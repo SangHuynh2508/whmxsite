@@ -6,6 +6,7 @@ import { renderHeader } from './ui/characterHeader.js';
 import { initLevelProgress, renderLevelProgress } from './ui/levelProgress.js';
 import { renderTalentGraph } from './ui/talentGraph.js';
 import { renderResourceSummary } from './ui/resourceSummary.js';
+import { initTheme } from './ui/theme.js';
 
 function selectCharFromUrl(gameData) {
   const hash = window.location.hash.replace('#', '').trim();
@@ -18,6 +19,7 @@ function selectCharFromUrl(gameData) {
 }
 
 async function boot() {
+  initTheme();
   const gameData = await loadGameData();
   
   initSidebar('char-catalog', 'search-input');

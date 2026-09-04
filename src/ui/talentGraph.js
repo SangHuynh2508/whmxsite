@@ -437,10 +437,12 @@ function showDetailPanel(nodeEl, node, char) {
   if (node.cost && node.cost.length > 0) {
     node.cost.forEach(c => {
       if (c.id === '3') {
+        const coinItem = gameData ? gameData.items['3'] : null;
+        const coinName = coinItem ? (coinItem.name_vi || coinItem.name_cn) : 'Đông Cốc Tệ';
         costRows += `
           <div class="tg-pop-cost-row">
-            <img src="/assets/items/itemicon_3.png" class="tg-pop-item-icon" alt="Đồng Cốc Tệ" />
-            <span class="tg-pop-item-name">Đồng Cốc Tệ</span>
+            <img src="/assets/items/itemicon_3.png" class="tg-pop-item-icon" alt="${coinName}" />
+            <span class="tg-pop-item-name">${coinName}</span>
             <span class="tg-pop-item-qty">×${c.count.toLocaleString('vi-VN')}</span>
           </div>`;
       } else {

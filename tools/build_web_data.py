@@ -250,10 +250,12 @@ def build():
     for cid in char_talents:
         char_talents[cid] = sorted(char_talents[cid], key=lambda x: x["id"])
 
+    EXCLUDED_CHARACTER_IDS = {"W0021", "ES013"}
+
     for cid, data in char_table.items():
-        # Exclude unplayable characters (SCJ main avatar costumes and characters without talents)
+        # Exclude non-playable characters (SCJ costumes, explicit excluded IDs, and characters without talents)
         talents = char_talents.get(cid, [])
-        if cid.startswith("SCJ") or len(talents) == 0:
+        if cid.startswith("SCJ") or cid in EXCLUDED_CHARACTER_IDS or len(talents) == 0:
             continue
 
         rare = data.get("rare", 3)

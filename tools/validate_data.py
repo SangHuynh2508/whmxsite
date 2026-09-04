@@ -34,8 +34,12 @@ def validate():
     valid_rarities = {1, 2, 3, 4, 5} # 4=SSR, 3=SR, 2=R, 5=EXTRA
 
     seen_char_ids = set()
+    EXCLUDED_CHARACTER_IDS = {"W0021", "ES013"}
 
     for cid, char in characters.items():
+        if cid in EXCLUDED_CHARACTER_IDS or cid.startswith("SCJ"):
+            errors.append(f"Non-playable character ID '{cid}' found in playable characters dataset!")
+
         # Check ID match
         if char.get("id") != cid:
             errors.append(f"Character key '{cid}' mismatch with char.id '{char.get('id')}'")
