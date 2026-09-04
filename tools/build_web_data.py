@@ -243,6 +243,11 @@ def build():
         char_talents[cid] = sorted(char_talents[cid], key=lambda x: x["id"])
 
     for cid, data in char_table.items():
+        # Exclude unplayable characters (SCJ main avatar costumes and characters without talents)
+        talents = char_talents.get(cid, [])
+        if cid.startswith("SCJ") or len(talents) == 0:
+            continue
+
         rare = data.get("rare", 3)
         
         chars_db[cid] = {
@@ -258,7 +263,7 @@ def build():
             "attacktype": data.get("attacktype", 0),
             "icon": f"assets/avatars/{cid}.png",
             "cards": char_cards.get(cid, [f"{cid}001.png"]),
-            "talents": char_talents.get(cid, []),
+            "talents": talents,
             "rankUpRule": rare
         }
         
