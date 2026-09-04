@@ -61,9 +61,9 @@ def main():
     try:
         with urllib.request.urlopen(req) as resp, open(EXCEL_PATH, "wb") as f:
             f.write(resp.read())
-        print(f"✅ Downloaded updated Excel to {EXCEL_PATH}")
+        print(f"[OK] Downloaded updated Excel to {EXCEL_PATH}")
     except Exception as e:
-        print(f"❌ Error downloading from Google Sheets: {e}")
+        print(f"[ERROR] Error downloading from Google Sheets: {e}")
         print("Dam bao bang tinh Google Sheets da bat che do: 'Bat ky ai co lien ket deu co the xem' (Anyone with link can view).")
         sys.exit(1)
 
@@ -84,7 +84,7 @@ def main():
     # Step 5: Deploy to Vercel
     run_step('npx vercel --prod --yes')
 
-    print("\n🎉 HOAN TAT! DDL Google Sheets da duoc sync & deploy len Vercel Production!")
+    print("\n[SUCCESS] HOAN TAT! Du lieu Google Sheets da duoc sync & deploy len Vercel Production!")
 
 if __name__ == "__main__":
     main()

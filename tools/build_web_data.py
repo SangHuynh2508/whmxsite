@@ -16,36 +16,44 @@ def build():
     print("Loading localization...")
     wb = openpyxl.load_workbook(EXCEL_PATH)
     
+    def get_sheet(wb, possible_names, default_idx=0):
+        for name in possible_names:
+            if name in wb.sheetnames:
+                return wb[name]
+        if len(wb.worksheets) > default_idx:
+            return wb.worksheets[default_idx]
+        return wb.active
+
     char_loc = {}
-    ws = wb["characters"]
-    for r in range(2, ws.max_row + 1):
-        cid = ws.cell(r, 1).value
+    ws_char = get_sheet(wb, ["characters", "Khán Giả", "Khan Gia"], 0)
+    for r in range(2, ws_char.max_row + 1):
+        cid = ws_char.cell(r, 1).value
         if cid:
             char_loc[cid] = {
-                "name_vi": ws.cell(r, 8).value or "",
-                "fullname_vi": ws.cell(r, 9).value or "",
-                "nickname_vi": ws.cell(r, 10).value or "",
-                "tags_vi": ws.cell(r, 11).value or ""
+                "name_vi": ws_char.cell(r, 8).value or "",
+                "fullname_vi": ws_char.cell(r, 9).value or "",
+                "nickname_vi": ws_char.cell(r, 10).value or "",
+                "tags_vi": ws_char.cell(r, 11).value or ""
             }
             
     item_loc = {}
-    ws = wb["items"]
-    for r in range(2, ws.max_row + 1):
-        iid = str(ws.cell(r, 1).value)
+    ws_item = get_sheet(wb, ["items", "Vật Phẩm", "Vat Pham"], 1)
+    for r in range(2, ws_item.max_row + 1):
+        iid = str(ws_item.cell(r, 1).value)
         if iid:
             item_loc[iid] = {
-                "name_vi": ws.cell(r, 7).value or "",
-                "category": ws.cell(r, 6).value or "other"
+                "name_vi": ws_item.cell(r, 7).value or "",
+                "category": ws_item.cell(r, 6).value or "other"
             }
             
     node_loc = {}
-    ws = wb["talent_nodes"]
-    for r in range(2, ws.max_row + 1):
-        ncn = ws.cell(r, 1).value
+    ws_node = get_sheet(wb, ["talent_nodes"], 2)
+    for r in range(2, ws_node.max_row + 1):
+        ncn = ws_node.cell(r, 1).value
         if ncn:
             node_loc[ncn] = {
-                "desc_vi": ws.cell(r, 2).value or "",
-                "name_vi": ws.cell(r, 3).value or ""
+                "desc_vi": ws_node.cell(r, 2).value or "",
+                "name_vi": ws_node.cell(r, 3).value or ""
             }
 
     # EXP books that may not be in the excel but exist in game
