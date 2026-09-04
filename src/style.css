@@ -703,9 +703,10 @@ body {
   display: grid;
   grid-template-rows: 64px 64px 64px;
   position: relative;
-  width: max-content;
-  min-width: max-content;
+  width: var(--talent-graph-width, max-content);
+  min-width: var(--talent-graph-width, max-content);
   max-width: none;
+  flex: 0 0 auto;
   flex-shrink: 0;
   column-gap: 2px;
   row-gap: 0;
@@ -1412,9 +1413,10 @@ body {
     display: grid !important;
     grid-template-rows: 64px 64px 64px !important;
     position: relative !important;
-    width: max-content !important;
-    min-width: max-content !important;
+    width: var(--talent-graph-width, max-content) !important;
+    min-width: var(--talent-graph-width, max-content) !important;
     max-width: none !important;
+    flex: 0 0 auto !important;
     flex-shrink: 0 !important;
     transform: none !important;
     touch-action: pan-x;

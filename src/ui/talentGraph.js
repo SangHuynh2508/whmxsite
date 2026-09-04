@@ -66,7 +66,10 @@ export function renderTalentGraph(container) {
   const wrap = document.createElement('div');
   wrap.className = 'tg-wrap';
   wrap.style.gridTemplateColumns = `repeat(${maxCol}, 58px)`;
-  const graphWidth = maxCol * 58 + Math.max(0, maxCol - 1) * 2 + 16;
+  
+  // Calculate explicit physical logical width for the talent graph
+  const graphWidth = maxCol * 58 + Math.max(0, maxCol - 1) * 2 + 32;
+  wrap.style.setProperty('--talent-graph-width', `${graphWidth}px`);
   wrap.style.width = `${graphWidth}px`;
   wrap.style.minWidth = `${graphWidth}px`;
 
@@ -258,6 +261,29 @@ function getEssentialPrereqs(nodes) {
         svg.appendChild(line);
       });
     });
+
+    // Calculate and report DOM scroll metrics
+    const clientWidth = container.clientWidth;
+    const scrollWidth = container.scrollWidth;
+    const innerGraphOffsetWidth = wrap.offsetWidth;
+
+    let maxNodeRight = 0;
+    Object.values(nodeEls).forEach(info => {
+      const r = info.el.getBoundingClientRect().right;
+      if (r > maxNodeRight) maxNodeRight = r;
+    });
+    const containerRight = container.getBoundingClientRect().right;
+
+    window.__TALENT_METRICS__ = {
+      clientWidth,
+      scrollWidth,
+      innerGraphOffsetWidth,
+      rightmostNodeRight: maxNodeRight,
+      containerRight,
+      isScrollable: scrollWidth > clientWidth
+    };
+
+    console.log('[TALENT METRICS]', window.__TALENT_METRICS__);
   });
 }
 
