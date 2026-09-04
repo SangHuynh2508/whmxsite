@@ -100,53 +100,34 @@ export function renderTalentGraph(container) {
     div.addEventListener('mouseenter', () => {
       clearLeaveTimer();
       hoveredTalentId = node.id;
-      if (!pinnedTalentId) {
-        showDetailPanel(div, node, char);
-      }
+      showDetailPanel(div, node, char);
     });
 
     div.addEventListener('mouseleave', () => {
-      if (!pinnedTalentId) {
-        startLeaveTimer();
-      }
+      startLeaveTimer();
     });
 
     div.addEventListener('focus', () => {
       clearLeaveTimer();
       hoveredTalentId = node.id;
-      if (!pinnedTalentId) {
-        showDetailPanel(div, node, char);
-      }
+      showDetailPanel(div, node, char);
     });
 
     div.addEventListener('blur', () => {
-      if (!pinnedTalentId) {
-        startLeaveTimer();
-      }
+      startLeaveTimer();
     });
 
     div.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         e.stopPropagation();
-        if (pinnedTalentId === node.id) {
-          toggleTalentNode(node.id, char);
-        } else {
-          pinnedTalentId = node.id;
-          showDetailPanel(div, node, char);
-        }
+        toggleTalentNode(node.id, char);
       }
     });
 
     div.addEventListener('click', (e) => {
       e.stopPropagation();
-      clearLeaveTimer();
-      if (pinnedTalentId === node.id) {
-        toggleTalentNode(node.id, char);
-      } else {
-        pinnedTalentId = node.id;
-        showDetailPanel(div, node, char);
-      }
+      toggleTalentNode(node.id, char);
     });
 
     wrap.appendChild(div);
@@ -155,10 +136,9 @@ export function renderTalentGraph(container) {
 
   container.appendChild(wrap);
 
-  // If a detail panel target is active, refresh it with updated status/node element
-  const targetId = pinnedTalentId ?? hoveredTalentId;
-  if (targetId && nodeEls[targetId]) {
-    const activeInfo = nodeEls[targetId];
+  // If hover detail panel is active, refresh it with updated status/node element
+  if (hoveredTalentId && nodeEls[hoveredTalentId]) {
+    const activeInfo = nodeEls[hoveredTalentId];
     showDetailPanel(activeInfo.el, activeInfo.node, char);
   }
 
@@ -236,7 +216,6 @@ function getEssentialPrereqs(nodes) {
 
 // ── Game-Style Detail Panel ───────────────────────────────────────────────
 let hoveredTalentId = null;
-let pinnedTalentId = null;
 let leaveTimer = null;
 let activeNodeEl = null;
 
@@ -250,10 +229,8 @@ function clearLeaveTimer() {
 function startLeaveTimer() {
   clearLeaveTimer();
   leaveTimer = setTimeout(() => {
-    if (!pinnedTalentId) {
-      hoveredTalentId = null;
-      hideDetailPanel();
-    }
+    hoveredTalentId = null;
+    hideDetailPanel();
   }, 200);
 }
 
@@ -275,15 +252,12 @@ detailPanel.addEventListener('mouseenter', () => {
 });
 
 detailPanel.addEventListener('mouseleave', () => {
-  if (!pinnedTalentId) {
-    startLeaveTimer();
-  }
+  startLeaveTimer();
 });
 
 // Close handlers
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    pinnedTalentId = null;
     hoveredTalentId = null;
     hideDetailPanel();
   }
@@ -293,7 +267,6 @@ document.addEventListener('click', (e) => {
   if (detailPanel.style.display === 'none') return;
   if (detailPanel.contains(e.target)) return;
   if (e.target.closest('.tg-node')) return;
-  pinnedTalentId = null;
   hoveredTalentId = null;
   hideDetailPanel();
 });
@@ -308,7 +281,6 @@ function showDetailPanel(nodeEl, node, char) {
   if (!node || !nodeEl) return;
   activeNodeEl = nodeEl;
 
-  const isPinned = (pinnedTalentId === node.id);
   const gameData = getGameData();
   const status = state.talentNodes[node.id] || 'neutral';
 
@@ -431,7 +403,6 @@ function showDetailPanel(nodeEl, node, char) {
         <div class="tg-pop-badges">
           ${node.req_level ? `<span class="tg-pop-badge req">Lv.${node.req_level}</span>` : ''}
           <span class="tg-pop-badge status-${status}">${statusLabel}</span>
-          ${isPinned ? `<span class="tg-pop-badge pinned">📌 Đã ghim</span>` : ''}
         </div>
       </div>
     </div>
@@ -457,7 +428,6 @@ function showDetailPanel(nodeEl, node, char) {
   const closeBtn = detailPanel.querySelector('#tg-pop-close-btn');
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
-      pinnedTalentId = null;
       hoveredTalentId = null;
       hideDetailPanel();
     });
@@ -466,7 +436,6 @@ function showDetailPanel(nodeEl, node, char) {
   const actionBtn = detailPanel.querySelector('#tg-pop-action-btn');
   if (actionBtn) {
     actionBtn.addEventListener('click', () => {
-      pinnedTalentId = node.id;
       toggleTalentNode(node.id, char);
     });
   }
