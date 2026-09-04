@@ -77,18 +77,9 @@ function syncTalentsToLevel(charData, targetLevel) {
 }
 
 
-export function setAutoMaxMode(isAuto) {
-  state.autoMaxMode = isAuto;
-  notify();
-}
-
 export function toggleTalentNode(nodeId, charData) {
-  // If auto-max is ON, clicking a middle node sets its target level and unlocks dependencies
-  if (state.autoMaxMode) {
-    autoMaxUnlock(nodeId, charData);
-  } else {
-    manualUnlock(nodeId, charData);
-  }
+  // Clicking a node sets its target level and unlocks prerequisites / dependencies automatically
+  autoMaxUnlock(nodeId, charData);
   notify();
 }
 

@@ -1,5 +1,5 @@
 import { loadGameData } from './data/loader.js';
-import { state, subscribe, setAutoMaxMode, setCharacter } from './data/state.js';
+import { state, subscribe, setCharacter } from './data/state.js';
 import { calculateResources } from './data/calculator.js';
 import { initSidebar, renderCatalog } from './ui/sidebar.js';
 import { renderHeader } from './ui/characterHeader.js';
@@ -22,14 +22,6 @@ async function boot() {
   
   initSidebar('char-catalog', 'search-input');
   initLevelProgress('level-current', 'level-target');
-
-  const autoMaxCheckbox = document.getElementById('auto-max-toggle');
-  if (autoMaxCheckbox) {
-    autoMaxCheckbox.checked = state.autoMaxMode;
-    autoMaxCheckbox.addEventListener('change', (e) => {
-      setAutoMaxMode(e.target.checked);
-    });
-  }
 
   // Load character from URL if present
   selectCharFromUrl(gameData);
