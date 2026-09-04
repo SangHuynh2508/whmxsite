@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "validate-data": "python tools/validate_data.py"
+    "validate-data": "python tools/validate_data.py",
+    "sync-sheets": "python tools/update_from_gsheets.py"
   },
   "keywords": [],
   "author": "",
