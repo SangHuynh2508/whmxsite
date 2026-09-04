@@ -32,13 +32,18 @@
     </div>
   </nav>
 
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
   <div id="app" class="app-layout">
 
     <!-- Sidebar: Catalog -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <header class="sidebar-header">
-        <h1>Vật Hoa Di Tân</h1>
-        <p class="subtitle">CALCULATOR</p>
+        <div class="sidebar-header-title">
+          <h1>Vật Hoa Di Tân</h1>
+          <p class="subtitle">CALCULATOR</p>
+        </div>
+        <button type="button" id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Đóng danh mục">×</button>
       </header>
 
       <div class="filter-section">
@@ -74,6 +79,13 @@
 
     <!-- Main View: Details & Calculation -->
     <main class="main-content hidden" id="main-content">
+      <div class="mobile-action-bar">
+        <button type="button" id="mobile-char-select-btn" class="mobile-char-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <span>Danh Mục Nhân Vật</span>
+        </button>
+      </div>
+
       <div class="content-body">
         <div class="calc-wrapper">
           <!-- Character Profile -->
@@ -182,7 +194,13 @@
     </main>
 
     <div id="empty-state" class="empty-state">
-      <p>Chọn một nhân vật từ danh mục để xem thông tin chi tiết.</p>
+      <div class="empty-state-content">
+        <button type="button" id="empty-char-select-btn" class="mobile-char-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <span>Danh Mục Nhân Vật</span>
+        </button>
+        <p>Chọn một nhân vật từ danh mục để xem thông tin chi tiết.</p>
+      </div>
     </div>
 
   </div>

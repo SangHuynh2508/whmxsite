@@ -5,6 +5,26 @@ let elCatalog, elSearch;
 let activeJob = 'all';
 let activeRarity = 'all';
 
+export function openMobileDrawer() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('drawer-backdrop');
+  if (sidebar && backdrop) {
+    sidebar.classList.add('open');
+    backdrop.classList.add('active');
+    document.body.classList.add('drawer-open');
+  }
+}
+
+export function closeMobileDrawer() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('drawer-backdrop');
+  if (sidebar && backdrop) {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('active');
+    document.body.classList.remove('drawer-open');
+  }
+}
+
 export function initSidebar(catalogId, searchId) {
   elCatalog = document.getElementById(catalogId);
   elSearch = document.getElementById(searchId);
@@ -29,6 +49,23 @@ export function initSidebar(catalogId, searchId) {
     btn.classList.add('active');
     activeRarity = btn.dataset.rarity;
     renderCatalog();
+  });
+
+  // Mobile drawer controls
+  const btnOpen = document.getElementById('mobile-char-select-btn');
+  const btnOpenEmpty = document.getElementById('empty-char-select-btn');
+  const btnClose = document.getElementById('sidebar-close-btn');
+  const backdrop = document.getElementById('drawer-backdrop');
+
+  if (btnOpen) btnOpen.addEventListener('click', openMobileDrawer);
+  if (btnOpenEmpty) btnOpenEmpty.addEventListener('click', openMobileDrawer);
+  if (btnClose) btnClose.addEventListener('click', closeMobileDrawer);
+  if (backdrop) backdrop.addEventListener('click', closeMobileDrawer);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileDrawer();
+    }
   });
 
   renderCatalog();
@@ -71,6 +108,7 @@ export function renderCatalog() {
       document.querySelectorAll('.char-item').forEach(el => el.classList.remove('active'));
       div.classList.add('active');
       setCharacter(char);
+      closeMobileDrawer();
     };
 
     const rareText = getRarityText(char.rare);

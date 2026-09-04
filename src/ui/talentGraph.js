@@ -1,6 +1,8 @@
 import { state, toggleTalentNode } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
 
+const isTouchDevice = () => window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
 const TRACK = (icon) => {
   if (!icon) return 2;
   if (icon.includes('PasSkill') || icon.includes('EXskill')) return 1;
@@ -64,6 +66,9 @@ export function renderTalentGraph(container) {
   const wrap = document.createElement('div');
   wrap.className = 'tg-wrap';
   wrap.style.gridTemplateColumns = `repeat(${maxCol}, 58px)`;
+  const graphWidth = maxCol * 58 + Math.max(0, maxCol - 1) * 2 + 16;
+  wrap.style.width = `${graphWidth}px`;
+  wrap.style.minWidth = `${graphWidth}px`;
 
   // SVG layer behind nodes
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -97,24 +102,55 @@ export function renderTalentGraph(container) {
     div.setAttribute('role', 'button');
     div.setAttribute('aria-label', node.name_vi || node.name_cn);
 
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let isDragging = false;
+
+    div.addEventListener('pointerdown', (e) => {
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      isDragging = false;
+    });
+
+    div.addEventListener('pointermove', (e) => {
+      if (!isDragging) {
+        const dist = Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY);
+        if (dist > 6) {
+          isDragging = true;
+        }
+      }
+    });
+
+    div.addEventListener('pointercancel', () => {
+      isDragging = true;
+    });
+
     div.addEventListener('mouseenter', () => {
-      clearLeaveTimer();
-      hoveredTalentId = node.id;
-      showDetailPanel(div, node, char);
+      if (!isTouchDevice()) {
+        clearLeaveTimer();
+        hoveredTalentId = node.id;
+        showDetailPanel(div, node, char);
+      }
     });
 
     div.addEventListener('mouseleave', () => {
-      startLeaveTimer();
+      if (!isTouchDevice()) {
+        startLeaveTimer();
+      }
     });
 
     div.addEventListener('focus', () => {
-      clearLeaveTimer();
-      hoveredTalentId = node.id;
-      showDetailPanel(div, node, char);
+      if (!isTouchDevice()) {
+        clearLeaveTimer();
+        hoveredTalentId = node.id;
+        showDetailPanel(div, node, char);
+      }
     });
 
     div.addEventListener('blur', () => {
-      startLeaveTimer();
+      if (!isTouchDevice()) {
+        startLeaveTimer();
+      }
     });
 
     div.addEventListener('keydown', (e) => {
@@ -127,7 +163,18 @@ export function renderTalentGraph(container) {
 
     div.addEventListener('click', (e) => {
       e.stopPropagation();
-      toggleTalentNode(node.id, char);
+      if (isDragging) {
+        isDragging = false;
+        return;
+      }
+      if (isTouchDevice()) {
+        // Mobile/Touch: tap node -> open / update bottom sheet
+        hoveredTalentId = node.id;
+        showDetailPanel(div, node, char);
+      } else {
+        // Desktop: click node -> toggle talent node
+        toggleTalentNode(node.id, char);
+      }
     });
 
     wrap.appendChild(div);
@@ -137,7 +184,7 @@ export function renderTalentGraph(container) {
   container.appendChild(wrap);
 
   // If hover detail panel is active, refresh it with updated status/node element
-  if (hoveredTalentId && nodeEls[hoveredTalentId]) {
+  if (!isTouchDevice() && hoveredTalentId && nodeEls[hoveredTalentId]) {
     const activeInfo = nodeEls[hoveredTalentId];
     showDetailPanel(activeInfo.el, activeInfo.node, char);
   }
