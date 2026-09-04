@@ -17,7 +17,7 @@ export function renderHeader() {
 
   elAvatar.src = `/${char.icon}`;
   elRarity.className = `profile-rarity rare-${char.rare}`;
-  elRarity.textContent = getRarityText(char.rare);
+  elRarity.textContent = getRarityText(char.rare) + (char.is_limited ? ' • LIMITED' : '');
   elNameVi.textContent = char.name_vi || char.name_cn;
   elNameCn.textContent = char.fullname_vi || char.fullname_cn || char.name_cn;
 

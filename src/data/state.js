@@ -19,7 +19,7 @@ export function notify() {
   listeners.forEach(fn => fn(state));
 }
 
-export function setCharacter(char) {
+export function setCharacter(char, syncHash = true) {
   state.character = char;
   state.levelCur = 1;
   state.levelTgt = 1;
@@ -32,10 +32,12 @@ export function setCharacter(char) {
     });
   }
 
-  // Sync URL hash for sharing links
-  const targetHash = char ? `#${char.id}` : '';
-  if (window.location.hash !== targetHash) {
-    history.replaceState(null, '', targetHash || window.location.pathname);
+  // Sync URL hash for sharing links when in calculator view
+  if (syncHash && !window.location.hash.includes('/characters/')) {
+    const targetHash = char ? `#${char.id}` : '';
+    if (window.location.hash !== targetHash) {
+      history.replaceState(null, '', targetHash || window.location.pathname);
+    }
   }
 
   notify();

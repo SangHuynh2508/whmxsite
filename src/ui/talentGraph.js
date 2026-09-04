@@ -1,5 +1,19 @@
 import { state, toggleTalentNode } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
+import { formatVan } from './resourceSummary.js';
+
+/**
+ * Shared helper to resolve verified talent icon URL for a talent node.
+ * Uses node.skill_meta.skill_icon if available, fallback to node.icon (assets/talents/...).
+ */
+export function getTalentIconUrl(node) {
+  if (!node) return '';
+  const iconPath = (node.skill_meta && node.skill_meta.skill_icon) 
+    ? node.skill_meta.skill_icon 
+    : node.icon;
+  if (!iconPath) return '';
+  return iconPath.startsWith('/') ? iconPath : `/${iconPath}`;
+}
 
 const isTouchDevice = () => window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
@@ -50,8 +64,8 @@ function computeColumns(nodes) {
   return cols;
 }
 
-export function renderTalentGraph(container) {
-  const char = state.character;
+export function renderTalentGraph(container, charData) {
+  const char = charData || state.character;
   if (!char || !char.talents || char.talents.length === 0) {
     container.innerHTML = '<div class="tg-empty">Nhân vật này chưa có dữ liệu thiên phú.</div>';
     return;
@@ -85,7 +99,7 @@ export function renderTalentGraph(container) {
   nodes.forEach(node => {
     const col = cols[node.id] || 1;
     const track = TRACK(node.icon);
-    const status = state.talentNodes[node.id] || 'neutral';
+    const status = (charData && charData !== state.character) ? 'neutral' : (state.talentNodes[node.id] || 'neutral');
 
     const div = document.createElement('div');
     div.className = `tg-node track-${track} status-${status}`;
@@ -116,16 +130,9 @@ export function renderTalentGraph(container) {
     });
 
     div.addEventListener('pointermove', (e) => {
-      if (!isDragging) {
-        const dist = Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY);
-        if (dist > 6) {
-          isDragging = true;
-        }
+      if (Math.abs(e.clientX - pointerStartX) > 6 || Math.abs(e.clientY - pointerStartY) > 6) {
+        isDragging = true;
       }
-    });
-
-    div.addEventListener('pointercancel', () => {
-      isDragging = true;
     });
 
     div.addEventListener('mouseenter', () => {
@@ -160,7 +167,11 @@ export function renderTalentGraph(container) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         e.stopPropagation();
-        toggleTalentNode(node.id, char);
+        if (charData && charData !== state.character) {
+          showDetailPanel(div, node, char);
+        } else {
+          toggleTalentNode(node.id, char);
+        }
       }
     });
 
@@ -170,12 +181,12 @@ export function renderTalentGraph(container) {
         isDragging = false;
         return;
       }
-      if (isTouchDevice()) {
-        // Mobile/Touch: tap node -> open / update bottom sheet
+      if (isTouchDevice() || (charData && charData !== state.character)) {
+        // Character detail view or touch device -> open detail panel
         hoveredTalentId = node.id;
         showDetailPanel(div, node, char);
       } else {
-        // Desktop: click node -> toggle talent node
+        // Calculator desktop mode: click node -> toggle talent node
         toggleTalentNode(node.id, char);
       }
     });
@@ -380,9 +391,7 @@ function showDetailPanel(nodeEl, node, char) {
   const status = state.talentNodes[node.id] || 'neutral';
 
   // Primary Icon: Use real skill/passive icon if available, else fallback to node icon
-  const primaryIconSrc = (node.skill_meta && node.skill_meta.skill_icon) 
-    ? `/${node.skill_meta.skill_icon}` 
-    : `/${node.icon}`;
+  const primaryIconSrc = getTalentIconUrl(node);
 
   // Names
   const displayName = node.name_vi || (node.skill_meta && node.skill_meta.skill_name_cn) || node.name_cn;
@@ -443,7 +452,7 @@ function showDetailPanel(nodeEl, node, char) {
           <div class="tg-pop-cost-row">
             <img src="/assets/items/itemicon_3.png" class="tg-pop-item-icon" alt="${coinName}" />
             <span class="tg-pop-item-name">${coinName}</span>
-            <span class="tg-pop-item-qty">×${c.count.toLocaleString('vi-VN')}</span>
+            <span class="tg-pop-item-qty">×${formatVan(c.count)}</span>
           </div>`;
       } else {
         const item = gameData ? gameData.items[c.id] : null;
@@ -453,7 +462,7 @@ function showDetailPanel(nodeEl, node, char) {
           <div class="tg-pop-cost-row">
             <img src="/${icon}" class="tg-pop-item-icon" alt="${name}" onerror="this.src='/assets/items/itemicon_3.png'"/>
             <span class="tg-pop-item-name">${name}</span>
-            <span class="tg-pop-item-qty">×${c.count.toLocaleString('vi-VN')}</span>
+            <span class="tg-pop-item-qty">×${formatVan(c.count)}</span>
           </div>`;
       }
     });

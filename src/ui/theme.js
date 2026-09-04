@@ -30,28 +30,33 @@ export function toggleTheme() {
 }
 
 function updateToggleBtnUI(theme) {
-  const btn = document.getElementById('theme-toggle-btn');
-  if (!btn) return;
+  const buttons = document.querySelectorAll('.theme-toggle-btn');
+  const titleText = theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối';
+  const icon = theme === 'dark' ? SUN_SVG : MOON_SVG;
 
-  if (theme === 'dark') {
-    btn.innerHTML = SUN_SVG;
-    btn.setAttribute('title', 'Chuyển sang giao diện sáng');
-    btn.setAttribute('aria-label', 'Chuyển sang giao diện sáng');
-  } else {
-    btn.innerHTML = MOON_SVG;
-    btn.setAttribute('title', 'Chuyển sang giao diện tối');
-    btn.setAttribute('aria-label', 'Chuyển sang giao diện tối');
-  }
+  buttons.forEach(btn => {
+    btn.setAttribute('title', titleText);
+    btn.setAttribute('aria-label', titleText);
+    
+    const iconSlot = btn.querySelector('.theme-icon-slot');
+    if (iconSlot) {
+      iconSlot.innerHTML = icon;
+    } else {
+      btn.innerHTML = icon;
+    }
+  });
 }
 
 export function initTheme() {
   const initialTheme = getPreferredTheme();
   setTheme(initialTheme, false);
 
-  const btn = document.getElementById('theme-toggle-btn');
-  if (btn) {
-    btn.addEventListener('click', toggleTheme);
-  }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-toggle-btn');
+    if (btn) {
+      toggleTheme();
+    }
+  });
 
   // Listen for OS system theme changes if no manual preference stored
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {

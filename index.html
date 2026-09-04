@@ -19,15 +19,19 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap"
     rel="stylesheet">
 
-  <!-- Early Theme script to prevent FOUC -->
+  <!-- Early Theme & Nav script to prevent FOUC -->
   <script>
     (function () {
       try {
-        var saved = localStorage.getItem('whmx_theme');
-        var theme = (saved === 'dark' || saved === 'light')
-          ? saved
+        var savedTheme = localStorage.getItem('whmx_theme');
+        var theme = (savedTheme === 'dark' || savedTheme === 'light')
+          ? savedTheme
           : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
+
+        var savedNav = localStorage.getItem('whmx_nav_expanded');
+        var expanded = savedNav === 'true';
+        document.documentElement.setAttribute('data-nav-expanded', expanded ? 'true' : 'false');
       } catch (e) {}
     })();
   </script>
@@ -36,12 +40,61 @@
 </head>
 
 <body>
+  <!-- Desktop Vertical Navigation Rail -->
+  <aside class="app-nav" id="app-nav" aria-label="Thanh điều hướng ứng dụng">
+    <div class="app-nav-header">
+      <a href="#/characters" class="app-nav-brand" title="Vật Hoa Di Tân">
+        <span class="app-nav-brand-mark">VHDT</span>
+        <span class="app-nav-brand-full">VẬT HOA DI TÂN</span>
+      </a>
+      <button type="button" id="app-nav-toggle" class="app-nav-toggle-btn" aria-label="Thu gọn/Mở rộng menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <ul class="app-nav-menu">
+      <li>
+        <a href="#/characters" class="app-nav-item active" data-tooltip="Characters">
+          <span class="app-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </span>
+          <span class="app-nav-label">Characters</span>
+        </a>
+      </li>
+      <li>
+        <a href="#/data" class="app-nav-item" data-tooltip="Data">
+          <span class="app-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M21 19c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14"></path><path d="M21 5v14"></path></svg>
+          </span>
+          <span class="app-nav-label">Data</span>
+        </a>
+      </li>
+      <li>
+        <a href="#calc" class="app-nav-item" data-tooltip="Calculator">
+          <span class="app-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+          </span>
+          <span class="app-nav-label">Calculator</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="app-nav-footer">
+      <button type="button" class="theme-toggle-btn app-nav-item" id="app-nav-theme-btn" data-tooltip="Giao diện">
+        <span class="app-nav-icon theme-icon-slot">
+        </span>
+        <span class="app-nav-label">Giao diện</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Top Nav Bar -->
   <nav class="top-nav">
     <div class="nav-brand">VẬT HOA DI TÂN</div>
     <div class="nav-links">
-      <a href="#" class="active">Calculator</a>
-      <a href="#">Characters</a>
-      <a href="#">Data</a>
+      <a href="#/characters" class="active">Characters</a>
+      <a href="#/data">Data</a>
+      <a href="#calc">Calculator</a>
     </div>
     <button type="button" id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Chuyển giao diện sáng/tối" title="Chuyển giao diện sáng/tối">
     </button>
@@ -62,27 +115,50 @@
       </header>
 
       <div class="filter-section">
-        <input type="text" id="search-input" placeholder="Tìm kiếm nhân vật..." autocomplete="off" />
-
-        <div class="filter-group">
-          <span class="filter-label">Lớp</span>
-          <div class="filter-chips" id="job-filter">
-            <button class="chip active" data-job="all">Tất cả</button>
-            <button class="chip" data-job="1">Túc Vệ</button>
-            <button class="chip" data-job="2">Khinh Nhuệ</button>
-            <button class="chip" data-job="3">Viễn Kích</button>
-            <button class="chip" data-job="4">Cấu Thuật</button>
-            <button class="chip" data-job="5">Chiến Lược</button>
-          </div>
+        <div class="search-row">
+          <input type="text" id="search-input" placeholder="Tìm kiếm nhân vật..." autocomplete="off" />
+          <button type="button" id="adv-filter-btn" class="adv-filter-btn" title="Tìm kiếm nâng cao" aria-label="Bộ lọc nâng cao">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span class="filter-badge hidden" id="filter-active-count">0</span>
+          </button>
         </div>
 
-        <div class="filter-group">
-          <span class="filter-label">Độ hiếm</span>
-          <div class="filter-chips" id="rarity-filter">
-            <button class="chip active" data-rarity="all">Tất cả</button>
-            <button class="chip chip-ssr" data-rarity="4">SSR</button>
-            <button class="chip chip-sr" data-rarity="3">SR</button>
-            <button class="chip chip-r" data-rarity="2">R</button>
+        <div class="adv-filter-panel hidden" id="adv-filter-panel">
+          <div class="filter-group">
+            <span class="filter-label">Lớp</span>
+            <div class="filter-chips" id="job-filter">
+              <button class="chip active" data-job="all">Tất cả</button>
+              <button class="chip" data-job="1">Túc Vệ</button>
+              <button class="chip" data-job="2">Khinh Nhuệ</button>
+              <button class="chip" data-job="3">Viễn Kích</button>
+              <button class="chip" data-job="4">Cấu Thuật</button>
+              <button class="chip" data-job="5">Chiến Lược</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Độ hiếm</span>
+            <div class="filter-chips" id="rarity-filter">
+              <button class="chip active" data-rarity="all">Tất cả</button>
+              <button class="chip chip-ssr" data-rarity="4">SSR</button>
+              <button class="chip chip-sr" data-rarity="3">SR</button>
+              <button class="chip chip-r" data-rarity="2">R</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Loại nhân vật</span>
+            <div class="filter-chips" id="pool-filter">
+              <button class="chip active" data-pool="all">Tất cả</button>
+              <button class="chip chip-limited" data-pool="limited">Limited</button>
+              <button class="chip" data-pool="standard">Thường</button>
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button type="button" id="reset-filter-btn" class="reset-filter-btn">Đặt lại bộ lọc</button>
           </div>
         </div>
       </div>
@@ -226,6 +302,21 @@
         <p class="empty-state-text">Chọn một nhân vật từ danh mục bên trái để xem thông tin chi tiết và tính toán tài nguyên.</p>
       </div>
     </div>
+
+    <!-- Standalone Character Catalog View Root -->
+    <main id="character-catalog-view" class="character-catalog-view hidden">
+      <!-- Dynamically rendered by characterCatalogView.js -->
+    </main>
+
+    <!-- Character Detail View Root -->
+    <main id="character-detail-view" class="character-detail-view hidden">
+      <!-- Dynamically rendered by characterDetail.js -->
+    </main>
+
+    <!-- Standalone Data View Root -->
+    <main id="data-view" class="data-view hidden">
+      <!-- Dynamically rendered for /data route -->
+    </main>
 
   </div>
 
