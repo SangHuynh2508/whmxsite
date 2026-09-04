@@ -186,6 +186,28 @@ export function renderTalentGraph(container) {
 
   container.appendChild(wrap);
 
+  // Mouse drag-to-scroll helper for desktop emulation / drag testing
+  let isContainerDragging = false;
+  let startX = 0;
+  let scrollLeft = 0;
+
+  container.addEventListener('mousedown', (e) => {
+    // Only trigger if clicking on container or wrap background (not directly clicking a node button)
+    if (e.target.closest('.tg-node')) return;
+    isContainerDragging = true;
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+  });
+  container.addEventListener('mouseleave', () => { isContainerDragging = false; });
+  container.addEventListener('mouseup', () => { isContainerDragging = false; });
+  container.addEventListener('mousemove', (e) => {
+    if (!isContainerDragging) return;
+    e.preventDefault();
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    container.scrollLeft = scrollLeft - walk;
+  });
+
   // If hover detail panel is active, refresh it with updated status/node element
   if (!isTouchDevice() && hoveredTalentId && nodeEls[hoveredTalentId]) {
     const activeInfo = nodeEls[hoveredTalentId];

@@ -272,9 +272,43 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  padding: 60px 24px;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 380px;
+}
+
+.empty-state-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(184, 153, 71, 0.12);
+  border: 1px solid rgba(184, 153, 71, 0.2);
+}
+
+.empty-state-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.empty-state-text {
   font-size: 0.875rem;
-  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  line-height: 1.55;
 }
 
 .profile-header {
@@ -1152,14 +1186,11 @@ body {
 }
 
 /* Hidden elements on desktop */
-.sidebar-close-btn {
-  display: none;
-}
-.mobile-action-bar {
-  display: none;
-}
-.drawer-backdrop {
-  display: none;
+.sidebar-close-btn,
+.mobile-action-bar,
+.drawer-backdrop,
+#empty-char-select-btn {
+  display: none !important;
 }
 
 /* Keyframe for mobile bottom sheet slide up */
@@ -1227,12 +1258,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     width: 100%;
     max-width: 320px;
   }
 
-  .empty-state-content p {
+  #empty-char-select-btn {
+    display: inline-flex !important;
+    margin-bottom: 4px;
+  }
+
+  .empty-state-text {
     font-size: 0.875rem;
     color: var(--text-muted);
     text-align: center;
@@ -1362,19 +1398,61 @@ body {
 
   /* Profile Header */
   .profile-header {
-    gap: 12px;
-    align-items: flex-start;
+    display: flex !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
   .profile-avatar-container {
-    width: 72px;
-    height: 72px;
+    width: 72px !important;
+    height: 72px !important;
+    flex-shrink: 0 !important;
+  }
+  .profile-identity {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    gap: 4px !important;
+    overflow: hidden !important;
+  }
+  .profile-name-row {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .profile-names {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    min-width: 0 !important;
   }
   .profile-name-vi {
-    font-size: 1.35rem;
+    font-size: 1.25rem !important;
+    word-break: break-word !important;
+    line-height: 1.2 !important;
+  }
+  .profile-job-block {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    flex-shrink: 0 !important;
+    margin-left: 4px !important;
   }
   .class-badge {
-    width: 48px;
-    height: 48px;
+    width: 44px !important;
+    height: 44px !important;
+    object-fit: contain !important;
+  }
+  .class-badge-label {
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
   }
 
   /* Level Controls */
@@ -1395,19 +1473,37 @@ body {
     font-size: 16px; /* Prevents mobile browser auto-zoom */
   }
 
-  /* Talent Section & Native Unscaled Scroll Container */
-  .calc-section {
-    width: 100%;
-    overflow: visible;
-  }
-  .talent-graph-container {
+  /* Content & Config Wrappers - Strict Width Constraints for Mobile Horizontal Scroll */
+  .calc-wrapper {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .config-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .calc-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  .talent-graph-container {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
     overflow-x: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-    padding: 12px 4px;
-    touch-action: pan-x;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 12px 4px !important;
+    touch-action: pan-x pan-y !important;
+    box-sizing: border-box !important;
   }
   .tg-wrap {
     display: grid !important;
@@ -1419,7 +1515,10 @@ body {
     flex: 0 0 auto !important;
     flex-shrink: 0 !important;
     transform: none !important;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y !important;
+  }
+  .tg-node, .tg-node-inner {
+    touch-action: pan-x pan-y !important;
   }
 
   /* Mobile Bottom-Sheet Detail Popup */
