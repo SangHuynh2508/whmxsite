@@ -1,5 +1,0 @@
-A10101: icon=, name=None
-A10102: icon=, name=None
-A10103: icon=, name=None
-A10104: icon=, name=None
-A10105: icon=, name=None
