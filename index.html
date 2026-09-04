@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vật Hoa Di Tân - Character Calculator</title>
+  <meta name="description" content="Công cụ tính toán nguyên liệu nâng cấp cấp độ và thiên phú nhân vật game Vật Hoa Di Tân (物华弥新)." />
+  <meta property="og:title" content="Vật Hoa Di Tân - Character Calculator" />
+  <meta property="og:description" content="Tra cứu và tính toán tài nguyên nâng cấp nhân vật Vật Hoa Di Tân." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/avatars/W0001.png" />
+  <link rel="icon" type="image/png" href="/assets/items/itemicon_3.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+
+<body>
+  <nav class="top-nav">
+    <div class="nav-brand">VẬT HOA DI TÂN</div>
+    <div class="nav-links">
+      <a href="#" class="active">Calculator</a>
+      <a href="#">Characters</a>
+      <a href="#">Data</a>
+    </div>
+  </nav>
+
+  <div id="app" class="app-layout">
+
+    <!-- Sidebar: Catalog -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <h1>Vật Hoa Di Tân</h1>
+        <p class="subtitle">CALCULATOR</p>
+      </header>
+
+      <div class="filter-section">
+        <input type="text" id="search-input" placeholder="Tìm kiếm nhân vật..." autocomplete="off" />
+
+        <div class="filter-group">
+          <span class="filter-label">Lớp</span>
+          <div class="filter-chips" id="job-filter">
+            <button class="chip active" data-job="all">Tất cả</button>
+            <button class="chip" data-job="1">Túc Vệ</button>
+            <button class="chip" data-job="2">Khinh Nhuệ</button>
+            <button class="chip" data-job="3">Viễn Kích</button>
+            <button class="chip" data-job="4">Cấu Thuật</button>
+            <button class="chip" data-job="5">Chiến Lược</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Độ hiếm</span>
+          <div class="filter-chips" id="rarity-filter">
+            <button class="chip active" data-rarity="all">Tất cả</button>
+            <button class="chip chip-ssr" data-rarity="4">SSR</button>
+            <button class="chip chip-sr" data-rarity="3">SR</button>
+            <button class="chip chip-r" data-rarity="2">R</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="character-catalog" id="char-catalog">
+        <!-- Populated via JS -->
+      </div>
+    </aside>
+
+    <!-- Main View: Details & Calculation -->
+    <main class="main-content hidden" id="main-content">
+      <div class="content-body">
+        <div class="calc-wrapper">
+          <!-- Character Profile -->
+          <section class="profile-header">
+            <div class="profile-avatar-container">
+              <img src="" alt="" id="profile-avatar" />
+            </div>
+            <div class="profile-identity">
+              <div class="profile-name-row">
+                <div class="profile-names">
+                  <div class="profile-rarity" id="profile-rarity">SSR</div>
+                  <h2 class="profile-name-vi" id="profile-name-vi">Tên Nhân Vật</h2>
+                  <h3 class="profile-name-cn" id="profile-name-cn">Name CN</h3>
+                </div>
+                <div class="profile-job-block" id="profile-job-block">
+                  <img class="class-badge" id="profile-class-badge" src="" alt="" />
+                  <span class="class-badge-label" id="profile-class-label"></span>
+                </div>
+              </div>
+              <div class="profile-tags" id="profile-tags">
+                <!-- Tags go here -->
+              </div>
+            </div>
+          </section>
+
+          <hr class="divider" />
+
+          <!-- Configuration Panel -->
+          <section class="config-panel">
+            <div class="config-block">
+              <div class="config-label">
+                <h3>CẤP ĐỘ (LEVEL)</h3>
+                <span class="meta-text">Tối đa 120</span>
+              </div>
+              <div class="config-controls">
+                <div class="control-group">
+                  <label>Hiện tại</label>
+                  <input type="number" id="level-current" min="1" max="120" value="1" />
+                </div>
+                <span class="arrow">→</span>
+                <div class="control-group">
+                  <label>Mục tiêu</label>
+                  <input type="number" id="level-target" min="1" max="120" value="120" />
+                </div>
+              </div>
+            </div>
+
+            <section class="calc-section">
+              <div class="section-header">
+                <h2>Thiên Phú</h2>
+                <label class="toggle-inline">
+                  <input type="checkbox" id="auto-max-toggle" checked>
+                  <span>Tự động chọn nhánh liên quan</span>
+                </label>
+              </div>
+
+              <div id="talent-graph-container" class="talent-graph-container">
+                <!-- Rendered by talentGraph.js -->
+              </div>
+            </section>
+          </section>
+
+          <hr class="divider" />
+
+          <!-- Requirements Report -->
+          <section class="report-panel">
+            <header class="report-header">
+              <h3>BÁO CÁO TÀI NGUYÊN</h3>
+            </header>
+
+            <div class="summary-stats">
+              <div class="stat-item">
+                <span class="stat-label">ĐÔNG CỐC TỆ</span>
+                <span class="stat-value" id="total-coin">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">KINH NGHIỆM</span>
+                <span class="stat-value" id="total-exp">0 EXP</span>
+              </div>
+            </div>
+
+            <div class="materials-report">
+              <h4>VẬT LIỆU CẦN</h4>
+              <div class="material-grid" id="material-grid">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Optional Character Card Panel for wide screens -->
+        <aside class="char-card-panel" id="char-card-panel">
+          <div class="character-gallery">
+            <div class="character-card">
+              <img class="character-artwork" id="profile-card-img" src="" alt="Character Artwork" />
+              <div class="ticket-base-wrapper">
+                <img class="ticket-base" src="/assets/frames/ui_ty_kp_di1.png" alt="Ticket Base" />
+              </div>
+            </div>
+            <div class="character-thumbnails" id="card-thumbnails">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="app-footer">
+        <p>Vật Hoa Di Tân Calculator là công cụ fan-made phi thương mại. Tất cả hình ảnh và dữ liệu game thuộc bản quyền của nhà phát hành Vật Hoa Di Tân (物华弥新).</p>
+      </footer>
+    </main>
+
+    <div id="empty-state" class="empty-state">
+      <p>Chọn một nhân vật từ danh mục để xem thông tin chi tiết.</p>
+    </div>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

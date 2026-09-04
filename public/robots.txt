@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://whmxcalc.vercel.app/sitemap.xml

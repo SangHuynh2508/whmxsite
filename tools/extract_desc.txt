@@ -1,0 +1,124 @@
+Name: Đông Cốc Tệ
+CN: 冬谷基金会发行的内部货币，欢迎在基金会旗下的商业场所使用。
+VI: Đồng tiền do Quỹ Đông Cốc phát hành, được lưu hành tại các khu thương mại trực thuộc Quỹ.
+----------------------------------------
+Name: Thẻ Chứng Nhận Túc Vệ I
+CN: 用于宿卫器者考核，可以解锁技能，考核复杂程度为1。
+VI: Dùng để Khí Giả Túc Vệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 1. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Túc Vệ II
+CN: 用于宿卫器者考核，可以解锁技能，考核复杂程度为2。
+VI: Dùng để Khí Giả Túc Vệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 2. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Túc Vệ III
+CN: 用于宿卫器者考核，可以解锁技能，考核复杂程度为3。
+VI: Dùng để Khí Giả Túc Vệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 3. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Túc Vệ IV
+CN: 用于宿卫器者考核，可以解锁技能，考核复杂程度为4。
+VI: Dùng để Khí Giả Túc Vệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 4. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Túc Vệ V
+CN: 用于宿卫器者考核，可以解锁技能，考核复杂程度为5。
+VI: Dùng để Khí Giả Túc Vệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 5. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Khinh Duệ I
+CN: 用于轻锐器者考核，可以解锁技能，考核复杂程度为1。
+VI: Dùng để Khí Giả Khinh Nhuệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 1. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Khinh Duệ II
+CN: 用于轻锐器者考核，可以解锁技能，考核复杂程度为2。
+VI: Dùng để Khí Giả Khinh Nhuệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 2. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Khinh Duệ III
+CN: 用于轻锐器者考核，可以解锁技能，考核复杂程度为3。
+VI: Dùng để Khí Giả Khinh Nhuệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 3. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Khinh Duệ IV
+CN: 用于轻锐器者考核，可以解锁技能，考核复杂程度为4。
+VI: Dùng để Khí Giả Khinh Nhuệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 4. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Khinh Duệ V
+CN: 用于轻锐器者考核，可以解锁技能，考核复杂程度为5。
+VI: Dùng để Khí Giả Khinh Nhuệ tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 5. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Viễn Kích I
+CN: 用于远击器者考核，可以解锁技能，考核复杂程度为1。
+VI: Dùng để Khí Giả Viễn Kích tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 1. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Viễn Kích II
+CN: 用于远击器者考核，可以解锁技能，考核复杂程度为2。
+VI: Dùng để Khí Giả Viễn Kích tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 2. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Viễn Kích III
+CN: 用于远击器者考核，可以解锁技能，考核复杂程度为3。
+VI: Dùng để Khí Giả Viễn Kích tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 3. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Viễn Kích IV
+CN: 用于远击器者考核，可以解锁技能，考核复杂程度为4。
+VI: Dùng để Khí Giả Viễn Kích tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 4. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Viễn Kích V
+CN: 用于远击器者考核，可以解锁技能，考核复杂程度为5。
+VI: Dùng để Khí Giả Viễn Kích tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 5. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Cấu Thuật I
+CN: 用于构术器者考核，可以解锁技能，考核复杂程度为1。
+VI: Dùng để Khí Giả Cấu Thuật tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 1. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Cấu Thuật II
+CN: 用于构术器者考核，可以解锁技能，考核复杂程度为2。
+VI: Dùng để Khí Giả Cấu Thuật tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 2. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Cấu Thuật III
+CN: 用于构术器者考核，可以解锁技能，考核复杂程度为3。
+VI: Dùng để Khí Giả Cấu Thuật tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 3. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Cấu Thuật IV
+CN: 用于构术器者考核，可以解锁技能，考核复杂程度为4。
+VI: Dùng để Khí Giả Cấu Thuật tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 4. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Cấu Thuật V
+CN: 用于构术器者考核，可以解锁技能，考核复杂程度为5。
+VI: Dùng để Khí Giả Cấu Thuật tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 5. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Chiến Lược I
+CN: 用于战略器者考核，可以解锁技能，考核复杂程度为1。
+VI: Dùng để Khí Giả Chiến Lược tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 1. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Chiến Lược II
+CN: 用于战略器者考核，可以解锁技能，考核复杂程度为2。
+VI: Dùng để Khí Giả Chiến Lược tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 2. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Chiến Lược III
+CN: 用于战略器者考核，可以解锁技能，考核复杂程度为3。
+VI: Dùng để Khí Giả Chiến Lược tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 3. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Chiến Lược IV
+CN: 用于战略器者考核，可以解锁技能，考核复杂程度为4。
+VI: Dùng để Khí Giả Chiến Lược tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 4. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Thẻ Chứng Nhận Chiến Lược V
+CN: 用于战略器者考核，可以解锁技能，考核复杂程度为5。
+VI: Dùng để Khí Giả Chiến Lược tiến hành Khảo Hạch và mở khóa kỹ năng. Độ phức tạp của Khảo Hạch là 5. Nội dung Khảo Hạch bao gồm khả năng kiểm soát năng lực, phân cấp sức mạnh, quy chuẩn sử dụng trang bị, v.v.
+----------------------------------------
+Name: Giấy Chứng Nhận Tư Chất I
+CN: 器者工作、能力等各方面的资质证明，是评估的重要材料，这似乎是第一次需要提供的证明。
+VI: Dùng trong Khảo Hạch Khí Giả và có thể mở khóa kỹ năng. Đây là chứng nhận về năng lực làm việc và nhiều phương diện khác của Khí Giả, một tài liệu quan trọng dùng để đánh giá. Có vẻ đây là lần đầu tiên cần cung cấp chứng nhận này.
+----------------------------------------
+Name: Giấy Chứng Nhận Tư Chất II
+CN: 器者工作、能力等各方面的资质证明，是评估的重要材料，这似乎是第二次需要提供的证明。
+VI: Dùng trong Khảo Hạch Khí Giả và có thể mở khóa kỹ năng. Đây là chứng nhận về năng lực làm việc và nhiều phương diện khác của Khí Giả, một tài liệu quan trọng dùng để đánh giá. Có vẻ đây là lần thứ hai cần cung cấp chứng nhận này.
+----------------------------------------
+Name: Giấy Chứng Nhận Tư Chất III
+CN: 器者工作、能力等各方面的资质证明，是评估的重要材料，这似乎是第三次需要提供的证明。
+VI: Dùng trong Khảo Hạch Khí Giả và có thể mở khóa kỹ năng. Đây là chứng nhận về năng lực làm việc và nhiều phương diện khác của Khí Giả, một tài liệu quan trọng dùng để đánh giá. Có vẻ đây là lần thứ ba cần cung cấp chứng nhận này.
+----------------------------------------
+Name: Giấy Chứng Nhận Tư Chất IV
+CN: 器者工作、能力等各方面的资质证明，是评估的重要材料，这似乎是第四次需要提供的证明。
+VI: Dùng trong Khảo Hạch Khí Giả và có thể mở khóa kỹ năng. Đây là chứng nhận về năng lực làm việc và nhiều phương diện khác của Khí Giả, một tài liệu quan trọng dùng để đánh giá. Có vẻ đây là lần thứ tư cần cung cấp chứng nhận này.
+----------------------------------------
+Name: Giấy Chứng Nhận Tư Chất V
+CN: 器者工作、能力等各方面的资质证明，是评估的重要材料，这似乎是第五次需要提供的证明。
+VI: Dùng trong Khảo Hạch Khí Giả và có thể mở khóa kỹ năng. Đây là chứng nhận về năng lực làm việc và nhiều phương diện khác của Khí Giả, một tài liệu quan trọng dùng để đánh giá. Có vẻ đây là lần thứ năm cần cung cấp chứng nhận này.
+----------------------------------------
