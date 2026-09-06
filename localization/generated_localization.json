@@ -92,7 +92,7 @@
       "term_id": "STAT_12",
       "category": "STAT",
       "term_cn": "真实伤害",
-      "term_vi": "Sát Thương Chân Thật",
+      "term_vi": "Sát Thương Chuẩn",
       "han_viet": "Chân Thật Sát Thương",
       "status": "APPROVED"
     },
@@ -100,9 +100,9 @@
       "term_id": "STAT_13",
       "category": "STAT",
       "term_cn": "防御穿透",
-      "term_vi": "Xuyên Phòng Ngự",
+      "term_vi": "Xuyên Thủ",
       "han_viet": "Phòng Ngự Xuyên Thấu",
-      "status": "REVIEW"
+      "status": "APPROVED"
     },
     "宿卫": {
       "term_id": "JOB_01",
@@ -3690,163 +3690,163 @@
       "character_id": "A0090",
       "group_id": "A009001",
       "skill_name_cn": "喜乐喧天",
-      "skill_name_vi": "",
+      "skill_name_vi": "Hỷ Lạc Huyên Thiên",
       "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên 1 kẻ địch chỉ định.",
+      "status": "TRANSLATED"
     },
     "A009001_2": {
       "character_id": "A0090",
       "group_id": "A009001",
       "skill_name_cn": "喜乐喧天",
-      "skill_name_vi": "",
+      "skill_name_vi": "Hỷ Lạc Huyên Thiên",
       "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên 1 kẻ địch chỉ định.",
+      "status": "TRANSLATED"
     },
     "A009001_3": {
       "character_id": "A0090",
       "group_id": "A009001",
       "skill_name_cn": "喜乐喧天",
-      "skill_name_vi": "",
+      "skill_name_vi": "Hỷ Lạc Huyên Thiên",
       "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên 1 kẻ địch chỉ định.",
+      "status": "TRANSLATED"
     },
     "A009001_4": {
       "character_id": "A0090",
       "group_id": "A009001",
       "skill_name_cn": "喜乐喧天",
-      "skill_name_vi": "",
+      "skill_name_vi": "Hỷ Lạc Huyên Thiên",
       "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên 1 kẻ địch chỉ định.",
+      "status": "TRANSLATED"
     },
     "A009001_5": {
       "character_id": "A0090",
       "group_id": "A009001",
       "skill_name_cn": "喜乐喧天",
-      "skill_name_vi": "",
+      "skill_name_vi": "Hỷ Lạc Huyên Thiên",
       "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên 1 kẻ địch chỉ định.",
+      "status": "TRANSLATED"
     },
     "A009002_1": {
       "character_id": "A0090",
       "group_id": "A009002",
       "skill_name_cn": "良辰启轿",
-      "skill_name_vi": "",
+      "skill_name_vi": "Lương Thần Khởi Kiệu",
       "desc_cn": "使用后自身获得再行动<color=#158bdb>1</color>次，并获得持续<color=#158bdb>1</color>回合的<color=#ff6724>吉时</color>状态。{Buff_A0090_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi sử dụng, bản thân nhận <color=#158bdb>1</color> lần tái hành động, đồng thời nhận trạng thái <color=#ff6724>Giờ Lành</color> kéo dài <color=#158bdb>1</color> lượt.{Buff_A0090_1}",
+      "status": "TRANSLATED"
     },
     "A009002_2": {
       "character_id": "A0090",
       "group_id": "A009002",
       "skill_name_cn": "良辰启轿",
-      "skill_name_vi": "",
+      "skill_name_vi": "Lương Thần Khởi Kiệu",
       "desc_cn": "使用后自身获得再行动<color=#158bdb>1</color>次，并获得持续<color=#158bdb>1</color>回合的<color=#ff6724>吉时</color>状态。{Buff_A0090_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi sử dụng, bản thân nhận <color=#158bdb>1</color> lần tái hành động, đồng thời nhận trạng thái <color=#ff6724>Giờ Lành</color> kéo dài <color=#158bdb>1</color> lượt.{Buff_A0090_1}",
+      "status": "TRANSLATED"
     },
     "A009002_3": {
       "character_id": "A0090",
       "group_id": "A009002",
       "skill_name_cn": "良辰启轿",
-      "skill_name_vi": "",
+      "skill_name_vi": "Lương Thần Khởi Kiệu",
       "desc_cn": "使用后自身获得再行动<color=#158bdb>1</color>次，并获得持续<color=#158bdb>1</color>回合的<color=#ff6724>吉时</color>状态。{Buff_A0090_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi sử dụng, bản thân nhận <color=#158bdb>1</color> lần tái hành động, đồng thời nhận trạng thái <color=#ff6724>Giờ Lành</color> kéo dài <color=#158bdb>1</color> lượt.{Buff_A0090_1}",
+      "status": "TRANSLATED"
     },
     "A009003_1": {
       "character_id": "A0090",
       "group_id": "A009003",
       "skill_name_cn": "鸣锣开道",
-      "skill_name_vi": "",
+      "skill_name_vi": "Minh La Khai Đạo",
       "desc_cn": "处于<color=#ff6724>瞄准</color>状态时，常击后进行连击，对受击单位造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使敌方获得<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态。{Buff_A0090_3_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Khi ở trạng thái <color=#ff6724>Nhắm Bắn</color>, sau Đánh Thường sẽ tiến hành liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị chịu đòn, đồng thời khiến phe địch nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>.{Buff_A0090_3_1}",
+      "status": "TRANSLATED"
     },
     "A009003_2": {
       "character_id": "A0090",
       "group_id": "A009003",
       "skill_name_cn": "鸣锣开道",
-      "skill_name_vi": "",
+      "skill_name_vi": "Minh La Khai Đạo",
       "desc_cn": "处于<color=#ff6724>瞄准</color>状态时，常击后进行连击，对受击单位造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使敌方获得<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态。{Buff_A0090_3_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Khi ở trạng thái <color=#ff6724>Nhắm Bắn</color>, sau Đánh Thường sẽ tiến hành liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị chịu đòn, đồng thời khiến phe địch nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>.{Buff_A0090_3_1}",
+      "status": "TRANSLATED"
     },
     "A009003_3": {
       "character_id": "A0090",
       "group_id": "A009003",
       "skill_name_cn": "鸣锣开道",
-      "skill_name_vi": "",
+      "skill_name_vi": "Minh La Khai Đạo",
       "desc_cn": "处于<color=#ff6724>瞄准</color>状态时，常击后进行连击，对受击单位造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使敌方获得<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态。{Buff_A0090_3_1}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Khi ở trạng thái <color=#ff6724>Nhắm Bắn</color>, sau Đánh Thường sẽ tiến hành liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị chịu đòn, đồng thời khiến phe địch nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>.{Buff_A0090_3_1}",
+      "status": "TRANSLATED"
     },
     "A009004_1": {
       "character_id": "A0090",
       "group_id": "A009004",
       "skill_name_cn": "朱金漆雕",
-      "skill_name_vi": "",
+      "skill_name_vi": "Chu Kim Thất Điêu",
       "desc_cn": "敌方单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则自身攻击力提高<color=#158bdb>[Effect1Para,1]%</color>，最多可叠加<color=#158bdb>5</color>层；\n连击对敌方单位造成伤害时，该单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则对其造成自身攻击力<color=#158bdb>20%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Mỗi khi đơn vị phe địch có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, Tấn Công của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>, dồn tối đa <color=#158bdb>5</color> tầng;\nKhi liên kích gây sát thương lên đơn vị phe địch, mỗi khi đơn vị đó có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, gây thêm <color=#ff6724>Sát Thương Vật Lý Bổ Sung</color> bằng <color=#158bdb>20%</color> Tấn Công của bản thân lên mục tiêu đó.{Buff_SpecialDamgeP_Lan}",
+      "status": "TRANSLATED"
     },
     "A009004_2": {
       "character_id": "A0090",
       "group_id": "A009004",
       "skill_name_cn": "朱金漆雕",
-      "skill_name_vi": "",
+      "skill_name_vi": "Chu Kim Thất Điêu",
       "desc_cn": "敌方单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则自身攻击力提高<color=#158bdb>[Effect1Para,1]%</color>，最多可叠加<color=#158bdb>5</color>层；\n连击对敌方单位造成伤害时，该单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则对其造成自身攻击力<color=#158bdb>20%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Mỗi khi đơn vị phe địch có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, Tấn Công của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>, dồn tối đa <color=#158bdb>5</color> tầng;\nKhi liên kích gây sát thương lên đơn vị phe địch, mỗi khi đơn vị đó có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, gây thêm <color=#ff6724>Sát Thương Vật Lý Bổ Sung</color> bằng <color=#158bdb>20%</color> Tấn Công của bản thân lên mục tiêu đó.{Buff_SpecialDamgeP_Lan}",
+      "status": "TRANSLATED"
     },
     "A009004_3": {
       "character_id": "A0090",
       "group_id": "A009004",
       "skill_name_cn": "朱金漆雕",
-      "skill_name_vi": "",
+      "skill_name_vi": "Chu Kim Thất Điêu",
       "desc_cn": "敌方单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则自身攻击力提高<color=#158bdb>[Effect1Para,1]%</color>，最多可叠加<color=#158bdb>5</color>层；\n连击对敌方单位造成伤害时，该单位每存在<color=#158bdb>1</color>层<color=#ff6724>避让</color>状态，则对其造成自身攻击力<color=#158bdb>20%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Mỗi khi đơn vị phe địch có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, Tấn Công của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>, dồn tối đa <color=#158bdb>5</color> tầng;\nKhi liên kích gây sát thương lên đơn vị phe địch, mỗi khi đơn vị đó có <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Nhường Đường</color>, gây thêm <color=#ff6724>Sát Thương Vật Lý Bổ Sung</color> bằng <color=#158bdb>20%</color> Tấn Công của bản thân lên mục tiêu đó.{Buff_SpecialDamgeP_Lan}",
+      "status": "TRANSLATED"
     },
     "A009005_1": {
       "character_id": "A0090",
       "group_id": "A009005",
       "skill_name_cn": "万工匠心",
-      "skill_name_vi": "",
+      "skill_name_vi": "Vạn Công Tượng Tâm",
       "desc_cn": "进入战斗后，自身防御穿透增加<color=#158bdb>[Effect1Para,1]%</color>；\n使用绝技时，自身获得<color=#158bdb>1</color>层<color=#ff6724>啸剑</color>状态；\n若使用绝技时，自身未处于瞄准状态，则刷新职业技能冷却时间。{Buff_Atk_Up}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi vào trận, Xuyên Thủ của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nKhi sử dụng Tuyệt Kỹ, bản thân nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Khiếu Kiếm</color>;\nNếu khi sử dụng Tuyệt Kỹ, bản thân không ở trạng thái Nhắm Bắn, sẽ làm mới thời gian hồi Kỹ Năng Nghề.{Buff_Atk_Up}",
+      "status": "TRANSLATED"
     },
     "A009005_2": {
       "character_id": "A0090",
       "group_id": "A009005",
       "skill_name_cn": "万工匠心",
-      "skill_name_vi": "",
+      "skill_name_vi": "Vạn Công Tượng Tâm",
       "desc_cn": "进入战斗后，自身防御穿透增加<color=#158bdb>[Effect1Para,1]%</color>；\n使用绝技时，自身获得<color=#158bdb>1</color>层<color=#ff6724>啸剑</color>状态；\n若使用绝技时，自身未处于瞄准状态，则刷新职业技能冷却时间。{Buff_Atk_Up}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi vào trận, Xuyên Thủ của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nKhi sử dụng Tuyệt Kỹ, bản thân nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Khiếu Kiếm</color>;\nNếu khi sử dụng Tuyệt Kỹ, bản thân không ở trạng thái Nhắm Bắn, sẽ làm mới thời gian hồi Kỹ Năng Nghề.{Buff_Atk_Up}",
+      "status": "TRANSLATED"
     },
     "A009005_3": {
       "character_id": "A0090",
       "group_id": "A009005",
       "skill_name_cn": "万工匠心",
-      "skill_name_vi": "",
+      "skill_name_vi": "Vạn Công Tượng Tâm",
       "desc_cn": "进入战斗后，自身防御穿透增加<color=#158bdb>[Effect1Para,1]%</color>；\n使用绝技时，自身获得<color=#158bdb>1</color>层<color=#ff6724>啸剑</color>状态；\n若使用绝技时，自身未处于瞄准状态，则刷新职业技能冷却时间。{Buff_Atk_Up}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi vào trận, Xuyên Thủ của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nKhi sử dụng Tuyệt Kỹ, bản thân nhận <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Khiếu Kiếm</color>;\nNếu khi sử dụng Tuyệt Kỹ, bản thân không ở trạng thái Nhắm Bắn, sẽ làm mới thời gian hồi Kỹ Năng Nghề.{Buff_Atk_Up}",
+      "status": "TRANSLATED"
     },
     "A009011_1": {
       "character_id": "A0090",
       "group_id": "A009011",
       "skill_name_cn": "锦绣红妆",
-      "skill_name_vi": "",
+      "skill_name_vi": "Cẩm Tú Hồng Trang",
       "desc_cn": "使用后自身获得<color=#158bdb>1</color>次不可移动的再行动，并进入<color=#ff6724>瞄准</color>状态。{Buff_Snipe_Lan}",
-      "desc_vi": "",
-      "status": "PENDING"
+      "desc_vi": "Sau khi sử dụng, bản thân nhận <color=#158bdb>1</color> lần tái hành động không thể di chuyển, đồng thời tiến vào trạng thái <color=#ff6724>Nhắm Bắn</color>.{Buff_Snipe_Lan}",
+      "status": "TRANSLATED"
     },
     "A009301_1": {
       "character_id": "A0093",
@@ -23185,29 +23185,29 @@
     "Buff_A0090_1": {
       "group_root_id": "Buff_A0090_1",
       "buff_name_cn": "吉时",
-      "buff_name_vi": "",
+      "buff_name_vi": "Giờ Lành",
       "buff_desc_cn": "连击伤害提高<color=#158bdb>[EffectParam,2]%</color>，触发连击后，自身获得额外行动<color=#158bdb>1</color>次，并刷新职业技能冷却时间。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Sát thương liên kích tăng <color=#158bdb>[EffectParam,2]%</color>, sau khi kích hoạt liên kích, bản thân nhận thêm <color=#158bdb>1</color> lần hành động, đồng thời làm mới thời gian hồi Kỹ Năng Nghề.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_A0090_3A_1": {
       "group_root_id": "Buff_A0090_3A_1",
       "buff_name_cn": "避让",
-      "buff_name_vi": "",
+      "buff_name_vi": "Nhường Đường",
       "buff_desc_cn": "受到的连击伤害提高<color=#158bdb>[EffectParam,2]%</color>，此状态持续<color=#158bdb>2</color>回合，最多叠加<color=#158bdb>3</color>层。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Sát thương liên kích chịu nhận tăng <color=#158bdb>[EffectParam,2]%</color>, trạng thái này kéo dài <color=#158bdb>2</color> lượt, dồn tối đa <color=#158bdb>3</color> tầng.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_A0090_hz_4_3": {
       "group_root_id": "Buff_A0090_hz_4_3",
       "buff_name_cn": "临时干部",
-      "buff_name_vi": "",
+      "buff_name_vi": "Cán Bộ Tạm Thời",
       "buff_desc_cn": "使自身造成的连击伤害提高<color=#158bdb>70%</color>，额外伤害提高<color=#158bdb>100%</color>且自身防御穿透提高<color=#158bdb>50%</color>，此状态持续<color=#158bdb>1</color>轮次。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khiến sát thương liên kích bản thân gây ra tăng <color=#158bdb>70%</color>, sát thương bổ sung tăng <color=#158bdb>100%</color> và Xuyên Thủ của bản thân tăng <color=#158bdb>50%</color>, trạng thái này kéo dài <color=#158bdb>1</color> vòng.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_A0093_1": {
       "group_root_id": "Buff_A0093_1",
@@ -23626,11 +23626,11 @@
     "Buff_Atk_Up": {
       "group_root_id": "Buff_Atk_Up",
       "buff_name_cn": "啸剑",
-      "buff_name_vi": "",
+      "buff_name_vi": "Khiếu Kiếm",
       "buff_desc_cn": "攻击力提高<color=#158bdb>20%</color>，持续<color=#158bdb>[EffectParam,2]</color>回合，可叠加<color=#158bdb>2</color>层。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Tấn Công tăng <color=#158bdb>20%</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, có thể dồn <color=#158bdb>2</color> tầng.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_BA013_1": {
       "group_root_id": "Buff_BA013_1",
@@ -29647,11 +29647,11 @@
     "Buff_HitRate_Up": {
       "group_root_id": "Buff_HitRate_Up",
       "buff_name_cn": "瞄准",
-      "buff_name_vi": "",
+      "buff_name_vi": "Nhắm Bắn",
       "buff_desc_cn": "提高命中率<color=#158bdb>[EffectParam,3]%</color>，持续<color=#158bdb>[EffectParam,2]</color>回合，可叠加<color=#158bdb>2</color>层。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Tăng Tỷ Lệ Chính Xác <color=#158bdb>[EffectParam,3]%</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, có thể dồn <color=#158bdb>2</color> tầng.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_Immunize_BossCommon_MZ_1": {
       "group_root_id": "Buff_Immunize_BossCommon_MZ_1",
@@ -35092,11 +35092,11 @@
     "Buff_SpecialDamgeP_Lan": {
       "group_root_id": "Buff_SpecialDamgeP_Lan",
       "buff_name_cn": "额外物理伤害",
-      "buff_name_vi": "",
+      "buff_name_vi": "Sát Thương Vật Lý Bổ Sung",
       "buff_desc_cn": "此伤害不触发暴击和贯穿效果，且无法被格挡。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Sát thương này không kích hoạt hiệu ứng Bạo Kích và Xuyên Thấu, đồng thời không thể bị Đỡ.",
       "classification_scope": "UNKNOWN",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "Buff_SpecialDamge_Lan": {
       "group_root_id": "Buff_SpecialDamge_Lan",
@@ -41266,8 +41266,8 @@
       "rank_numeral_vi": "Trí Tri I",
       "effect_type": "stat_bonus",
       "effect_summary_cn": "Atk_PERCENT+14; Atk_FIX+171",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Tấn Công +14%; Tấn Công +171",
+      "status": "TRANSLATED"
     },
     "A0090_2": {
       "star": 2,
@@ -41275,8 +41275,8 @@
       "rank_numeral_vi": "Trí Tri II",
       "effect_type": "stat_bonus",
       "effect_summary_cn": "PhysicDef_PERCENT+20; PhysicDef_FIX+87",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Phòng Thủ Vật Lý +20%; Phòng Thủ Vật Lý +87",
+      "status": "TRANSLATED"
     },
     "A0090_3": {
       "star": 3,
@@ -41284,8 +41284,8 @@
       "rank_numeral_vi": "Trí Tri III",
       "effect_type": "skill_upgrade",
       "effect_summary_cn": "技能强化: A009003 -> A009003ex",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Cường hóa Nội Tại 1: Minh La Khai Đạo",
+      "status": "TRANSLATED"
     },
     "A0090_4": {
       "star": 4,
@@ -41293,8 +41293,8 @@
       "rank_numeral_vi": "Trí Tri IV",
       "effect_type": "stat_bonus",
       "effect_summary_cn": "Hp_PERCENT+14; Hp_FIX+374",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Máu +14%; Máu +374",
+      "status": "TRANSLATED"
     },
     "A0090_5": {
       "star": 5,
@@ -41302,8 +41302,8 @@
       "rank_numeral_vi": "Trí Tri V",
       "effect_type": "stat_bonus",
       "effect_summary_cn": "MagicDef_PERCENT+20; MagicDef_FIX+87",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Phòng Thủ Cấu Thuật +20%; Phòng Thủ Cấu Thuật +87",
+      "status": "TRANSLATED"
     },
     "A0090_6": {
       "star": 6,
@@ -41311,8 +41311,8 @@
       "rank_numeral_vi": "Trí Tri VI",
       "effect_type": "stat_bonus",
       "effect_summary_cn": "DoubleHitDmgIncrease_FIX+20",
-      "effect_summary_vi": "",
-      "status": "APPROVED"
+      "effect_summary_vi": "Tăng Sát Thương Liên Kích +20",
+      "status": "TRANSLATED"
     },
     "A0093_1": {
       "star": 1,
@@ -47731,12 +47731,12 @@
     "A00904": {
       "character_id": "A0090",
       "icon_name_cn": "心理委员袖章",
-      "icon_name_vi": "",
+      "icon_name_vi": "Băng Tay Ủy Viên Tâm Lý",
       "icon_info_cn": "万工轿参加了某个校园交流项目。为什么会派一顶轿子参加这种活动？商业部同事解答：“小万能说会道，还有迎新经验，而且外显形象这么小……不是，年轻！更适合融入学生之中嘛！”\n交流活动很顺利，而且在和他熟悉之后，学生们似乎很愿意向这位“同龄人”倾诉生活学习中的烦恼。于是小万聊天室·校园版开张，万工轿也狠狠恶补了一番青少年心理知识。\n项目结束这天，他收到学生们送来的一件特别的纪念物。“心理委员？”“对呀，其实我们都这么叫您，无论什么事，您都能找到又积极又好玩儿的解答方向。”“要是小万老师真的能留下来当我们的同学就好啦！”\n他望着那些笑脸略感恍惚，他见过的，一张张和他们年纪相仿的面容，却有着截然不同的忧愁。万工轿无法断定如今是不是最好的时代，但年轻的生命确实有了更多选择。\n“谢谢同学们。”小万老师露出招牌的灿烂笑容，“不过，我或许很早就担任过这个职位了。”",
-      "icon_info_vi": "",
+      "icon_info_vi": "Vạn Công Kiệu đã tham gia một dự án giao lưu học đường. Tại sao lại cử một chiếc kiệu tham gia hoạt động như vậy? Đồng nghiệp ở Bộ Thương Mại giải thích: \"Tiểu Vạn khéo ăn khéo nói, lại có kinh nghiệm đón tân sinh viên, hơn nữa ngoại hình trông nhỏ nhắn... à không, trẻ trung! Rất thích hợp để hòa nhập với học sinh mà!\"\nHoạt động giao lưu diễn ra rất thuận lợi, sau khi quen thuộc với cậu, các em học sinh dường như rất sẵn lòng tâm sự những phiền muộn trong cuộc sống và học tập với \"bạn cùng lứa\" này. Thế là Phòng Trò Chuyện Tiểu Vạn · Phiên Bản Học Đường chính thức khai trương, Vạn Công Kiệu cũng miệt mài bổ sung một lượng lớn kiến thức tâm lý thanh thiếu niên.\nVào ngày dự án kết thúc, cậu nhận được một món quà kỷ niệm đặc biệt từ các em học sinh. \"Ủy viên tâm lý?\" \"Đúng vậy ạ, thực ra bọn em toàn gọi thầy như thế, dù là chuyện gì thầy cũng tìm được hướng giải đáp vừa tích cực vừa thú vị.\" \"Giá mà thầy Tiểu Vạn thực sự có thể ở lại làm bạn học của bọn em thì tốt biết mấy!\"\nCậu nhìn những gương mặt nụ cười ấy mà hơi thẫn thờ, cậu từng nhìn thấy những gương mặt ở độ tuổi tương tự họ, nhưng lại mang những nỗi âu lo hoàn toàn khác biệt. Vạn Công Kiệu không thể khẳng định thời đại bây giờ có phải là thời đại tốt nhất hay không, nhưng những sinh mệnh trẻ tuổi rõ ràng đã có thêm nhiều lựa chọn.\n\"Cảm ơn các em.\" Thầy Tiểu Vạn nở nụ cười rạng rỡ thương hiệu, \"Tuy nhiên, có lẽ tôi đã đảm nhận chức vụ này từ rất lâu về trước rồi.\"",
       "buff_show_cn": "",
       "buff_show_vi": "",
-      "status": "PENDING"
+      "status": "TRANSLATED"
     },
     "A00934": {
       "character_id": "A0093",

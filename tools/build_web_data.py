@@ -824,14 +824,25 @@ def build():
     # 01 -> 常击 -> Đánh Thường (Type 1)
     # 11 -> 职业 -> Kỹ Năng Nghề (Type 2)
     # 02 -> 绝技 -> Tuyệt Kỹ (Type 3)
-    # 03, 04, 05 -> 被动 -> Nội Tại (Types 4, 5, 6)
+    # 03 -> 被动1 -> Nội Tại 1 (Type 4)
+    # 04 -> 被动2 -> Nội Tại 2 (Type 5)
+    # 05 -> 被动3 -> Nội Tại 3 (Type 6)
     SUFFIX_CATEGORY_MAP = {
         "01": ("Đánh Thường", 1),
         "11": ("Kỹ Năng Nghề", 2),
         "02": ("Tuyệt Kỹ", 3),
-        "03": ("Nội Tại", 4),
-        "04": ("Nội Tại", 5),
-        "05": ("Nội Tại", 6)
+        "03": ("Nội Tại 1", 4),
+        "04": ("Nội Tại 2", 5),
+        "05": ("Nội Tại 3", 6)
+    }
+
+    SUFFIX_SLOT_LABEL_MAP = {
+        "01": "Đánh Thường",
+        "11": "Kỹ Năng Nghề",
+        "02": "Tuyệt Kỹ",
+        "03": "Nội Tại 1",
+        "04": "Nội Tại 2",
+        "05": "Nội Tại 3"
     }
 
     DISPLAY_ORDER_MAP = {
