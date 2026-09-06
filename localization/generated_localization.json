@@ -36,7 +36,7 @@
       "term_id": "STAT_05",
       "category": "STAT",
       "term_cn": "生命",
-      "term_vi": "Sinh Mệnh",
+      "term_vi": "Máu",
       "han_viet": "Sinh Mệnh",
       "status": "APPROVED"
     },
@@ -96,6 +96,14 @@
       "han_viet": "Chân Thật Sát Thương",
       "status": "APPROVED"
     },
+    "防御穿透": {
+      "term_id": "STAT_13",
+      "category": "STAT",
+      "term_cn": "防御穿透",
+      "term_vi": "Xuyên Phòng Ngự",
+      "han_viet": "Phòng Ngự Xuyên Thấu",
+      "status": "REVIEW"
+    },
     "宿卫": {
       "term_id": "JOB_01",
       "category": "JOB",
@@ -108,7 +116,7 @@
       "term_id": "JOB_02",
       "category": "JOB",
       "term_cn": "轻锐",
-      "term_vi": "Khinh Duệ",
+      "term_vi": "Khinh Nhuệ",
       "han_viet": "Khinh Duệ",
       "status": "APPROVED"
     },
@@ -222,6 +230,30 @@
       "term_cn": "焕彰",
       "term_vi": "Hoán Chương",
       "han_viet": "Hoán Chương",
+      "status": "APPROVED"
+    },
+    "格挡率": {
+      "term_id": "STAT_14",
+      "category": "STAT",
+      "term_cn": "格挡率",
+      "term_vi": "Tỷ Lệ Đỡ",
+      "han_viet": "Cách Đãng Tỷ Lệ",
+      "status": "APPROVED"
+    },
+    "效果命中": {
+      "term_id": "STAT_15",
+      "category": "STAT",
+      "term_cn": "效果命中",
+      "term_vi": "Chính Xác Hiệu Ứng",
+      "han_viet": "Hiệu Ứng Mệnh Trung",
+      "status": "APPROVED"
+    },
+    "效果抵抗": {
+      "term_id": "STAT_16",
+      "category": "STAT",
+      "term_cn": "效果抵抗",
+      "term_vi": "Kháng Hiệu Ứng",
+      "han_viet": "Hiệu Ứng Đề Kháng",
       "status": "APPROVED"
     }
   },
