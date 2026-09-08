@@ -28,6 +28,8 @@ def build():
     node_loc = gen_loc.get("talents", {})
     skill_loc = gen_loc.get("skills", {})
     profile_loc = gen_loc.get("profiles", {})
+    buff_loc = gen_loc.get("buffs", {})
+    hz_loc_dict = gen_loc.get("huanzhang", {})
     
     # Skin localization map from master
     skin_loc_clean = {}
@@ -97,6 +99,30 @@ def build():
     brilliant_up_raw = load_json("BrilliantUpMap.json")
     talent_bank_raw = load_json("talentBankMap.json")
     actor_raw = load_json("actor.json")
+
+    def clean_rich_text(value):
+        """Return a comparable player-facing term without changing source text."""
+        return re.sub(r'<[^>]+>', '', safe_str(value)).strip()
+
+    def normalize_buff_name(value):
+        """Exact-only comparison key; this deliberately performs no fuzzy matching."""
+        return re.sub(r'\s+', '', unicodedata.normalize("NFKC", clean_rich_text(value)))
+
+    def usable_vi(value):
+        """Do not publish an incomplete CN/VI mash-up as a Vietnamese translation."""
+        text = safe_str(value)
+        return text if text and not re.search(r'[\u3400-\u9fff]', text) else ""
+
+    # A source description can name a status without carrying its {Buff_ID} marker.
+    # Such a relation is usable only when the raw buff table has exactly one matching
+    # normalized Chinese name.  Ambiguous names intentionally receive no popup.
+    buff_ids_by_name = {}
+    for buff_id, buff_data in buff_loc.items():
+        if not isinstance(buff_data, dict):
+            continue
+        normalized_name = normalize_buff_name(buff_data.get("buff_name_cn") or buff_data.get("name_cn", ""))
+        if normalized_name:
+            buff_ids_by_name.setdefault(normalized_name, []).append(str(buff_id))
 
     # Build Brilliant Map skill lookup
     brilliant_skill_gids = set()
@@ -438,6 +464,59 @@ def build():
                     
         return mechs
 
+    def attach_popup_terms(raw_desc, mechanics):
+        """Attach only deterministic, displayable buff references to each mechanic.
+
+        The frontend must never infer a popup from an arbitrary matching word.  A term
+        is linkable when its buff was reached through the skill's raw relation, or when
+        its exact normalized Chinese name maps to exactly one BUFF_STATUS record.
+        In both cases the source description must actually contain that name.
+        """
+        source_text = clean_rich_text(raw_desc)
+        if not source_text:
+            return mechanics
+        highlighted_names = {
+            normalize_buff_name(match.group(1))
+            for match in re.finditer(r'<color=[^>]+>(.*?)</color>', raw_desc, flags=re.IGNORECASE | re.DOTALL)
+        }
+
+        by_key = {m.get("key"): m for m in mechanics if isinstance(m, dict) and m.get("key")}
+
+        # Add unambiguous source-name-only references.  This covers conditions such as
+        # 寒天/霜冻 that the game text names without embedding a marker in that skill.
+        for normalized_name, buff_ids in buff_ids_by_name.items():
+            if len(buff_ids) != 1:
+                continue
+            buff_id = buff_ids[0]
+            buff_data = buff_loc.get(buff_id, {})
+            name_cn = clean_rich_text(buff_data.get("buff_name_cn") or buff_data.get("name_cn", ""))
+            if (not name_cn or normalized_name not in highlighted_names
+                    or buff_id in by_key):
+                continue
+            resolved = resolve_buff_tree(buff_id, [])
+            direct = next((m for m in resolved if m.get("key") == buff_id), None)
+            if direct and not re.search(r'\[(?:EffectParam|EffectPara|BuffParam|[A-Za-z0-9_]+Para),\d+\]', direct.get("template", "")):
+                loc = buff_loc.get(buff_id, {})
+                direct["name_vi"] = usable_vi(loc.get("buff_name_vi") or loc.get("name_vi", ""))
+                direct["desc_cn"] = direct.get("template", "")
+                direct["desc_vi"] = usable_vi(loc.get("buff_desc_vi") or loc.get("desc_vi", ""))
+                mechanics.append(direct)
+                by_key[buff_id] = direct
+
+        for mechanic in mechanics:
+            if not isinstance(mechanic, dict):
+                continue
+            name_cn = clean_rich_text(mechanic.get("name_cn", ""))
+            if not name_cn or name_cn not in source_text:
+                continue
+            name_vi = clean_rich_text(mechanic.get("name_vi", ""))
+            mechanic["popup_terms"] = [{
+                "buff_id": mechanic.get("key"),
+                "name_cn": name_cn,
+                "name_vi": name_vi,
+            }]
+        return mechanics
+
     def get_buff_param_val(pname, idx_str, args, b_attr_dict, unit="", closing_tags="", placeholder_to_pos=None):
         if placeholder_to_pos is None: placeholder_to_pos = {}
         pos = placeholder_to_pos.get(idx_str, int(idx_str) - 1)
@@ -507,6 +586,10 @@ def build():
             template = first_m["template"]
             b_attr_dict = first_m["attr_dict"]
             
+            b_loc = buff_loc.get(key, {})
+            b_name_vi = usable_vi(b_loc.get("buff_name_vi") or b_loc.get("name_vi", ""))
+            b_desc_vi_raw = usable_vi(b_loc.get("buff_desc_vi") or b_loc.get("desc_vi", ""))
+            
             args_per_lvl = [m["args"] for _, m in entries]
             same_template = all(m["template"] == template for _, m in entries)
             
@@ -555,18 +638,30 @@ def build():
                         
                 clean_desc = re.sub(pattern, multi_replacer, template)
                 clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+                
+                clean_desc_vi = re.sub(pattern, multi_replacer, b_desc_vi_raw) if b_desc_vi_raw else ""
+                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+                
                 merged_list.append({
                     "key": key,
                     "name_cn": name_cn,
-                    "desc_cn": clean_desc
+                    "name_vi": b_name_vi,
+                    "desc_cn": clean_desc,
+                    "desc_vi": clean_desc_vi
                 })
             elif len(entries) == 1:
                 clean_desc = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), template)
                 clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+                
+                clean_desc_vi = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), b_desc_vi_raw) if b_desc_vi_raw else ""
+                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+                
                 merged_list.append({
                     "key": key,
                     "name_cn": name_cn,
-                    "desc_cn": clean_desc
+                    "name_vi": b_name_vi,
+                    "desc_cn": clean_desc,
+                    "desc_vi": clean_desc_vi
                 })
             else:
                 parts = []
@@ -575,37 +670,53 @@ def build():
                 merged_list.append({
                     "key": key,
                     "name_cn": name_cn,
-                    "desc_cn": "\n".join(parts)
+                    "name_vi": b_name_vi,
+                    "desc_cn": "\n".join(parts),
+                    "desc_vi": b_desc_vi_raw
                 })
                 
         return merged_list
 
-    def resolve_desc(skill_obj):
-        if not skill_obj: return "", []
+    def resolve_desc(skill_obj, sk_entry=None):
+        if not skill_obj: return "", "", []
         raw_desc = skill_obj.get("DescriptionLanText", "")
+        raw_desc_vi = ""
+        if sk_entry:
+            raw_desc_vi = usable_vi(sk_entry.get("skill_desc_vi") or sk_entry.get("desc_vi"))
         attr_dict = parse_attr(skill_obj.get("Attr", []))
         mechanics = merge_mechs_across_levels([extract_skill_level_mechs(skill_obj)])
+        mechanics = attach_popup_terms(raw_desc, mechanics)
         
-        def global_replacer(m):
-            pname = m.group(1)
-            idx = int(m.group(2)) if m.group(2) else 1
+        pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+
+        def single_replacer(m):
+            full_p = m.group(1)
+            pname = m.group(2)
+            idx = int(m.group(3)) if m.group(3) else 1
+            closing_tags = m.group(4) or ""
+            unit = m.group(5) or ""
+            val = None
             if pname in attr_dict:
                 params = attr_dict[pname]
-                if 1 <= idx <= len(params):
-                    return str(params[idx - 1])
-            full_match = f"{pname},{idx}" if m.group(2) else pname
-            if full_match in attr_dict:
-                return str(attr_dict[full_match][0])
-            if pname.endswith("Para"):
+                if 1 <= idx <= len(params): val = str(params[idx - 1])
+            full_match = f"{pname},{idx}"
+            if val is None and full_match in attr_dict: val = str(attr_dict[full_match][0])
+            if val is None and pname.endswith("Para"):
                 if pname in attr_dict:
                     params = attr_dict[pname]
-                    if 1 <= idx <= len(params):
-                        return str(params[idx - 1])
-            return m.group(0)
+                    if 1 <= idx <= len(params): val = str(params[idx - 1])
+            if val is None: val = full_p
+            return f"{val}{unit}{closing_tags}"
 
-        clean_desc = re.sub(r'\[([A-Za-z0-9_]+),(?:(\d+))?\]', global_replacer, raw_desc)
-        clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc)
-        return clean_desc.strip(), mechanics
+        clean_desc = re.sub(pattern, single_replacer, raw_desc)
+        clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+        
+        clean_desc_vi = ""
+        if raw_desc_vi:
+            clean_desc_vi = re.sub(pattern, single_replacer, raw_desc_vi)
+            clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+            
+        return clean_desc, clean_desc_vi, mechanics
 
     def resolve_multi_level_desc(gid):
         lvls = []
@@ -616,71 +727,90 @@ def build():
             lvls.append(sk)
             lvl += 1
 
-        if not lvls: return "", [], True
+        if not lvls: return "", "", [], True
 
         mechs_by_lvl = [extract_skill_level_mechs(sk) for sk in lvls]
         multi_mechs = merge_mechs_across_levels(mechs_by_lvl)
+        multi_mechs = attach_popup_terms("\n".join(sk.get("DescriptionLanText", "") for sk in lvls), multi_mechs)
+
+        vi_entries = []
+        for l_idx in range(1, len(lvls) + 1):
+            sk_id = f"{gid}_{l_idx}"
+            sk_entry = skill_loc.get(sk_id, {}) or skill_loc.get(gid, {}) or skill_loc.get(f"{gid}{l_idx}", {})
+            vi_entries.append(sk_entry)
 
         if len(lvls) == 1:
-            d_clean, _ = resolve_desc(lvls[0])
-            return d_clean, multi_mechs, True
+            d_clean, d_clean_vi, _ = resolve_desc(lvls[0], vi_entries[0] if vi_entries else None)
+            return d_clean, d_clean_vi, multi_mechs, True
 
         raw_descs = [sk.get("DescriptionLanText", "") for sk in lvls]
         is_template_same = len(set(raw_descs)) == 1
 
-        if is_template_same:
-            raw_template = raw_descs[0]
-            attr_dicts = [parse_attr(sk.get("Attr", [])) for sk in lvls]
+        attr_dicts = [parse_attr(sk.get("Attr", [])) for sk in lvls]
 
-            def get_param_val(pname, idx, attr_dict):
+        def get_param_val(pname, idx, attr_dict):
+            if pname in attr_dict:
+                params = attr_dict[pname]
+                if 1 <= idx <= len(params): return str(params[idx - 1])
+            full_match = f"{pname},{idx}"
+            if full_match in attr_dict: return str(attr_dict[full_match][0])
+            if pname.endswith("Para"):
                 if pname in attr_dict:
                     params = attr_dict[pname]
                     if 1 <= idx <= len(params): return str(params[idx - 1])
-                full_match = f"{pname},{idx}"
-                if full_match in attr_dict: return str(attr_dict[full_match][0])
-                if pname.endswith("Para"):
-                    if pname in attr_dict:
-                        params = attr_dict[pname]
-                        if 1 <= idx <= len(params): return str(params[idx - 1])
-                return None
+            return None
 
-            pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+        pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
 
-            def multi_replacer(m):
-                full_p = m.group(1)
-                pname = m.group(2)
-                idx = int(m.group(3)) if m.group(3) else 1
-                closing_tags = m.group(4) or ""
-                unit = m.group(5) or ""
+        def multi_replacer(m):
+            full_p = m.group(1)
+            pname = m.group(2)
+            idx = int(m.group(3)) if m.group(3) else 1
+            closing_tags = m.group(4) or ""
+            unit = m.group(5) or ""
 
-                vals = []
-                for ad in attr_dicts:
-                    v = get_param_val(pname, idx, ad)
-                    if v is not None:
-                        vals.append(v)
-                    else:
-                        vals.append(full_p)
-
-                if len(set(vals)) == 1:
-                    return f"{vals[0]}{unit}{closing_tags}"
+            vals = []
+            for ad in attr_dicts:
+                v = get_param_val(pname, idx, ad)
+                if v is not None:
+                    vals.append(v)
                 else:
-                    if unit == "%":
-                        formatted_items = [f"{v}%" for v in vals]
-                        return f"{'/'.join(formatted_items)}{closing_tags}"
-                    elif unit:
-                        return f"{'/'.join(vals)}{unit}{closing_tags}"
-                    else:
-                        return f"{'/'.join(vals)}{closing_tags}"
+                    vals.append(full_p)
 
-            clean_desc = re.sub(pattern, multi_replacer, raw_template)
-            clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc)
-            return clean_desc.strip(), multi_mechs, True
+            if len(set(vals)) == 1:
+                return f"{vals[0]}{unit}{closing_tags}"
+            else:
+                if unit == "%":
+                    formatted_items = [f"{v}%" for v in vals]
+                    return f"{'/'.join(formatted_items)}{closing_tags}"
+                elif unit:
+                    return f"{'/'.join(vals)}{unit}{closing_tags}"
+                else:
+                    return f"{'/'.join(vals)}{closing_tags}"
+
+        vi_raw_descs = [usable_vi(e.get("skill_desc_vi") or e.get("desc_vi")) for e in vi_entries]
+        non_empty_vi = [v for v in vi_raw_descs if v]
+
+        if is_template_same:
+            clean_desc = re.sub(pattern, multi_replacer, raw_descs[0])
+            clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+
+            clean_desc_vi = ""
+            if non_empty_vi:
+                clean_desc_vi = re.sub(pattern, multi_replacer, non_empty_vi[0])
+                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+
+            return clean_desc, clean_desc_vi, multi_mechs, True
         else:
-            parts = []
+            parts_cn = []
+            parts_vi = []
             for l_idx, sk in enumerate(lvls, 1):
-                d_clean, _ = resolve_desc(sk)
-                parts.append(f"Lv.{l_idx}: {d_clean}")
-            return "\n".join(parts), multi_mechs, False
+                sk_entry = vi_entries[l_idx - 1] if l_idx <= len(vi_entries) else None
+                d_cn, d_vi, _ = resolve_desc(sk, sk_entry)
+                parts_cn.append(f"Lv.{l_idx}: {d_cn}")
+                if d_vi:
+                    parts_vi.append(f"Lv.{l_idx}: {d_vi}")
+            return "\n".join(parts_cn), "\n".join(parts_vi) if parts_vi else "", multi_mechs, False
 
     print("Processing talent tree...")
     talent_bank = load_json("talentBankMap.json")
@@ -882,13 +1012,13 @@ def build():
         return ""
 
     STAT_NAME_VI = {
-        'Atk_FIX': 'Công', 'Atk_PERCENT': 'Công', 'Hp_FIX': 'HP', 'Hp_PERCENT': 'HP',
+        'Atk_FIX': 'Tấn Công', 'Atk_PERCENT': 'Tấn Công', 'Hp_FIX': 'Máu', 'Hp_PERCENT': 'Máu',
         'PhysicDef_FIX': 'Phòng Thủ Vật Lý', 'PhysicDef_PERCENT': 'Phòng Thủ Vật Lý',
         'MagicDef_FIX': 'Phòng Thủ Cấu Thuật', 'MagicDef_PERCENT': 'Phòng Thủ Cấu Thuật',
-        'Speed_FIX': 'Tốc Độ', 'Mov_FIX': 'Di Chuyển', 'Critical_FIX': 'Tỷ Lệ Bạo Kích',
-        'Block_FIX': 'Tỷ Lệ Đỡ Đòn', 'MissRate_FIX': 'Tỷ Lệ Né Tránh',
+        'Speed_FIX': 'Tốc Độ', 'Mov_FIX': 'Sức Di Chuyển', 'Critical_FIX': 'Tỷ Lệ Bạo Kích',
+        'CritDmg_FIX': 'Sát Thương Bạo Kích', 'Block_FIX': 'Tỷ Lệ Đỡ Đòn', 'MissRate_FIX': 'Tỷ Lệ Né Tránh',
         'HealIncrease_FIX': 'Tăng Cường Trị Liệu', 'HealedIncrease_FIX': 'Hiệu Quả Trị Liệu Nhận Được',
-        'AllDmgIncrease_FIX': 'Tăng Sát Thương', 'AllDmgReductionIncrease_FIX': 'Giảm Sát Thương Nhận Vào',
+        'AllDmgIncrease_FIX': 'Tăng Tất Cả Sát Thương', 'AllDmgReductionIncrease_FIX': 'Giảm Sát Thương Nhận Vào',
         'PhysicalDmgIncrease_FIX': 'Tăng Sát Thương Vật Lý', 'MagicDmgIncrease_FIX': 'Tăng Sát Thương Cấu Thuật',
         'PhyDmgReductionIncrease_FIX': 'Giảm Sát Thương Vật Lý Nhận Vào', 'MagDmgReductionIncrease_FIX': 'Giảm Sát Thương Cấu Thuật Nhận Vào',
         'CommonAttackDmgIncrease_FIX': 'Tăng Sát Thương Đánh Thường', 'SkillDmgIncrease_FIX': 'Tăng Sát Thương Kỹ Năng',
@@ -932,6 +1062,14 @@ def build():
                     if m: items.append(m.group(1))
         return items
 
+    SLOT_UPGRADE_LABEL_MAP = {
+        "01": "CƯỜNG HÓA ĐÁNH THƯỜNG",
+        "11": "CƯỜNG HÓA KỸ NÂNG NGHỀ",
+        "02": "CƯỜNG HÓA TUYỆT KỸ",
+        "03": "CƯỜNG HÓA NỘI TẠI 1",
+        "04": "CƯỜNG HÓA NỘI TẠI 2",
+        "05": "CƯỜNG HÓA NỘI TẠI 3"
+    }
 
     def extract_char_zhizhi(cid):
         zz_list = []
@@ -956,23 +1094,61 @@ def build():
                     base_sk_val = all_skills.get((base_id, 1)) or all_skills.get((base_id, 0))
                     ex_sk_val = all_skills.get((ex_id, 1)) or all_skills.get((ex_id, 0))
                     
-                    base_name_vi = skill_loc.get(base_id, {}).get("name_vi", "")
+                    base_sk_entry = skill_loc.get(base_id, {}) or skill_loc.get(f"{base_id}_1", {})
+                    ex_sk_entry = skill_loc.get(ex_id, {}) or skill_loc.get(f"{ex_id}_1", {})
+                    
+                    base_name_vi = usable_vi(base_sk_entry.get("skill_name_vi") or base_sk_entry.get("name_vi", ""))
                     base_name_cn = base_sk_val.get("NameLanText", "") if base_sk_val else ""
                     base_type_id = int(base_sk_val.get("Type", 1)) if base_sk_val and str(base_sk_val.get("Type", "")).isdigit() else 1
                     base_cat_label, _ = resolve_skill_category(base_id, base_type_id)
                     base_raw_icon = safe_str(base_sk_val.get("SkillIcon")) if base_sk_val else ""
                     base_icon = resolve_skill_icon(base_id, base_raw_icon)
                     
-                    ex_desc_clean, ex_mechanics, is_merged = resolve_multi_level_desc(ex_id)
-                    ex_name_vi = skill_loc.get(ex_id, {}).get("name_vi", "")
-                    ex_name_cn = ex_sk_val.get("NameLanText", "") if ex_sk_val else ""
+                    ex_desc_clean, _, ex_mechanics, is_merged = resolve_multi_level_desc(ex_id)
+                    raw_ex_name_cn = ex_sk_val.get("NameLanText", "") if ex_sk_val else ""
+                    if "-超群" in raw_ex_name_cn:
+                        ex_name_cn = raw_ex_name_cn
+                        ex_name_vi = f"{base_name_vi} - Siêu Quần" if base_name_vi else usable_vi(ex_sk_entry.get("skill_name_vi") or ex_sk_entry.get("name_vi", ""))
+                    else:
+                        ex_name_cn = raw_ex_name_cn if raw_ex_name_cn else base_name_cn
+                        ex_name_vi = base_name_vi if base_name_vi else usable_vi(ex_sk_entry.get("skill_name_vi") or ex_sk_entry.get("name_vi", ""))
+                    
+                    raw_ex_desc_vi = usable_vi(ex_sk_entry.get("skill_desc_vi") or ex_sk_entry.get("desc_vi", ""))
+                    ex_desc_vi = ""
+                    if raw_ex_desc_vi and ex_sk_val:
+                        ex_ad = parse_attr(ex_sk_val.get("Attr", []))
+                        pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+                        def ex_rep(m):
+                            pname = m.group(2)
+                            idx = int(m.group(3)) if m.group(3) else 1
+                            unit = m.group(5) or ""
+                            closing = m.group(4) or ""
+                            val = None
+                            if pname in ex_ad:
+                                params = ex_ad[pname]
+                                if 1 <= idx <= len(params): val = str(params[idx - 1])
+                            full_match = f"{pname},{idx}"
+                            if val is None and full_match in ex_ad: val = str(ex_ad[full_match][0])
+                            if val is None and pname.endswith("Para"):
+                                if pname in ex_ad:
+                                    params = ex_ad[pname]
+                                    if 1 <= idx <= len(params): val = str(params[idx - 1])
+                            if val is None: val = m.group(1)
+                            return f"{val}{unit}{closing}"
+                        ex_desc_vi = re.sub(pattern, ex_rep, raw_ex_desc_vi)
+                        ex_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', ex_desc_vi).strip()
+
                     ex_raw_icon = safe_str(ex_sk_val.get("SkillIcon")) if ex_sk_val else ""
                     ex_icon = resolve_skill_icon(ex_id, ex_raw_icon) or base_icon
                     
+                    base_suffix = base_id[-2:] if len(base_id) >= 2 else "01"
+                    upgrade_badge_vi = SLOT_UPGRADE_LABEL_MAP.get(base_suffix, "CƯỜNG HÓA KỸ NÂNG")
+
                     row["type"] = "skill_upgrade"
                     row["skill_upgrade"] = {
                         "base_skill_id": base_id,
                         "enhanced_skill_id": ex_id,
+                        "upgrade_badge_vi": upgrade_badge_vi,
                         "base_skill": {
                             "name_vi": base_name_vi,
                             "name_cn": base_name_cn,
@@ -984,7 +1160,7 @@ def build():
                             "name_vi": ex_name_vi,
                             "name_cn": ex_name_cn,
                             "desc_cn": ex_desc_clean,
-                            "desc_vi": skill_loc.get(ex_id, {}).get("desc_vi", ""),
+                            "desc_vi": ex_desc_vi,
                             "mechanics": ex_mechanics,
                             "is_merged": is_merged,
                             "icon": ex_icon
@@ -1024,11 +1200,15 @@ def build():
         matches.sort(key=lambda x: x[0])
         b_id, entry = matches[-1]
 
+        hz_loc = hz_loc_dict.get(b_id, {})
         name_cn = safe_str(entry.get("IconNameLanText") or entry.get("IconNameLan") or entry.get("IconName"))
+        name_vi = usable_vi(hz_loc.get("icon_name_vi") or hz_loc.get("name_vi", ""))
         icon_name = safe_str(entry.get("Icon")) or f"brilliant_{cid}"
         icon_asset = f"assets/huanzhang/{icon_name}.png"
         info_cn = safe_str(entry.get("IconInfoLanText") or entry.get("IconInfoLan") or entry.get("IconInfo"))
+        info_vi = usable_vi(hz_loc.get("icon_info_vi") or hz_loc.get("info_vi", ""))
         buff_show_cn = safe_str(entry.get("BuffShowLanText") or entry.get("BuffShowLan") or entry.get("BuffShow"))
+        buff_show_vi = usable_vi(hz_loc.get("buff_show_vi", ""))
 
         stat_labels_vi = {
             "Hp_FIX": "Sinh Mệnh (HP)",
@@ -1103,9 +1283,12 @@ def build():
         return {
             "id": b_id,
             "name_cn": name_cn,
+            "name_vi": name_vi,
             "icon": icon_asset,
             "info_cn": info_cn,
+            "info_vi": info_vi,
             "buff_show_cn": buff_show_cn,
+            "buff_show_vi": buff_show_vi,
             "property_up": property_up,
             "materials": materials
         }
@@ -1147,7 +1330,7 @@ def build():
                         seen_levels.add(lvl)
                         
                         sk_id = f"{gid}_{lvl}"
-                        sk_entry = skill_loc.get(sk_id, {})
+                        sk_entry = skill_loc.get(sk_id, {}) or skill_loc.get(gid, {}) or skill_loc.get(f"{gid}{lvl}", {})
                         stype = int(sk_val.get("Type", sk_val.get("type", 1))) if str(sk_val.get("Type", sk_val.get("type", ""))).isdigit() else 1
                         cat_label, cat_type_id = resolve_skill_category(gid, stype)
                         raw_icon = safe_str(sk_val.get("SkillIcon"))
@@ -1166,8 +1349,8 @@ def build():
                         lvl_obj = {
                             "level": lvl,
                             "name_cn": safe_str(sk_val.get("NameLanText")),
-                            "name_vi": safe_str(sk_entry.get("name_vi")),
-                            "desc_vi": safe_str(sk_entry.get("desc_vi")),
+                            "name_vi": usable_vi(sk_entry.get("skill_name_vi") or sk_entry.get("name_vi")),
+                            "desc_vi": usable_vi(sk_entry.get("skill_desc_vi") or sk_entry.get("desc_vi")),
                             "desc_cn": resolve_desc(sk_val)[0],
                             "mechanics": resolve_desc(sk_val)[1],
                             "desc_raw": safe_str(sk_val.get("DescriptionLanText")),
@@ -1188,11 +1371,44 @@ def build():
                             lvl_obj["provenance_corrections"] = sk_val["provenance_corrections"]
                         levels.append(lvl_obj)
 
-            levels.sort(key=lambda x: x["level"])
             if levels:
-                multi_desc_cn, multi_mechs, _ = resolve_multi_level_desc(gid)
+                multi_desc_cn, multi_desc_vi, multi_mechs, is_template_same = resolve_multi_level_desc(gid)
                 for lvl_item in levels:
-                    lvl_item["desc_cn"] = multi_desc_cn
+                    if is_template_same:
+                        lvl_item["desc_cn"] = multi_desc_cn
+                        if multi_desc_vi:
+                            lvl_item["desc_vi"] = multi_desc_vi
+                    else:
+                        l_num = lvl_item["level"]
+                        sk_val_l = all_skills.get((gid, l_num), {})
+                        sk_id_l = f"{gid}_{l_num}"
+                        sk_entry_l = skill_loc.get(sk_id_l, {}) or skill_loc.get(gid, {}) or skill_loc.get(f"{gid}{l_num}", {})
+                        d_cn_l, d_vi_l, _ = resolve_desc(sk_val_l, sk_entry_l)
+                        lvl_item["desc_cn"] = d_cn_l
+                        lvl_item["desc_vi"] = d_vi_l if d_vi_l else ""
+
+                    if lvl_item.get("desc_vi"):
+                        ad = parse_attr(all_skills.get((gid, lvl_item["level"]), {}).get("Attr", []))
+                        pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+                        def single_rep(m):
+                            pname = m.group(2)
+                            idx = int(m.group(3)) if m.group(3) else 1
+                            unit = m.group(5) or ""
+                            closing = m.group(4) or ""
+                            val = None
+                            if pname in ad:
+                                params = ad[pname]
+                                if 1 <= idx <= len(params): val = str(params[idx - 1])
+                            full_match = f"{pname},{idx}"
+                            if val is None and full_match in ad: val = str(ad[full_match][0])
+                            if val is None and pname.endswith("Para"):
+                                if pname in ad:
+                                    params = ad[pname]
+                                    if 1 <= idx <= len(params): val = str(params[idx - 1])
+                            if val is None: val = m.group(1)
+                            return f"{val}{unit}{closing}"
+                        lvl_item["desc_vi"] = re.sub(pattern, single_rep, lvl_item["desc_vi"])
+                        lvl_item["desc_vi"] = re.sub(r'\{Buff_[^}]+\}', '', lvl_item["desc_vi"]).strip()
                     lvl_item["mechanics"] = multi_mechs
 
                 raw_skills_dict[gid] = {
@@ -1230,10 +1446,10 @@ def build():
             if "ex" in gid.lower() or "-超群" in name:
                 category = "EX"
                 parent_id = gid.lower().replace("ex", "").upper()
-            # Check 3: Summon / NPC skills
-            elif "npc" in gid.lower() or "summon" in gid.lower():
+            # Check 3: Summon skills (ONLY if "summon" is explicitly in gid.lower())
+            elif "summon" in gid.lower():
                 category = "Summon"
-                idx = gid.lower().find("npc") if "npc" in gid.lower() else gid.lower().find("summon")
+                idx = gid.lower().find("summon")
                 parent_id = gid[:idx].upper()
             elif gid.endswith("A") or gid.endswith("B"):
                 category = "Alternate"
@@ -1307,11 +1523,9 @@ def build():
         base_slot_skills.sort(key=get_display_rank)
 
         skills_list = base_slot_skills
-        # Append remaining independent skills if any
-        for idx, sk in enumerate(independent_skills):
-            sk_copy = sk.copy()
-            sk_copy["slot"] = f"extra_{idx}"
-            skills_list.append(sk_copy)
+        # Note: independent_skills contains internal helper/NPC/battle-logic records (e.g. A016005npc01)
+        # that are not part of the public 6 base skill cards (skill1..skill6).
+        # They remain available internally via raw_skills_dict if needed, but are excluded from the public base skills list.
             
         char_skills[cid] = skills_list
         if brilliant_skills_list:
