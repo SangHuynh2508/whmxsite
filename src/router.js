@@ -8,6 +8,7 @@ import { renderCharacterCatalogView } from './ui/characterCatalogView.js';
 import { renderDataView } from './ui/dataView.js';
 import { renderCatalog } from './ui/sidebar.js';
 import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
+import { renderHeader } from './ui/characterHeader.js';
 
 export function getCharBySlugOrId(slugOrId) {
   const gameData = getGameData();

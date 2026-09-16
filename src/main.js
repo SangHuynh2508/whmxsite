@@ -10,10 +10,12 @@ import { initTheme } from './ui/theme.js';
 import { initAppNav } from './ui/appNav.js';
 import { initRouter, handleRoute } from './router.js';
 import { initCalcPicker } from './ui/calcCharacterPicker.js';
+import { initFeedbackButton } from './ui/feedbackButton.js';
 
 async function boot() {
   initAppNav();
   initTheme();
+  initFeedbackButton();
   const gameData = await loadGameData();
   
   initCalcPicker();

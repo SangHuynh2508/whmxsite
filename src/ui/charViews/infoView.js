@@ -392,7 +392,7 @@ function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", pare
     });
 
     targets.forEach((target, idx) => {
-      const html = `<span class="mechanic-keyword" tabindex="0" data-popup-scope="${popupScope}" data-buff-id="${target.buffId}" data-popup-binding="${target.bindingKey}" data-popup-alias="${target.name}" data-depth="${contextDepth}">${target.name}</span>`;
+      const html = `<span class="mechanic-keyword status-keyword" tabindex="0" data-popup-scope="${popupScope}" data-buff-id="${target.buffId}" data-popup-binding="${target.bindingKey}" data-popup-alias="${target.name}" data-depth="${contextDepth}">${target.name}</span>`;
       formatted = formatted.split(`%%MECH_${idx}%%`).join(html);
     });
     protectedTerms.forEach((term, idx) => {
