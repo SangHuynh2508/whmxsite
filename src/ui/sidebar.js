@@ -1,19 +1,32 @@
+import { selectCalculatorCharacter } from './calcCharacterPicker.js';
 import { state, setCharacter } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
 import { parseHash } from '../router.js';
+import { getCharacterAvatarUrl } from './utils/avatar.js';
+import { hasHuanZhang } from './utils/huanzhang.js';
 
 let elCatalog, elSearch;
-let activeJob = 'all';
-let activeRarity = 'all';
-let activePool = 'all';
+let activeJob = null;
+let activeRarity = null;
+let activePool = null;
+let activeHuanzhang = false;
 
 export function openMobileDrawer() {
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('drawer-backdrop');
   if (sidebar && backdrop) {
+    sidebar.classList.remove('hidden');
     sidebar.classList.add('open');
+    backdrop.classList.remove('hidden');
     backdrop.classList.add('active');
     document.body.classList.add('drawer-open');
+    
+    renderCatalog();
+
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      setTimeout(() => searchInput.focus(), 50);
+    }
   }
 }
 
@@ -59,71 +72,92 @@ export function initSidebar(catalogId, searchId) {
     });
   }
 
-  // Job filter chips
+  // Job filter chips (deselect on second click)
   const jobFilter = document.getElementById('job-filter');
   if (jobFilter) {
     jobFilter.addEventListener('click', (e) => {
       const btn = e.target.closest('.chip');
       if (!btn) return;
-      jobFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      activeJob = btn.dataset.job;
+      const val = btn.dataset.job;
+      if (activeJob === val) {
+        activeJob = null;
+        btn.classList.remove('active');
+      } else {
+        jobFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        activeJob = val;
+      }
       updateFilterBadge();
       renderCatalog();
     });
   }
 
-  // Rarity filter chips
+  // Rarity filter chips (deselect on second click)
   const rarityFilter = document.getElementById('rarity-filter');
   if (rarityFilter) {
     rarityFilter.addEventListener('click', (e) => {
       const btn = e.target.closest('.chip');
       if (!btn) return;
-      rarityFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      activeRarity = btn.dataset.rarity;
+      const val = btn.dataset.rarity;
+      if (activeRarity === val) {
+        activeRarity = null;
+        btn.classList.remove('active');
+      } else {
+        rarityFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        activeRarity = val;
+      }
       updateFilterBadge();
       renderCatalog();
     });
   }
 
-  // Pool filter chips (Limited / Standard)
+  // Pool filter chips (deselect on second click)
   const poolFilter = document.getElementById('pool-filter');
   if (poolFilter) {
     poolFilter.addEventListener('click', (e) => {
       const btn = e.target.closest('.chip');
       if (!btn) return;
-      poolFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      activePool = btn.dataset.pool;
+      const val = btn.dataset.pool;
+      if (activePool === val) {
+        activePool = null;
+        btn.classList.remove('active');
+      } else {
+        poolFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        activePool = val;
+      }
       updateFilterBadge();
       renderCatalog();
     });
   }
 
-  // Reset Filter Button
+  // Hoán Chương filter chip
+  const hzFilter = document.getElementById('huanzhang-filter');
+  if (hzFilter) {
+    hzFilter.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      activeHuanzhang = !activeHuanzhang;
+      btn.classList.toggle('active', activeHuanzhang);
+      updateFilterBadge();
+      renderCatalog();
+    });
+  }
+
+  // Clear Filter Button
   const resetBtn = document.getElementById('reset-filter-btn');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      activeJob = 'all';
-      activeRarity = 'all';
-      activePool = 'all';
+      activeJob = null;
+      activeRarity = null;
+      activePool = null;
+      activeHuanzhang = false;
 
-      if (jobFilter) {
-        jobFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        const def = jobFilter.querySelector('[data-job="all"]');
-        if (def) def.classList.add('active');
-      }
-      if (rarityFilter) {
-        rarityFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        const def = rarityFilter.querySelector('[data-rarity="all"]');
-        if (def) def.classList.add('active');
-      }
-      if (poolFilter) {
-        poolFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        const def = poolFilter.querySelector('[data-pool="all"]');
-        if (def) def.classList.add('active');
-      }
+      if (jobFilter) jobFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (rarityFilter) rarityFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (poolFilter) poolFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (hzFilter) hzFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
 
       updateFilterBadge();
       renderCatalog();
@@ -153,9 +187,10 @@ export function initSidebar(catalogId, searchId) {
 
 function updateFilterBadge() {
   let count = 0;
-  if (activeJob !== 'all') count++;
-  if (activeRarity !== 'all') count++;
-  if (activePool !== 'all') count++;
+  if (activeJob !== null) count++;
+  if (activeRarity !== null) count++;
+  if (activePool !== null) count++;
+  if (activeHuanzhang) count++;
 
   const badge = document.getElementById('filter-active-count');
   if (badge) {
@@ -192,12 +227,14 @@ export function renderCatalog() {
 
   chars.forEach(char => {
     // Job filter
-    if (activeJob !== 'all' && String(char.job) !== activeJob) return;
+    if (activeJob !== null && String(char.job) !== activeJob) return;
     // Rarity filter
-    if (activeRarity !== 'all' && String(char.rare) !== activeRarity) return;
+    if (activeRarity !== null && String(char.rare) !== activeRarity) return;
     // Pool filter (Limited / Standard)
     if (activePool === 'limited' && !char.is_limited) return;
     if (activePool === 'standard' && char.is_limited) return;
+    // Hoán Chương filter
+    if (activeHuanzhang && !hasHuanZhang(char)) return;
 
     // Search query
     if (query) {
@@ -214,14 +251,14 @@ export function renderCatalog() {
     div.onclick = () => {
       document.querySelectorAll('.char-item').forEach(el => el.classList.remove('active'));
       div.classList.add('active');
-      closeMobileDrawer();
 
       const currentRoute = parseHash();
       if (currentRoute.view === 'character') {
+        closeMobileDrawer();
         const subtab = (currentRoute.subtab && currentRoute.subtab !== 'overview') ? currentRoute.subtab : '';
         window.location.hash = subtab ? `#/characters/${char.id}/${subtab}` : `#/characters/${char.id}`;
       } else {
-        setCharacter(char);
+        selectCalculatorCharacter(char);
       }
     };
 
@@ -229,7 +266,7 @@ export function renderCatalog() {
     const limitedBadge = char.is_limited ? `<span class="char-item-limited-tag">LIMITED</span>` : '';
     
     div.innerHTML = `
-      <img class="char-item-icon" src="/${char.icon}" alt="${char.name_vi}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 1 1\\'/%3E'"/>
+      <img class="char-item-icon" src="${getCharacterAvatarUrl(char)}" alt="${char.name_vi}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 1 1\\'/%3E'"/>
       <div class="char-item-info">
         <div class="char-item-name-row">
           <span class="char-item-name">${char.name_vi || char.name_cn}</span>

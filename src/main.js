@@ -9,12 +9,14 @@ import { renderResourceSummary } from './ui/resourceSummary.js';
 import { initTheme } from './ui/theme.js';
 import { initAppNav } from './ui/appNav.js';
 import { initRouter, handleRoute } from './router.js';
+import { initCalcPicker } from './ui/calcCharacterPicker.js';
 
 async function boot() {
   initAppNav();
   initTheme();
   const gameData = await loadGameData();
   
+  initCalcPicker();
   initSidebar('char-catalog', 'search-input');
   initLevelProgress('level-current', 'level-target');
   initRouter();

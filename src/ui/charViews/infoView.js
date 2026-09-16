@@ -70,10 +70,9 @@ function resolveEffectAreaText(effType, effRange) {
 
 let tooltipTimer = null;
 const tooltipStack = [];
-let mechanicIndex = new Map();
-let currentSkillMechanics = new Map();
+let popupScopes = new Map();
 let tooltipEventsAttached = false;
-let popupRenderSequence = 0;
+let popupScopeSequence = 0;
 
 function getOrCreateTooltipEl(depth) {
   let el = document.getElementById(`mech-tooltip-${depth}`);
@@ -108,10 +107,15 @@ function closeAllTooltips() {
   scheduleClose(0);
 }
 
-function openTooltip(keywordEl, mechKey, depth) {
+function openTooltip(keywordEl, depth) {
   cancelClose();
   
-  if (depth > 3) return; // limit depth
+  // The active-ID guard below handles cycles. Keep this only as a generous
+  // last-resort protection for malformed source graphs, not a normal path cap.
+  if (depth > 8) {
+    console.warn('POPUP_DEPTH_GUARD', { depth, buffId: keywordEl?.dataset?.buffId });
+    return;
+  }
   
   while (tooltipStack.length > depth) {
     const top = tooltipStack.pop();
@@ -119,31 +123,93 @@ function openTooltip(keywordEl, mechKey, depth) {
   }
   
   // Cycle protection
-  if (tooltipStack.some(t => t.id === mechKey)) return;
-  
-  const indexedMechanic = mechanicIndex.get(mechKey);
-  const mech = indexedMechanic?.mech || indexedMechanic;
-  if (!mech) return;
-  
+  const scopeId = keywordEl.dataset.popupScope;
+  const buffId = keywordEl.dataset.buffId;
+  const scope = popupScopes.get(scopeId);
+  if (!scope?.allowedBuffIds?.has(buffId)) return;
+  // The registry is title/template authority only. Card-local binding provides
+  // every player-facing body and exact parameter context.
+  const canonical = scope.buffRegistry?.[buffId];
+  const bindingKey = keywordEl.dataset.popupBinding;
+  const binding = scope.bindings?.[bindingKey];
+  if (!binding) {
+    console.error('POPUP_RESOLUTION_TRACE', {
+      runtimeVerdict: 'BINDING_LOOKUP_FAILED', scopeId, buffId, bindingKey,
+      clickedTerm: keywordEl.textContent,
+    });
+    return;
+  }
+  const isMultiVariant = binding.kind === 'MULTI_VARIANT_CONTROLLER';
+  const mech = isMultiVariant
+    ? binding
+    : canonical && { ...canonical, desc_cn: binding.desc_cn, desc_vi: binding.desc_vi };
+  if (!mech || tooltipStack.some(t => t.id === `${scopeId}:${buffId}`)) return;
+
   const tt = getOrCreateTooltipEl(depth);
   
   let rootKeywordEl = keywordEl;
   if (depth > 0 && tooltipStack.length > 0) {
     rootKeywordEl = tooltipStack[0].keywordEl;
   }
-  const skillCard = rootKeywordEl.closest('.skill-entry-card');
-  const skillGroupId = skillCard ? skillCard.id.replace('skill-entry-', '') : null;
-  const mechs = indexedMechanic?.contextMechanics
-    || (skillGroupId ? (currentSkillMechanics.get(skillGroupId) || []) : Array.from(mechanicIndex.values()).map(entry => entry?.mech || entry));
   
-  const mechName = (mech.name_vi || mech.name_cn || "").replace(/<[^>]*>/g, '').trim();
-  const mechDesc = mech.desc_vi || mech.desc_cn || "";
-  const descHtml = renderRichGameText(mechDesc, mechs, depth + 1);
+  const unresolvedParamRe = /\[(?:EffectParam|EffectPara|BuffParam|Effect[1-5]Para|Condition[1-5]Para)(?:,[^\]]*)?\]|(?<![A-Za-z0-9_])#\d+\b/;
+  const mechName = (mech.name_vi || keywordEl.dataset.popupAlias || mech.name_cn || "").replace(/<[^>]*>/g, '').trim();
+  const bindingHasPlaceholder = !isMultiVariant && unresolvedParamRe.test(`${binding.desc_vi || ''}${binding.desc_cn || ''}`);
+  const runtimeVerdict = bindingHasPlaceholder
+    ? 'BINDING_FOUND_BUT_UNRESOLVED'
+    : binding.desc_vi
+      ? 'BINDING_FOUND_RESOLVED_VI'
+      : binding.canonical_vi_missing
+        ? 'CANONICAL_VI_TEMPLATE_MISSING'
+        : 'BINDING_FOUND_RESOLVED_CN_ONLY';
+  if (runtimeVerdict === 'BINDING_FOUND_RESOLVED_CN_ONLY') {
+    throw new Error(`BINDING_FOUND_RESOLVED_CN_ONLY: ${JSON.stringify({ scopeId, buffId, bindingKey })}`);
+  }
+  const mechDesc = binding.desc_vi || (binding.canonical_vi_missing ? binding.desc_cn : "");
+  const finalBodySource = binding.desc_vi ? 'binding.desc_vi' : 'binding.desc_cn:canonical_vi_missing';
+  if (!isMultiVariant && unresolvedParamRe.test(mechDesc)) {
+    throw new Error(`UNRESOLVED_EFFECT_PARAM: ${JSON.stringify({ scopeId, buffId, bindingKey, finalBodySource, mechDesc })}`);
+  }
+  let descHtml;
+  if (isMultiVariant) {
+    const variants = binding.variant_children || [];
+    if (variants.length < 2) {
+      throw new Error(`INVALID_MULTI_VARIANT_BINDING: ${JSON.stringify({ scopeId, buffId, bindingKey })}`);
+    }
+    descHtml = variants.map(variant => {
+      const child = scope.bindings?.[variant.binding_key];
+      const childBody = child?.desc_vi || (child?.canonical_vi_missing ? child?.desc_cn : "");
+      if (!child || !childBody || unresolvedParamRe.test(childBody)) {
+        throw new Error(`UNRESOLVED_MULTI_VARIANT_CHILD: ${JSON.stringify({ scopeId, bindingKey, variant })}`);
+      }
+      const childName = (variant.name_vi || variant.name_cn || child.name_vi || child.name_cn || "").replace(/<[^>]*>/g, "");
+      return `<div class="mech-tt-variant"><div class="mech-tt-variant-title">${childName}</div><div class="mech-tt-variant-desc">${renderRichGameText(childBody, scope, depth + 1, scopeId, variant.buff_id)}</div></div>`;
+    }).join("");
+  } else {
+    descHtml = renderRichGameText(mechDesc, scope, depth + 1, scopeId, buffId);
+  }
+  if (new URLSearchParams(window.location.search).has('debugPopup')) {
+    console.debug('POPUP_RESOLUTION_TRACE', {
+      runtimeVerdict,
+      clickedTerm: keywordEl.textContent,
+      buffId,
+      bindingKey,
+      parentBuffId: tooltipStack[depth - 1]?.id || null,
+      sourceCardId: scopeId,
+      binding,
+      bindingDescCn: binding.desc_cn,
+      bindingDescVi: binding.desc_vi,
+      registryDescCn: canonical?.desc_cn,
+      registryDescVi: canonical?.desc_vi,
+      finalBody: isMultiVariant ? binding.variant_children : mechDesc,
+      finalBodySource,
+    });
+  }
   
   tt.innerHTML = `<div class="mech-tt-title">${mechName}</div><div class="mech-tt-desc">${descHtml}</div>`;
   tt.classList.add('show');
   
-  tooltipStack.push({ id: mech.key, el: tt, keywordEl });
+  tooltipStack.push({ id: `${scopeId}:${buffId}`, el: tt, keywordEl });
   
   // Position
   const rect = keywordEl.getBoundingClientRect();
@@ -183,7 +249,7 @@ function initTooltipEvents() {
     const keyword = e.target.closest('.mechanic-keyword');
     if (keyword) {
       const depth = parseInt(keyword.dataset.depth || "0", 10);
-      openTooltip(keyword, keyword.dataset.mechKey, depth);
+      openTooltip(keyword, depth);
     }
   });
   
@@ -199,7 +265,7 @@ function initTooltipEvents() {
     const keyword = e.target.closest('.mechanic-keyword');
     if (keyword) {
       const depth = parseInt(keyword.dataset.depth || "0", 10);
-      openTooltip(keyword, keyword.dataset.mechKey, depth);
+      openTooltip(keyword, depth);
     }
   });
   
@@ -215,7 +281,7 @@ function initTooltipEvents() {
     const keyword = e.target.closest('.mechanic-keyword');
     if (keyword) {
       const depth = parseInt(keyword.dataset.depth || "0", 10);
-      openTooltip(keyword, keyword.dataset.mechKey, depth);
+      openTooltip(keyword, depth);
       return;
     }
     
@@ -233,28 +299,85 @@ function initTooltipEvents() {
   }, { capture: true, passive: true });
 }
 
-function renderRichGameText(text, mechanics = [], contextDepth = 0) {
+function createPopupScope(mechanics) {
+  const gameData = getGameData() || {};
+  const allowedBuffIds = new Set(
+    (mechanics || []).map(mech => mech?.key).filter(Boolean)
+  );
+  return {
+    mechanics: mechanics || [],
+    allowedBuffIds,
+    bindings: Object.fromEntries((mechanics || []).filter(mech => mech?.key).map(mech => [mech.key, mech])),
+    buffRegistry: gameData.buff_registry || {}
+  };
+}
+
+function deriveCardLocalAlias(mech, term) {
+  if (term.name_vi || !mech?.desc_cn || !mech?.desc_vi) return term.name_vi || "";
+  const colouredTerms = text => [...text.matchAll(/<color=[^>]+>(.*?)<\/color>/gi)]
+    .map(match => match[1].replace(/<[^>]*>/g, '').trim());
+  const cnTerms = colouredTerms(mech.desc_cn);
+  const viTerms = colouredTerms(mech.desc_vi);
+  if (cnTerms.length !== viTerms.length) return "";
+  const aliases = viTerms.filter((value, index) => cnTerms[index] === term.name_cn && value);
+  return aliases.length && new Set(aliases).size === 1 ? aliases[0] : "";
+}
+
+function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", parentBuffId = null) {
   if (!text) return "Chưa có mô tả.";
 
+  const cleanRichTerm = value => String(value || '').replace(/<[^>]*>/g, '').trim();
+  // A source may colour a longer gameplay phrase while only a shorter child
+  // status has a binding. Preserve the whole phrase as ordinary text unless
+  // the raw export supplied an exact binding for that phrase.
+  const colouredSourceTerms = [...String(text).matchAll(/<color=[^>]+>(.*?)<\/color>/gi)]
+    .map(match => cleanRichTerm(match[1]))
+    .filter(Boolean);
   let formatted = text
     .replace(/<color=#([0-9a-fA-F]{6})>(.*?)<\/color>/gi, '<span class="highlight-val" style="color: #$1">$2</span>')
     .replace(/\n/g, '<br/>');
 
-  if (mechanics && mechanics.length > 0) {
+  if (scope?.mechanics?.length) {
     const targets = [];
-    mechanics.forEach(mech => {
+    // At the root, only direct card terms are eligible.  Inside a popup, only
+    // that popup's own deterministic child terms are eligible.  Never scan the
+    // rest of the card or match against a global name index.
+    const sourceMechanics = parentBuffId
+      ? scope.mechanics.filter(mech => mech?.key === parentBuffId)
+      : scope.mechanics.filter(mech => mech?.is_direct_popup_target);
+    sourceMechanics.forEach(mech => {
       // Popup eligibility is exported from the raw buff relation.  Do not turn a
       // coloured word into a popup merely because it happens to match a buff name.
       const popupTerms = Array.isArray(mech.popup_terms) ? mech.popup_terms : [];
       popupTerms.forEach(term => {
-        const nameVi = (term.name_vi || "").replace(/<[^>]*>/g, '').trim();
+        const nameVi = (term.name_vi || deriveCardLocalAlias(mech, term) || "").replace(/<[^>]*>/g, '').trim();
         const nameCn = (term.name_cn || "").replace(/<[^>]*>/g, '').trim();
-        if (nameVi) targets.push({ name: nameVi, mech });
-        if (nameCn && nameCn !== nameVi) targets.push({ name: nameCn, mech });
+        const buffId = term.buff_id;
+        const bindingKey = term.binding_key;
+        if (!buffId || !bindingKey || !scope.bindings?.[bindingKey]) return;
+        // The current popup already is this exact buff.  Leave its visible text
+        // ordinary rather than rendering a dead-looking nested trigger.
+        if (parentBuffId && (buffId === parentBuffId || tooltipStack.some(entry => entry.id === `${popupScope}:${buffId}`))) return;
+        if (nameVi) targets.push({ name: nameVi, buffId, bindingKey });
+        if (nameCn && nameCn !== nameVi) targets.push({ name: nameCn, buffId, bindingKey });
       });
     });
 
     targets.sort((a, b) => b.name.length - a.name.length);
+
+    // Protect coloured phrases such as "Triện Phóng Lĩnh Vực" from matching a
+    // shorter eligible term such as "Triện Phóng". This is data-driven: the
+    // condition applies to any longer coloured phrase without its own exact
+    // exported popup binding, rather than any character-specific alias.
+    const exactTargetNames = new Set(targets.map(target => target.name));
+    const protectedTerms = [...new Set(colouredSourceTerms.filter(sourceTerm =>
+      !exactTargetNames.has(sourceTerm) && targets.some(target => sourceTerm.includes(target.name))
+    ))];
+    protectedTerms.forEach((term, idx) => {
+      const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const termRe = new RegExp(`(<span[^>]*>)(${escapedTerm})(<\\/span>)`, 'g');
+      formatted = formatted.replace(termRe, `$1%%PROTECTED_TERM_${idx}%%$3`);
+    });
 
     targets.forEach((target, idx) => {
       const parts = formatted.split(/(<[^>]*>)/g);
@@ -269,10 +392,11 @@ function renderRichGameText(text, mechanics = [], contextDepth = 0) {
     });
 
     targets.forEach((target, idx) => {
-      const popupKey = `popup-${++popupRenderSequence}`;
-      mechanicIndex.set(popupKey, { mech: target.mech, contextMechanics: mechanics });
-      const html = `<span class="mechanic-keyword" tabindex="0" data-mech-key="${popupKey}" data-depth="${contextDepth}">${target.name}</span>`;
+      const html = `<span class="mechanic-keyword" tabindex="0" data-popup-scope="${popupScope}" data-buff-id="${target.buffId}" data-popup-binding="${target.bindingKey}" data-popup-alias="${target.name}" data-depth="${contextDepth}">${target.name}</span>`;
       formatted = formatted.split(`%%MECH_${idx}%%`).join(html);
+    });
+    protectedTerms.forEach((term, idx) => {
+      formatted = formatted.split(`%%PROTECTED_TERM_${idx}%%`).join(term);
     });
   }
 
@@ -330,8 +454,8 @@ export function renderInfoTab(container, char) {
 
     const hpCard = formatStatCard('Sinh Mệnh (HP)', resolved.hp, '', 'highlight-hp');
     const atkCard = formatStatCard('Tấn Công (ATK)', resolved.atk, '', 'highlight-atk');
-    const pdefCard = formatStatCard('Phòng Thủ Vật Lý', resolved.defPhysic, '');
-    const mdefCard = formatStatCard('Phòng Thủ Cấu Thuật', resolved.defMagic, '');
+    const pdefCard = formatStatCard('Phòng Ngự Vật Lý', resolved.defPhysic, '');
+    const mdefCard = formatStatCard('Phòng Ngự Cấu Thuật', resolved.defMagic, '');
     
     const spdCard = resolved.speed !== null && resolved.speed !== undefined ? `
       <div class="stat-card">
@@ -380,13 +504,15 @@ export function renderInfoTab(container, char) {
 
   function renderSkillEntry(skill, isSubEntry = false, subLabel = "") {
     const curLevelData = skill.levels[0] || {};
-    const mechs = currentSkillMechanics.get(skill.group_id) || [];
+    const mechs = curLevelData.mechanics || [];
+    const popupScope = `card-${++popupScopeSequence}`;
+    popupScopes.set(popupScope, createPopupScope(mechs));
 
     const iconPath = curLevelData.icon ? `/${curLevelData.icon}` : "";
     const nameVi = String(curLevelData.name_vi ?? "").trim();
     const nameCn = String(curLevelData.name_cn ?? "").trim();
     
-    const primaryName = nameVi || nameCn || `Kỹ Năng ${skill.group_id}`;
+    const primaryName = nameVi || nameCn || "Kỹ Năng";
     const secondaryName = nameVi ? nameCn : "";
     const descPrimary = curLevelData.desc_vi || curLevelData.desc_cn || curLevelData.desc_raw || "";
     const descCn = curLevelData.desc_cn || curLevelData.desc_raw || "";
@@ -421,7 +547,7 @@ export function renderInfoTab(container, char) {
     }
 
     return `
-      <div class="skill-entry-card ${isSubEntry ? 'sub-entry' : ''}" id="skill-entry-${skill.group_id}">
+      <div class="skill-entry-card ${isSubEntry ? 'sub-entry' : ''}">
         <div class="skill-entry-header">
           <div class="skill-icon-wrapper">
             ${iconPath ? `<img src="${iconPath}" alt="${primaryName}" class="skill-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><div class="skill-icon-fallback" style="display:none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div>` : `<div class="skill-icon-fallback"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div>`}
@@ -437,7 +563,7 @@ export function renderInfoTab(container, char) {
         </div>
         <div class="skill-entry-body">
           <div class="skill-desc-block">
-            <p class="skill-desc-primary">${renderRichGameText(descPrimary, mechs, 0)}</p>
+            <p class="skill-desc-primary">${renderRichGameText(descPrimary, popupScopes.get(popupScope), 0, popupScope)}</p>
             <details class="skill-cn-details">
               <summary class="cn-summary">Xem văn bản gốc (Chinese)</summary>
               <p class="skill-desc-secondary cn-font">${descCn}</p>
@@ -464,32 +590,11 @@ export function renderInfoTab(container, char) {
 
   function buildSkillsListHtml() {
     closeAllTooltips();
-    mechanicIndex.clear();
-    currentSkillMechanics.clear();
+    popupScopes.clear();
+    popupScopeSequence = 0;
     
     if (skills.length === 0) {
       return `<p class="empty-sub-state-text">Chưa có thông tin kỹ năng cho nhân vật này.</p>`;
-    }
-
-    // Populate active mechanics
-    skills.forEach(skill => {
-      const curLevelData = skill.levels[0] || {};
-      if (curLevelData.mechanics) {
-        currentSkillMechanics.set(skill.group_id, curLevelData.mechanics);
-        curLevelData.mechanics.forEach(m => mechanicIndex.set(m.key, m));
-      }
-    });
-
-    if (char.zhizhi) {
-      char.zhizhi.forEach(row => {
-        if (row.type === 'skill_upgrade' && row.skill_upgrade && row.skill_upgrade.enhanced_skill) {
-          const sk = row.skill_upgrade.enhanced_skill;
-          if (sk.mechanics) {
-            currentSkillMechanics.set(sk.group_id, sk.mechanics);
-            sk.mechanics.forEach(m => mechanicIndex.set(m.key, m));
-          }
-        }
-      });
     }
 
     return skills.map(skill => renderSkillEntry(skill)).join('');
@@ -517,7 +622,9 @@ export function renderInfoTab(container, char) {
         const nameCn = (enhancedSkill.name_vi || baseSkill.name_vi) ? (enhancedSkill.name_cn || baseSkill.name_cn || '') : '';
         const iconPath = enhancedSkill.icon ? `/${enhancedSkill.icon}` : (baseSkill.icon ? `/${baseSkill.icon}` : '');
         const descPrimary = enhancedSkill.desc_vi || enhancedSkill.desc_cn || '';
-        const mechs = currentSkillMechanics.get(enhancedSkill.group_id) || [];
+        const mechs = enhancedSkill.mechanics || [];
+        const popupScope = `card-${++popupScopeSequence}`;
+    popupScopes.set(popupScope, createPopupScope(mechs));
 
         contentHtml = `
           <div class="zhizhi-skill-block">
@@ -534,7 +641,7 @@ export function renderInfoTab(container, char) {
               </div>
             </div>
             <div class="zhizhi-skill-desc">
-              ${renderRichGameText(descPrimary, mechs, 0)}
+              ${renderRichGameText(descPrimary, popupScopes.get(popupScope), 0, popupScope)}
             </div>
           </div>
         `;
@@ -573,8 +680,8 @@ export function renderInfoTab(container, char) {
 
   function buildHuanzhangPanelHtml() {
     closeAllTooltips();
-    mechanicIndex.clear();
-    currentSkillMechanics.clear();
+    popupScopes.clear();
+    popupScopeSequence = 0;
 
     const bInfo = char.brilliant_info;
     const bSkills = char.brilliant_skills || [];
@@ -582,15 +689,6 @@ export function renderInfoTab(container, char) {
     if (!bInfo && bSkills.length === 0) {
       return `<p class="empty-sub-state-text">Nhân vật này chưa có dữ liệu Hoán Chương.</p>`;
     }
-
-    // Populate active mechanics for tooltips
-    bSkills.forEach(skill => {
-      const curLevelData = skill.levels[0] || {};
-      if (curLevelData.mechanics) {
-        currentSkillMechanics.set(skill.group_id, curLevelData.mechanics);
-        curLevelData.mechanics.forEach(m => mechanicIndex.set(m.key, m));
-      }
-    });
 
     const hzTitle = (bInfo && (bInfo.name_vi || bInfo.name_cn)) || (bSkills[0]?.levels[0]?.name_vi) || (bSkills[0]?.levels[0]?.name_cn) || "Hoán Chương";
     const iconUrl = bInfo?.icon ? `/${bInfo.icon}` : null;
@@ -663,12 +761,15 @@ export function renderInfoTab(container, char) {
       `;
     }
 
-    // Build skills content HTML
+    // A linked gameplay card owns the visual surface.  build_web_data may supply
+    // a proven HUANZHANG BuffShow translation as that card's fallback, preserving
+    // the SKILL's card title, original text, mechanics, and scoped popups.
+    const buffShowHtml = bSkills.length === 0 && buffShowPrimary
+      ? `<p class="skill-desc-primary">${renderRichGameText(buffShowPrimary, [], 0)}</p>`
+      : "";
     const skillsContentHtml = bSkills.length > 0
       ? bSkills.map(skill => renderSkillEntry(skill)).join('')
-      : (buffShowPrimary
-          ? `<p class="skill-desc-primary">${renderRichGameText(buffShowPrimary, [], 0)}</p>`
-          : `<p class="empty-sub-state-text">Không có chi tiết kỹ năng Hoán Chương.</p>`);
+      : (!buffShowHtml ? `<p class="empty-sub-state-text">Không có chi tiết kỹ năng Hoán Chương.</p>` : "");
 
     // Top Area: 35% Property Table + 65% Effect / Skill Section
     const infoGridHtml = `
@@ -681,6 +782,7 @@ export function renderInfoTab(container, char) {
             <h4>HIỆU ỨNG / KỸ NĂNG HOÁN CHƯƠNG</h4>
           </div>
           <div class="hz-effects-body">
+            ${buffShowHtml}
             ${skillsContentHtml}
           </div>
         </div>

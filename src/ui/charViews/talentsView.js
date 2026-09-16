@@ -19,17 +19,6 @@ export function renderTalentsTab(container, char) {
 
   container.innerHTML = `
     <div class="talents-page-wrapper">
-      <div class="talents-page-header">
-        <div class="t-header-title">
-          <h2>CÂY THIÊN PHÚ NHÂN VẬT</h2>
-          <span class="t-sub-info">${talents.length} Nút thiên phú (3 Nhánh)</span>
-        </div>
-        <p class="t-help-tip">
-          <span class="tip-icon">💡</span>
-          Rê chuột hoặc nhấn vào từng nút thiên phú để xem thông số tác dụng và yêu cầu. (Chế độ tra cứu)
-        </p>
-      </div>
-
       <div class="talent-graph-subview-container readonly-talent-tree" id="char-detail-talent-graph">
         <!-- Rendered by renderReadOnlyTalentTree -->
       </div>

@@ -2,6 +2,8 @@
  * Overview Sub-View Component (/characters/:slug)
  * Profile & Identity Information ONLY (Compact Overview)
  */
+import { getCharacterCardUrl } from '../../constants/assetPaths.js';
+
 export function renderOverviewTab(container, char) {
   const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
   const rarityMap = { 4: { label: "SSR", class: "ssr" }, 3: { label: "SR", class: "sr" }, 2: { label: "R", class: "r" } };
@@ -10,8 +12,8 @@ export function renderOverviewTab(container, char) {
   const jobName = jobNames[char.job] || "Chưa xác định";
   const attackTypeStr = char.attacktype === 1 ? "Cận chiến" : char.attacktype === 2 ? "Tầm xa" : "Đặc biệt";
 
-  const mainCardImg = char.cards && char.cards.length > 0 ? `/assets/cards/${char.cards[0]}` : char.icon;
-  const nickname = (char.nickname_vi || "").trim();
+  const mainCardImg = char.cards && char.cards.length > 0 ? getCharacterCardUrl(char.cards[0]) : char.icon;
+  const nickname = String(char.nickname_vi ?? "").trim();
   const profile = char.profile || {};
 
   container.innerHTML = `
@@ -127,3 +129,4 @@ export function renderOverviewTab(container, char) {
     </div>
   `;
 }
+

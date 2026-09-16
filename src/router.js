@@ -7,6 +7,7 @@ import { renderCharacterDetail } from './ui/characterDetail.js';
 import { renderCharacterCatalogView } from './ui/characterCatalogView.js';
 import { renderDataView } from './ui/dataView.js';
 import { renderCatalog } from './ui/sidebar.js';
+import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
 
 export function getCharBySlugOrId(slugOrId) {
   const gameData = getGameData();
@@ -181,7 +182,8 @@ export function handleRoute() {
       dataView.classList.add('hidden');
       dataView.innerHTML = '';
     }
-    if (sidebar) sidebar.classList.remove('hidden');
+    // Persistent left sidebar is NOT shown in Calculator view (uses dedicated modal picker)
+    if (sidebar) sidebar.classList.add('hidden');
 
     let targetCharId = route.characterId;
     if (!targetCharId && state.character) {
@@ -189,18 +191,12 @@ export function handleRoute() {
     }
 
     if (targetCharId && gameData.characters[targetCharId]) {
-      if (!state.character || state.character.id !== targetCharId) {
-        setCharacter(gameData.characters[targetCharId]);
-      }
+      selectCalculatorCharacter(targetCharId);
+    } else {
       if (mainContent) mainContent.classList.remove('hidden');
       if (emptyState) emptyState.classList.add('hidden');
-    } else {
-      if (mainContent) mainContent.classList.add('hidden');
-      if (emptyState) emptyState.classList.remove('hidden');
+      renderHeader();
     }
-
-    // Sync left sidebar catalog active state ONLY for Calculator
-    renderCatalog();
   }
 }
 
@@ -208,11 +204,11 @@ function updateAppNavHighlights(activeView) {
   // Update desktop vertical nav rail links
   document.querySelectorAll('.app-nav-item').forEach(item => {
     const tooltip = item.dataset.tooltip;
-    if (tooltip === 'Calculator') {
+    if (tooltip === 'Máy Tính' || tooltip === 'Calculator') {
       item.classList.toggle('active', activeView === 'calculator');
-    } else if (tooltip === 'Characters') {
+    } else if (tooltip === 'Khí Giả' || tooltip === 'Characters') {
       item.classList.toggle('active', activeView === 'catalog' || activeView === 'character');
-    } else if (tooltip === 'Data') {
+    } else if (tooltip === 'Dữ Liệu' || tooltip === 'Data') {
       item.classList.toggle('active', activeView === 'data');
     }
   });

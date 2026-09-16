@@ -5,7 +5,7 @@
 
 export function parseTags(tagStr) {
   if (!tagStr) return [];
-  return tagStr
+  return String(tagStr)
     .split(/[,|;]/)
     .map(t => t.trim())
     .filter(Boolean);
