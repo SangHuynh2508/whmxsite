@@ -14,12 +14,8 @@ export function renderBuildTab(container, char) {
           </div>
           <h3 class="build-empty-title">Chưa có hướng dẫn build</h3>
           <p class="build-empty-desc">
-            Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho <strong>${char.name_vi || char.name_cn}</strong> đang được tổng hợp từ phiên bản thử nghiệm.
+            Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho <strong>${char.name_vi || char.name_cn}</strong> đang chưa được làm.
           </p>
-          <div class="build-schema-preview">
-            <span class="schema-badge">Dữ liệu biên tập (Editorial Schema)</span>
-            <p>Hệ thống hỗ trợ cập nhật động các mục: Vai trò, Vũ khí đề xuất, Thâm tạo, Đội hình, Rotation & Ưu/Nhược điểm.</p>
-          </div>
         </div>
       </div>
     `;
