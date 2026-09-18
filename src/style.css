@@ -129,6 +129,34 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Batch 1A: Tabular numerals for numeric contexts */
+.tabular-nums,
+.stat-val,
+.stat-value,
+.stat-detail,
+.m-stat-val,
+.zhizhi-stat-val,
+.mat-count,
+.hz-prop-values-cell,
+.hz-stage-val,
+.range-metric-val,
+.spec-value,
+.price-with-icon,
+.museum-data-row .val,
+.highlight-price,
+.gallery-results-count,
+.series-chip-count,
+.catalog-hero-count,
+.gallery-card-badge,
+.gallery-card-price,
+.gallery-price-val,
+.calc-table td,
+.weapon-stat-val,
+.character-spec-val {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
 /* Top Nav (Mobile Default / Responsive Header) */
 .top-nav {
   height: 56px;
@@ -560,11 +588,10 @@ body {
   gap: 6px;
 }
 .filter-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
-  text-transform: uppercase;
 }
 .filter-chips {
   display: flex;
@@ -1325,10 +1352,10 @@ body {
 .tg-node:not(.status-neutral) { opacity: 1; filter: none; }
 
 .tg-node.status-completed .tg-node-inner {
-  filter: drop-shadow(0 0 2.5px #23867f) drop-shadow(0 0 1px #23867f);
+  filter: drop-shadow(0 0 2px rgba(35, 134, 127, 0.8));
 }
 .tg-node.status-target .tg-node-inner {
-  filter: drop-shadow(0 0 3.5px #00d5e8) drop-shadow(0 0 1.5px #00d5e8);
+  filter: drop-shadow(0 0 2.5px rgba(212, 183, 99, 0.7));
 }
 
 .section-header {
@@ -2518,7 +2545,6 @@ body {
 .quick-link-card:hover {
   border-color: var(--accent);
   background: var(--bg-surface-hover);
-  transform: translateY(-1px);
 }
 
 .quick-link-card.accent-card {
@@ -3409,19 +3435,19 @@ body {
 }
 
 .catalog-hero-title {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-family: var(--font-serif, 'Noto Serif SC', serif);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--text-main);
   margin: 0;
-  text-transform: uppercase;
 }
 
 .catalog-hero-count {
   font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  color: var(--text-secondary, #999);
+  letter-spacing: 0.02em;
 }
 
 /* 2. Compact Search & Collapsible Toolbar */
@@ -3560,11 +3586,10 @@ body {
 }
 
 .cfg-label {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
-  color: #717d8a;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #8c98a5;
+  letter-spacing: 0.3px;
   user-select: none;
 }
 
@@ -3763,7 +3788,7 @@ body {
 /* 3. Artwork-Dominant Roster Cards (S1N Continuous Layout) */
 .catalog-grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
   gap: 16px;
 }
 
@@ -3777,7 +3802,7 @@ body {
   text-decoration: none;
   color: #ffffff;
   isolation: isolate;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* REQ 3: LIMITED = Thin Red Card Border (1px, at most 2px, muted red, no glow) */
@@ -3785,11 +3810,12 @@ body {
   border: 1px solid #c83b3b;
 }
 
-/* Restrained CardV2 hover crossfade (180-250ms, no scale distortion) */
+/* Restrained CardV2 hover crossfade (180-250ms, stationary, no lift) */
 @media (hover: hover) {
   .cc-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(212, 183, 99, 0.45);
+    background-color: #10141d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   }
 
   .cc-card.is-limited:hover {
@@ -3805,11 +3831,11 @@ body {
   }
 }
 
-/* Slim vertical silhouette (target width/height ~0.625 -> 5/8) */
+/* Slender in-game card silhouette (target width/height ~0.5625 -> 9 / 16) */
 .card-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 8;
+  aspect-ratio: 9 / 16;
   overflow: hidden;
   background: var(--bg-main);
   isolation: isolate;
@@ -3824,7 +3850,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 15%;
+  object-position: 50% 10%;
   z-index: 0;
   transition: opacity 0.2s ease;
   pointer-events: none;
@@ -3838,13 +3864,13 @@ body {
   opacity: 0;
 }
 
-/* z-index 1: Subtle dark readability overlay over lower 46% */
+/* z-index 1: Subtle dark readability overlay over lower 38% */
 .card-bottom-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 46%;
+  height: 38%;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
   z-index: 1;
   pointer-events: none;
@@ -4350,7 +4376,6 @@ body {
 .hz-title-bar {
   background: var(--bg-main);
   border: 1px solid var(--border-color);
-  border-left: 3px solid #c4a265;
   border-radius: 2px;
   padding: 10px 16px;
 }
@@ -4580,10 +4605,9 @@ body {
 .info-section-header h3 {
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   color: var(--text-muted);
   margin: 0;
-  text-transform: uppercase;
 }
 
 .stats-level-badge {
@@ -4936,7 +4960,8 @@ body {
   white-space: pre-line;
 }
 
-/* Standalone Data View Styles */
+/* Standalone Data / Weapons View Styles */
+.weapons-view,
 .data-view {
   width: 100%;
   min-height: calc(100vh - 40px);
@@ -6193,7 +6218,7 @@ body {
 .profile-avatar-button:hover,
 .profile-avatar-button:focus-visible {
   border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(184, 153, 71, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .profile-avatar-button #profile-avatar {

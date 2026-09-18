@@ -71,21 +71,21 @@ export function renderMaterialsTab(container, char) {
         <!-- Summary Stats Card -->
         <div class="materials-summary-card">
           <div class="m-stat-box">
-            <span class="m-stat-label">ĐÔNG CỐC TỆ</span>
+            <span class="m-stat-label">Đông Cốc Tệ</span>
             <span class="m-stat-val coin-val">${formatVan(res.totalCoin || 0)}</span>
           </div>
 
           <div class="m-stat-divider"></div>
 
           <div class="m-stat-box">
-            <span class="m-stat-label">KINH NGHIỆM (EXP)</span>
+            <span class="m-stat-label">Kinh Nghiệm (EXP)</span>
             <span class="m-stat-val exp-val">${formatVan(res.totalExp || 0)}</span>
           </div>
         </div>
 
         <!-- Material Icons Grid -->
         <div class="materials-grid-section">
-          <h3>DANH SÁCH VẬT LIỆU CẦN (${(res.mats || []).length} loại)</h3>
+          <h3>Danh sách vật liệu cần (${(res.mats || []).length} loại)</h3>
           
           <div class="material-grid">
             ${(res.mats || []).map(mat => `

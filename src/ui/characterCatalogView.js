@@ -180,7 +180,8 @@ export function renderCharacterCatalogView(container) {
         <!-- Full-Width Visual Hero Header -->
         <section class="catalog-hero">
           <div class="catalog-hero-content">
-            <h1 class="catalog-hero-title">KHÍ GIẢ</h1>
+            <h1 class="catalog-hero-title">Khí Giả</h1>
+            <span class="catalog-hero-count">${Object.keys(gameData.characters).length} hồ sơ</span>
           </div>
         </section>
 
@@ -210,7 +211,7 @@ export function renderCharacterCatalogView(container) {
             <div class="compact-filter-grid">
               <!-- Job Segmented Control -->
               <div class="compact-filter-group group-job">
-                <span class="cfg-label">CHỨC NGHIỆP</span>
+                <span class="cfg-label">Chức nghiệp</span>
                 <div class="segmented-control" id="job-segmented-control">
                   <button class="seg-btn ${catalogJobFilters.has('1') ? 'active' : ''}" data-val="1">
                     <img src="/assets/jobs/job_1.png" alt="Túc Vệ" class="seg-btn-job-icon" />
@@ -237,7 +238,7 @@ export function renderCharacterCatalogView(container) {
 
               <!-- Rarity Segmented Control -->
               <div class="compact-filter-group group-rarity">
-                <span class="cfg-label">ĐỘ HIẾM</span>
+                <span class="cfg-label">Độ hiếm</span>
                 <div class="segmented-control" id="rarity-segmented-control">
                   <button class="seg-btn seg-ssr ${catalogRarityFilters.has('4') ? 'active' : ''}" data-val="4">SSR</button>
                   <button class="seg-btn seg-sr ${catalogRarityFilters.has('3') ? 'active' : ''}" data-val="3">SR</button>
@@ -247,7 +248,7 @@ export function renderCharacterCatalogView(container) {
 
               <!-- Pool Segmented Control -->
               <div class="compact-filter-group group-pool">
-                <span class="cfg-label">PHÂN LOẠI</span>
+                <span class="cfg-label">Phân loại</span>
                 <div class="segmented-control" id="pool-segmented-control">
                   <button class="seg-btn ${catalogPoolFilters.has('limited') ? 'active' : ''}" data-val="limited">Limited</button>
                   <button class="seg-btn ${catalogPoolFilters.has('standard') ? 'active' : ''}" data-val="standard">Thường</button>

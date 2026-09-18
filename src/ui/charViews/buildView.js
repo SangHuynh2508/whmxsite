@@ -33,13 +33,13 @@ export function renderBuildTab(container, char) {
       <div class="build-sections-grid">
         <!-- 1. Role / Summary -->
         <div class="build-card role-card">
-          <h3>VAI TRÒ TRONG ĐỘI HÌNH</h3>
+          <h3>Vai trò trong đội hình</h3>
           <p>${buildData.role || "Chưa có thông tin"}</p>
         </div>
 
         <!-- 2. Recommended Weapons -->
         <div class="build-card weapons-card">
-          <h3>VŨ KHÍ ĐỀ XUẤT</h3>
+          <h3>Vũ khí đề xuất</h3>
           <ul class="build-item-list">
             ${(buildData.weapons || []).map(w => `<li><strong>${w.name}</strong> - ${w.desc}</li>`).join('') || '<li>Đang cập nhật...</li>'}
           </ul>
@@ -47,7 +47,7 @@ export function renderBuildTab(container, char) {
 
         <!-- 3. Engravings / Thâm tạo -->
         <div class="build-card engraving-card">
-          <h3>THÂM TẠO (BỘ TRANG BỊ)</h3>
+          <h3>Thâm Tạo (Bộ trang bị)</h3>
           <ul class="build-item-list">
             ${(buildData.engravings || []).map(e => `<li><strong>${e.name}</strong>: ${e.effect}</li>`).join('') || '<li>Đang cập nhật...</li>'}
           </ul>
@@ -55,26 +55,26 @@ export function renderBuildTab(container, char) {
 
         <!-- 4. Team Comps -->
         <div class="build-card team-card">
-          <h3>ĐỘI HÌNH PHÙ HỢP</h3>
+          <h3>Đội hình phù hợp</h3>
           <p>${buildData.team_comps || "Đang cập nhật..."}</p>
         </div>
 
         <!-- 5. Rotation / Playstyle -->
         <div class="build-card rotation-card">
-          <h3>CÁCH CHƠI / ROTATION</h3>
+          <h3>Cách chơi / Rotation</h3>
           <p>${buildData.rotation || "Đang cập nhật..."}</p>
         </div>
 
         <!-- 6. Pros & Cons -->
         <div class="build-card pros-cons-card">
           <div class="pros-col">
-            <h4 class="pros-title">ƯU ĐIỂM</h4>
+            <h4 class="pros-title">Ưu điểm</h4>
             <ul>
               ${(buildData.pros || []).map(p => `<li>${p}</li>`).join('') || '<li>Chưa liệt kê</li>'}
             </ul>
           </div>
           <div class="cons-col">
-            <h4 class="cons-title">NHƯỢC ĐIỂM</h4>
+            <h4 class="cons-title">Nhược điểm</h4>
             <ul>
               ${(buildData.cons || []).map(c => `<li>${c}</li>`).join('') || '<li>Chưa liệt kê</li>'}
             </ul>

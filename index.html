@@ -5,7 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vật Hoa Di Tân - Character Calculator</title>
-  <meta name="description" content="Công cụ tính toán nguyên liệu nâng cấp cấp độ và thiên phú nhân vật game Vật Hoa Di Tân (物华弥新)." />
+  <meta name="description"
+    content="Công cụ tính toán nguyên liệu nâng cấp cấp độ và thiên phú nhân vật game Vật Hoa Di Tân (物华弥新)." />
   <meta property="og:title" content="Vật Hoa Di Tân - Character Calculator" />
   <meta property="og:description" content="Tra cứu và tính toán tài nguyên nâng cấp nhân vật Vật Hoa Di Tân." />
   <meta property="og:type" content="website" />
@@ -32,7 +33,7 @@
         var savedNav = localStorage.getItem('whmx_nav_expanded');
         var expanded = savedNav === 'true';
         document.documentElement.setAttribute('data-nav-expanded', expanded ? 'true' : 'false');
-      } catch (e) {}
+      } catch (e) { }
     })();
   </script>
 
@@ -56,25 +57,63 @@
       <li>
         <a href="#/characters" class="app-nav-item active" data-tooltip="Khí Giả">
           <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"
+              data-lucide="users-round">
+              <path d="M18 21a8 8 0 0 0-16 0"></path>
+              <circle cx="10" cy="8" r="5"></circle>
+              <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path>
+            </svg>
           </span>
           <span class="app-nav-label">Khí Giả</span>
         </a>
       </li>
       <li>
-        <a href="#/data" class="app-nav-item" data-tooltip="Dữ Liệu">
+        <a href="#/gallery" class="app-nav-item" data-tooltip="Trang Phục">
           <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M21 19c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14"></path><path d="M21 5v14"></path></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt" data-lucide="shirt">
+              <path
+                d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z">
+              </path>
+            </svg>
           </span>
-          <span class="app-nav-label">Dữ Liệu</span>
+          <span class="app-nav-label">Trang Phục</span>
         </a>
       </li>
       <li>
-        <a href="#calc" class="app-nav-item" data-tooltip="Máy Tính">
+        <a href="#/weapons" class="app-nav-item" data-tooltip="Vũ Khí">
           <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-sword" data-lucide="sword">
+              <path d="m11 19-6-6" />
+              <path d="m5 21-2-2" />
+              <path d="m8 16-4 4" />
+              <path d="M9.5 17.5 20.414 6.586A2 2 0 0021 5.172V3h-2.172a2 2 0 00-1.414.586L6.5 14.5" />
+            </svg>
           </span>
-          <span class="app-nav-label">Máy Tính</span>
+          <span class="app-nav-label">Vũ Khí</span>
+        </a>
+      </li>
+      <li>
+        <a href="#calc" class="app-nav-item" data-tooltip="Công cụ">
+          <span class="app-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator" data-lucide="calculator">
+              <rect width="16" height="20" x="4" y="2" rx="2"></rect>
+              <line x1="8" x2="16" y1="6" x2="6"></line>
+              <line x1="16" x2="16" y1="14" y2="18"></line>
+              <path d="M16 10h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M8 14h.01"></path>
+              <path d="M12 18h.01"></path>
+              <path d="M8 18h.01"></path>
+            </svg>
+          </span>
+          <span class="app-nav-label">Công cụ</span>
         </a>
       </li>
     </ul>
@@ -85,7 +124,8 @@
     <div class="nav-brand">VẬT HOA DI TÂN</div>
     <div class="nav-links">
       <a href="#/characters" class="active">Khí Giả</a>
-      <a href="#/data">Dữ Liệu</a>
+      <a href="#/gallery">Trang Phục</a>
+      <a href="#/weapons">Vũ Khí</a>
       <a href="#calc">Máy Tính</a>
     </div>
   </nav>
@@ -107,8 +147,10 @@
       <div class="filter-section">
         <div class="search-row">
           <input type="text" id="search-input" placeholder="Tìm kiếm nhân vật..." autocomplete="off" />
-          <button type="button" id="adv-filter-btn" class="adv-filter-btn" title="Tìm kiếm nâng cao" aria-label="Bộ lọc nâng cao">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" id="adv-filter-btn" class="adv-filter-btn" title="Tìm kiếm nâng cao"
+            aria-label="Bộ lọc nâng cao">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
             </svg>
             <span class="filter-badge hidden" id="filter-active-count">0</span>
@@ -117,7 +159,7 @@
 
         <div class="adv-filter-panel hidden" id="adv-filter-panel">
           <div class="filter-group">
-            <span class="filter-label">CHỨC NGHIỆP</span>
+            <span class="filter-label">Chức nghiệp</span>
             <div class="filter-chips" id="job-filter">
               <button class="chip" data-job="1">Túc Vệ</button>
               <button class="chip" data-job="2">Khinh Nhuệ</button>
@@ -128,7 +170,7 @@
           </div>
 
           <div class="filter-group">
-            <span class="filter-label">ĐỘ HIẾM</span>
+            <span class="filter-label">Độ hiếm</span>
             <div class="filter-chips" id="rarity-filter">
               <button class="chip chip-ssr" data-rarity="4">SSR</button>
               <button class="chip chip-sr" data-rarity="3">SR</button>
@@ -137,7 +179,7 @@
           </div>
 
           <div class="filter-group">
-            <span class="filter-label">PHÂN LOẠI</span>
+            <span class="filter-label">Phân loại</span>
             <div class="filter-chips" id="pool-filter">
               <button class="chip chip-limited" data-pool="limited">Limited</button>
               <button class="chip" data-pool="standard">Thường</button>
@@ -145,7 +187,7 @@
           </div>
 
           <div class="filter-group">
-            <span class="filter-label">HOÁN CHƯƠNG</span>
+            <span class="filter-label">Hoán Chương</span>
             <div class="filter-chips" id="huanzhang-filter">
               <button class="chip" id="sidebar-hz-btn" data-huanzhang="has">Có Hoán Chương</button>
             </div>
@@ -166,7 +208,12 @@
     <main class="main-content hidden" id="main-content">
       <div class="mobile-action-bar">
         <button type="button" id="mobile-char-select-btn" class="mobile-char-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
           <span>Danh Mục Nhân Vật</span>
         </button>
       </div>
@@ -176,8 +223,10 @@
           <!-- Character Profile -->
           <section class="profile-header" id="calc-profile-header">
             <div class="profile-avatar-col">
-              <button type="button" class="profile-avatar-button" id="profile-avatar-container" aria-label="Chọn nhân vật" title="Bấm để chọn nhân vật">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E" alt="" id="profile-avatar" class="hidden" />
+              <button type="button" class="profile-avatar-button" id="profile-avatar-container"
+                aria-label="Chọn nhân vật" title="Bấm để chọn nhân vật">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E" alt=""
+                  id="profile-avatar" class="hidden" />
                 <div class="avatar-placeholder-plus" id="profile-avatar-plus">+</div>
               </button>
               <button type="button" class="change-char-btn hidden" id="profile-change-char-btn">Đổi Khí Giả</button>
@@ -190,7 +239,8 @@
                   <h3 class="profile-name-cn" id="profile-name-cn">Bấm vào hình đại diện để chọn nhân vật</h3>
                 </div>
                 <div class="profile-job-block" id="profile-job-block" style="display: none;">
-                  <img class="class-badge" id="profile-class-badge" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E" alt="" />
+                  <img class="class-badge" id="profile-class-badge"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E" alt="" />
                   <span class="class-badge-label" id="profile-class-label"></span>
                 </div>
               </div>
@@ -206,7 +256,7 @@
           <section class="config-panel">
             <div class="config-block">
               <div class="config-label">
-                <h3>CẤP ĐỘ (LEVEL)</h3>
+                <h3>Cấp độ (Level)</h3>
                 <span class="meta-text">Tối đa 120</span>
               </div>
               <div class="config-controls">
@@ -238,22 +288,22 @@
           <!-- Requirements Report -->
           <section class="report-panel">
             <header class="report-header">
-              <h3>BÁO CÁO TÀI NGUYÊN</h3>
+              <h3>Báo Cáo Tài Nguyên</h3>
             </header>
 
             <div class="summary-stats">
               <div class="stat-item">
-                <span class="stat-label">ĐÔNG CỐC TỆ</span>
+                <span class="stat-label">Đông Cốc Tệ</span>
                 <span class="stat-value" id="total-coin">0</span>
               </div>
               <div class="stat-item">
-                <span class="stat-label">KINH NGHIỆM</span>
+                <span class="stat-label">Kinh Nghiệm</span>
                 <span class="stat-value" id="total-exp">0 EXP</span>
               </div>
             </div>
 
             <div class="materials-report">
-              <h4>VẬT LIỆU CẦN</h4>
+              <h4>Vật liệu cần</h4>
               <div class="material-grid" id="material-grid">
                 <!-- Populated via JS -->
               </div>
@@ -265,7 +315,9 @@
         <aside class="char-card-panel" id="char-card-panel" style="display: none;">
           <div class="character-gallery">
             <div class="character-card">
-              <img class="character-artwork" id="profile-card-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E" alt="Character Artwork" />
+              <img class="character-artwork" id="profile-card-img"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E"
+                alt="Character Artwork" />
               <div class="ticket-base-wrapper">
                 <img class="ticket-base" src="/assets/frames/ui_ty_kp_di1.png" alt="Ticket Base" />
               </div>
@@ -278,14 +330,17 @@
       </div>
 
       <footer class="app-footer">
-        <p>Vật Hoa Di Tân Calculator là dự án fan-made, phi thương mại và không liên kết với nhà phát hành chính thức. Các hình ảnh, tên gọi và tài sản trò chơi liên quan đến 物华弥新 thuộc quyền sở hữu của các chủ sở hữu tương ứng.</p>
+        <p>Vật Hoa Di Tân Calculator là dự án fan-made, phi thương mại và không liên kết với nhà phát hành chính thức.
+          Các hình ảnh, tên gọi và tài sản trò chơi liên quan đến 物华弥新 thuộc quyền sở hữu của các chủ sở hữu tương ứng.
+        </p>
       </footer>
     </main>
 
     <div id="empty-state" class="empty-state">
       <div class="empty-state-content">
         <div class="empty-state-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -293,11 +348,17 @@
           </svg>
         </div>
         <button type="button" id="empty-char-select-btn" class="mobile-char-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
           <span>Danh Mục Nhân Vật</span>
         </button>
         <h3 class="empty-state-title">Tra Cứu & Tính Toán</h3>
-        <p class="empty-state-text">Chọn một nhân vật từ danh mục bên trái để xem thông tin chi tiết và tính toán tài nguyên.</p>
+        <p class="empty-state-text">Chọn một nhân vật từ danh mục bên trái để xem thông tin chi tiết và tính toán tài
+          nguyên.</p>
       </div>
     </div>
 
@@ -311,22 +372,34 @@
       <!-- Dynamically rendered by characterDetail.js -->
     </main>
 
-    <!-- Standalone Data View Root -->
-    <main id="data-view" class="data-view hidden">
-      <!-- Dynamically rendered for /data route -->
+    <!-- Standalone Weapons View Root -->
+    <main id="weapons-view" class="weapons-view hidden">
+      <!-- Dynamically rendered for /weapons route -->
+    </main>
+
+    <!-- Skin Gallery View Root -->
+    <main id="skin-gallery-view" class="skin-gallery-view hidden">
+      <!-- Dynamically rendered by skinGalleryView.js -->
+    </main>
+
+    <!-- Skin Detail View Root -->
+    <main id="skin-detail-view" class="skin-detail-view hidden">
+      <!-- Dynamically rendered by skinDetailView.js -->
     </main>
 
   </div>
 
   <!-- Dedicated Calculator Character Picker Modal Overlay -->
   <div id="calc-char-picker-backdrop" class="calc-picker-backdrop hidden">
-    <div id="calc-char-picker-dialog" class="calc-picker-dialog" role="dialog" aria-modal="true" aria-label="Chọn Nhân Vật">
+    <div id="calc-char-picker-dialog" class="calc-picker-dialog" role="dialog" aria-modal="true"
+      aria-label="Chọn Nhân Vật">
       <header class="calc-picker-header">
         <div class="calc-picker-header-title">
           <h3>CHỌN NHÂN VẬT</h3>
           <span class="calc-picker-subtitle">Vật Hoa Di Tân</span>
         </div>
-        <button type="button" id="calc-picker-close-btn" class="calc-picker-close-btn" aria-label="Đóng">&times;</button>
+        <button type="button" id="calc-picker-close-btn" class="calc-picker-close-btn"
+          aria-label="Đóng">&times;</button>
       </header>
       <div class="calc-picker-body">
         <div class="calc-picker-search-bar">
@@ -348,12 +421,10 @@
   </div>
 
   <!-- Site-Level Feedback / Bug Report Control -->
-  <button type="button"
-          id="whmx-feedback-btn"
-          class="whmx-feedback-btn"
-          aria-label="Phản hồi / Báo lỗi">
+  <button type="button" id="whmx-feedback-btn" class="whmx-feedback-btn" aria-label="Phản hồi / Báo lỗi">
     <span class="feedback-badge">
-      <svg class="feedback-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg class="feedback-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <circle cx="12" cy="15.5" r="0.75" fill="currentColor"></circle>

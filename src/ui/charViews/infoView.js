@@ -429,7 +429,7 @@ export function renderInfoTab(container, char) {
     if (!resolved) {
       return `
         <div class="info-section-header">
-          <h3>CHỈ SỐ CHIẾN ĐẤU</h3>
+          <h3>Chỉ Số Chiến Đấu</h3>
         </div>
         <p class="empty-sub-state-text">Chưa có dữ liệu chỉ số chiến đấu cho nhân vật này.</p>
       `;
@@ -486,7 +486,7 @@ export function renderInfoTab(container, char) {
 
     return `
       <div class="info-section-header">
-        <h3>CHỈ SỐ CHIẾN ĐẤU</h3>
+        <h3>Chỉ Số Chiến Đấu</h3>
         <div class="stats-header-actions">
           <span class="stats-level-badge">${levelBadgeText}</span>
           <div class="stats-lvl-toggle">
@@ -838,7 +838,7 @@ export function renderInfoTab(container, char) {
 
       <div class="info-sub-section zhizhi-sub-section">
         <div class="info-section-header">
-          <h3>TRÍ TRI</h3>
+          <h3>Trí Tri</h3>
         </div>
         ${zhizhiHtml}
       </div>
@@ -848,8 +848,8 @@ export function renderInfoTab(container, char) {
   let currentInfoMode = 'skills'; // 'skills' | 'huanzhang'
 
   const sectionTitles = {
-    skills: 'THÔNG TIN KỸ NĂNG',
-    huanzhang: 'THÔNG TIN HOÁN CHƯƠNG'
+    skills: 'Thông Tin Kỹ Năng',
+    huanzhang: 'Thông Tin Hoán Chương'
   };
 
   function renderModeContent() {

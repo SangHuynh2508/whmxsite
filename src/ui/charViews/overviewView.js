@@ -10,7 +10,11 @@ export function renderOverviewTab(container, char) {
 
   const rarityInfo = rarityMap[char.rare] || { label: `★${char.rare}`, class: "sr" };
   const jobName = jobNames[char.job] || "Chưa xác định";
-  const attackTypeStr = char.attacktype === 1 ? "Cận chiến" : char.attacktype === 2 ? "Tầm xa" : "Đặc biệt";
+  const attackStyleMap = {
+    1: "Cận chiến",
+    2: "Tầm xa"
+  };
+  const attackTypeStr = attackStyleMap[char.attack_style_type] || "Chưa xác định";
 
   const mainCardImg = char.cards && char.cards.length > 0 ? getCharacterCardUrl(char.cards[0]) : char.icon;
   const nickname = String(char.nickname_vi ?? "").trim();
@@ -22,7 +26,7 @@ export function renderOverviewTab(container, char) {
         <!-- Compact Profile List Block -->
         <div class="overview-info-block">
           <div class="overview-section-header">
-            <h3>HỒ SƠ KHÍ GIẢ</h3>
+            <h3>Hồ Sơ Khí Giả</h3>
             <span class="rarity-badge ${rarityInfo.class}">${rarityInfo.label}</span>
           </div>
 
