@@ -2,18 +2,70 @@ import json
 import openpyxl
 from pathlib import Path
 
+from asset_publish_manifest import load_manifest, manifest_path, require_asset_url
+
 from export_localization_json import export as export_master_localization
 
 MASTER = Path(__file__).resolve().parent.parent.parent / "NeoArtifacts" / "MasterData" / "json"
 MASTER_JSON = Path(__file__).resolve().parent.parent / "localization" / "generated_localization.json"
 PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
 OUT_FILE = PUBLIC_DIR / "data.json"
+EXCLUDED_CHARACTER_IDS = {"W0021", "ES013"}
+
+
+def build_skill_icon_index(skills_dir):
+    """Index real skill filenames without relying on a case-insensitive disk.
+
+    Raw MasterData names are useful lookup candidates only.  Every generated
+    URL must retain the exact spelling of the filename that is actually
+    published under ``public/assets/skills``.  A casefold collision cannot be
+    represented safely on Linux, so fail before producing ambiguous output.
+    """
+    exact = {}
+    casefold = {}
+    for path in sorted(skills_dir.iterdir(), key=lambda item: item.name.casefold()):
+        if not path.is_file():
+            continue
+        name = path.name
+        folded = name.casefold()
+        other = casefold.get(folded)
+        if other is not None and other != name:
+            raise RuntimeError(
+                f"Casefold collision in skill assets: {other!r} and {name!r}"
+            )
+        exact[name] = name
+        casefold[folded] = name
+    return exact, casefold
+
+
+def build_exact_filename_index(asset_dir, asset_label):
+    """Return exact/casefold filename lookup and reject ambiguous disk state."""
+    exact = {}
+    casefold = {}
+    for path in sorted(asset_dir.iterdir(), key=lambda item: item.name.casefold()):
+        if not path.is_file():
+            continue
+        name = path.name
+        folded = name.casefold()
+        other = casefold.get(folded)
+        if other is not None and other != name:
+            raise RuntimeError(
+                f"Casefold collision in {asset_label} assets: {other!r} and {name!r}"
+            )
+        exact[name] = name
+        casefold[folded] = name
+    return exact, casefold
 
 def load_json(name):
     return json.loads((MASTER / name).read_text(encoding="utf-8"))
 
 def build():
+    remote_asset_manifest = load_manifest(manifest_path(Path(__file__).resolve().parent.parent))
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+    SKILLS_DIR = PUBLIC_DIR / "assets" / "skills"
+    skill_icon_exact, skill_icon_casefold = build_skill_icon_index(SKILLS_DIR)
+    HUANZHANG_DIR = PUBLIC_DIR / "assets" / "huanzhang"
+    huanzhang_icon_exact, huanzhang_icon_casefold = build_exact_filename_index(HUANZHANG_DIR, "Hoán Chương")
     
     print("Loading master localization...")
     gen_loc = export_master_localization()
@@ -22,6 +74,25 @@ def build():
         if val is None:
             return ""
         return str(val).strip()
+
+    def raw_record_level(record, raw_key=""):
+        """Read the level encoded by the raw table's record identity.
+
+        Some MasterData skill records omit a ``Level`` field, but their primary
+        raw key is exactly ``<GroupId><level>``.  This is a table-level identity
+        relation (not a gameplay-semantic suffix guess), and is accepted only
+        when the whole prefix exactly equals the record's GroupId.
+        """
+        explicit = record.get("Level", record.get("level"))
+        if explicit not in (None, ""):
+            try:
+                return int(explicit)
+            except (TypeError, ValueError):
+                return 1
+        group_id = safe_str(record.get("GroupId"))
+        key = safe_str(raw_key or record.get("Id"))
+        suffix = key[len(group_id):] if group_id and key.startswith(group_id) else ""
+        return int(suffix) if suffix.isdigit() and int(suffix) > 0 else 1
 
     char_loc = gen_loc.get("characters", {})
     item_loc = gen_loc.get("items", {})
@@ -113,6 +184,50 @@ def build():
         text = safe_str(value)
         return text if text and not re.search(r'[\u3400-\u9fff]', text) else ""
 
+    popup_param_re = re.compile(r'\[(?:EffectParam|EffectPara|BuffParam|Effect[1-5]Para|Condition[1-5]Para),\d+\]')
+    # This deliberately recognises only a standalone positional raw argument.
+    # It cannot match hex colours such as <color=#158bdb>.
+    raw_hash_param_re = re.compile(r'(?<![A-Za-z0-9_])#(\d+)\b')
+
+    def contains_unresolved_player_parameter(value):
+        text = safe_str(value)
+        return bool(popup_param_re.search(text) or raw_hash_param_re.search(text))
+
+    def valid_named_popup_anchor(value):
+        """A popup title is a named term, never a resolved value or parameter."""
+        text = clean_rich_text(value)
+        return bool(text and not contains_unresolved_player_parameter(text)
+                    and not re.fullmatch(r"[\d\s.,/%+\-]+", text))
+
+    def resolve_vi_from_resolved_cn(template_cn, resolved_cn, template_vi):
+        """Project exact resolved values from the CN template into its VI template."""
+        if not template_vi or not popup_param_re.search(template_vi):
+            return template_vi
+        parts = popup_param_re.split(template_cn)
+        tokens = popup_param_re.findall(template_cn)
+        if not tokens:
+            return template_vi
+        pattern = '^' + ''.join(
+            re.escape(part) + (r'(.*?)' if idx < len(tokens) else '')
+            for idx, part in enumerate(parts)
+        ) + '$'
+        match = re.match(pattern, resolved_cn, flags=re.DOTALL)
+        if not match or len(match.groups()) != len(tokens):
+            return ""
+        values_by_token = {}
+        for token, value in zip(tokens, match.groups()):
+            values_by_token.setdefault(token, []).append(value)
+        positions = {token: 0 for token in values_by_token}
+        def replace(match_obj):
+            token = match_obj.group(0)
+            values = values_by_token.get(token, [])
+            pos = positions.get(token, 0)
+            if not values:
+                return token
+            positions[token] = pos + 1
+            return values[min(pos, len(values) - 1)]
+        return popup_param_re.sub(replace, template_vi)
+
     # A source description can name a status without carrying its {Buff_ID} marker.
     # Such a relation is usable only when the raw buff table has exactly one matching
     # normalized Chinese name.  Ambiguous names intentionally receive no popup.
@@ -124,14 +239,17 @@ def build():
         if normalized_name:
             buff_ids_by_name.setdefault(normalized_name, []).append(str(buff_id))
 
-    # Build Brilliant Map skill lookup
-    brilliant_skill_gids = set()
+    # BrilliantMap ownership comes from the HUANZHANG record's explicit
+    # character_id, never from an ID prefix or a global group-name convention.
+    brilliant_skill_gids_by_character = {}
     if isinstance(brilliant_raw, dict):
         for b_id, b_val in brilliant_raw.items():
-            if isinstance(b_val, dict):
+            owner_id = safe_str((hz_loc_dict.get(b_id) or {}).get("character_id"))
+            if owner_id and isinstance(b_val, dict):
+                groups = brilliant_skill_gids_by_character.setdefault(owner_id, set())
                 for sk_id in b_val.get("Buff", []) + b_val.get("Skill1", []) + b_val.get("Skill2", []):
                     if sk_id:
-                        brilliant_skill_gids.add(str(sk_id))
+                        groups.add(str(sk_id))
 
     # Build Actor EX skill lookup: (char_id, skill_gid) -> CharactRank
     actor_ex_map = {}
@@ -274,7 +392,7 @@ def build():
         if isinstance(src, dict):
             for k, v in src.items():
                 gid = v.get("GroupId")
-                lvl = v.get("Level", v.get("level", 1))
+                lvl = raw_record_level(v, k)
                 if gid:
                     key = (str(gid), int(lvl))
                     if key not in all_skills:
@@ -343,8 +461,75 @@ def build():
         apply_proven_semantic_corrections(sk_val)
 
 
-    def resolve_buff_tree(buff_key, passed_args, depth=0, visited=None):
+    def walk_strings(value):
+        if isinstance(value, str):
+            yield value
+        elif isinstance(value, dict):
+            for item in value.values():
+                yield from walk_strings(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from walk_strings(item)
+
+    # Character-owned raw relations provide a deterministic tiebreaker for the
+    # rare case where a card names a status without a marker and the global name is
+    # duplicated.  The tiebreaker is still only used as a final exact-name fallback.
+    hero_buff_ids = {}
+    hero_skill_records = {}
+    for skill_source in (char_skill_raw, passive_map_raw):
+        for raw_skill in skill_source.values():
+            hero_id = safe_str(raw_skill.get("HeroId"))
+            if not hero_id:
+                continue
+            refs = set(re.findall(r'\{(Buff_[^}\s]+)\}', safe_str(raw_skill.get("DescriptionLanText"))))
+            refs.update(re.findall(r'\b(Buff_[A-Za-z0-9_]+)\b', "\n".join(walk_strings(raw_skill.get("Attr", [])))))
+            hero_buff_ids.setdefault(hero_id, set()).update(refs)
+            hero_skill_records.setdefault(hero_id, []).append(raw_skill)
+
+    raw_closure_text_cache = {}
+
+    def raw_skill_closure_text(raw_skill_records):
+        """Return source text from the exact Buff closure of one card/group."""
+        roots = set()
+        for raw_skill in raw_skill_records or ():
+            roots.update(re.findall(r'\{(Buff_[^}\s]+)\}', safe_str(raw_skill.get("DescriptionLanText"))))
+            roots.update(re.findall(r'\b(Buff_[A-Za-z0-9_]+)\b', "\n".join(walk_strings(raw_skill.get("Attr", [])))))
+        cache_key = tuple(sorted(roots))
+        if cache_key in raw_closure_text_cache:
+            return raw_closure_text_cache[cache_key]
+        texts, seen, pending = [], set(), list(cache_key)
+        while pending:
+            buff_id = pending.pop()
+            if buff_id in seen:
+                continue
+            seen.add(buff_id)
+            buff = buff_map_raw.get(buff_id) or {}
+            texts.extend((safe_str(buff.get("NameLanText")), safe_str(buff.get("DescriptionLanText"))))
+            child_source = "\n".join(walk_strings(buff.get("Attr", []))) + "\n" + safe_str(buff.get("DescriptionLanText"))
+            pending.extend(
+                child for child in re.findall(r'\b(Buff_[A-Za-z0-9_]+)\b', child_source)
+                if child not in seen
+            )
+        result = "\n".join(texts)
+        raw_closure_text_cache[cache_key] = result
+        return result
+
+    def resolve_positional_arg(value, local_args, inherited_args):
+        """Resolve raw #n only through the exact EffectNPara/inherited edge."""
+        token = safe_str(value)
+        if not token.startswith("#") or not token[1:].isdigit():
+            return value
+        index = int(token[1:]) - 1
+        for candidates in (local_args, inherited_args):
+            if 0 <= index < len(candidates):
+                candidate = candidates[index]
+                if safe_str(candidate) and safe_str(candidate) != token:
+                    return candidate
+        return None
+
+    def resolve_buff_tree(buff_key, passed_args, depth=0, visited=None, path=None):
         if visited is None: visited = set()
+        if path is None: path = []
         if buff_key in visited or depth > 5: return []
         visited.add(buff_key)
         
@@ -354,6 +539,9 @@ def build():
         b_name = b_def.get("NameLanText", "").strip()
         b_desc_raw = b_def.get("DescriptionLanText", "")
         b_attr = parse_attr(b_def.get("Attr", []))
+        child_buff_ids = set(re.findall(r'\b(Buff_[A-Za-z0-9_]+)\b', "\n".join(walk_strings(b_def.get("Attr", [])))))
+        child_buff_ids.update(re.findall(r'\{(Buff_[^}\s]+)\}', b_desc_raw))
+        child_buff_ids.discard(buff_key)
         
         results = []
         if b_name and b_desc_raw:
@@ -363,33 +551,35 @@ def build():
                 "name_cn": name_clean,
                 "template": b_desc_raw,
                 "attr_dict": b_attr,
-                "args": passed_args
+                "args": passed_args,
+                "raw_path": path + [buff_key],
+                "child_buff_ids": sorted(child_buff_ids),
             })
             
         for key, params in b_attr.items():
             if key.startswith("Effect") and not key.endswith("Para") and not key.endswith("Tips"):
                 if not params: continue
-                buff_idx = -1
-                for i, p in enumerate(params):
-                    if str(p).startswith("Buff_"):
-                        buff_idx = i
-                        break
-                if buff_idx != -1:
-                    child_key = params[buff_idx]
-                    arg_tokens = params[buff_idx + 1:]
+                # An Effect can deterministically reference more than one child buff.
+                # Follow every raw Buff_ operand rather than silently keeping only the
+                # first one; this is required for nested, per-card popup closure.
+                for buff_idx, child_key in enumerate(params):
+                    if not str(child_key).startswith("Buff_"):
+                        continue
+                    next_buff_idx = next(
+                        (i for i in range(buff_idx + 1, len(params))
+                         if str(params[i]).startswith("Buff_")),
+                        len(params),
+                    )
+                    arg_tokens = params[buff_idx + 1:next_buff_idx]
                     para_key = f"{key}Para"
                     para_vals = b_attr.get(para_key, [])
                     child_args = []
                     for arg in arg_tokens:
-                        if str(arg).startswith("#"):
-                            arg_i = int(str(arg)[1:]) - 1
-                            if 0 <= arg_i < len(para_vals): child_args.append(para_vals[arg_i])
-                            elif 0 <= arg_i < len(passed_args): child_args.append(passed_args[arg_i])
-                            else: child_args.append(arg)
-                        else:
-                            child_args.append(arg)
+                        resolved_arg = resolve_positional_arg(arg, para_vals, passed_args)
+                        if resolved_arg not in (None, ""):
+                            child_args.append(resolved_arg)
                     if not child_args: child_args = para_vals
-                    results.extend(resolve_buff_tree(child_key, child_args, depth + 1, visited.copy()))
+                    results.extend(resolve_buff_tree(child_key, child_args, depth + 1, visited.copy(), path + [buff_key]))
                     
         return results
 
@@ -398,7 +588,10 @@ def build():
         raw_desc = sk.get("DescriptionLanText", "")
         s_attr = parse_attr(sk.get("Attr", []))
         mechs = []
-        visited_keys = set()
+        candidates_by_key = {}
+        source_text = clean_rich_text(raw_desc)
+        direct_buff_keys = set(re.findall(r'\{(Buff_[^}\s]+)\}', raw_desc))
+        direct_buff_keys.update(re.findall(r'\b(Buff_[A-Za-z0-9_]+)\b', "\n".join(walk_strings(sk.get("Attr", [])))))
         
         for key, params in s_attr.items():
             if key.startswith("Effect") and not key.endswith("Para") and not key.endswith("Tips"):
@@ -415,25 +608,26 @@ def build():
                     para_vals = s_attr.get(para_key, [])
                     resolved_b_args = []
                     for arg in arg_tokens:
-                        if str(arg).startswith("#"):
-                            arg_i = int(str(arg)[1:]) - 1
-                            if 0 <= arg_i < len(para_vals): resolved_b_args.append(para_vals[arg_i])
-                            else: resolved_b_args.append(arg)
-                        else:
-                            resolved_b_args.append(arg)
+                        resolved_arg = resolve_positional_arg(arg, para_vals, [])
+                        if resolved_arg not in (None, ""):
+                            resolved_b_args.append(resolved_arg)
                     if not resolved_b_args: resolved_b_args = para_vals
                     
                     sub_m = resolve_buff_tree(b_key, resolved_b_args)
                     for m in sub_m:
-                        if m["key"] not in visited_keys:
-                            visited_keys.add(m["key"])
-                            mechs.append(m)
+                        # Raw Effect roots are often invisible controller buffs.  The
+                        # first player-facing descendant is direct only when its own
+                        # authored name is present in this card's source text.
+                        if (m["key"] == b_key or
+                                (clean_rich_text(m.get("name_cn", "")) and
+                                 clean_rich_text(m.get("name_cn", "")) in source_text)):
+                            m["is_direct_popup_target"] = True
+                        candidates_by_key.setdefault(m["key"], []).append(m)
                         
         buff_matches = re.finditer(r'\{([A-Za-z0-9_]+)\}', raw_desc)
         for match in buff_matches:
             buff_key = match.group(1)
             if not buff_key.startswith("Buff_"): continue
-            if buff_key in visited_keys: continue
             
             match_args = []
             for k, v in s_attr.items():
@@ -448,23 +642,38 @@ def build():
                         para_key = f"{k}Para"
                         para_vals = s_attr.get(para_key, [])
                         for arg in arg_tokens:
-                            if str(arg).startswith("#"):
-                                arg_i = int(str(arg)[1:]) - 1
-                                if 0 <= arg_i < len(para_vals): match_args.append(para_vals[arg_i])
-                                else: match_args.append(arg)
-                            else:
-                                match_args.append(arg)
+                            resolved_arg = resolve_positional_arg(arg, para_vals, [])
+                            if resolved_arg not in (None, ""):
+                                match_args.append(resolved_arg)
                         if not match_args: match_args = para_vals
                         break
             sub_m = resolve_buff_tree(buff_key, match_args)
             for m in sub_m:
-                if m["key"] not in visited_keys:
-                    visited_keys.add(m["key"])
-                    mechs.append(m)
+                if (m["key"] == buff_key or
+                        (clean_rich_text(m.get("name_cn", "")) and
+                         clean_rich_text(m.get("name_cn", "")) in source_text)):
+                    m["is_direct_popup_target"] = True
+                candidates_by_key.setdefault(m["key"], []).append(m)
                     
+        # A raw card can reach the same leaf through a parameterless controller
+        # and through a parameterised edge.  Select only the exact candidate whose
+        # edge vector is fully resolved; never keep the first Buff_ID encountered.
+        mechs = []
+        for key, candidates in candidates_by_key.items():
+            def candidate_score(candidate):
+                args = [safe_str(x) for x in candidate.get("args", [])]
+                return (
+                    not any(raw_hash_param_re.search(x) for x in args),
+                    len([x for x in args if x]),
+                    len(candidate.get("raw_path", [])),
+                )
+            mechs.append(max(candidates, key=candidate_score))
+        for mechanic in mechs:
+            if mechanic.get("key") in direct_buff_keys:
+                mechanic["is_direct_popup_target"] = True
         return mechs
 
-    def attach_popup_terms(raw_desc, mechanics):
+    def attach_popup_terms(raw_desc, mechanics, hero_id="", display_desc_vi="", raw_skill_records=()):
         """Attach only deterministic, displayable buff references to each mechanic.
 
         The frontend must never infer a popup from an arbitrary matching word.  A term
@@ -479,42 +688,264 @@ def build():
             normalize_buff_name(match.group(1))
             for match in re.finditer(r'<color=[^>]+>(.*?)</color>', raw_desc, flags=re.IGNORECASE | re.DOTALL)
         }
+        # If a canonical BUFF_STATUS name has no VI, a card may still expose a
+        # deterministic display alias from its own localized description.  Pair
+        # coloured source/display terms by position only; this alias is never
+        # persisted and never used to discover a global buff relation.
+        source_coloured_terms = [clean_rich_text(match.group(1)) for match in re.finditer(
+            r'<color=[^>]+>(.*?)</color>', raw_desc, flags=re.IGNORECASE | re.DOTALL,
+        )]
+        vi_coloured_terms = [clean_rich_text(match.group(1)) for match in re.finditer(
+            r'<color=[^>]+>(.*?)</color>', display_desc_vi, flags=re.IGNORECASE | re.DOTALL,
+        )]
+        display_aliases = {}
+        if len(source_coloured_terms) == len(vi_coloured_terms):
+            for source_term, vi_term in zip(source_coloured_terms, vi_coloured_terms):
+                if source_term and vi_term and source_term != vi_term:
+                    display_aliases.setdefault(normalize_buff_name(source_term), []).append(vi_term)
 
         by_key = {m.get("key"): m for m in mechanics if isinstance(m, dict) and m.get("key")}
 
+        def add_unique_name_fallback(normalized_name, is_direct=False):
+            """Add one displayable BUFF_STATUS only for an exact, unique name match.
+
+            This is deliberately a last fallback: raw marker/Attr relations are
+            collected before this function is used.  It is also kept inside the
+            current card's mechanics list, so a successful match cannot populate a
+            global popup index or leak to another skill card.
+            """
+            placeholder_re = r'\[(?:EffectParam|EffectPara|BuffParam|[A-Za-z0-9_]+Para),\d+\]'
+            buff_ids = buff_ids_by_name.get(normalized_name, [])
+            if len(buff_ids) != 1:
+                # Resolve only through the current character's independently raw
+                # referenced set.  If it is still not unique, do not create a popup.
+                buff_ids = [buff_id for buff_id in buff_ids if buff_id in hero_buff_ids.get(hero_id, set())]
+            if len(buff_ids) != 1:
+                return None
+            buff_id = buff_ids[0]
+            if buff_id in by_key:
+                return by_key[buff_id]
+            buff_data = buff_loc.get(buff_id, {})
+            name_cn = clean_rich_text(buff_data.get("buff_name_cn") or buff_data.get("name_cn", ""))
+            if not name_cn:
+                return None
+            resolved = resolve_buff_tree(buff_id, [])
+            node = next((m for m in resolved if m.get("key") == buff_id), None)
+            if not node:
+                return None
+            # A fallback must never publish an unbound [EffectParam,*].  When the
+            # same character has a raw, marked skill that supplies this status's
+            # arguments, use that deterministic instance; otherwise leave it as
+            # normal text and let the audit report the unresolved nested target.
+            if re.search(placeholder_re, node.get("template", "")):
+                rendered = None
+                marker = "{" + buff_id + "}"
+                grouped_sources = {}
+                for hero_skill in hero_skill_records.get(hero_id, []):
+                    if marker in safe_str(hero_skill.get("DescriptionLanText")):
+                        grouped_sources.setdefault(safe_str(hero_skill.get("GroupId")), []).append(hero_skill)
+                candidates = []
+                for group_levels in grouped_sources.values():
+                    group_levels.sort(key=raw_record_level)
+                    resolved_group = merge_mechs_across_levels([
+                        extract_skill_level_mechs(skill) for skill in group_levels
+                    ])
+                    candidate = next((entry for entry in resolved_group if entry.get("key") == buff_id), None)
+                    if candidate and not re.search(placeholder_re, candidate.get("desc_cn", "")):
+                        candidates.append(candidate)
+                unique_candidates = {candidate.get("desc_cn", ""): candidate for candidate in candidates}
+                if len(unique_candidates) == 1:
+                    rendered = next(iter(unique_candidates.values()))
+                if rendered and not re.search(placeholder_re, rendered.get("desc_cn", "")):
+                    node = rendered
+                else:
+                    return None
+            loc = buff_loc.get(buff_id, {})
+            node["name_vi"] = usable_vi(loc.get("buff_name_vi") or loc.get("name_vi", ""))
+            node["desc_cn"] = node.get("desc_cn") or node.get("template", "")
+            # A card-local candidate produced by merge_mechs_across_levels already
+            # carries the exact level/argument vector.  Preserve that resolved VI;
+            # rebuilding it from another CN string can lose tag/unit placement.
+            localized_desc = usable_vi(node.get("desc_vi", ""))
+            if not localized_desc:
+                localized_desc = usable_vi(loc.get("buff_desc_vi") or loc.get("desc_vi", ""))
+            if re.search(placeholder_re, localized_desc):
+                localized_desc = resolve_vi_from_resolved_cn(
+                    safe_str(loc.get("buff_desc_cn") or loc.get("desc_cn", "")),
+                    node.get("desc_cn", ""),
+                    localized_desc,
+                )
+            node["desc_vi"] = localized_desc if localized_desc and not re.search(placeholder_re, localized_desc) else ""
+            node["canonical_vi_missing"] = not bool(usable_vi(loc.get("buff_desc_vi") or loc.get("desc_vi", "")))
+            node["is_direct_popup_target"] = is_direct
+            node["name_match_fallback"] = True
+            mechanics.append(node)
+            by_key[buff_id] = node
+            return node
+
         # Add unambiguous source-name-only references.  This covers conditions such as
         # 寒天/霜冻 that the game text names without embedding a marker in that skill.
+        # Some raw descriptions name an exact status without a <color> tag.  This is
+        # still eligible only when the canonical BUFF_STATUS name is unique and is
+        # literally present both in this card's raw description and in the exact raw
+        # Buff closure reached from this card's Attr/marker edges.
+        raw_closure_text = clean_rich_text(raw_skill_closure_text(raw_skill_records))
+        exact_plain_names = set()
         for normalized_name, buff_ids in buff_ids_by_name.items():
             if len(buff_ids) != 1:
                 continue
-            buff_id = buff_ids[0]
-            buff_data = buff_loc.get(buff_id, {})
-            name_cn = clean_rich_text(buff_data.get("buff_name_cn") or buff_data.get("name_cn", ""))
-            if (not name_cn or normalized_name not in highlighted_names
-                    or buff_id in by_key):
+            source_name = clean_rich_text((buff_loc.get(buff_ids[0]) or {}).get("buff_name_cn", ""))
+            if source_name and source_name in source_text and source_name in raw_closure_text:
+                exact_plain_names.add(normalized_name)
+        for normalized_name in highlighted_names | exact_plain_names:
+            add_unique_name_fallback(normalized_name, is_direct=True)
+
+        # Complete the same card-local closure for rich-text names in a buff popup.
+        # A nested name is eligible only when the raw buff table/localization gives a
+        # single exact ID; otherwise it remains ordinary text and is reported by audit.
+        active_keys = {
+            key for key, mechanic in by_key.items()
+            if mechanic.get("is_direct_popup_target")
+        }
+        pending_keys = list(active_keys)
+        while pending_keys:
+            parent_key = pending_keys.pop()
+            parent = by_key.get(parent_key)
+            if not isinstance(parent, dict):
                 continue
-            resolved = resolve_buff_tree(buff_id, [])
-            direct = next((m for m in resolved if m.get("key") == buff_id), None)
-            if direct and not re.search(r'\[(?:EffectParam|EffectPara|BuffParam|[A-Za-z0-9_]+Para),\d+\]', direct.get("template", "")):
-                loc = buff_loc.get(buff_id, {})
-                direct["name_vi"] = usable_vi(loc.get("buff_name_vi") or loc.get("name_vi", ""))
-                direct["desc_cn"] = direct.get("template", "")
-                direct["desc_vi"] = usable_vi(loc.get("buff_desc_vi") or loc.get("desc_vi", ""))
-                mechanics.append(direct)
-                by_key[buff_id] = direct
+            parent_names = {
+                normalize_buff_name(match.group(1))
+                for match in re.finditer(
+                    r'<color=[^>]+>(.*?)</color>',
+                    parent.get("template") or parent.get("desc_cn", ""), flags=re.IGNORECASE | re.DOTALL,
+                )
+            }
+            for normalized_name in parent_names:
+                child = add_unique_name_fallback(normalized_name)
+                if not child or child.get("key") == parent.get("key"):
+                    continue
+                child_ids = parent.setdefault("child_buff_ids", [])
+                if child["key"] not in child_ids:
+                    child_ids.append(child["key"])
+                    child_ids.sort()
+                if child["key"] not in active_keys:
+                    active_keys.add(child["key"])
+                    pending_keys.append(child["key"])
+            # Follow deterministic raw child edges too.  Invisible controller
+            # buffs remain in the graph but never become text popup targets.
+            for child_id in parent.get("child_buff_ids", []):
+                if child_id in by_key and child_id not in active_keys:
+                    active_keys.add(child_id)
+                    pending_keys.append(child_id)
 
         for mechanic in mechanics:
             if not isinstance(mechanic, dict):
                 continue
+            mechanic["popup_terms"] = []
             name_cn = clean_rich_text(mechanic.get("name_cn", ""))
-            if not name_cn or name_cn not in source_text:
-                continue
             name_vi = clean_rich_text(mechanic.get("name_vi", ""))
-            mechanic["popup_terms"] = [{
+            if not name_vi and name_cn:
+                aliases = display_aliases.get(normalize_buff_name(name_cn), [])
+                if aliases and len(set(aliases)) == 1:
+                    name_vi = aliases[0]
+            mechanic["display_alias_vi"] = name_vi
+            popup_body = mechanic.get("desc_vi") or (
+                mechanic.get("desc_cn") if mechanic.get("canonical_vi_missing") else ""
+            )
+            popup_body_ready = bool(popup_body) and not popup_param_re.search(popup_body)
+            mechanic["popup_body_ready"] = popup_body_ready
+            # A controller may be raw-reachable and share the visible CN term of
+            # its localized child.  It is not, however, a player-facing popup
+            # authority until it has its own canonical VI template.  Leaving it
+            # linkable would make the frontend select a CN-only body before the
+            # exact localized descendant (for example A0001_2_1 -> A0001_2).
+            if (not mechanic.get("is_direct_popup_target")
+                    or mechanic.get("canonical_vi_missing")
+                    or not popup_body_ready
+                    or not valid_named_popup_anchor(name_cn)
+                    or not valid_named_popup_anchor(name_vi or name_cn)
+                    or name_cn not in source_text):
+                continue
+            mechanic["popup_terms"].append({
                 "buff_id": mechanic.get("key"),
+                "binding_key": mechanic.get("key"),
                 "name_cn": name_cn,
                 "name_vi": name_vi,
-            }]
+            })
+
+        # Every buff node carries only its own deterministic child edges.  These
+        # terms are consumed when that node's tooltip is rendered; the frontend
+        # never discovers a new buff from a global name index.
+        for mechanic in mechanics:
+            if mechanic.get("key") not in active_keys:
+                continue
+            parent_text = clean_rich_text(mechanic.get("template") or mechanic.get("desc_cn", ""))
+            known_ids = {term.get("buff_id") for term in mechanic.get("popup_terms", [])}
+            for child_id in mechanic.get("child_buff_ids", []):
+                child = by_key.get(child_id)
+                child_name = clean_rich_text((child or {}).get("name_cn", ""))
+                child_body = (child or {}).get("desc_vi") or (
+                    (child or {}).get("desc_cn") if (child or {}).get("canonical_vi_missing") else ""
+                )
+                child_body_ready = bool(child_body) and not popup_param_re.search(child_body)
+                child_name_vi = clean_rich_text((child or {}).get("display_alias_vi") or (child or {}).get("name_vi", ""))
+                if (child and child_body_ready and valid_named_popup_anchor(child_name)
+                        and valid_named_popup_anchor(child_name_vi or child_name)
+                        and child_name in parent_text and child_id not in known_ids):
+                    mechanic["popup_terms"].append({
+                        "buff_id": child_id,
+                        "binding_key": child_id,
+                        "name_cn": child_name,
+                        "name_vi": child_name_vi,
+                    })
+                    known_ids.add(child_id)
+
+        # A highlighted generic term can represent several exact player-facing
+        # descendants of the *same card-local raw closure* (profession, state or
+        # mode variants).  Keep those IDs separate and export one composite
+        # binding; this is never a global name lookup and never chooses a child.
+        composite_bindings = []
+        existing_keys = {mechanic.get("key") for mechanic in mechanics if mechanic.get("key")}
+        for source_term in source_coloured_terms:
+            normalized_term = normalize_buff_name(source_term)
+            if not normalized_term:
+                continue
+            children = []
+            for mechanic in mechanics:
+                name_cn = clean_rich_text(mechanic.get("name_cn", ""))
+                body = mechanic.get("desc_vi") or (mechanic.get("desc_cn") if mechanic.get("canonical_vi_missing") else "")
+                if (mechanic.get("is_direct_popup_target") and name_cn.startswith(f"{source_term}·")
+                        and body and not contains_unresolved_player_parameter(body)):
+                    children.append(mechanic)
+            # At least two raw-reachable exact children are required. A normal
+            # single buff remains on the standard exact-binding path above.
+            child_ids = sorted({child.get("key") for child in children if child.get("key")})
+            if len(child_ids) < 2:
+                continue
+            composite_key = f"__multi__:{normalized_term}:{'|'.join(child_ids)}"
+            if composite_key in existing_keys:
+                continue
+            aliases = display_aliases.get(normalized_term, [])
+            name_vi = aliases[0] if len(set(aliases)) == 1 else ""
+            composite_bindings.append({
+                "key": composite_key,
+                "kind": "MULTI_VARIANT_CONTROLLER",
+                "name_cn": source_term,
+                "name_vi": name_vi,
+                "desc_cn": "", "desc_vi": "", "canonical_vi_missing": True,
+                "is_direct_popup_target": True,
+                "variant_children": [
+                    {"binding_key": child.get("key"), "buff_id": child.get("key"),
+                     "name_cn": clean_rich_text(child.get("name_cn", "")),
+                     "name_vi": clean_rich_text(child.get("display_alias_vi") or child.get("name_vi", "")),
+                     "raw_paths": child.get("raw_paths", [])}
+                    for child in sorted(children, key=lambda item: clean_rich_text(item.get("name_cn", "")))
+                ],
+                "popup_terms": [{"buff_id": composite_key, "binding_key": composite_key,
+                                 "name_cn": source_term, "name_vi": name_vi}],
+            })
+            existing_keys.add(composite_key)
+        mechanics.extend(composite_bindings)
         return mechanics
 
     def get_buff_param_val(pname, idx_str, args, b_attr_dict, unit="", closing_tags="", placeholder_to_pos=None):
@@ -523,9 +954,11 @@ def build():
         val = None
         if pname in ["EffectParam", "EffectPara", "BuffParam"]:
             if 0 <= pos < len(args) and args[pos] != '':
-                val = str(args[pos])
+                candidate = str(args[pos])
+                val = candidate if not raw_hash_param_re.search(candidate) else None
             elif 1 <= int(idx_str) <= len(args) and args[int(idx_str) - 1] != '':
-                val = str(args[int(idx_str) - 1])
+                candidate = str(args[int(idx_str) - 1])
+                val = candidate if not raw_hash_param_re.search(candidate) else None
         if val is None and pname in b_attr_dict:
             params = b_attr_dict[pname]
             if 1 <= int(idx_str) <= len(params):
@@ -561,11 +994,6 @@ def build():
                 if para_k in b_attr_dict and b_attr_dict[para_k]:
                     val = str(b_attr_dict[para_k][0])
                     break
-        if val is None:
-            if unit == "%":
-                val = "10"
-            elif unit in ["回合", "层", "格", "次", "点", "倍"]:
-                val = "1"
         return val
 
     def merge_mechs_across_levels(mechs_by_lvl):
@@ -585,10 +1013,18 @@ def build():
             name_cn = first_m["name_cn"]
             template = first_m["template"]
             b_attr_dict = first_m["attr_dict"]
+            child_buff_ids = sorted({child for _, mech in entries for child in mech.get("child_buff_ids", []) if child != key})
+            # Preserve every raw edge path that contributed to this card-local
+            # binding. A binding key identifies its target; these paths retain
+            # controller/parent provenance for audits and composite popups.
+            raw_paths = sorted({tuple(mech.get("raw_path", [])) for _, mech in entries if mech.get("raw_path")})
+            raw_paths = [list(path) for path in raw_paths]
+            is_direct_popup_target = any(mech.get("is_direct_popup_target", False) for _, mech in entries)
             
             b_loc = buff_loc.get(key, {})
             b_name_vi = usable_vi(b_loc.get("buff_name_vi") or b_loc.get("name_vi", ""))
             b_desc_vi_raw = usable_vi(b_loc.get("buff_desc_vi") or b_loc.get("desc_vi", ""))
+            canonical_vi_missing = not bool(b_desc_vi_raw)
             
             args_per_lvl = [m["args"] for _, m in entries]
             same_template = all(m["template"] == template for _, m in entries)
@@ -598,6 +1034,29 @@ def build():
             for pos, idx_str in enumerate(param_matches):
                 if idx_str not in placeholder_to_pos:
                     placeholder_to_pos[idx_str] = pos
+
+            # Keep the exact parameter provenance on the card-local binding.  This
+            # is diagnostic metadata, not a second resolver or a global value cache.
+            effect_param_values_by_level = {}
+            for placeholder_match in re.finditer(pattern, template):
+                pname = placeholder_match.group(2)
+                idx_str = placeholder_match.group(3) or "1"
+                token = f"[{pname},{idx_str}]"
+                if token in effect_param_values_by_level:
+                    continue
+                values = []
+                for args in args_per_lvl:
+                    value = get_buff_param_val(
+                        pname, idx_str, args, b_attr_dict,
+                        placeholder_to_pos=placeholder_to_pos,
+                    )
+                    values.append(str(value) if value is not None else token)
+                effect_param_values_by_level[token] = values
+            aggregated_effect_param_values = {
+                token: (values[0] if len(set(values)) == 1 else "/".join(values))
+                for token, values in effect_param_values_by_level.items()
+                if values
+            }
                     
             def replacer_for_lvl(args):
                 def single_replacer(m):
@@ -610,6 +1069,16 @@ def build():
                     if val is None: val = full_p
                     return f"{val}{unit}{closing_tags}"
                 return single_replacer
+
+            def replace_raw_hash_args(text, args):
+                def replace_hash(match):
+                    index = int(match.group(1)) - 1
+                    if 0 <= index < len(args):
+                        value = safe_str(args[index])
+                        if value and not raw_hash_param_re.search(value):
+                            return value
+                    return match.group(0)
+                return raw_hash_param_re.sub(replace_hash, text)
 
             if same_template and len(entries) > 1:
                 def multi_replacer(m):
@@ -637,9 +1106,11 @@ def build():
                             return f"{'/'.join(vals)}{closing_tags}"
                         
                 clean_desc = re.sub(pattern, multi_replacer, template)
+                clean_desc = replace_raw_hash_args(clean_desc, args_per_lvl[0])
                 clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
                 
                 clean_desc_vi = re.sub(pattern, multi_replacer, b_desc_vi_raw) if b_desc_vi_raw else ""
+                clean_desc_vi = replace_raw_hash_args(clean_desc_vi, args_per_lvl[0]) if clean_desc_vi else ""
                 clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
                 
                 merged_list.append({
@@ -647,13 +1118,21 @@ def build():
                     "name_cn": name_cn,
                     "name_vi": b_name_vi,
                     "desc_cn": clean_desc,
-                    "desc_vi": clean_desc_vi
+                    "desc_vi": clean_desc_vi,
+                    "child_buff_ids": child_buff_ids,
+                    "raw_paths": raw_paths,
+                    "is_direct_popup_target": is_direct_popup_target,
+                    "canonical_vi_missing": canonical_vi_missing,
+                    "effect_param_values_by_level": effect_param_values_by_level,
+                    "aggregated_effect_param_values": aggregated_effect_param_values,
                 })
             elif len(entries) == 1:
                 clean_desc = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), template)
+                clean_desc = replace_raw_hash_args(clean_desc, args_per_lvl[0])
                 clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
                 
                 clean_desc_vi = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), b_desc_vi_raw) if b_desc_vi_raw else ""
+                clean_desc_vi = replace_raw_hash_args(clean_desc_vi, args_per_lvl[0]) if clean_desc_vi else ""
                 clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
                 
                 merged_list.append({
@@ -661,7 +1140,13 @@ def build():
                     "name_cn": name_cn,
                     "name_vi": b_name_vi,
                     "desc_cn": clean_desc,
-                    "desc_vi": clean_desc_vi
+                    "desc_vi": clean_desc_vi,
+                    "child_buff_ids": child_buff_ids,
+                    "raw_paths": raw_paths,
+                    "is_direct_popup_target": is_direct_popup_target,
+                    "canonical_vi_missing": canonical_vi_missing,
+                    "effect_param_values_by_level": effect_param_values_by_level,
+                    "aggregated_effect_param_values": aggregated_effect_param_values,
                 })
             else:
                 parts = []
@@ -672,10 +1157,20 @@ def build():
                     "name_cn": name_cn,
                     "name_vi": b_name_vi,
                     "desc_cn": "\n".join(parts),
-                    "desc_vi": b_desc_vi_raw
+                    "desc_vi": b_desc_vi_raw,
+                    "child_buff_ids": child_buff_ids,
+                    "raw_paths": raw_paths,
+                    "is_direct_popup_target": is_direct_popup_target,
+                    "canonical_vi_missing": canonical_vi_missing,
+                    "effect_param_values_by_level": effect_param_values_by_level,
+                    "aggregated_effect_param_values": aggregated_effect_param_values,
                 })
                 
         return merged_list
+
+    # Provenance is serialized with Trí Tri/EX output.  It lets audits prove
+    # every displayed vector value back to a raw skill level and parameter.
+    level_vector_provenance_by_group = {}
 
     def resolve_desc(skill_obj, sk_entry=None):
         if not skill_obj: return "", "", []
@@ -685,7 +1180,7 @@ def build():
             raw_desc_vi = usable_vi(sk_entry.get("skill_desc_vi") or sk_entry.get("desc_vi"))
         attr_dict = parse_attr(skill_obj.get("Attr", []))
         mechanics = merge_mechs_across_levels([extract_skill_level_mechs(skill_obj)])
-        mechanics = attach_popup_terms(raw_desc, mechanics)
+        mechanics = attach_popup_terms(raw_desc, mechanics, safe_str(skill_obj.get("HeroId")), raw_desc_vi, [skill_obj])
         
         pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
 
@@ -731,13 +1226,19 @@ def build():
 
         mechs_by_lvl = [extract_skill_level_mechs(sk) for sk in lvls]
         multi_mechs = merge_mechs_across_levels(mechs_by_lvl)
-        multi_mechs = attach_popup_terms("\n".join(sk.get("DescriptionLanText", "") for sk in lvls), multi_mechs)
-
         vi_entries = []
         for l_idx in range(1, len(lvls) + 1):
             sk_id = f"{gid}_{l_idx}"
             sk_entry = skill_loc.get(sk_id, {}) or skill_loc.get(gid, {}) or skill_loc.get(f"{gid}{l_idx}", {})
             vi_entries.append(sk_entry)
+
+        multi_mechs = attach_popup_terms(
+            "\n".join(sk.get("DescriptionLanText", "") for sk in lvls),
+            multi_mechs,
+            safe_str(lvls[0].get("HeroId")),
+            "\n".join(usable_vi(entry.get("skill_desc_vi") or entry.get("desc_vi")) for entry in vi_entries),
+            lvls,
+        )
 
         if len(lvls) == 1:
             d_clean, d_clean_vi, _ = resolve_desc(lvls[0], vi_entries[0] if vi_entries else None)
@@ -761,6 +1262,22 @@ def build():
             return None
 
         pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+
+        provenance = []
+        for token_match in re.finditer(pattern, raw_descs[0]):
+            pname = token_match.group(2)
+            index = int(token_match.group(3)) if token_match.group(3) else 1
+            for source_level, attr_dict in enumerate(attr_dicts, 1):
+                value = get_param_val(pname, index, attr_dict)
+                if value is not None:
+                    provenance.append({
+                        "source_skill_id": gid,
+                        "source_level": source_level,
+                        "parameter_index": f"{pname},{index}",
+                        "value": value,
+                        "raw_path": [gid, f"level:{source_level}", f"{pname},{index}"],
+                    })
+        level_vector_provenance_by_group[gid] = provenance
 
         def multi_replacer(m):
             full_p = m.group(1)
@@ -908,44 +1425,94 @@ def build():
             })
         rank_up_rules[rare] = rule_list
 
-    print("Processing character cards...")
-    cards_dir = PUBLIC_DIR / "assets" / "characters" / "cards"
+    print("Resolving published character cards...")
     char_cards = {}
-    if cards_dir.exists():
-        for f in cards_dir.glob("*.png"):
-            cid = f.name[:5]
-            if cid not in char_cards:
-                char_cards[cid] = []
-            char_cards[cid].append(f.name)
-        for cid in char_cards:
-            char_cards[cid].sort()
+    for cid in sorted(char_table_raw):
+        card_dir = MASTER.parent.parent / "Assets" / "characters" / cid / "card"
+        if card_dir.exists():
+            char_cards[cid] = [
+                require_asset_url(remote_asset_manifest, cid, "card", card.name)
+                for card in sorted(card_dir.glob("*.png"), key=lambda item: item.name)
+            ]
+
+    SERIES_MAP_CN = {
+        202: "新春",
+        203: "花朝",
+        204: "节气",
+        205: "非遗",
+        206: "闲趣",
+        207: "长安",
+        208: "绮梦",
+        209: "幸食",
+        210: "纪念",
+        211: "异象",
+        212: "幻景",
+        213: "行者",
+        214: "裁样",
+        215: "聆律",
+        216: "秦音",
+        217: "织彩",
+        218: "异世",
+        219: "消暑",
+        220: "云想新裳"
+    }
 
     print("Processing character drawings & skins...")
-    drawings_dir = PUBLIC_DIR / "assets" / "characters" / "drawings"
-    drawings_dir_alt = PUBLIC_DIR / "assets" / "drawings"
-    painting_dir = MASTER.parent / "Painting"
     char_skins_processed = {}
     for cid, cskins in skins_raw.items():
+        # characterSkins can retain visual-only records that have no current
+        # characterTable entity. They are not part of public web data and must
+        # not create a remote-publish requirement.
+        if cid not in char_table_raw or cid in EXCLUDED_CHARACTER_IDS or cid.startswith("SCJ"):
+            continue
         if not isinstance(cskins, list): continue
         valid_skins = []
         for sk in cskins:
             sid = sk.get("skinID", "")
-            has_img = False
-            ext = "webp"
-            if (drawings_dir / f"{sid}.webp").exists() or (drawings_dir_alt / f"{sid}.webp").exists():
-                has_img = True
-                ext = "webp"
-            elif (drawings_dir / f"{sid}.png").exists() or (drawings_dir_alt / f"{sid}.png").exists() or (painting_dir / f"{sid}.png").exists():
-                has_img = True
-                ext = "png"
-            if sid and has_img:
+            drawing_filename = f"{sid}.png"
+            if sid:
+                image_url = require_asset_url(remote_asset_manifest, cid, "drawing", drawing_filename)
+                sdata = gen_loc.get("skins", {}).get(sid, {})
+
+                # Authoritative Series mapping for actual skins (skinType == 3)
+                raw_logo = sk.get("skinLOGO")
+                series_id = None
+                series_name_cn = ""
+                series_name_vi = ""
+                series_badge = None
+
+                cand_id = sdata.get("series_id")
+                if cand_id is None and raw_logo and raw_logo in SERIES_MAP_CN:
+                    cand_id = raw_logo
+
+                if cand_id and cand_id in SERIES_MAP_CN:
+                    series_id = cand_id
+                    series_name_cn = sdata.get("series_name_cn") or SERIES_MAP_CN[cand_id]
+                    series_name_vi = sdata.get("series_name_vi", "")
+                    series_badge = f"/assets/series/skinlogo_{series_id}.png"
+
                 valid_skins.append({
                     "skinID": sid,
                     "name_cn": sk.get("skinNamelanText", sk.get("skinName", "")),
                     "name_vi": skin_loc_clean.get(sid, skin_loc_clean.get(sk.get("skinNamelanText", ""), ("Ảnh Gốc" if sk.get("bIsBaseSkin") else sk.get("skinNamelanText", "Trang Phục")))),
                     "is_base": bool(sk.get("bIsBaseSkin")),
                     "description_cn": sk.get("getdescriptionLanText", ""),
-                    "image": f"assets/characters/drawings/{sid}.{ext}"
+                    "story_cn": sdata.get("desc_cn", "") or sk.get("skinFileLanText", ""),
+                    "story_vi": sdata.get("desc_vi", ""),
+                    "obtain_cn": sdata.get("obtain_cn", "") or sk.get("getdescriptionLanText", ""),
+                    "obtain_vi": sdata.get("obtain_vi", ""),
+                    "skin_type": sdata.get("skin_type", sk.get("skinType", 3)),
+                    "unlock_date": sdata.get("unlock_date") or (sk.get("UnlockDate") if sk.get("UnlockDate") != 0 else None),
+                    "price": sdata.get("price"),
+                    "currency": sdata.get("currency", ""),
+                    "is_high_skin": sdata.get("is_high_skin", False),
+                    "skin_rare": sdata.get("skin_rare", sk.get("skinRare")),
+                    "cv_name": sdata.get("cv_name", "") or sk.get("CvName", ""),
+                    "series_id": series_id,
+                    "series_name_cn": series_name_cn,
+                    "series_name_vi": series_name_vi,
+                    "series_badge": series_badge,
+                    "image": image_url
                 })
         if valid_skins:
             char_skins_processed[cid] = valid_skins
@@ -1000,21 +1567,34 @@ def build():
             return SUFFIX_CATEGORY_MAP[suffix]
         return (TYPE_MAP.get(raw_stype, "Kỹ Năng"), raw_stype)
 
-    def resolve_skill_icon(gid, raw_icon_name):
-        SKILLS_DIR = PUBLIC_DIR / "assets" / "skills"
-        if raw_icon_name and (SKILLS_DIR / f"{raw_icon_name}.png").exists():
-            return f"assets/skills/{raw_icon_name}.png"
-        if (SKILLS_DIR / f"skillicon_{gid}.png").exists():
-            return f"assets/skills/skillicon_{gid}.png"
-        base_gid = gid.lower().replace("ex", "").upper()
-        if (SKILLS_DIR / f"skillicon_{base_gid}.png").exists():
-            return f"assets/skills/skillicon_{base_gid}.png"
+    def resolve_skill_icon(gid, raw_icon_name, allow_generated_fallback=True):
+        def real_filename(candidate):
+            """Return a disk filename, never a synthesized/case-normalized name."""
+            candidate = safe_str(candidate)
+            if not candidate or "/" in candidate or "\\" in candidate:
+                return ""
+            if not Path(candidate).suffix:
+                candidate += ".png"
+            return skill_icon_exact.get(candidate) or skill_icon_casefold.get(candidate.casefold(), "")
+
+        actual = real_filename(raw_icon_name)
+        if actual:
+            return f"assets/skills/{actual}"
+        if not allow_generated_fallback:
+            return ""
+        actual = real_filename(f"skillicon_{safe_str(gid)}")
+        if actual:
+            return f"assets/skills/{actual}"
+        base_gid = safe_str(gid).lower().replace("ex", "").upper()
+        actual = real_filename(f"skillicon_{base_gid}")
+        if actual:
+            return f"assets/skills/{actual}"
         return ""
 
     STAT_NAME_VI = {
-        'Atk_FIX': 'Tấn Công', 'Atk_PERCENT': 'Tấn Công', 'Hp_FIX': 'Máu', 'Hp_PERCENT': 'Máu',
-        'PhysicDef_FIX': 'Phòng Thủ Vật Lý', 'PhysicDef_PERCENT': 'Phòng Thủ Vật Lý',
-        'MagicDef_FIX': 'Phòng Thủ Cấu Thuật', 'MagicDef_PERCENT': 'Phòng Thủ Cấu Thuật',
+        'Atk_FIX': 'Tấn Công', 'Atk_PERCENT': 'Tấn Công', 'Hp_FIX': 'Sinh Mệnh', 'Hp_PERCENT': 'Sinh Mệnh',
+        'PhysicDef_FIX': 'Phòng Ngự Vật Lý', 'PhysicDef_PERCENT': 'Phòng Ngự Vật Lý',
+        'MagicDef_FIX': 'Phòng Ngự Cấu Thuật', 'MagicDef_PERCENT': 'Phòng Ngự Cấu Thuật',
         'Speed_FIX': 'Tốc Độ', 'Mov_FIX': 'Sức Di Chuyển', 'Critical_FIX': 'Tỷ Lệ Bạo Kích',
         'CritDmg_FIX': 'Sát Thương Bạo Kích', 'Block_FIX': 'Tỷ Lệ Đỡ Đòn', 'MissRate_FIX': 'Tỷ Lệ Né Tránh',
         'HealIncrease_FIX': 'Tăng Cường Trị Liệu', 'HealedIncrease_FIX': 'Hiệu Quả Trị Liệu Nhận Được',
@@ -1025,8 +1605,8 @@ def build():
         'AlertAttackDmgIncrease_FIX': 'Tăng Sát Thương Cảnh Giới', 'AlertAttackExtraBullet_FIX': 'Đạn Cảnh Giới Bổ Sung',
         'DotDamageIncrease_FIX': 'Tăng Sát Thương Theo Thời Gian', 'DoubleHitDmgIncrease_FIX': 'Tăng Sát Thương Liên Kích',
         'FightBackDmgIncrease_FIX': 'Tăng Sát Thương Phản Kích', 'BeCommonAttackedDmgReduce_FIX': 'Giảm Sát Thương Đánh Thường Nhận Vào',
-        'BeSkilledDmgReduce_FIX': 'Giảm Sát Thương Kỹ Năng Nhận Vào', 'DefPenetrationRate_FIX': 'Xuyên Phòng Thủ',
-        'AllDefPenetrationRate_FIX': 'Xuyên Toàn Bộ Phòng Thủ', 'PenetrationRate_FIX': 'Tỷ Lệ Xuyên Giáp',
+        'BeSkilledDmgReduce_FIX': 'Giảm Sát Thương Kỹ Năng Nhận Vào', 'DefPenetrationRate_FIX': 'Xuyên Phòng Ngự',
+        'AllDefPenetrationRate_FIX': 'Xuyên Toàn Bộ Phòng Ngự', 'PenetrationRate_FIX': 'Tỷ Lệ Xuyên Giáp',
         'HurtHealRate_FIX': 'Tỷ Lệ Hút Máu', 'EnergyRecoveryCycle_FIX': 'Hồi Phục Năng Lượng',
         'SnipeResetRate_FIX': 'Tỷ Lệ Bắn Tỉa Tái Lập'
     }
@@ -1104,18 +1684,26 @@ def build():
                     base_raw_icon = safe_str(base_sk_val.get("SkillIcon")) if base_sk_val else ""
                     base_icon = resolve_skill_icon(base_id, base_raw_icon)
                     
-                    ex_desc_clean, _, ex_mechanics, is_merged = resolve_multi_level_desc(ex_id)
+                    ex_desc_clean, ex_desc_vi, ex_mechanics, is_merged = resolve_multi_level_desc(ex_id)
+                    # A SkillUP edge supplies upgrade and parameter semantics,
+                    # never display identity.  The EX row is an atomic display
+                    # record: title, localized title and description must all be
+                    # read from that exact row, even when its CN name is shared
+                    # with its base counterpart.
                     raw_ex_name_cn = ex_sk_val.get("NameLanText", "") if ex_sk_val else ""
-                    if "-超群" in raw_ex_name_cn:
-                        ex_name_cn = raw_ex_name_cn
-                        ex_name_vi = f"{base_name_vi} - Siêu Quần" if base_name_vi else usable_vi(ex_sk_entry.get("skill_name_vi") or ex_sk_entry.get("name_vi", ""))
-                    else:
-                        ex_name_cn = raw_ex_name_cn if raw_ex_name_cn else base_name_cn
-                        ex_name_vi = base_name_vi if base_name_vi else usable_vi(ex_sk_entry.get("skill_name_vi") or ex_sk_entry.get("name_vi", ""))
+                    # The raw exact EX record is the display-CN authority.  A
+                    # legacy master row may retain a shared base CN label, but
+                    # that must not collapse the enhanced record's identity.
+                    ex_name_cn = raw_ex_name_cn or safe_str(ex_sk_entry.get("skill_name_cn") or ex_sk_entry.get("name_cn"))
+                    ex_name_vi = usable_vi(ex_sk_entry.get("skill_name_vi") or ex_sk_entry.get("name_vi", ""))
                     
                     raw_ex_desc_vi = usable_vi(ex_sk_entry.get("skill_desc_vi") or ex_sk_entry.get("desc_vi", ""))
-                    ex_desc_vi = ""
-                    if raw_ex_desc_vi and ex_sk_val:
+                    # ``resolve_multi_level_desc`` is the player-facing source
+                    # because it preserves every exact raw level.  The fallback
+                    # below is only for an EX record whose raw relation genuinely
+                    # exposes one level; it must never replace an established
+                    # vector with level 1.
+                    if not ex_desc_vi and raw_ex_desc_vi and ex_sk_val:
                         ex_ad = parse_attr(ex_sk_val.get("Attr", []))
                         pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
                         def ex_rep(m):
@@ -1162,6 +1750,20 @@ def build():
                             "desc_cn": ex_desc_clean,
                             "desc_vi": ex_desc_vi,
                             "mechanics": ex_mechanics,
+                            "level_vector_provenance": [
+                                {**entry, "raw_edge": f"SkillUP,{base_id}->{ex_id}"}
+                                for entry in level_vector_provenance_by_group.get(ex_id, [])
+                            ],
+                            "display_source": {
+                                "skill_id": ex_id,
+                                "name_record_id": ex_id,
+                                "description_record_id": ex_id,
+                                "provenance": "exact SkillUP enhanced SKILL record",
+                            },
+                            "parameter_source": {
+                                "skill_id": ex_id,
+                                "provenance": f"exact raw skill levels; SkillUP,{base_id}->{ex_id}",
+                            },
                             "is_merged": is_merged,
                             "icon": ex_icon
                         }
@@ -1194,7 +1796,7 @@ def build():
         if not isinstance(brilliant_raw, dict): return None
         matches = []
         for b_id, b_val in brilliant_raw.items():
-            if b_id.startswith(cid) and isinstance(b_val, dict):
+            if safe_str((hz_loc_dict.get(b_id) or {}).get("character_id")) == cid and isinstance(b_val, dict):
                 matches.append((b_id, b_val))
         if not matches: return None
         matches.sort(key=lambda x: x[0])
@@ -1204,17 +1806,28 @@ def build():
         name_cn = safe_str(entry.get("IconNameLanText") or entry.get("IconNameLan") or entry.get("IconName"))
         name_vi = usable_vi(hz_loc.get("icon_name_vi") or hz_loc.get("name_vi", ""))
         icon_name = safe_str(entry.get("Icon")) or f"brilliant_{cid}"
-        icon_asset = f"assets/huanzhang/{icon_name}.png"
+        icon_candidate = icon_name if Path(icon_name).suffix else f"{icon_name}.png"
+        if "/" in icon_candidate or "\\" in icon_candidate:
+            raise RuntimeError(f"Invalid Hoán Chương icon filename in {b_id}: {icon_name!r}")
+        icon_actual = (huanzhang_icon_exact.get(icon_candidate)
+                       or huanzhang_icon_casefold.get(icon_candidate.casefold(), ""))
+        icon_asset = f"assets/huanzhang/{icon_actual}" if icon_actual else ""
         info_cn = safe_str(entry.get("IconInfoLanText") or entry.get("IconInfoLan") or entry.get("IconInfo"))
         info_vi = usable_vi(hz_loc.get("icon_info_vi") or hz_loc.get("info_vi", ""))
         buff_show_cn = safe_str(entry.get("BuffShowLanText") or entry.get("BuffShowLan") or entry.get("BuffShow"))
         buff_show_vi = usable_vi(hz_loc.get("buff_show_vi", ""))
+        gameplay_group_ids = []
+        for field in ("Buff", "Skill1", "Skill2"):
+            values = entry.get(field, [])
+            for value in values if isinstance(values, list) else [values]:
+                if value and str(value) not in gameplay_group_ids:
+                    gameplay_group_ids.append(str(value))
 
         stat_labels_vi = {
             "Hp_FIX": "Sinh Mệnh (HP)",
             "Atk_FIX": "Tấn Công (ATK)",
-            "PhysicDef_PERCENT": "Phòng Thủ Vật Lý",
-            "MagicDef_PERCENT": "Phòng Thủ Cấu Thuật",
+            "PhysicDef_PERCENT": "Phòng Ngự Vật Lý",
+            "MagicDef_PERCENT": "Phòng Ngự Cấu Thuật",
             "Speed_FIX": "Tốc Độ (SPD)",
             "Mov": "Di Chuyển (MOV)",
             "Crit_PERCENT": "Tỷ Lệ Bạo Kích",
@@ -1289,6 +1902,7 @@ def build():
             "info_vi": info_vi,
             "buff_show_cn": buff_show_cn,
             "buff_show_vi": buff_show_vi,
+            "_gameplay_group_ids": gameplay_group_ids,
             "property_up": property_up,
             "materials": materials
         }
@@ -1325,7 +1939,7 @@ def build():
                 if not isinstance(src, dict): continue
                 for sk_key, sk_val in src.items():
                     if str(sk_val.get("GroupId")) == gid:
-                        lvl = int(sk_val.get("Level", sk_val.get("level", 1)))
+                        lvl = raw_record_level(sk_val, sk_key)
                         if lvl in seen_levels: continue
                         seen_levels.add(lvl)
                         
@@ -1352,7 +1966,7 @@ def build():
                             "name_vi": usable_vi(sk_entry.get("skill_name_vi") or sk_entry.get("name_vi")),
                             "desc_vi": usable_vi(sk_entry.get("skill_desc_vi") or sk_entry.get("desc_vi")),
                             "desc_cn": resolve_desc(sk_val)[0],
-                            "mechanics": resolve_desc(sk_val)[1],
+                            "mechanics": resolve_desc(sk_val)[2],
                             "desc_raw": safe_str(sk_val.get("DescriptionLanText")),
                             "icon": resolved_icon,
                             "type_id": cat_type_id,
@@ -1420,6 +2034,43 @@ def build():
                 }
                 
         # Structural classification and linking
+        brilliant_info = extract_char_brilliant_info(cid)
+        def huanzhang_gameplay_fallback(raw_desc, source_cn, source_vi):
+            """Return only the HZ paragraphs that correspond to a SKILL source.
+
+            BrilliantMap can expose a BuffShow composed of the linked gameplay
+            text followed by an expanded status definition.  The latter belongs
+            in its BUFF_STATUS popup, never in the gameplay card body.
+            """
+            if not raw_desc or not source_cn or not source_vi:
+                return ""
+            raw_parts = [part.strip() for part in re.split(r"\n+", re.sub(r"\{Buff_[^}]+\}", "", raw_desc)) if part.strip()]
+            source_cn_parts = [part.strip() for part in re.split(r"\n\s*\n", source_cn) if part.strip()]
+            source_vi_parts = [part.strip() for part in re.split(r"\n\s*\n", source_vi) if part.strip()]
+            if not raw_parts or len(source_cn_parts) < len(raw_parts) or len(source_vi_parts) < len(raw_parts):
+                return ""
+            norm = lambda text: re.sub(r"\s+", "", text)
+            if norm("\n".join(raw_parts)) != norm("\n".join(source_cn_parts[:len(raw_parts)])):
+                return ""
+            return "\n".join(source_vi_parts[:len(raw_parts)])
+
+        # BuffShow is an authored Hoán Chương effect.  A linked gameplay group may
+        # temporarily borrow its valid VI only when BrilliantMap explicitly joins
+        # the two records.  The card remains the SKILL entity and retains its raw
+        # Chinese source and mechanics/popup references.
+        if brilliant_info and brilliant_info.get("buff_show_vi"):
+            source_id = brilliant_info.get("id", "")
+            for gameplay_gid in brilliant_info.get("_gameplay_group_ids", []):
+                skill = raw_skills_dict.get(gameplay_gid)
+                if not skill:
+                    continue
+                for level in skill.get("levels", []):
+                    fallback_vi = huanzhang_gameplay_fallback(
+                        level.get("desc_raw", ""), brilliant_info.get("buff_show_cn", ""), brilliant_info["buff_show_vi"]
+                    )
+                    if not level.get("desc_vi") and fallback_vi:
+                        level["desc_vi"] = fallback_vi
+
         independent_skills = []
         alternate_forms_map = {} # parent_id -> list of skills
         summon_skills_map = {} # parent_id -> list of skills
@@ -1430,12 +2081,16 @@ def build():
             stype = sk["levels"][0]["type_id"]
             
             # Check 1: Hoán Chương (Brilliant) skills
-            if gid in brilliant_skill_gids:
+            if gid in brilliant_skill_gids_by_character.get(cid, set()):
                 sk_copy = sk.copy()
-                sk_copy["provenance"] = {
-                    "relationship_type": "hoan_chuong",
-                    "evidence": ["BrilliantMap.json reference"]
-                }
+                for level in sk_copy.get("levels", []):
+                    # BrilliantMap proves gameplay ownership, but a normal skill
+                    # Type/icon fallback does not prove a Hoán Chương tag or icon.
+                    raw_skill = all_skills.get((gid, level.get("level", 1)), {})
+                    raw_icon = safe_str(raw_skill.get("SkillIcon")) if raw_skill else ""
+                    level["icon"] = resolve_skill_icon(gid, raw_icon, allow_generated_fallback=False)
+                    level["type"] = "Hoán Chương"
+                    level["type_id"] = 0
                 brilliant_skills_list.append(sk_copy)
                 continue
 
@@ -1540,7 +2195,25 @@ def build():
         text = re.sub(r'[\s-]+', '-', text).strip('-').lower()
         return text
 
-    EXCLUDED_CHARACTER_IDS = {"W0021", "ES013"}
+    def extract_character_attack_style_type(char_record):
+        """Derive attack style classification (1=Cận chiến, 2=Tầm xa, 0=Chưa xác định)
+
+        Derived SOLELY from exact textual tokens in CharacterTagLanText:
+          - Contains '近战' and not '远程' -> 1 (Cận chiến)
+          - Contains '远程' and not '近战' -> 2 (Tầm xa)
+          - Neither or both -> 0 (Chưa xác định)
+        No job fallback, no attack range / SelectRange inference, no numeric attacktype inference.
+        """
+        raw_tags = char_record.get("CharacterTagLanText") or ""
+        tokens = [t.strip() for t in raw_tags.replace("；", ";").replace(",", ";").split(";") if t.strip()]
+        has_melee = "近战" in tokens
+        has_ranged = "远程" in tokens
+        if has_melee and not has_ranged:
+            return 1
+        elif has_ranged and not has_melee:
+            return 2
+        return 0
+
     chars_db = {}
     slug_counts = {}
 
@@ -1548,6 +2221,17 @@ def build():
         char_talents[cid] = sorted(char_talents[cid], key=lambda x: x["id"])
 
     for cid, data in char_table_raw.items():
+        # A Switch=0 record is only a preload when it has neither a raw visual
+        # reference nor a published avatar/drawing. Older released records
+        # retain Switch=0, so both asset checks are deliberately required.
+        raw_visual_reference = any(data.get(field) not in (None, "", 0, []) for field in (
+            "mainAvatar", "trainingAvatar", "setCharacterAvatar",
+            "beforeFullImage", "afterFullImage",
+        ))
+        avatar_available = (PUBLIC_DIR / "assets" / "characters" / "avatars" / f"{cid}.png").exists()
+        drawing_available = any(skin.get("is_base") for skin in char_skins_processed.get(cid, []))
+        if data.get("Switch") == 0 and not raw_visual_reference and not (avatar_available or drawing_available):
+            continue
         talents = char_talents.get(cid, [])
         if cid.startswith("SCJ") or cid in EXCLUDED_CHARACTER_IDS or len(talents) == 0:
             continue
@@ -1566,6 +2250,10 @@ def build():
         else:
             slug_counts[slug] = 1
 
+        brilliant_info = extract_char_brilliant_info(cid)
+        if brilliant_info:
+            brilliant_info.pop("_gameplay_group_ids", None)
+
         chars_db[cid] = {
             "id": cid,
             "slug": slug,
@@ -1578,15 +2266,16 @@ def build():
             "rare": rare,
             "job": data.get("job", 0),
             "attacktype": data.get("attacktype", 0),
+            "attack_style_type": extract_character_attack_style_type(data),
             "is_limited": bool(data.get("Linkage")),
             "icon": f"assets/characters/avatars/{cid}.png",
-            "cards": char_cards.get(cid, [f"{cid}001.png"]),
+            "cards": char_cards.get(cid, []),
             "skins": char_skins_processed.get(cid, []),
             "talents": talents,
             "skills": char_skills.get(cid, []),
             "brilliant_skills": char_brilliant_skills.get(cid, []),
-            "brilliant_info": extract_char_brilliant_info(cid),
-            "has_huanzhang": bool(extract_char_brilliant_info(cid) or char_brilliant_skills.get(cid, [])),
+            "brilliant_info": brilliant_info,
+            "has_huanzhang": bool(brilliant_info or char_brilliant_skills.get(cid, [])),
             "zhizhi": extract_char_zhizhi(cid),
             "stats": extract_char_stats(cid),
             "profile": extract_char_profile(cid),
@@ -1599,11 +2288,31 @@ def build():
             }
         }
         
+    # Popup text is canonical per exact Buff_ID.  Card mechanics below only carry
+    # the proven local closure and term-to-ID bindings; they are never a second
+    # competing source of localized popup text.
+    canonical_buff_registry = {}
+    for buff_id, buff_data in buff_loc.items():
+        if not isinstance(buff_data, dict):
+            continue
+        name_cn = safe_str(buff_data.get("buff_name_cn") or buff_data.get("name_cn"))
+        desc_cn = safe_str(buff_data.get("buff_desc_cn") or buff_data.get("desc_cn"))
+        if not name_cn and not desc_cn:
+            continue
+        canonical_buff_registry[str(buff_id)] = {
+            "name_cn": name_cn,
+            "name_vi": usable_vi(buff_data.get("buff_name_vi") or buff_data.get("name_vi")),
+            "desc_cn": re.sub(r'\{Buff_[^}]+\}', '', desc_cn).strip(),
+            "desc_vi": re.sub(r'\{Buff_[^}]+\}', '', usable_vi(buff_data.get("buff_desc_vi") or buff_data.get("desc_vi"))).strip(),
+        }
+
     web_data = {
+        "asset_base_url": remote_asset_manifest["public_base_url"],
         "characters": chars_db,
         "items": items_db,
         "expCurve": exp_curve,
-        "rankUpRules": rank_up_rules
+        "rankUpRules": rank_up_rules,
+        "buff_registry": canonical_buff_registry,
     }
     
     OUT_FILE.write_text(json.dumps(web_data, ensure_ascii=False, separators=(',', ':')), encoding="utf-8")

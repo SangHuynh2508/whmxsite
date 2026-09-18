@@ -204,8 +204,29 @@ def export():
                     "skin_name_vi": safe_str(ws.cell(r, 4).value),
                     "desc_cn": safe_str(ws.cell(r, 5).value),
                     "desc_vi": safe_str(ws.cell(r, 6).value),
+                    "obtain_cn": safe_str(ws.cell(r, 7).value),
+                    "obtain_vi": safe_str(ws.cell(r, 8).value),
                     "is_base_skin": safe_str(ws.cell(r, 9).value).lower() == "true",
-                    "status": safe_str(ws.cell(r, 11).value)
+                    "status": safe_str(ws.cell(r, 11).value),
+                    "skin_type": ws.cell(r, 13).value if ws.cell(r, 13).value is not None else 3,
+                    "unlock_date": ws.cell(r, 14).value,
+                    "price": ws.cell(r, 15).value,
+                    "currency": safe_str(ws.cell(r, 16).value),
+                    "is_high_skin": safe_str(ws.cell(r, 17).value).lower() == "true",
+                    "skin_rare": ws.cell(r, 18).value,
+                    "cv_name": safe_str(ws.cell(r, 19).value),
+                    "drawing_path": safe_str(ws.cell(r, 20).value),
+                    "card_path": safe_str(ws.cell(r, 21).value),
+                    "series_id": ws.cell(r, 22).value,
+                    "series_name_cn": safe_str(ws.cell(r, 23).value),
+                    "series_name_vi": safe_str(ws.cell(r, 24).value),
+                    "avatar_path": safe_str(ws.cell(r, 25).value),
+                    "item_id": safe_str(ws.cell(r, 26).value) or None,
+                    "goods_id": safe_str(ws.cell(r, 27).value) or None,
+                    "discount_goods_id": safe_str(ws.cell(r, 28).value) or None,
+                    "discount_price": ws.cell(r, 29).value,
+                    "discount_start": ws.cell(r, 30).value,
+                    "discount_end": ws.cell(r, 31).value
                 }
 
     # 11. Export UI_SYSTEM
@@ -237,6 +258,7 @@ def export():
     }
 
     OUT_JSON.write_text(json.dumps(out_data, ensure_ascii=False, indent=2), encoding="utf-8")
+    wb.close()
     print(f"[OK] Exported master localization to {OUT_JSON}")
     return out_data
 
