@@ -112,6 +112,28 @@ def build():
             if cn_n:
                 skin_loc_clean[cn_n] = vi_n
 
+    # Canonical base appearance names from skin_translation_FINAL_CLEAN.xlsx (owner-approved)
+    clean_skin_file = Path(__file__).resolve().parent.parent / "localization" / "skin_translation_FINAL_CLEAN.xlsx"
+    if clean_skin_file.exists():
+        wb_clean = openpyxl.load_workbook(clean_skin_file, data_only=True)
+        if "SKINS_FINAL" in wb_clean.sheetnames:
+            for row in wb_clean["SKINS_FINAL"].iter_rows(values_only=True):
+                cn, vi = row[0], row[1]
+                if cn and vi:
+                    cn_str = str(cn).strip()
+                    vi_str = str(vi).strip()
+                    if cn_str not in skin_loc_clean:
+                        skin_loc_clean[cn_str] = vi_str
+                    if len(row) > 4 and row[4]:
+                        for sid_part in str(row[4]).split(","):
+                            s_clean = sid_part.strip()
+                            if s_clean and s_clean not in skin_loc_clean:
+                                skin_loc_clean[s_clean] = vi_str
+
+    skin_loc_clean.setdefault("肖形", "Tạo Hình")
+    skin_loc_clean.setdefault("造形", "Tạo Hình")
+    skin_loc_clean.setdefault("写照", "Chân Dung")
+
     # EXP books that may not be in the excel but exist in game
     EXP_BOOKS = {
         "2101": {"exp": 500,  "name_vi": "Sơ Cấp Xã Hội Học"},
@@ -1494,7 +1516,7 @@ def build():
                 valid_skins.append({
                     "skinID": sid,
                     "name_cn": sk.get("skinNamelanText", sk.get("skinName", "")),
-                    "name_vi": skin_loc_clean.get(sid, skin_loc_clean.get(sk.get("skinNamelanText", ""), ("Ảnh Gốc" if sk.get("bIsBaseSkin") else sk.get("skinNamelanText", "Trang Phục")))),
+                    "name_vi": skin_loc_clean.get(sid, skin_loc_clean.get(sk.get("skinNamelanText", ""), ("Tạo Hình" if sk.get("bIsBaseSkin") else (skin_loc_clean.get("写照", "Chân Dung") if sk.get("skinNamelanText") == "写照" else sk.get("skinNamelanText", "Trang Phục"))))),
                     "is_base": bool(sk.get("bIsBaseSkin")),
                     "description_cn": sk.get("getdescriptionLanText", ""),
                     "story_cn": sdata.get("desc_cn", "") or sk.get("skinFileLanText", ""),

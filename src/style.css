@@ -182,9 +182,10 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+  transition: color 150ms ease;
 }
 .nav-links a.active {
-  color: var(--text-main);
+  color: var(--accent, #D4B763);
 }
 .nav-links a:hover {
   color: var(--text-main);
@@ -1768,27 +1769,50 @@ body {
     display: flex !important;
     height: 52px;
     padding: 0 12px;
-    gap: 12px;
+    gap: 10px;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .nav-brand {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     white-space: nowrap;
     flex-shrink: 0;
     letter-spacing: 0.02em;
   }
 
   .nav-links {
-    gap: 10px;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-links a {
     font-size: 0.8rem;
     white-space: nowrap;
-    padding: 6px 2px;
+    padding: 6px 6px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: color 140ms ease, background-color 140ms ease;
+  }
+
+  .nav-links a.active {
+    color: var(--accent, #D4B763);
+    font-weight: 700;
+    background: rgba(212, 183, 99, 0.08);
   }
 
   .app-layout {
@@ -4374,10 +4398,11 @@ body {
 }
 
 .hz-title-bar {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 4px 0 12px 0;
 }
 
 .hz-title-text {
@@ -4404,13 +4429,13 @@ body {
 }
 
 .hz-prop-block {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .hz-block-sub-title, .hz-sub-header h4 {
@@ -6288,11 +6313,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-gold-subtle);
-  border-radius: 4px;
-  padding: 12px 18px;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 18px 0 6px 0;
 }
 
 .hz-mats-title {
@@ -6341,19 +6367,19 @@ body {
 
 .hz-prop-col {
   background: var(--bg-surface);
-  border: 1px solid var(--border-gold-subtle);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  padding: 16px;
+  padding: 18px 20px;
 }
 
 .hz-effects-col {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-gold-subtle);
-  border-radius: 4px;
-  padding: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .hz-block-sub-title,

@@ -15,10 +15,17 @@ export function renderGalleryTab(container, char) {
       const skinId = s.skinID || `${char.id}00${idx + 1}`;
       const imagePath = resolveAssetUrl(s.image);
 
+      let label = s.name_vi;
+      if (!label || label === '写照' || label === '肖形' || label === '造形') {
+        if (s.name_cn === '写照' || label === '写照') label = 'Chân Dung';
+        else if (s.name_cn === '肖形' || s.name_cn === '造形' || label === '肖形' || label === '造形') label = 'Tạo Hình';
+        else label = s.name_vi || s.name_cn || (s.is_base ? 'Tạo Hình' : `Trang Phục ${idx + 1}`);
+      }
+
       return {
         id: idx,
         skinID: skinId,
-        label: s.name_vi || s.name_cn || (s.is_base ? 'Trang Phục Mặc Định' : `Trang Phục ${idx + 1}`),
+        label,
         nameCn: s.name_cn || '',
         src: imagePath,
         desc: s.description_cn || ''

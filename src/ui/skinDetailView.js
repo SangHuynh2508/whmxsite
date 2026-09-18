@@ -5,6 +5,7 @@
  */
 import { getGameData } from '../data/loader.js';
 import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl } from '../constants/assetPaths.js';
+import { createLoreReveal } from './loreReveal.js';
 
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();
@@ -81,7 +82,7 @@ export function renderSkinDetailView(container, skinId) {
   const loreVi = (targetSkin.story_vi || '').trim();
   const loreCn = (targetSkin.story_cn || targetSkin.description_cn || '').trim();
   const loreText = loreVi || loreCn || '';
-  const loreQuoteHtml = loreText ? `<blockquote class="hero-lore-quote">“${loreText}”</blockquote>` : '';
+  const loreQuoteHtml = loreText ? `<blockquote class="hero-lore-quote" id="skin-detail-lore-quote"></blockquote>` : '';
 
   // Release Date
   let releaseDateStr = 'Chưa xác định';
@@ -206,7 +207,7 @@ export function renderSkinDetailView(container, skinId) {
               <circle cx="8.5" cy="8.5" r="1.5"></circle>
               <polyline points="21 15 16 10 5 21"></polyline>
             </svg>
-            <span>BỘ TÀI NGUYÊN HÌNH ẢNH</span>
+            <span>Bộ Tài Nguyên Hình Ảnh</span>
           </div>
 
           <div class="asset-cards-layout">
@@ -264,6 +265,13 @@ export function renderSkinDetailView(container, skinId) {
 
   // Attach Lightbox Handlers
   setupLightboxHandlers(container, drawingUrl);
+
+  // Shared Lore Reveal: trigger once on the detail lore blockquote
+  const loreQuoteEl = container.querySelector('#skin-detail-lore-quote');
+  if (loreQuoteEl && loreText) {
+    const detailLoreReveal = createLoreReveal(loreQuoteEl);
+    detailLoreReveal.start(`\u201C${loreText}\u201D`);
+  }
 }
 
 function setupLightboxHandlers(container, defaultDrawingUrl) {
