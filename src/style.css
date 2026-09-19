@@ -32,17 +32,17 @@
   --rarity-sr:  #c4a265; /* SR - Warm Antique Gold */
   --rarity-r:   #4e7091; /* R - Cool Medium Blue */
 
-  --rarity-ssr-bg: #b93232;
-  --rarity-ssr-text: #ffffff;
-  --rarity-ssr-border: rgba(185, 50, 50, 0.60);
+  --rarity-ssr-bg: rgba(145, 55, 45, 0.48);
+  --rarity-ssr-text: #F0A08F;
+  --rarity-ssr-border: rgba(210, 92, 76, 0.55);
 
-  --rarity-sr-bg: #c4a265;
-  --rarity-sr-text: #0f172a;
-  --rarity-sr-border: rgba(196, 162, 101, 0.60);
+  --rarity-sr-bg: rgba(128, 98, 30, 0.48);
+  --rarity-sr-text: #E7C96D;
+  --rarity-sr-border: rgba(214, 176, 68, 0.55);
 
-  --rarity-r-bg: #4e7091;
-  --rarity-r-text: #ffffff;
-  --rarity-r-border: rgba(78, 112, 145, 0.60);
+  --rarity-r-bg: rgba(52, 82, 116, 0.50);
+  --rarity-r-text: #AFCDF1;
+  --rarity-r-border: rgba(105, 149, 202, 0.55);
 
   /* Legacy aliases mapping to authoritative global rarity tokens */
   --rare-5: #b93232;
@@ -119,6 +119,10 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -613,19 +617,19 @@ body {
 }
 .chip:hover { background: var(--bg-surface-hover); color: var(--text-main); }
 .chip.active {
-  background: var(--text-main);
-  color: var(--bg-main);
-  border-color: var(--text-main);
+  background: rgba(212, 183, 99, 0.12);
+  color: #E2C987;
+  border-color: rgba(212, 183, 99, 0.40);
 }
-.chip-ssr { color: var(--rare-4); border-color: var(--rare-4); }
-.chip-ssr.active { background: var(--rare-4); color: #fff; }
-.chip-sr  { color: var(--rare-3); border-color: var(--rare-3); }
-.chip-sr.active  { background: var(--rare-3); color: #fff; }
-.chip-r   { color: var(--rare-2); border-color: var(--rare-2); }
-.chip-r.active   { background: var(--rare-2); color: #fff; }
+.chip-ssr { color: #F0A08F; border-color: rgba(210, 92, 76, 0.35); }
+.chip-ssr.active { background: rgba(145, 55, 45, 0.48); color: #F0A08F; border-color: rgba(210, 92, 76, 0.55); }
+.chip-sr  { color: #E7C96D; border-color: rgba(214, 176, 68, 0.35); }
+.chip-sr.active  { background: rgba(128, 98, 30, 0.48); color: #E7C96D; border-color: rgba(214, 176, 68, 0.55); }
+.chip-r   { color: #AFCDF1; border-color: rgba(105, 149, 202, 0.35); }
+.chip-r.active   { background: rgba(52, 82, 116, 0.50); color: #AFCDF1; border-color: rgba(105, 149, 202, 0.55); }
 
-.chip-limited { color: #d97706; border-color: #f59e0b; }
-.chip-limited.active { background: #d97706; color: #fff; border-color: #d97706; }
+.chip-limited { color: #F0BC98; border-color: rgba(215, 130, 70, 0.35); }
+.chip-limited.active { background: rgba(140, 78, 36, 0.48); color: #F0BC98; border-color: rgba(215, 130, 70, 0.55); }
 
 .filter-actions {
   display: flex;
@@ -745,6 +749,8 @@ body {
 .main-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
   padding: 28px 36px;
   min-width: 0;
   width: 100%;
@@ -2144,6 +2150,8 @@ body {
   flex: 1;
   min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
   padding: 24px 32px;
   background: var(--bg-main);
 }
@@ -2619,19 +2627,28 @@ body {
 }
 
 .art-caption {
-  margin-top: 12px;
+  margin-top: 8px;
+  padding: 0 4px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 256px;
 }
 
 .art-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #94A3B8);
+  text-transform: uppercase;
+  line-height: 1.35;
 }
 
 .art-sub {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 11px;
+  color: var(--text-subtle, #64748B);
 }
 
 /* 4. Skills Sub-View Styles */
@@ -3419,6 +3436,8 @@ body {
   flex: 1;
   min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
   padding: 0 0 40px 0;
   background: var(--bg-main);
 }
@@ -3665,36 +3684,66 @@ body {
   filter: brightness(1);
 }
 
-/* Active State: Filled Background + High Contrast Text (Identical 500 font weight & sizing) */
+/* Active State: Restrained Mineral / Lacquer Fills with High Contrast */
 .seg-btn.active {
-  background: rgba(255, 255, 255, 0.16);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(212, 183, 99, 0.12);
+  color: #E2C987;
+  border-color: rgba(212, 183, 99, 0.40);
   font-weight: 500;
 }
 
 .seg-btn.active .seg-btn-job-icon {
   opacity: 1;
-  filter: brightness(1.1);
+  filter: brightness(1.15);
 }
 
-/* Game-Sampled Muted Rarity Active Fill States (SSR=Crimson, SR=Antique Gold, R=Cool Blue) */
+/* Material / Lacquer / Mineral Rarity Active States */
 .seg-btn.seg-ssr.active {
-  color: var(--rarity-ssr-text);
-  border-color: var(--rarity-ssr-border);
-  background: var(--rarity-ssr-bg);
+  background: rgba(145, 55, 45, 0.48);
+  border-color: rgba(210, 92, 76, 0.55);
+  color: #F0A08F;
+}
+
+.seg-btn.seg-ssr.active:hover {
+  background: rgba(165, 65, 55, 0.60);
+  border-color: rgba(225, 105, 88, 0.70);
+  color: #F7B5A6;
 }
 
 .seg-btn.seg-sr.active {
-  color: var(--rarity-sr-text);
-  border-color: var(--rarity-sr-border);
-  background: var(--rarity-sr-bg);
+  background: rgba(128, 98, 30, 0.48);
+  border-color: rgba(214, 176, 68, 0.55);
+  color: #E7C96D;
+}
+
+.seg-btn.seg-sr.active:hover {
+  background: rgba(148, 114, 38, 0.60);
+  border-color: rgba(230, 192, 82, 0.70);
+  color: #F2D888;
 }
 
 .seg-btn.seg-r.active {
-  color: var(--rarity-r-text);
-  border-color: var(--rarity-r-border);
-  background: var(--rarity-r-bg);
+  background: rgba(52, 82, 116, 0.50);
+  border-color: rgba(105, 149, 202, 0.55);
+  color: #AFCDF1;
+}
+
+.seg-btn.seg-r.active:hover {
+  background: rgba(62, 96, 134, 0.62);
+  border-color: rgba(122, 168, 224, 0.70);
+  color: #C6DEFA;
+}
+
+.seg-btn[data-val="limited"].active {
+  background: rgba(140, 78, 36, 0.48);
+  border-color: rgba(215, 130, 70, 0.55);
+  color: #F0BC98;
+}
+
+.seg-btn[data-val="limited"].active:hover {
+  background: rgba(158, 90, 42, 0.60);
+  border-color: rgba(230, 145, 85, 0.70);
+  color: #F7CDAE;
 }
 
 /* Filter Section Divider */
@@ -4108,10 +4157,11 @@ body {
 .cd-limited-badge {
   font-size: 9.5px;
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 2px;
-  background: #E63946;
-  color: #ffffff;
+  background: rgba(120, 68, 32, 0.85);
+  border: 1px solid rgba(190, 115, 60, 0.45);
+  color: #F0C4A5;
   letter-spacing: 0.5px;
 }
 
@@ -4168,17 +4218,29 @@ body {
   letter-spacing: 0.5px;
 }
 
-.cd-rarity-badge-large.ssr { background: var(--rare-4); }
-.cd-rarity-badge-large.sr { background: var(--rare-3); }
-.cd-rarity-badge-large.r { background: var(--rare-2); }
+.cd-rarity-badge-large.ssr { background: rgba(145, 55, 45, 0.85); color: #F7D2CA; border: 1px solid rgba(210, 92, 76, 0.60); }
+.cd-rarity-badge-large.sr { background: rgba(128, 98, 30, 0.85); color: #F6E6B8; border: 1px solid rgba(214, 176, 68, 0.60); }
+.cd-rarity-badge-large.r { background: rgba(52, 82, 116, 0.85); color: #DAE7FA; border: 1px solid rgba(105, 149, 202, 0.60); }
 
-/* Sub-Nav Bar */
+.rarity-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+.rarity-badge.ssr { background: rgba(145, 55, 45, 0.85); color: #F7D2CA; border: 1px solid rgba(210, 92, 76, 0.60); }
+.rarity-badge.sr { background: rgba(128, 98, 30, 0.85); color: #F6E6B8; border: 1px solid rgba(214, 176, 68, 0.60); }
+.rarity-badge.r { background: rgba(52, 82, 116, 0.85); color: #DAE7FA; border: 1px solid rgba(105, 149, 202, 0.60); }
+
+/* Sub-Nav Bar - De-cardified continuous tab strip */
 .cd-sub-nav {
   margin-top: 14px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-  padding: 4px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 0 0 6px 0;
 }
 
 .cd-tab-item {
@@ -4190,20 +4252,20 @@ body {
   font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
-  border-radius: 2px;
+  border-radius: 3px;
   border: 1px solid transparent;
-  transition: all 0.15s ease;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
 }
 
 .cd-tab-item:hover {
   color: var(--text-main);
-  background: var(--bg-surface-hover);
+  background: rgba(212, 183, 99, 0.05);
 }
 
 .cd-tab-item.active {
-  color: var(--accent);
-  background: var(--accent-light);
-  border-color: var(--accent);
+  color: var(--accent, #D4B763);
+  background: rgba(212, 183, 99, 0.10);
+  border-color: rgba(212, 183, 99, 0.35);
   font-weight: 600;
 }
 
@@ -4216,8 +4278,8 @@ body {
 
 .overview-top-section {
   display: grid;
-  grid-template-columns: 1fr clamp(280px, 22vw, 320px);
-  gap: 24px;
+  grid-template-columns: 1fr 256px;
+  gap: 28px;
   align-items: flex-start;
 }
 
@@ -4287,34 +4349,47 @@ body {
 }
 
 .overview-art-block {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-  padding: 14px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 256px;
+  justify-self: end;
   align-self: flex-start;
 }
 
 .art-frame {
   width: 100%;
-  aspect-ratio: 258 / 512;
+  max-width: 256px;
+  aspect-ratio: 256 / 512;
   overflow: hidden;
-  border-radius: 2px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-main);
+  border-radius: 3px;
+  border: 1px solid rgba(212, 183, 99, 0.18);
+  background: #0D0F12;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.40);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  margin: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.art-frame:hover {
+  border-color: rgba(212, 183, 99, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.50);
 }
 
 .overview-art-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 18%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 /* 6. Gameplay Info Tab: Stats + Skills */
@@ -4875,11 +4950,14 @@ body {
 
   .overview-top-section {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .overview-art-block {
-    max-width: 320px;
+    max-width: 240px;
     align-self: center;
+    justify-self: center;
+    margin: 0 auto;
   }
 
   .overview-info-grid {
@@ -4988,8 +5066,23 @@ body {
 /* Standalone Data / Weapons View Styles */
 .weapons-view,
 .data-view {
+  flex: 1;
   width: 100%;
   min-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* Fallback for browsers without scrollbar-gutter support */
+@supports not (scrollbar-gutter: stable) {
+  .character-detail-view,
+  .character-catalog-view,
+  .main-content,
+  .weapons-view,
+  .data-view {
+    overflow-y: scroll;
+  }
 }
 
 .data-page-wrapper {

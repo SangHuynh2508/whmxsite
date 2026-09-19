@@ -1,6 +1,7 @@
 /**
  * Master Character Detail View Shell & Orchestrator
  */
+import { gsap } from 'gsap';
 import { getGameData } from '../data/loader.js';
 import { getCharBySlugOrId } from '../router.js';
 import { renderTagChipsHtml } from './utils/tagColors.js';
@@ -12,6 +13,66 @@ import { renderTalentsTab } from './charViews/talentsView.js';
 import { renderBuildTab } from './charViews/buildView.js';
 import { renderGalleryTab } from './charViews/galleryView.js';
 
+// Internal Tab State & Controller
+let currentRenderedCharId = null;
+let currentActiveTab = null;
+let activeTabTransition = null;
+
+function isReducedMotion() {
+  return typeof window !== 'undefined' && 
+         window.matchMedia && 
+         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function normalizeTab(activeTab) {
+  if (activeTab === 'skills') return 'info';
+  return activeTab || 'overview';
+}
+
+function renderTabContent(container, char, tabName) {
+  switch (tabName) {
+    case 'info':
+      renderInfoTab(container, char);
+      break;
+    case 'talents':
+      renderTalentsTab(container, char);
+      break;
+    case 'build':
+      renderBuildTab(container, char);
+      break;
+    case 'gallery':
+      renderGalleryTab(container, char);
+      break;
+    case 'overview':
+    default:
+      renderOverviewTab(container, char);
+      break;
+  }
+}
+
+function updateNavTabs(container, tabName) {
+  const tabLinks = container.querySelectorAll('.cd-tab-item');
+  tabLinks.forEach(link => {
+    const href = link.getAttribute('href') || '';
+    let isActive = false;
+    if (tabName === 'overview') {
+      isActive = !href.endsWith('/info') && !href.endsWith('/talents') && !href.endsWith('/build') && !href.endsWith('/gallery');
+    } else {
+      isActive = href.endsWith('/' + tabName);
+    }
+    link.classList.toggle('active', isActive);
+  });
+
+  const activeTabEl = container.querySelector('.cd-tab-item.active');
+  if (activeTabEl && typeof activeTabEl.scrollIntoView === 'function') {
+    activeTabEl.scrollIntoView({
+      behavior: isReducedMotion() ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
+  }
+}
+
 export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
   const container = document.getElementById('character-detail-view');
   if (!container) return;
@@ -21,6 +82,12 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
   const char = getCharBySlugOrId(slugOrId);
   if (!char) {
+    if (activeTabTransition) {
+      activeTabTransition.kill();
+      activeTabTransition = null;
+    }
+    currentRenderedCharId = null;
+    currentActiveTab = null;
     container.innerHTML = `
       <div class="char-not-found">
         <h2>Không tìm thấy nhân vật</h2>
@@ -31,12 +98,109 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     return;
   }
 
+  const normTab = normalizeTab(activeTab);
+  const shellExists = !!container.querySelector('.character-detail-content');
+  const isSameChar = currentRenderedCharId === char.id && shellExists;
+
+  // CASE 1: Internal tab switch on already active character detail view
+  if (isSameChar) {
+    if (currentActiveTab === normTab && !activeTabTransition) {
+      return;
+    }
+
+    currentActiveTab = normTab;
+    updateNavTabs(container, normTab);
+
+    const tabContentContainer = document.getElementById('cd-tab-content');
+    if (!tabContentContainer) return;
+
+    // Safety: kill any pending / active animation
+    if (activeTabTransition) {
+      activeTabTransition.kill();
+      activeTabTransition = null;
+    }
+
+    // Reduced motion check: instantaneous swap with no transform, opacity, or height animation
+    if (isReducedMotion()) {
+      gsap.set(tabContentContainer, { clearProps: 'transform,opacity,height,overflow' });
+      tabContentContainer.style.height = '';
+      tabContentContainer.style.overflow = '';
+      renderTabContent(tabContentContainer, char, normTab);
+      return;
+    }
+
+    // Measure starting height before fade-out begins
+    const startHeight = tabContentContainer.offsetHeight;
+
+    // Outgoing animation: 0.09s (90ms), ease 'power1.out', translateY: 0 -> -4px
+    activeTabTransition = gsap.to(tabContentContainer, {
+      opacity: 0,
+      y: -4,
+      duration: 0.09,
+      ease: 'power1.out',
+      onComplete: () => {
+        // Swap content inside hidden container
+        renderTabContent(tabContentContainer, char, normTab);
+
+        // Measure next natural content height
+        tabContentContainer.style.height = 'auto';
+        const targetHeight = tabContentContainer.offsetHeight;
+
+        // Constrain height temporarily to prevent layout jump
+        tabContentContainer.style.height = startHeight + 'px';
+        tabContentContainer.style.overflow = 'hidden';
+
+        // Set incoming initial state (+4px offset, opacity 0)
+        gsap.set(tabContentContainer, { opacity: 0, y: 4 });
+
+        // Coordinated incoming timeline
+        const incomingTl = gsap.timeline({
+          onComplete: () => {
+            // Restore natural flow layout
+            gsap.set(tabContentContainer, { clearProps: 'transform,opacity,height,overflow' });
+            tabContentContainer.style.height = '';
+            tabContentContainer.style.overflow = '';
+            activeTabTransition = null;
+          }
+        });
+        activeTabTransition = incomingTl;
+
+        // Height stabilization interpolation (~180ms, power2.out)
+        if (Math.abs(targetHeight - startHeight) > 2) {
+          incomingTl.to(tabContentContainer, {
+            height: targetHeight,
+            duration: 0.18,
+            ease: 'power2.out'
+          }, 0);
+        }
+
+        // Incoming content fade & settle (~160ms, power2.out)
+        incomingTl.to(tabContentContainer, {
+          opacity: 1,
+          y: 0,
+          duration: 0.16,
+          ease: 'power2.out'
+        }, 0);
+      }
+    });
+
+    return;
+  }
+
+  // CASE 2: Initial Render or Different Character
+  if (activeTabTransition) {
+    activeTabTransition.kill();
+    activeTabTransition = null;
+  }
+
+  currentRenderedCharId = char.id;
+  currentActiveTab = normTab;
+
   const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
   const rarityMap = { 4: { label: "SSR", class: "ssr" }, 3: { label: "SR", class: "sr" }, 2: { label: "R", class: "r" } };
   const rarityInfo = rarityMap[char.rare] || { label: `★${char.rare}`, class: "sr" };
   const jobName = jobNames[char.job] || "Chức nghiệp";
   const slug = char.slug || char.id;
-
   const tagStr = char.tags_vi || char.tags_cn || "";
 
   container.innerHTML = `
@@ -91,23 +255,23 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
       <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Thư Viện -->
       <nav class="cd-sub-nav" aria-label="Điều hướng chi tiết nhân vật">
         <div class="cd-nav-scroll-wrapper">
-          <a href="#/characters/${slug}" class="cd-tab-item ${activeTab === 'overview' ? 'active' : ''}">
+          <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
             <span class="tab-label">Tổng Quan</span>
           </a>
 
-          <a href="#/characters/${slug}/info" class="cd-tab-item ${activeTab === 'info' || activeTab === 'skills' ? 'active' : ''}">
+          <a href="#/characters/${slug}/info" class="cd-tab-item ${normTab === 'info' ? 'active' : ''}">
             <span class="tab-label">Thông Tin</span>
           </a>
 
-          <a href="#/characters/${slug}/talents" class="cd-tab-item ${activeTab === 'talents' ? 'active' : ''}">
+          <a href="#/characters/${slug}/talents" class="cd-tab-item ${normTab === 'talents' ? 'active' : ''}">
             <span class="tab-label">Thiên Phú</span>
           </a>
 
-          <a href="#/characters/${slug}/build" class="cd-tab-item ${activeTab === 'build' ? 'active' : ''}">
+          <a href="#/characters/${slug}/build" class="cd-tab-item ${normTab === 'build' ? 'active' : ''}">
             <span class="tab-label">Build</span>
           </a>
 
-          <a href="#/characters/${slug}/gallery" class="cd-tab-item ${activeTab === 'gallery' ? 'active' : ''}">
+          <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
             <span class="tab-label">Thư Viện</span>
           </a>
         </div>
@@ -122,32 +286,21 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
   // Auto-scroll active tab into view on mobile
   const activeTabEl = container.querySelector('.cd-tab-item.active');
-  if (activeTabEl) {
-    activeTabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  if (activeTabEl && typeof activeTabEl.scrollIntoView === 'function') {
+    activeTabEl.scrollIntoView({
+      behavior: isReducedMotion() ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
   }
 
-  // Render sub tab content
+  // Render initial tab content directly (NO double animation with route entry)
   const tabContentContainer = document.getElementById('cd-tab-content');
-  if (!tabContentContainer) return;
-
-  switch (activeTab) {
-    case 'info':
-    case 'skills':
-      renderInfoTab(tabContentContainer, char);
-      break;
-    case 'talents':
-      renderTalentsTab(tabContentContainer, char);
-      break;
-    case 'build':
-      renderBuildTab(tabContentContainer, char);
-      break;
-    case 'gallery':
-      renderGalleryTab(tabContentContainer, char);
-      break;
-    case 'overview':
-    default:
-      renderOverviewTab(tabContentContainer, char);
-      break;
+  if (tabContentContainer) {
+    gsap.set(tabContentContainer, { clearProps: 'transform,opacity,height,overflow' });
+    tabContentContainer.style.height = '';
+    tabContentContainer.style.overflow = '';
+    renderTabContent(tabContentContainer, char, normTab);
   }
 }
 

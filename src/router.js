@@ -12,6 +12,15 @@ import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
 import { renderHeader } from './ui/characterHeader.js';
 import { renderSkinGalleryView, renderGalleryDemoView } from './ui/skinGalleryView.js';
 import { renderSkinDetailView } from './ui/skinDetailView.js';
+import { gsap } from 'gsap';
+
+let previousRouteKey = null;
+let activeRouteTransition = null;
+let activeIncomingEl = null;
+
+function isReducedMotion() {
+  return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
 
 export function getCharBySlugOrId(slugOrId) {
   const gameData = getGameData();
@@ -133,6 +142,182 @@ export function parseHash() {
   };
 }
 
+function renderRouteView(route, refs) {
+  const {
+    mainContent,
+    sidebar,
+    emptyState,
+    charCatalogView,
+    charDetailView,
+    weaponsView,
+    skinGalleryView,
+    skinDetailView,
+    gameData
+  } = refs;
+
+  if (route.view === 'catalog') {
+    if (mainContent) mainContent.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    if (charDetailView) {
+      charDetailView.classList.add('hidden');
+      charDetailView.innerHTML = '';
+    }
+    if (weaponsView) {
+      weaponsView.classList.add('hidden');
+      weaponsView.innerHTML = '';
+    }
+    if (skinGalleryView) {
+      skinGalleryView.classList.add('hidden');
+      skinGalleryView.innerHTML = '';
+    }
+    if (skinDetailView) {
+      skinDetailView.classList.add('hidden');
+      skinDetailView.innerHTML = '';
+    }
+
+    if (charCatalogView) {
+      charCatalogView.classList.remove('hidden');
+      renderCharacterCatalogView(charCatalogView);
+    }
+  } else if (route.view === 'weapons' || route.view === 'data') {
+    if (mainContent) mainContent.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    if (charCatalogView) {
+      charCatalogView.classList.add('hidden');
+      charCatalogView.innerHTML = '';
+    }
+    if (charDetailView) {
+      charDetailView.classList.add('hidden');
+      charDetailView.innerHTML = '';
+    }
+    if (skinGalleryView) {
+      skinGalleryView.classList.add('hidden');
+      skinGalleryView.innerHTML = '';
+    }
+    if (skinDetailView) {
+      skinDetailView.classList.add('hidden');
+      skinDetailView.innerHTML = '';
+    }
+
+    if (weaponsView) {
+      weaponsView.classList.remove('hidden');
+      renderWeaponsView(weaponsView);
+    }
+  } else if (route.view === 'gallery') {
+    if (mainContent) mainContent.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    if (charCatalogView) {
+      charCatalogView.classList.add('hidden');
+      charCatalogView.innerHTML = '';
+    }
+    if (charDetailView) {
+      charDetailView.classList.add('hidden');
+      charDetailView.innerHTML = '';
+    }
+    if (weaponsView) {
+      weaponsView.classList.add('hidden');
+      weaponsView.innerHTML = '';
+    }
+    if (skinDetailView) {
+      skinDetailView.classList.add('hidden');
+      skinDetailView.innerHTML = '';
+    }
+
+    if (skinGalleryView) {
+      skinGalleryView.classList.remove('hidden');
+      renderSkinGalleryView(skinGalleryView);
+    }
+  } else if (route.view === 'skin-detail') {
+    if (mainContent) mainContent.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    if (charCatalogView) {
+      charCatalogView.classList.add('hidden');
+      charCatalogView.innerHTML = '';
+    }
+    if (charDetailView) {
+      charDetailView.classList.add('hidden');
+      charDetailView.innerHTML = '';
+    }
+    if (weaponsView) {
+      weaponsView.classList.add('hidden');
+      weaponsView.innerHTML = '';
+    }
+    if (skinGalleryView) {
+      skinGalleryView.classList.add('hidden');
+      skinGalleryView.innerHTML = '';
+    }
+
+    if (skinDetailView) {
+      skinDetailView.classList.remove('hidden');
+      renderSkinDetailView(skinDetailView, route.skinId);
+    }
+  } else if (route.view === 'character') {
+    if (mainContent) mainContent.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    if (charCatalogView) {
+      charCatalogView.classList.add('hidden');
+      charCatalogView.innerHTML = '';
+    }
+    if (weaponsView) {
+      weaponsView.classList.add('hidden');
+      weaponsView.innerHTML = '';
+    }
+    if (skinGalleryView) {
+      skinGalleryView.classList.add('hidden');
+      skinGalleryView.innerHTML = '';
+    }
+    if (skinDetailView) {
+      skinDetailView.classList.add('hidden');
+      skinDetailView.innerHTML = '';
+    }
+
+    if (charDetailView) {
+      charDetailView.classList.remove('hidden');
+      renderCharacterDetail(route.slug, route.subtab);
+    }
+  } else {
+    if (charCatalogView) {
+      charCatalogView.classList.add('hidden');
+      charCatalogView.innerHTML = '';
+    }
+    if (charDetailView) {
+      charDetailView.classList.add('hidden');
+      charDetailView.innerHTML = '';
+    }
+    if (weaponsView) {
+      weaponsView.classList.add('hidden');
+      weaponsView.innerHTML = '';
+    }
+    if (skinGalleryView) {
+      skinGalleryView.classList.add('hidden');
+      skinGalleryView.innerHTML = '';
+    }
+    if (skinDetailView) {
+      skinDetailView.classList.add('hidden');
+      skinDetailView.innerHTML = '';
+    }
+    if (sidebar) sidebar.classList.add('hidden');
+
+    let targetCharId = route.characterId;
+    if (!targetCharId && state.character) {
+      targetCharId = state.character.id;
+    }
+
+    if (targetCharId && gameData.characters[targetCharId]) {
+      selectCalculatorCharacter(targetCharId);
+    } else {
+      if (mainContent) mainContent.classList.remove('hidden');
+      if (emptyState) emptyState.classList.add('hidden');
+      renderHeader();
+    }
+  }
+}
+
 export function handleRoute() {
   const gameData = getGameData();
   if (!gameData) return;
@@ -157,179 +342,97 @@ export function handleRoute() {
   // Update Navigation Active Highlights
   updateAppNavHighlights(route.view);
 
-  if (route.view === 'catalog') {
-    // Hide Calculator Views, Character Detail, Data View, Gallery Demo, and Skin Detail
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    // Show Standalone Catalog View
-    if (charCatalogView) {
-      charCatalogView.classList.remove('hidden');
-      renderCharacterCatalogView(charCatalogView);
-    }
-  } else if (route.view === 'weapons' || route.view === 'data') {
-    // Hide Calculator Views, Catalog, Character Detail, Skin Gallery, and Skin Detail
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    // Show Standalone Weapons View
-    if (weaponsView) {
-      weaponsView.classList.remove('hidden');
-      renderWeaponsView(weaponsView);
-    }
-  } else if (route.view === 'gallery') {
-    // Hide Calculator Views, Standalone Catalog, Character Detail, Data View, and Skin Detail
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    // Show Skin Gallery View
-    if (skinGalleryView) {
-      skinGalleryView.classList.remove('hidden');
-      renderSkinGalleryView(skinGalleryView);
-    }
+  // Compute semantic route key (subtabs within the same character share the same routeKey)
+  let routeKey = route.view;
+  if (route.view === 'character') {
+    routeKey = `character:${route.slug}`;
   } else if (route.view === 'skin-detail') {
-    // Hide Calculator Views, Standalone Catalog, Character Detail, Data View, and Gallery Demo
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-
-    // Show Skin Detail View
-    if (skinDetailView) {
-      skinDetailView.classList.remove('hidden');
-      renderSkinDetailView(skinDetailView, route.skinId);
-    }
-  } else if (route.view === 'character') {
-    // Hide Calculator Views, Standalone Catalog, Data View, Gallery Demo, and Skin Detail
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    // Show Character Detail View
-    if (charDetailView) {
-      charDetailView.classList.remove('hidden');
-      renderCharacterDetail(route.slug, route.subtab);
-    }
-  } else {
-    // Calculator View
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-    // Persistent left sidebar is NOT shown in Calculator view (uses dedicated modal picker)
-    if (sidebar) sidebar.classList.add('hidden');
-
-    let targetCharId = route.characterId;
-    if (!targetCharId && state.character) {
-      targetCharId = state.character.id;
-    }
-
-    if (targetCharId && gameData.characters[targetCharId]) {
-      selectCalculatorCharacter(targetCharId);
-    } else {
-      if (mainContent) mainContent.classList.remove('hidden');
-      if (emptyState) emptyState.classList.add('hidden');
-      renderHeader();
-    }
+    routeKey = `skin-detail:${route.skinId}`;
+  } else if (route.view === 'calculator') {
+    routeKey = `calculator:${route.characterId || ''}`;
   }
+
+  // Determine target incoming container
+  let incomingContainer = null;
+  if (route.view === 'catalog') incomingContainer = charCatalogView;
+  else if (route.view === 'weapons' || route.view === 'data') incomingContainer = weaponsView;
+  else if (route.view === 'gallery') incomingContainer = skinGalleryView;
+  else if (route.view === 'skin-detail') incomingContainer = skinDetailView;
+  else if (route.view === 'character') incomingContainer = charDetailView;
+  else incomingContainer = mainContent;
+
+  const allViewContainers = [charCatalogView, weaponsView, skinGalleryView, skinDetailView, charDetailView, mainContent].filter(Boolean);
+  const outgoingContainer = allViewContainers.find(el => !el.classList.contains('hidden') && el !== incomingContainer);
+
+  const isRealRouteChange = previousRouteKey !== null && previousRouteKey !== routeKey;
+
+  // Interruption safety: cancel any running animation and reset element styles
+  if (activeRouteTransition) {
+    activeRouteTransition.kill();
+    activeRouteTransition = null;
+  }
+  if (activeIncomingEl) {
+    gsap.set(activeIncomingEl, { clearProps: 'transform,opacity' });
+    activeIncomingEl = null;
+  }
+
+  const doRender = () => {
+    renderRouteView(route, {
+      mainContent,
+      sidebar,
+      emptyState,
+      charCatalogView,
+      charDetailView,
+      weaponsView,
+      skinGalleryView,
+      skinDetailView,
+      gameData
+    });
+  };
+
+  if (!isRealRouteChange || !outgoingContainer || isReducedMotion()) {
+    previousRouteKey = routeKey;
+    allViewContainers.forEach(el => gsap.set(el, { clearProps: 'transform,opacity' }));
+    doRender();
+    return;
+  }
+
+  // Perform subtle route change transition:
+  // OUTGOING: opacity 1 -> 0, translateY 0 -> -4px (~110ms)
+  // INCOMING: opacity 0 -> 1, translateY +5px -> 0 (~200ms)
+  previousRouteKey = routeKey;
+
+  activeRouteTransition = gsap.timeline();
+  activeRouteTransition.to(outgoingContainer, {
+    opacity: 0,
+    y: -4,
+    duration: 0.11,
+    ease: 'power1.out',
+    onComplete: () => {
+      outgoingContainer.classList.add('hidden');
+      gsap.set(outgoingContainer, { clearProps: 'transform,opacity' });
+
+      doRender();
+
+      if (incomingContainer) {
+        activeIncomingEl = incomingContainer;
+        gsap.fromTo(incomingContainer,
+          { opacity: 0, y: 5 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.20,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity',
+            onComplete: () => {
+              activeRouteTransition = null;
+              activeIncomingEl = null;
+            }
+          }
+        );
+      }
+    }
+  });
 }
 
 function updateAppNavHighlights(activeView) {

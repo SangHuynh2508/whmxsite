@@ -13,9 +13,17 @@
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   box-sizing: border-box;
   background: #0E1012;
   position: relative;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  .skin-gallery-view,
+  .skin-detail-view {
+    overflow-y: scroll;
+  }
 }
 
 .skin-gallery-view.hidden,
@@ -82,12 +90,14 @@
    ================================================== */
 .gallery-hero-container {
   position: relative;
-  min-height: 420px;
+  min-height: 560px;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 70% 80% at 68% 50%, rgba(212, 183, 99, 0.06) 0%, transparent 70%),
-    linear-gradient(135deg, #111316 0%, #0E1012 40%, #0D0F11 100%);
-  border-bottom: 1px solid rgba(212, 183, 99, 0.18);
+  background-color: transparent;
+  background-image:
+    radial-gradient(ellipse 85% 80% at 72% 50%, rgba(212, 183, 99, 0.08) 0%, rgba(212, 183, 99, 0.025) 45%, rgba(212, 183, 99, 0.005) 70%, transparent 88%),
+    radial-gradient(ellipse 95% 85% at 65% 50%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
+  border: none;
+  border-bottom: 1px solid rgba(212, 183, 99, 0.12);
   margin-bottom: 32px;
 }
 
@@ -95,11 +105,11 @@
   display: grid;
   grid-template-columns: 360px 1fr;
   width: 100%;
-  min-height: 420px;
+  min-height: 560px;
   position: relative;
   box-sizing: border-box;
-  padding: 36px 40px;
-  gap: 48px;
+  padding: 24px 36px;
+  gap: 36px;
   align-items: center;
 }
 
@@ -387,7 +397,9 @@
   cursor: zoom-in;
   text-decoration: none;
   outline: none;
-  min-height: 380px;
+  align-self: stretch;
+  height: 100%;
+  min-height: 500px;
 }
 
 .museum-center-frame:focus-visible {
@@ -400,7 +412,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 380px;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -415,12 +427,12 @@
   bottom: 0;
   margin: auto;
   height: 100%;
-  max-height: 440px;
-  width: auto;
+  max-height: 100%;
+  width: 100%;
   max-width: 100%;
   object-fit: contain;
   object-position: center center;
-  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 20px 42px rgba(0, 0, 0, 0.60));
   user-select: none;
   pointer-events: none;
   will-change: opacity, transform;
@@ -1285,24 +1297,25 @@
   color: var(--text-muted, #9097A0);
 }
 
-/* Cinematic Featured Spotlight Hero - ONE UNIFIED CONTINUOUS CANVAS */
+/* Cinematic Featured Spotlight Hero - ONE UNIFIED CONTINUOUS CANVAS (Option B Ambient Integration) */
 .skin-spotlight-hero {
   position: relative;
   width: 100%;
   min-height: 480px;
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
-  background-color: #08090B;
+  background-color: transparent;
   background-image: 
-    radial-gradient(ellipse 80% 70% at 72% 50%, rgba(212, 183, 99, 0.13) 0%, rgba(212, 183, 99, 0.05) 35%, rgba(212, 183, 99, 0.01) 60%, transparent 80%),
-    radial-gradient(ellipse 95% 85% at 70% 50%, #16181D 0%, #0D0F12 55%, #07080A 100%);
-  border: 1px solid rgba(212, 183, 99, 0.28);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+    radial-gradient(ellipse 80% 70% at 72% 50%, rgba(212, 183, 99, 0.07) 0%, rgba(212, 183, 99, 0.025) 35%, rgba(212, 183, 99, 0.005) 60%, transparent 85%),
+    radial-gradient(ellipse 95% 85% at 68% 50%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
+  border: none;
+  border-bottom: 1px solid rgba(212, 183, 99, 0.12);
+  box-shadow: none;
   display: grid;
   grid-template-columns: 440px 1fr;
   gap: 40px;
   align-items: center;
-  padding: 36px 44px;
+  padding: 32px 36px 36px 36px;
   box-sizing: border-box;
 }
 
@@ -1816,8 +1829,13 @@
 @media (max-width: 1200px) {
   .hero-variant-museum {
     grid-template-columns: 320px 1fr;
-    padding: 28px 28px;
-    gap: 36px;
+    padding: 20px 24px;
+    gap: 28px;
+    min-height: 520px;
+  }
+  .museum-center-frame,
+  .museum-artwork-stage {
+    min-height: 460px;
   }
   .skin-spotlight-hero {
     grid-template-columns: 380px 1fr;
@@ -1830,15 +1848,17 @@
   .hero-variant-museum {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding: 24px 24px;
+    padding: 24px 20px;
     gap: 24px;
   }
   .museum-center-frame {
-    min-height: 300px;
+    min-height: 380px;
+    height: 420px;
     order: -1;
   }
   .museum-artwork-stage {
-    min-height: 300px;
+    min-height: 380px;
+    height: 100%;
   }
   .skin-detail-content-grid {
     grid-template-columns: 1fr;
@@ -1846,11 +1866,11 @@
   .skin-spotlight-hero {
     grid-template-columns: 1fr;
     gap: 28px;
-    padding: 28px 24px;
+    padding: 24px 20px;
     min-height: auto;
     background-image: 
-      radial-gradient(ellipse 85% 65% at 50% 30%, rgba(212, 183, 99, 0.13) 0%, rgba(212, 183, 99, 0.04) 45%, transparent 75%),
-      radial-gradient(ellipse 100% 90% at 50% 40%, #16181D 0%, #0D0F12 55%, #07080A 100%);
+      radial-gradient(ellipse 85% 65% at 50% 30%, rgba(212, 183, 99, 0.07) 0%, rgba(212, 183, 99, 0.02) 45%, transparent 75%),
+      radial-gradient(ellipse 100% 90% at 50% 40%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
   }
   .spotlight-artwork-stage {
     height: 340px;
