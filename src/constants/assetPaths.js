@@ -44,3 +44,37 @@ export function getSkinSeriesBadgeUrl(seriesId) {
   if (!sid || sid === '0') return '';
   return `/assets/series/skinlogo_${sid}.png`;
 }
+
+/**
+ * Centralized resolver for skin visual assets (drawing, card crop, avatar)
+ * Ensures consistency between Skin Gallery and Skin Detail views.
+ */
+export function getSkinAssetUrls(skin, char) {
+  const charId = (char?.id || '').toLowerCase();
+  const skinId = (skin?.skinID || skin?.id || '').toLowerCase();
+
+  const drawingUrl = resolveAssetUrl(skin?.image);
+  const cardUrl = skin?.image
+    ? skin.image.replace('/drawings/', '/cards/').replace('drawings', 'cards')
+    : (charId && skinId ? `https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev/characters/${charId}/cards/${skinId}.webp` : '');
+  const avatarUrl = getSkinAvatarUrl(skinId);
+
+  // Reliable character fallback avatar
+  let fallbackAvatarUrl = '';
+  if (char?.icon) {
+    let iconPath = char.icon;
+    if (iconPath.includes('assets/avatars/')) {
+      iconPath = iconPath.replace('assets/avatars/', 'assets/characters/avatars/');
+    }
+    fallbackAvatarUrl = resolveAssetUrl(iconPath);
+  } else if (char?.id) {
+    fallbackAvatarUrl = `/assets/characters/avatars/${char.id}.png`;
+  }
+
+  return {
+    drawingUrl,
+    cardUrl,
+    avatarUrl,
+    fallbackAvatarUrl
+  };
+}

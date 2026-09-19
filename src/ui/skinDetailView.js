@@ -4,7 +4,7 @@
  * Displays real audited metadata, flavor lore, and in-app asset lightbox.
  */
 import { getGameData } from '../data/loader.js';
-import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl } from '../constants/assetPaths.js';
+import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../constants/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
 
@@ -52,11 +52,7 @@ export function renderSkinDetailView(container, skinId) {
   const charSlug = targetChar.slug || targetChar.id;
 
   // Assets
-  const drawingUrl = resolveAssetUrl(targetSkin.image);
-  const cardUrl = targetSkin.image
-    ? targetSkin.image.replace('/drawings/', '/cards/').replace('drawings', 'cards')
-    : `https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev/characters/${charId.toLowerCase()}/cards/${targetSkin.skinID.toLowerCase()}.webp`;
-  const avatarUrl = getSkinAvatarUrl(targetSkin.skinID);
+  const { drawingUrl, cardUrl, avatarUrl, fallbackAvatarUrl } = getSkinAssetUrls(targetSkin, targetChar);
 
   // Proven Metadata
   const price = targetSkin.price;
@@ -215,7 +211,7 @@ export function renderSkinDetailView(container, skinId) {
             <!-- Full Drawing Item -->
             <button type="button" class="asset-preview-item" data-asset-url="${drawingUrl}" aria-label="Xem ảnh phóng to Toàn Cảnh">
               <div class="asset-thumb-wrap drawing-wrap">
-                <img src="${drawingUrl}" alt="${skinNameVi} Drawing" loading="lazy" onerror="this.src='${cardUrl}'" />
+                <img src="${drawingUrl}" alt="${skinNameVi} Drawing" loading="lazy" onerror="this.onerror=null; this.src='${cardUrl}';" />
               </div>
               <div class="asset-info">
                 <span class="asset-title">Toàn Cảnh (Drawing)</span>
@@ -226,7 +222,7 @@ export function renderSkinDetailView(container, skinId) {
             <!-- Card Crop Item -->
             <button type="button" class="asset-preview-item" data-asset-url="${cardUrl}" aria-label="Xem ảnh phóng to Thẻ Bài">
               <div class="asset-thumb-wrap card-wrap">
-                <img src="${cardUrl}" alt="${skinNameVi} Card" loading="lazy" onerror="this.src='${drawingUrl}'" />
+                <img src="${cardUrl}" alt="${skinNameVi} Card" loading="lazy" onerror="this.onerror=null; this.src='${drawingUrl}';" />
               </div>
               <div class="asset-info">
                 <span class="asset-title">Thẻ Bài (Card)</span>
@@ -237,7 +233,10 @@ export function renderSkinDetailView(container, skinId) {
             <!-- Avatar Crop Item -->
             <button type="button" class="asset-preview-item" data-asset-url="${avatarUrl}" aria-label="Xem ảnh phóng to Chân Dung">
               <div class="asset-thumb-wrap avatar-wrap">
-                <img src="${avatarUrl}" alt="${skinNameVi} Avatar" loading="lazy" />
+                <img src="${avatarUrl}" 
+                     alt="${skinNameVi} Avatar" 
+                     loading="lazy" 
+                     onerror="this.onerror=null; if ('${fallbackAvatarUrl}' && this.src !== '${fallbackAvatarUrl}') { this.src='${fallbackAvatarUrl}'; const p=this.closest('.asset-preview-item'); if(p) p.dataset.assetUrl='${fallbackAvatarUrl}'; } else { this.style.opacity='0'; }" />
               </div>
               <div class="asset-info">
                 <span class="asset-title">Chân Dung (Avatar)</span>

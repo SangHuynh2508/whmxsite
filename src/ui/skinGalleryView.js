@@ -5,7 +5,7 @@
  */
 import { gsap } from 'gsap';
 import { getGameData } from '../data/loader.js';
-import { resolveAssetUrl } from '../constants/assetPaths.js';
+import { resolveAssetUrl, getSkinAssetUrls } from '../constants/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
 import './skinGalleryView.css';
@@ -191,10 +191,7 @@ function getActualSkins(gameData) {
         return;
       }
 
-      const drawingUrl = resolveAssetUrl(skin.image);
-      const cardUrl = skin.image
-        ? skin.image.replace('/drawings/', '/cards/').replace('drawings', 'cards')
-        : `https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev/characters/${char.id.toLowerCase()}/cards/${sid.toLowerCase()}.webp`;
+      const { drawingUrl, cardUrl } = getSkinAssetUrls(skin, char);
 
       const acqInfo = resolveAcquisitionLabel(skin);
 
