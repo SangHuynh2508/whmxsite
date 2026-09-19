@@ -13,13 +13,29 @@ import { renderHeader } from './ui/characterHeader.js';
 import { renderSkinGalleryView, renderGalleryDemoView } from './ui/skinGalleryView.js';
 import { renderSkinDetailView } from './ui/skinDetailView.js';
 import { gsap } from 'gsap';
+import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from './ui/smoothScroll.js';
 
 let previousRouteKey = null;
 let activeRouteTransition = null;
 let activeIncomingEl = null;
+let isPopStateNav = false;
+const routeScrollCache = new Map();
 
 function isReducedMotion() {
   return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+
+function cancelActiveTransition(allViewContainers) {
+  if (activeRouteTransition) {
+    activeRouteTransition.kill();
+    activeRouteTransition = null;
+  }
+  if (allViewContainers) {
+    allViewContainers.forEach(el => {
+      gsap.set(el, { clearProps: 'transform,opacity' });
+    });
+  }
+  activeIncomingEl = null;
 }
 
 export function getCharBySlugOrId(slugOrId) {
@@ -362,19 +378,19 @@ export function handleRoute() {
   else incomingContainer = mainContent;
 
   const allViewContainers = [charCatalogView, weaponsView, skinGalleryView, skinDetailView, charDetailView, mainContent].filter(Boolean);
-  const outgoingContainer = allViewContainers.find(el => !el.classList.contains('hidden') && el !== incomingContainer);
+  const outgoingContainer = allViewContainers.find(el => !el.classList.contains('hidden'));
+
+  // Save outgoing container scroll position before route change
+  if (previousRouteKey && outgoingContainer) {
+    routeScrollCache.set(previousRouteKey, outgoingContainer.scrollTop);
+  }
+
+  // Determine target scroll position (Back/Forward restores previous position; forward nav resets to 0)
+  const isBackForward = isPopStateNav;
+  isPopStateNav = false;
+  const targetScroll = isBackForward ? (routeScrollCache.get(routeKey) ?? 0) : 0;
 
   const isRealRouteChange = previousRouteKey !== null && previousRouteKey !== routeKey;
-
-  // Interruption safety: cancel any running animation and reset element styles
-  if (activeRouteTransition) {
-    activeRouteTransition.kill();
-    activeRouteTransition = null;
-  }
-  if (activeIncomingEl) {
-    gsap.set(activeIncomingEl, { clearProps: 'transform,opacity' });
-    activeIncomingEl = null;
-  }
 
   const doRender = () => {
     renderRouteView(route, {
@@ -390,35 +406,89 @@ export function handleRoute() {
     });
   };
 
-  if (!isRealRouteChange || !outgoingContainer || isReducedMotion()) {
-    previousRouteKey = routeKey;
-    allViewContainers.forEach(el => gsap.set(el, { clearProps: 'transform,opacity' }));
+  // CASE 1: Same semantic route key (e.g. internal Character Detail subtab change) or initial mount
+  if (!isRealRouteChange) {
     doRender();
+    if (previousRouteKey === null) {
+      previousRouteKey = routeKey;
+      allViewContainers.forEach(el => gsap.set(el, { clearProps: 'transform,opacity' }));
+      updateSmoothScrollContainer(incomingContainer);
+      setScrollPositionImmediate(targetScroll);
+    } else {
+      // Subtab switch inside same mounted shell preserves scroll position and resizes smooth scroll
+      resizeSmoothScroll();
+    }
     return;
   }
 
-  // Perform subtle route change transition:
-  // OUTGOING: opacity 1 -> 0, translateY 0 -> -4px (~110ms)
-  // INCOMING: opacity 0 -> 1, translateY +5px -> 0 (~200ms)
+  // CASE 2: User prefers reduced motion: instant swap without sliding/fading
+  if (isReducedMotion()) {
+    cancelActiveTransition(allViewContainers);
+    previousRouteKey = routeKey;
+    doRender();
+    updateSmoothScrollContainer(incomingContainer);
+    setScrollPositionImmediate(targetScroll);
+    return;
+  }
+
+  // CASE 3: Top-level route change transition
+  // OUTGOING: opacity 1 -> 0, y: 0 -> -4px (~110ms, power1.out)
+  // SWAP & SCROLL: DOM swap, set target scroll position (0 or restored), attach Lenis
+  // INCOMING: opacity 0 -> 1, y: +5px -> 0 (~200ms, power2.out)
+  cancelActiveTransition(allViewContainers);
   previousRouteKey = routeKey;
 
-  activeRouteTransition = gsap.timeline();
-  activeRouteTransition.to(outgoingContainer, {
-    opacity: 0,
-    y: -4,
-    duration: 0.11,
-    ease: 'power1.out',
-    onComplete: () => {
-      outgoingContainer.classList.add('hidden');
-      gsap.set(outgoingContainer, { clearProps: 'transform,opacity' });
+  const sameContainer = outgoingContainer && outgoingContainer === incomingContainer;
 
-      doRender();
+  if (sameContainer) {
+    // Navigation between different items sharing the same view shell (e.g. character to character)
+    activeRouteTransition = gsap.timeline();
+    activeRouteTransition.to(incomingContainer, {
+      opacity: 0,
+      y: -4,
+      duration: 0.11,
+      ease: 'power1.out',
+      onComplete: () => {
+        gsap.set(incomingContainer, { opacity: 0, y: 5 });
+        doRender();
+        updateSmoothScrollContainer(incomingContainer);
+        setScrollPositionImmediate(targetScroll);
 
-      if (incomingContainer) {
         activeIncomingEl = incomingContainer;
-        gsap.fromTo(incomingContainer,
-          { opacity: 0, y: 5 },
-          {
+        gsap.to(incomingContainer, {
+          opacity: 1,
+          y: 0,
+          duration: 0.20,
+          ease: 'power2.out',
+          clearProps: 'transform,opacity',
+          onComplete: () => {
+            activeRouteTransition = null;
+            activeIncomingEl = null;
+          }
+        });
+      }
+    });
+  } else if (outgoingContainer) {
+    // Standard cross-view page transition
+    activeRouteTransition = gsap.timeline();
+    activeRouteTransition.to(outgoingContainer, {
+      opacity: 0,
+      y: -4,
+      duration: 0.11,
+      ease: 'power1.out',
+      onComplete: () => {
+        outgoingContainer.classList.add('hidden');
+        gsap.set(outgoingContainer, { clearProps: 'transform,opacity' });
+
+        if (incomingContainer) {
+          gsap.set(incomingContainer, { opacity: 0, y: 5 });
+          incomingContainer.classList.remove('hidden');
+          doRender();
+          updateSmoothScrollContainer(incomingContainer);
+          setScrollPositionImmediate(targetScroll);
+
+          activeIncomingEl = incomingContainer;
+          gsap.to(incomingContainer, {
             opacity: 1,
             y: 0,
             duration: 0.20,
@@ -428,11 +498,37 @@ export function handleRoute() {
               activeRouteTransition = null;
               activeIncomingEl = null;
             }
-          }
-        );
+          });
+        } else {
+          doRender();
+          activeRouteTransition = null;
+        }
       }
+    });
+  } else {
+    // Fallback if no container was actively visible
+    if (incomingContainer) {
+      gsap.set(incomingContainer, { opacity: 0, y: 5 });
+      incomingContainer.classList.remove('hidden');
     }
-  });
+    doRender();
+    updateSmoothScrollContainer(incomingContainer);
+    setScrollPositionImmediate(targetScroll);
+    if (incomingContainer) {
+      activeIncomingEl = incomingContainer;
+      gsap.to(incomingContainer, {
+        opacity: 1,
+        y: 0,
+        duration: 0.20,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        onComplete: () => {
+          activeRouteTransition = null;
+          activeIncomingEl = null;
+        }
+      });
+    }
+  }
 }
 
 function updateAppNavHighlights(activeView) {
@@ -466,8 +562,10 @@ function updateAppNavHighlights(activeView) {
 }
 
 export function initRouter() {
+  window.addEventListener('popstate', () => {
+    isPopStateNav = true;
+  });
   window.addEventListener('hashchange', handleRoute);
-  window.addEventListener('popstate', handleRoute);
 
   // Wire up App Nav item clicks
   document.querySelectorAll('.app-nav-item, .top-nav .nav-links a').forEach(el => {
@@ -476,27 +574,32 @@ export function initRouter() {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = '#/characters';
+        el.blur();
       });
     } else if (text === 'Thư Viện Trang Phục' || text === 'Trang Phục' || text === 'Y Phục' || text === 'Gallery') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = '#/gallery';
+        el.blur();
       });
     } else if (text === 'Vũ Khí' || text === 'Weapons') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = '#/weapons';
+        el.blur();
       });
     } else if (text === 'Data' || text === 'Dữ Liệu') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = '#/weapons';
+        el.blur();
       });
     } else if (text === 'Calculator' || text === 'Máy Tính' || text === 'Công cụ') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         const curCharId = state.character ? state.character.id : '';
         window.location.hash = curCharId ? `#calc?char=${curCharId}` : '#calc';
+        el.blur();
       });
     }
   });

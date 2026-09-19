@@ -8,6 +8,7 @@ import { calculateResources } from '../data/calculator.js';
 import { closeMobileDrawer } from './sidebar.js';
 
 import { getCharacterAvatarUrl } from './utils/avatar.js';
+import { stopSmoothScroll, startSmoothScroll, resizeSmoothScroll } from './smoothScroll.js';
 
 let activeJob = 'all';
 let isInitialized = false;
@@ -22,6 +23,7 @@ export function openCalcPicker() {
   const backdrop = document.getElementById('calc-char-picker-backdrop');
   if (!backdrop) return;
 
+  stopSmoothScroll();
   backdrop.classList.remove('hidden');
   renderCalcPickerRoster();
 
@@ -35,6 +37,7 @@ export function closeCalcPicker() {
   const backdrop = document.getElementById('calc-char-picker-backdrop');
   if (backdrop) {
     backdrop.classList.add('hidden');
+    startSmoothScroll();
   }
 }
 
@@ -82,6 +85,9 @@ export function selectCalculatorCharacter(characterOrId) {
   try {
     closeMobileDrawer();
   } catch (e) {}
+
+  // 6. Notify Lenis of changed content height
+  resizeSmoothScroll();
 }
 
 export function initCalcPicker() {

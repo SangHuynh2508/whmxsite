@@ -16,11 +16,14 @@
 // ============================================================================
 // CENTRALIZED TIMING CONFIGURATION (TUNABLE BY OWNER)
 // ============================================================================
-export const LORE_REVEAL_MIN_MS = 3000;    // ~1.0s total duration for short lore (~30 chars)
-export const LORE_REVEAL_MAX_MS = 4000;    // ~1.7s cap for long lore (150+ chars)
-export const SCRAMBLE_REFRESH_MS = 50;     // ~40-60ms range: scramble refresh interval
-export const SCRAMBLE_CYCLES_PER_CHAR = 3;  // cycles through ~3 random letters before locking
-export const SCRAMBLE_OVERLAP_CHARS = 2;    // active scrambling frontier window size (1-2 chars)
+export const LORE_REVEAL_MIN_MS = 1000;    // ~1.0s minimum duration for short lore (<= 30 chars)
+export const LORE_REVEAL_MID1_MS = 1200;   // ~1.2s duration for medium-short lore (31-70 chars)
+export const LORE_REVEAL_MID2_MS = 1450;   // ~1.45s duration for medium-long lore (71-120 chars)
+export const LORE_REVEAL_MAX_MS = 1700;    // ~1.7s cap for very long lore (> 120 chars)
+export const SCRAMBLE_REFRESH_MS = 50;     // 50ms interval for scramble character refresh
+export const SCRAMBLE_OVERLAP_CHARS = 2;   // active scrambling frontier window size (2 chars)
+// Note: Character locking progresses continuously from left to right over the total duration;
+// characters within the frontier window cycle random glyphs every 50ms.
 
 // Scramble character set: Latin + Vietnamese accented letters (no geometric symbols)
 const SCRAMBLE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzĂÂĐÊÔƠƯăâđêôơư';
@@ -61,13 +64,17 @@ function getRandomLetter() {
 
 /**
  * Calculate adaptive reveal duration based on grapheme count.
- * ~1.0s for short (~30 chars), ~1.2s for medium (~70 chars), capped at ~1.7s for long (~180+ chars).
+ * Progresses monotonically:
+ * <= 30 graphemes: ~1000ms
+ * 31–70 graphemes: ~1200ms
+ * 71–120 graphemes: ~1450ms
+ * > 120 graphemes: scales up to ~1700ms max cap.
  */
 function computeAdaptiveDuration(charCount) {
   if (charCount <= 30) return LORE_REVEAL_MIN_MS;
-  if (charCount <= 70) return 1200;
-  if (charCount <= 120) return 1450;
-  return Math.min(LORE_REVEAL_MAX_MS, Math.round(1450 + (charCount - 120) * 4));
+  if (charCount <= 70) return LORE_REVEAL_MID1_MS;
+  if (charCount <= 120) return LORE_REVEAL_MID2_MS;
+  return Math.min(LORE_REVEAL_MAX_MS, Math.round(LORE_REVEAL_MID2_MS + (charCount - 120) * 4));
 }
 
 /**

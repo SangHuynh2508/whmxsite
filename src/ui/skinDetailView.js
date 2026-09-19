@@ -6,6 +6,7 @@
 import { getGameData } from '../data/loader.js';
 import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl } from '../constants/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
+import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
 
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();
@@ -291,6 +292,7 @@ function setupLightboxHandlers(container, defaultDrawingUrl) {
     prevBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', onKeyDown);
+    stopSmoothScroll();
   }
 
   function closeLightbox() {
@@ -298,6 +300,7 @@ function setupLightboxHandlers(container, defaultDrawingUrl) {
     imgEl.src = '';
     document.body.style.overflow = prevBodyOverflow;
     document.removeEventListener('keydown', onKeyDown);
+    startSmoothScroll();
   }
 
   function onKeyDown(e) {

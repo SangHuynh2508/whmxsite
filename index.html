@@ -135,7 +135,7 @@
   <div id="app" class="app-layout">
 
     <!-- Sidebar: Catalog -->
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" data-lenis-prevent>
       <header class="sidebar-header">
         <div class="sidebar-header-title">
           <h1>Vật Hoa Di Tân</h1>
@@ -157,7 +157,7 @@
           </button>
         </div>
 
-        <div class="adv-filter-panel hidden" id="adv-filter-panel">
+        <div class="adv-filter-panel hidden" id="adv-filter-panel" data-lenis-prevent>
           <div class="filter-group">
             <span class="filter-label">Chức nghiệp</span>
             <div class="filter-chips" id="job-filter">
@@ -199,7 +199,7 @@
         </div>
       </div>
 
-      <div class="character-catalog" id="char-catalog">
+      <div class="character-catalog" id="char-catalog" data-lenis-prevent>
         <!-- Populated via JS -->
       </div>
     </aside>
@@ -392,7 +392,7 @@
   <!-- Dedicated Calculator Character Picker Modal Overlay -->
   <div id="calc-char-picker-backdrop" class="calc-picker-backdrop hidden">
     <div id="calc-char-picker-dialog" class="calc-picker-dialog" role="dialog" aria-modal="true"
-      aria-label="Chọn Nhân Vật">
+      aria-label="Chọn Nhân Vật" data-lenis-prevent>
       <header class="calc-picker-header">
         <div class="calc-picker-header-title">
           <h3>CHỌN NHÂN VẬT</h3>
@@ -413,7 +413,7 @@
           <button class="chip" data-job="4">Cấu Thuật</button>
           <button class="chip" data-job="5">Chiến Lược</button>
         </div>
-        <div class="calc-picker-roster" id="calc-picker-roster-list">
+        <div class="calc-picker-roster" id="calc-picker-roster-list" data-lenis-prevent>
           <!-- Dynamically rendered by calcCharacterPicker.js -->
         </div>
       </div>

@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { getGameData } from '../data/loader.js';
 import { resolveAssetUrl } from '../constants/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
+import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
 import './skinGalleryView.css';
 
 /**
@@ -601,7 +602,7 @@ export function renderSkinGalleryView(container) {
           <div class="gallery-collapsible-drawer ${isSeriesOpen ? 'is-open' : ''}" id="gallery-series-drawer" ${isSeriesOpen ? '' : 'inert'} aria-hidden="${isSeriesOpen ? 'false' : 'true'}">
             <div class="gallery-collapsible-drawer-inner">
               <div class="gallery-collapsible-content" id="gallery-series-content">
-                <div class="series-cabinet-grid" id="series-cabinet-grid" role="group" aria-label="Tủ dòng y phục">
+                <div class="series-cabinet-grid" id="series-cabinet-grid" role="group" aria-label="Tủ dòng y phục" data-lenis-prevent>
                   <!-- Tất Cả Slot -->
                   <button 
                     type="button" 
@@ -1351,6 +1352,7 @@ function setupHeroLightbox(container, getCurrentImageUrl) {
     prevBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', onKeyDown);
+    stopSmoothScroll();
   }
 
   function closeLightbox() {
@@ -1358,6 +1360,7 @@ function setupHeroLightbox(container, getCurrentImageUrl) {
     imgEl.src = '';
     document.body.style.overflow = prevBodyOverflow;
     document.removeEventListener('keydown', onKeyDown);
+    startSmoothScroll();
   }
 
   function onKeyDown(e) {
