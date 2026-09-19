@@ -1,4 +1,5 @@
 import { getGameData } from '../data/loader.js';
+import { resizeSmoothScroll } from './smoothScroll.js';
 
 const EXP_BOOK_ID = '2105';   // Thâm Độ Xã Hội Học — 8000 EXP each
 const EXP_PER_BOOK = 8000;
@@ -67,6 +68,7 @@ export function renderResourceSummary(resources) {
 
   if (sorted.length === 0) {
     elMatGrid.innerHTML = '<div class="mat-empty">Không cần tài nguyên cho khoảng này.</div>';
+    resizeSmoothScroll();
     return;
   }
 
@@ -91,4 +93,6 @@ export function renderResourceSummary(resources) {
     `;
     elMatGrid.appendChild(div);
   });
+
+  resizeSmoothScroll();
 }

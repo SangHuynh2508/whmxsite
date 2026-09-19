@@ -10,6 +10,7 @@ import Lenis from 'lenis';
 
 let activeLenis = null;
 let currentContainer = null;
+let activeResizeObserver = null;
 
 function isReducedMotion() {
   return Boolean(
@@ -26,6 +27,15 @@ function isReducedMotion() {
  * @param {HTMLElement|null} container - The active view scroll container
  */
 export function updateSmoothScrollContainer(container) {
+  if (activeResizeObserver) {
+    try {
+      activeResizeObserver.disconnect();
+    } catch (e) {
+      // ignore
+    }
+    activeResizeObserver = null;
+  }
+
   if (activeLenis) {
     try {
       activeLenis.destroy();
@@ -34,6 +44,9 @@ export function updateSmoothScrollContainer(container) {
     }
     activeLenis = null;
     currentContainer = null;
+    if (typeof window !== 'undefined') {
+      window.__lenis = null;
+    }
   }
 
   if (!container || !(container instanceof HTMLElement)) {
@@ -48,10 +61,17 @@ export function updateSmoothScrollContainer(container) {
 
   currentContainer = container;
 
+  // Resolve content element: for Calculator (#main-content), .content-body encompasses
+  // all vertical calculation content. For other views, first child or container.
+  const resolvedContent =
+    container.querySelector('.content-body') ||
+    container.firstElementChild ||
+    container;
+
   // Controlled, snappy feel: lerp 0.14, wheelMultiplier 1.0
   activeLenis = new Lenis({
     wrapper: container,
-    content: container,
+    content: resolvedContent,
     lerp: 0.14,
     wheelMultiplier: 1.0,
     smoothWheel: true,
@@ -71,6 +91,31 @@ export function updateSmoothScrollContainer(container) {
     }
   });
 
+  // Attach scoped ResizeObserver on the actual growing content root(s)
+  // to guarantee Lenis synchronizes dimensions immediately whenever dynamic content grows or shrinks.
+  activeResizeObserver = new ResizeObserver(() => {
+    if (activeLenis) {
+      activeLenis.resize();
+    }
+  });
+
+  if (resolvedContent && resolvedContent !== container) {
+    activeResizeObserver.observe(resolvedContent);
+  }
+  const calcWrapper = container.querySelector('.calc-wrapper');
+  if (calcWrapper) {
+    activeResizeObserver.observe(calcWrapper);
+  }
+  Array.from(container.children).forEach(child => {
+    if (child instanceof HTMLElement) {
+      activeResizeObserver.observe(child);
+    }
+  });
+
+  if (typeof window !== 'undefined') {
+    window.__lenis = activeLenis;
+  }
+
   return activeLenis;
 }
 
@@ -79,6 +124,10 @@ export function updateSmoothScrollContainer(container) {
  */
 export function getActiveLenis() {
   return activeLenis;
+}
+
+if (typeof window !== 'undefined') {
+  window.getActiveLenis = getActiveLenis;
 }
 
 /**
@@ -126,6 +175,15 @@ export function setScrollPositionImmediate(position = 0) {
  * Destroys any active Lenis instance cleanly
  */
 export function destroySmoothScroll() {
+  if (activeResizeObserver) {
+    try {
+      activeResizeObserver.disconnect();
+    } catch (e) {
+      // ignore
+    }
+    activeResizeObserver = null;
+  }
+
   if (activeLenis) {
     try {
       activeLenis.destroy();
@@ -134,5 +192,8 @@ export function destroySmoothScroll() {
     }
     activeLenis = null;
     currentContainer = null;
+    if (typeof window !== 'undefined') {
+      window.__lenis = null;
+    }
   }
 }

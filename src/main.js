@@ -6,6 +6,7 @@ import { renderHeader } from './ui/characterHeader.js';
 import { initLevelProgress, renderLevelProgress } from './ui/levelProgress.js';
 import { renderTalentGraph } from './ui/talentGraph.js';
 import { renderResourceSummary } from './ui/resourceSummary.js';
+import { resizeSmoothScroll } from './ui/smoothScroll.js';
 import { initTheme } from './ui/theme.js';
 import { initAppNav } from './ui/appNav.js';
 import { initRouter, handleRoute } from './router.js';
@@ -42,6 +43,7 @@ async function boot() {
       const currentData = await loadGameData();
       const resources = calculateResources(currentData, currentState);
       renderResourceSummary(resources);
+      resizeSmoothScroll();
     }
   });
 }
