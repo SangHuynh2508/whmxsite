@@ -2,7 +2,7 @@ import { state } from '../data/state.js';
 import { renderTagChipsHtml } from './utils/tagColors.js';
 import { openCalcPicker } from './calcCharacterPicker.js';
 import { getCharacterAvatarUrl } from './utils/avatar.js';
-import { getCharacterCardUrl } from '../constants/assetPaths.js';
+import { getCharacterCardUrl } from '../features/assets/assetPaths.js';
 
 export function renderHeader() {
   const char = state.character;
@@ -143,4 +143,3 @@ function renderCardGallery(char) {
     thumbsWrap.style.display = 'none';
   }
 }
-

@@ -3,7 +3,7 @@
  */
 import { getGameData } from '../data/loader.js';
 import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from './utils/huanzhang.js';
-import { getCharacterCardUrl } from '../constants/assetPaths.js';
+import { getCharacterCardUrl } from '../features/assets/assetPaths.js';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -397,5 +397,4 @@ export function renderCharacterCatalogView(container) {
     }
   }
 }
-
 

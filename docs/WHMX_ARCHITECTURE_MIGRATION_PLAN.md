@@ -48,7 +48,7 @@ src/router.js                      hash routing, route transitions, view selecti
 src/data/                          public snapshot loading, state, calculator/stat behavior
 src/ui/                            public navigation and public feature renderers
 src/ui/charViews/                  Character detail subviews
-src/constants/assetPaths.js        shared Character/Skin public asset URL resolution
+src/features/assets/assetPaths.js  shared Character/Skin public asset URL resolution
 src/adminShell.js                  Admin route/session/login/accounts shell and Vue island loader
 src/adminPreviewShell.js           Preview Character and managed-upload Admin UI
 src/characterSkinAdminWorkspace.js Vue 3 Character/Skin Admin island

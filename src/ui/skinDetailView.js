@@ -4,7 +4,7 @@
  * Displays real audited metadata, flavor lore, and in-app asset lightbox.
  */
 import { getGameData } from '../data/loader.js';
-import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../constants/assetPaths.js';
+import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../features/assets/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
 
@@ -329,4 +329,3 @@ function setupLightboxHandlers(container, defaultDrawingUrl) {
     });
   }
 }
-
