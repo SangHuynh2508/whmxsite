@@ -12,10 +12,12 @@ import { initAppNav } from './ui/appNav.js';
 import { initRouter, handleRoute } from './router.js';
 import { initCalcPicker } from './ui/calcCharacterPicker.js';
 import { initFeedbackButton } from './ui/feedbackButton.js';
+import { initAdminShell } from './adminShell.js';
 import { inject } from '@vercel/analytics';
 
 async function boot() {
   inject();
+  initAdminShell();
   initAppNav();
   initTheme();
   initFeedbackButton();
@@ -51,4 +53,3 @@ async function boot() {
 }
 
 document.addEventListener('DOMContentLoaded', boot);
-

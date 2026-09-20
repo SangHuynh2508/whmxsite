@@ -2,8 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth/[...]?authPath=$1"
     }
   ],
   "headers": [
