@@ -6,7 +6,7 @@ module.exports = async function adminUsersHandler(request, response) {
   try {
     const [{ authenticatedUser, requestBody, requestId }, { listAdminAccounts, provisionAdminAccount }] = await Promise.all([
       import('../../../server/admin-api.mjs'),
-      import('../../../server/admin-account-domain.mjs'),
+      import('../../../server/admin/accounts/admin-account-domain.mjs'),
     ]);
     const user = await authenticatedUser(request, { requireOrigin: request.method !== 'GET' });
     if (request.method === 'GET') {

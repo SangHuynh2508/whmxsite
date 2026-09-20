@@ -5,7 +5,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { eq, or } from 'drizzle-orm';
 
 import { internalAuthHeaders, provisioningAuth, auth } from '../server/auth.mjs';
-import { AdminAccountDomainError, bootstrapFirstOwner } from '../server/admin-account-domain.mjs';
+import { AdminAccountDomainError, bootstrapFirstOwner } from '../server/admin/accounts/admin-account-domain.mjs';
 import { authenticatedUser } from '../server/admin-api.mjs';
 import sessionRoute from '../api/admin/session.js';
 import { closeDb, getDb } from '../db/client.mjs';

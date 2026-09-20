@@ -9,7 +9,7 @@ if (!name || !email || !password) {
   process.exitCode = 1;
 } else {
   try {
-    const { bootstrapFirstOwner } = await import('../server/admin-account-domain.mjs');
+    const { bootstrapFirstOwner } = await import('../server/admin/accounts/admin-account-domain.mjs');
     await bootstrapFirstOwner({ name, email, password, requestId: randomUUID() });
     // Do not emit identity, password, session, account, or database details.
     console.log('OWNER_BOOTSTRAP_COMPLETED');

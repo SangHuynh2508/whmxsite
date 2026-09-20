@@ -65,7 +65,7 @@ try {
     import('../server/auth.mjs'),
     import('../db/client.mjs'),
     import('../db/schema/auth.mjs'),
-    import('../server/admin-account-domain.mjs'),
+    import('../server/admin/accounts/admin-account-domain.mjs'),
     import('../server/admin-api.mjs'),
     import('../api/admin/session.js'),
     import('../api/auth/[...].js'),

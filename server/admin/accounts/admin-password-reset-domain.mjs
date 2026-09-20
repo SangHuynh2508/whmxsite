@@ -1,9 +1,9 @@
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { getDb } from '../db/client.mjs';
-import { accounts, users } from '../db/schema/auth.mjs';
-import { createPasswordRecoveryAuth, internalAuthHeaders } from './auth.mjs';
+import { getDb } from '../../../db/client.mjs';
+import { accounts, users } from '../../../db/schema/auth.mjs';
+import { createPasswordRecoveryAuth, internalAuthHeaders } from '../../auth.mjs';
 
 const resetInput = z.object({
   email: z.string().trim().email().max(320).transform((value) => value.toLowerCase()),

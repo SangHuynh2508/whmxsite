@@ -25,7 +25,7 @@ try {
     import('../server/auth.mjs'),
     import('../db/client.mjs'),
     import('../db/schema/index.mjs'),
-    import('../server/admin-account-domain.mjs'),
+    import('../server/admin/accounts/admin-account-domain.mjs'),
     import('../api/admin/previews/index.js'),
     import('../api/admin/previews/[id].js'),
     import('../server/admin-api.mjs'),

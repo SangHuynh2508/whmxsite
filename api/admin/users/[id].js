@@ -6,7 +6,7 @@ module.exports = async function adminUserHandler(request, response) {
   try {
     const [{ authenticatedUser, requestBody, requestId }, { updateAdminAccount }] = await Promise.all([
       import('../../../server/admin-api.mjs'),
-      import('../../../server/admin-account-domain.mjs'),
+      import('../../../server/admin/accounts/admin-account-domain.mjs'),
     ]);
     const user = await authenticatedUser(request);
     const body = await requestBody(request);

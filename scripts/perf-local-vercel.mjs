@@ -32,7 +32,7 @@ try {
     import('../db/client.mjs'),
     import('../db/schema/auth.mjs'),
     import('../server/preview-character-read-domain.mjs'),
-    import('../server/admin-account-domain.mjs'),
+    import('../server/admin/accounts/admin-account-domain.mjs'),
   ]);
   db = getDb();
   const created = await provisioningAuth.api.signUpEmail({

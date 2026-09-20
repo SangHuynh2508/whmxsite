@@ -1,9 +1,9 @@
 import { desc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { getDb } from '../db/client.mjs';
-import { adminAccountAudits, sessions, users } from '../db/schema/auth.mjs';
-import { internalAuthHeaders, provisioningAuth } from './auth.mjs';
+import { getDb } from '../../../db/client.mjs';
+import { adminAccountAudits, sessions, users } from '../../../db/schema/auth.mjs';
+import { internalAuthHeaders, provisioningAuth } from '../../auth.mjs';
 
 const roleSchema = z.enum(['owner', 'editor']);
 const accountInput = z.object({

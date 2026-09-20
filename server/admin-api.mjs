@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 
 import { getDb } from '../db/client.mjs';
 import { users } from '../db/schema/auth.mjs';
-import { AdminAccountDomainError } from './admin-account-domain.mjs';
+import { AdminAccountDomainError } from './admin/accounts/admin-account-domain.mjs';
 import { auth } from './auth.mjs';
 import { ManagedAssetError } from './r2-managed-assets.mjs';
 import { PreviewDomainError } from './preview-character-domain.mjs';
