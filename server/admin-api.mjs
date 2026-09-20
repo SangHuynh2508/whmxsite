@@ -8,7 +8,7 @@ import { users } from '../db/schema/auth.mjs';
 import { AdminAccountDomainError } from './admin/accounts/admin-account-domain.mjs';
 import { auth } from './auth.mjs';
 import { ManagedAssetError } from './assets/r2-managed-assets.mjs';
-import { PreviewDomainError } from './preview-character-domain.mjs';
+import { PreviewDomainError } from './preview-characters/preview-character-domain.mjs';
 import { CharacterSkinDomainError } from './character-skin-admin-domain.mjs';
 
 export class AdminApiError extends Error {

@@ -69,7 +69,7 @@ try {
     import('../server/admin-api.mjs'),
     import('../api/admin/session.js'),
     import('../api/auth/[...].js'),
-    import('../server/preview-character-domain.mjs'),
+    import('../server/preview-characters/preview-character-domain.mjs'),
   ]);
   db = getDb();
   const { bootstrapFirstOwner, provisionAdminAccount, updateAdminAccount, AdminAccountDomainError } = accountDomain;

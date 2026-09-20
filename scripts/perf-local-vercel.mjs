@@ -31,7 +31,7 @@ try {
     import('../server/auth.mjs'),
     import('../db/client.mjs'),
     import('../db/schema/auth.mjs'),
-    import('../server/preview-character-read-domain.mjs'),
+    import('../server/preview-characters/preview-character-read-domain.mjs'),
     import('../server/admin/accounts/admin-account-domain.mjs'),
   ]);
   db = getDb();

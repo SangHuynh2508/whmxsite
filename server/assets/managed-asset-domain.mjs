@@ -12,7 +12,7 @@ import {
   activateEntityAssetMapping,
   issueAssetUploadIntent,
   PreviewDomainError,
-} from '../preview-character-domain.mjs';
+} from '../preview-characters/preview-character-domain.mjs';
 import {
   ManagedAssetError,
   deliveryObjectKey,

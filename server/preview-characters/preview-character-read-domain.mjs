@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, ilike, or } from 'drizzle-orm';
 
-import { getDb } from '../db/client.mjs';
+import { getDb } from '../../db/client.mjs';
 import {
   assetObjects,
   characters,
@@ -12,7 +12,7 @@ import {
   previewCharacters,
   assetUploadIntents,
   users,
-} from '../db/schema/index.mjs';
+} from '../../db/schema/index.mjs';
 
 function assetMap(rows) {
   const result = new Map();

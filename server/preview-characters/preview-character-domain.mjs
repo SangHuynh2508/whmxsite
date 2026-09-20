@@ -10,7 +10,7 @@ import {
   managedEntities,
   sourceSnapshots,
   users,
-} from '../db/schema/index.mjs';
+} from '../../db/schema/index.mjs';
 import {
   assetUploadIntents,
   characterPublicationStates,
@@ -18,7 +18,7 @@ import {
   entityAssetRoleRules,
   previewCharacterReconciliations,
   previewCharacters,
-} from '../db/schema/preview-character-assets.mjs';
+} from '../../db/schema/preview-character-assets.mjs';
 
 const lifecycleValues = ['unverified', 'unreleased', 'released', 'retired'];
 const visibilityValues = ['hidden', 'preview', 'public'];

@@ -7,8 +7,8 @@ module.exports = async function previewDetailHandler(request, response) {
     const [{ authenticatedUser, requestBody, requestId }, { getDb }, previewRead, previewDomain] = await Promise.all([
       import('../../../server/admin-api.mjs'),
       import('../../../db/client.mjs'),
-      import('../../../server/preview-character-read-domain.mjs'),
-      import('../../../server/preview-character-domain.mjs'),
+      import('../../../server/preview-characters/preview-character-read-domain.mjs'),
+      import('../../../server/preview-characters/preview-character-domain.mjs'),
     ]);
     const user = await authenticatedUser(request, { requireOrigin: request.method === 'PATCH' });
     const entityId = request.query?.id;

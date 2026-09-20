@@ -5,8 +5,8 @@ import { and, eq, sql } from 'drizzle-orm';
 
 import { closeDb, getDb } from '../db/client.mjs';
 import { editHistory, managedEntities, previewCharacters, characterPublicationStates, users } from '../db/schema/index.mjs';
-import { createPreviewCharacter, setPreviewPublicationState, updatePreviewCharacter } from '../server/preview-character-domain.mjs';
-import { getPreviewCharacter, listPreviewCharacters } from '../server/preview-character-read-domain.mjs';
+import { createPreviewCharacter, setPreviewPublicationState, updatePreviewCharacter } from '../server/preview-characters/preview-character-domain.mjs';
+import { getPreviewCharacter, listPreviewCharacters } from '../server/preview-characters/preview-character-read-domain.mjs';
 
 const marker = `d0c-admin-${randomUUID()}`;
 let db;

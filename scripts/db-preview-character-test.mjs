@@ -26,7 +26,7 @@ import {
   proposePreviewReconciliation,
   setPreviewPublicationState,
   updatePreviewCharacter,
-} from '../server/preview-character-domain.mjs';
+} from '../server/preview-characters/preview-character-domain.mjs';
 
 const db = getDb();
 const marker = `d0a-proof-${randomUUID()}`;

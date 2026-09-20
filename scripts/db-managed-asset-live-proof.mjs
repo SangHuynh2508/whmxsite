@@ -23,7 +23,7 @@ import {
   createPreviewCharacter,
   activateEntityAssetMapping,
   PreviewDomainError,
-} from '../server/preview-character-domain.mjs';
+} from '../server/preview-characters/preview-character-domain.mjs';
 import {
   createR2ManagedAssetStorage,
   ManagedAssetError,
