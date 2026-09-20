@@ -53,6 +53,22 @@ try {
   const cookies = typeof login.headers.getSetCookie === 'function' ? login.headers.getSetCookie() : [];
   const cookieHeader = (cookies[0] || login.headers.get('set-cookie')).split(';')[0];
 
+  const methodResponse = capture();
+  await previewRoute.default(await bodyRequest('DELETE', undefined, undefined), methodResponse);
+  assert.equal(methodResponse.statusCode, 405);
+  assert.equal(methodResponse.headers.Allow, 'GET, POST');
+  assert.deepEqual(methodResponse.body, { error: { code: 'METHOD_NOT_ALLOWED' } });
+
+  const unauthenticatedResponse = capture();
+  await previewRoute.default(await bodyRequest('GET', undefined, undefined), unauthenticatedResponse);
+  assert.equal(unauthenticatedResponse.statusCode, 401);
+  assert.deepEqual(unauthenticatedResponse.body, { error: { code: 'UNAUTHORIZED' } });
+
+  const validationResponse = capture();
+  await previewRoute.default(await bodyRequest('POST', { nameVi: 42 }, cookieHeader), validationResponse);
+  assert.equal(validationResponse.statusCode, 422);
+  assert.deepEqual(validationResponse.body, { error: { code: 'VALIDATION_ERROR' } });
+
   const createResponse = capture();
   await previewRoute.default(await bodyRequest('POST', { nameVi: `${marker}-preview`, claimedRawId: 'CLAIM-01', claimedRawIdEvidence: { note: 'fixture' } }, cookieHeader), createResponse);
   assert.equal(createResponse.statusCode, 201);
@@ -70,12 +86,29 @@ try {
   assert.equal(detailResponse.statusCode, 200);
   assert.equal(detailResponse.body.preview.revision, 1);
 
+  const invalidIdResponse = capture();
+  await detailRoute.default(await bodyRequest('GET', undefined, cookieHeader, { id: ['invalid'] }), invalidIdResponse);
+  assert.equal(invalidIdResponse.statusCode, 400);
+  assert.deepEqual(invalidIdResponse.body, { error: { code: 'INVALID_PREVIEW_ID' } });
+
+  const notFoundResponse = capture();
+  await detailRoute.default(await bodyRequest('GET', undefined, cookieHeader, { id: randomUUID() }), notFoundResponse);
+  assert.equal(notFoundResponse.statusCode, 404);
+  assert.deepEqual(notFoundResponse.body, { error: { code: 'NOT_FOUND' } });
+
+  const detailMethodResponse = capture();
+  await detailRoute.default(await bodyRequest('PUT', undefined, undefined, { id: entityId }), detailMethodResponse);
+  assert.equal(detailMethodResponse.statusCode, 405);
+  assert.equal(detailMethodResponse.headers.Allow, 'GET, PATCH');
+  assert.deepEqual(detailMethodResponse.body, { error: { code: 'METHOD_NOT_ALLOWED' } });
+
   const firstEditResponse = capture();
   await detailRoute.default(await bodyRequest('PATCH', { expectedRevision: 1, patch: { nameVi: `${marker}-edited` }, requestId: randomUUID() }, cookieHeader, { id: entityId }), firstEditResponse);
   assert.equal(firstEditResponse.statusCode, 200);
   const staleResponse = capture();
   await detailRoute.default(await bodyRequest('PATCH', { expectedRevision: 1, patch: { nameVi: 'must not win' }, requestId: randomUUID() }, cookieHeader, { id: entityId }), staleResponse);
   assert.equal(staleResponse.statusCode, 409);
+  assert.deepEqual(staleResponse.body, { error: { code: 'VERSION_CONFLICT' } });
 
   const stateResponse = capture();
   await detailRoute.default(await bodyRequest('PATCH', { expectedRevision: 2, lifecycle: 'unreleased', visibility: 'preview', requestId: randomUUID() }, cookieHeader, { id: entityId }), stateResponse);
