@@ -56,7 +56,10 @@ src/style.css                      tokens, global/public styles, responsive rule
 src/ui/skinGalleryView.css         Skin Gallery/Detail feature-local CSS
 
 api/                               Vercel filesystem/HTTP transport
-server/                            flat server auth and domain modules
+server/admin/accounts/             Admin account and password-reset domain
+server/assets/                     Managed-asset orchestration and R2 adapter
+server/preview-characters/         Preview commands, reads, and operations
+server/                            auth and remaining flat server modules
 db/client.mjs                      PostgreSQL/Drizzle client
 db/schema/                         auth, core, Character/Skin, Preview/Asset schemas
 db/migrations/                     committed Drizzle SQL and metadata
@@ -76,7 +79,7 @@ localization/localization_master.xlsx
 - `src/characterSkinAdminWorkspace.js` is a programmatically mounted Vue 3 island, not an SFC application. Its module-level caches, dynamic loading, stale-response protection, editor state, and rendering are accepted D2.4.1 behavior.
 - `src/style.css` is approximately 175 KB and mixes design tokens, global shell rules, public features, responsive behavior, and Admin/D2 styling. Cascade order is behavior.
 - `src/ui/skinGalleryView.js` imports `skinGalleryView.css` locally. `src/talent.css` exists, but the audit found no current import or HTML reference; do not delete or move it without a focused rendering/history check.
-- `api/` routes are generally thin, but Preview routes currently import `db/client.mjs` directly to open transactions. Moving that orchestration into `server/` is a separate responsibility refactor, not a path-only cleanup.
+- `api/` routes are generally thin. Preview routes delegate reads and transaction-scoped mutations to explicit operations in `server/preview-characters/`, while retaining HTTP transport and error-envelope responsibilities.
 - `server/` has real domain modules but is flat. `server/admin-api.mjs` is a cross-cutting authorization/error helper with imports from account and Character/Skin domains, so it has a larger blast radius than its name suggests.
 - `db/` is already close to the canonical boundary. One boundary anomaly remains: `db/client.mjs` imports `server/load-local-env.mjs`. Do not “fix” this during an unrelated move; environment loading needs its own runtime-safe decision.
 - Proof scripts import concrete files from `api/`, `server/`, and `db/`. A server move is incomplete until every proof/operation import is updated in the same batch.
@@ -200,6 +203,10 @@ Each successful batch is one reviewable commit and rollback unit. Do not combine
 - **Rollback:** revert the orchestration commit independently of Batch 5.
 - **Risk:** MEDIUM–HIGH.
 - **Execution model:** **Terra High**.
+
+#### Completion record — 2026-09-21
+
+Batches 3–6 are complete as separate reversible commits. The current server locations are `server/admin/accounts/`, `server/assets/`, and `server/preview-characters/`; Preview API adapters now delegate database reads and transaction-scoped mutations to `preview-character-operations.mjs`. The historical source-to-target entries above are intentionally retained.
 
 ### Batch 7 — Organize the Admin cross-cutting shell
 
