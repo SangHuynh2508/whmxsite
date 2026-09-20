@@ -1,18 +1,18 @@
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { getDb } from '../db/client.mjs';
+import { getDb } from '../../db/client.mjs';
 import {
   assetObjects,
   assetUploadIntents,
   managedEntities,
   users,
-} from '../db/schema/index.mjs';
+} from '../../db/schema/index.mjs';
 import {
   activateEntityAssetMapping,
   issueAssetUploadIntent,
   PreviewDomainError,
-} from './preview-character-domain.mjs';
+} from '../preview-character-domain.mjs';
 import {
   ManagedAssetError,
   deliveryObjectKey,

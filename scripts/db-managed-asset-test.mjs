@@ -23,8 +23,8 @@ import {
 import {
   finalizeManagedAssetUpload,
   issueManagedAssetUploadIntent,
-} from '../server/managed-asset-domain.mjs';
-import { ManagedAssetError } from '../server/r2-managed-assets.mjs';
+} from '../server/assets/managed-asset-domain.mjs';
+import { ManagedAssetError } from '../server/assets/r2-managed-assets.mjs';
 
 class FakeStorage {
   constructor() {

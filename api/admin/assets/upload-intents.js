@@ -6,8 +6,8 @@ module.exports = async function uploadIntentHandler(request, response) {
   try {
     const [{ authenticatedUser, requestBody, requestId }, { createR2ManagedAssetStorage }, { issueManagedAssetUploadIntent }] = await Promise.all([
       import('../../../server/admin-api.mjs'),
-      import('../../../server/r2-managed-assets.mjs'),
-      import('../../../server/managed-asset-domain.mjs'),
+      import('../../../server/assets/r2-managed-assets.mjs'),
+      import('../../../server/assets/managed-asset-domain.mjs'),
     ]);
     const user = await authenticatedUser(request);
     const body = await requestBody(request);

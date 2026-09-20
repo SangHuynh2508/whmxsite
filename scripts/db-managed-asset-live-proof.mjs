@@ -18,7 +18,7 @@ import {
 import {
   finalizeManagedAssetUpload,
   issueManagedAssetUploadIntent,
-} from '../server/managed-asset-domain.mjs';
+} from '../server/assets/managed-asset-domain.mjs';
 import {
   createPreviewCharacter,
   activateEntityAssetMapping,
@@ -28,7 +28,7 @@ import {
   createR2ManagedAssetStorage,
   ManagedAssetError,
   sha256,
-} from '../server/r2-managed-assets.mjs';
+} from '../server/assets/r2-managed-assets.mjs';
 
 function requestId() {
   return randomUUID();
