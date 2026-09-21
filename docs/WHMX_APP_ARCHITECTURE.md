@@ -6,6 +6,8 @@ This is the canonical guide for organizing the **WHMX application**. It governs 
 
 It does not replace the repository-root [`ARCHITECTURE.md`](../ARCHITECTURE.md). That file describes the Codex Kit scaffolding (`AGENTS.md`, skills, workflows, and agents), not the WHMX product architecture.
 
+This guide governs *where code lives*. For *how to write code so it stays stable without becoming rigid* — isolating decisions that may change behind narrow interfaces, avoiding vendor lock-in, and judging when flexibility is worth its cost versus when it is premature — see [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md). Read both before substantial new work.
+
 This guide is intentionally incremental. WHMX has valid legacy Vite/vanilla-JavaScript code alongside newer Vue, Vercel Function, PostgreSQL/Drizzle, Better Auth, and R2 work. It is not authorization for a rewrite, a mass move, or a change in product behavior.
 
 ## 2. Architectural status vocabulary
