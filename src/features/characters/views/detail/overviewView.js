@@ -2,7 +2,7 @@
  * Overview Sub-View Component (/characters/:slug)
  * Profile & Identity Information ONLY (Compact Overview)
  */
-import { getCharacterCardUrl } from '../../features/assets/assetPaths.js';
+import { getCharacterCardUrl } from '../../../assets/assetPaths.js';
 
 export function renderOverviewTab(container, char) {
   const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };

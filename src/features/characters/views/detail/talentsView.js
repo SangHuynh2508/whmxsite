@@ -1,7 +1,7 @@
 /**
  * Standalone Read-Only Character Talent Tree Sub-View (/characters/:slug/talents)
  */
-import { getTalentIconUrl } from '../talentGraph.js';
+import { getTalentIconUrl } from '../../../../ui/talentGraph.js';
 
 let popupHideTimeout = null;
 
@@ -323,4 +323,3 @@ function positionPopup(popup, nodeEl) {
   popup.style.left = `${left}px`;
   popup.style.top = `${top}px`;
 }
-

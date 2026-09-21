@@ -3,13 +3,13 @@
  */
 import { getGameData } from './data/loader.js';
 import { setCharacter, state } from './data/state.js';
-import { renderCharacterDetail } from './ui/characterDetail.js';
-import { renderCharacterCatalogView } from './ui/characterCatalogView.js';
+import { renderCharacterDetail } from './features/characters/views/characterDetail.js';
+import { renderCharacterCatalogView } from './features/characters/views/characterCatalogView.js';
 import { renderWeaponsView } from './ui/weaponsView.js';
 import { renderDataView } from './ui/dataView.js';
 import { renderCatalog } from './app/layout/sidebar.js';
 import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
-import { renderHeader } from './ui/characterHeader.js';
+import { renderHeader } from './features/characters/components/characterHeader.js';
 import { renderSkinGalleryView, renderGalleryDemoView } from './features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from './features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';

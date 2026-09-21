@@ -2,16 +2,16 @@
  * Master Character Detail View Shell & Orchestrator
  */
 import { gsap } from 'gsap';
-import { getGameData } from '../data/loader.js';
-import { getCharBySlugOrId } from '../router.js';
-import { renderTagChipsHtml } from './utils/tagColors.js';
-import { getCharacterAvatarUrl } from './utils/avatar.js';
+import { getGameData } from '../../../data/loader.js';
+import { getCharBySlugOrId } from '../../../router.js';
+import { renderTagChipsHtml } from '../../../ui/utils/tagColors.js';
+import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 
-import { renderOverviewTab } from './charViews/overviewView.js';
-import { renderInfoTab } from './charViews/infoView.js';
-import { renderTalentsTab } from './charViews/talentsView.js';
-import { renderBuildTab } from './charViews/buildView.js';
-import { renderGalleryTab } from './charViews/galleryView.js';
+import { renderOverviewTab } from './detail/overviewView.js';
+import { renderInfoTab } from './detail/infoView.js';
+import { renderTalentsTab } from './detail/talentsView.js';
+import { renderBuildTab } from './detail/buildView.js';
+import { renderGalleryTab } from './detail/galleryView.js';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -303,4 +303,3 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     renderTabContent(tabContentContainer, char, normTab);
   }
 }
-

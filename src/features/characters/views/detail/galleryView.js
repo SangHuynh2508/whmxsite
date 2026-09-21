@@ -2,7 +2,7 @@
  * Gallery Sub-View Component (/characters/:slug/gallery)
  * Showcase full character drawing (.webp) on canvas with 3-step interactive zoom & pan
  */
-import { resolveAssetUrl } from '../../features/assets/assetPaths.js';
+import { resolveAssetUrl } from '../../../assets/assetPaths.js';
 
 export function renderGalleryTab(container, char) {
   const skins = char.skins || [];

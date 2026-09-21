@@ -2,10 +2,10 @@
  * Materials Sub-View Component (/characters/:characterId/materials)
  * Reuses Calculator resource calculation logic & formatVan formatting
  */
-import { getGameData } from '../../data/loader.js';
-import { calculateResources } from '../../data/calculator.js';
-import { formatVan } from '../resourceSummary.js';
-import { setCharacter, updateLevels } from '../../data/state.js';
+import { getGameData } from '../../../../data/loader.js';
+import { calculateResources } from '../../../../data/calculator.js';
+import { formatVan } from '../../../../ui/resourceSummary.js';
+import { setCharacter, updateLevels } from '../../../../data/state.js';
 
 export function renderMaterialsTab(container, char) {
   const gameData = getGameData();

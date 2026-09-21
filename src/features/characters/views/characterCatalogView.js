@@ -1,9 +1,9 @@
 /**
  * Standalone Character Catalog Index Page (/characters)
  */
-import { getGameData } from '../data/loader.js';
-import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from './utils/huanzhang.js';
-import { getCharacterCardUrl } from '../features/assets/assetPaths.js';
+import { getGameData } from '../../../data/loader.js';
+import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from '../../../ui/utils/huanzhang.js';
+import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -397,4 +397,3 @@ export function renderCharacterCatalogView(container) {
     }
   }
 }
-

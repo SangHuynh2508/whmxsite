@@ -1,8 +1,8 @@
-import { state } from '../data/state.js';
-import { renderTagChipsHtml } from './utils/tagColors.js';
-import { openCalcPicker } from './calcCharacterPicker.js';
-import { getCharacterAvatarUrl } from './utils/avatar.js';
-import { getCharacterCardUrl } from '../features/assets/assetPaths.js';
+import { state } from '../../../data/state.js';
+import { renderTagChipsHtml } from '../../../ui/utils/tagColors.js';
+import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
+import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
+import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 
 export function renderHeader() {
   const char = state.character;

@@ -1,5 +1,5 @@
-import { resolveCharacterStats } from '../../data/statResolver.js';
-import { getGameData } from '../../data/loader.js';
+import { resolveCharacterStats } from '../../../../data/statResolver.js';
+import { getGameData } from '../../../../data/loader.js';
 
 const KNOWN_RANGE_ASSETS = new Set([
   "Cross_2_7.png", "Overlap_1.png", "Overlap_2.png", "Overlap_3.png",

@@ -2,7 +2,7 @@ import { loadGameData } from '../../data/loader.js';
 import { state, subscribe, setCharacter } from '../../data/state.js';
 import { calculateResources } from '../../data/calculator.js';
 import { initSidebar, renderCatalog } from '../layout/sidebar.js';
-import { renderHeader } from '../../ui/characterHeader.js';
+import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { initLevelProgress, renderLevelProgress } from '../../ui/levelProgress.js';
 import { renderTalentGraph } from '../../ui/talentGraph.js';
 import { renderResourceSummary } from '../../ui/resourceSummary.js';
