@@ -19,16 +19,16 @@ This guide is intentionally incremental. WHMX has valid legacy Vite/vanilla-Java
 
 ## 3. Current application reality
 
-Audit snapshot: 2026-09-20. The repository is a deliberately mixed application, not a clean-room framework migration.
+Audit snapshot: 2026-09-21. The repository is a deliberately mixed application, not a clean-room framework migration.
 
 | Area | Observed current state | Status |
 | --- | --- | --- |
-| Public browser app | Vite serves `index.html`; `src/main.js` delegates startup to `src/app/bootstrap/boot.js`, while `src/router.js` drives the hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | Current hybrid boundary |
-| Public UI | `src/ui/` remains home to legacy Character, weapon, and calculator renderers; Skin Gallery/Detail live in `src/features/skins/views/`. Global navigation, sidebar, feedback, theme, and smooth-scroll behavior live in `src/app/`. | Current hybrid boundary |
+| Public browser app | Vite serves `index.html`; `src/main.js` delegates startup to `src/app/bootstrap/boot.js`, and `src/app/router/router.js` drives the hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | Current hybrid boundary |
+| Public UI | `src/features/characters/` and `src/features/skins/` own the public Character and Skin renderers. `src/ui/` now holds only the remaining Calculator/Weapons/talent-adjacent legacy modules (`calcCharacterPicker.js`, `dataView.js`, `levelProgress.js`, `talentGraph.js`, `resourceSummary.js`, `weaponsView.js`, `loreReveal.js`, `utils/`). Global navigation, sidebar, feedback, theme, and smooth-scroll behavior live in `src/app/`. | Current hybrid boundary |
 | Vue | Vue 3 is used as a dynamically imported, programmatically mounted Character/Skin Admin island in `src/characterSkinAdminWorkspace.js`. There are currently no `.vue` SFCs or a Vite Vue-plugin boundary. | Current hybrid boundary |
 | Admin shell | `src/admin/layout/adminShell.js` and `src/admin/preview/previewWorkspace.js` provide the authenticated Admin shell and Preview workspace; the former retains its accepted route/session/UI responsibilities. | Current hybrid boundary |
-| API runtime | `api/` contains Node-style Vercel Function adapters for auth, session, Admin Character/Skin/Preview/User routes, managed-asset upload intents, and DB health. | Current foundation |
-| Server/domain layer | `server/` contains Better Auth, authorization helpers, Character/Skin, Preview Character, managed asset, and R2 domain modules. The files are currently flat rather than nested by domain. | Current foundation; TARGET for domain directories |
+| API runtime | `api/` contains Node-style Vercel Function adapters for auth, session, Admin Character/Skin/Preview/User routes, managed-asset upload intents, and DB health. Preview routes delegate transaction-scoped reads/mutations into `server/preview-characters/`. | Current foundation |
+| Server/domain layer | `server/admin/accounts/`, `server/assets/`, and `server/preview-characters/` are already real current domain directories; remaining Better Auth, Character/Skin Admin, and R2 adapter modules stay flat until their own bounded batch. | Current foundation; TARGET for remaining domain directories |
 | Database | Neon/PostgreSQL is accessed through Drizzle and `postgres` in `db/`. Schemas are already separated into auth, core, Character/Skin, and preview/asset files; committed SQL migrations exist. | Current foundation |
 | Assets | Source card/drawing assets are R2/CDN-backed; public avatars, item icons, and Series badges are local public assets. Managed-asset services store metadata and mappings in PostgreSQL, not image bytes. | Current foundation |
 | Public data | `public/data.json` remains a generated, read-optimized frontend artifact. `tools/build_web_data.py` joins source-backed relationships, localization, and asset information; it is not a blind table export. | Current public delivery |
