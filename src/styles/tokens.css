@@ -1,0 +1,116 @@
+/* Reset & Base Variables */
+
+:root {
+  --bg-main: #FAFAFA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-hover: #F2F2F2;
+  --bg-elevated: #FFFFFF;
+  --bg-input: #FAFAFA;
+  --border-color: #E2E2E2;
+  --border-strong: #D4D4D4;
+  --text-main: #1A1A1A;
+  --text-muted: #666666;
+  --text-subtle: #888888;
+  --accent: #B89947; /* Muted gold/bronze inspired by antiques */
+  --accent-light: #F4F1E9;
+  --shadow-pop: rgba(0, 0, 0, 0.16);
+  --tg-line-inactive: #D1D5DB;
+
+  /* Subtle Gold Border Tokens */
+  --border-gold-subtle: rgba(184, 153, 71, 0.30);
+  --border-gold-divider: rgba(184, 153, 71, 0.16);
+
+  /* Form Control Tokens - Light Mode */
+  --input-bg: #FAFAFA;
+  --input-bg-hover: #F2F2F2;
+  --input-border: #E2E2E2;
+  --input-text: #1A1A1A;
+  --input-placeholder: #666666;
+
+  /* Centralized Global Rarity Tokens (Game-like Muted Tones) */
+  --rarity-ssr: #b93232; /* SSR - Refined Crimson/Red */
+  --rarity-sr:  #c4a265; /* SR - Warm Antique Gold */
+  --rarity-r:   #4e7091; /* R - Cool Medium Blue */
+
+  --rarity-ssr-bg: rgba(145, 55, 45, 0.48);
+  --rarity-ssr-text: #F0A08F;
+  --rarity-ssr-border: rgba(210, 92, 76, 0.55);
+
+  --rarity-sr-bg: rgba(128, 98, 30, 0.48);
+  --rarity-sr-text: #E7C96D;
+  --rarity-sr-border: rgba(214, 176, 68, 0.55);
+
+  --rarity-r-bg: rgba(52, 82, 116, 0.50);
+  --rarity-r-text: #AFCDF1;
+  --rarity-r-border: rgba(105, 149, 202, 0.55);
+
+  /* Legacy aliases mapping to authoritative global rarity tokens */
+  --rare-5: #b93232;
+  --rare-4: var(--rarity-ssr);
+  --rare-3: var(--rarity-sr);
+  --rare-2: var(--rarity-r);
+
+  /* Global Motion Tokens */
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 260ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Noto Serif SC', serif;
+
+  /* App Rail Layout Variables */
+  --app-nav-collapsed-width: 72px;
+  --app-nav-expanded-width: 220px;
+  --app-nav-width: var(--app-nav-collapsed-width);
+}
+
+[data-nav-expanded="true"] {
+  --app-nav-width: var(--app-nav-expanded-width);
+}
+
+[data-theme="dark"] {
+  --bg-main: #111315;
+  --bg-surface: #17191C;
+  --bg-surface-hover: #22262B;
+  --bg-elevated: #1Character024;
+  --bg-input: #1Character024;
+  --border-color: #2B2F34;
+  --border-strong: #3D434A;
+  --text-main: #E3E5E8;
+  --text-muted: #9097A0;
+  --text-subtle: #6B7280;
+  --accent: #D4B763;
+  --accent-light: #24221A;
+  --shadow-pop: rgba(0, 0, 0, 0.55);
+  --tg-line-inactive: #3A4048;
+
+  /* Subtle Gold Border Tokens - Dark Mode */
+  --border-gold-subtle: rgba(212, 183, 99, 0.30);
+  --border-gold-divider: rgba(212, 183, 99, 0.16);
+
+  /* Form Control Tokens - Dark Mode */
+  --input-bg: #1Character024;
+  --input-bg-hover: #202327;
+  --input-border: #34383D;
+  --input-text: #ECEDEE;
+  --input-placeholder: #737980;
+}
+
+/* Dark Mode Scrollbars */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #3A4048;
+  border-radius: 4px;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #4F5661;
+}
