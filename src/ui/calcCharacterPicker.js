@@ -1,7 +1,7 @@
 import { state, setCharacter } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
 import { renderHeader } from '../features/characters/components/characterHeader.js';
-import { renderLevelProgress } from './levelProgress.js';
+import { renderLevelProgress } from '../features/calculator/views/levelProgress.js';
 import { renderTalentGraph } from './talentGraph.js';
 import { renderResourceSummary } from './resourceSummary.js';
 import { calculateResources } from '../data/calculator.js';
