@@ -10,8 +10,8 @@ import { renderDataView } from './ui/dataView.js';
 import { renderCatalog } from './app/layout/sidebar.js';
 import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
 import { renderHeader } from './ui/characterHeader.js';
-import { renderSkinGalleryView, renderGalleryDemoView } from './ui/skinGalleryView.js';
-import { renderSkinDetailView } from './ui/skinDetailView.js';
+import { renderSkinGalleryView, renderGalleryDemoView } from './features/skins/views/skinGalleryView.js';
+import { renderSkinDetailView } from './features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
 import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from './app/runtime/smoothScroll.js';
 

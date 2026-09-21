@@ -4,11 +4,11 @@
  * Browses ACTUAL SKINS ONLY (145 custom skins), removing base/breakthrough appearances.
  */
 import { gsap } from 'gsap';
-import { getGameData } from '../data/loader.js';
-import { resolveAssetUrl, getSkinAssetUrls } from '../features/assets/assetPaths.js';
-import { createLoreReveal } from './loreReveal.js';
-import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
-import './skinGalleryView.css';
+import { getGameData } from '../../../data/loader.js';
+import { resolveAssetUrl, getSkinAssetUrls } from '../../assets/assetPaths.js';
+import { createLoreReveal } from '../../../ui/loreReveal.js';
+import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smoothScroll.js';
+import '../styles/skinGallery.css';
 
 /**
  * Formats curatorial lore quote for high skin hero spotlight

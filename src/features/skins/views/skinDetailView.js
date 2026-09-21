@@ -3,10 +3,10 @@
  * Uses Variant 3 Featured Spotlight visual language.
  * Displays real audited metadata, flavor lore, and in-app asset lightbox.
  */
-import { getGameData } from '../data/loader.js';
-import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../features/assets/assetPaths.js';
-import { createLoreReveal } from './loreReveal.js';
-import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
+import { getGameData } from '../../../data/loader.js';
+import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../../assets/assetPaths.js';
+import { createLoreReveal } from '../../../ui/loreReveal.js';
+import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smoothScroll.js';
 
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();
