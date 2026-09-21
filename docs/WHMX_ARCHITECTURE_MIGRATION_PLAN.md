@@ -42,17 +42,21 @@ Creating a recovery branch is preferred to destructive reset or broad worktree c
 The current application is a valid hybrid. Legacy denotes its generation and coupling, not that it is broken.
 
 ```text
-index.html                         explicit Vite HTML entry, global shell DOM, global CSS link
+index.html                         explicit Vite HTML entry, global shell DOM, ordered global/legacy CSS links
 src/main.js                        stable Vite entry delegating to application bootstrap
 src/app/bootstrap/boot.js          public bootstrap and global initialization
 src/app/layout/                    global navigation, sidebar, and feedback layout behavior
+src/app/router/router.js           hash routing, route transitions, view selection, scroll coordination
 src/app/runtime/smoothScroll.js    shared application scroll lifecycle
 src/app/settings/theme.js          forced/persisted application theme setting
-src/router.js                      hash routing, route transitions, view selection, scroll coordination
 src/data/                          public snapshot loading, state, calculator/stat behavior
-src/ui/                            remaining public Character, Weapon, and Calculator renderers
-src/ui/charViews/                  Character detail subviews
+src/ui/                            remaining Weapon/Calculator renderers and cross-domain helpers
 src/features/assets/assetPaths.js  shared Character/Skin public asset URL resolution
+src/features/characters/components/
+                                   public Character header composition
+src/features/characters/views/     Character Catalog/Detail renderers
+src/features/characters/views/detail/
+                                   Character detail subviews
 src/features/skins/views/          public Skin Gallery and Detail renderers
 src/features/skins/styles/skinGallery.css
                                    feature-local Skin Gallery/Detail CSS
@@ -60,7 +64,9 @@ src/admin/layout/adminShell.js     Admin route/session/login/accounts shell and 
 src/admin/preview/previewWorkspace.js
                                    Preview Character and managed-upload Admin UI
 src/characterSkinAdminWorkspace.js Vue 3 Character/Skin Admin island
-src/style.css                      tokens, global/public styles, responsive rules, and Admin/D2 styles
+src/styles/tokens.css              global tokens, theme variables, and scrollbar styling
+src/styles/global.css              global reset and document base rules
+src/style.css                      legacy feature/Admin/responsive compatibility styles
 
 api/                               Vercel filesystem/HTTP transport
 server/admin/accounts/             Admin account and password-reset domain
@@ -79,12 +85,12 @@ localization/localization_master.xlsx
 
 ### Observed concentration and coupling
 
-- `index.html` directly loads `/src/style.css` and `/src/main.js`; there is no custom Vite configuration or path-alias layer. All current moves therefore affect relative paths directly.
+- `index.html` directly loads `/src/styles/tokens.css`, `/src/styles/global.css`, `/src/style.css`, and `/src/main.js`; there is no custom Vite configuration or path-alias layer. This explicit order is part of CSS behavior.
 - `src/main.js` imports public data/state/calculator modules, UI initializers, router code, Admin bootstrap, and analytics. It is small, but it is the single startup fan-out.
-- `src/router.js` statically imports public Character, Skin, weapon, calculator/sidebar, transition, and smooth-scroll behavior. `src/config/reportIssue.js` also imports router helpers, so the router is not currently an isolated route table.
+- `src/app/router/router.js` statically imports public Character, Skin, weapon, calculator/sidebar, transition, and smooth-scroll behavior. `src/config/reportIssue.js` also imports router helpers, so the router is not currently an isolated route table.
 - `src/admin/layout/adminShell.js` owns route detection, session/login state, account UI, shell markup, and the dynamic import of `src/characterSkinAdminWorkspace.js`.
 - `src/characterSkinAdminWorkspace.js` is a programmatically mounted Vue 3 island, not an SFC application. Its module-level caches, dynamic loading, stale-response protection, editor state, and rendering are accepted D2.4.1 behavior.
-- `src/style.css` is approximately 175 KB and mixes design tokens, global shell rules, public features, responsive behavior, and Admin/D2 styling. Cascade order is behavior.
+- `src/style.css` remains a legacy compatibility sheet for feature, responsive, and Admin/D2 styling after the stable token/theme and document-base layers moved to `src/styles/`. Cascade order is behavior.
 - `src/features/skins/views/skinGalleryView.js` imports `../styles/skinGallery.css` locally. `src/talent.css` exists, but the audit found no current import or HTML reference; do not delete or move it without a focused rendering/history check.
 - `api/` routes are generally thin. Preview routes delegate reads and transaction-scoped mutations to explicit operations in `server/preview-characters/`, while retaining HTTP transport and error-envelope responsibilities.
 - `server/` has real domain modules but is flat. `server/admin-api.mjs` is a cross-cutting authorization/error helper with imports from account and Character/Skin domains, so it has a larger blast radius than its name suggests.
@@ -222,6 +228,14 @@ Batches 3–6 are complete as separate reversible commits. The current server lo
 - **F3:** Skin Gallery/Detail views and their local CSS now live under `src/features/skins/`.
 
 No Character public cluster, router, Calculator domain, or global `src/style.css` split was included in this wave.
+
+#### Public Structure and CSS Ownership Wave completion — 2026-09-21
+
+- **P1:** public Character Catalog, Detail, Header, and detail subviews now live under `src/features/characters/`; Calculator/character cross-domain helpers remain at their established ownership.
+- **P2:** the coherent hash router now lives at `src/app/router/router.js`; bootstrap, sidebar, report-issue, and Character Detail import the new path.
+- **P3:** `src/styles/tokens.css` and `src/styles/global.css` own the stable global token/theme/scrollbar and document-base layers, respectively. `index.html` loads them before the remaining `src/style.css` compatibility sheet.
+
+Calculator and Weapons were not migrated. Character, Skin, Admin, Calculator, Weapon, and interleaved responsive legacy CSS remains in `src/style.css` where moving it would change cascade order without a dedicated parity proof.
 
 ### Batch 7 — Organize the Admin cross-cutting shell
 
