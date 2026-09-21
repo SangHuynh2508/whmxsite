@@ -1,5 +1,5 @@
 import { getGameData } from '../data/loader.js';
-import { resizeSmoothScroll } from './smoothScroll.js';
+import { resizeSmoothScroll } from '../app/runtime/smoothScroll.js';
 
 const EXP_BOOK_ID = '2105';   // Thâm Độ Xã Hội Học — 8000 EXP each
 const EXP_PER_BOOK = 8000;

@@ -5,10 +5,10 @@ import { renderLevelProgress } from './levelProgress.js';
 import { renderTalentGraph } from './talentGraph.js';
 import { renderResourceSummary } from './resourceSummary.js';
 import { calculateResources } from '../data/calculator.js';
-import { closeMobileDrawer } from './sidebar.js';
+import { closeMobileDrawer } from '../app/layout/sidebar.js';
 
 import { getCharacterAvatarUrl } from './utils/avatar.js';
-import { stopSmoothScroll, startSmoothScroll, resizeSmoothScroll } from './smoothScroll.js';
+import { stopSmoothScroll, startSmoothScroll, resizeSmoothScroll } from '../app/runtime/smoothScroll.js';
 
 let activeJob = 'all';
 let isInitialized = false;
@@ -232,4 +232,3 @@ export function renderCalcPickerRoster() {
     rosterEl.innerHTML = '<div style="padding:24px;color:var(--text-muted);font-size:13px;text-align:center;">Không tìm thấy nhân vật phù hợp.</div>';
   }
 }
-

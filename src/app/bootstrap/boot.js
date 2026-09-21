@@ -1,17 +1,17 @@
 import { loadGameData } from '../../data/loader.js';
 import { state, subscribe, setCharacter } from '../../data/state.js';
 import { calculateResources } from '../../data/calculator.js';
-import { initSidebar, renderCatalog } from '../../ui/sidebar.js';
+import { initSidebar, renderCatalog } from '../layout/sidebar.js';
 import { renderHeader } from '../../ui/characterHeader.js';
 import { initLevelProgress, renderLevelProgress } from '../../ui/levelProgress.js';
 import { renderTalentGraph } from '../../ui/talentGraph.js';
 import { renderResourceSummary } from '../../ui/resourceSummary.js';
-import { resizeSmoothScroll } from '../../ui/smoothScroll.js';
-import { initTheme } from '../../ui/theme.js';
-import { initAppNav } from '../../ui/appNav.js';
+import { resizeSmoothScroll } from '../runtime/smoothScroll.js';
+import { initTheme } from '../settings/theme.js';
+import { initAppNav } from '../layout/appNav.js';
 import { initRouter, handleRoute } from '../../router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
-import { initFeedbackButton } from '../../ui/feedbackButton.js';
+import { initFeedbackButton } from '../layout/feedbackButton.js';
 import { initAdminShell } from '../../admin/layout/adminShell.js';
 import { inject } from '@vercel/analytics';
 

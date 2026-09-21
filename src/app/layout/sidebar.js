@@ -1,9 +1,9 @@
-import { selectCalculatorCharacter } from './calcCharacterPicker.js';
-import { state, setCharacter } from '../data/state.js';
-import { getGameData } from '../data/loader.js';
-import { parseHash } from '../router.js';
-import { getCharacterAvatarUrl } from './utils/avatar.js';
-import { hasHuanZhang } from './utils/huanzhang.js';
+import { selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
+import { state, setCharacter } from '../../data/state.js';
+import { getGameData } from '../../data/loader.js';
+import { parseHash } from '../../router.js';
+import { getCharacterAvatarUrl } from '../../ui/utils/avatar.js';
+import { hasHuanZhang } from '../../ui/utils/huanzhang.js';
 
 let elCatalog, elSearch;
 let activeJob = null;

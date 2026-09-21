@@ -7,7 +7,7 @@ import { gsap } from 'gsap';
 import { getGameData } from '../data/loader.js';
 import { resolveAssetUrl, getSkinAssetUrls } from '../features/assets/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
-import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
+import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
 import './skinGalleryView.css';
 
 /**

@@ -6,7 +6,7 @@
 import { getGameData } from '../data/loader.js';
 import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../features/assets/assetPaths.js';
 import { createLoreReveal } from './loreReveal.js';
-import { stopSmoothScroll, startSmoothScroll } from './smoothScroll.js';
+import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
 
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();

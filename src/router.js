@@ -7,13 +7,13 @@ import { renderCharacterDetail } from './ui/characterDetail.js';
 import { renderCharacterCatalogView } from './ui/characterCatalogView.js';
 import { renderWeaponsView } from './ui/weaponsView.js';
 import { renderDataView } from './ui/dataView.js';
-import { renderCatalog } from './ui/sidebar.js';
+import { renderCatalog } from './app/layout/sidebar.js';
 import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
 import { renderHeader } from './ui/characterHeader.js';
 import { renderSkinGalleryView, renderGalleryDemoView } from './ui/skinGalleryView.js';
 import { renderSkinDetailView } from './ui/skinDetailView.js';
 import { gsap } from 'gsap';
-import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from './ui/smoothScroll.js';
+import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from './app/runtime/smoothScroll.js';
 
 let previousRouteKey = null;
 let activeRouteTransition = null;
