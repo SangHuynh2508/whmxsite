@@ -12,7 +12,7 @@ import { initAppNav } from '../../ui/appNav.js';
 import { initRouter, handleRoute } from '../../router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
 import { initFeedbackButton } from '../../ui/feedbackButton.js';
-import { initAdminShell } from '../../adminShell.js';
+import { initAdminShell } from '../../admin/layout/adminShell.js';
 import { inject } from '@vercel/analytics';
 
 export async function boot() {
