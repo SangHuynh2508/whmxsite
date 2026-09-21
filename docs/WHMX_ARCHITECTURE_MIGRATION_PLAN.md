@@ -43,17 +43,24 @@ The current application is a valid hybrid. Legacy denotes its generation and cou
 
 ```text
 index.html                         explicit Vite HTML entry, global shell DOM, global CSS link
-src/main.js                        public bootstrap and global initialization
+src/main.js                        stable Vite entry delegating to application bootstrap
+src/app/bootstrap/boot.js          public bootstrap and global initialization
+src/app/layout/                    global navigation, sidebar, and feedback layout behavior
+src/app/runtime/smoothScroll.js    shared application scroll lifecycle
+src/app/settings/theme.js          forced/persisted application theme setting
 src/router.js                      hash routing, route transitions, view selection, scroll coordination
 src/data/                          public snapshot loading, state, calculator/stat behavior
-src/ui/                            public navigation and public feature renderers
+src/ui/                            remaining public Character, Weapon, and Calculator renderers
 src/ui/charViews/                  Character detail subviews
 src/features/assets/assetPaths.js  shared Character/Skin public asset URL resolution
-src/adminShell.js                  Admin route/session/login/accounts shell and Vue island loader
-src/adminPreviewShell.js           Preview Character and managed-upload Admin UI
+src/features/skins/views/          public Skin Gallery and Detail renderers
+src/features/skins/styles/skinGallery.css
+                                   feature-local Skin Gallery/Detail CSS
+src/admin/layout/adminShell.js     Admin route/session/login/accounts shell and Vue island loader
+src/admin/preview/previewWorkspace.js
+                                   Preview Character and managed-upload Admin UI
 src/characterSkinAdminWorkspace.js Vue 3 Character/Skin Admin island
 src/style.css                      tokens, global/public styles, responsive rules, and Admin/D2 styles
-src/ui/skinGalleryView.css         Skin Gallery/Detail feature-local CSS
 
 api/                               Vercel filesystem/HTTP transport
 server/admin/accounts/             Admin account and password-reset domain
@@ -75,10 +82,10 @@ localization/localization_master.xlsx
 - `index.html` directly loads `/src/style.css` and `/src/main.js`; there is no custom Vite configuration or path-alias layer. All current moves therefore affect relative paths directly.
 - `src/main.js` imports public data/state/calculator modules, UI initializers, router code, Admin bootstrap, and analytics. It is small, but it is the single startup fan-out.
 - `src/router.js` statically imports public Character, Skin, weapon, calculator/sidebar, transition, and smooth-scroll behavior. `src/config/reportIssue.js` also imports router helpers, so the router is not currently an isolated route table.
-- `src/adminShell.js` owns route detection, session/login state, account UI, shell markup, and the dynamic import of `src/characterSkinAdminWorkspace.js`.
+- `src/admin/layout/adminShell.js` owns route detection, session/login state, account UI, shell markup, and the dynamic import of `src/characterSkinAdminWorkspace.js`.
 - `src/characterSkinAdminWorkspace.js` is a programmatically mounted Vue 3 island, not an SFC application. Its module-level caches, dynamic loading, stale-response protection, editor state, and rendering are accepted D2.4.1 behavior.
 - `src/style.css` is approximately 175 KB and mixes design tokens, global shell rules, public features, responsive behavior, and Admin/D2 styling. Cascade order is behavior.
-- `src/ui/skinGalleryView.js` imports `skinGalleryView.css` locally. `src/talent.css` exists, but the audit found no current import or HTML reference; do not delete or move it without a focused rendering/history check.
+- `src/features/skins/views/skinGalleryView.js` imports `../styles/skinGallery.css` locally. `src/talent.css` exists, but the audit found no current import or HTML reference; do not delete or move it without a focused rendering/history check.
 - `api/` routes are generally thin. Preview routes delegate reads and transaction-scoped mutations to explicit operations in `server/preview-characters/`, while retaining HTTP transport and error-envelope responsibilities.
 - `server/` has real domain modules but is flat. `server/admin-api.mjs` is a cross-cutting authorization/error helper with imports from account and Character/Skin domains, so it has a larger blast radius than its name suggests.
 - `db/` is already close to the canonical boundary. One boundary anomaly remains: `db/client.mjs` imports `server/load-local-env.mjs`. Do not “fix” this during an unrelated move; environment loading needs its own runtime-safe decision.
@@ -207,6 +214,14 @@ Each successful batch is one reviewable commit and rollback unit. Do not combine
 #### Completion record — 2026-09-21
 
 Batches 3–6 are complete as separate reversible commits. The current server locations are `server/admin/accounts/`, `server/assets/`, and `server/preview-characters/`; Preview API adapters now delegate database reads and transaction-scoped mutations to `preview-character-operations.mjs`. The historical source-to-target entries above are intentionally retained.
+
+#### Frontend Structure Wave completion — 2026-09-21
+
+- **F1:** Admin shell and Preview workspace now live at `src/admin/layout/adminShell.js` and `src/admin/preview/previewWorkspace.js`; the accepted `src/characterSkinAdminWorkspace.js` island remains unchanged.
+- **F2:** global navigation, sidebar, feedback, theme, and smooth-scroll modules now have explicit `src/app/` layout, settings, and runtime ownership.
+- **F3:** Skin Gallery/Detail views and their local CSS now live under `src/features/skins/`.
+
+No Character public cluster, router, Calculator domain, or global `src/style.css` split was included in this wave.
 
 ### Batch 7 — Organize the Admin cross-cutting shell
 
