@@ -123,7 +123,7 @@ The table is intentionally selective. “Later” means migrate as a bounded app
 | Vercel filesystem routes | HIGH | Bracketed routes such as `api/auth/[...].js`, `[characterId].js`, and upload `[id]/finalize.js` depend on exact paths. Keep API paths fixed during organization work. |
 | Auth rewrite | HIGH | `vercel.json` rewrites `/api/auth/(.*)` to `api/auth/[...]`. Do not rename or relocate the auth route during folder cleanup. |
 | Server path fan-out | MEDIUM–HIGH | API adapters and many DB proof scripts import flat server filenames directly. Use `rg` before and after every move; update all importers in one commit. |
-| API/server responsibility leakage | MEDIUM–HIGH | Preview API routes import `db/client.mjs` directly. Correct this only in a dedicated behavior-preserving orchestration batch with Preview API proofs. |
+| API/server responsibility boundary | MEDIUM–HIGH | Preview API routes retain HTTP transport and error mapping; `server/preview-characters/` owns Preview reads, transaction scope, and domain orchestration. Preserve this split with Preview API proofs. |
 | Database-to-server import direction | MEDIUM | `db/client.mjs` imports `server/load-local-env.mjs`. Resolve only after defining a runtime-neutral env bootstrap; do not duplicate or silently drop local loading. |
 | Public asset URL assumptions | HIGH | Many modules hard-code `/assets/...`; `assetPaths.js` also encodes snapshot filename behavior. A folder move must not alter returned URLs, case, or fallbacks. |
 | Public snapshot shape/path | HIGH | `src/data/loader.js` fetches `/data.json`; tools/scripts assume `public/data.json`. Folder cleanup must keep the artifact byte-identical. |

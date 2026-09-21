@@ -199,9 +199,15 @@ TypeScript improves development-time checking and refactoring confidence. It doe
 
 ## 10. Styling policy
 
-**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/talent.css` and `src/ui/skinGalleryView.css` as established local exceptions. New work should keep global tokens, base/global rules, and typography separable from feature-local styles as the touched area permits.
+**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/talent.css` and `src/ui/skinGalleryView.css` as established local exceptions. This remains a gradual extraction, not a required CSS migration and not a Tailwind mandate.
 
-The intended eventual organization is `src/styles/tokens.css`, `global.css`, and `typography.css`, plus feature-local CSS or component-scoped styles where appropriate. This is a gradual extraction, not a required CSS migration and not a Tailwind mandate.
+Style ownership is explicit:
+
+- Global/application styles belong in `src/styles/`, for example `src/styles/tokens.css`, `src/styles/global.css`, and `src/styles/typography.css`.
+- Feature-specific styles belong in `src/features/<domain>/styles/`, for example `src/features/skins/styles/` and `src/features/characters/styles/`.
+- Admin-area-specific styles belong in `src/admin/<area>/styles/`. Cross-cutting Admin-only styles may later use `src/admin/styles/`.
+
+Do not create a giant generic `src/css/` directory or another flat style dumping ground. Feature-local CSS does not mean mixing every CSS and JavaScript file at a feature root when a feature has enough files to justify `views/`, `components/`, and `styles/`. Small features may remain compact; do not create empty directory taxonomy merely for appearance.
 
 **LOCKED:** architectural cleanup must preserve WHMX's accepted dark-charcoal / antique-gold visual direction, typography, and interaction character. Do not silently recolor the product, normalize all radii, or turn a file move into a visual redesign.
 
