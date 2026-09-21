@@ -5,7 +5,7 @@ import { getGameData } from '../../data/loader.js';
 import { setCharacter, state } from '../../data/state.js';
 import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
-import { renderWeaponsView } from '../../ui/weaponsView.js';
+import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
 import { renderDataView } from '../../ui/dataView.js';
 import { renderCatalog } from '../layout/sidebar.js';
 import { selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
