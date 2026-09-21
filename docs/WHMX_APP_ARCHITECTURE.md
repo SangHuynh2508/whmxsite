@@ -23,10 +23,10 @@ Audit snapshot: 2026-09-20. The repository is a deliberately mixed application, 
 
 | Area | Observed current state | Status |
 | --- | --- | --- |
-| Public browser app | Vite serves `index.html`; `src/main.js` and `src/router.js` drive a hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | LEGACY, supported |
-| Public UI | `src/ui/` contains Character, Skin, weapon, calculator, navigation, scroll, and detail-view modules. Character subviews live in `src/ui/charViews/`. | LEGACY, supported |
+| Public browser app | Vite serves `index.html`; `src/main.js` delegates startup to `src/app/bootstrap/boot.js`, while `src/router.js` drives the hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | Current hybrid boundary |
+| Public UI | `src/ui/` remains home to legacy Character, weapon, and calculator renderers; Skin Gallery/Detail live in `src/features/skins/views/`. Global navigation, sidebar, feedback, theme, and smooth-scroll behavior live in `src/app/`. | Current hybrid boundary |
 | Vue | Vue 3 is used as a dynamically imported, programmatically mounted Character/Skin Admin island in `src/characterSkinAdminWorkspace.js`. There are currently no `.vue` SFCs or a Vite Vue-plugin boundary. | Current hybrid boundary |
-| Admin shell | `src/adminShell.js` and `src/adminPreviewShell.js` provide the authenticated Admin shell and Preview workspace; the former mixes routing, session UI, and DOM rendering. | Current implementation; TARGET for separation when touched |
+| Admin shell | `src/admin/layout/adminShell.js` and `src/admin/preview/previewWorkspace.js` provide the authenticated Admin shell and Preview workspace; the former retains its accepted route/session/UI responsibilities. | Current hybrid boundary |
 | API runtime | `api/` contains Node-style Vercel Function adapters for auth, session, Admin Character/Skin/Preview/User routes, managed-asset upload intents, and DB health. | Current foundation |
 | Server/domain layer | `server/` contains Better Auth, authorization helpers, Character/Skin, Preview Character, managed asset, and R2 domain modules. The files are currently flat rather than nested by domain. | Current foundation; TARGET for domain directories |
 | Database | Neon/PostgreSQL is accessed through Drizzle and `postgres` in `db/`. Schemas are already separated into auth, core, Character/Skin, and preview/asset files; committed SQL migrations exist. | Current foundation |
@@ -47,15 +47,18 @@ src/
     bootstrap/                 # startup and app mounting
     layout/                    # global navigation, header/footer, shell regions
     router/                    # route registration and route-level composition
+    runtime/                   # shared application lifecycle behavior
     settings/                  # theme, persisted UI preferences, app providers
 
   features/
     characters/
       components/              # public Character composition and local parts
-      pages/                   # route-level Character views where justified
+      views/                   # route-level Character views where justified
       api/                     # browser adapters for Character endpoints/data
-      types.ts
+      styles/                  # Character-owned CSS when justified
     skins/
+      views/
+      styles/
     profile/
     skills/
     buffs/
@@ -69,7 +72,7 @@ src/
     accounts/
     preview/
     audit/
-    components/
+    components/                # only when a real Admin-wide component exists
 
   shared/                      # proven domain-neutral primitives only
     components/
@@ -79,16 +82,15 @@ src/
     utils/
 
   styles/
-    tokens.css
-    global.css
-    typography.css
+    tokens.css                 # only when a stable global token layer exists
+    global.css                 # only when a stable global/base layer exists
 ```
 
 ### Incremental mapping from today
 
 - When public bootstrap/navigation/router code is materially changed, migrate its bounded responsibility from `index.html`, `src/main.js`, `src/router.js`, and `src/ui/` toward `src/app/`; do not move it merely for appearance.
 - Keep current public rendering functional while a domain is migrated. A feature may initially wrap a legacy renderer or data adapter.
-- Evolve `src/adminShell.js`, `src/adminPreviewShell.js`, and the Vue Character/Skin island toward `src/admin/` only as those modules are materially extended. The accepted D2.4.1 editor behavior is a baseline, not a migration trigger.
+- Keep the accepted Admin shell at `src/admin/layout/adminShell.js` and Preview workspace at `src/admin/preview/previewWorkspace.js`. Evolve the Vue Character/Skin island only when materially extended; accepted D2.4.1 behavior is a baseline, not a migration trigger.
 - New Character/Skin/Profile/Skill/Buff/Guide/Tier List work belongs in the owning feature, even if the public consumer remains legacy JavaScript for a period.
 - A new Vue module should use TypeScript and may use `<script setup lang="ts">`; adopting SFCs later is optional, not a prerequisite for organizing a feature.
 
@@ -199,15 +201,18 @@ TypeScript improves development-time checking and refactoring confidence. It doe
 
 ## 10. Styling policy
 
-**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/talent.css` and `src/ui/skinGalleryView.css` as established local exceptions. This remains a gradual extraction, not a required CSS migration and not a Tailwind mandate.
+**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/talent.css` and `src/features/skins/styles/skinGallery.css` as established local exceptions. This remains a gradual extraction, not a required CSS migration and not a Tailwind mandate.
 
-Style ownership is explicit:
+**LOCKED placement convention.** The repository is domain-first, not file-type-first:
 
-- Global/application styles belong in `src/styles/`, for example `src/styles/tokens.css`, `src/styles/global.css`, and `src/styles/typography.css`.
-- Feature-specific styles belong in `src/features/<domain>/styles/`, for example `src/features/skins/styles/` and `src/features/characters/styles/`.
-- Admin-area-specific styles belong in `src/admin/<area>/styles/`. Cross-cutting Admin-only styles may later use `src/admin/styles/`.
+- Application-global JavaScript belongs in `src/app/<responsibility>/`, such as `bootstrap/`, `layout/`, `router/`, `runtime/`, and `settings/`.
+- Feature-owned JavaScript belongs in `src/features/<domain>/`. Use bounded `views/`, `components/`, `api/`, or `utils/` categories only when the domain has enough real files to justify them.
+- Cross-cutting Admin JavaScript belongs in `src/admin/<area>/`, such as `layout/`, `auth/`, `accounts/`, `preview/`, and `audit/`.
+- Truly global CSS belongs in `src/styles/`. `tokens.css` and `global.css` may exist when they each represent a stable global responsibility; `typography.css` is not mandatory.
+- Feature CSS belongs in `src/features/<domain>/styles/`. Do not colocate it beside feature JavaScript when the domain already has a meaningful deterministic `styles/` directory. The accepted `src/features/skins/views/` and `src/features/skins/styles/` structure remains in place.
+- Genuinely Admin-only CSS belongs in `src/admin/styles/`, for example `adminShell.css`, `previewWorkspace.css`, or `characterSkinWorkspace.css`; do not scatter arbitrary style directories through every Admin subarea.
 
-Do not create a giant generic `src/css/` directory or another flat style dumping ground. Feature-local CSS does not mean mixing every CSS and JavaScript file at a feature root when a feature has enough files to justify `views/`, `components/`, and `styles/`. Small features may remain compact; do not create empty directory taxonomy merely for appearance.
+Do not create `src/js/` or `src/css/`. `src/styles/` is not a dumping ground: feature-specific and Admin-specific selectors belong with their owners. Do not create empty directories merely for appearance.
 
 **LOCKED:** architectural cleanup must preserve WHMX's accepted dark-charcoal / antique-gold visual direction, typography, and interaction character. Do not silently recolor the product, normalize all radii, or turn a file move into a visual redesign.
 
