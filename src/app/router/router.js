@@ -1,19 +1,19 @@
 /**
  * SPA Hash Router for WhmxCalc
  */
-import { getGameData } from './data/loader.js';
-import { setCharacter, state } from './data/state.js';
-import { renderCharacterDetail } from './features/characters/views/characterDetail.js';
-import { renderCharacterCatalogView } from './features/characters/views/characterCatalogView.js';
-import { renderWeaponsView } from './ui/weaponsView.js';
-import { renderDataView } from './ui/dataView.js';
-import { renderCatalog } from './app/layout/sidebar.js';
-import { selectCalculatorCharacter } from './ui/calcCharacterPicker.js';
-import { renderHeader } from './features/characters/components/characterHeader.js';
-import { renderSkinGalleryView, renderGalleryDemoView } from './features/skins/views/skinGalleryView.js';
-import { renderSkinDetailView } from './features/skins/views/skinDetailView.js';
+import { getGameData } from '../../data/loader.js';
+import { setCharacter, state } from '../../data/state.js';
+import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
+import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
+import { renderWeaponsView } from '../../ui/weaponsView.js';
+import { renderDataView } from '../../ui/dataView.js';
+import { renderCatalog } from '../layout/sidebar.js';
+import { selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
+import { renderHeader } from '../../features/characters/components/characterHeader.js';
+import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
+import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
-import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from './app/runtime/smoothScroll.js';
+import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../runtime/smoothScroll.js';
 
 let previousRouteKey = null;
 let activeRouteTransition = null;

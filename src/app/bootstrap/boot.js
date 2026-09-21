@@ -9,7 +9,7 @@ import { renderResourceSummary } from '../../ui/resourceSummary.js';
 import { resizeSmoothScroll } from '../runtime/smoothScroll.js';
 import { initTheme } from '../settings/theme.js';
 import { initAppNav } from '../layout/appNav.js';
-import { initRouter, handleRoute } from '../../router.js';
+import { initRouter, handleRoute } from '../router/router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
 import { initFeedbackButton } from '../layout/feedbackButton.js';
 import { initAdminShell } from '../../admin/layout/adminShell.js';

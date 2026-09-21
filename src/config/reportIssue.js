@@ -3,7 +3,7 @@
  * Centralized mapping for the public Google Form.
  */
 
-import { parseHash, getCharBySlugOrId } from '../router.js';
+import { parseHash, getCharBySlugOrId } from '../app/router/router.js';
 
 export const FEEDBACK_FORM_CONFIG = {
   canonicalBaseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe2aGBWSRMvVwpX5-UHDIYVry-lpbMBomQEbjMC997eotMtfA/viewform',

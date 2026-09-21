@@ -3,7 +3,7 @@
  */
 import { gsap } from 'gsap';
 import { getGameData } from '../../../data/loader.js';
-import { getCharBySlugOrId } from '../../../router.js';
+import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.js';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 
