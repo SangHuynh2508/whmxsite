@@ -110,7 +110,7 @@ async function renderAuthenticated(root, session, sequence) {
     // Paint the route shell before the island chunk resolves. This makes the
     // navigation click visible immediately on a cold Vercel function.
     characterWorkspaceRoot.innerHTML = '<div class="character-workspace-loading"><span>WHMX / Characters &amp; Skins</span><strong>Đang mở workspace…</strong></div>';
-    characterWorkspaceModulePromise ||= import('../../characterSkinAdminWorkspace.js');
+    characterWorkspaceModulePromise ||= import('../character-skin/characterSkinAdminWorkspace.js');
     characterWorkspaceModulePromise.then(({ mountCharacterSkinAdmin }) => {
       if (sequence !== renderSequence || !isCharacterSkinRoute()) return;
       characterWorkspaceApp = mountCharacterSkinAdmin(characterWorkspaceRoot, session);
