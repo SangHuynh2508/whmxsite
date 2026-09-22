@@ -12,6 +12,7 @@ import { renderInfoTab } from './detail/infoView.js';
 import { renderTalentsTab } from './detail/talentsView.js';
 import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
+import { enhanceCharacterOverviewEditing } from '../components/characterInlineEdit.js';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -46,6 +47,9 @@ function renderTabContent(container, char, tabName) {
     case 'overview':
     default:
       renderOverviewTab(container, char);
+      // Roadmap Phase 3: fire-and-forget — hidden entirely for anonymous
+      // visitors, this only checks the already-cached boot-time session.
+      void enhanceCharacterOverviewEditing(container, char);
       break;
   }
 }

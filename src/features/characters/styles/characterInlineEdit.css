@@ -1,0 +1,81 @@
+/* Roadmap Phase 3 — contextual inline edit MVP (Character, Overview tab).
+ * Owner: src/features/characters/components/characterInlineEdit.js.
+ */
+
+.char-inline-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 6px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.char-inline-edit-btn:hover {
+  color: var(--accent);
+  border-color: var(--border-color);
+  background: var(--accent-light);
+}
+
+.char-inline-edit-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.char-inline-edit-input {
+  min-width: 160px;
+  padding: 3px 7px;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  font: inherit;
+  font-size: 0.92em;
+}
+
+.char-inline-edit-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.char-inline-edit-save,
+.char-inline-edit-cancel {
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.82em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.char-inline-edit-save {
+  background: var(--accent);
+  color: #fff;
+}
+
+.char-inline-edit-save:disabled,
+.char-inline-edit-cancel:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.char-inline-edit-cancel {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.char-inline-edit-status {
+  font-size: 0.8em;
+  color: var(--text-muted);
+}

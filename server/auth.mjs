@@ -49,6 +49,17 @@ function authConfiguration({ allowProvisioning, sendResetPassword, revokeSession
         verifications,
       },
     }),
+    // Admin-only login (owner + a handful of invited editors), not a
+    // general-audience session — kept short so a session doesn't outlive a
+    // single work sitting. Sessions live in Postgres, so restarting the
+    // local dev server (vercel dev) never clears them on its own; only this
+    // expiry does. updateAge slides the expiry forward on active use so an
+    // editor mid-session isn't logged out, but an idle/forgotten login dies
+    // within a few hours.
+    session: {
+      expiresIn: 60 * 60 * 8,
+      updateAge: 60 * 60,
+    },
     emailAndPassword: {
       enabled: true,
       disableSignUp: !allowProvisioning,

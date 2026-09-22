@@ -1,4 +1,4 @@
-import { createIcons, UsersRound, Shirt, Sword, Database, Calculator, ShieldCheck } from 'lucide';
+import { createIcons, UsersRound, Shirt, Sword, Database, Calculator, LogIn, ShieldCheck } from 'lucide';
 import { getSession, isAuthorizedEditor } from '../auth/session.js';
 
 export function initAppNav() {
@@ -9,6 +9,7 @@ export function initAppNav() {
       Sword,
       Database,
       Calculator,
+      LogIn,
       ShieldCheck
     },
     attrs: {
@@ -21,14 +22,24 @@ export function initAppNav() {
   syncAdminNavEntry();
 }
 
-// WHMX has no general-audience login — the nav entry only exists for
-// visitors who are already an authenticated owner/editor, never as an
-// invitation to sign in. Hidden by default, shown once the boot-time
-// session check (src/app/auth/session.js) resolves as authorized.
+// The entry is always visible (it's the discoverable shortcut to #/admin,
+// per Roadmap Phase 2) — its icon/label reflect the boot-time session check
+// (src/app/auth/session.js): a plain login icon by default, swapping to a
+// "you're the admin" icon once authorized. WHMX login has no
+// general-audience purpose beyond letting an already-authenticated
+// owner/editor jump back in.
 function syncAdminNavEntry() {
   const link = document.getElementById('app-nav-admin-link');
-  if (!link) return;
+  const label = document.getElementById('app-nav-admin-label');
+  const loggedOutIcon = document.getElementById('app-nav-admin-icon-loggedout');
+  const loggedInIcon = document.getElementById('app-nav-admin-icon-loggedin');
+  if (!link || !label || !loggedOutIcon || !loggedInIcon) return;
   getSession().then((session) => {
-    link.classList.toggle('hidden', !isAuthorizedEditor(session));
+    const authorized = isAuthorizedEditor(session);
+    const text = authorized ? 'Quản trị' : 'Đăng nhập';
+    label.textContent = text;
+    link.dataset.tooltip = text;
+    loggedOutIcon.classList.toggle('hidden', authorized);
+    loggedInIcon.classList.toggle('hidden', !authorized);
   });
 }

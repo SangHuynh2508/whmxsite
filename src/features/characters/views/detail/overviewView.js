@@ -36,14 +36,14 @@ export function renderOverviewTab(container, char) {
               <!-- 1. Tên hiển thị -->
               <div class="info-cell">
                 <span class="info-label">Tên hiển thị:</span>
-                <span class="info-val highlight">${char.name_vi || char.name_cn}</span>
+                <span class="info-val highlight" data-field="name_vi">${char.name_vi || char.name_cn}</span>
               </div>
 
               <!-- 2. Tên đầy đủ -->
               ${char.fullname_vi ? `
               <div class="info-cell">
                 <span class="info-label">Tên đầy đủ:</span>
-                <span class="info-val">${char.fullname_vi}</span>
+                <span class="info-val" data-field="fullname_vi">${char.fullname_vi}</span>
               </div>
               ` : ''}
 
@@ -85,7 +85,7 @@ export function renderOverviewTab(container, char) {
               ${nickname ? `
               <div class="info-cell">
                 <span class="info-label">Tên thường gọi:</span>
-                <span class="info-val">${nickname}</span>
+                <span class="info-val" data-field="nickname_vi">${nickname}</span>
               </div>
               ` : ''}
 
