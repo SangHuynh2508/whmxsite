@@ -4,6 +4,10 @@
     {
       "source": "/api/auth/(.*)",
       "destination": "/api/auth/[...]?authPath=$1"
+    },
+    {
+      "source": "/api/admin/(.*)",
+      "destination": "/api/admin/[...]?adminPath=$1"
     }
   ],
   "headers": [

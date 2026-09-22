@@ -21,15 +21,16 @@ let db;
 let owner;
 let entityId;
 try {
-  const [{ auth, internalAuthHeaders, provisioningAuth }, dbClient, schema, accountDomain, previewRoute, detailRoute, adminApi] = await Promise.all([
+  const [{ auth, internalAuthHeaders, provisioningAuth }, dbClient, schema, accountDomain, previewRoutes, adminApi] = await Promise.all([
     import('../server/auth.mjs'),
     import('../db/client.mjs'),
     import('../db/schema/index.mjs'),
     import('../server/admin/accounts/admin-account-domain.mjs'),
-    import('../api/admin/previews/index.js'),
-    import('../api/admin/previews/[id].js'),
+    import('../server/admin-api-routes/previews.mjs'),
     import('../server/admin-api.mjs'),
   ]);
+  const previewRoute = { default: previewRoutes.previewList };
+  const detailRoute = { default: previewRoutes.previewDetail };
   db = dbClient.getDb();
   const existingOwners = await db.select({ id: schema.users.id }).from(schema.users).where(eq(schema.users.role, 'owner'));
   if (existingOwners.length) {
