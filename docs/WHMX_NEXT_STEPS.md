@@ -46,7 +46,7 @@ Owner confirmed: build Hướng B (static `public/data.json` model + an automate
 **Status: in progress, blocked on a redo of Phase 2.** Full detail: `C:\Users\Legion\.claude\plans\m-u-c-c-dropdown-v-n-sprightly-fox.md`.
 - Phase 1 (isolated bug fixes — `color-scheme` for the `<select>` popup contrast bug, corrupted dark-token reconstruction) shipped.
 - Phase 2 (3 direction options) was built and **all 3 rejected** — they only varied details *inside* the existing narrow `.admin-shell` card, which was the wrong axis. **Corrected brief, in the owner's own words:** *"muốn là 1 trang quản trị/admin chuẩn, layout to, không bị đóng hộp, bố cục rõ ràng ở cả 2 route preview và character"* — a proper open admin-dashboard layout (big, not boxed), on **both** Preview/Users **and** Character/Skin CMS routes. This overrides the plan's earlier "don't touch `.admin-shell` width" and "Character/Skin CMS = polish only" positions — see the plan file's Phase 2 section for the full correction and a reusable design-review technique (temp test account + real browser login + self-contained static HTML snapshots, since screenshots alone weren't reliable this session).
-- Cleanup owed: a temp test account (`design-review-4ea3e244@design-review.invalid`) and 2 seeded preview rows from the rejected review round still exist in Postgres — delete or reuse next time.
+- Cleanup done — temp test account and seeded preview rows deleted at session end.
 
 ### 8. Queued — Character Lore into Postgres + artifact ("hiện vật") archive images
 **Status: noted only, not started, not designed in detail yet.** Owner asked to look into this next, but explicitly said: only after the Admin UI redesign (item #7 above) is done — do not start until then.
