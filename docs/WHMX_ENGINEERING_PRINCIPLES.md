@@ -17,7 +17,7 @@ Every one of the concrete lessons below is the same idea applied in a different 
 
 ### Worked example 1 — the public-data resolver pattern (from this session's Hướng A/B discussion)
 
-WHMX has an open, unresolved question: should public pages read live from PostgreSQL on every request ("Hướng A"), or keep a static generated snapshot that gets republished whenever Admin saves ("Hướng B")? Both are legitimate — S1N.gg does the former (Supabase direct reads), Great Limbus Library does the latter (data baked into the build) — real products, both working, at very different traffic scales.
+WHMX faced this question: should public pages read live from PostgreSQL on every request ("Hướng A"), or keep a static generated snapshot that gets republished whenever Admin saves ("Hướng B")? Both are legitimate — S1N.gg does the former (Supabase direct reads), Great Limbus Library does the latter (data baked into the build) — real products, both working, at very different traffic scales. **LOCKED (2026-09-22): WHMX chose Hướng B** (see `WHMX_APP_ARCHITECTURE.md` §11) — but the reasoning below for *how* to build B is exactly what keeps that choice from being a one-way door, which is the actual point of this worked example.
 
 **The mistake would be building the data-shaping logic (joining Character + Skin + localization + assets into the shape a public page needs) as a monolithic script that walks the whole database and writes one big file.** That hard-codes "Hướng B" into the implementation.
 
