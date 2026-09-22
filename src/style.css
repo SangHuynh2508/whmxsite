@@ -193,6 +193,12 @@
   overflow-x: hidden;
 }
 
+.app-nav-footer {
+  flex-shrink: 0;
+  padding: 8px 10px 14px;
+  border-top: 1px solid var(--border-color);
+}
+
 .app-nav-item {
   display: flex;
   align-items: center;
@@ -8428,6 +8434,17 @@
   border: 0;
   border-radius: 0;
   box-shadow: none;
+}
+
+/* Roadmap Phase 2: the global nav rail now renders on Admin routes (60px
+ * fixed-position overlay, see "Left Global Nav: Compact Overlay Rail" above)
+ * — subtract it here too so this workspace's near-full-viewport width
+ * doesn't overflow past the right edge of the screen. Mobile is unaffected
+ * since .app-nav is display:none there regardless. */
+@media (min-width: 769px) {
+  .admin-character-workspace-active .admin-shell {
+    width: min(calc(100vw - 60px - 48px), 1760px);
+  }
 }
 
 .character-cms-index-head h1 {

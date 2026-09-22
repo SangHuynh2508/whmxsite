@@ -13,11 +13,13 @@ import { initRouter, handleRoute } from '../router/router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
 import { initFeedbackButton } from '../layout/feedbackButton.js';
 import { initAdminShell } from '../../admin/layout/adminShell.js';
+import { initSession } from '../auth/session.js';
 import { inject } from '@vercel/analytics';
 
 export async function boot() {
   inject();
   initAdminShell();
+  initSession();
   initAppNav();
   initTheme();
   initFeedbackButton();

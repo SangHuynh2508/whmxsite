@@ -15,19 +15,19 @@ This file only tracks **sequence and status**. When an item's status changes, up
 ## Order
 
 ### 1. Plan A — consolidate `api/admin/*` into one serverless function
-**Status: designed, not started. Do this first.**
-Not because nothing else can start before it, but because it fixes an **active production bug** — Vercel Preview deployments are failing right now (13 functions, Hobby cap is 12) — which outranks any new feature. Self-contained (`api/` + new `server/admin-api-routes/` + one test script import), doesn't block or get blocked by anything else below. Full design in the plan file.
+**Status: ✅ DONE, pushed (`bec6d7c` on `feat/postgres-admin-crud`).**
+`api/` reduced from 13 functions to 4 (`admin/[...]`, `admin/session`, `auth/[...]`, `internal/db-health`) — confirmed both locally and via `vercel inspect` on the resulting Preview build, which is now `● Ready`. One deviation from the original design: a bare `[...path].js` file does not act as a true multi-segment catch-all on Vercel's plain (non-Next.js) routing — an explicit `vercel.json` rewrite was required (added, mirroring the existing `api/auth/[...].js` pattern).
 
 ### 2. Roadmap Phase 1 — session-awareness primitive
-**Status: designed, not started.**
-Shared module so public-page code can ask "is this visitor an authorized editor," reusing existing `/api/admin/session`. Foundation for Phase 2 and 3.
+**Status: ✅ DONE.**
+`src/app/auth/session.js` wraps `fetch('/api/admin/session')`, exports `initSession()` (called once at boot in `src/app/bootstrap/boot.js`, fire-and-forget), `getSession()` (returns the cached promise, lazily initializing if needed), `refreshSession()` (force re-check, unused so far, available for Phase 3), and `isAuthorizedEditor(session)` helper. Cache is boot-lifetime only, UX convenience — the HttpOnly cookie stays the real authorization boundary, matches the already-LOCKED principle. Verified: builds clean, fetch fires once at boot, memoized across repeat calls, no console errors.
 
 ### 3. Roadmap Phase 2 — global sidebar includes Admin
-**Status: designed, not started. Depends on Phase 1.**
-Stop hiding `.app-nav` on Admin routes; add one session-aware entry pinned at the bottom (shortcut to existing login, not a general-audience feature — WHMX login is owner+editors only).
+**Status: ✅ DONE.**
+`.app-nav` no longer force-hidden on Admin routes (`src/admin/styles/adminShell.css`) — only `.top-nav`/`#app`/`#drawer-backdrop`/calc-picker/feedback-button stay hidden, so Admin still owns its own content area, just beside the rail instead of covering the whole viewport. Added a pinned `.app-nav-footer` entry (`index.html`, `#app-nav-admin-link` → `#/admin`) below the domain links, hidden by default and shown only once `initAppNav()` (`src/app/layout/appNav.js`) resolves the Phase-1 session check as an authorized owner/editor — matches the confirmed "no anonymous-visitor login UI" rule, this is a shortcut for people already logged in, not a general "Login" invite. Fixed a real-bug side effect discovered along the way: the nav rail's actual rendered width is a hardcoded `60px` (a later "Compact Overlay Rail" cascade layer in `src/style.css` overrides the older `--app-nav-width` token with `!important`), not the token value — matched `.admin-auth-page`'s new margin-left and the `.admin-character-workspace-active .admin-shell` width formula (3 call sites) to that same real `60px` so nothing overflows horizontally on desktop; mobile (`.app-nav` already `display:none` there) is unaffected. Verified: build clean, desktop layout shifts correctly with no horizontal overflow, mobile unchanged, nav links usable while on `#/admin`, admin link correctly hidden pre-login.
 
 ### 4. Roadmap Phase 3 — contextual inline edit MVP (Character)
-**Status: designed, not started. Depends on Phase 1+2.**
+**Status: designed, not started. Depends on Phase 1+2. Do this next.**
 Small "Edit" affordances on the public Character page for authorized editors, reusing the existing Admin mutation API. Guardrail: build as its own small component, do not copy logic out of `characterSkinAdminWorkspace.js`.
 
 ### 5. Checkpoint — evaluate Hướng A/B before going further

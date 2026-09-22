@@ -1,6 +1,7 @@
 /* Reset & Base Variables */
 
 :root {
+  color-scheme: light;
   --bg-main: #FAFAFA;
   --bg-surface: #FFFFFF;
   --bg-surface-hover: #F2F2F2;
@@ -72,11 +73,12 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg-main: #111315;
   --bg-surface: #17191C;
   --bg-surface-hover: #22262B;
-  --bg-elevated: #1Character024;
-  --bg-input: #1Character024;
+  --bg-elevated: #1C2024;
+  --bg-input: #1C2024;
   --border-color: #2B2F34;
   --border-strong: #3D434A;
   --text-main: #E3E5E8;
@@ -92,7 +94,7 @@
   --border-gold-divider: rgba(212, 183, 99, 0.16);
 
   /* Form Control Tokens - Dark Mode */
-  --input-bg: #1Character024;
+  --input-bg: #1C2024;
   --input-bg-hover: #202327;
   --input-border: #34383D;
   --input-text: #ECEDEE;

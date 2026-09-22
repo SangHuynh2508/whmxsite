@@ -3,8 +3,10 @@
  * Owner: src/admin/layout/adminShell.js, src/admin/preview/previewWorkspace.js.
  */
 
-/* D1 keeps Admin intentionally small and isolated from the public SPA views. */
-body.admin-route-active>.app-nav,
+/* Roadmap Phase 2: the global nav rail is now part of the shared layout on
+ * Admin routes too (previously fully hidden per D1) — Admin still owns its
+ * own content area/header, it just renders beside the rail instead of
+ * replacing the whole viewport. */
 body.admin-route-active>.top-nav,
 body.admin-route-active>#drawer-backdrop,
 body.admin-route-active>#app,
@@ -19,6 +21,18 @@ body.admin-route-active>#whmx-feedback-btn {
   place-items: center;
   padding: 32px;
   background: var(--bg-main);
+}
+
+/* .app-nav's real desktop width is the hardcoded 60px "compact overlay rail"
+ * value that a later cascade layer (src/style.css "Left Global Nav: Compact
+ * Overlay Rail" section) forces with !important, not the --app-nav-width
+ * token .app-layout was originally written against — match that same 60px
+ * here (as .app-layout itself does) rather than the stale token. */
+@media (min-width: 769px) {
+  body.admin-route-active .admin-auth-page {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+  }
 }
 
 .admin-auth-card,
