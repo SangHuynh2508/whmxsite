@@ -2,7 +2,7 @@
 
 **Supersedes:** `WHMX_CURRENT_STATE_FINAL_2026-09-20.md` for day-to-day work. That file's still-valid background (source-of-truth model, R2/asset invariants, localization rules, ID conventions) is NOT repeated here — read it for that. This file only covers what changed or was decided since 2026-09-20.
 
-**Companions to read first, in order:** this file → `WHMX_APP_ARCHITECTURE.md` → `WHMX_ENGINEERING_PRINCIPLES.md` → `WHMX_ARCHITECTURE_MIGRATION_PLAN.md` → the 2026-09-20 state/handoff docs for deep history.
+**Companions to read first, in order:** this file → `WHMX_APP_ARCHITECTURE.md` → `WHMX_ENGINEERING_PRINCIPLES.md` → `WHMX_ARCHITECTURE_MIGRATION_PLAN.md` → the 2026-09-20 state/handoff docs for deep history. For **what to actually do next and in what order**, see [`WHMX_NEXT_STEPS.md`](./WHMX_NEXT_STEPS.md) — this file explains the *why*, that one tracks the *sequence/status*.
 
 ---
 
