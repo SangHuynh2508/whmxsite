@@ -7,6 +7,14 @@
  * its internals). It only reuses the same public admin mutation contract
  * (GET/PATCH /api/admin/characters/:id) the workspace already calls, mirrored
  * independently here.
+ *
+ * UX: one visible "Sửa" toggle next to the "Hồ Sơ Khí Giả" section header
+ * (not a tiny pencil per field — the first version of this feature used one
+ * and it was too small/easy to miss). Clicking it turns every field that
+ * supports editing into an input at once; fields with no data-field hook
+ * (not part of the server allowlist) are left exactly as rendered. One Save
+ * sends every changed field in a single PATCH, matching how the admin
+ * workspace batches its own diff.
  */
 import '../styles/characterInlineEdit.css';
 import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
@@ -20,9 +28,9 @@ const FIELD_CONFIG = {
   nickname_vi: { apiKey: 'nicknameVi', label: 'Tên thường gọi' },
 };
 
-// Per-character GET cache so opening several field editors on the same
-// character reuses one revision lookup; cleared after every successful save
-// so the next edit always starts from the authoritative revision.
+// Per-character GET cache so re-entering edit mode reuses one revision
+// lookup; cleared after every successful save so the next edit always starts
+// from the authoritative revision.
 const detailCache = new Map();
 
 function loadDetail(characterId) {
@@ -41,14 +49,14 @@ function loadDetail(characterId) {
   return detailCache.get(characterId);
 }
 
-async function saveField(characterId, apiKey, value) {
+async function saveFields(characterId, changes) {
   const detail = await loadDetail(characterId);
   const expectedRevision = detail?.character?.revision;
   const response = await fetch(`/api/admin/characters/${encodeURIComponent(characterId)}`, {
     method: 'PATCH',
     credentials: 'same-origin',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ expectedRevision, changes: { [apiKey]: value || null }, requestId: crypto.randomUUID() }),
+    body: JSON.stringify({ expectedRevision, changes, requestId: crypto.randomUUID() }),
   });
   const payload = await response.json().catch(() => ({}));
   detailCache.delete(characterId);
@@ -58,76 +66,81 @@ async function saveField(characterId, apiKey, value) {
 
 function errorMessage(status) {
   if (status === 409) return 'Dữ liệu đã thay đổi ở nơi khác. Vui lòng tải lại trang.';
-  if (status === 403) return 'Bạn không có quyền chỉnh sửa trường này.';
-  if (status === 422) return 'Giá trị không hợp lệ.';
+  if (status === 403) return 'Bạn không có quyền chỉnh sửa.';
+  if (status === 422) return 'Một hoặc nhiều giá trị không hợp lệ.';
   return 'Không thể lưu thay đổi. Vui lòng thử lại.';
 }
 
-function pencilButton(label) {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'char-inline-edit-btn';
-  button.setAttribute('aria-label', `Sửa ${label}`);
-  button.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>';
-  return button;
+function editIconSvg() {
+  return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>';
 }
 
-function openInlineForm({ valueEl, button, characterId, field, char, container }) {
-  const config = FIELD_CONFIG[field];
-  const form = document.createElement('span');
-  form.className = 'char-inline-edit-form';
+function enterEditMode(container, char, characterId, toggleBtn) {
+  const fieldEntries = Object.keys(FIELD_CONFIG)
+    .map((field) => ({ field, el: container.querySelector(`[data-field="${field}"]`) }))
+    .filter((entry) => entry.el);
+  if (!fieldEntries.length) return;
 
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'char-inline-edit-input';
-  input.value = valueEl.textContent.trim();
-  input.maxLength = 200;
+  toggleBtn.classList.add('hidden');
 
+  const actionBar = document.createElement('span');
+  actionBar.className = 'char-edit-actionbar';
   const saveBtn = document.createElement('button');
   saveBtn.type = 'button';
   saveBtn.className = 'char-inline-edit-save';
-  saveBtn.textContent = 'Lưu';
-
+  saveBtn.textContent = 'Lưu thay đổi';
   const cancelBtn = document.createElement('button');
   cancelBtn.type = 'button';
   cancelBtn.className = 'char-inline-edit-cancel';
   cancelBtn.textContent = 'Hủy';
-
   const status = document.createElement('span');
   status.className = 'char-inline-edit-status';
+  actionBar.append(saveBtn, cancelBtn, status);
+  toggleBtn.insertAdjacentElement('afterend', actionBar);
 
-  form.append(input, saveBtn, cancelBtn, status);
-  valueEl.classList.add('hidden');
-  button.classList.add('hidden');
-  valueEl.insertAdjacentElement('afterend', form);
-  input.focus();
-  input.select();
+  const inputs = new Map();
+  for (const { field, el } of fieldEntries) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'char-inline-edit-input';
+    input.value = el.textContent.trim();
+    input.maxLength = 200;
+    el.replaceWith(input);
+    inputs.set(field, input);
+  }
+  inputs.get('name_vi')?.focus();
 
-  function close() {
-    form.remove();
-    valueEl.classList.remove('hidden');
-    button.classList.remove('hidden');
+  function exit() {
+    // Re-render from the (possibly just-mutated) char object rather than
+    // trying to restore each swapped node by hand — also re-mounts a fresh
+    // toggle button, so Cancel and Save both leave the tab in a clean state.
+    renderOverviewTab(container, char);
+    mountEditToggle(container, char, characterId);
   }
 
-  cancelBtn.addEventListener('click', close);
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') close();
-    if (event.key === 'Enter') saveBtn.click();
+  cancelBtn.addEventListener('click', exit);
+  actionBar.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') exit();
   });
 
   saveBtn.addEventListener('click', async () => {
-    const nextValue = input.value.trim();
+    const changes = {};
+    for (const [field, input] of inputs) {
+      const nextValue = input.value.trim();
+      const currentValue = (char[field] ?? '').toString().trim();
+      if (nextValue !== currentValue) changes[FIELD_CONFIG[field].apiKey] = nextValue || null;
+    }
+    if (!Object.keys(changes).length) {
+      exit();
+      return;
+    }
     saveBtn.disabled = true;
     cancelBtn.disabled = true;
     status.textContent = 'Đang lưu…';
     try {
-      await saveField(characterId, config.apiKey, nextValue);
-      char[field] = nextValue || null;
-      // Full tab re-render keeps every derived display of this field (e.g.
-      // the art caption title, which also reads char.name_vi) consistent,
-      // rather than patching each DOM spot by hand.
-      renderOverviewTab(container, char);
-      attachEditors(container, char, characterId);
+      await saveFields(characterId, changes);
+      for (const [field, input] of inputs) char[field] = input.value.trim() || null;
+      exit();
     } catch (error) {
       status.textContent = errorMessage(error.status);
       saveBtn.disabled = false;
@@ -136,25 +149,34 @@ function openInlineForm({ valueEl, button, characterId, field, char, container }
   });
 }
 
-function attachEditors(container, char, characterId) {
-  for (const field of Object.keys(FIELD_CONFIG)) {
-    const valueEl = container.querySelector(`[data-field="${field}"]`);
-    if (!valueEl || valueEl.dataset.editWired) continue;
-    const button = pencilButton(FIELD_CONFIG[field].label);
-    valueEl.insertAdjacentElement('afterend', button);
-    valueEl.dataset.editWired = 'true';
-    button.addEventListener('click', () => {
-      if (valueEl.nextElementSibling?.classList.contains('char-inline-edit-form')) return;
-      openInlineForm({ valueEl, button, characterId, field, char, container });
-    });
-  }
+function mountEditToggle(container, char, characterId) {
+  const header = container.querySelector('.overview-section-header');
+  const heading = header?.querySelector('h3');
+  if (!header || !heading) return;
+  const hasEditableField = Object.keys(FIELD_CONFIG).some((field) => container.querySelector(`[data-field="${field}"]`));
+  if (!hasEditableField) return;
+
+  // Group the heading + toggle so the button sits right beside "Hồ Sơ Khí
+  // Giả" (not far right where the rarity badge is pinned by
+  // .overview-section-header's space-between layout).
+  const titleGroup = document.createElement('div');
+  titleGroup.className = 'overview-title-group';
+  header.insertBefore(titleGroup, heading);
+  titleGroup.appendChild(heading);
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.type = 'button';
+  toggleBtn.className = 'char-edit-toggle-btn';
+  toggleBtn.innerHTML = `${editIconSvg()}<span>Sửa</span>`;
+  titleGroup.appendChild(toggleBtn);
+  toggleBtn.addEventListener('click', () => enterEditMode(container, char, characterId, toggleBtn));
 }
 
 export async function enhanceCharacterOverviewEditing(container, char) {
   const session = await getSession();
   if (!isAuthorizedEditor(session)) return;
-  // The public snapshot has no revision info of its own — see saveField's
+  // The public snapshot has no revision info of its own — see saveFields'
   // lazy GET above, which is the only admin-API traffic this adds, and only
   // for confirmed owner/editor sessions opening this tab.
-  attachEditors(container, char, char.id);
+  mountEditToggle(container, char, char.id);
 }
