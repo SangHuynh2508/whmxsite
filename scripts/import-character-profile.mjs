@@ -12,7 +12,7 @@ import { characters } from '../db/schema/character-skin.mjs';
 import { editHistory, importRuns, managedEntities, sourceSnapshots } from '../db/schema/core.mjs';
 import { characterProfiles, lorePublishState, loreTerms, profileTexts } from '../db/schema/profile.mjs';
 import { matchLegacyCells } from './lib/profile-legacy.mjs';
-import { planProfileImport } from './lib/profile-import-plan.mjs';
+import { needsPublish, planProfileImport } from './lib/profile-import-plan.mjs';
 import { hashValue, normalizeProfileSources, sha256 } from './lib/profile-source.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -120,7 +120,8 @@ async function apply(db, { plan, receipt, seeds }) {
 
     const bumpIds = [...[...touched].map((id) => profileEntity.get(id)), ...[...plan.touchedTerms].map((code) => termEntity.get(code))];
     if (bumpIds.length) await tx.update(managedEntities).set({ revision: sql`${managedEntities.revision} + 1`, updatedAt: now }).where(inArray(managedEntities.id, bumpIds));
-    if (plan.cnChanged || (seeds ?? []).length) {
+    // Legacy seeds are never exported, so they do not make the live lore stale.
+    if (needsPublish(plan)) {
       await tx.insert(lorePublishState).values({ id: 1, lastEditAt: now }).onConflictDoUpdate({ target: lorePublishState.id, set: { lastEditAt: now } });
     }
     const status = plan.counts.conflicted ? 'completed_with_conflicts' : 'completed';

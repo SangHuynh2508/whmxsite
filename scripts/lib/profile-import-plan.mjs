@@ -56,3 +56,6 @@ export function planProfileImport({ normalized, current }) {
   }
   return plan;
 }
+
+// Any change to what the published document is built from means the live lore is stale.
+export const needsPublish = (plan) => plan.touchedProfiles.size > 0 || plan.touchedTerms.size > 0;

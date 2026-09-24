@@ -47,3 +47,15 @@ test('a unit missing from raw is marked absent, never deleted', () => {
   assert.deepEqual(plan.textUpdates, [{ id: 't9', characterId: 'V0053', unitKey: 'timeline.A.story', patch: { sourcePresent: false } }]);
   assert.equal(plan.counts.absent, 1);
 });
+
+test('any write needs a publish, including a new unit on an existing profile (review #4)', async () => {
+  const { needsPublish } = await import('./profile-import-plan.mjs');
+  const current = empty();
+  current.profiles.set('V0053', { entityId: 'e1', sourceHash: 'P1', sourcePresent: true });
+  current.texts.set('V0053|card_intro', { id: 't1', sourceCn: 'A', sourceHash: 'h:A', vi: null, state: 'ok', sourcePresent: true });
+  const withNewReport = planProfileImport({ normalized: { profiles: [profile([u('card_intro', 'A'), u('report.X.title', 'R')])], terms: [] }, current });
+  assert.equal(withNewReport.cnChanged, false);
+  assert.equal(needsPublish(withNewReport), true);
+  const identical = planProfileImport({ normalized: { profiles: [profile([u('card_intro', 'A')])], terms: [] }, current });
+  assert.equal(needsPublish(identical), false);
+});
