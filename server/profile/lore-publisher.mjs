@@ -8,8 +8,9 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
   return repo.withPublishLock(async (tx) => {
     const doc = buildLoreDocument(await repo.loadPublishProfiles(tx));
     await storage.putBackup(backupKey(storage.envName, now), gzipSync(JSON.stringify(await repo.loadBackupPayload(tx))));
-    const state = await repo.readState(tx);
-    if (state?.publishedHash === doc.hash) return { status: 'unchanged', file: doc.fileName };
+    // Compare with the live pointer of this environment, not the DB row: the state row is
+    // per database, so a new environment (or a branch copied from another) would look current.
+    if ((await storage.readPointerFile()) === doc.fileName) return { status: 'unchanged', file: doc.fileName };
     await storage.putPublic(doc.fileName, doc.body, { cacheControl: IMMUTABLE });
     await storage.putPublic(POINTER_NAME, buildPointer(doc.fileName, now), { cacheControl: POINTER_CACHE });
     await repo.writeState(tx, { publishedFile: doc.fileName, publishedHash: doc.hash, publishedAt: now, publishedByUserId: actorUserId });

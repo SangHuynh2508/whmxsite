@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { gunzipSync } from 'node:zlib';
 import { publishLore } from './lore-publisher.mjs';
 
-function fakes({ locked = true, publishedHash = null, failPointer = false } = {}) {
+function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null } = {}) {
   const writes = [];
   let state = { publishedHash };
   const repo = {
@@ -16,6 +16,7 @@ function fakes({ locked = true, publishedHash = null, failPointer = false } = {}
   };
   const storage = {
     envName: 'development',
+    readPointerFile: async () => livePointerFile,
     putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body]); },
     putBackup: async (key, buffer) => writes.push(['backup', key, JSON.parse(gunzipSync(buffer).toString())]),
   };
@@ -36,8 +37,8 @@ test('publishes content, then pointer, then state; always writes the backup', as
 
 test('unchanged content writes only the backup', async () => {
   const first = fakes();
-  await publishLore({ repo: first.repo, storage: first.storage, now });
-  const f = fakes({ publishedHash: first.getState().publishedHash });
+  const { file } = await publishLore({ repo: first.repo, storage: first.storage, now });
+  const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: file });
   assert.equal((await publishLore({ repo: f.repo, storage: f.storage, now })).status, 'unchanged');
   assert.deepEqual(f.writes.map((w) => w[0]), ['backup']);
 });
@@ -52,4 +53,12 @@ test('a pointer failure leaves state untouched so the old version stays live', a
   const f = fakes({ failPointer: true });
   await assert.rejects(publishLore({ repo: f.repo, storage: f.storage, now }), /R2 down/);
   assert.equal(f.writes.some((w) => w[0] === 'state'), false);
+});
+
+test('a new environment is published even when the DB state already has this hash (review #3)', async () => {
+  const first = fakes();
+  const { file } = await publishLore({ repo: first.repo, storage: first.storage, now });
+  const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: null });
+  assert.equal((await publishLore({ repo: f.repo, storage: f.storage, now })).status, 'published');
+  assert.ok(f.writes.some((w) => w[0] === 'public' && w[1] === file));
 });

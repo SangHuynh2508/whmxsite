@@ -1,6 +1,6 @@
 // server/profile/lore-storage.mjs
 // R2 access for lore: public bucket under LORE_PUBLISH_PREFIX + a private backup bucket.
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 export function loadLoreStorageConfig(env = process.env) {
   const need = (name) => {
@@ -23,6 +23,15 @@ export function createLoreStorage(config) {
     envName: config.envName,
     async putPublic(name, body, { cacheControl }) {
       await client.send(new PutObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}${name}`, Body: body, ContentType: 'application/json; charset=utf-8', CacheControl: cacheControl }));
+    },
+    async readPointerFile() {
+      try {
+        const response = await client.send(new GetObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}lore.pointer.json` }));
+        return JSON.parse(await response.Body.transformToString()).file ?? null;
+      } catch (error) {
+        if (error?.name === 'NoSuchKey' || error?.$metadata?.httpStatusCode === 404) return null;
+        throw error;
+      }
     },
     async putBackup(key, buffer) {
       await client.send(new PutObjectCommand({ Bucket: config.backupBucket, Key: key, Body: buffer, ContentType: 'application/gzip' }));
