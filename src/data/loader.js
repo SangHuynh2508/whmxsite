@@ -1,8 +1,12 @@
+import { loadLoreOverlay, mergeLoreOverlay } from '../features/profile/api/loreOverlay.mts';
+
 let gameData = null;
 
 export async function loadGameData() {
   if (gameData) return gameData;
   try {
+    // Started in parallel with data.json; resolves to null on any failure (CN fallback).
+    const overlayPromise = loadLoreOverlay(import.meta.env.VITE_LORE_POINTER_URL);
     const res = await fetch('/data.json');
     gameData = await res.json();
     if (gameData && gameData.characters) {
@@ -19,6 +23,7 @@ export async function loadGameData() {
         }
       });
     }
+    mergeLoreOverlay(gameData, await overlayPromise);
     return gameData;
   } catch (error) {
     console.error("Error loading data:", error);
