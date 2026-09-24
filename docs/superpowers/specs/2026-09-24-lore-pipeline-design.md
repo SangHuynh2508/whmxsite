@@ -1,6 +1,6 @@
 # Lore pipeline (character profile) — design spec
 
-> Date: 2026-09-24. Status: **Approved by the owner on 2026-09-24** (including the 所属 source, §12 manual steps and the 90-day backup lifecycle). Next: implementation plan via `superpowers:writing-plans`.
+> Date: 2026-09-24. Status: **Approved by the owner on 2026-09-24** (including the 所属 source, §12 manual steps and the 90-day backup lifecycle). Adjusted while planning (overlay write in Python, no timestamp in the content file, publish endpoint open to editors, env segment in backup keys, empty department diff at gate 2); see the plan's last section. Implementation plan: `docs/superpowers/plans/2026-09-24-lore-pipeline.md`.
 > Source of truth for the decisions: `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` §1 (owner decisions) and §2 "P0 design — approved sections" 1–4. This spec turns those four sections into buildable detail. It does not add features. Where the approved text left a mechanism open, the choice made here is marked **[spec choice]** and listed in §11 for owner confirmation.
 
 ## 1. Goal and scope
@@ -148,11 +148,11 @@ Read-only. Returns `null` for a character with no profile (the caller then leave
 
 ## 6. Local data.json overlay + parity (P2)
 
-`scripts/export-profile-overlay.mjs --shape legacy|v2`: runs after `python tools/build_web_data.py`, reads `public/data.json`, replaces `characters[id].profile` with `resolveCharacterProfile(id, ctx, {shape})` for every character that has a profile, and writes back atomically (temp file in `public/` + rename). It only reads the DB. Serialization must match the Python writer (compact separators, non-ASCII unescaped, key order preserved); any mismatch is caught by gate 1.
+`scripts/export-profile-overlay.mjs --shape legacy|v2` runs after `python tools/build_web_data.py` and prints `{characterId: resolveCharacterProfile(id, ctx, {shape})}` to stdout; `tools/apply_profile_overlay.py` reads it from stdin, replaces `characters[id].profile` in `public/data.json` and writes back atomically (temp file + rename). The exporter only reads the DB. **Python does the write** because Node's `JSON.parse`/`stringify` moves integer-like keys (verified: `items` `"3"` jumps ahead of `"1001"`), while a Python round-trip is byte-identical.
 
 **Gate 1 (legacy):** fresh `build_web_data.py` output → overlay `--shape legacy` → the file is **byte-identical** to its input. Run before any lore VI is published. If it fails, fix the resolver/serializer; nothing proceeds.
 
-**Gate 2 (v2):** overlay `--shape v2`, then a check script proves the diff touches only `characters.*.profile` (parse both, drop `profile`, deep-equal the rest), no value in any `profile` matches `^[KTSP]\d{4}$`, and it prints every character whose `department` changed (expected: the 26 characters the keyword heuristic got wrong or left empty, e.g. A0167 → Liên Minh Hàng Hải, A0180 → Bộ Kỹ Thuật, A0003 no longer empty) for the owner to eyeball, then all validators pass: `validate_data.py`, `validate_public_output.py`, `validate_skin_roster.py`, `validate_skin_assets.py`, `npm run build`.
+**Gate 2 (v2):** overlay `--shape v2`, then a check script proves the diff touches only `characters.*.profile` (parse both, drop `profile`, deep-equal the rest), no value in any `profile` matches `^[KTSP]\d{4}$`, and it prints every character whose `department` changed (expected: none, because the old pipeline already switched to `typeJJh` in commit `d3e9689`; any entry means an organisation got a published admin VI name), then all validators pass: `validate_data.py`, `validate_public_output.py`, `validate_skin_roster.py`, `validate_skin_assets.py`, `npm run build`.
 
 After gate 2, the overlay step (`--shape v2`) becomes part of the release-day build (N2 runbook, step 5, after `build_web_data.py`). The build machine then needs read-only DB access (`.env.local`).
 
@@ -160,7 +160,7 @@ After gate 2, the overlay step (`--shape v2`) becomes part of the release-day bu
 
 ### 7.1 Objects
 - Public bucket (the existing `R2_BUCKET`), prefix per environment from `LORE_PUBLISH_PREFIX` (e.g. `lore/production/`, `lore/preview/`, `lore/development/`).
-- Content: `lore.<sha256-12>.json` = `{ "version": 1, "publishedAt": "…", "characters": { "<id>": <v2 profile> } }`, `Cache-Control: public, max-age=31536000, immutable`. Built by looping `resolveCharacterProfile(id, ctx, {shape: 'v2'})` over official characters only.
+- Content: `lore.<sha256-12>.json` = `{ "version": 1, "characters": { "<id>": <v2 profile> } }` (no timestamp inside, so the same DB state always gives the same file name; `publishedAt` lives in the pointer), `Cache-Control: public, max-age=31536000, immutable`. Built by looping `resolveCharacterProfile(id, ctx, {shape: 'v2'})` over official characters only.
 - Pointer: `lore.pointer.json` = `{ "file": "lore.<hash>.json", "publishedAt": "…" }`, `Cache-Control: public, max-age=60`.
 - A publish = upload content (if that hash is new), then overwrite the pointer (a single PUT, so the swap is atomic). Old content files are kept. **Rollback** = repoint (`scripts/publish-lore.mjs --repoint <file>`, owner-run).
 - The bucket needs a CORS rule allowing `GET` from the site origins (owner, Cloudflare dashboard).
@@ -172,7 +172,7 @@ After gate 2, the overlay step (`--shape v2`) becomes part of the release-day bu
 - Records the result in a one-row table `lore_publish_state` (`published_file`, `published_hash`, `published_at`, `published_by_user_id`, `last_edit_at`), which the P4 UI reads to show "published / has unpublished changes".
 
 ### 7.3 Callers
-- `POST /api/admin/lore/publish`: owner-only, same-origin + session + active-user checks like other admin routes. New `lore` case in `api/admin/[...].js` → `server/admin-api-routes/lore.mjs` (no new Vercel Function). `GET` on the same path returns `lore_publish_state`.
+- `POST /api/admin/lore/publish`: any active signed-in admin (owner or editor), same-origin + session checks like other admin routes. Editors must be allowed because the P4 auto-publish runs in their browser after their own saves; it only publishes what is already saved. The "Xuất bản" button is shown to owners only (P4). New `lore` case in `api/admin/[...].js` → `server/admin-api-routes/lore.mjs` (no new Vercel Function). `GET` on the same path returns `lore_publish_state`.
 - `scripts/publish-lore.mjs`: CLI for the first publish and verification (`--dry-run` writes the JSON locally instead of uploading; `--repoint <file>`).
 
 ### 7.4 Trigger contract for P4
@@ -186,7 +186,7 @@ After gate 2, the overlay step (`--shape v2`) becomes part of the release-day bu
 
 ## 8. Backup and restore (plan P6, ships with P3)
 
-- Every `publishLore` call (including `unchanged`) writes `backups/lore/<YYYY-MM-DD>.json.gz` (UTC date, overwritten by the day's latest state) containing all `character_profiles` structure rows, all `profile_texts` (including unpublished and legacy VI), all `lore_terms`, `lore_publish_state`, and `edit_history` rows for `character_profile` / `lore_term` entities.
+- Every `publishLore` call (including `unchanged`) writes `backups/lore/<env>/<YYYY-MM-DD>.json.gz` (`<env>` from `LORE_PUBLISH_PREFIX`, so development never overwrites production; UTC date, overwritten by the day's latest state) containing all `character_profiles` structure rows, all `profile_texts` (including unpublished and legacy VI), all `lore_terms`, `lore_publish_state`, and `edit_history` rows for `character_profile` / `lore_term` entities.
 - **Private** means a **separate bucket without public access** (`R2_BACKUP_BUCKET`): R2 public access is per bucket, so a prefix inside the public bucket would be readable. Lifecycle rule: delete after 90 days (owner set it up in the Cloudflare dashboard on 2026-09-24).
 - `scripts/restore-lore-snapshot.mjs <date|file> --actor <owner email>`: default is a dry run that lists every unit/term whose `vi` / `vi_origin` / `state` differs. `--apply` (owner approval required, it writes the DB) restores those fields in one transaction, bumps revisions, and writes `human_edit` history rows with `metadata.restoredFrom`. It does not re-insert old history rows (they stay in the snapshot file). CN is never restored from a snapshot; run the importer first on an empty DB.
 
