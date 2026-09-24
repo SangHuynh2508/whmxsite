@@ -31,7 +31,7 @@ Full local commit chain (newest first) since the rollback checkpoint includes th
 
 **Vercel Preview deployments have been failing** (`Build Failed: No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan`) since before this session started, unrelated to any code content (docs-only commits fail identically). Root cause confirmed: `api/` has **exactly 13 route files** (still true as of this doc — `find api -name "*.js" | wc -l` = 13), 1 over Vercel Hobby's cap.
 
-**Fix designed but not yet executed — "Plan A" in the session's plan file** (`C:\Users\Legion\.claude\plans\you-are-working-in-fluffy-micali.md`, also should be read for full phase detail):
+**Fix designed but not yet executed — "Plan A" in the session's plan file** (`docs/plans/WHMX_ROADMAP_ADMIN_UI_PLAN_2026-09-22.md`, also should be read for full phase detail):
 
 - Move the 10 `api/admin/{users,characters,skins,previews,assets}/**` files' logic into `server/admin-api-routes/*.mjs` (outside `api/`, doesn't count toward the cap).
 - Replace them with one thin dispatcher `api/admin/[...path].js` (Vercel catch-all — preserves every existing external URL exactly, so `characterSkinAdminWorkspace.js`, `adminShell.js`, `previewWorkspace.js`, and 3 of 4 proof scripts need **zero changes**; only `scripts/db-preview-admin-api-test.mjs`'s two direct module imports need updating).
@@ -61,7 +61,7 @@ Owner confirmed this session: **Hướng B is the chosen mechanism**, with an ex
 
 ### 4.3 Admin/Public UI integration roadmap — designed, Phase 0 done, rest not started
 
-Full detail lives in the plan file (`C:\Users\Legion\.claude\plans\you-are-working-in-fluffy-micali.md`). Summary:
+Full detail lives in the plan file (`docs/plans/WHMX_ROADMAP_ADMIN_UI_PLAN_2026-09-22.md`). Summary:
 
 - **Phase 0** (SSR color) — ✅ done, pushed.
 - **Phase 1** — session-awareness primitive: a shared module wrapping `fetch('/api/admin/session')`, called once at boot, so public-page code (not just `adminShell.js`) can know "is this visitor an authorized editor." Not started.
@@ -81,7 +81,7 @@ Reference material behind these decisions: `docs/WHMX_ADMIN_ARCHITECTURE_ANALYSI
 ## 6. Fresh-session continuation checklist
 
 1. Read this file, then `WHMX_APP_ARCHITECTURE.md`, `WHMX_ENGINEERING_PRINCIPLES.md`.
-2. Read the plan file at `C:\Users\Legion\.claude\plans\you-are-working-in-fluffy-micali.md` for full Plan A + roadmap phase detail before writing any related code.
+2. Read the plan file at `docs/plans/WHMX_ROADMAP_ADMIN_UI_PLAN_2026-09-22.md` for full Plan A + roadmap phase detail before writing any related code.
 3. Confirm live git state with `git log --oneline -5` and `git ls-remote origin feat/postgres-admin-crud` — do not trust this document's SHAs blindly if significant time has passed.
 4. Do not push anything beyond what's already on `origin` without explicit owner approval (unchanged standing rule).
 5. Do not touch the parent `D:\BaiTapCode\WHMX\` folder's own doc duplication without being asked (shared with `NeoArtifacts`, out of this repo's scope).
