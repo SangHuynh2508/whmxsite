@@ -14,7 +14,7 @@ from urllib.parse import urljoin
 
 MANIFEST_FILENAME = "asset-publish-manifest.json"
 MANIFEST_SCHEMA_VERSION = 1
-REMOTE_CATEGORIES = {"card": "cards", "drawing": "drawings"}
+REMOTE_CATEGORIES = {"card": "cards", "drawing": "drawings", "archive": "archives"}
 
 
 def manifest_path(project_root: Path) -> Path:
