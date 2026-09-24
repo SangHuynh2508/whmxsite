@@ -660,7 +660,16 @@ def build():
                 if k.startswith("Effect") and not k.endswith("Para") and not k.endswith("Tips"):
                     buff_idx = -1
                     for i, p in enumerate(v):
-                        if str(p) == buff_key or buff_key in str(p):
+                        p_str = str(p)
+                        # Exact match, or a genuine underscore-delimited
+                        # per-level/variant suffix (e.g. buff_key
+                        # "Buff_A0156_2" must match operand
+                        # "Buff_A0156_2_1"). A bare-letter suffix with no
+                        # separator (e.g. "Buff_V0053_1" vs the unrelated
+                        # "Buff_V0053_1A") must NOT match — that was the
+                        # actual V0053 bug, a false-positive prefix collision
+                        # between two distinct buff ids.
+                        if p_str == buff_key or p_str.startswith(buff_key + "_"):
                             buff_idx = i
                             break
                     if buff_idx != -1:
