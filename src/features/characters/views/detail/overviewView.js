@@ -3,6 +3,7 @@
  * Profile & Identity Information ONLY (Compact Overview)
  */
 import { getCharacterCardUrl } from '../../../assets/assetPaths.js';
+import { escapeHtml } from '../../../../lib/escapeHtml.mts';
 
 export function renderOverviewTab(container, char) {
   const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
@@ -64,7 +65,7 @@ export function renderOverviewTab(container, char) {
               ${profile.staff_status ? `
               <div class="info-cell">
                 <span class="info-label">Tình trạng nhân sự:</span>
-                <span class="info-val">${profile.staff_status}</span>
+                <span class="info-val">${escapeHtml(profile.staff_status)}</span>
               </div>
               ` : ''}
 
@@ -72,7 +73,7 @@ export function renderOverviewTab(container, char) {
               ${profile.record_id ? `
               <div class="info-cell">
                 <span class="info-label">Mã hồ sơ:</span>
-                <span class="info-val record-id-val">${profile.record_id}</span>
+                <span class="info-val record-id-val">${escapeHtml(profile.record_id)}</span>
               </div>
               ` : ''}
             </div>
@@ -101,7 +102,7 @@ export function renderOverviewTab(container, char) {
               ${profile.department ? `
               <div class="info-cell">
                 <span class="info-label">Trực thuộc:</span>
-                <span class="info-val highlight-dept">${profile.department}</span>
+                <span class="info-val highlight-dept">${escapeHtml(profile.department)}</span>
               </div>
               ` : ''}
 
@@ -109,7 +110,7 @@ export function renderOverviewTab(container, char) {
               ${profile.entity_status ? `
               <div class="info-cell">
                 <span class="info-label">Tình trạng bản thể:</span>
-                <span class="info-val">${profile.entity_status}</span>
+                <span class="info-val">${escapeHtml(profile.entity_status)}</span>
               </div>
               ` : ''}
             </div>
