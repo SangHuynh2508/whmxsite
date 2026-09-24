@@ -59,3 +59,15 @@ test('any write needs a publish, including a new unit on an existing profile (re
   const identical = planProfileImport({ normalized: { profiles: [profile([u('card_intro', 'A')])], terms: [] }, current });
   assert.equal(needsPublish(identical), false);
 });
+
+test('profiles and terms gone from raw are marked absent once, never deleted (review #13)', () => {
+  const current = empty();
+  current.profiles.set('Z9999', { entityId: 'z', sourceHash: 'P9', sourcePresent: true });
+  current.profiles.set('Y0001', { entityId: 'y', sourceHash: 'P8', sourcePresent: false });
+  current.terms.set('K9999', { entityId: 'k', sourceHash: 'T9', nameVi: null, detailVi: null, state: 'ok', sourcePresent: true });
+  const plan = planProfileImport({ normalized: { profiles: [], terms: [] }, current });
+  assert.deepEqual(plan.profiles, [{ characterId: 'Z9999', action: 'absent' }]);
+  assert.deepEqual(plan.terms, [{ code: 'K9999', action: 'absent', patch: { sourcePresent: false } }]);
+  assert.equal(plan.counts.absent, 2);
+  assert.ok(plan.touchedProfiles.has('Z9999') && plan.touchedTerms.has('K9999'));
+});

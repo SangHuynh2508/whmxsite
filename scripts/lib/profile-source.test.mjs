@@ -73,3 +73,9 @@ test('imports every affinity level, even unreferenced ones (spec §3.4)', () => 
   const term = normalizeProfileSources(withLevel9, ['V0053']).terms.find((t) => t.code === 'AFFINITY_9');
   assert.deepEqual([term?.nameCn, term?.detailCn], ['莫逆', '莫逆之交']);
 });
+
+test('a DB character missing from raw is reported, not given an empty profile (review #13)', () => {
+  const out = normalizeProfileSources(raw, ['V0053', 'Z9999']);
+  assert.deepEqual(out.missingFromRaw, ['Z9999']);
+  assert.deepEqual(out.profiles.map((p) => p.characterId), ['V0053']);
+});

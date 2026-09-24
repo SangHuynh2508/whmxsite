@@ -27,8 +27,10 @@ export function normalizeProfileSources(raw, characterIds) {
   const skipped = Object.keys(raw.characterFiles).filter((id) => !wanted.has(id)).sort();
   const terms = new Map();
   const profiles = [];
+  const missingFromRaw = [...wanted].filter((id) => !raw.characterFiles[id]).sort();
 
   for (const characterId of [...wanted].sort()) {
+    if (!raw.characterFiles[characterId]) continue;
     const file = raw.characterFiles[characterId] || {};
     const relic = raw.historicalRelicsMap[characterId];
     const units = [];
@@ -109,7 +111,7 @@ export function normalizeProfileSources(raw, characterIds) {
     addTerm(terms, `AFFINITY_${level}`, 'affinity_level', text(friend.iconDescriptionLanText), text(friend.descriptionLanText));
   }
 
-  return { profiles, terms: [...terms.values()].sort((a, b) => a.code.localeCompare(b.code)), skipped };
+  return { profiles, terms: [...terms.values()].sort((a, b) => a.code.localeCompare(b.code)), skipped, missingFromRaw };
 }
 
 function addTerm(terms, code, kind, nameCn, detailCn) {

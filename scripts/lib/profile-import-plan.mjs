@@ -41,6 +41,15 @@ export function planProfileImport({ normalized, current }) {
     }
   }
 
+  // Gone from raw: mark absent once (the resolver skips absent profiles); never delete.
+  const normalizedIds = new Set(normalized.profiles.map((p) => p.characterId));
+  for (const [characterId, old] of current.profiles) {
+    if (normalizedIds.has(characterId) || !old.sourcePresent) continue;
+    plan.profiles.push({ characterId, action: 'absent' });
+    plan.touchedProfiles.add(characterId);
+    counts.absent += 1;
+  }
+
   for (const term of normalized.terms) {
     const old = current.terms.get(term.code);
     if (!old) { plan.terms.push({ code: term.code, action: 'insert', row: term }); counts.inserted += 1; plan.touchedTerms.add(term.code); continue; }
@@ -53,6 +62,13 @@ export function planProfileImport({ normalized, current }) {
     } else counts.updated += 1;
     plan.terms.push({ code: term.code, action: 'update', patch });
     plan.touchedTerms.add(term.code);
+  }
+  const normalizedCodes = new Set(normalized.terms.map((t) => t.code));
+  for (const [code, old] of current.terms) {
+    if (normalizedCodes.has(code) || !old.sourcePresent) continue;
+    plan.terms.push({ code, action: 'absent', patch: { sourcePresent: false } });
+    plan.touchedTerms.add(code);
+    counts.absent += 1;
   }
   return plan;
 }

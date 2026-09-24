@@ -56,6 +56,7 @@ function summarize(plan, normalized, seeds) {
   return {
     counts: plan.counts,
     skippedRawCharacters: normalized.skipped,
+    missingFromRaw: normalized.missingFromRaw,
     profiles: plan.profiles.filter((p) => p.action !== 'unchanged').map((p) => `${p.action} ${p.characterId}`),
     textInserts: plan.textInserts.length,
     textUpdates: plan.textUpdates.map((u) => `${u.characterId} ${u.unitKey} ${JSON.stringify(u.patch.state ?? (u.patch.sourcePresent === false ? 'absent' : 'source'))}`),
@@ -84,6 +85,10 @@ async function apply(db, { plan, receipt, seeds }) {
 
     for (const p of plan.profiles) {
       if (p.action === 'unchanged') continue;
+      if (p.action === 'absent') {
+        await tx.update(characterProfiles).set({ sourcePresent: false, updatedAt: now }).where(eq(characterProfiles.entityId, profileEntity.get(p.characterId)));
+        continue;
+      }
       const { characterId, ...row } = p.row;
       const values = { ...row, characterEntityId: characterEntity.get(characterId), sourceSnapshotId: snapshot.id, sourcePresent: true, sourceSeenAt: now, updatedAt: now };
       if (p.action === 'insert') await tx.insert(characterProfiles).values({ entityId: profileEntity.get(characterId), ...values });
@@ -95,7 +100,7 @@ async function apply(db, { plan, receipt, seeds }) {
     for (const u of plan.textUpdates) await tx.update(profileTexts).set({ ...u.patch, updatedAt: now }).where(eq(profileTexts.id, u.id));
     for (const t of plan.terms) {
       if (t.action === 'insert') await tx.insert(loreTerms).values({ entityId: termEntity.get(t.code), code: t.code, kind: t.row.kind, nameCn: t.row.nameCn, detailCn: t.row.detailCn, sourceHash: t.row.sourceHash });
-      if (t.action === 'update') await tx.update(loreTerms).set({ ...t.patch, updatedAt: now }).where(eq(loreTerms.code, t.code));
+      if (t.action === 'update' || t.action === 'absent') await tx.update(loreTerms).set({ ...t.patch, updatedAt: now }).where(eq(loreTerms.code, t.code));
     }
 
     const touched = new Set(plan.touchedProfiles);
@@ -152,7 +157,7 @@ if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
       const ids = Object.keys(JSON.parse(readFileSync(args.dataJson, 'utf8')).characters);
       const normalized = normalizeProfileSources(raw, ids);
       const legacy = args.seedLegacy ? matchLegacyCells(readLegacyRows(args.workbook), normalized.profiles) : null;
-      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
+      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, missingFromRaw: normalized.missingFromRaw, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
     } else {
       const db = getDb();
       const ids = (await db.select({ id: characters.characterId }).from(characters)).map((r) => r.id);
