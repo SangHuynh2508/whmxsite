@@ -23,7 +23,9 @@ export async function loadGameData() {
         }
       });
     }
-    mergeLoreOverlay(gameData, await overlayPromise);
+    // Do not hold the app for up to 5 s: merge when the overlay arrives. Views read
+    // char.profile at render time, so the next render shows it.
+    overlayPromise.then((overlay) => mergeLoreOverlay(gameData, overlay));
     return gameData;
   } catch (error) {
     console.error("Error loading data:", error);
