@@ -71,6 +71,16 @@ def _report_current_process_open_files(master_path):
     print(f"[SAFE MUTATION LOCK DIAG] MASTER_IN_CURRENT_PROCESS_OPEN_FILES={master_is_open}")
 
 
+def _last_data_row(ws):
+    """Last row that holds a value. ``max_row`` follows the declared sheet dimension,
+    which Excel extends over formatted-but-empty rows and openpyxl drops on save."""
+    last = 1
+    for index, row in enumerate(ws.iter_rows(values_only=True), start=1):
+        if any(value not in (None, "") for value in row):
+            last = index
+    return last
+
+
 def safe_mutate_workbook(
     base_dir,
     mutator_fn,
@@ -144,10 +154,11 @@ def safe_mutate_workbook(
             appended_headers = after_headers[before_width:]
             if not set(appended_headers).issubset(set(authorized_new_columns.get(sheetname, ()))):
                 raise PermissionError(f"Unauthorized appended headers in {sheetname}: {appended_headers}")
-            if ws_after.max_row < ws_before.max_row:
+            before_last, after_last = _last_data_row(ws_before), _last_data_row(ws_after)
+            if after_last < before_last:
                 allowed_deleted_ids = authorized_deleted_rows.get(sheetname, set())
                 if not allowed_deleted_ids:
-                    raise PermissionError(f"Rows removed in {sheetname}: {ws_before.max_row} -> {ws_after.max_row}")
+                    raise PermissionError(f"Rows removed in {sheetname}: {before_last} -> {after_last}")
                 before_id_col = [str(r[0] or "").strip() for r in ws_before.iter_rows(min_row=2, max_col=1, values_only=True)]
                 after_id_col = [str(r[0] or "").strip() for r in ws_after.iter_rows(min_row=2, max_col=1, values_only=True)]
                 from collections import Counter
@@ -157,18 +168,18 @@ def safe_mutate_workbook(
                         f"Deleted rows in {sheetname} do not exactly match authorized deleted IDs: "
                         f"{set(deleted_counts.keys())!r} vs {sorted(allowed_deleted_ids)!r}"
                     )
-            if ws_after.max_row > ws_before.max_row:
+            if after_last > before_last:
                 allowed_ids = authorized_new_rows.get(sheetname, set())
                 if not allowed_ids:
                     raise PermissionError(
-                        f"Unauthorized rows appended in {sheetname}: {ws_before.max_row} -> {ws_after.max_row}"
+                        f"Unauthorized rows appended in {sheetname}: {before_last} -> {after_last}"
                     )
                 existing_ids = {
                     str(row[0] or "").strip()
                     for row in ws_before.iter_rows(min_row=2, max_col=1, values_only=True)
                 }
                 appended_ids = []
-                for row in ws_after.iter_rows(min_row=ws_before.max_row + 1, max_col=after_width, values_only=True):
+                for row in ws_after.iter_rows(min_row=before_last + 1, max_row=after_last, max_col=after_width, values_only=True):
                     record_id = str((row[0] if row else None) or "").strip()
                     appended_ids.append(record_id)
                     if not record_id or record_id in existing_ids or record_id not in allowed_ids:
