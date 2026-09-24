@@ -24,6 +24,8 @@ export const managedEntityType = pgEnum('managed_entity_type', [
   'skin',
   'series',
   'preview_character',
+  'character_profile',
+  'lore_term',
 ]);
 export const editEventType = pgEnum('edit_event_type', [
   'human_edit',
