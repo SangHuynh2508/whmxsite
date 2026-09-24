@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "node --test \"scripts/lib/*.test.mjs\" \"server/profile/*.test.mjs\" \"api/admin/*.test.mjs\" \"src/**/*.test.mts\"",
+    "test:tools": "python -m unittest discover -s tools -p \"test_*.py\"",
     "validate-data": "python tools/validate_data.py",
     "sync-sheets": "python tools/update_from_gsheets.py",
     "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",

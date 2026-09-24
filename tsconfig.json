@@ -17,5 +17,6 @@
       "@/*": ["./src/admin/layout/*"]
     }
   },
-  "include": ["src/admin/layout", "src/**/*.tsx"]
+  "include": ["src/admin/layout", "src/**/*.tsx", "src/**/*.mts"],
+  "exclude": ["src/**/*.test.mts"]
 }
