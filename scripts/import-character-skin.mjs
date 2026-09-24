@@ -225,9 +225,14 @@ export function loadSourceBundle({
   const workbookCharacters = new Map(workbook.characters.map((row) => [row.character_id, row]));
   const workbookSkins = new Map(workbook.skins.map((row) => [row.skin_id, row]));
   if (validateExpectedCounts) {
-    if (workbook.characters.length !== 133) throw new Error(`expected 133 CHARACTER rows, got ${workbook.characters.length}`);
-    if (workbook.skins.length !== 145) throw new Error(`expected 145 SKIN rows, got ${workbook.skins.length}`);
-    if (rawSkinMap.size !== 145) throw new Error(`expected 145 raw actual skins, got ${rawSkinMap.size}`);
+    // Counts come from raw MasterData, not constants, so a new game release doesn't break the import.
+    // Every workbook row is still checked against its raw record below.
+    if (!workbook.characters.length) throw new Error('workbook has no CHARACTER rows');
+    const missing = [...rawSkinMap.keys()].filter((id) => !workbookSkins.has(id));
+    const extra = [...workbookSkins.keys()].filter((id) => !rawSkinMap.has(id));
+    if (missing.length || extra.length) {
+      throw new Error(`SKIN sheet does not match raw actual skins (missing: ${missing.join(', ') || '-'}; extra: ${extra.join(', ') || '-'})`);
+    }
   }
 
   const characterCandidates = [];
@@ -388,8 +393,9 @@ export function loadSourceBundle({
   }
 
   if (validateExpectedCounts) {
-    const highCount = skinCandidates.filter((candidate) => candidate.isHighSkin).length;
-    if (highCount !== 10) throw new Error(`expected 10 High Skins, got ${highCount}`);
+    const rawHigh = [...rawSkinMap.entries()].filter(([id, raw]) => Boolean(highSkinMap[id]) || raw.highskin === 1).map(([id]) => id).sort();
+    const flaggedHigh = skinCandidates.filter((candidate) => candidate.isHighSkin).map((candidate) => candidate.skinId).sort();
+    if (rawHigh.join() !== flaggedHigh.join()) throw new Error(`High Skin set differs from raw (raw: ${rawHigh.join(', ')}; flagged: ${flaggedHigh.join(', ')})`);
     const noSeries = skinCandidates.filter((candidate) => candidate.skinId === 'S0174003');
     if (noSeries.length !== 1 || noSeries[0].rawSeriesId !== null) throw new Error('S0174003 must have null Series');
     if (skinCandidates.some((candidate) => candidate.rawSeriesId === null && candidate.skinId !== 'S0174003')) {
@@ -644,10 +650,9 @@ async function applyTypedState(tx, table, current, currentKey, key, values, sour
 }
 
 export async function runImport(db, bundle, { validateExpectedCounts = true, failAfterEntity = null } = {}) {
-  if (validateExpectedCounts) {
-    if (bundle.characters.length !== 133 || bundle.skins.length !== 145 || bundle.skins.filter((skin) => skin.isHighSkin).length !== 10) {
-      throw new Error('source bundle does not meet the accepted Character/Skin counts');
-    }
+  // Source validation lives in loadSourceBundle; this only refuses an obviously truncated bundle.
+  if (validateExpectedCounts && (!bundle.characters.length || !bundle.skins.length)) {
+    throw new Error('source bundle is empty');
   }
   const counts = makeCounts();
   const now = new Date();
@@ -809,18 +814,22 @@ function parseArgs(argv) {
     else if (value === '--manifest') args.manifestPath = resolve(argv[++index]);
     else if (value === '--public-root') args.publicRoot = resolve(argv[++index]);
     else if (value === '--no-count-validation') args.validateExpectedCounts = false;
+    else if (value === '--check') args.check = true;
     else throw new Error(`unknown importer argument: ${value}`);
   }
   return args;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
-  const db = getDb();
   try {
     const options = parseArgs(process.argv.slice(2));
     const bundle = loadSourceBundle(options);
-    const summary = await runImport(db, bundle, options);
-    console.log(JSON.stringify(summary));
+    if (options.check) {
+      // --check: validate sources only; never touches the database.
+      console.log(JSON.stringify({ check: 'ok', characters: bundle.characters.length, skins: bundle.skins.length, highSkins: bundle.skins.filter((skin) => skin.isHighSkin).length }));
+    } else {
+      console.log(JSON.stringify(await runImport(getDb(), bundle, options)));
+    }
   } catch (error) {
     console.error(`IMPORT_FAILED: ${error instanceof Error ? error.message : 'unknown importer failure'}`);
     process.exitCode = 1;
