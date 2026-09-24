@@ -429,8 +429,18 @@ def copy_row_schema(ws, source_row: int, target_row: int, headers: list[str]) ->
                 dst.value = src.value
 
 
+def current_source_version() -> dict[str, Any]:
+    """Version of the MasterData actually on disk: the newest launch provenance written by
+    `NeoArtifacts.py masterdata`. version.json is not refreshed by that command."""
+    launches = sorted((SOURCE_ROOT.parent / "provenance").glob("launch_*.json"))
+    if not launches:
+        return json.loads(VERSION_FILE.read_text(encoding="utf-8-sig"))
+    launch = json.loads(launches[-1].read_text(encoding="utf-8"))["launch"]
+    return {"cfcVersion": launch["ConfigVersion_v2"], "langVersion": launch["LangData"]}
+
+
 def collect(character_id: str) -> tuple[dict[str, list[dict[str, Any]]], dict[str, Any]]:
-    version = json.loads(VERSION_FILE.read_text(encoding="utf-8-sig"))
+    version = current_source_version()
     character_table = load_json("characterTable.json", {})
     skill_map = load_json("skillMap.json", {})
     role_map = load_json("roleattrMap.json", {})
