@@ -187,9 +187,9 @@ P0 must finish (sectioned design → spec in `docs/superpowers/specs/` → owner
 | Phase | Deliverable | Notes |
 |---|---|---|
 | P0 | Spec + implementation plan | Design approved (sections 1–4 above). Write the spec from those sections, get owner review, then `writing-plans` |
-| P1 | Profile importer | 🟡 Code done (Tasks 1–5); **waiting: owner approves migration 0005 + first import + legacy seed** |
-| P2 | Resolvers + parity | 🟡 Code done (Tasks 6–7); parity gates 1–2 run after P1 data exists |
-| P3 | Publish to R2 | 🟡 Code done (Tasks 8–11 incl. backup/restore); **waiting: env vars + first publish (owner)** |
+| P1 | Profile importer | Schema (`character_profiles`, `profile_texts`, `lore_terms`) + `scripts/import-character-profile.mjs` (`--check`). Sources: `characterFiles`, `characterFileTextMap`, `historicalRelicsMap` (incl. timeline), `HistoricalTextMap`, `friendshipDescription`; seed the 195 legacy VI cells once as `legacy_workbook`. Only characters already in the DB. Migration + first import need owner approval (DB writes) 🟡 **Status 2026-09-24:** code done (Tasks 1–5); waiting for owner approval of migration 0005 + first import + legacy seed. |
+| P2 | Resolvers + parity | JS per-entity resolvers (`resolveCharacterProfile(id)`). **Parity gate:** for every character, the resolver's legacy-shape output equals the legacy build's `profile` byte-for-byte before any DB edit; then the new shape (VI, resolved K/T/S, timeline, unlock level) 🟡 **Status 2026-09-24:** code done (Tasks 6–7); parity gates 1–2 run once P1 data exists. |
+| P3 | Publish to R2 | A Vercel Function builds the lore JSON with per-entity resolvers → versioned object on R2 + pointer swap. Triggered about 30 s after an Admin save (debounced) and by an owner button. Frontend overlay loader with CN fallback. No commits/CI (architecture §11, 2026-09-24) 🟡 **Status 2026-09-24:** code done (Tasks 8–11 incl. backup/restore); waiting for env vars + first publish (owner). |
 | P4 | Admin Lore module | Part F approach 2 (module workspace; `BilingualText` CN ↔ VI; no review states; revision/409 + history). React |
 | P5 | Next domains | Character/skin names (they already have overrides), then Hoán Chương, archive images (reuse managed assets + a new `artifact_archive` role), and later skills (Part D) |
 | P6 | Backup/restore | Daily private R2 snapshot written by the publish job + restore command (replaces the earlier "workbook auto-export" idea, see section 4) |
