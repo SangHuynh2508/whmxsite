@@ -287,16 +287,22 @@ def build():
                         if "ex" in sk_gid.lower():
                             actor_ex_map[(cid, sk_gid)] = rank
 
-    DEPT_KEYWORDS = {
-        "商业部": "Bộ Thương Mại",
+    # 所属 comes from characterTable.typeJJh -> TypeJJHMap (exact raw relation).
+    # VI names are hard-coded here until the lore pipeline moves them into
+    # lore_terms (docs/superpowers/specs/2026-09-24-lore-pipeline-design.md §5).
+    # An organisation without a VI name falls back to its CN name.
+    type_jjh_raw = load_json("TypeJJHMap.json")
+    DEPARTMENT_VI = {
         "资料部": "Bộ Tư Liệu",
+        "商业部": "Bộ Thương Mại",
         "技术部": "Bộ Kỹ Thuật",
         "执行部": "Bộ Hành Chính",
-        "航海家": "Liên Minh Hàng Hải",
+        "航海家联盟": "Liên Minh Hàng Hải",
+        "冬谷·航海家联盟": "Đông Cốc · Liên Minh Hàng Hải",
         "塞纳回廊": "Hành Lang Seine",
-        "不列颠": "Học Viện Anh Quốc",
-        "方塔": "Liên Minh Tháp Phương",
-        "繁星花": "Hiệp Hội Hoa Phồn Tinh"
+        "不列颠学会": "Học Viện Anh Quốc",
+        "方塔联合会": "Liên Minh Tháp Phương",
+        "繁星花协会": "Hiệp Hội Hoa Phồn Tinh",
     }
 
     STAFF_STATUS_MAP = {
@@ -314,11 +320,9 @@ def build():
         finfo = char_files_raw.get(cid, {})
         card_intro = finfo.get("cardIntrolanText", "").strip()
 
-        dept = ""
-        for k, v in DEPT_KEYWORDS.items():
-            if k in card_intro:
-                dept = v
-                break
+        org = type_jjh_raw.get(safe_str(char_table_raw.get(cid, {}).get("typeJJh")), {})
+        org_cn = org.get("NameLanText", "").strip()
+        dept = DEPARTMENT_VI.get(org_cn, org_cn)
 
         staff_raw = finfo.get("stafflanText", "").strip()
         staff_status = STAFF_STATUS_MAP.get(staff_raw, staff_raw)
@@ -819,7 +823,8 @@ def build():
             source_name = clean_rich_text((buff_loc.get(buff_ids[0]) or {}).get("buff_name_cn", ""))
             if source_name and source_name in source_text and source_name in raw_closure_text:
                 exact_plain_names.add(normalized_name)
-        for normalized_name in highlighted_names | exact_plain_names:
+        # Sorted (here and below): set order changes per run and leaks into output order.
+        for normalized_name in sorted(highlighted_names | exact_plain_names):
             add_unique_name_fallback(normalized_name, is_direct=True)
 
         # Complete the same card-local closure for rich-text names in a buff popup.
@@ -829,7 +834,7 @@ def build():
             key for key, mechanic in by_key.items()
             if mechanic.get("is_direct_popup_target")
         }
-        pending_keys = list(active_keys)
+        pending_keys = sorted(active_keys)
         while pending_keys:
             parent_key = pending_keys.pop()
             parent = by_key.get(parent_key)
@@ -842,7 +847,7 @@ def build():
                     parent.get("template") or parent.get("desc_cn", ""), flags=re.IGNORECASE | re.DOTALL,
                 )
             }
-            for normalized_name in parent_names:
+            for normalized_name in sorted(parent_names):
                 child = add_unique_name_fallback(normalized_name)
                 if not child or child.get("key") == parent.get("key"):
                     continue
@@ -1954,7 +1959,8 @@ def build():
                     
         # Collect level data for all expected gids
         raw_skills_dict = {}
-        for gid in expected_gids:
+        # Sorted: set order changes per run (hash seed) and leaks into output order.
+        for gid in sorted(expected_gids):
             levels = []
             seen_levels = set()
             for src in [char_skill_raw, passive_map_raw, skill_map_raw]:
