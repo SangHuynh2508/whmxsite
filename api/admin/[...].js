@@ -43,6 +43,11 @@ module.exports = async function adminApiDispatcher(request, response) {
         }
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
       }
+      case 'lore': {
+        const { lorePublish } = await import('../../server/admin-api-routes/lore.mjs');
+        if (rest.length === 1 && rest[0] === 'publish') return lorePublish(request, response);
+        return response.status(404).json({ error: { code: 'NOT_FOUND' } });
+      }
       default:
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
     }
