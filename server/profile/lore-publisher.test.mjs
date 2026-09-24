@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { gunzipSync } from 'node:zlib';
-import { publishLore } from './lore-publisher.mjs';
+import { publishLore, repointLore } from './lore-publisher.mjs';
 
 function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null } = {}) {
   const writes = [];
@@ -17,6 +17,7 @@ function fakes({ locked = true, publishedHash = null, failPointer = false, liveP
   const storage = {
     envName: 'development',
     readPointerFile: async () => livePointerFile,
+    publicFileExists: async (name) => name === 'lore.aaaaaaaaaaaa.json',
     putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body]); },
     putBackup: async (key, buffer) => writes.push(['backup', key, JSON.parse(gunzipSync(buffer).toString())]),
   };
@@ -61,4 +62,15 @@ test('a new environment is published even when the DB state already has this has
   const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: null });
   assert.equal((await publishLore({ repo: f.repo, storage: f.storage, now })).status, 'published');
   assert.ok(f.writes.some((w) => w[0] === 'public' && w[1] === file));
+});
+
+test('repoint rolls back under the lock, only to an existing file, and marks live as not current (review #6)', async () => {
+  const f = fakes();
+  await assert.rejects(repointLore({ repo: f.repo, storage: f.storage, fileName: 'lore.bbbbbbbbbbbb.json', now }), /not found/);
+  assert.equal(f.writes.length, 0);
+  assert.deepEqual(await repointLore({ repo: f.repo, storage: f.storage, fileName: 'lore.aaaaaaaaaaaa.json', now }), { status: 'repointed', file: 'lore.aaaaaaaaaaaa.json' });
+  assert.deepEqual(f.writes.map((w) => w[0] === 'public' ? w[1] : w[0]), ['lore.pointer.json', 'state']);
+  assert.deepEqual(f.getState(), { publishedHash: 'aaaaaaaaaaaa', publishedFile: 'lore.aaaaaaaaaaaa.json', publishedAt: null, publishedByUserId: null });
+  const busy = fakes({ locked: false });
+  assert.deepEqual(await repointLore({ repo: busy.repo, storage: busy.storage, fileName: 'lore.aaaaaaaaaaaa.json', now }), { status: 'busy' });
 });

@@ -5,11 +5,11 @@
 import { writeFileSync } from 'node:fs';
 
 import { closeDb, getDb } from '../db/client.mjs';
-import { POINTER_CACHE, POINTER_NAME, buildLoreDocument, buildPointer } from '../server/profile/lore-document.mjs';
+import { buildLoreDocument } from '../server/profile/lore-document.mjs';
 import { createLoreRepository } from '../server/profile/lore-repository.mjs';
 import { createLoreStorage, loadLoreStorageConfig } from '../server/profile/lore-storage.mjs';
 import { loadProfileContext, resolveAllProfiles } from '../server/profile/resolve-character-profile.mjs';
-import { publishLore } from '../server/profile/lore-publisher.mjs';
+import { publishLore, repointLore } from '../server/profile/lore-publisher.mjs';
 
 const argv = process.argv.slice(2);
 try {
@@ -20,10 +20,7 @@ try {
   } else if (argv[0] === '--repoint') {
     if (!/^lore\.[0-9a-f]{12}\.json$/.test(argv[1] ?? '')) throw new Error('usage: --repoint lore.<12 hex>.json');
     const storage = createLoreStorage(loadLoreStorageConfig());
-    const now = new Date();
-    await storage.putPublic(POINTER_NAME, buildPointer(argv[1], now), { cacheControl: POINTER_CACHE });
-    await createLoreRepository(getDb()).writeState(getDb(), { publishedFile: argv[1], publishedHash: argv[1].slice(5, 17), publishedAt: now });
-    console.log(JSON.stringify({ repointed: argv[1] }));
+    console.log(JSON.stringify(await repointLore({ repo: createLoreRepository(getDb()), storage, fileName: argv[1] })));
   } else {
     const storage = createLoreStorage(loadLoreStorageConfig());
     console.log(JSON.stringify(await publishLore({ repo: createLoreRepository(getDb()), storage })));

@@ -17,3 +17,14 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
     return { status: 'published', file: doc.fileName };
   });
 }
+
+// Rollback: point this environment at an older content file. publishedAt is cleared so
+// Admin keeps showing "unpublished changes" until the next real publish.
+export async function repointLore({ repo, storage, fileName, now = new Date() }) {
+  return repo.withPublishLock(async (tx) => {
+    if (!(await storage.publicFileExists(fileName))) throw new Error(`${fileName} not found in this environment`);
+    await storage.putPublic(POINTER_NAME, buildPointer(fileName, now), { cacheControl: POINTER_CACHE });
+    await repo.writeState(tx, { publishedFile: fileName, publishedHash: fileName.slice(5, 17), publishedAt: null, publishedByUserId: null });
+    return { status: 'repointed', file: fileName };
+  });
+}
