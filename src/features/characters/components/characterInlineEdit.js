@@ -103,8 +103,11 @@ function enterEditMode(container, char, characterId, toggleBtn) {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = 'char-inline-edit-input';
-    input.value = el.textContent.trim();
+    // From the data, not the rendered text: name_vi falls back to the CN name on screen.
+    input.value = (char[field] ?? '').toString().trim();
     input.maxLength = 200;
+    input.placeholder = 'Chưa có — nhập để thêm';
+    el.closest('.info-cell')?.classList.remove('hidden'); // empty fields are rendered hidden
     el.replaceWith(input);
     inputs.set(field, input);
   }

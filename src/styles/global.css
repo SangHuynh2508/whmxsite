@@ -1,7 +1,21 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Named layer so Tailwind's utility layer (loaded later, only on the Admin
+ * route) can win margin/padding/box-sizing overrides. CSS spec rule: an
+ * unlayered rule always beats a layered one regardless of specificity or
+ * source order — so with this reset unlayered, every Tailwind spacing
+ * utility (ml-*, p-*, gap-* via box-sizing, etc.) in AdminApp.tsx was being
+ * silently zeroed site-wide, which is why `md:ml-[60px]` never pushed
+ * content past the nav rail. Wrapping it in a named layer here registers
+ * that layer first in the page's layer order; Tailwind's own `layer(theme)`
+ * / `layer(utilities)` imports (src/admin/layout/styles/globals.css) then
+ * land after it, so `utilities` wins as intended. No effect on the rest of
+ * the site: nothing else here uses @layer, so the cascade result for every
+ * non-Admin page is identical to before. */
+@layer legacy-reset {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {

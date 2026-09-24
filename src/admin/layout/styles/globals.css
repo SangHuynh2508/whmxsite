@@ -1,0 +1,15 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Tailwind's preflight isn't imported (it would reset the whole public site
+ * once loaded), so give the React admin the resets it relies on, scoped
+ * and in the lowest layer so any utility class still overrides them.
+ * Colours come straight from WHMX tokens (`bg-(--bg-main)` etc.), so there is
+ * no shadcn colour theme here; add one back if `shadcn add` components land. */
+@layer legacy-reset {
+  .admin-react-root :where(ol, ul) { list-style: none; }
+  .admin-react-root :where(button, input, select, textarea) { font: inherit; color: inherit; letter-spacing: inherit; }
+  .admin-react-root :where(button) { background: none; border: 0; cursor: pointer; }
+  .admin-react-root :where(img) { display: block; max-width: 100%; }
+  .admin-react-root :where(a) { color: inherit; text-decoration: none; }
+}

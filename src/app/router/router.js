@@ -63,6 +63,15 @@ export function parseHash() {
     };
   }
 
+  // Admin routes are owned by the React shell (src/admin/layout/AdminApp.tsx).
+  if (hash === '/admin' || hash.startsWith('/admin/') || hash.startsWith('/admin?')) {
+    return {
+      view: 'admin',
+      slug: '',
+      subtab: ''
+    };
+  }
+
   // Format: /characters (Standalone Catalog)
   if (hash === '/characters' || hash === 'characters') {
     return {
@@ -355,8 +364,8 @@ export function handleRoute() {
   const skinGalleryView = document.getElementById('skin-gallery-view');
   const skinDetailView = document.getElementById('skin-detail-view');
 
-  // Update Navigation Active Highlights
-  updateAppNavHighlights(route.view);
+  // The React admin shell owns #/admin; nav highlights live in src/app/layout/AppNav.tsx.
+  if (route.view === 'admin') return;
 
   // Compute semantic route key (subtabs within the same character share the same routeKey)
   let routeKey = route.view;
@@ -531,34 +540,9 @@ export function handleRoute() {
   }
 }
 
-function updateAppNavHighlights(activeView) {
-  // Update desktop vertical nav rail links
-  document.querySelectorAll('.app-nav-item').forEach(item => {
-    const tooltip = item.dataset.tooltip;
-    if (tooltip === 'Máy Tính' || tooltip === 'Calculator' || tooltip === 'Công cụ') {
-      item.classList.toggle('active', activeView === 'calculator');
-    } else if (tooltip === 'Khí Giả' || tooltip === 'Characters') {
-      item.classList.toggle('active', activeView === 'catalog' || activeView === 'character');
-    } else if (tooltip === 'Thư Viện Trang Phục' || tooltip === 'Trang Phục' || tooltip === 'Y Phục' || tooltip === 'Gallery') {
-      item.classList.toggle('active', activeView === 'gallery' || activeView === 'skin-detail');
-    } else if (tooltip === 'Vũ Khí' || tooltip === 'Weapons' || tooltip === 'Dữ Liệu' || tooltip === 'Data') {
-      item.classList.toggle('active', activeView === 'weapons' || activeView === 'data');
-    }
-  });
-
-  // Update mobile top nav links
-  document.querySelectorAll('.top-nav .nav-links a').forEach(link => {
-    const text = link.textContent.trim();
-    if (text === 'Calculator' || text === 'Máy Tính' || text === 'Công cụ') {
-      link.classList.toggle('active', activeView === 'calculator');
-    } else if (text === 'Characters' || text === 'Khí Giả') {
-      link.classList.toggle('active', activeView === 'catalog' || activeView === 'character');
-    } else if (text === 'Thư Viện Trang Phục' || text === 'Trang Phục' || text === 'Y Phục' || text === 'Gallery') {
-      link.classList.toggle('active', activeView === 'gallery' || activeView === 'skin-detail');
-    } else if (text === 'Vũ Khí' || text === 'Weapons' || text === 'Data' || text === 'Dữ Liệu') {
-      link.classList.toggle('active', activeView === 'weapons' || activeView === 'data');
-    }
-  });
+// The calculator link keeps the currently selected character (src/app/layout/AppNav.tsx).
+export function calculatorHash() {
+  return state.character ? `#calc?char=${state.character.id}` : '#calc';
 }
 
 export function initRouter() {
@@ -566,41 +550,4 @@ export function initRouter() {
     isPopStateNav = true;
   });
   window.addEventListener('hashchange', handleRoute);
-
-  // Wire up App Nav item clicks
-  document.querySelectorAll('.app-nav-item, .top-nav .nav-links a').forEach(el => {
-    const text = el.dataset.tooltip || el.textContent.trim();
-    if (text === 'Characters' || text === 'Khí Giả') {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.hash = '#/characters';
-        el.blur();
-      });
-    } else if (text === 'Thư Viện Trang Phục' || text === 'Trang Phục' || text === 'Y Phục' || text === 'Gallery') {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.hash = '#/gallery';
-        el.blur();
-      });
-    } else if (text === 'Vũ Khí' || text === 'Weapons') {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.hash = '#/weapons';
-        el.blur();
-      });
-    } else if (text === 'Data' || text === 'Dữ Liệu') {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.hash = '#/weapons';
-        el.blur();
-      });
-    } else if (text === 'Calculator' || text === 'Máy Tính' || text === 'Công cụ') {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const curCharId = state.character ? state.character.id : '';
-        window.location.hash = curCharId ? `#calc?char=${curCharId}` : '#calc';
-        el.blur();
-      });
-    }
-  });
 }

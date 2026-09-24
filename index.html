@@ -40,118 +40,12 @@
   <link rel="stylesheet" href="/src/styles/tokens.css" />
   <link rel="stylesheet" href="/src/styles/global.css" />
   <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="/src/admin/styles/characterSkinAdmin.css" />
   <link rel="stylesheet" href="/src/admin/styles/adminShell.css" />
 </head>
 
 <body>
-  <!-- Desktop Vertical Navigation Rail -->
-  <aside class="app-nav" id="app-nav" aria-label="Thanh điều hướng ứng dụng">
-    <div class="app-nav-header">
-      <a href="#/characters" class="app-nav-brand" title="Vật Hoa Di Tân">
-        <span class="app-nav-brand-mark">物</span>
-        <span class="app-nav-brand-full">
-          <span class="brand-title">物华弥新</span>
-          <span class="brand-subtitle">Vật Hoa Di Tân</span>
-        </span>
-      </a>
-    </div>
-
-    <ul class="app-nav-menu">
-      <li>
-        <a href="#/characters" class="app-nav-item active" data-tooltip="Khí Giả">
-          <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"
-              data-lucide="users-round">
-              <path d="M18 21a8 8 0 0 0-16 0"></path>
-              <circle cx="10" cy="8" r="5"></circle>
-              <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path>
-            </svg>
-          </span>
-          <span class="app-nav-label">Khí Giả</span>
-        </a>
-      </li>
-      <li>
-        <a href="#/gallery" class="app-nav-item" data-tooltip="Trang Phục">
-          <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt" data-lucide="shirt">
-              <path
-                d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z">
-              </path>
-            </svg>
-          </span>
-          <span class="app-nav-label">Trang Phục</span>
-        </a>
-      </li>
-      <li>
-        <a href="#/weapons" class="app-nav-item" data-tooltip="Vũ Khí">
-          <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sword" data-lucide="sword">
-              <path d="m11 19-6-6" />
-              <path d="m5 21-2-2" />
-              <path d="m8 16-4 4" />
-              <path d="M9.5 17.5 20.414 6.586A2 2 0 0021 5.172V3h-2.172a2 2 0 00-1.414.586L6.5 14.5" />
-            </svg>
-          </span>
-          <span class="app-nav-label">Vũ Khí</span>
-        </a>
-      </li>
-      <li>
-        <a href="#calc" class="app-nav-item" data-tooltip="Công cụ">
-          <span class="app-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator" data-lucide="calculator">
-              <rect width="16" height="20" x="4" y="2" rx="2"></rect>
-              <line x1="8" x2="16" y1="6" x2="6"></line>
-              <line x1="16" x2="16" y1="14" y2="18"></line>
-              <path d="M16 10h.01"></path>
-              <path d="M12 10h.01"></path>
-              <path d="M8 10h.01"></path>
-              <path d="M12 14h.01"></path>
-              <path d="M8 14h.01"></path>
-              <path d="M12 18h.01"></path>
-              <path d="M8 18h.01"></path>
-            </svg>
-          </span>
-          <span class="app-nav-label">Công cụ</span>
-        </a>
-      </li>
-    </ul>
-
-    <div class="app-nav-footer">
-      <a href="#/admin" class="app-nav-item" id="app-nav-admin-link" data-tooltip="Đăng nhập">
-        <span class="app-nav-icon">
-          <svg id="app-nav-admin-icon-loggedout" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in" data-lucide="log-in">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-            <polyline points="10 17 15 12 10 7"></polyline>
-            <line x1="15" x2="3" y1="12" y2="12"></line>
-          </svg>
-          <svg id="app-nav-admin-icon-loggedin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check hidden" data-lucide="shield-check">
-            <path
-              d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.53 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
-            </path>
-            <path d="m9 12 2 2 4-4"></path>
-          </svg>
-        </span>
-        <span class="app-nav-label" id="app-nav-admin-label">Đăng nhập</span>
-      </a>
-    </div>
-  </aside>
-
-  <!-- Mobile Top Nav Bar -->
-  <nav class="top-nav">
-    <div class="nav-brand">VẬT HOA DI TÂN</div>
-    <div class="nav-links">
-      <a href="#/characters" class="active">Khí Giả</a>
-      <a href="#/gallery">Trang Phục</a>
-      <a href="#/weapons">Vũ Khí</a>
-      <a href="#calc">Máy Tính</a>
-    </div>
-  </nav>
+  <!-- Global nav (desktop rail + mobile dock): React, src/app/layout/AppNav.tsx, mounted first in <body> -->
 
   <div id="drawer-backdrop" class="drawer-backdrop"></div>
 

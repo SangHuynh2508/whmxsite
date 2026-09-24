@@ -8,11 +8,11 @@ import { renderTalentGraph } from '../../ui/talentGraph.js';
 import { renderResourceSummary } from '../../ui/resourceSummary.js';
 import { resizeSmoothScroll } from '../runtime/smoothScroll.js';
 import { initTheme } from '../settings/theme.js';
-import { initAppNav } from '../layout/appNav.js';
+import { initAppNav } from '../layout/AppNav.tsx';
 import { initRouter, handleRoute } from '../router/router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
 import { initFeedbackButton } from '../layout/feedbackButton.js';
-import { initAdminShell } from '../../admin/layout/adminShell.js';
+import { initAdminShell } from '../../admin/layout/mount.tsx';
 import { initSession } from '../auth/session.js';
 import { inject } from '@vercel/analytics';
 

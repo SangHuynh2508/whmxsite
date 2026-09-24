@@ -27,7 +27,14 @@ export function getSession() {
 
 export function refreshSession() {
   sessionPromise = fetchSession();
+  sessionPromise.then(() => window.dispatchEvent(new Event('whmx:session-change')));
   return sessionPromise;
+}
+
+// Shared by the Admin shell and the mobile dock; listeners re-sync via `whmx:session-change`.
+export async function signOut() {
+  await fetch('/api/auth/sign-out', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: '{}' }).catch(() => {});
+  return refreshSession();
 }
 
 export function isAuthorizedEditor(session) {

@@ -1,13 +1,10 @@
-/* Admin shell, auth, users, and Preview workspace styles.
- * Extracted verbatim from src/style.css (no value/selector changes).
- * Owner: src/admin/layout/adminShell.js, src/admin/preview/previewWorkspace.js.
+/* Admin shell styles (React Admin, src/admin/layout/AdminApp.tsx).
+ * Layout is Tailwind utilities in the .tsx files; this file holds only what
+ * Tailwind can't express plus the rules that hide public chrome on Admin routes.
+ * Colours: WHMX tokens or color-mix() of them only (no hex). App is dark-only.
  */
 
-/* Roadmap Phase 2: the global nav rail is now part of the shared layout on
- * Admin routes too (previously fully hidden per D1) — Admin still owns its
- * own content area/header, it just renders beside the rail instead of
- * replacing the whole viewport. */
-body.admin-route-active>.top-nav,
+/* The global nav rail stays beside Admin; everything else public is hidden. */
 body.admin-route-active>#drawer-backdrop,
 body.admin-route-active>#app,
 body.admin-route-active>#calc-char-picker-backdrop,
@@ -15,195 +12,46 @@ body.admin-route-active>#whmx-feedback-btn {
   display: none !important;
 }
 
-.admin-auth-page {
-  min-height: 100vh;
+.admin-react-root {
+  /* Readable gold for text/glyphs (raw --accent is too low-contrast as text). */
+  --admin-gold-ink: color-mix(in oklch, var(--accent) 62%, var(--text-main));
+  --admin-gold-bg: color-mix(in oklch, var(--accent) 12%, var(--bg-surface));
+  /* Text on a gold fill is dark, never white. */
+  --admin-on-gold: var(--bg-main);
+  --admin-danger: color-mix(in oklch, var(--rarity-ssr) 58%, var(--text-main));
+  --admin-danger-bg: color-mix(in oklch, var(--rarity-ssr) 10%, var(--bg-surface));
+  --admin-danger-line: color-mix(in oklch, var(--rarity-ssr) 40%, var(--border-color));
+  --admin-warn: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main));
+  --admin-warn-bg: color-mix(in oklch, var(--rarity-sr) 14%, var(--bg-surface));
+}
+
+.admin-serif { font-family: 'Noto Serif', var(--font-serif); }
+.admin-cn { font-family: var(--font-serif); }
+.admin-num { font-variant-numeric: tabular-nums; }
+
+/* Record page: title / properties / body. Properties become a sticky right
+ * column (Linear's issue side panel) only when there is room for it. */
+.admin-record {
   display: grid;
-  place-items: center;
-  padding: 32px;
-  background: var(--bg-main);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "props" "body";
 }
-
-/* .app-nav's real desktop width is the hardcoded 60px "compact overlay rail"
- * value that a later cascade layer (src/style.css "Left Global Nav: Compact
- * Overlay Rail" section) forces with !important, not the --app-nav-width
- * token .app-layout was originally written against — match that same 60px
- * here (as .app-layout itself does) rather than the stale token. */
-@media (min-width: 769px) {
-  body.admin-route-active .admin-auth-page {
-    margin-left: 60px;
-    width: calc(100% - 60px);
+.admin-record > .admin-area-title { grid-area: title; }
+.admin-record > .admin-area-props { grid-area: props; }
+.admin-record > .admin-area-body { grid-area: body; }
+@media (min-width: 1536px) {
+  .admin-record {
+    grid-template-columns: minmax(0, 1fr) 296px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "title props" "body props";
   }
+  .admin-record > .admin-area-props { align-self: start; position: sticky; top: 48px; }
 }
 
-.admin-auth-card,
-.admin-shell {
-  width: min(100%, 960px);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 16px 48px var(--shadow-pop);
-  padding: 32px;
-}
+.admin-react-root dialog::backdrop { background: color-mix(in oklch, var(--bg-main) 70%, transparent); }
 
-.admin-auth-card {
-  max-width: 440px;
-}
-
-.admin-eyebrow {
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .14em;
-}
-
-.admin-form {
-  display: grid;
-  gap: 14px;
-  margin-top: 24px;
-}
-
-.admin-form label {
-  display: grid;
-  gap: 6px;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.admin-form input,
-.admin-form select {
-  min-height: 40px;
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 8px 10px;
-  background: var(--input-bg);
-  color: var(--input-text);
-}
-
-.admin-form button,
-.admin-identity button {
-  border: 0;
-  border-radius: 8px;
-  padding: 10px 14px;
-  cursor: pointer;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-}
-
-.admin-form-error {
-  min-height: 1.2em;
-  color: #b93232;
-  font-size: 13px;
-}
-
-.admin-shell-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 20px;
-}
-
-.admin-identity {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.admin-role {
-  border-radius: 999px;
-  padding: 3px 8px;
-  background: var(--accent-light);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.admin-users {
-  margin-top: 28px;
-}
-
-.admin-provision-form {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: end;
-}
-
-.admin-table-wrap {
-  overflow-x: auto;
-  margin-top: 28px;
-}
-
-.admin-table-wrap table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.admin-table-wrap th,
-.admin-table-wrap td {
-  border-bottom: 1px solid var(--border-color);
-  padding: 10px;
-  font-size: 14px;
-}
-
-@media (max-width: 640px) {
-  .admin-auth-page {
-    padding: 16px;
-  }
-
-  .admin-auth-card,
-  .admin-shell {
-    padding: 22px;
-  }
-
-  .admin-shell-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .admin-provision-form {
-    grid-template-columns: 1fr;
-  }
-}
-
-.admin-preview-workspace {
-  margin-top: 32px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 28px;
-}
-
-.admin-preview-toolbar,
-.admin-preview-detail-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.admin-preview-filters {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
-.admin-preview-filters input,
-.admin-preview-filters select,
-.admin-owner-controls select {
-  min-height: 38px;
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  background: var(--input-bg);
-  color: var(--input-text);
-  padding: 7px 10px;
-}
-
-.admin-preview-filters input {
-  min-width: 240px;
-}
-
+/* Still used by the Vue Khí Giả island (characterSkinAdminWorkspace.js), which
+ * Part C leaves untouched. Remove when that island is redesigned (Part F). */
 .admin-secondary {
   border: 1px solid var(--border-strong);
   border-radius: 8px;
@@ -213,306 +61,7 @@ body.admin-route-active>#whmx-feedback-btn {
   cursor: pointer;
 }
 
-.admin-preview-create {
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 22px;
-}
-
-.admin-preview-create summary {
-  cursor: pointer;
-  color: var(--accent);
-  font-weight: 700;
-}
-
-.admin-preview-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.admin-preview-form label {
-  display: grid;
-  gap: 6px;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-.admin-preview-form input,
-.admin-preview-form textarea {
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 9px;
-  background: var(--input-bg);
-  color: var(--input-text);
-  font: inherit;
-}
-
-.admin-preview-form textarea {
-  resize: vertical;
-}
-
-.admin-preview-form button,
-.admin-owner-controls button,
-.admin-finalize-pending {
-  border: 0;
-  border-radius: 8px;
-  padding: 9px 12px;
-  cursor: pointer;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-}
-
-.admin-preview-form .admin-form-error {
-  grid-column: 1 / -1;
-}
-
-.admin-preview-list {
-  display: grid;
-  gap: 8px;
-}
-
-.admin-preview-row {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 48px 1fr auto;
-  gap: 12px;
-  align-items: center;
-  text-align: left;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px;
-  background: var(--bg-surface);
-  color: var(--text-main);
-  cursor: pointer;
-}
-
-.admin-preview-row:hover {
-  border-color: var(--accent);
-  background: var(--bg-surface-hover);
-}
-
-.admin-preview-row-image {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--accent-light);
-  color: var(--accent);
-  font-size: 24px;
-}
-
-.admin-preview-row-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.admin-preview-row-main,
-.admin-preview-row-meta {
-  display: grid;
-  gap: 4px;
-}
-
-.admin-preview-row-main small,
-.admin-preview-row-meta,
 .admin-muted {
   color: var(--text-muted);
   font-size: 12px;
-}
-
-.admin-preview-row-meta {
-  text-align: right;
-}
-
-.admin-preview-detail {
-  margin-top: 16px;
-}
-
-.admin-preview-detail-head {
-  margin: 18px 0;
-}
-
-.admin-state-pills {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.admin-state-pills span {
-  border-radius: 999px;
-  padding: 4px 9px;
-  background: var(--accent-light);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.admin-owner-controls,
-.admin-assets-section,
-.admin-history-section,
-.admin-recon-section {
-  margin-top: 26px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 20px;
-}
-
-.admin-owner-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.admin-owner-controls h3,
-.admin-assets-section h3,
-.admin-history-section h3,
-.admin-recon-section h3 {
-  width: 100%;
-}
-
-.admin-assets-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.admin-asset-card {
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px;
-  display: grid;
-  gap: 9px;
-}
-
-.admin-asset-card h4 {
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-size: 12px;
-}
-
-.admin-asset-thumb {
-  display: grid;
-  gap: 6px;
-  color: var(--text-muted);
-  font-size: 11px;
-}
-
-.admin-asset-thumb img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
-  border-radius: 6px;
-  background: var(--bg-main);
-}
-
-.admin-asset-empty {
-  display: grid;
-  place-items: center;
-  min-height: 110px;
-  border: 1px dashed var(--border-strong);
-  border-radius: 6px;
-  color: var(--text-muted);
-  text-align: center;
-}
-
-.admin-asset-meta {
-  color: var(--text-muted);
-  font-size: 11px;
-}
-
-.admin-file-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  display: grid;
-  gap: 5px;
-}
-
-.admin-file-label input {
-  width: 100%;
-}
-
-.admin-asset-card select {
-  min-height: 34px;
-  border: 1px solid var(--input-border);
-  border-radius: 6px;
-  background: var(--input-bg);
-  color: var(--input-text);
-  padding: 5px;
-}
-
-.admin-upload-status {
-  min-height: 1.2em;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.admin-placeholder-warning {
-  color: #b93232;
-  font-weight: 700;
-  font-size: 11px;
-}
-
-.admin-history-list {
-  display: grid;
-  gap: 8px;
-  list-style: none;
-}
-
-.admin-history-list li {
-  display: grid;
-  gap: 3px;
-  border-left: 3px solid var(--accent);
-  padding: 8px 10px;
-  background: var(--accent-light);
-  font-size: 13px;
-}
-
-.admin-history-list li span,
-.admin-history-list li small {
-  color: var(--text-muted);
-  font-size: 11px;
-}
-
-.admin-recon-card {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 12px;
-  margin-top: 8px;
-}
-
-.admin-recon-card small {
-  color: var(--text-muted);
-  word-break: break-word;
-}
-
-@media (max-width: 760px) {
-  .admin-preview-form {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-assets-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-preview-detail-head {
-    flex-direction: column;
-  }
-
-  .admin-preview-row {
-    grid-template-columns: 42px 1fr;
-  }
-
-  .admin-preview-row-meta {
-    grid-column: 2;
-    text-align: left;
-    display: flex;
-    gap: 8px;
-  }
 }

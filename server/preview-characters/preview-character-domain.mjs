@@ -31,6 +31,10 @@ const provenanceValues = [
 
 const nullableText = z.string().trim().max(10_000).nullable().optional();
 const jsonValue = z.record(z.string(), z.unknown()).default({});
+// Patch fields must stay undefined when omitted: in zod 4, `jsonValue.optional()`
+// still applies `.default({})`, which silently wiped the stored JSON on any
+// PATCH that didn't resend it.
+const jsonPatchValue = z.record(z.string(), z.unknown()).optional();
 const requestIdSchema = z.string().uuid();
 
 const createPreviewSchema = z.object({
@@ -73,8 +77,8 @@ const updatePreviewSchema = createPreviewSchema
         nicknameVi: nullableText,
         tagsVi: nullableText,
         claimedRawId: nullableText,
-        claimedRawIdEvidence: jsonValue.optional(),
-        manualMetadata: jsonValue.optional(),
+        claimedRawIdEvidence: jsonPatchValue,
+        manualMetadata: jsonPatchValue,
         provenanceNotes: nullableText,
       })
       .strict()

@@ -39,13 +39,11 @@ export function renderOverviewTab(container, char) {
                 <span class="info-val highlight" data-field="name_vi">${char.name_vi || char.name_cn}</span>
               </div>
 
-              <!-- 2. Tên đầy đủ -->
-              ${char.fullname_vi ? `
-              <div class="info-cell">
+              <!-- 2. Tên đầy đủ (always rendered: inline edit un-hides empty editable fields) -->
+              <div class="info-cell${char.fullname_vi ? '' : ' hidden'}">
                 <span class="info-label">Tên đầy đủ:</span>
-                <span class="info-val" data-field="fullname_vi">${char.fullname_vi}</span>
+                <span class="info-val" data-field="fullname_vi">${char.fullname_vi ?? ''}</span>
               </div>
-              ` : ''}
 
               <!-- 3. Khí Giả -->
               <div class="info-cell">
@@ -81,13 +79,11 @@ export function renderOverviewTab(container, char) {
 
             <!-- RIGHT COLUMN -->
             <div class="overview-info-col">
-              <!-- 1. Tên thường gọi -->
-              ${nickname ? `
-              <div class="info-cell">
+              <!-- 1. Tên thường gọi (always rendered, see above) -->
+              <div class="info-cell${nickname ? '' : ' hidden'}">
                 <span class="info-label">Tên thường gọi:</span>
                 <span class="info-val" data-field="nickname_vi">${nickname}</span>
               </div>
-              ` : ''}
 
               <!-- 2. Tên gốc (CN) -->
               <div class="info-cell">
