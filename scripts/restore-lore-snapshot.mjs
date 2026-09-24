@@ -11,6 +11,7 @@ import { closeDb, getDb } from '../db/client.mjs';
 import { users } from '../db/schema/auth.mjs';
 import { editHistory, managedEntities } from '../db/schema/core.mjs';
 import { lorePublishState, loreTerms, profileTexts } from '../db/schema/profile.mjs';
+import { selectProfileTextsWithCharacterId } from '../server/profile/lore-repository.mjs';
 import { planRestore } from '../server/profile/lore-restore.mjs';
 
 const [file, ...rest] = process.argv.slice(2);
@@ -22,8 +23,10 @@ try {
   const db = getDb();
   const [actor] = await db.select().from(users).where(eq(users.email, actorEmail));
   if (!actor || actor.role !== 'owner' || actor.status !== 'active') throw new Error('actor must be an active owner');
-  const plan = planRestore(snapshot, { profileTexts: await db.select().from(profileTexts), loreTerms: await db.select().from(loreTerms) });
-  console.log(JSON.stringify({ mode: applyChanges ? 'apply' : 'dry run (nothing written)', texts: plan.texts, terms: plan.terms }, null, 2));
+  const plan = planRestore(snapshot, { profileTexts: await selectProfileTextsWithCharacterId(db), loreTerms: await db.select().from(loreTerms) });
+  console.log(JSON.stringify({ mode: applyChanges ? 'apply' : 'dry run (nothing written)', texts: plan.texts, terms: plan.terms, unmatched: plan.unmatched }, null, 2));
+  // Unmatched snapshot rows mean this DB lacks units the backup has (run the importer first).
+  if (applyChanges && plan.unmatched.length) throw new Error(`${plan.unmatched.length} snapshot rows have no matching DB row; run the importer first`);
   if (applyChanges && (plan.texts.length || plan.terms.length)) {
     await db.transaction(async (tx) => {
       const now = new Date();

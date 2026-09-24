@@ -1,9 +1,18 @@
 // server/profile/lore-repository.mjs
-import { inArray, sql } from 'drizzle-orm';
+import { eq, getTableColumns, inArray, sql } from 'drizzle-orm';
 
+import { characters } from '../../db/schema/character-skin.mjs';
 import { editHistory } from '../../db/schema/core.mjs';
 import { characterProfiles, lorePublishLockKey, lorePublishState, loreTerms, profileTexts } from '../../db/schema/profile.mjs';
 import { loadProfileContext, resolveAllProfiles } from './resolve-character-profile.mjs';
+
+// Profile texts carry their character ID so a backup can be matched against a rebuilt DB.
+export function selectProfileTextsWithCharacterId(db) {
+  return db.select({ ...getTableColumns(profileTexts), characterId: characters.characterId })
+    .from(profileTexts)
+    .innerJoin(characterProfiles, eq(characterProfiles.entityId, profileTexts.profileEntityId))
+    .innerJoin(characters, eq(characters.entityId, characterProfiles.characterEntityId));
+}
 
 export function createLoreRepository(db) {
   return {
@@ -19,10 +28,10 @@ export function createLoreRepository(db) {
     },
     async loadBackupPayload(tx) {
       return {
-        version: 1,
+        version: 2,
         exportedAt: new Date().toISOString(),
         characterProfiles: await tx.select().from(characterProfiles),
-        profileTexts: await tx.select().from(profileTexts),
+        profileTexts: await selectProfileTextsWithCharacterId(tx),
         loreTerms: await tx.select().from(loreTerms),
         lorePublishState: await tx.select().from(lorePublishState),
         editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term'])),
