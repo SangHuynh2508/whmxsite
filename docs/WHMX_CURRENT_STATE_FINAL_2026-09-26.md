@@ -22,6 +22,23 @@
 5. Release day: runbook N2.
 6. Older owner decisions: `production-old-empty` deletion, repo public/private, uncommitted leftovers (`docs/admin-redesign/screens/` has an email), Preview-URL admin check.
 
+### Backlog collected from older plans (2026-09-26 sweep)
+
+| Item | Source | State |
+|---|---|---|
+| Logged-in admin check at 768–1279 px (icon column) | Admin plan Part E | Not verified (375 px verified via Playwright 2026-09-26) |
+| Preview-URL admin check (sign in on the Preview alias, save must not touch production) | 09-25 handoff | Owner, needs Vercel SSO |
+| Server `null` override fix (+ public inline edit sends `null`) | Phase-1 review | Open |
+| Character/skin name overrides have no publish path (inline edit value disappears on reload) | Pipeline P5 / §6 | Not started |
+| P5 next domains: Hoán Chương, archive-image asset role, skills (Admin Part D) | Pipeline §5 | Not started |
+| Roadmap Phase 4: Skill/Guide/Tier List/Buff admin domains | Roadmap plan | Not started (needs P5 data models) |
+| Public lore UI spec + `char.archive` in data.json | P4 spec §1 | Not started |
+| Story lore (`../WHMX_Lore_*`) | Pipeline §6 | Not in any plan |
+| `scripts/db-*-proof/test.mjs` create users with fixed passwords, swallow cleanup errors | Pipeline §6 | Open (hardening) |
+| Shared S3 client (#11), lore restore by date (#14) | Lore pipeline review | Deferred |
+| "Layered ticket asset" rarity visual | Roadmap plan | Idea, unscheduled |
+| Legacy admin CSS in `src/style.css` ~L6980–7240 | Phase 1 | Cleanup, unscheduled |
+
 ## 3. Known limits (by design, not bugs)
 
 - A cancelled "Rời trang?" leaves one extra browser-history entry (the browser creates it before the guard runs); Back needs one more press.
