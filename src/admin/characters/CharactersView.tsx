@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { parseCharactersRoute } from './lib/route.mts';
 import { CharacterList } from './CharacterList';
 import { CharacterRecord } from './CharacterRecord';
@@ -22,7 +23,11 @@ export default function CharactersView() {
         return;
       }
       last = location.hash;
-      if (inCharacters(last)) setRoute(parseCharactersRoute(last));
+      if (!inCharacters(last)) return;
+      const next = parseCharactersRoute(last);
+      // Record/module changes cross-fade (View Transitions); instant where unsupported or motion is reduced.
+      if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) setRoute(next);
+      else document.startViewTransition(() => flushSync(() => setRoute(next)));
     };
     addEventListener('hashchange', onHash);
     return () => removeEventListener('hashchange', onHash);

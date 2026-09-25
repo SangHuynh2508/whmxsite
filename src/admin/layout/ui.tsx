@@ -87,7 +87,8 @@ export function Button({ variant = 'secondary', className, ...props }: ButtonHTM
       type="button"
       {...props}
       className={cn(
-        'inline-flex h-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors',
+        'inline-flex h-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm font-medium',
+        'transition-[color,background-color,border-color,transform] duration-(--motion-fast) ease-(--ease-standard) active:scale-[.97] disabled:active:scale-100',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-45',
         VARIANT[variant],
         className,

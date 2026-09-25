@@ -63,3 +63,12 @@ body.mobile-dock-collapsed .admin-react-root { --admin-dock: 0px; }
 }
 
 .admin-react-root dialog::backdrop { background: color-mix(in oklch, var(--bg-main) 70%, transparent); }
+
+/* Khí Giả route/module change: a short cross-fade (CharactersView uses document.startViewTransition). */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: var(--motion-normal); animation-timing-function: var(--ease-standard); }
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-react-root *, .admin-react-root *::before { transition: none !important; }
+  .admin-react-root *:active { scale: none !important; transform: none !important; }
+}
