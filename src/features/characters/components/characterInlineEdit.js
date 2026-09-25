@@ -1,12 +1,9 @@
 /**
  * Roadmap Phase 3 — contextual inline edit MVP (Character, Overview tab).
  *
- * Small, standalone enhancer: it does NOT import anything from
- * src/admin/character-skin/characterSkinAdminWorkspace.js (that file is
- * flagged as a god-component in project docs — nothing new should couple to
- * its internals). It only reuses the same public admin mutation contract
- * (GET/PATCH /api/admin/characters/:id) the workspace already calls, mirrored
- * independently here.
+ * Small, standalone enhancer: it imports nothing from the Admin (React,
+ * src/admin/characters/). It only reuses the same public admin mutation
+ * contract (GET/PATCH /api/admin/characters/:id) the Admin calls.
  *
  * UX: one visible "Sửa" toggle next to the "Hồ Sơ Khí Giả" section header
  * (not a tiny pencil per field — the first version of this feature used one

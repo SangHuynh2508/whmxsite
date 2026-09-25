@@ -63,19 +63,3 @@ body.mobile-dock-collapsed .admin-react-root { --admin-dock: 0px; }
 }
 
 .admin-react-root dialog::backdrop { background: color-mix(in oklch, var(--bg-main) 70%, transparent); }
-
-/* Still used by the Vue Khí Giả island (characterSkinAdminWorkspace.js), which
- * Part C leaves untouched. Remove when that island is redesigned (Part F). */
-.admin-secondary {
-  border: 1px solid var(--border-strong);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-main);
-  padding: 9px 13px;
-  cursor: pointer;
-}
-
-.admin-muted {
-  color: var(--text-muted);
-  font-size: 12px;
-}
