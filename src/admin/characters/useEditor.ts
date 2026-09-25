@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useReducer } from 'react';
-import { changedDraft, changesFor, draftToRestore, fieldValue } from './lib/fields.mts';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import { changedDraft, changesFor, conflictRows, draftToRestore, fieldValue } from './lib/fields.mts';
 import { isSaveShortcut } from './lib/shortcut.mts';
 import { clearDraft, draftKey, loadDraft, saveDraft } from './lib/draft.mts';
 import { editorReducer, initialEditor } from './lib/editorState.mts';
@@ -13,20 +13,24 @@ type Args = {
   save: (changes: Record<string, string | null>) => Promise<unknown>;
   // Returns the freshly loaded record so the editor shows exactly what the server stored.
   reload: () => Promise<Rec | null>;
+  // Reads the saved version without replacing the editor's record (for "Xem khác biệt" after a 409).
+  peek?: () => Promise<Rec | null>;
 };
 type DirtyFlag = { __whmxAdminDirty?: boolean };
 const valuesOf = (record: Rec | null, keys: string[]) => Object.fromEntries(keys.map((k) => [k, fieldValue(record, k)]));
 
-export function useEditor({ scope, id, record, keys, save, reload }: Args) {
+export function useEditor({ scope, id, record, keys, save, reload, peek }: Args) {
   const key = draftKey(scope, id);
   const [state, dispatch] = useReducer(editorReducer, initialEditor(valuesOf(record, keys), record));
   // Until the hydrate for a newly loaded record lands, the draft belongs to the previous one: no changes, no draft write.
   const synced = state.source === record;
   const changes = synced ? changesFor(state.draft, record ?? {}, keys) : {};
   const dirtyCount = Object.keys(changes).length;
+  const [diff, setDiff] = useState<ReturnType<typeof conflictRows> | null>(null);
 
   useEffect(() => {
     if (!record) return; // still loading: ask about a draft once, when there is something to restore it onto
+    setDiff(null);
     dispatch({ type: 'hydrate', draft: valuesOf(record, keys), source: record });
     const restore = draftToRestore(loadDraft(localStorage, key), record, keys);
     if (!restore) { clearDraft(localStorage, key); return; }
@@ -69,5 +73,6 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
   }, [onSave, dirtyCount]);
 
   const setField = useCallback((k: string, v: string) => dispatch({ type: 'edit', key: k, value: v }), []);
-  return { draft: state.draft, changes, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
+  const onShowDiff = peek ? async () => setDiff(conflictRows(state.draft, record ?? {}, (await peek()) ?? {}, keys)) : undefined;
+  return { diff, onShowDiff, onHideDiff: () => setDiff(null), draft: state.draft, changes, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
 }

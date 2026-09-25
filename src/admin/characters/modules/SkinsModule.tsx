@@ -72,7 +72,8 @@ function SkinEditor({ skinId, summary, onSaved }: { skinId: string; summary?: Sk
     (changes: Record<string, string | null>) => patchSkin(skinId, { expectedRevision: skin?.revision, changes }).then(() => onSaved()),
     [skinId, skin?.revision, onSaved],
   );
-  const editor = useEditor({ scope: 'skin', id: skinId, record: skin, keys: KEYS, save, reload });
+  const peek = useCallback(() => getSkin(skinId).then((d: { skin: Skin }) => d.skin), [skinId]);
+  const editor = useEditor({ scope: 'skin', id: skinId, record: skin, keys: KEYS, save, reload, peek });
 
   if (error) return <Notice className="m-4">Không tải được trang phục {skinId}. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>;
   if (!skin) return <SkeletonRows count={3} />;
@@ -110,7 +111,7 @@ function SkinEditor({ skinId, summary, onSaved }: { skinId: string; summary?: Sk
           <p className="mt-2 text-xs text-(--text-subtle)">Series, cách nhận và ảnh chỉ xem.</p>
         </aside>
       </div>
-      <SaveBar {...editor} />
+      <SaveBar {...editor} labels={Object.fromEntries(FIELDS.map((f) => [f.key, f.label]))} />
     </div>
   );
 }

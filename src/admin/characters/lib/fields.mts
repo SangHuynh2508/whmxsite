@@ -24,3 +24,7 @@ export function draftToRestore(stored: Record<string, string> | null, record: Re
   const merged = { ...Object.fromEntries(keys.map((k) => [k, fieldValue(record, k)])), ...stored };
   return Object.keys(changesFor(merged, record, keys)).length ? merged : null;
 }
+
+// For a 409: every field the user changed, with the value they started from and what is saved now.
+export const conflictRows = (draft: Record<string, string>, base: Record<string, unknown>, fresh: Record<string, unknown>, keys: string[]) =>
+  Object.keys(changesFor(draft, base, keys)).map((key) => ({ key, base: fieldValue(base, key), theirs: fieldValue(fresh, key), yours: draft[key] ?? '' }));

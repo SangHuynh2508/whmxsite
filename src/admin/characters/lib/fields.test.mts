@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { changedDraft, changesFor, draftToRestore, fieldValue } from './fields.mts';
+import { changedDraft, changesFor, conflictRows, draftToRestore, fieldValue } from './fields.mts';
 
 const record = {
   nameVi: { value: 'Lộc', source: 'Lộc', override: null, state: 'none' },
@@ -45,4 +45,11 @@ test('never offers a draft identical to the record; merges a real one over curre
   assert.equal(draftToRestore({ nameVi: 'a' }, rec, k), null);
   assert.equal(draftToRestore(null, rec, k), null);
   assert.deepEqual(draftToRestore({ nameVi: 'mine' }, rec, k), { nameVi: 'mine', tagsVi: 't' });
+});
+
+test('after a 409, lists each field you changed with what the other person saved', () => {
+  const k = ['nameVi', 'tagsVi'];
+  const base = { nameVi: { value: 'a', source: 'a' }, tagsVi: { value: 't', source: 't' } };
+  const fresh = { nameVi: { value: 'theirs', source: 'a' }, tagsVi: { value: 't2', source: 't' } };
+  assert.deepEqual(conflictRows({ nameVi: 'mine', tagsVi: 't' }, base, fresh, k), [{ key: 'nameVi', base: 'a', theirs: 'theirs', yours: 'mine' }]);
 });

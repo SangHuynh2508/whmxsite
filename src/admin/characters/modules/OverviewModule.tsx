@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { patchCharacter } from '../charactersApi.js';
+import { getCharacter, patchCharacter } from '../charactersApi.js';
 import { useEditor } from '../useEditor';
 import { OverridableField, PairHead } from '../components/OverridableField';
 import { SaveBar } from '../components/SaveBar';
@@ -23,7 +23,8 @@ export function OverviewModule({ data, reload }: ModuleProps) {
     (changes: Record<string, string | null>) => patchCharacter(c.characterId, { expectedRevision: c.revision, changes }).then(invalidateCharacterList),
     [c.characterId, c.revision],
   );
-  const editor = useEditor({ scope: 'character', id: c.characterId, record: c, keys: KEYS, save, reload });
+  const peek = useCallback(() => getCharacter(c.characterId).then((d: { character: Character }) => d.character), [c.characterId]);
+  const editor = useEditor({ scope: 'character', id: c.characterId, record: c, keys: KEYS, save, reload, peek });
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -59,7 +60,7 @@ export function OverviewModule({ data, reload }: ModuleProps) {
           </div>
         </aside>
       </div>
-      <SaveBar {...editor} />
+      <SaveBar {...editor} labels={Object.fromEntries(FIELDS.map((f) => [f.key, f.label]))} />
     </div>
   );
 }
