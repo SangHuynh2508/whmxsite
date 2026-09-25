@@ -6,7 +6,6 @@ import { CharacterRecord } from './CharacterRecord';
 
 const LIST = '#/admin/characters';
 const inCharacters = (hash: string) => hash === LIST || hash.startsWith(`${LIST}/`);
-type DirtyFlag = { __whmxAdminDirty?: boolean };
 
 // Khí Giả area: list or record, driven by the hash. Stays mounted (hidden) while another admin area is
 // open, so an unsaved draft survives the trip.
@@ -14,17 +13,10 @@ export default function CharactersView() {
   const [route, setRoute] = useState(() => parseCharactersRoute(inCharacters(location.hash) ? location.hash : LIST));
 
   useEffect(() => {
-    let last = location.hash;
+    // Unsaved-edit prompts live in AdminApp's capture-phase guard (src/admin/layout/lib/leaveGuard.mts).
     const onHash = () => {
-      if (location.hash === last) return;
-      // Links, the sidebar and browser Back all change the hash; ask before leaving unsaved edits.
-      if (inCharacters(last) && (window as DirtyFlag).__whmxAdminDirty && !confirm('Có thay đổi chưa lưu. Rời trang?')) {
-        location.hash = last;
-        return;
-      }
-      last = location.hash;
-      if (!inCharacters(last)) return;
-      const next = parseCharactersRoute(last);
+      if (!inCharacters(location.hash)) return;
+      const next = parseCharactersRoute(location.hash);
       // Record/module changes cross-fade (View Transitions); instant where unsupported or motion is reduced.
       if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) setRoute(next);
       else document.startViewTransition(() => flushSync(() => setRoute(next)));

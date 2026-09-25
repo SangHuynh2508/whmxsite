@@ -9,6 +9,7 @@ import AccountsView from '../users/AccountsView';
 import CharactersView from '../characters/CharactersView';
 import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav';
 import { LOGIN_HASH, authRedirect } from './lib/authRoute.mts';
+import { mustAskBeforeLeaving } from './lib/leaveGuard.mts';
 
 /*
  * React Admin shell (direction B, picked 2026-09-23 — see
@@ -34,6 +35,23 @@ export default function AdminApp() {
   if (section === 'preview' && !previewMounted) setPreviewMounted(true);
   const [charactersMounted, setCharactersMounted] = useState(false);
   if (section === 'characters' && !charactersMounted) setCharactersMounted(true);
+
+  useEffect(() => {
+    let last = location.hash;
+    // Capture listener on window: at the target, capture listeners run before every other hashchange
+    // listener (this component's, CharactersView's, the public router's), so "stay" leaves nothing half-switched.
+    const guard = (event: HashChangeEvent) => {
+      if (mustAskBeforeLeaving(last, location.hash, Boolean((window as { __whmxAdminDirty?: boolean }).__whmxAdminDirty))
+        && !confirm('Có thay đổi chưa lưu. Rời trang?')) {
+        event.stopImmediatePropagation();
+        history.replaceState(null, '', last); // back, without a new history entry or another hashchange
+        return;
+      }
+      last = location.hash;
+    };
+    addEventListener('hashchange', guard, { capture: true });
+    return () => removeEventListener('hashchange', guard, { capture: true });
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('admin-route-active', isAdmin);

@@ -23,10 +23,11 @@ body.admin-route-active>#whmx-feedback-btn {
   --admin-danger-line: color-mix(in oklch, var(--rarity-ssr) 40%, var(--border-color));
   --admin-warn: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main));
   --admin-warn-bg: color-mix(in oklch, var(--rarity-sr) 14%, var(--bg-surface));
-  /* Height of the phone dock (src/style.css) so fixed admin bars sit above it; 0 when collapsed or absent. */
+  /* Height of the phone dock (src/style.css) so fixed admin bars sit above it (0 on wide screens, where there is no dock). */
   --admin-dock: calc(var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
 }
-body.mobile-dock-collapsed .admin-react-root { --admin-dock: 0px; }
+/* Collapsed dock: only the ˄ tab remains (32 px tall, 8 px above the bottom + safe area); keep the bars above it. */
+body.mobile-dock-collapsed .admin-react-root { --admin-dock: calc(48px + env(safe-area-inset-bottom, 0px)); }
 
 /* Thin scrollbars inside Admin (owner, 2026-09-25): 6 px, the thumb shows while its pane is hovered.
  * Firefox gets the standard properties only; setting scrollbar-color in Chrome would disable these. */
