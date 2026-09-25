@@ -2,7 +2,7 @@ import { formatDate } from '../../layout/ui';
 
 export type HistoryEntry = { id: string; entityId: string; fieldName: string; eventType: string; oldValue: unknown; newValue: unknown; actorUserId: string | null; editedAt: string };
 
-export const EVENT_VI: Record<string, string> = {
+const EVENT_VI: Record<string, string> = {
   source_baseline: 'Dữ liệu gốc',
   source_import: 'Nhập từ nguồn',
   admin_override: 'Sửa trong Admin',

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { changesFor, fieldValue, isDirty } from './fields.mts';
+import { changesFor, fieldValue } from './fields.mts';
 
 const record = {
   nameVi: { value: 'Lộc', source: 'Lộc', override: null, state: 'none' },
@@ -23,6 +23,6 @@ test('emptying a field that already shows its source is not a change', () => {
 
 test('typed text is sent trimmed; unchanged fields are not sent', () => {
   assert.deepEqual(changesFor({ nameVi: ' Lộc Giác ', tagsVi: 'a', nicknameVi: 'x' }, record, keys), { nameVi: 'Lộc Giác' });
-  assert.equal(isDirty({ nameVi: 'Lộc', tagsVi: 'a', nicknameVi: 'x' }, record, keys), false);
+  assert.deepEqual(changesFor({ nameVi: 'Lộc', tagsVi: 'a', nicknameVi: 'x' }, record, keys), {});
   assert.equal(fieldValue(record, 'missing'), '');
 });

@@ -12,6 +12,3 @@ export function changesFor(draft: Record<string, string>, record: Record<string,
   }
   return changes;
 }
-
-export const isDirty = (draft: Record<string, string>, record: Record<string, unknown>, keys: string[]) =>
-  Object.keys(changesFor(draft, record, keys)).length > 0;
