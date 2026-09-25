@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "api/admin/[...].js": {
+    "api/admin/*.js": {
       "maxDuration": 30
     }
   },
