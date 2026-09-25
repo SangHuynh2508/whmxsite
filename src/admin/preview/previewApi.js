@@ -1,24 +1,11 @@
+import { api, json, requestId } from '../lib/api.js';
+
 export const LIFECYCLES = ['unverified', 'unreleased', 'released', 'retired'];
 export const VISIBILITIES = ['hidden', 'preview', 'public'];
 export const ASSET_ROLES = ['avatar', 'card', 'drawing'];
 export const PROVENANCES = ['manual_preview', 'manual_official', 'manual_placeholder'];
 
-export function requestId() { return crypto.randomUUID(); }
-
-// Throws Error(code) with .status (409 = VERSION_CONFLICT) and .payload.
-async function api(path, options = {}) {
-  const response = await fetch(path, { credentials: 'same-origin', ...options });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const error = new Error(payload?.error?.code || 'REQUEST_FAILED');
-    error.status = response.status;
-    error.payload = payload;
-    throw error;
-  }
-  return payload;
-}
-
-const json = (method, body) => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+export { requestId };
 
 export function listPreviews({ q = '', lifecycle = '', visibility = '' } = {}) {
   const query = new URLSearchParams();
