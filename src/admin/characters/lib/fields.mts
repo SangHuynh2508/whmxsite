@@ -12,3 +12,8 @@ export function changesFor(draft: Record<string, string>, record: Record<string,
   }
   return changes;
 }
+
+// What goes into the browser draft: only the fields the user changed, as typed (restored over the
+// record's current values, so other people's newer values are kept).
+export const changedDraft = (draft: Record<string, string>, record: Record<string, unknown>, keys: string[]) =>
+  Object.fromEntries(Object.keys(changesFor(draft, record, keys)).map((k) => [k, draft[k] ?? '']));

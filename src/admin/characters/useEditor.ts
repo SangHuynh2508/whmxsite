@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { changesFor, fieldValue } from './lib/fields.mts';
+import { changedDraft, changesFor, fieldValue } from './lib/fields.mts';
 import { clearDraft, draftKey, loadDraft, saveDraft } from './lib/draft.mts';
 import { editorReducer, initialEditor } from './lib/editorState.mts';
 
@@ -25,13 +25,15 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
   const dirtyCount = Object.keys(changes).length;
 
   useEffect(() => {
+    if (!record) return; // still loading: ask about a draft once, when there is something to restore it onto
     const stored = loadDraft(localStorage, key);
     const restore = Boolean(stored) && confirm('Có bản nháp chưa lưu. Khôi phục?');
     if (stored && !restore) clearDraft(localStorage, key); // declined once, don't ask on every open
-    dispatch({ type: 'hydrate', draft: restore && stored ? stored : valuesOf(record, keys), source: record });
+    // The draft holds only the user's changed fields; everything else comes from the current record.
+    dispatch({ type: 'hydrate', draft: { ...valuesOf(record, keys), ...(restore ? stored : null) }, source: record });
   }, [key, record]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => { if (dirtyCount) saveDraft(localStorage, key, state.draft); }, [key, state.draft, dirtyCount]);
+  useEffect(() => { if (dirtyCount) saveDraft(localStorage, key, changedDraft(state.draft, record ?? {}, keys)); }, [key, state.draft, dirtyCount, record, keys]);
 
   const onSave = useCallback(async () => {
     if (!dirtyCount || state.status === 'saving') return;
