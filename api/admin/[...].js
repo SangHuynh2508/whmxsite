@@ -44,8 +44,12 @@ module.exports = async function adminApiDispatcher(request, response) {
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
       }
       case 'lore': {
-        const { lorePublish } = await import('../../server/admin-api-routes/lore.mjs');
-        if (rest.length === 1 && rest[0] === 'publish') return lorePublish(request, response);
+        const lore = await import('../../server/admin-api-routes/lore.mjs');
+        if (rest.length === 1 && rest[0] === 'publish') return lore.lorePublish(request, response);
+        if (rest.length === 1 && rest[0] === 'progress') return lore.loreProgress(request, response);
+        if (rest.length === 1 && rest[0] === 'terms') return lore.loreTerms(request, response);
+        if (rest.length === 2 && rest[0] === 'terms') { request.query.code = rest[1]; return lore.loreTerm(request, response); }
+        if (rest.length === 2 && rest[0] === 'characters') { request.query.characterId = rest[1]; return lore.loreCharacter(request, response); }
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
       }
       default:
