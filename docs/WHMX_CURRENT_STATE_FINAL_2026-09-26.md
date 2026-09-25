@@ -8,7 +8,7 @@
 
 | Area | State |
 |---|---|
-| **Git** | `feat/postgres-admin-crud` = `main` = `af021ab` (pushed; production deployed and checked signed-out: `#/login`, no console errors). |
+| **Git** | `feat/postgres-admin-crud` = `main` = `ebdd0b9` (pushed). Hotfix after release: lore routes returned 500 on Vercel because `.vercelignore` excluded `asset-publish-manifest.json` (test `server/vercelignore.test.mjs` now guards imports); functions moved to **sin1** (Neon is ap-southeast-1; iad1 made every record open cost ~10 trans-Pacific queries, 3–4 s). Unexpected admin errors are now logged (`sendAdminError`). |
 | **P4 Admin Khí Giả + Lore** | ✅ Phase 1 and phase 2 done and live. Lore module (`src/admin/characters/modules/LoreModule.tsx`), terms page (`LoreTermsView.tsx`), lore API (`server/profile/lore-admin.mjs` + planners `lore-edit.mjs`, routes in `server/admin-api-routes/lore.mjs`). Saves auto-publish to R2 after 30 s; owners have "Xuất bản ngay". |
 | **Lore data** | Report titles (536) and organisation names (10) seeded as admin VI on development and production; lore published to both (`lore.0da4b45cac21.json`). v2 department comes from `lore_terms`. |
 | **New character (~2026-10-01)** | Unchanged: runbook N2 (pipeline plan §4) on the pre-release game update, owner yes at each DB/workbook write. |
@@ -29,6 +29,8 @@
 - ocr (`open-code-review`) is installed but needs an LLM key; not configured (owner declined paid keys).
 
 ## 4. Environment gotchas (new)
+
+- Vercel function logs: `npx vercel logs https://whmxsite.vercel.app --json` (CLI is signed in as the owner). `vercel build` locally does NOT apply `.vercelignore` — an ignored import only fails after upload.
 
 - The built-in browser tools stopped working mid-session; **Playwright MCP** works: `vercel dev` via `preview_start whmxcalc-vercel-dev`, open `localhost:3003` in Playwright, the owner signs in once in that window, then drive it with `browser_run_code_unsafe`. Playwright writes snapshots/logs to `D:\BaiTapCode\WHMX\.playwright-mcp\` (outside the project).
 - When the Playwright window is not in front, Chrome paints few frames: smooth scrolls finish late — measure over a few seconds before calling it broken.
