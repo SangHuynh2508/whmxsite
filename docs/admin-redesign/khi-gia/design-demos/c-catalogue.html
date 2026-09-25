@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Khí Giả — C · Catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+<!--
+  Direction C — Museum catalogue (best designer: Kenya Hara — "emptiness", Muji/Takeo paper
+  catalogues; the page as a vessel, not a dashboard). Translation is a facing-page spread: the
+  original on the left page, the Vietnamese on the right page, each unit on the same baseline row.
+  The list is a register index, text-first. Dark-only: ink paper instead of white paper.
+  Data real (A0144); "đã đổi" state and 2 dirty units simulated.
+-->
+<style>
+  :root {
+    --bg-main:#111315; --bg-surface:#17191C; --bg-hover:#22262B; --bg-elevated:#1C2024;
+    --border:#2B2F34; --border-strong:#3D434A; --text:#E3E5E8; --muted:#9097A0; --subtle:#6B7280;
+    --accent:#D4B763; --accent-light:#24221A; --ssr-text:#F0A08F; --ease:cubic-bezier(0.2,0,0,1);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { overflow-x:hidden; }
+  body { background:var(--bg-main); color:var(--text); font:15px/1.7 Inter, system-ui, sans-serif; font-weight:400; }
+  .serif { font-family:'Noto Serif SC', serif; }
+  button { font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
+  .rail { position:fixed; inset:0 auto 0 0; width:60px; border-right:1px solid var(--border); background:var(--bg-surface); display:flex; flex-direction:column; align-items:center; gap:18px; padding-top:14px; }
+  .rail .logo { width:34px; height:34px; border:1px solid var(--accent); border-radius:6px; color:var(--accent); display:grid; place-items:center; font-family:'Noto Serif SC'; font-weight:600; }
+  .rail i { width:22px; height:22px; border:1.5px solid var(--muted); border-radius:5px; opacity:.6; } .rail i.on { border-color:var(--accent); opacity:1; }
+  main { margin-left:60px; }
+  .viewhead { height:52px; display:flex; align-items:center; gap:14px; padding:0 32px; border-bottom:1px solid var(--border); }
+  .viewhead b { font-weight:500; } .viewhead span { color:var(--subtle); font-size:13px; }
+
+  /* ---------- List: register index ---------- */
+  .index { max-width:1100px; margin:0 auto; padding:64px 40px 120px; }
+  .index h1 { font:400 13px/1 Inter; letter-spacing:.3em; color:var(--subtle); text-transform:uppercase; }
+  .index .lead { font:400 40px/1.25 'Noto Serif SC', serif; margin:18px 0 36px; }
+  .index .lead small { display:block; font:400 14px/1.6 Inter; color:var(--muted); margin-top:10px; }
+  .find { display:flex; gap:28px; align-items:baseline; border-bottom:1px solid var(--border-strong); padding-bottom:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .find input { flex:1; min-width:200px; background:transparent; border:0; color:var(--text); font:400 18px Inter; }
+  .find input::placeholder { color:var(--subtle); }
+  .find button { font-size:13px; color:var(--subtle); } .find button.on { color:var(--text); }
+  .entries { columns:2; column-gap:64px; }
+  .entry { break-inside:avoid; display:grid; grid-template-columns:44px 1fr auto; gap:14px; align-items:center; padding:14px 0; border-bottom:1px solid var(--border); width:100%; text-align:left; transition:background .18s var(--ease); }
+  .entry:hover { background:linear-gradient(90deg, transparent, var(--bg-surface), transparent); }
+  .entry img { width:44px; height:44px; border-radius:50%; object-fit:cover; background:var(--bg-elevated); }
+  .entry .n { font:400 17px/1.3 'Noto Serif SC', serif; } .entry .n small { color:var(--subtle); font-size:13px; margin-left:8px; }
+  .entry .id { font-size:12px; color:var(--subtle); letter-spacing:.08em; }
+  .entry .frac { font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; text-align:right; }
+  .entry .frac small { display:block; color:var(--accent); font-size:11px; }
+
+  /* ---------- Record: facing pages ---------- */
+  .doc { max-width:1320px; margin:0 auto; padding:48px 40px 160px; display:grid; grid-template-columns:150px 1fr; gap:48px; }
+  .margin { position:sticky; top:24px; align-self:start; font-size:13px; }
+  .margin a { display:block; color:var(--subtle); text-decoration:none; padding:5px 0; transition:color .18s var(--ease); }
+  .margin a.on { color:var(--text); } .margin a.on::before { content:'—'; color:var(--accent); margin-right:8px; }
+  .margin .sep { height:28px; }
+  .title { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:end; padding-bottom:36px; border-bottom:1px solid var(--border-strong); }
+  .title .kicker { font-size:12px; letter-spacing:.3em; color:var(--subtle); text-transform:uppercase; }
+  .title h1 { font:400 46px/1.15 'Noto Serif SC', serif; margin-top:10px; }
+  .title h1 small { font-size:22px; color:var(--muted); margin-left:14px; }
+  .title .meta { font-size:12px; color:var(--subtle); letter-spacing:.06em; line-height:2; text-align:right; }
+  .title .meta b { color:var(--muted); font-weight:400; }
+  .title .portrait { width:120px; height:120px; border-radius:50%; object-fit:cover; object-position:top; }
+  .spread-head { display:grid; grid-template-columns:1fr 1fr; gap:56px; margin:44px 0 8px; font-size:11px; letter-spacing:.3em; color:var(--subtle); text-transform:uppercase; }
+  section.chapter { margin-top:56px; }
+  .chapter > h2 { font:400 13px/1 Inter; letter-spacing:.3em; color:var(--accent); text-transform:uppercase; margin-bottom:6px; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:56px; padding:28px 0; border-top:1px solid var(--border); position:relative; }
+  .pair .cap { grid-column:1/-1; display:flex; gap:14px; align-items:baseline; font-size:12px; color:var(--subtle); letter-spacing:.04em; margin-bottom:-12px; flex-wrap:wrap; }
+  .pair .cap b { color:var(--muted); font-weight:500; }
+  .orig { font-family:'Noto Serif SC', serif; font-size:15px; line-height:2.05; color:#b9bec5; white-space:pre-line; }
+  .viwrap { position:relative; }
+  textarea { width:100%; background:transparent; border:0; color:var(--text); font:300 16px/1.95 Inter, sans-serif; resize:none; field-sizing:content; min-height:4em; padding:0; }
+  textarea:focus { outline:none; }
+  textarea::placeholder { color:var(--subtle); font-style:italic; }
+  .viwrap::before { content:''; position:absolute; left:-28px; top:6px; bottom:6px; width:1px; background:var(--border); transition:background .18s var(--ease); }
+  .viwrap:focus-within::before, .pair.dirty .viwrap::before { background:var(--accent); }
+  .note { font-size:12px; color:var(--subtle); margin-top:10px; display:flex; gap:16px; flex-wrap:wrap; }
+  .note .legacy { color:var(--accent); } .note .changed { color:var(--ssr-text); }
+  .note button:hover { color:var(--text); }
+  .plate { display:grid; grid-template-columns:1fr 1fr; gap:56px; padding:28px 0; border-top:1px solid var(--border); }
+  .plate figure img { width:100%; max-width:360px; aspect-ratio:1; object-fit:contain; background:#0c0d0e; }
+  .plate figcaption { font-size:12px; color:var(--subtle); margin-top:10px; letter-spacing:.04em; }
+  .plate dl { display:grid; grid-template-columns:auto 1fr; gap:12px 20px; align-content:center; font-size:14px; }
+  .plate dt { color:var(--subtle); font-size:12px; letter-spacing:.1em; text-transform:uppercase; } .plate dd a { color:var(--text); text-decoration:none; border-bottom:1px solid var(--border-strong); }
+  .plate dd small { color:var(--subtle); margin-left:8px; }
+  .savebar { position:fixed; right:32px; bottom:28px; display:flex; align-items:center; gap:16px; padding:10px 12px 10px 20px; background:var(--bg-elevated); border:1px solid var(--border-strong); border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.45); font-size:13px; }
+  .savebar .n { color:var(--accent); }
+  .btn { padding:8px 18px; border-radius:999px; font-size:13px; transition:transform .12s var(--ease); } .btn:active { transform:scale(.96); }
+  .btn.primary { background:var(--accent); color:#111315; font-weight:500; } .btn.ghost { color:var(--muted); }
+  @media (max-width:900px) {
+    main { margin-left:0; } .rail { display:none; } .viewhead { padding:0 16px; }
+    .index { padding:32px 16px 100px; } .index .lead { font-size:30px; } .entries { columns:1; }
+    .doc { display:block; padding:24px 16px 140px; }
+    .margin { position:sticky; top:0; z-index:3; display:flex; gap:18px; overflow-x:auto; scrollbar-width:none; background:var(--bg-main); padding:10px 0; border-bottom:1px solid var(--border); margin-bottom:20px; }
+    .margin .sep { display:none; } .margin a { white-space:nowrap; } .margin a.on::before { content:none; } .margin a.on { border-bottom:1px solid var(--accent); }
+    .title { grid-template-columns:1fr; } .title .meta { text-align:left; } .title .portrait { display:none; } .title h1 { font-size:34px; }
+    .spread-head { display:none; }
+    .pair, .plate { grid-template-columns:1fr; gap:14px; } .viwrap::before { left:-10px; }
+    .viwrap { padding-left:0; }
+    .savebar { left:16px; right:16px; bottom:16px; } .savebar .n { flex:1; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<nav class="rail"><div class="logo">物</div><i class="on"></i><i></i><i></i><i></i></nav>
+<main><div class="viewhead"><b>Khí Giả</b><span>Nhân vật · bản dịch tiếng Việt</span></div><div id="app"></div></main>
+<script src="data.js"></script>
+<script>
+const { list, record: R } = window.KG;
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]);
+const rare = { 4:'SSR', 3:'SR', 2:'R' };
+const DIRTY = new Set(['card_intro', `report.${R.structure.reports[1].fileId}.content`]);
+const SIM_CHANGED = 'relic_intro';
+const byKey = Object.fromEntries(R.units.map((u) => [u.key, u]));
+
+function listView() {
+  return `<div class="index"><h1>Khí Giả</h1>
+    <div class="lead">133 hồ sơ<small>Tiến độ dịch lore theo từng nhân vật. Bấm một tên để mở hồ sơ.</small></div>
+    <div class="find"><input placeholder="Tìm tên hoặc mã" /><button class="on">Tất cả</button><button>Chưa xong</button><button>Có bản cũ</button><button>Tiếng Trung đã đổi</button><button>Thuật ngữ lore</button></div>
+    <div class="entries">${list.map((c) => { const p = c.progress || { total: 0, done: 0, legacy: 0 }; return `<button class="entry" onclick="location.hash='#record'">
+      <img src="${esc(c.avatar)}" alt=""><div><div class="n">${esc(c.nameVi)}<small class="serif">${esc(c.nameCn)}</small></div><div class="id">${c.id} · ${rare[c.rare] || ''} · ${esc(c.dept)}</div></div>
+      <div class="frac">${p.done} / ${p.total}${p.legacy ? `<small>${p.legacy} bản cũ</small>` : ''}</div></button>`; }).join('')}</div></div>`;
+}
+
+function pair(k, label, extra = '') {
+  const u = byKey[k]; if (!u) return '';
+  const changed = k === SIM_CHANGED;
+  const note = changed ? '<span class="changed">Tiếng Trung đã đổi</span><button>So bản cũ</button>' : u.origin === 'legacy_workbook' ? '<span class="legacy">Bản cũ · chưa lưu</span><button>Dùng bản này</button>' : u.vi ? '' : '<span>Chưa dịch</span>';
+  return `<div class="pair ${DIRTY.has(k) ? 'dirty' : ''}"><div class="cap"><b>${label}</b>${extra}</div>
+    <div class="orig">${esc(u.cn)}</div>
+    <div class="viwrap"><textarea placeholder="Viết bản tiếng Việt…">${esc(u.vi || '')}</textarea><div class="note">${note}<button>Phóng to</button><span>${(u.vi || '').length} ký tự</span></div></div></div>`;
+}
+
+function recordView() {
+  const t = R.terms; const reps = R.structure.reports;
+  return `<div class="doc">
+    <aside class="margin"><a href="#list">← Khí Giả</a><div class="sep"></div><a href="#">Tổng quan</a><a class="on" href="#">Lore</a><a href="#">Trang phục</a><a href="#">Nguồn</a><a href="#">Lịch sử</a></aside>
+    <article>
+      <header class="title"><div><div class="kicker">Hồ sơ ${R.id}</div><h1>${esc(R.nameVi)}<small class="serif">${esc(R.nameCn)}</small></h1></div>
+        <div style="display:flex;gap:24px;align-items:center"><div class="meta"><b>${esc(R.recordId)}</b><br>${esc(R.dept)} · ${rare[R.rare]}<br>0 / 14 đoạn đã lưu</div><img class="portrait" src="${esc(R.avatar)}" alt=""></div></header>
+      <div class="spread-head"><div>Nguyên bản</div><div>Tiếng Việt</div></div>
+      <section class="chapter"><h2>Giới thiệu</h2>${pair('card_intro', 'Đánh giá')}</section>
+      <section class="chapter"><h2>Báo cáo quan sát</h2>${reps.map((r, i) => {
+        const unlock = r.unlock.type === 2 ? `<span>Mở khoá ở thiện cảm ${r.unlock.elementId} · <span class="serif">${esc(R.affinity[r.unlock.elementId] || '')}</span></span>` : '';
+        return pair(`report.${r.fileId}.title`, `Tiêu đề ${i + 1}`, unlock) + pair(`report.${r.fileId}.content`, `Báo cáo ${i + 1}`);
+      }).join('')}</section>
+      <section class="chapter"><h2>Hiện vật</h2>
+        <div class="plate"><figure><img src="${esc(R.archive.image)}" alt=""><figcaption>Ảnh hiện vật · chỉ xem</figcaption></figure>
+        <dl><dt>Loại</dt><dd><a href="#">${esc(t.type?.cn)}</a><small>chưa dịch</small></dd><dt>Triều đại</dt><dd><a href="#">${esc(t.era?.cn)}</a><small>chưa dịch</small></dd><dt>Bảo tàng</dt><dd><a href="#">${esc(t.museum?.cn)}</a><small>chưa dịch</small></dd><dt>Giai đoạn</dt><dd><a href="#">${esc(t.range?.cn)}</a></dd></dl></div>
+        ${pair('relic_intro', 'Giới thiệu hiện vật')}</section>
+      <section class="chapter"><h2>Dòng thời gian</h2>${R.structure.timeline.map((s) => pair(`timeline.${s}.label`, `Mốc ${s}`) + pair(`timeline.${s}.story`, `Câu chuyện ${s}`)).join('')}</section>
+    </article></div>
+    <div class="savebar"><span class="n">2 thay đổi chưa lưu</span><button class="btn ghost">Bỏ</button><button class="btn primary">Lưu</button></div>`;
+}
+const render = () => { document.getElementById('app').innerHTML = location.hash === '#list' ? listView() : recordView(); scrollTo(0, 0); };
+addEventListener('hashchange', render); render();
+</script>
+</body>
+</html>
