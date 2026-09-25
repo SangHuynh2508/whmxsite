@@ -1,11 +1,11 @@
 # WHMX — Next Steps (task order)
 
-> **2026-09-25 — start here:** [`WHMX_CURRENT_STATE_FINAL_2026-09-25.md`](./WHMX_CURRENT_STATE_FINAL_2026-09-25.md) (newest handoff). Active work: **P4 Admin Khí Giả (React) + Lore** — spec [`superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](./superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md), phase-1 plan [`superpowers/plans/2026-09-25-admin-khi-gia-phase1.md`](./superpowers/plans/2026-09-25-admin-khi-gia-phase1.md) (Task 1 ✅, Task 2 waiting for the owner to pick design A/B/C). Lore pipeline P1–P3 is live on production.
+> **2026-09-25 (evening) — start here:** [`WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md`](./WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md) (newest handoff). **P4 phase 1 (React Khí Giả) is done and live** (`main` = `aa2fa41`). Next: owner's signed-in production check, then the **P4 phase 2 (Lore module) plan** from spec [`superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](./superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md), and the server null-override fix listed in the handoff §3. Release day (~10-01): runbook N2.
 >
 > **2026-09-24 — active plans:** [`plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md`](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md) (new-character readiness + DB-centred data pipeline; its §6 is the current **global order**), and [`plans/WHMX_ADMIN_PLAN_2026-09-23.md`](./plans/WHMX_ADMIN_PLAN_2026-09-23.md) (Admin UI). Item #5 below (Hướng A/B checkpoint) is superseded in detail by the pipeline plan (Hướng 2 = DB-centred, domain by domain, lore first).
 
 **Read first, in this order:**
-1. [`WHMX_CURRENT_STATE_FINAL_2026-09-25.md`](./WHMX_CURRENT_STATE_FINAL_2026-09-25.md) — **newest** state/handoff (09-24 file is the previous one) (then `WHMX_CURRENT_STATE_FINAL_2026-09-23_v2.md` for the environment gotchas it keeps referring to) (always use the newest `WHMX_CURRENT_STATE_FINAL_*`). Then the working plan [`plans/WHMX_ADMIN_PLAN_2026-09-23.md`](./plans/WHMX_ADMIN_PLAN_2026-09-23.md) — its status table says what's next.
+1. [`WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md`](./WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md) — **newest** state/handoff (then `WHMX_CURRENT_STATE_FINAL_2026-09-25.md` for infrastructure) (then `WHMX_CURRENT_STATE_FINAL_2026-09-23_v2.md` for the environment gotchas it keeps referring to) (always use the newest `WHMX_CURRENT_STATE_FINAL_*`). Then the working plan [`plans/WHMX_ADMIN_PLAN_2026-09-23.md`](./plans/WHMX_ADMIN_PLAN_2026-09-23.md) — its status table says what's next.
 2. [`WHMX_APP_ARCHITECTURE.md`](./WHMX_APP_ARCHITECTURE.md) — where code belongs.
 3. [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md) — how to write it so it stays stable without being rigid.
 4. [`WHMX_ARCHITECTURE_MIGRATION_PLAN.md`](./WHMX_ARCHITECTURE_MIGRATION_PLAN.md) — structural migration history (Q1–Q4 done, don't redo).
@@ -60,7 +60,7 @@ Owner confirmed: build Hướng B (static `public/data.json` model + an automate
 - **Open gap:** the full D2.4.1 save/discard/409-conflict flow in the Character CMS is still not exercised end-to-end. `vercel dev` is now installed — next session can actually do the live-login verification steps in current-state §6.1 (provision temp account → log in → exercise flows → clean up via the documented FK-chain order) before Phase 6 (final cross-surface verify).
 
 ### 8. Character Lore into Postgres + artifact ("hiện vật") archive images
-**Status 2026-09-25: ✅ pipeline done and live (P1–P3):** lore in Postgres, R2 publish + daily private backup, public overlay, archive images on R2 (not shown in the UI yet). **P4 (Admin Lore module inside a React Khí Giả) in progress** — see the header. Public lore UI = separate spec later.
+**Status 2026-09-25: ✅ pipeline done and live (P1–P3):** lore in Postgres, R2 publish + daily private backup, public overlay, archive images on R2 (not shown in the UI yet). **P4 phase 1 (React Khí Giả) ✅ live 2026-09-25; phase 2 (Lore module) next** — see the header. Public lore UI = separate spec later.
 
 **Original note:** Owner asked to look into this next, but explicitly said: only after the Admin UI redesign (item #7 above) is done — do not start until then.
 

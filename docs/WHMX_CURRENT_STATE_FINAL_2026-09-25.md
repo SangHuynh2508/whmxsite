@@ -1,6 +1,6 @@
 # WHMX — Current state / handoff (2026-09-25)
 
-> Newest handoff. Read this, then `docs/WHMX_NEXT_STEPS.md` (order), then the active plan
+> **Superseded for next steps by `WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md`** (P4 phase 1 done); §2 infrastructure here is still current. Originally: Newest handoff. Read this, then `docs/WHMX_NEXT_STEPS.md` (order), then the active plan
 > `docs/superpowers/plans/2026-09-25-admin-khi-gia-phase1.md`. The data-pipeline plan
 > `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` has the full dated log of 2026-09-24/25.
 > Environment gotchas from `WHMX_CURRENT_STATE_FINAL_2026-09-23_v2.md` §3 still apply.

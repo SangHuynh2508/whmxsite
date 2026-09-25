@@ -103,7 +103,7 @@ scrollbar-color: var(--border-strong) transparent` inside `@supports (-moz-appea
 | List | loading (skeleton lines), error + "Thử lại", empty search "Không có nhân vật khớp" |
 | Pair | clean · focused (gold hairline) · dirty (gold hairline) · legacy (note) · source changed (red note) · saving (field read-only) |
 | Save bar | not rendered when clean & idle · "N thay đổi chưa lưu" · saving (Lưu disabled) · "Đã lưu." · error message (`role="status"`) · 409 banner above the editor: "Có người khác vừa lưu…" + "Tải bản mới (bản của bạn giữ trong nháp)" |
-| Draft | on open with a stored draft: inline banner "Có bản nháp chưa lưu — Khôi phục / Bỏ" (instead of `confirm()`) |
+| Draft | on open with a stored draft: native `confirm('Có bản nháp chưa lưu. Khôi phục?')` as in the plan (an inline banner only if the owner asks) |
 
 ## 6. Motion intent (Task 8)
 

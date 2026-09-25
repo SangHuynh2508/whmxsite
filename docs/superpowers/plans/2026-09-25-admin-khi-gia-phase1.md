@@ -96,7 +96,7 @@ Run JS tests: `npm test` (already globs `src/**/*.test.mts`).
 - `draftKey(scope, id) → string`; `saveDraft(storage, key, value)`, `loadDraft(storage, key) → object | null`, `clearDraft(storage, key)` (never throw).
 - `saveErrorMessage(error) → string`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // src/admin/characters/lib/route.test.mts
@@ -167,9 +167,9 @@ test('maps save failures to Vietnamese messages', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npm test` → the four new files fail with `ERR_MODULE_NOT_FOUND`.
+- [x] **Step 2: Run to verify they fail** — `npm test` → the four new files fail with `ERR_MODULE_NOT_FOUND`.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 ```ts
 // src/admin/characters/lib/route.mts
@@ -272,8 +272,8 @@ export const patchSkin = (id, { expectedRevision, changes }) =>
 
 In `src/admin/preview/previewApi.js`, delete the private `requestId`, `api` and `json` definitions and add `import { api, json, requestId } from '../lib/api.js';` plus `export { requestId };` (it was exported before; keep the export so callers are unchanged).
 
-- [ ] **Step 4: Verify** — `npm test` → all pass (previous 34 + 4 files). `grep -rn "requestId\|from './previewApi" src/admin/preview` shows callers unchanged; `npm run build` (background) passes.
-- [ ] **Step 5: Commit** — `feat(admin): shared admin api helper, characters API client, route/fields/draft/error libs`.
+- [x] **Step 4: Verify** — `npm test` → all pass (previous 34 + 4 files). `grep -rn "requestId\|from './previewApi" src/admin/preview` shows callers unchanged; `npm run build` (background) passes.
+- [x] **Step 5: Commit** — `feat(admin): shared admin api helper, characters API client, route/fields/draft/error libs`.
 
 ### Task 4: Editor primitives — useEditor, OverridableField, SaveBar, HistoryList
 
@@ -284,7 +284,7 @@ In `src/admin/preview/previewApi.js`, delete the private `requestId`, `api` and 
 - `useEditor({ scope, id, record, keys, save: (changes) => Promise<void>, reload: () => Promise<void> })` → `{ draft, setField, dirtyCount, status, message, onSave, onDiscard }`; registers Ctrl+S, `beforeunload`, and `window.__whmxAdminDirty` guard used by in-app navigation.
 - `<OverridableField label source override value onChange onRevert />`, `<SaveBar dirtyCount status message onSave onDiscard />`, `<HistoryList entries labels />`.
 
-- [ ] **Step 1: Failing test for the reducer (pins Review Focus 1 and 5)**
+- [x] **Step 1: Failing test for the reducer (pins Review Focus 1 and 5)**
 
 ```ts
 // src/admin/characters/lib/editorState.test.mts
@@ -313,8 +313,8 @@ test('saveOk replaces the draft with the saved values; discard restores', () => 
 });
 ```
 
-- [ ] **Step 2: Run** — `npm test` → fails (module not found).
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — `npm test` → fails (module not found).
+- [x] **Step 3: Implement**
 
 ```ts
 // src/admin/characters/lib/editorState.mts
@@ -403,8 +403,8 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
 - `SaveBar`: hidden (`max-md:` / conditional render, never bare `hidden`) when `dirtyCount === 0 && status === 'idle'`; shows "N thay đổi chưa lưu", buttons Lưu (disabled while saving) and Bỏ thay đổi; `role="status"` region for `message`; stays reachable on phones (sticky bottom).
 - `HistoryList`: rows newest first: field label (from `labels`), old → new, actor, `toLocaleString('vi-VN')`.
 
-- [ ] **Step 4: Verify** — `npm test` passes; `node_modules/.bin/tsc -p tsconfig.json` clean; `npm run build` (background) passes.
-- [ ] **Step 5: Commit** — `feat(admin): editor state, useEditor hook and field/save/history primitives`.
+- [x] **Step 4: Verify** — `npm test` passes; `node_modules/.bin/tsc -p tsconfig.json` clean; `npm run build` (background) passes.
+- [x] **Step 5: Commit** — `feat(admin): editor state, useEditor hook and field/save/history primitives`.
 
 ### Task 5: List + record shell, mounted in AdminApp
 
@@ -412,12 +412,12 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
 
 **Interfaces — Consumes:** Task 3 (`parseCharactersRoute`, `recordHref`, `MODULE_IDS`, `listCharacters`, `getCharacter`), Task 4 primitives. **Produces:** `<CharactersView />` (no props; reads `location.hash`, listens to `hashchange`); `MODULES: { id: ModuleId; label: string; Component }[]` in `CharacterRecord.tsx` (Phase 2 adds `lore` here).
 
-- [ ] **Step 1: Implement `CharactersView`** — state `route = parseCharactersRoute(location.hash)`, updated on `hashchange`; renders `<CharacterList />` or `<CharacterRecord id module />`. In-app links go through a `navigate(href)` that asks `confirm('Có thay đổi chưa lưu. Rời trang?')` when `window.__whmxAdminDirty` and otherwise sets `location.hash`.
-- [ ] **Step 2: Implement `CharacterList`** — loads `listCharacters()` once (cache in a module-level promise so returning from a record is instant); search box filters on `characterId nameCn nameVi.value fullnameVi.value` (lower-case); each item: avatar `/assets/characters/avatars/${id}.png` with `loading="lazy"` and a text fallback on error, VI name, CN name, ID; click → `navigate(recordHref(id))`. States: loading, error with retry, empty search result.
-- [ ] **Step 3: Implement `CharacterRecord`** — loads `getCharacter(id)` (returns `{ character, skins, history }` as today); header (avatar, names, ID, back to list); module rail from `MODULES` (links with `recordHref(id, m.id)`, `aria-current="page"` on the active one; horizontal scroll on phones); renders the active module component with `{ data, reload }`.
-- [ ] **Step 4: Mount** — in `AdminApp.tsx` remove the Vue `useEffect` and `charRootRef`/`vueAppRef`; render `<CharactersView />` inside the existing characters `<div hidden={section !== 'characters'} …>` wrapper (keep `ViewHeader`). Keep it mounted after first visit like Preview so an unsaved draft survives switching areas.
-- [ ] **Step 5: Browser check** — `preview_start whmxcalc-vercel-dev` (needs DB: uses `.env.local` = development branch). Owner signs in (or approved temp account on the development branch). Open `#/admin/characters`: 133 items; search "Lộc" narrows; open A0061 → header + rail; switch modules via rail → hash changes; Back returns to list. `read_console_messages` onlyErrors → none.
-- [ ] **Step 6: Commit** — `feat(admin): React Khí Giả list and record shell replaces the Vue mount`.
+- [x] **Step 1: Implement `CharactersView`** — state `route = parseCharactersRoute(location.hash)`, updated on `hashchange`; renders `<CharacterList />` or `<CharacterRecord id module />`. In-app links go through a `navigate(href)` that asks `confirm('Có thay đổi chưa lưu. Rời trang?')` when `window.__whmxAdminDirty` and otherwise sets `location.hash`.
+- [x] **Step 2: Implement `CharacterList`** — loads `listCharacters()` once (cache in a module-level promise so returning from a record is instant); search box filters on `characterId nameCn nameVi.value fullnameVi.value` (lower-case); each item: avatar `/assets/characters/avatars/${id}.png` with `loading="lazy"` and a text fallback on error, VI name, CN name, ID; click → `navigate(recordHref(id))`. States: loading, error with retry, empty search result.
+- [x] **Step 3: Implement `CharacterRecord`** — loads `getCharacter(id)` (returns `{ character, skins, history }` as today); header (avatar, names, ID, back to list); module rail from `MODULES` (links with `recordHref(id, m.id)`, `aria-current="page"` on the active one; horizontal scroll on phones); renders the active module component with `{ data, reload }`.
+- [x] **Step 4: Mount** — in `AdminApp.tsx` remove the Vue `useEffect` and `charRootRef`/`vueAppRef`; render `<CharactersView />` inside the existing characters `<div hidden={section !== 'characters'} …>` wrapper (keep `ViewHeader`). Keep it mounted after first visit like Preview so an unsaved draft survives switching areas.
+- [x] **Step 5: Browser check** — `preview_start whmxcalc-vercel-dev` (needs DB: uses `.env.local` = development branch). Owner signs in (or approved temp account on the development branch). Open `#/admin/characters`: 133 items; search "Lộc" narrows; open A0061 → header + rail; switch modules via rail → hash changes; Back returns to list. `read_console_messages` onlyErrors → none.
+- [x] **Step 6: Commit** — `feat(admin): React Khí Giả list and record shell replaces the Vue mount`.
 
 ### Task 6: Parity modules — Tổng quan, Trang phục, Nguồn, Lịch sử
 
@@ -425,35 +425,35 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
 
 **Interfaces — Consumes:** `useEditor`, `OverridableField`, `SaveBar`, `HistoryList`, `patchCharacter`, `patchSkin`, `getSkin`.
 
-- [ ] **Step 1: OverviewModule** — keys `['nameVi','fullnameVi','nicknameVi','tagsVi']`, labels `Tên tiếng Việt / Tên đầy đủ tiếng Việt / Biệt danh tiếng Việt / Thẻ tiếng Việt`, source CN from `character.nameCn / fullnameCn / — / tagsCn`; `useEditor({ scope: 'character', id, record: character, keys, save: (changes) => patchCharacter(id, { expectedRevision: character.revision, changes }), reload })`; fields in place; `SaveBar`.
-- [ ] **Step 2: SkinsModule** — grid/list of `skins` (image from the skin's asset URL or `/assets/characters/avatars/${skinId.toLowerCase()}.png`, VI/CN name); selecting a skin loads `getSkin(skinId)` and opens its editor inline under the list (keys `['skinNameVi','descriptionVi','obtainVi']`, `scope: 'skin'`), read-only series/acquisition/asset info as today; one `SaveBar` for the open skin.
-- [ ] **Step 3: SourceModule** — read-only: Character ID, source snapshot, workbook snapshot, raw rare/job/attack type/unlock date from `character.protected`.
-- [ ] **Step 4: HistoryModule** — `HistoryList` with labels for the 7 fields and event labels `source_baseline / source_import / admin_override / override_cleared / human_edit`.
-- [ ] **Step 5: Browser check (development branch)** — edit nameVi → SaveBar "1 thay đổi" → Ctrl+S → saved; History shows it; "Trả về gốc" + save → value back to source, history shows `override_cleared`; open a second tab, save there, save in the first → 409 banner and typed value still present; reload with an unsaved edit → "Khôi phục?" prompt restores it. Skin: edit description, save, revert.
-- [ ] **Step 6: Commit** — `feat(admin): overview, skins, source and history modules`. Then run `ponytail:ponytail-review` on the diff since Task 3's base; apply its deletions/simplifications with tests still green; commit `refactor(admin): ponytail review`.
+- [x] **Step 1: OverviewModule** — keys `['nameVi','fullnameVi','nicknameVi','tagsVi']`, labels `Tên tiếng Việt / Tên đầy đủ tiếng Việt / Biệt danh tiếng Việt / Thẻ tiếng Việt`, source CN from `character.nameCn / fullnameCn / — / tagsCn`; `useEditor({ scope: 'character', id, record: character, keys, save: (changes) => patchCharacter(id, { expectedRevision: character.revision, changes }), reload })`; fields in place; `SaveBar`.
+- [x] **Step 2: SkinsModule** — grid/list of `skins` (image from the skin's asset URL or `/assets/characters/avatars/${skinId.toLowerCase()}.png`, VI/CN name); selecting a skin loads `getSkin(skinId)` and opens its editor inline under the list (keys `['skinNameVi','descriptionVi','obtainVi']`, `scope: 'skin'`), read-only series/acquisition/asset info as today; one `SaveBar` for the open skin.
+- [x] **Step 3: SourceModule** — read-only: Character ID, source snapshot, workbook snapshot, raw rare/job/attack type/unlock date from `character.protected`.
+- [x] **Step 4: HistoryModule** — `HistoryList` with labels for the 7 fields and event labels `source_baseline / source_import / admin_override / override_cleared / human_edit`.
+- [x] **Step 5: Browser check (development branch)** — edit nameVi → SaveBar "1 thay đổi" → Ctrl+S → saved; History shows it; "Trả về gốc" + save → value back to source, history shows `override_cleared`; open a second tab, save there, save in the first → 409 banner and typed value still present; reload with an unsaved edit → "Khôi phục?" prompt restores it. Skin: edit description, save, revert.
+- [x] **Step 6: Commit** — `feat(admin): overview, skins, source and history modules`. Then run `ponytail:ponytail-review` on the diff since Task 3's base; apply its deletions/simplifications with tests still green; commit `refactor(admin): ponytail review`.
 
 ### Task 7: Parity check, delete Vue
 
 **Files:** Delete `src/admin/character-skin/`, `src/admin/styles/characterSkinAdmin.css`; Modify `package.json`/`package-lock.json` (remove `vue`), any import of `characterSkinAdmin.css`.
 
-- [ ] **Step 1: Parity checklist (Playwright, development branch)** — every Vue capability works in React: search; open character; edit/save/revert 4 character fields; skins list; open skin; edit/save/revert 3 skin fields; read-only series/acquisition/assets; source; history labels; 409; an editor account can edit (no owner-only actions here); plus new: drafts, leave-page prompt, module URLs. Record results in the pipeline plan log.
-- [ ] **Step 2: Phone check** — `resize_window` mobile preset: list and record, no horizontal scroll (`document.documentElement.scrollWidth <= innerWidth`), SaveBar visible after editing; reset to desktop.
-- [ ] **Step 3: Delete** — `git rm -r src/admin/character-skin src/admin/styles/characterSkinAdmin.css`; `grep -rn "character-skin\|characterSkinAdmin\|from 'vue'" src index.html` → nothing; `npm uninstall vue` (background) — owner already approved removing Vue in the spec.
-- [ ] **Step 4: Verify** — `npm test`, `tsc`, `npm run build` all pass; bundle size before/after noted.
-- [ ] **Step 5: Commit** — `chore(admin): remove the Vue Khí Giả workspace and the vue dependency`.
+- [x] **Step 1: Parity checklist (Playwright, development branch)** — every Vue capability works in React: search; open character; edit/save/revert 4 character fields; skins list; open skin; edit/save/revert 3 skin fields; read-only series/acquisition/assets; source; history labels; 409; an editor account can edit (no owner-only actions here); plus new: drafts, leave-page prompt, module URLs. Record results in the pipeline plan log.
+- [x] **Step 2: Phone check** — `resize_window` mobile preset: list and record, no horizontal scroll (`document.documentElement.scrollWidth <= innerWidth`), SaveBar visible after editing; reset to desktop.
+- [x] **Step 3: Delete** — `git rm -r src/admin/character-skin src/admin/styles/characterSkinAdmin.css`; `grep -rn "character-skin\|characterSkinAdmin\|from 'vue'" src index.html` → nothing; `npm uninstall vue` (background) — owner already approved removing Vue in the spec.
+- [x] **Step 4: Verify** — `npm test`, `tsc`, `npm run build` all pass; bundle size before/after noted.
+- [x] **Step 5: Commit** — `chore(admin): remove the Vue Khí Giả workspace and the vue dependency`.
 
 ### Task 8: Motion
 
 **Files:** Modify the components from Tasks 4–6 and `src/admin/layout/styles/globals.css` per the motion intent in `khi-gia-direction.md`.
 
-- [ ] **Step 1:** Implement press/hover feedback with CSS transitions; module/record route changes with the View Transitions API (`document.startViewTransition?.(() => …)` around the hash-driven state update in `CharactersView`, feature-detected); save feedback per the direction. All wrapped in `@media (prefers-reduced-motion: no-preference)`.
-- [ ] **Step 2:** Only if an effect the owner asked for cannot be done with CSS/View Transitions: propose GSAP (dependency ~70 KB) to the owner first.
-- [ ] **Step 3: Verify** — browser: transitions run; with `emulate reduced motion` none run; `npm run build` passes.
-- [ ] **Step 4: Commit** — `feat(admin): Khí Giả motion`. Run `ponytail:ponytail-review` again on Tasks 4–8; commit any simplifications.
+- [x] **Step 1:** Implement press/hover feedback with CSS transitions; module/record route changes with the View Transitions API (`document.startViewTransition?.(() => …)` around the hash-driven state update in `CharactersView`, feature-detected); save feedback per the direction. All wrapped in `@media (prefers-reduced-motion: no-preference)`.
+- [x] **Step 2:** Only if an effect the owner asked for cannot be done with CSS/View Transitions: propose GSAP (dependency ~70 KB) to the owner first.
+- [x] **Step 3: Verify** — browser: transitions run; with `emulate reduced motion` none run; `npm run build` passes.
+- [x] **Step 4: Commit** — `feat(admin): Khí Giả motion`. Run `ponytail:ponytail-review` again on Tasks 4–8; commit any simplifications.
 
 ### Task 9: Review and release
 
-- [ ] **Step 1:** Final whole-branch review (fresh reviewer, most capable model) with this plan's Review Focus; fix Critical/Important with a failing test first.
-- [ ] **Step 2:** Merge-safety: `git fetch`; `origin/main` is an ancestor of HEAD; build the committed tree alone (in-project temp folder, deleted afterwards); `npm test`; validators unaffected (no data changes).
-- [ ] **Step 3:** Push branch, push `main`; after the production deploy: sign in on `whmxsite.vercel.app`, open Khí Giả, edit+revert one field, no console errors.
-- [ ] **Step 4:** Pipeline plan: P4 Phase 1 ✅; log; delete `bash-edit-diff`.
+- [x] **Step 1:** Final whole-branch review (fresh reviewer, most capable model) with this plan's Review Focus; fix Critical/Important with a failing test first.
+- [x] **Step 2:** Merge-safety: `git fetch`; `origin/main` is an ancestor of HEAD; build the committed tree alone (in-project temp folder, deleted afterwards); `npm test`; validators unaffected (no data changes).
+- [x] **Step 3:** Push branch, push `main`; after the production deploy: sign in on `whmxsite.vercel.app`, open Khí Giả, edit+revert one field, no console errors.
+- [x] **Step 4:** Pipeline plan: P4 Phase 1 ✅; log; delete `bash-edit-diff`.
