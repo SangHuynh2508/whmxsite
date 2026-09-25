@@ -24,7 +24,7 @@ export function useEditor({ scope, id, record, keys, save, reload, peek }: Args)
   const [state, dispatch] = useReducer(editorReducer, initialEditor(valuesOf(record, keys), record));
   // Until the hydrate for a newly loaded record lands, the draft belongs to the previous one: no changes, no draft write.
   const synced = state.source === record;
-  const changes = synced ? changesFor(state.draft, record ?? {}, keys) : {};
+  const changes = synced ? changesFor(state.draft, record ?? {}, keys, state.confirmed) : {};
   const dirtyCount = Object.keys(changes).length;
   const [diff, setDiff] = useState<ReturnType<typeof conflictRows> | null>(null);
 
@@ -73,6 +73,8 @@ export function useEditor({ scope, id, record, keys, save, reload, peek }: Args)
   }, [onSave, dirtyCount]);
 
   const setField = useCallback((k: string, v: string) => dispatch({ type: 'edit', key: k, value: v }), []);
+  // A confirmation is a click, not text: it is not kept in the browser draft.
+  const confirmField = useCallback((k: string) => dispatch({ type: 'confirm', key: k }), []);
   const onShowDiff = peek ? async () => setDiff(conflictRows(state.draft, record ?? {}, (await peek()) ?? {}, keys)) : undefined;
-  return { diff, onShowDiff, onHideDiff: () => setDiff(null), draft: state.draft, changes, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
+  return { confirm: confirmField, confirmed: state.confirmed, diff, onShowDiff, onHideDiff: () => setDiff(null), draft: state.draft, changes, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
 }

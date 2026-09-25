@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseCharactersRoute, recordHref } from './route.mts';
+import { parseCharactersRoute, recordHref, termHref } from './route.mts';
 
 test('parses list, record and module hashes', () => {
   assert.deepEqual(parseCharactersRoute('#/admin/characters'), { view: 'list' });
@@ -13,4 +13,11 @@ test('parses list, record and module hashes', () => {
 
 test('a malformed %-escape falls back to the list instead of throwing', () => {
   assert.deepEqual(parseCharactersRoute('#/admin/characters/%E0'), { view: 'list' });
+});
+
+test('terms page and lore module routes', () => {
+  assert.deepEqual(parseCharactersRoute('#/admin/characters/terms'), { view: 'terms' });
+  assert.deepEqual(parseCharactersRoute('#/admin/characters/terms/K12'), { view: 'terms', code: 'K12' });
+  assert.deepEqual(parseCharactersRoute('#/admin/characters/A0144/lore'), { view: 'record', id: 'A0144', module: 'lore' });
+  assert.equal(termHref('ORG_3'), '#/admin/characters/terms/ORG_3');
 });

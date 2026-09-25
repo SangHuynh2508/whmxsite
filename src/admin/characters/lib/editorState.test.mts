@@ -69,3 +69,12 @@ test('edited is set by typing and reset by hydrate, saveOk and discard', () => {
   assert.equal(editorReducer(s, { type: 'saveOk', draft: { nameVi: 'b' } }).edited, false);
   assert.equal(editorReducer(s, { type: 'discard', draft: { nameVi: 'a' } }).edited, false);
 });
+
+test('confirm records a field; hydrate, saveOk and discard clear the confirmations', () => {
+  let s = editorReducer(initialEditor({ a: 'x' }), { type: 'confirm', key: 'a' });
+  s = editorReducer(s, { type: 'confirm', key: 'a' });
+  assert.deepEqual(s.confirmed, ['a']);
+  assert.deepEqual(editorReducer(s, { type: 'saveOk', draft: { a: 'x' } }).confirmed, []);
+  assert.deepEqual(editorReducer(s, { type: 'hydrate', draft: { a: 'x' } }).confirmed, []);
+  assert.deepEqual(editorReducer(s, { type: 'discard', draft: { a: 'x' } }).confirmed, []);
+});

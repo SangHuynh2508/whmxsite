@@ -25,5 +25,7 @@ export default function CharactersView() {
     return () => removeEventListener('hashchange', onHash);
   }, []);
 
-  return route.view === 'list' ? <CharacterList /> : <CharacterRecord key={route.id} id={route.id} module={route.module} />;
+  if (route.view === 'list') return <CharacterList />;
+  if (route.view === 'terms') return null; // terms page: Task 9
+  return <CharacterRecord key={route.id} id={route.id} module={route.module} />;
 }

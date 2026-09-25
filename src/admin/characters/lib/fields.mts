@@ -1,14 +1,17 @@
-type Field = { value?: string | null; source?: string | null };
+type Field = { value?: string | null; source?: string | null; official?: boolean };
 export const fieldValue = (record: Record<string, Field | unknown> | null | undefined, key: string) =>
   String((record?.[key] as Field | undefined)?.value ?? '');
 
 // Empty input means "back to source". The server clears an override only when it receives the source
 // value itself (null would be stored as an empty override), so an emptied field sends the source.
-export function changesFor(draft: Record<string, string>, record: Record<string, unknown>, keys: string[]) {
+export function changesFor(draft: Record<string, string>, record: Record<string, unknown>, keys: string[], confirmed: string[] = []) {
   const changes: Record<string, string | null> = {};
   for (const key of keys) {
-    const next = (draft[key] ?? '').trim() || ((record[key] as Field | undefined)?.source ?? '').trim();
-    if (next !== fieldValue(record, key).trim()) changes[key] = next || null;
+    const field = record[key] as Field | undefined;
+    const next = (draft[key] ?? '').trim() || (field?.source ?? '').trim();
+    // "Dùng bản này" / "Giữ bản dịch": the shown text becomes official as it is.
+    const accepted = confirmed.includes(key) && field?.official === false;
+    if (next !== fieldValue(record, key).trim() || accepted) changes[key] = next || null;
   }
   return changes;
 }

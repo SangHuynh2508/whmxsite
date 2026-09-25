@@ -53,3 +53,9 @@ test('after a 409, lists each field you changed with what the other person saved
   const fresh = { nameVi: { value: 'theirs', source: 'a' }, tagsVi: { value: 't2', source: 't' } };
   assert.deepEqual(conflictRows({ nameVi: 'mine', tagsVi: 't' }, base, fresh, k), [{ key: 'nameVi', base: 'a', theirs: 'theirs', yours: 'mine' }]);
 });
+
+test('a confirmed field is a change even when the text is identical (legacy / CN changed)', () => {
+  const rec = { a: { value: 'x', source: null, official: false }, b: { value: 'y', source: null, official: true } };
+  assert.deepEqual(changesFor({ a: 'x', b: 'y' }, rec, ['a', 'b']), {});
+  assert.deepEqual(changesFor({ a: 'x', b: 'y' }, rec, ['a', 'b'], ['a', 'b']), { a: 'x' });
+});
