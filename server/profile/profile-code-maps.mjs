@@ -1,6 +1,6 @@
 // server/profile/profile-code-maps.mjs
-// JS copies of the maps in tools/build_web_data.py. DEPARTMENT_VI moves into lore_terms
-// once owners translate organisations in Admin (spec §5); keep both copies in sync until then.
+// JS copies of the maps in tools/build_web_data.py. DEPARTMENT_VI is used only by the legacy shape
+// (parity gate 1); v2 organisation names come from lore_terms (seeded 2026-09, spec Q7).
 export const DEPARTMENT_VI = Object.freeze({
   资料部: 'Bộ Tư Liệu',
   商业部: 'Bộ Thương Mại',

@@ -55,7 +55,9 @@ test('v2 shape publishes only admin+ok VI and resolves codes', () => {
   assert.ok(!JSON.stringify(v2).match(/"[KTSP]\d{4}"|V0053\d\d/), 'no raw codes or file ids');
 });
 
-test('v2 department prefers published admin VI, then the code map, then CN', () => {
+// Organisation names are admin VI in lore_terms since the 2026-09 seed (spec Q7): no JS name map in v2.
+test('v2 department is the published admin VI of the organisation term, else its CN', () => {
+  assert.equal(shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }).department, '商业部');
   const custom = new Map(terms); custom.set('ORG_2', term('商业部', 'Bộ Thương Nghiệp', 'admin'));
   assert.equal(shapeCharacterProfile({ profile, texts }, custom, { shape: 'v2' }).department, 'Bộ Thương Nghiệp');
   const unknown = new Map(terms); unknown.set('ORG_2', term('冬谷·繁星花协会'));

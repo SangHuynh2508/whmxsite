@@ -13,7 +13,7 @@ const map = (table, cn) => (Object.hasOwn(table, cn) ? table[cn] : cn);
 function department(profile, terms, shape) {
   const org = profile.organisationCode ? terms.get(`ORG_${profile.organisationCode}`) : null;
   const cn = org?.nameCn ?? '';
-  if (shape === 'v2') return publishableVi(org, 'nameVi') ?? map(DEPARTMENT_VI, cn);
+  if (shape === 'v2') return publishableVi(org, 'nameVi') ?? cn; // organisations are translated in lore_terms
   return map(DEPARTMENT_VI, cn);
 }
 
