@@ -36,12 +36,13 @@ test('publishes content, then pointer, then state; always writes the backup', as
   assert.equal(f.getState().publishedByUserId, 'u1');
 });
 
-test('unchanged content writes only the backup', async () => {
+test('unchanged content writes the backup and marks the live file current (clears the unpublished hint)', async () => {
   const first = fakes();
   const { file } = await publishLore({ repo: first.repo, storage: first.storage, now });
   const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: file });
-  assert.equal((await publishLore({ repo: f.repo, storage: f.storage, now })).status, 'unchanged');
-  assert.deepEqual(f.writes.map((w) => w[0]), ['backup']);
+  assert.equal((await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u2', now })).status, 'unchanged');
+  assert.deepEqual(f.writes.map((w) => w[0]), ['backup', 'state']);
+  assert.equal(f.getState().publishedAt, now);
 });
 
 test('a concurrent publish returns busy and writes nothing', async () => {

@@ -21,7 +21,7 @@ export function createLoreRepository(db) {
         const result = await tx.execute(sql`select pg_try_advisory_xact_lock(${lorePublishLockKey}) as locked`);
         const row = Array.isArray(result) ? result[0] : result.rows?.[0]; // same shape handling as db/client.mjs
         return row?.locked ? fn(tx) : { status: 'busy' };
-      });
+      }, { isolationLevel: 'repeatable read' }); // one snapshot for every read that builds the document
     },
     async loadPublishProfiles(tx) {
       return resolveAllProfiles(await loadProfileContext(tx), { shape: 'v2' });
