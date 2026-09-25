@@ -38,6 +38,8 @@
 | Shared S3 client (#11), lore restore by date (#14) | Lore pipeline review | Deferred |
 | "Layered ticket asset" rarity visual | Roadmap plan | Idea, unscheduled |
 | Legacy admin CSS in `src/style.css` ~L6980–7240 | Phase 1 | Cleanup, unscheduled |
+| **Localization quality backlog**: 111 VI cells with Han leaks (83 SKILL `PENDING` rows, 6 BUFF_STATUS, 22 PROFILE — 20 schema-shift rows for S0155/S0181/V0146/W0178/W0182 + 2 partial), 42-cell rich-text repair, 2 suspicious-VI warnings, then Batch #3 export | `localization/reviews/WHMX_CHECKPOINT_2026-09-13_AFTER_BATCH2.md` (+ `localization/PHASE3_WORKFLOW.md`) | Not tracked since 2026-09-13; current counts unknown — audit read-only first (whmx-localization skill). PROFILE rows now matter less: lore VI lives in the DB |
+| Workbook reconciliation gate for admin overrides of workbook-owned fields (hosted edit = working override; export blocks unreconciled overrides) | Root `../WHMX_CURRENT_STATE_FINAL_2026-09-19.md` §42 | Never explicitly approved; decide before P5 (name overrides publish path) |
 
 ## 3. Known limits (by design, not bugs)
 
