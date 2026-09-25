@@ -5,6 +5,8 @@ module.exports = async function adminSessionHandler(request, response) {
   }
   // Public pages ask this on every load. "Not signed in" is a normal answer, not an
   // error: also when auth is not configured for this deployment (no DB/auth env vars).
+  // `vercel dev` skips `.env.local`, where the local DB/auth vars live: load it before checking.
+  await import('../../server/load-local-env.mjs');
   if (!process.env.DATABASE_URL || !process.env.BETTER_AUTH_SECRET) {
     return response.status(200).json({ authenticated: false });
   }
