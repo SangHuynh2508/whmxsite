@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { parseCharactersRoute } from './lib/route.mts';
 import { CharacterList } from './CharacterList';
 import { CharacterRecord } from './CharacterRecord';
+import { LoreTermsView } from './LoreTermsView';
 
 const LIST = '#/admin/characters';
 const inCharacters = (hash: string) => hash === LIST || hash.startsWith(`${LIST}/`);
@@ -26,6 +27,6 @@ export default function CharactersView() {
   }, []);
 
   if (route.view === 'list') return <CharacterList />;
-  if (route.view === 'terms') return null; // terms page: Task 9
+  if (route.view === 'terms') return <LoreTermsView code={route.code} />;
   return <CharacterRecord key={route.id} id={route.id} module={route.module} />;
 }
