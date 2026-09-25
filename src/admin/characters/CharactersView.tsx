@@ -20,7 +20,8 @@ export default function CharactersView() {
       const next = parseCharactersRoute(location.hash);
       // Record/module changes cross-fade (View Transitions); instant where unsupported or motion is reduced.
       if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) setRoute(next);
-      else document.startViewTransition(() => flushSync(() => setRoute(next)));
+      // A newer hash change skips the running transition; its `ready` rejection is expected, not an error.
+      else document.startViewTransition(() => flushSync(() => setRoute(next))).ready.catch(() => {});
     };
     addEventListener('hashchange', onHash);
     return () => removeEventListener('hashchange', onHash);

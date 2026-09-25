@@ -26,6 +26,9 @@ body.admin-route-active>#whmx-feedback-btn {
   /* Height of the phone dock (src/style.css) so fixed admin bars sit above it (0 on wide screens, where there is no dock). */
   --admin-dock: calc(var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
 }
+/* The public CSS sets overflow-x: hidden on html and body, which makes body a scroll container and
+ * breaks position: sticky (the phone chip strip). clip crops the same way without that side effect. */
+html:has(> body.admin-route-active), body.admin-route-active { overflow-x: clip; }
 /* Collapsed dock: only the ˄ tab remains (32 px tall, 8 px above the bottom + safe area); keep the bars above it. */
 body.mobile-dock-collapsed .admin-react-root { --admin-dock: calc(48px + env(safe-area-inset-bottom, 0px)); }
 
