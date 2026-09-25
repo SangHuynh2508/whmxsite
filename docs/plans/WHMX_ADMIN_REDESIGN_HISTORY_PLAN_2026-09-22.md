@@ -115,6 +115,8 @@ Apply the direction to `src/admin/preview/previewWorkspace.js` + `adminShell.css
 
 ## Phase 6 — Final cross-surface verification
 
+> **Superseded 2026-09-26:** the app is dark-only and the Admin was rebuilt (Direction B shell, React Khí Giả); verification happened per phase (see the phase-1/phase-2 plans). Not run as a separate pass.
+
 No new deliverable — a verification-only pass across all three surfaces × both themes × both breakpoints confirming: the anti-slop checklist below holds everywhere touched; no color exists outside `tokens.css`; the dark-charcoal/antique-gold invariant is intact; no JS/render-function logic changed anywhere beyond what Phase 3/4 explicitly flagged.
 
 ## Anti-slop checklist (huashu principles → this codebase)

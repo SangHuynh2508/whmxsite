@@ -136,7 +136,10 @@ Facts that shaped this plan:
 | N2 | Release-day runbook for the new character (old pipeline) | Written below; run on release day |
 | N3 | After release: DB import of the new character (+ Preview reconciliation if a preview exists) | After N2 |
 | P0 | Pipeline brainstorm → written spec → implementation plan (superpowers flow) | ✅ Spec approved 2026-09-24. ✅ Implementation plan written: `docs/superpowers/plans/2026-09-24-lore-pipeline.md` (12 tasks: P1 Tasks 1–5, P2 Tasks 6–7, P3 Tasks 8–11 incl. backup/restore, archive images Task 12). **Next: owner reviews the plan and picks the execution method** |
-| P1–P6 | Pipeline implementation (lore slice first) | Not started; needs P0 spec + plan approval |
+| P1–P3 | Importer, resolvers + parity, publish to R2 + backup | ✅ Done and live 2026-09-24 |
+| P4 | Admin Khí Giả (React) + Lore module + terms + seeds | ✅ Done and live 2026-09-26 |
+| P5 | Next domains: character/skin names publish path, Hoán Chương, archive images role, skills (Part D) | Not started |
+| P6 | Backup/restore | ✅ Daily private R2 snapshot + restore CLI (2026-09-24); restore-by-date deferred |
 
 ## 4. Part N — new character readiness (specific order)
 

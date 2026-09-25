@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-24-lore-pipeline-design.md` (approved 2026-09-24). Read it before any task.
 
+> **Status 2026-09-26:** all 12 tasks done and live (see `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` §7 log, 2026-09-24).
+
 ## Global Constraints
 
 - Owner rules: no push/merge/reset/restore/clean; commit only your own files, only when verified; never stage `localization/localization_master.xlsx`.
@@ -82,7 +84,7 @@ Run all JS tests with: `node --test scripts/lib/ server/profile/ src/features/pr
   - `NormalizedTerm = { code, kind, nameCn, detailCn, sourceHash }`.
 - Produces: `sha256(text) → hex`, `hashValue(value) → hex` (stable key order).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // scripts/lib/profile-source.test.mjs
@@ -155,12 +157,12 @@ test('hashes are stable across runs', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node --test scripts/lib/profile-source.test.mjs`
 Expected: FAIL with `Cannot find module` / `ERR_MODULE_NOT_FOUND` for `profile-source.mjs`.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```js
 // scripts/lib/profile-source.mjs
@@ -277,12 +279,12 @@ function addTerm(terms, code, kind, nameCn, detailCn) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node --test scripts/lib/profile-source.test.mjs`
 Expected: `ℹ pass 3`, `ℹ fail 0`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add scripts/lib/profile-source.mjs scripts/lib/profile-source.test.mjs
@@ -299,7 +301,7 @@ git commit -m "feat(lore): pure raw profile source normalizer"
 - Consumes: `NormalizedProfile` (Task 1).
 - Produces: `matchLegacyCells(rows, profiles) → { seeds: [{characterId, unitKey, vi, sourceChanged}], ignored: [{profileId, reason}] }`; rows are `{profile_id, character_id, category, text_cn, text_vi}` from the reader.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // scripts/lib/profile-legacy.test.mjs
@@ -339,12 +341,12 @@ test('maps the four text categories and skips status/code rows', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node --test scripts/lib/profile-legacy.test.mjs`
 Expected: FAIL, module not found.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```js
 // scripts/lib/profile-legacy.mjs
@@ -422,13 +424,13 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 4: Run tests and the reader**
+- [x] **Step 4: Run tests and the reader**
 
 Run: `node --test scripts/lib/profile-legacy.test.mjs` → Expected `ℹ pass 1`.
 Run: `python scripts/read_profile_legacy_vi.py --workbook localization/localization_master.xlsx | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const r=JSON.parse(s);const c={};r.forEach(x=>c[x.category]=(c[x.category]||0)+1);console.log(r.length,c)})"`
 Expected: `195` rows; `card_intro 15, relic_intro 15, report_title 60, report_content 60, staff_status 15, entity_status 15, relic_name 5, relic_dynasty 5, relic_museum 5`. Then `git status --short localization/localization_master.xlsx` shows the same state as before (the reader never writes).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add scripts/lib/profile-legacy.mjs scripts/lib/profile-legacy.test.mjs scripts/read_profile_legacy_vi.py
@@ -447,7 +449,7 @@ git commit -m "feat(lore): legacy PROFILE VI matcher and read-only reader"
   - `current = { profiles: Map<characterId, {entityId, sourceHash, sourcePresent}>, texts: Map<"characterId|unitKey", {id, sourceCn, sourceHash, vi, state, sourcePresent}>, terms: Map<code, {entityId, sourceHash, nameVi, detailVi, state, sourcePresent}> }`,
   - `Plan = { profiles: [{characterId, action: 'insert'|'update'|'unchanged', row}], textInserts: [{characterId, unitKey, sourceCn, sourceRef, sourceHash}], textUpdates: [{id, characterId, unitKey, patch}], terms: [{code, action, row, patch}], audits: [{scope: 'profile'|'term', key, fieldName, oldValue, newValue}], touchedProfiles: Set<characterId>, touchedTerms: Set<code>, cnChanged: boolean, counts: {inserted, updated, unchanged, conflicted, absent} }`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // scripts/lib/profile-import-plan.test.mjs
@@ -501,12 +503,12 @@ test('a unit missing from raw is marked absent, never deleted', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node --test scripts/lib/profile-import-plan.test.mjs`
 Expected: FAIL, module not found.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```js
 // scripts/lib/profile-import-plan.mjs
@@ -569,12 +571,12 @@ export function planProfileImport({ normalized, current }) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node --test scripts/lib/profile-import-plan.test.mjs`
 Expected: `ℹ pass 4`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add scripts/lib/profile-import-plan.mjs scripts/lib/profile-import-plan.test.mjs
@@ -591,7 +593,7 @@ git commit -m "feat(lore): pure import planner (idempotent, never deletes, flags
 **Interfaces:**
 - Produces (Drizzle tables): `characterProfiles`, `profileTexts`, `loreTerms`, `lorePublishState`; enums `viOrigin`, `loreTextState`, `loreTermKind`. Column names below are what every later task uses.
 
-- [ ] **Step 1: Extend the entity enum**
+- [x] **Step 1: Extend the entity enum**
 
 In `db/schema/core.mjs` change the `managedEntityType` values to:
 
@@ -606,7 +608,7 @@ export const managedEntityType = pgEnum('managed_entity_type', [
 ]);
 ```
 
-- [ ] **Step 2: Write the schema**
+- [x] **Step 2: Write the schema**
 
 ```js
 // db/schema/profile.mjs
@@ -703,17 +705,17 @@ Append to `db/schema/index.mjs`:
 export * from './profile.mjs';
 ```
 
-- [ ] **Step 3: Verify the schema loads**
+- [x] **Step 3: Verify the schema loads**
 
 Run: `node -e "import('./db/schema/index.mjs').then(s=>console.log(Object.keys(s).filter(k=>/profile|lore|viOrigin/i.test(k))))"`
 Expected: lists `characterProfiles`, `profileTexts`, `loreTerms`, `lorePublishState`, `lorePublishLockKey`, `viOrigin`, `loreTextState`, `loreTermKind`.
 
-- [ ] **Step 4: Generate the migration (one npm command, background)**
+- [x] **Step 4: Generate the migration (one npm command, background)**
 
 Run: `npm run db:generate` (background).
 Expected: a new `db/migrations/0005_<name>.sql` containing `ALTER TYPE "public"."managed_entity_type" ADD VALUE 'character_profile'`, `... ADD VALUE 'lore_term'`, `CREATE TYPE "public"."vi_origin"`, `CREATE TABLE "character_profiles"`, `"profile_texts"`, `"lore_terms"`, `"lore_publish_state"`, the two CHECKs, and **no** `DROP` statement. If it contains any `DROP` or touches existing tables other than the enum, stop and report.
 
-- [ ] **Step 5: Commit (migration not applied)**
+- [x] **Step 5: Commit (migration not applied)**
 
 ```bash
 git add db/schema/core.mjs db/schema/profile.mjs db/schema/index.mjs db/migrations/
@@ -729,7 +731,7 @@ git commit -m "feat(lore): profile/lore schema and migration 0005 (not applied)"
 - Consumes: `normalizeProfileSources`, `hashValue` (Task 1), `matchLegacyCells` (Task 2), `planProfileImport` (Task 3), schema (Task 4).
 - Produces: CLI. Default mode is a **read-only plan**; only `--apply` writes.
 
-- [ ] **Step 1: Write the CLI**
+- [x] **Step 1: Write the CLI**
 
 ```js
 // scripts/import-character-profile.mjs
@@ -904,31 +906,31 @@ if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
 }
 ```
 
-- [ ] **Step 2: Run `--check` (no DB)**
+- [x] **Step 2: Run `--check` (no DB)**
 
 Run: `node scripts/import-character-profile.mjs --check --seed-legacy-workbook`
 Expected: `{"check":"ok","characters":133,...,"skipped":["W0021"],"legacySeeds":150,"legacyIgnored":45}`. If `legacySeeds` is not 150, print the `ignored` list with reason `no_matching_unit` and stop to report — do not guess a mapping.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add scripts/import-character-profile.mjs
 git commit -m "feat(lore): profile importer CLI (read-only plan by default, --apply writes)"
 ```
 
-- [ ] **Step 4: OWNER GATE — apply migration 0005**
+- [x] **Step 4: OWNER GATE — apply migration 0005**
 
 Show the owner the full `db/migrations/0005_*.sql`. After an explicit yes, run (background): `npm run db:migrate -- --target=development`. Expected: `MIGRATION_CHAIN_OK target=development`. Then update the pipeline plan (P1: migration applied) and commit the plan file.
 
-- [ ] **Step 5: OWNER GATE — first import**
+- [x] **Step 5: OWNER GATE — first import**
 
 Run the read-only plan: `node --env-file=.env --env-file=.env.local scripts/import-character-profile.mjs`. Expected: 133 `insert` profiles, about 1,700–2,000 text inserts, the referenced terms (10 organisations, 10 affinity levels, K/T/S/P codes), `skippedRawCharacters: ["W0021"]`. Show the owner the counts and the term list; after a yes run the same command with `--apply`. Run the plan again: every row must be `unchanged` (idempotency). Update the plan file and commit it.
 
-- [ ] **Step 6: OWNER GATE — legacy seed**
+- [x] **Step 6: OWNER GATE — legacy seed**
 
 Run `node --env-file=.env --env-file=.env.local scripts/import-character-profile.mjs --seed-legacy-workbook` (plan). Show the owner the 150 `legacySeeds` lines. After a yes, rerun with `--apply`. Then plan again with the flag: zero new seeds (they only fill empty cells).
 
-- [ ] **Step 7: CN-change check on the real DB (read-only)**
+- [x] **Step 7: CN-change check on the real DB (read-only)**
 
 ```bash
 S=D:/BaiTapCode/WHMX/_claude_scratch/md && mkdir -p $S && cp ../NeoArtifacts/MasterData/json/{characterFiles,characterFileTextMap,historicalRelicsMap,HistoricalTextMap,friendshipDescription,characterTable,TypeJJHMap}.json $S/
@@ -951,7 +953,7 @@ Expected (plan only, nothing written): exactly one `textUpdates` line, `A0144 ca
 - Produces: `shapeCharacterProfile(entry, terms, { shape }) → object` where `entry = { profile: characterProfiles row, texts: Map<unitKey, profileTexts row (sourcePresent only)> }`, `terms = Map<code, loreTerms row>`, `shape ∈ {'legacy','v2'}`.
 - Produces: `publishableVi(row, field = 'vi') → string|null` (only `viOrigin === 'admin' && state === 'ok'`).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // server/profile/shape-character-profile.test.mjs
@@ -1024,11 +1026,11 @@ test('no relic entry gives an empty legacy relic_info', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node --test server/profile/shape-character-profile.test.mjs` → FAIL, module not found.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```js
 // server/profile/profile-code-maps.mjs
@@ -1128,11 +1130,11 @@ export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node --test server/profile/shape-character-profile.test.mjs` → `ℹ pass 4`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/profile/profile-code-maps.mjs server/profile/shape-character-profile.mjs server/profile/shape-character-profile.test.mjs
@@ -1149,7 +1151,7 @@ git commit -m "feat(lore): pure profile shaper (legacy + v2 shapes)"
 - Produces: `loadProfileContext(db) → { terms: Map, entries: Map<characterId, {profile, texts}> }`; `resolveCharacterProfile(characterId, ctx, { shape }) → object|null`; `resolveAllProfiles(ctx, { shape }) → Array<[characterId, profile]>` sorted by ID.
 - Produces: `node scripts/export-profile-overlay.mjs --shape legacy|v2` → stdout JSON `{characterId: profile}`; `python tools/apply_profile_overlay.py [--in P] [--out P] < overlay.json`.
 
-- [ ] **Step 1: Write the failing Python test (key order + byte identity)**
+- [x] **Step 1: Write the failing Python test (key order + byte identity)**
 
 ```python
 # tools/test_apply_profile_overlay.py
@@ -1200,11 +1202,11 @@ if __name__ == "__main__":
     print("OK")
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `python tools/test_apply_profile_overlay.py` → FAIL (`apply_profile_overlay.py` missing).
 
-- [ ] **Step 3: Implement the four files**
+- [x] **Step 3: Implement the four files**
 
 ```python
 # tools/apply_profile_overlay.py
@@ -1324,11 +1326,11 @@ console.log(JSON.stringify({ ok: problems.length === 0, problems, departmentChan
 process.exitCode = problems.length ? 1 : 0;
 ```
 
-- [ ] **Step 4: Run the Python test**
+- [x] **Step 4: Run the Python test**
 
 Run: `python tools/test_apply_profile_overlay.py` → `OK`.
 
-- [ ] **Step 5: Gate 1 (legacy, byte-identical) — needs P1 done**
+- [x] **Step 5: Gate 1 (legacy, byte-identical) — needs P1 done**
 
 ```bash
 S=/d/BaiTapCode/WHMX/_claude_scratch/gate && mkdir -p $S && cp public/data.json $S/before.json
@@ -1337,7 +1339,7 @@ cmp $S/before.json $S/legacy.json && echo GATE1_OK
 ```
 Expected: `applied 133 profiles; 0 characters kept their build profile` and `GATE1_OK`. (`public/data.json` must equal a fresh deterministic build; if `tools/build_web_data.py` inputs changed since the last commit, rebuild first with outputs redirected to `$S`.) If it fails, locate the first difference with `D:\BaiTapCode\WHMX\_claude_scratch\dept\jdiff.py` and fix the resolver/code maps; nothing proceeds until `GATE1_OK`.
 
-- [ ] **Step 6: Gate 2 (v2)**
+- [x] **Step 6: Gate 2 (v2)**
 
 ```bash
 node --env-file=.env --env-file=.env.local scripts/export-profile-overlay.mjs --shape v2 | python tools/apply_profile_overlay.py --in $S/before.json --out $S/v2.json
@@ -1345,7 +1347,7 @@ node scripts/check-profile-overlay.mjs $S/before.json $S/v2.json
 ```
 Expected: `"ok": true`, `"departmentChanges": []` (the old pipeline already uses `typeJJh`). Then copy `$S/v2.json` to `public/data.json`, run the four validators (`python tools/validate_data.py`, `validate_public_output.py`, `validate_skin_roster.py`, `validate_skin_assets.py`) and `npm run build` (background). All must pass. The public site renders only the 4 unchanged fields, so no UI check is needed beyond the character overview of one character.
 
-- [ ] **Step 7: Commit + runbook**
+- [x] **Step 7: Commit + runbook**
 
 Add to the N2 runbook (pipeline plan §4, step 5) after `build_web_data.py`: `node --env-file=.env --env-file=.env.local scripts/export-profile-overlay.mjs --shape v2 | python tools/apply_profile_overlay.py`. Update the status table (P2 ✅) and log.
 
@@ -1373,7 +1375,7 @@ git commit -m "feat(lore): DB resolver, data.json profile overlay, parity gates 
   - `createLoreRepository(db) → { withPublishLock(fn), loadPublishProfiles(tx), loadBackupPayload(tx), readState(tx), writeState(tx, patch) }`;
   - `publishLore({ repo, storage, actorUserId = null, now = new Date() }) → { status: 'published'|'unchanged'|'busy', file? }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```js
 // server/profile/lore-document.test.mjs
@@ -1454,11 +1456,11 @@ test('a pointer failure leaves state untouched so the old version stays live', a
 });
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `node --test server/profile/lore-document.test.mjs server/profile/lore-publisher.test.mjs` → FAIL, modules not found.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 ```js
 // server/profile/lore-document.mjs
@@ -1573,11 +1575,11 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
 }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `node --test server/profile/lore-document.test.mjs server/profile/lore-publisher.test.mjs` → `ℹ pass 6`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/profile/lore-document.mjs server/profile/lore-storage.mjs server/profile/lore-repository.mjs server/profile/lore-publisher.mjs server/profile/lore-document.test.mjs server/profile/lore-publisher.test.mjs
@@ -1594,7 +1596,7 @@ git commit -m "feat(lore): R2 lore publisher with advisory lock and daily privat
 - Consumes: Task 8.
 - Produces: `GET /api/admin/lore/publish` → `lore_publish_state` + `{ hasUnpublishedChanges }`; `POST` → `publishLore` result (`409` when `busy`). Any active signed-in admin (owner or editor) may POST — the P4 auto-publish runs in an editor's browser too; the "Xuất bản" button is shown to owners only (P4).
 
-- [ ] **Step 1: Route + dispatcher**
+- [x] **Step 1: Route + dispatcher**
 
 ```js
 // server/admin-api-routes/lore.mjs
@@ -1635,7 +1637,7 @@ In `api/admin/[...].js`, add before `default:`:
       }
 ```
 
-- [ ] **Step 2: CLI**
+- [x] **Step 2: CLI**
 
 ```js
 // scripts/publish-lore.mjs
@@ -1676,20 +1678,20 @@ try {
 }
 ```
 
-- [ ] **Step 3: Dry run (read-only)**
+- [x] **Step 3: Dry run (read-only)**
 
 Run: `node --env-file=.env --env-file=.env.local scripts/publish-lore.mjs --dry-run D:/BaiTapCode/WHMX/_claude_scratch/lore.json` twice.
 Expected: the same `file` name both times; size roughly 1–2 MB; `node -e` check that no value matches `^[KTSP]\d{4}$`.
 
-- [ ] **Step 4: OWNER GATE — env vars + first publish**
+- [x] **Step 4: OWNER GATE — env vars + first publish**
 
 Confirm with the owner that spec §12 step C is done (Vercel env vars) and that `.env.local` has `R2_ENDPOINT`, `R2_BUCKET`, `R2_BACKUP_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `LORE_PUBLISH_PREFIX=lore/development/`. After a yes run `node --env-file=.env --env-file=.env.local scripts/publish-lore.mjs`. Expected `{"status":"published","file":"lore.<hash>.json"}`; running it again gives `unchanged`. Fetch `https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev/lore/development/lore.pointer.json` and confirm its `file` matches and a CORS `Access-Control-Allow-Origin` header is present.
 
-- [ ] **Step 5: Endpoint check under `vercel dev`**
+- [x] **Step 5: Endpoint check under `vercel dev`**
 
 Start `whmxcalc-vercel-dev` (launch.json). The owner signs in (or approves a temp account per state doc 09-23_v2 §3). In the page: `await fetch('/api/admin/lore/publish', {method:'POST', credentials:'same-origin', headers:{'content-type':'application/json'}, body:'{}'})` → `200` with `unchanged`; a signed-out call → `401`. Stop the server afterwards.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add server/admin-api-routes/lore.mjs "api/admin/[...].js" scripts/publish-lore.mjs docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md
@@ -1706,7 +1708,7 @@ git commit -m "feat(lore): admin publish endpoint and publish/repoint CLI"
 **Interfaces:**
 - Produces: `loadLoreOverlay(pointerUrl?: string, fetchImpl = fetch, timeoutMs = 5000) → Promise<LoreOverlay | null>`; `mergeLoreOverlay(gameData, overlay) → number` (profiles replaced).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 // src/features/profile/api/loreOverlay.test.mts
@@ -1754,11 +1756,11 @@ test('merge replaces only known characters', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `node --test src/features/profile/api/loreOverlay.test.mts` → FAIL, module not found.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 ```ts
 // src/features/profile/api/loreOverlay.mts
@@ -1828,15 +1830,15 @@ export async function loadGameData() {
 
 (Keep the existing `if (gameData && gameData.characters) { … }` block exactly where it is, between `gameData = await res.json();` and `mergeLoreOverlay(...)`.) In `tsconfig.json` set `"include": ["src/admin/layout", "src/**/*.tsx", "src/**/*.mts"]`.
 
-- [ ] **Step 4: Run tests + build**
+- [x] **Step 4: Run tests + build**
 
 Run: `node --test src/features/profile/api/loreOverlay.test.mts` → `ℹ pass 4`. Then `npm run build` (background) → `✓ built`.
 
-- [ ] **Step 5: Browser check**
+- [x] **Step 5: Browser check**
 
 Start `whmxcalc-dev` with `VITE_LORE_POINTER_URL` pointing at the development pointer (in `.env.local`). On `#/characters/thuy-tinh-boi` (V0053): no console errors, and in the console `(await import('/src/data/loader.js')).getGameData().characters.V0053.profile.relic_info.type` returns `{cn: '玉器', vi: null}` (v2 shape from R2). Then block the pointer request (Playwright `page.route('**/lore.pointer.json', r => r.abort())`): the page still renders and the profile is the `data.json` one. Stop the server.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/features/profile/api/loreOverlay.mts src/features/profile/api/loreOverlay.test.mts src/data/loader.js tsconfig.json docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md
@@ -1853,7 +1855,7 @@ git commit -m "feat(lore): public lore overlay loader with CN fallback"
 - Consumes: backup payload shape from `loadBackupPayload` (Task 8).
 - Produces: `planRestore(snapshot, current) → { texts: [{id, before, after}], terms: [{code, before, after}] }` comparing `vi, viOrigin, state` (texts) and `nameVi, detailVi, viOrigin, state` (terms), matched by `profileEntityId+unitKey` and `code`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // server/profile/lore-restore.test.mjs
@@ -1882,11 +1884,11 @@ test('lists only VI fields that differ; never CN', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `node --test server/profile/lore-restore.test.mjs` → FAIL.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 ```js
 // server/profile/lore-restore.mjs
@@ -1973,11 +1975,11 @@ try {
 }
 ```
 
-- [ ] **Step 4: Run tests + a dry run**
+- [x] **Step 4: Run tests + a dry run**
 
 Run: `node --test server/profile/lore-restore.test.mjs` → pass. Download today's backup from the `whmx-backups` bucket (owner can do it in the Cloudflare dashboard, saved on drive D) and run `node --env-file=.env --env-file=.env.local scripts/restore-lore-snapshot.mjs <file> --actor <owner email>`. Expected: `texts: []`, `terms: []` (nothing changed since the backup). **Never run `--apply` without the owner's yes.**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/profile/lore-restore.mjs server/profile/lore-restore.test.mjs scripts/restore-lore-snapshot.mjs docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md
@@ -1998,7 +2000,7 @@ Update the status table: P3 ✅ and P6 (backup/restore) ✅.
 **Interfaces:**
 - Produces: `data.json` `characters.<id>.archive = { "image": <url>, "head": <url> }` (absent when the character has no archive folder).
 
-- [ ] **Step 1: Add the category**
+- [x] **Step 1: Add the category**
 
 ```python
 REMOTE_CATEGORIES = {"card": "cards", "drawing": "drawings", "archive": "archives"}
@@ -2006,11 +2008,11 @@ REMOTE_CATEGORIES = {"card": "cards", "drawing": "drawings", "archive": "archive
 
 `publish_assets.discover_assets()` already loops over `REMOTE_CATEGORIES` and globs `<character>/<category>/*.png`, so the 268 archive PNGs are picked up with no other change.
 
-- [ ] **Step 2: OWNER GATE — upload**
+- [x] **Step 2: OWNER GATE — upload**
 
 `tools/publish_assets.py` uploads to R2 with the owner's credentials. Show the owner the dry count (`python -c "import sys; sys.path.insert(0,'tools'); import publish_assets as p; a=[x for x in p.discover_assets() if x['category']=='archive']; print(len(a))"` → expected `268`). After a yes, the owner runs `python tools/publish_assets.py`; `asset-publish-manifest.json` gains 268 `characters/<id>/archives/…webp` keys.
 
-- [ ] **Step 3: Emit URLs in the build**
+- [x] **Step 3: Emit URLs in the build**
 
 In `tools/build_web_data.py`, after the `char_cards` loop add a helper (called only for characters that end up in `chars_db`, so the NPC `W0021`, which is not published, is never looked up):
 
@@ -2029,11 +2031,11 @@ In `tools/build_web_data.py`, after the `char_cards` loop add a helper (called o
 
 (Use the same base-path expression as `card_dir` a few lines above if it differs from `MASTER.parent.parent / "Assets"`.) Where each character dict is assembled into `chars_db`, add `**({"archive": archive} if (archive := archive_urls(cid)) else {}),` next to the card entry.
 
-- [ ] **Step 4: Build to scratch and verify**
+- [x] **Step 4: Build to scratch and verify**
 
 Build with outputs redirected (`D:\BaiTapCode\WHMX\_claude_scratch\dept\run_build.py <D path>`), then compare with `public/data.json`: the only differences are 133 new `characters.<id>.archive` objects (use `jdiff.py`). Open one URL from the output in the browser: it shows the relic image. Copy to `public/data.json`, run the four validators and `npm run build`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tools/asset_publish_manifest.py tools/build_web_data.py asset-publish-manifest.json public/data.json docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md

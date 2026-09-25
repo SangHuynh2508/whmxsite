@@ -8,9 +8,9 @@
 |---|---|---|
 | A | Bug fixes: fixture data, nav label, nav highlight | ✅ Done 2026-09-23, verified live |
 | B | 3 from-scratch directions → owner picked **B** | ✅ Done. B's login also got the MagicCard border-glow card (see C2) |
-| C | Promote B into production files + plain-language fields | ✅ Done 2026-09-23, verified live (owner + editor login). Awaiting owner review — see "C result" |
+| C | Promote B into production files + plain-language fields | ✅ Done 2026-09-23, verified live (owner + editor login). Accepted (in production since 2026-09-25); MoltenMetal/StarBorder/ogl leftovers already removed |
 | E | Mobile bottom dock (public + admin), incl. mobile login entry | ✅ Built 2026-09-24, now React (`src/app/layout/AppNav.tsx` = desktop rail + mobile dock). Owner tested logged-in (the sheet bug was fixed). **Agent-unverified:** the logged-in admin icon column at 768–1279 px. See "E result" |
-| F | Brainstorm: Khí Giả admin redesign (Vue island) | Q1 answered (no review). Q2 answered by the pipeline plan (DB is the authority for lore). Lore work continues in `plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` (P4 = Admin Lore module); remaining questions Q3–Q5 are asked when P4 starts |
+| F | Brainstorm: Khí Giả admin redesign (Vue island) | ✅ Superseded: built as P4 (React Khí Giả + Lore, live 2026-09-26; plans in `docs/superpowers/plans/2026-09-25-*`). Original note: Q1 answered (no review). Q2 answered by the pipeline plan (DB is the authority for lore). Lore work continues in `plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` (P4 = Admin Lore module); remaining questions Q3–Q5 are asked when P4 starts |
 | D | Skill translation frame | Deferred. Lore comes first, after Admin is tested |
 
 
