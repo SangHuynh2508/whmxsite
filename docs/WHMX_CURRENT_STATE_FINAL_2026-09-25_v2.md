@@ -1,5 +1,7 @@
 # WHMX — Current state / handoff (2026-09-25, evening)
 
+> **Superseded by `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`** (P4 phase 2 done). §2 API facts here still apply.
+
 > Newest handoff; supersedes `WHMX_CURRENT_STATE_FINAL_2026-09-25.md` for "what's next" (that file's
 > infrastructure section §2 is still accurate and not repeated here). Then read `docs/WHMX_NEXT_STEPS.md`
 > and the dated log in `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` §7.

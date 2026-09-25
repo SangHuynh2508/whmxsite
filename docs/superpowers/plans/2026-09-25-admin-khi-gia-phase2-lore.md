@@ -75,7 +75,7 @@ Run JS tests: `npm test` (globs `scripts/lib/*.test.mjs`, `server/profile/*.test
 
 Bugs covered: (1) malformed `%` hash crashed the admin root; (2) Ctrl+S saved the hidden Khí Giả editor from Preview/Accounts, Caps Lock `S` ignored; (3) save OK + reload failed showed "Không thể lưu" and the retry got 409; (4) typing then undoing by hand left a draft → pointless "Khôi phục?"; (7) the restore prompt could fire inside a view-transition update (page frozen on the old snapshot); plus a draft identical to the record is never offered.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
 
 ```ts
 // append to src/admin/characters/lib/route.test.mts
@@ -131,9 +131,9 @@ test('edited is set by typing and reset by hydrate, saveOk and discard', () => {
 });
 ```
 
-- [ ] **Step 2: Run** — `npm test` → the new tests fail (`URIError`, module not found, `draftToRestore` not exported, `edited` undefined, status `error`).
+- [x] **Step 2: Run** — `npm test` → the new tests fail (`URIError`, module not found, `draftToRestore` not exported, `edited` undefined, status `error`).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 ```ts
 // src/admin/characters/lib/route.mts — replace parseCharactersRoute's first line
@@ -222,8 +222,8 @@ const onSave = useCallback(async () => {
 const onKey = (event: KeyboardEvent) => { if (isSaveShortcut(event, location.hash)) { event.preventDefault(); void onSave(); } };
 ```
 
-- [ ] **Step 4: Verify** — `npm test` all pass; `tsc` clean; `npm run build` passes. Browser (vercel dev, development): open `#/admin/characters/%E0` → list shows, no crash; on A0003 type in a field, open Preview (`#/admin`), press Ctrl+S → no PATCH in `read_network_requests`; type then delete what you typed → `localStorage` has no `whmx:admin-draft:character:A0003`; reload a record with a draft identical to the record → no prompt.
-- [ ] **Step 5: Commit** — `fix(admin): malformed hash, shortcut scope, stale drafts, reload-after-save failure, deferred restore prompt`.
+- [x] **Step 4: Verify** — `npm test` all pass; `tsc` clean; `npm run build` passes. Browser (vercel dev, development): open `#/admin/characters/%E0` → list shows, no crash; on A0003 type in a field, open Preview (`#/admin`), press Ctrl+S → no PATCH in `read_network_requests`; type then delete what you typed → `localStorage` has no `whmx:admin-draft:character:A0003`; reload a record with a draft identical to the record → no prompt.
+- [x] **Step 5: Commit** — `fix(admin): malformed hash, shortcut scope, stale drafts, reload-after-save failure, deferred restore prompt`.
 
 ### Task 2: Leave guard in one place (+ test), dock-collapsed save bar
 
@@ -233,7 +233,7 @@ const onKey = (event: KeyboardEvent) => { if (isSaveShortcut(event, location.has
 
 Bugs covered: (6) cancelling "Rời trang?" towards a public page could still unmount the editor (AdminApp's listener ran first) and restoring the hash added a history entry (Back looped); (9) the leave guard had no test; (5) with the phone dock collapsed the ˄ tab covered the save bar and the safe-area inset was lost.
 
-- [ ] **Step 1: Failing test**
+- [x] **Step 1: Failing test**
 
 ```ts
 // src/admin/layout/lib/leaveGuard.test.mts
@@ -251,8 +251,8 @@ test('asks only when leaving a Khí Giả page with unsaved edits', () => {
 });
 ```
 
-- [ ] **Step 2: Run** — `npm test` → fails (module not found).
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — `npm test` → fails (module not found).
+- [x] **Step 3: Implement**
 
 ```ts
 // src/admin/layout/lib/leaveGuard.mts
@@ -293,8 +293,8 @@ body.mobile-dock-collapsed .admin-react-root { --admin-dock: calc(48px + env(saf
 ```
 (replaces the `--admin-dock: 0px` rule).
 
-- [ ] **Step 4: Verify** — `npm test`, `tsc`, build. Browser: dirty A0003 → click the rail's Characters link (public) → stub `confirm` to return false → hash back to the record, editor still mounted with the typed text, `history.length` unchanged; same with Preview; with `true` it leaves. Mobile preset: collapse the dock (˅) → save bar bottom = window height − 48 px, ˄ tab below it, not overlapping.
-- [ ] **Step 5: Commit** — `fix(admin): one capture-phase leave guard (tested); save bar above the collapsed dock`.
+- [x] **Step 4: Verify** — `npm test`, `tsc`, build. Browser: dirty A0003 → click the rail's Characters link (public) → stub `confirm` to return false → hash back to the record, editor still mounted with the typed text, `history.length` unchanged; same with Preview; with `true` it leaves. Mobile preset: collapse the dock (˅) → save bar bottom = window height − 48 px, ˄ tab below it, not overlapping.
+- [x] **Step 5: Commit** — `fix(admin): one capture-phase leave guard (tested); save bar above the collapsed dock`.
 
 ### Task 3: 409 "Xem khác biệt"
 
@@ -304,7 +304,7 @@ body.mobile-dock-collapsed .admin-react-root { --admin-dock: calc(48px + env(saf
 
 Spec §5: "409 keeps what the user typed and offers 'load the new version (yours stays in the draft)' or 'show differences'" — the second option was missing.
 
-- [ ] **Step 1: Failing test**
+- [x] **Step 1: Failing test**
 
 ```ts
 // append to fields.test.mts (add conflictRows to the import)
@@ -316,8 +316,8 @@ test('after a 409, lists each field you changed with what the other person saved
 });
 ```
 
-- [ ] **Step 2: Run** — fails (not exported).
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — fails (not exported).
+- [x] **Step 3: Implement**
 
 ```ts
 // fields.mts — append
@@ -355,8 +355,8 @@ export function ConflictDiff({ rows, labels, onClose }: { rows: Row[]; labels: R
 
 `SaveBar`: when `status === 'conflict' && onShowDiff`, add a `Button` "Xem khác biệt" next to "Tải bản mới"; render `diff && <ConflictDiff rows={diff} labels={labels ?? {}} onClose={onHideDiff} />` directly above the bar (wrap bar + panel in one element that carries the fixed/static positioning). Overview passes `peek={() => getCharacter(id).then((d) => d.character)}` and labels from `FIELDS`; Skins passes `peek={() => getSkin(skinId).then((d) => d.skin)}` and its labels.
 
-- [ ] **Step 4: Verify** — tests/tsc/build. Browser (development): make a 409 as in phase 1 (concurrent `PATCH` via `fetch` on another field and on the same field) → "Xem khác biệt" lists only your field; same-field case shows "cả hai cùng sửa". Clean up the test values afterwards (send source values).
-- [ ] **Step 5: Commit** — `feat(admin): 409 shows the differences`. Update `docs/WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md` §3 item 5 ("Deferred minors") → "fixed in phase 2 Tasks 1–3".
+- [x] **Step 4: Verify** — tests/tsc/build. Browser (development): make a 409 as in phase 1 (concurrent `PATCH` via `fetch` on another field and on the same field) → "Xem khác biệt" lists only your field; same-field case shows "cả hai cùng sửa". Clean up the test values afterwards (send source values).
+- [x] **Step 5: Commit** — `feat(admin): 409 shows the differences`. Update `docs/WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md` §3 item 5 ("Deferred minors") → "fixed in phase 2 Tasks 1–3".
 
 ### Task 4: Lore server planners (pure)
 
@@ -372,7 +372,7 @@ export function ConflictDiff({ rows, labels, onClose }: { rows: Row[]; labels: R
 - `archiveImagesFor(manifest, characterId) → { url, width, height }[]`
 - `shapeLoreRecord({ characterId, revision, profile, texts, terms, history, archiveImages }) → LoreRecord` (see code)
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
 
 ```js
 // server/profile/lore-edit.test.mjs
@@ -474,8 +474,8 @@ test('the lore record lists present units with previous CN only for changed ones
 });
 ```
 
-- [ ] **Step 2: Run** — `node --test server/profile/lore-edit.test.mjs` → fails (module not found).
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — `node --test server/profile/lore-edit.test.mjs` → fails (module not found).
+- [x] **Step 3: Implement**
 
 ```js
 // server/profile/lore-edit.mjs
@@ -590,8 +590,8 @@ export function shapeLoreRecord({ characterId, revision, profile, texts, terms, 
 }
 ```
 
-- [ ] **Step 4: Run** — `npm test` → all pass.
-- [ ] **Step 5: Commit** — `feat(lore): pure planners for lore/term saves, progress, usage and the admin record`.
+- [x] **Step 4: Run** — `npm test` → all pass.
+- [x] **Step 5: Commit** — `feat(lore): pure planners for lore/term saves, progress, usage and the admin record`.
 
 ### Task 5: Lore admin API (DB layer + routes)
 
@@ -604,7 +604,7 @@ export function shapeLoreRecord({ characterId, revision, profile, texts, terms, 
 - `PATCH /api/admin/lore/terms/:code` body `{ expectedRevision, nameVi: string|null, detailVi: string|null, requestId? }` → `{ revision, changed }`; 409; 404.
 - `GET /api/admin/lore/progress` → `{ progress: Record<characterId, {total, done, legacy, changed}> }`.
 
-- [ ] **Step 1: Implement the DB layer** (DB code is verified against the development branch in Step 3; its decisions are the Task 4 planners)
+- [x] **Step 1: Implement the DB layer** (DB code is verified against the development branch in Step 3; its decisions are the Task 4 planners)
 
 ```js
 // server/profile/lore-admin.mjs
@@ -756,15 +756,15 @@ case 'lore': {
 }
 ```
 
-- [ ] **Step 2: Unit check** — `npm test` still green; `node -e "import('./server/profile/lore-admin.mjs').then(()=>console.log('ok'))"` with `.env.local` loaded (`node --env-file=.env.local -e ...`) → `ok` (the JSON import attribute works on Node 24).
-- [ ] **Step 3: Integration on the development branch** (`vercel dev`, owner signed in; in the page console):
+- [x] **Step 2: Unit check** — `npm test` still green; `node -e "import('./server/profile/lore-admin.mjs').then(()=>console.log('ok'))"` with `.env.local` loaded (`node --env-file=.env.local -e ...`) → `ok` (the JSON import attribute works on Node 24).
+- [x] **Step 3: Integration on the development branch** (`vercel dev`, owner signed in; in the page console):
   - `await (await fetch('/api/admin/lore/characters/A0144')).json()` → 14 units, `relic.type.nameCn === '金银器'`, `archiveImages[0].url` ends `/archives/a0144.webp` and loads (200).
   - PATCH `card_intro` with a two-paragraph text (`'Dòng 1\n\nDòng 2'`) → `{changed:true}`; GET → `vi` keeps `\n\n`; `GET /api/admin/lore/publish` → `hasUnpublishedChanges: true`.
   - PATCH again with the old `expectedRevision` → 409; PATCH `{ nope: 'x' }` → 422 `UNKNOWN_UNIT`.
   - PATCH `card_intro: ''` → back to `vi: null, viOrigin: null`. Restore the unit's original value (legacy units: send their legacy text only if the owner wants it official — otherwise leave it as found; note what you changed in the log).
   - `GET /api/admin/lore/terms` → 139 terms, `ORG_*` with `usedBy` lengths summing to the characters that have an organisation; `GET /api/admin/lore/progress` → 133 keys.
   - Anonymous (other browser/incognito) `GET /api/admin/lore/progress` → 401.
-- [ ] **Step 4: Commit** — `feat(lore): lore admin API — record, unit save, terms, term save, progress (no new function)`. Log in the pipeline plan.
+- [x] **Step 4: Commit** — `feat(lore): lore admin API — record, unit save, terms, term save, progress (no new function)`. Log in the pipeline plan.
 
 Ruling carried from phase-1 review item #7 (import plan computed outside the transaction): not changed — the importer's patches never include `vi`/`viOrigin` (see `scripts/lib/profile-import-plan.mjs`), so a concurrent Admin save is never overwritten.
 
@@ -774,7 +774,7 @@ Ruling carried from phase-1 review item #7 (import plan computed outside the tra
 
 **Interfaces — Produces:** `createPublishScheduler({ delayMs, publish, onStatus, timers? }) → { schedule(): void; now(): void }`; `PublishStatus = { state: 'idle'|'waiting'|'publishing'|'done'|'error'; message: string }`; `lorePublisher` (singleton) + `usePublishStatus(): PublishStatus`; `loreApi`: `getLore(id)`, `patchLore(id, { expectedRevision, texts })`, `getLoreProgress()`, `getLoreTerms()`, `patchLoreTerm(code, { expectedRevision, nameVi, detailVi })`, `publishLore()`.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
 
 ```js
 // lore-publisher.test.mjs — replace the 'unchanged content writes only the backup' test
@@ -817,8 +817,8 @@ test('a busy publish (409) is retried after the delay; other failures report an 
 });
 ```
 
-- [ ] **Step 2: Run** — `npm test` → the three tests fail.
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — `npm test` → the three tests fail.
+- [x] **Step 3: Implement**
 
 ```js
 // lore-publisher.mjs — the unchanged branch
@@ -889,8 +889,8 @@ export const patchLoreTerm = (code, { expectedRevision, nameVi, detailVi }) => a
 export const publishLore = () => api('/api/admin/lore/publish', json('POST', {}));
 ```
 
-- [ ] **Step 4: Verify** — `npm test`, `tsc`, build. Development: `POST /api/admin/lore/publish` twice → second `unchanged`, then `GET` → `hasUnpublishedChanges: false`. Measure the POST (expect 7–9 s as before).
-- [ ] **Step 5: Commit** — `feat(lore): repeatable-read publish, unchanged clears the hint, debounced client publisher`.
+- [x] **Step 4: Verify** — `npm test`, `tsc`, build. Development: `POST /api/admin/lore/publish` twice → second `unchanged`, then `GET` → `hasUnpublishedChanges: false`. Measure the POST (expect 7–9 s as before).
+- [x] **Step 5: Commit** — `feat(lore): repeatable-read publish, unchanged clears the hint, debounced client publisher`.
 
 ### Task 7: Client lore libs — routes, confirm-as-is, unit groups, list filter
 
@@ -903,7 +903,7 @@ export const publishLore = () => api('/api/admin/lore/publish', json('POST', {})
 - `loreUnitGroups(structure, unitKeys, affinity) → { group: string; items: { unitKey, label, extra? }[] }[]`.
 - `filterCharacters(items, progress, { query, filter }) → items` with `filter: 'all'|'unfinished'|'legacy'|'changed'`.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
 
 ```ts
 // route.test.mts — append
@@ -981,8 +981,8 @@ test('search matches ID, VI and CN; filters use lore progress', () => {
 });
 ```
 
-- [ ] **Step 2: Run** — `npm test` → new tests fail.
-- [ ] **Step 3: Implement**
+- [x] **Step 2: Run** — `npm test` → new tests fail.
+- [x] **Step 3: Implement**
 
 ```ts
 // route.mts
@@ -1064,8 +1064,8 @@ export function filterCharacters<T extends Item>(items: T[], progress: Progress,
 }
 ```
 
-- [ ] **Step 4: Run** — `npm test`, `tsc` → pass (CharacterRecord's `MODULES` gets `lore` in Task 8; until then `parseCharactersRoute` may return `lore` and `CharacterRecord` falls back to the first module — acceptable within this commit).
-- [ ] **Step 5: Commit** — `feat(lore): client libs — lore/terms routes, confirm-as-is, unit groups, list filters`.
+- [x] **Step 4: Run** — `npm test`, `tsc` → pass (CharacterRecord's `MODULES` gets `lore` in Task 8; until then `parseCharactersRoute` may return `lore` and `CharacterRecord` falls back to the first module — acceptable within this commit).
+- [x] **Step 5: Commit** — `feat(lore): client libs — lore/terms routes, confirm-as-is, unit groups, list filters`.
 
 ### Task 8: Lore module + list progress
 
@@ -1073,7 +1073,7 @@ export function filterCharacters<T extends Item>(items: T[], progress: Progress,
 
 **Interfaces — Consumes:** Task 6 (`getLore`, `patchLore`, `lorePublisher`, `usePublishStatus`), Task 7 (`loreUnitGroups`, `filterCharacters`, `termHref`, `TERMS_HREF`, `confirm`). **Produces:** `PairRow`, `ViCell` for Task 9.
 
-- [ ] **Step 1: Extract the shared pair pieces** (refactor, behaviour unchanged — phase-1 browser behaviour of Overview/Skins must stay identical)
+- [x] **Step 1: Extract the shared pair pieces** (refactor, behaviour unchanged — phase-1 browser behaviour of Overview/Skins must stay identical)
 
 ```tsx
 // components/Pair.tsx
@@ -1118,7 +1118,7 @@ export function ViCell({ id, value, dirty, placeholder, multiline, onChange, not
 
 Rewrite `OverridableField` as `PairRow` + `ViCell` with its existing notes ("Đang dùng bản sửa", "Gốc: …", "Trả về gốc", "Chưa dịch", count) and its `useId()`-based id; re-run the phase-1 browser check on Overview (edit/save/revert) to confirm no change.
 
-- [ ] **Step 2: `FullscreenEditor` and `BilingualText`**
+- [x] **Step 2: `FullscreenEditor` and `BilingualText`**
 
 ```tsx
 // components/FullscreenEditor.tsx — native <dialog>: Esc closes, focus is trapped by the browser.
@@ -1174,7 +1174,7 @@ export function BilingualText({ unitKey, label, extra, cn, previousCn, value, st
 }
 ```
 
-- [ ] **Step 3: `LoreModule`** — layout per `khi-gia-direction.md` §3 (left unit list 260 px / middle pairs / right context 280 px at `xl`; phones: sticky chip strip, pairs stacked, fixed save bar):
+- [x] **Step 3: `LoreModule`** — layout per `khi-gia-direction.md` §3 (left unit list 260 px / middle pairs / right context 280 px at `xl`; phones: sticky chip strip, pairs stacked, fixed save bar):
 
 ```tsx
 // modules/LoreModule.tsx
@@ -1241,10 +1241,10 @@ Render requirements (write them out in JSX in this file; classes follow `khi-gia
 
 Register in `CharacterRecord.tsx`: `{ id: 'lore', label: 'Lore', Component: LoreModule }` after Tổng quan.
 
-- [ ] **Step 4: List progress + filters** — `CharacterList.tsx`: load `getLoreProgress()` once (module cache like the list); filter buttons Tất cả / Chưa xong / Có bản cũ / Tiếng Trung đã đổi (state; `aria-pressed`), a link "Thuật ngữ lore →" to `TERMS_HREF`; use `filterCharacters`; each entry's right column shows `done / total` and, when > 0, `N bản cũ` (gold) and `N đổi CN` (`--rarity-ssr-text`). Invalidate the progress cache after a lore save (`lorePublisher.schedule` call site also calls `invalidateLoreProgress()`).
+- [x] **Step 4: List progress + filters** — `CharacterList.tsx`: load `getLoreProgress()` once (module cache like the list); filter buttons Tất cả / Chưa xong / Có bản cũ / Tiếng Trung đã đổi (state; `aria-pressed`), a link "Thuật ngữ lore →" to `TERMS_HREF`; use `filterCharacters`; each entry's right column shows `done / total` and, when > 0, `N bản cũ` (gold) and `N đổi CN` (`--rarity-ssr-text`). Invalidate the progress cache after a lore save (`lorePublisher.schedule` call site also calls `invalidateLoreProgress()`).
 
-- [ ] **Step 5: Browser check (development)** — A0144 Lore: 14 units in groups; legacy units pre-filled with "Bản cũ · chưa lưu"; click "Dùng bản này" on one → SaveBar "1 thay đổi" → Ctrl+S → unit becomes done (dot), list progress +1 after returning, publish line "Sẽ xuất bản sau 30 giây…" → "Đã lên site." and the R2 file for `lore/development/` changes (`GET /api/admin/lore/publish`). Scroll the middle pane → the left list follows. Phone preset: chip strip sticky, tapping a chip jumps and focuses, back-to-top visible, "Phóng to" opens the full-screen dialog and edits reflect in the row. Two tabs (or a concurrent `fetch` PATCH on another unit) → 409 → "Tải bản mới" → restore → only your unit dirty (Review Focus 5). Revert every test change afterwards (send the original texts; for units that were legacy, the owner decides whether to leave them official — note it in the log). Console: no errors.
-- [ ] **Step 6: Commit** — `feat(lore): Lore module (workbench + pairs, scroll-spy, fullscreen, auto-publish) and list progress`. Then run `ponytail:ponytail-review` on the diff since Task 4's base; apply with tests green; commit `refactor(lore): ponytail review`.
+- [x] **Step 5: Browser check (development)** — A0144 Lore: 14 units in groups; legacy units pre-filled with "Bản cũ · chưa lưu"; click "Dùng bản này" on one → SaveBar "1 thay đổi" → Ctrl+S → unit becomes done (dot), list progress +1 after returning, publish line "Sẽ xuất bản sau 30 giây…" → "Đã lên site." and the R2 file for `lore/development/` changes (`GET /api/admin/lore/publish`). Scroll the middle pane → the left list follows. Phone preset: chip strip sticky, tapping a chip jumps and focuses, back-to-top visible, "Phóng to" opens the full-screen dialog and edits reflect in the row. Two tabs (or a concurrent `fetch` PATCH on another unit) → 409 → "Tải bản mới" → restore → only your unit dirty (Review Focus 5). Revert every test change afterwards (send the original texts; for units that were legacy, the owner decides whether to leave them official — note it in the log). Console: no errors.
+- [x] **Step 6: Commit** — `feat(lore): Lore module (workbench + pairs, scroll-spy, fullscreen, auto-publish) and list progress`. Then run `ponytail:ponytail-review` on the diff since Task 4's base; apply with tests green; commit `refactor(lore): ponytail review`.
 
 ### Task 9: Lore terms page
 
@@ -1252,14 +1252,14 @@ Register in `CharacterRecord.tsx`: `{ id: 'lore', label: 'Lore', Component: Lore
 
 **Interfaces — Consumes:** `getLoreTerms`, `patchLoreTerm`, `lorePublisher`, `useEditor`, `PairRow`, `ViCell`, `SaveBar`, `termHref`.
 
-- [ ] **Step 1: Implement** — requirements:
+- [x] **Step 1: Implement** — requirements:
   - Header (C style): kicker "KHÍ GIẢ", title "Thuật ngữ lore", lead "Sửa ở đây đổi cho mọi nhân vật dùng thuật ngữ." and a back link to the list; a borderless search (focus = gold underline, no box) over code / CN / VI.
   - Groups by `kind` in this order with these headings: `organisation` Tổ chức, `relic_type` Loại hiện vật, `era` Triều đại, `museum` Bảo tàng, `era_range` Giai đoạn, `affinity_level` Mức thiện cảm.
   - Each term row: CN name (serif), VI name or "chưa dịch", status (bản cũ never occurs for terms; "Tiếng Trung đã đổi" when `state === 'source_changed'`), "đang dùng bởi N nhân vật" as a `<details>` listing the IDs as links (`recordHref(id, 'lore')`).
   - Clicking a row opens its editor in place (one open at a time; switching with unsaved changes asks "Có thay đổi chưa lưu. Rời thuật ngữ này?"): `useEditor({ scope: 'term', id: code, record: { nameVi: { value: t.nameVi ?? '', source: null, official: t.viOrigin === 'admin' && t.state === 'ok' }, detailVi: { value: t.detailVi ?? '', source: null, official: … } }, keys: ['nameVi', 'detailVi'], save: (c) => patchLoreTerm(code, { expectedRevision: t.revision, nameVi: c.nameVi !== undefined ? c.nameVi : t.nameVi, detailVi: c.detailVi !== undefined ? c.detailVi : t.detailVi }).then(() => lorePublisher.schedule()), reload, peek })`; `PairRow` + `ViCell` for name and (when `detailCn`) detail; "Giữ bản dịch" (confirm) for `source_changed`; `SaveBar` with the publish line.
   - `#/admin/characters/terms/CODE` opens that term and scrolls it into view.
-- [ ] **Step 2: Browser check (development)** — open from a Lore module's relic term link → the right term is open; translate `K`-code "金银器" → save → the Lore module of A0144 shows the VI (after reload) and `usedBy` count matches; 409 via a concurrent `fetch`; phone width usable, no horizontal scroll. Revert the test term afterwards (empty both fields → back to "chưa dịch").
-- [ ] **Step 3: Commit** — `feat(lore): lore terms page`.
+- [x] **Step 2: Browser check (development)** — open from a Lore module's relic term link → the right term is open; translate `K`-code "金银器" → save → the Lore module of A0144 shows the VI (after reload) and `usedBy` count matches; 409 via a concurrent `fetch`; phone width usable, no horizontal scroll. Revert the test term afterwards (empty both fields → back to "chưa dịch").
+- [x] **Step 3: Commit** — `feat(lore): lore terms page`.
 
 ### Task 10: One-time seeds (report titles, organisation names) + v2 department from lore_terms
 
@@ -1267,7 +1267,7 @@ Register in `CharacterRecord.tsx`: `{ id: 'lore', label: 'Lore', Component: Lore
 
 **Interfaces — Consumes:** `saveLoreTexts`, `saveLoreTerm` (Task 5), `DEPARTMENT_VI`.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
 
 ```js
 // scripts/lib/lore-seed.test.mjs
@@ -1322,8 +1322,8 @@ test('v2 department: admin VI of the organisation term, else the CN (no JS name 
 ```
 (Write the second test with the file's existing `profile`/`terms` fixture builders; assert both cases.)
 
-- [ ] **Step 2: Run** — `npm test` → fail.
-- [ ] **Step 3: Implement the planners**
+- [x] **Step 2: Run** — `npm test` → fail.
+- [x] **Step 3: Implement the planners**
 
 ```js
 // scripts/lib/lore-seed.mjs
@@ -1359,17 +1359,17 @@ export function planOrgSeed(terms, names) {
 }
 ```
 
-- [ ] **Step 4: The script** — `scripts/seed-lore-admin-vi.mjs --part=titles|orgs [--apply]`:
+- [x] **Step 4: The script** — `scripts/seed-lore-admin-vi.mjs --part=titles|orgs [--apply]`:
   - loads rows (`selectProfileTextsWithCharacterId` + `lore_terms` + revisions), builds the plan, prints counts and **every** write / replaced-legacy / kept-admin / unknown row (IDs + CN + VI) — this printout is what the owner approves;
   - without `--apply` it never writes; with `--apply` it finds the single active owner (`users.role = 'owner' and status = 'active'`, abort if not exactly one) as actor and applies per character with `saveLoreTexts(db, id, { expectedRevision, texts, actorUserId })` (titles) or per term with `saveLoreTerm` (orgs, `detailVi` kept as is), then prints `{ written, conflicts }` (a 409 is skipped and reported, never retried blindly).
-- [ ] **Step 5: Run on development** — `node scripts/seed-lore-admin-vi.mjs --part=titles` (plan) → show the printout to the owner → **OWNER GATE** → `--apply` → re-run plan: 0 writes. Same for `--part=orgs`. `POST /api/admin/lore/publish` (or wait for the next UI publish) and check a public character page on the local site shows "Báo cáo quan sát 1" titles.
-- [ ] **Step 6: v2 department** — implement: in `shape-character-profile.mjs` v2 → `publishableVi(org, 'nameVi') ?? cn`; legacy shape keeps `map(DEPARTMENT_VI, cn)` (parity gate 1 compares with the Python build, which keeps its map — spec Q7). Update the `profile-code-maps.mjs` comment ("used only by the legacy shape"). `npm test` green. **Do not push this commit before the production seed (Step 7) is applied**, or production would show CN organisation names until then.
-- [ ] **Step 7: Production (OWNER GATE for each part)** — `node --env-file=.env.production.local scripts/seed-lore-admin-vi.mjs --part=titles` → owner reviews the printout → yes → `--apply`; same for `orgs`; then `LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.production.local scripts/publish-lore.mjs` (owner yes). Verify on whmxsite.vercel.app: a character page shows the VI titles and the organisation name.
-- [ ] **Step 8: Commit** — `feat(lore): one-time seeds (report titles, organisations); v2 department from lore_terms`. Run `ponytail:ponytail-review` on Tasks 9–10; commit any simplifications.
+- [x] **Step 5: Run on development** — `node scripts/seed-lore-admin-vi.mjs --part=titles` (plan) → show the printout to the owner → **OWNER GATE** → `--apply` → re-run plan: 0 writes. Same for `--part=orgs`. `POST /api/admin/lore/publish` (or wait for the next UI publish) and check a public character page on the local site shows "Báo cáo quan sát 1" titles.
+- [x] **Step 6: v2 department** — implement: in `shape-character-profile.mjs` v2 → `publishableVi(org, 'nameVi') ?? cn`; legacy shape keeps `map(DEPARTMENT_VI, cn)` (parity gate 1 compares with the Python build, which keeps its map — spec Q7). Update the `profile-code-maps.mjs` comment ("used only by the legacy shape"). `npm test` green. **Do not push this commit before the production seed (Step 7) is applied**, or production would show CN organisation names until then.
+- [x] **Step 7: Production (OWNER GATE for each part)** — `node --env-file=.env.production.local scripts/seed-lore-admin-vi.mjs --part=titles` → owner reviews the printout → yes → `--apply`; same for `orgs`; then `LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.production.local scripts/publish-lore.mjs` (owner yes). Verify on whmxsite.vercel.app: a character page shows the VI titles and the organisation name.
+- [x] **Step 8: Commit** — `feat(lore): one-time seeds (report titles, organisations); v2 department from lore_terms`. Run `ponytail:ponytail-review` on Tasks 9–10; commit any simplifications.
 
 ### Task 11: Review, release, docs
 
-- [ ] **Step 1:** Final whole-branch review (fresh reviewer, most capable model) with this plan's Review Focus and the ledger's rulings; fix every Critical/Important with a failing test first. Findings the reviewer calls "minor" are re-graded by effect: anything that crashes, loses or silently changes data, saves the wrong thing, or misleads the user is a bug and is fixed in this pass (owner, 2026-09-25); only pure polish may be deferred, and it is listed as such in the handoff.
-- [ ] **Step 2:** Merge safety: `git fetch`; `origin/main` is an ancestor of HEAD; export the committed tree into `.superpowers/sdd/<plan>/tree` (`git archive HEAD | tar -x -C …`), run `npm test`, `tsc`, `vite build` there; delete the folder.
-- [ ] **Step 3:** Push the branch and `main`; after the production deploy: `#/login` → owner signs in → Khí Giả → A0144 → Lore renders; terms page renders; no console errors (owner performs the signed-in check if the agent has no session).
-- [ ] **Step 4:** Docs: pipeline plan log; new `docs/WHMX_CURRENT_STATE_FINAL_<date>.md`; `WHMX_NEXT_STEPS.md` header and read-first list; skills used. Delete `%LOCALAPPDATA%\Temp\claude\bash-edit-diff`.
+- [x] **Step 1:** Final whole-branch review (fresh reviewer, most capable model) with this plan's Review Focus and the ledger's rulings; fix every Critical/Important with a failing test first. Findings the reviewer calls "minor" are re-graded by effect: anything that crashes, loses or silently changes data, saves the wrong thing, or misleads the user is a bug and is fixed in this pass (owner, 2026-09-25); only pure polish may be deferred, and it is listed as such in the handoff.
+- [x] **Step 2:** Merge safety: `git fetch`; `origin/main` is an ancestor of HEAD; export the committed tree into `.superpowers/sdd/<plan>/tree` (`git archive HEAD | tar -x -C …`), run `npm test`, `tsc`, `vite build` there; delete the folder.
+- [x] **Step 3:** Push the branch and `main`; after the production deploy: `#/login` → owner signs in → Khí Giả → A0144 → Lore renders; terms page renders; no console errors (owner performs the signed-in check if the agent has no session).
+- [x] **Step 4:** Docs: pipeline plan log; new `docs/WHMX_CURRENT_STATE_FINAL_<date>.md`; `WHMX_NEXT_STEPS.md` header and read-first list; skills used. Delete `%LOCALAPPDATA%\Temp\claude\bash-edit-diff`.
