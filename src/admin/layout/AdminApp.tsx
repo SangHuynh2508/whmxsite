@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Lock, LogOut } from 'lucide-react';
+import { Eye, EyeOff, Lock, LogOut } from 'lucide-react';
 import { getSession, refreshSession, signOut } from '../../app/auth/session.js';
 import { cn } from '@/lib/utils';
 import { MagicCard } from '@/components/magicui/magic-card';
 import { Button, Field, Notice, ViewHeader, inputClass } from '@/ui';
 import PreviewView from '../preview/PreviewView';
 import AccountsView from '../users/AccountsView';
+import CharactersView from '../characters/CharactersView';
 import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav';
+import { LOGIN_HASH, authRedirect } from './lib/authRoute.mts';
 
 /*
  * React Admin shell (direction B, picked 2026-09-23 — see
@@ -23,11 +25,15 @@ export default function AdminApp() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [section, setSection] = useState<Section>(currentSection);
   const [isAdmin, setIsAdmin] = useState(isAdminRoute());
-  const charRootRef = useRef<HTMLDivElement>(null);
-  const vueAppRef = useRef<{ unmount: () => void } | null>(null);
-  // Preview mounts on first visit and then stays mounted (hidden) so an unsaved draft survives a trip to another area.
+  const [hash, setHash] = useState(location.hash);
+  const [showPassword, setShowPassword] = useState(false);
+  // The admin page a signed-out visitor asked for, reopened after they sign in.
+  const nextAfterLogin = useRef('');
+  // Preview and Khí Giả mount on first visit and then stay mounted (hidden) so an unsaved draft survives a trip to another area.
   const [previewMounted, setPreviewMounted] = useState(false);
   if (section === 'preview' && !previewMounted) setPreviewMounted(true);
+  const [charactersMounted, setCharactersMounted] = useState(false);
+  if (section === 'characters' && !charactersMounted) setCharactersMounted(true);
 
   useEffect(() => {
     document.body.classList.toggle('admin-route-active', isAdmin);
@@ -37,6 +43,7 @@ export default function AdminApp() {
     const onHashChange = () => {
       setSection(currentSection());
       setIsAdmin(isAdminRoute());
+      setHash(location.hash);
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
@@ -52,21 +59,13 @@ export default function AdminApp() {
   }, []);
 
   useEffect(() => {
-    if (!session?.authenticated) return;
-    // Khí Giả is the Vue Character/Skin island, mounted into a plain container.
-    if (section === 'characters' && charRootRef.current && !vueAppRef.current) {
-      import('../character-skin/characterSkinAdminWorkspace.js').then(({ mountCharacterSkinAdmin }) => {
-        if (!charRootRef.current || vueAppRef.current) return;
-        vueAppRef.current = mountCharacterSkinAdmin(charRootRef.current, session);
-      });
-    }
-    return () => {
-      if (section !== 'characters' && vueAppRef.current) {
-        vueAppRef.current.unmount();
-        vueAppRef.current = null;
-      }
-    };
-  }, [session, section]);
+    if (!session || !isAdmin) return;
+    if (!session.authenticated && hash !== LOGIN_HASH) nextAfterLogin.current = hash;
+    const target = authRedirect(hash, session.authenticated, nextAfterLogin.current);
+    if (!target) return;
+    if (session.authenticated) nextAfterLogin.current = '';
+    location.replace(target);
+  }, [session, isAdmin, hash]);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -111,7 +110,20 @@ export default function AdminApp() {
             <form onSubmit={(event) => { setLoggingIn(true); void handleLogin(event).finally(() => setLoggingIn(false)); }}>
               <div className="grid gap-4 px-6 py-6">
                 <Field label="Email"><input required name="email" type="email" autoComplete="username" className={`${inputClass} h-10`} /></Field>
-                <Field label="Mật khẩu"><input required name="password" type="password" autoComplete="current-password" className={`${inputClass} h-10`} /></Field>
+                <Field label="Mật khẩu">
+                  <span className="relative block">
+                    <input required name="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" className={`${inputClass} h-10 pr-10`} />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                      aria-pressed={showPassword}
+                      className="absolute inset-y-0 right-0 grid w-10 place-items-center text-(--text-muted) hover:text-(--text-main) focus-visible:outline-2 focus-visible:outline-(--accent)"
+                    >
+                      {showPassword ? <EyeOff size={16} aria-hidden /> : <Eye size={16} aria-hidden />}
+                    </button>
+                  </span>
+                </Field>
                 {loginError && <Notice>{loginError}</Notice>}
               </div>
               <div className="border-t border-(--border-color) px-6 py-4">
@@ -137,12 +149,12 @@ export default function AdminApp() {
           </div>
         )}
         {section === 'accounts' && <AccountsView isOwner={isOwner} />}
-        <div hidden={section !== 'characters'} className={shown(section === 'characters')}>
-          <ViewHeader title="Khí Giả" meta="Nhân vật & trang phục · bản dịch tiếng Việt" />
-          <div className="min-h-0 flex-1 lg:overflow-y-auto">
-            <div ref={charRootRef} className="px-4 py-6 lg:px-8 lg:py-8" />
+        {charactersMounted && (
+          <div hidden={section !== 'characters'} className={shown(section === 'characters')}>
+            <ViewHeader title="Khí Giả" meta="Nhân vật & trang phục · bản dịch tiếng Việt" />
+            <CharactersView />
           </div>
-        </div>
+        )}
       </div>
     </main>
   );

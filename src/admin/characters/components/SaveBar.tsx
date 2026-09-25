@@ -8,7 +8,7 @@ export function SaveBar({ dirtyCount, status, message, onSave, onDiscard, onRelo
   if (dirtyCount === 0 && status === 'idle') return null;
   const saving = status === 'saving';
   return (
-    <div className="fixed inset-x-0 bottom-0 z-20 flex flex-none items-center gap-3 border-t border-(--border-color) bg-(--bg-surface) px-4 py-2.5 text-[13px] md:static md:px-5">
+    <div className="fixed inset-x-0 bottom-(--admin-dock) z-20 flex flex-none items-center gap-3 border-t border-(--border-color) bg-(--bg-surface) px-4 py-2.5 text-[13px] md:static md:px-5">
       {dirtyCount > 0 && <span className="text-(--accent)">{dirtyCount} thay đổi chưa lưu</span>}
       <span role="status" className="min-w-0 flex-1 truncate text-(--text-subtle)">{message || hint}</span>
       {status === 'conflict' && <Button onClick={onReload}>Tải bản mới</Button>}

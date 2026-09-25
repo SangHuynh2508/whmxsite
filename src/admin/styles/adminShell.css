@@ -23,6 +23,20 @@ body.admin-route-active>#whmx-feedback-btn {
   --admin-danger-line: color-mix(in oklch, var(--rarity-ssr) 40%, var(--border-color));
   --admin-warn: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main));
   --admin-warn-bg: color-mix(in oklch, var(--rarity-sr) 14%, var(--bg-surface));
+  /* Height of the phone dock (src/style.css) so fixed admin bars sit above it; 0 when collapsed or absent. */
+  --admin-dock: calc(var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
+}
+body.mobile-dock-collapsed .admin-react-root { --admin-dock: 0px; }
+
+/* Thin scrollbars inside Admin (owner, 2026-09-25): 6 px, the thumb shows while its pane is hovered.
+ * Firefox gets the standard properties only; setting scrollbar-color in Chrome would disable these. */
+.admin-react-root ::-webkit-scrollbar { width: 6px; height: 6px; }
+.admin-react-root ::-webkit-scrollbar-track { background: transparent; }
+.admin-react-root ::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.admin-react-root :hover::-webkit-scrollbar-thumb { background: var(--border-strong); }
+.admin-react-root ::-webkit-scrollbar-thumb:hover { background: var(--text-subtle); }
+@supports (-moz-appearance: none) {
+  .admin-react-root * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 }
 
 .admin-serif { font-family: 'Noto Serif', var(--font-serif); }

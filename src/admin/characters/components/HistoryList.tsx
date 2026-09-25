@@ -1,6 +1,6 @@
 import { formatDate } from '../../layout/ui';
 
-export type HistoryEntry = { id: string; fieldName: string; eventType: string; oldValue: unknown; newValue: unknown; actorUserId: string | null; editedAt: string };
+export type HistoryEntry = { id: string; entityId: string; fieldName: string; eventType: string; oldValue: unknown; newValue: unknown; actorUserId: string | null; editedAt: string };
 
 export const EVENT_VI: Record<string, string> = {
   source_baseline: 'Dữ liệu gốc',
@@ -9,6 +9,8 @@ export const EVENT_VI: Record<string, string> = {
   override_cleared: 'Trả về gốc',
   human_edit: 'Sửa tay',
 };
+// Import rows carry source-hash snapshots (objects); only text edits get an old → new line.
+const isText = (value: unknown) => value == null || typeof value !== 'object';
 const show = (value: unknown) => (value == null || value === '' ? '∅' : typeof value === 'string' ? value : JSON.stringify(value));
 
 export function HistoryList({ entries, labels }: { entries: HistoryEntry[]; labels: Record<string, string> }) {
@@ -23,11 +25,11 @@ export function HistoryList({ entries, labels }: { entries: HistoryEntry[]; labe
             <span>{EVENT_VI[entry.eventType] || entry.eventType}</span>
             <span className="ml-auto tabular-nums">{formatDate(entry.editedAt)}</span>
           </div>
-          <div className="min-w-0 break-words text-(--text-main)">
+          {isText(entry.oldValue) && isText(entry.newValue) && <div className="min-w-0 break-words text-(--text-main)">
             <span className="text-(--text-subtle) line-through">{show(entry.oldValue)}</span>
             <span className="mx-2 text-(--text-subtle)">→</span>
             {show(entry.newValue)}
-          </div>
+          </div>}
         </li>
       ))}
     </ol>
