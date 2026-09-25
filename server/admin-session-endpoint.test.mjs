@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
-const handler = createRequire(import.meta.url)('./session.js');
+const handler = createRequire(import.meta.url)('../api/admin/session.js');
 const response = () => {
   const r = { headers: {}, setHeader(k, v) { r.headers[k] = v; }, status(c) { r.code = c; return r; }, json(b) { r.body = b; return r; } };
   return r;
