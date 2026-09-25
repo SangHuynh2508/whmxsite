@@ -70,5 +70,4 @@ body.mobile-dock-collapsed .admin-react-root { --admin-dock: 0px; }
 
 @media (prefers-reduced-motion: reduce) {
   .admin-react-root *, .admin-react-root *::before { transition: none !important; }
-  .admin-react-root *:active { scale: none !important; transform: none !important; }
 }
