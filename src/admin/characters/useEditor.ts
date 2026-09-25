@@ -18,13 +18,17 @@ const valuesOf = (record: Rec | null, keys: string[]) => Object.fromEntries(keys
 
 export function useEditor({ scope, id, record, keys, save, reload }: Args) {
   const key = draftKey(scope, id);
-  const [state, dispatch] = useReducer(editorReducer, initialEditor(valuesOf(record, keys)));
-  const changes = changesFor(state.draft, record ?? {}, keys);
+  const [state, dispatch] = useReducer(editorReducer, initialEditor(valuesOf(record, keys), record));
+  // Until the hydrate for a newly loaded record lands, the draft belongs to the previous one: no changes, no draft write.
+  const synced = state.source === record;
+  const changes = synced ? changesFor(state.draft, record ?? {}, keys) : {};
   const dirtyCount = Object.keys(changes).length;
 
   useEffect(() => {
     const stored = loadDraft(localStorage, key);
-    dispatch({ type: 'hydrate', draft: stored && confirm('Có bản nháp chưa lưu. Khôi phục?') ? stored : valuesOf(record, keys) });
+    const restore = Boolean(stored) && confirm('Có bản nháp chưa lưu. Khôi phục?');
+    if (stored && !restore) clearDraft(localStorage, key); // declined once, don't ask on every open
+    dispatch({ type: 'hydrate', draft: restore && stored ? stored : valuesOf(record, keys), source: record });
   }, [key, record]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { if (dirtyCount) saveDraft(localStorage, key, state.draft); }, [key, state.draft, dirtyCount]);
@@ -56,5 +60,5 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
   }, [onSave, dirtyCount]);
 
   const setField = useCallback((k: string, v: string) => dispatch({ type: 'edit', key: k, value: v }), []);
-  return { draft: state.draft, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
+  return { draft: state.draft, changes, setField, dirtyCount, status: state.status, message: state.message, onSave, onDiscard, onReload };
 }

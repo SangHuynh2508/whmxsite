@@ -12,7 +12,8 @@ export const NAV: NavEntry[] = [
 ];
 
 export const ADMIN_HASH = '#/admin';
-export const isAdminRoute = () => location.hash === ADMIN_HASH || location.hash.startsWith(`${ADMIN_HASH}/`);
+// #/login is the signed-out face of the admin shell (see lib/authRoute.mts).
+export const isAdminRoute = () => location.hash === '#/login' || location.hash === ADMIN_HASH || location.hash.startsWith(`${ADMIN_HASH}/`);
 // '#/admin' (Preview) is the fallback for any admin hash no other entry claims.
 export const currentSection = (): Section =>
   NAV.find(({ href }) => href !== ADMIN_HASH && (location.hash === href || location.hash.startsWith(`${href}/`)))?.id ?? 'preview';

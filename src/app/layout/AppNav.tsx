@@ -82,6 +82,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
 
   const adminLabel = authorized ? 'Quản trị' : 'Đăng nhập';
   const AdminIcon = authorized ? ShieldCheck : LogIn;
+  const adminHref = authorized ? '#/admin' : '#/login';
   return (
     <aside ref={railRef} className="app-nav" id="app-nav" aria-label="Thanh điều hướng ứng dụng">
       <span
@@ -116,12 +117,12 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
       </ul>
       <div className="app-nav-footer">
         <a
-          href="#/admin"
+          href={adminHref}
           id="app-nav-admin-link"
           className={`app-nav-item${view === 'admin' ? ' active' : ''}`}
           aria-current={view === 'admin' ? 'page' : undefined}
           data-tooltip={adminLabel}
-          onClick={linkClick('#/admin')}
+          onClick={linkClick(adminHref)}
         >
           <span className="app-nav-icon"><AdminIcon size={20} /></span>
           <span className="app-nav-label">{adminLabel}</span>
@@ -254,7 +255,7 @@ function MobileDock({ view, authorized }: { view: string; authorized: boolean })
               </ul>
             </>
           ) : (
-            <a href="#/admin" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />Đăng nhập</a>
+            <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />Đăng nhập</a>
           )}
           {/* Sits exactly where ☰ is, morphing with the same `open ? X : Menu`. */}
           <div className="mobile-dock-sheet-close">

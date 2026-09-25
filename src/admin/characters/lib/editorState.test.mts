@@ -31,3 +31,25 @@ test('hydrate after a successful save keeps the saved status', () => {
   s = editorReducer(initialEditor({ nameVi: 'a' }), { type: 'hydrate', draft: { nameVi: 'c' } });
   assert.equal(s.status, 'idle');
 });
+
+test('typing after a save drops the stale "Đã lưu." message', () => {
+  let s = editorReducer(initialEditor({ nameVi: 'a' }), { type: 'saveOk', draft: { nameVi: 'b' } });
+  s = editorReducer(s, { type: 'edit', key: 'nameVi', value: 'c' });
+  assert.deepEqual([s.status, s.message], ['idle', '']);
+});
+
+// The hook may render once with a new record before its hydrate lands; `source` says which record
+// the draft belongs to, so a stale draft is never compared with (or stored against) the new record.
+test('the draft remembers the record it was hydrated from', () => {
+  const r1 = { id: 1 };
+  const r2 = { id: 2 };
+  let s = initialEditor({ nameVi: 'a' }, r1);
+  assert.equal(s.source, r1);
+  s = editorReducer(s, { type: 'hydrate', draft: { nameVi: 'b' }, source: r2 });
+  assert.equal(s.source, r2);
+  s = editorReducer(s, { type: 'edit', key: 'nameVi', value: 'c' });
+  s = editorReducer(s, { type: 'saveOk', draft: { nameVi: 'c' } });
+  assert.equal(s.source, r2);
+  s = editorReducer(s, { type: 'discard', draft: { nameVi: 'c' } });
+  assert.equal(s.source, r2);
+});

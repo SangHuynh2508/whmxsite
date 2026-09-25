@@ -64,7 +64,7 @@ export function parseHash() {
   }
 
   // Admin routes are owned by the React shell (src/admin/layout/AdminApp.tsx).
-  if (hash === '/admin' || hash.startsWith('/admin/') || hash.startsWith('/admin?')) {
+  if (hash === '/login' || hash === '/admin' || hash.startsWith('/admin/') || hash.startsWith('/admin?')) {
     return {
       view: 'admin',
       slug: '',
