@@ -6,6 +6,7 @@ import { getCharacter } from './charactersApi.js';
 import { recordHref, type ModuleId } from './lib/route.mts';
 import { Avatar, characterAvatar } from './components/Avatar';
 import { OverviewModule } from './modules/OverviewModule';
+import { LoreModule } from './modules/LoreModule';
 import { SkinsModule } from './modules/SkinsModule';
 import { SourceModule } from './modules/SourceModule';
 import { HistoryModule } from './modules/HistoryModule';
@@ -14,6 +15,7 @@ import type { CharacterData, ModuleProps } from './types';
 // One entry per module; phase 2 adds Lore here.
 export const MODULES: { id: ModuleId; label: string; Component: ComponentType<ModuleProps> }[] = [
   { id: 'overview', label: 'Tổng quan', Component: OverviewModule },
+  { id: 'lore', label: 'Lore', Component: LoreModule },
   { id: 'skins', label: 'Trang phục', Component: SkinsModule },
   { id: 'source', label: 'Nguồn', Component: SourceModule },
   { id: 'history', label: 'Lịch sử', Component: HistoryModule },
