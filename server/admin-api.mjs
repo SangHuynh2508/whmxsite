@@ -102,5 +102,6 @@ export function sendAdminError(response, error) {
     const status = error.status || (error.code === 'NOT_FOUND' ? 404 : error.code === 'VERSION_CONFLICT' ? 409 : error.code === 'FORBIDDEN' ? 403 : 400);
     return response.status(status).json({ error: { code: error.code, ...(error.details ? { details: error.details } : {}) } });
   }
+  console.error('[admin-api] unexpected error', error); // otherwise a 500 leaves no trace in the function logs
   return response.status(500).json({ error: { code: 'INTERNAL_ERROR' } });
 }
