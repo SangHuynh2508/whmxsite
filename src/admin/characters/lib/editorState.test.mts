@@ -53,3 +53,19 @@ test('the draft remembers the record it was hydrated from', () => {
   s = editorReducer(s, { type: 'discard', draft: { nameVi: 'c' } });
   assert.equal(s.source, r2);
 });
+
+test('a save that succeeded but could not reload asks for the new version', () => {
+  let s = editorReducer(initialEditor({ nameVi: 'a' }), { type: 'edit', key: 'nameVi', value: 'b' });
+  s = editorReducer(s, { type: 'saveFail', error: { savedButStale: true } });
+  assert.equal(s.status, 'conflict');
+  assert.match(s.message, /Đã lưu/);
+  assert.equal(s.draft.nameVi, 'b');
+});
+
+test('edited is set by typing and reset by hydrate, saveOk and discard', () => {
+  const s = editorReducer(initialEditor({ nameVi: 'a' }), { type: 'edit', key: 'nameVi', value: 'b' });
+  assert.equal(s.edited, true);
+  assert.equal(editorReducer(s, { type: 'hydrate', draft: { nameVi: 'a' } }).edited, false);
+  assert.equal(editorReducer(s, { type: 'saveOk', draft: { nameVi: 'b' } }).edited, false);
+  assert.equal(editorReducer(s, { type: 'discard', draft: { nameVi: 'a' } }).edited, false);
+});

@@ -17,3 +17,10 @@ export function changesFor(draft: Record<string, string>, record: Record<string,
 // record's current values, so other people's newer values are kept).
 export const changedDraft = (draft: Record<string, string>, record: Record<string, unknown>, keys: string[]) =>
   Object.fromEntries(Object.keys(changesFor(draft, record, keys)).map((k) => [k, draft[k] ?? '']));
+
+// The stored draft merged over the record's current values, or null when it changes nothing.
+export function draftToRestore(stored: Record<string, string> | null, record: Record<string, unknown>, keys: string[]) {
+  if (!stored) return null;
+  const merged = { ...Object.fromEntries(keys.map((k) => [k, fieldValue(record, k)])), ...stored };
+  return Object.keys(changesFor(merged, record, keys)).length ? merged : null;
+}

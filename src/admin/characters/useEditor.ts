@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { changedDraft, changesFor, fieldValue } from './lib/fields.mts';
+import { changedDraft, changesFor, draftToRestore, fieldValue } from './lib/fields.mts';
+import { isSaveShortcut } from './lib/shortcut.mts';
 import { clearDraft, draftKey, loadDraft, saveDraft } from './lib/draft.mts';
 import { editorReducer, initialEditor } from './lib/editorState.mts';
 
@@ -26,25 +27,31 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
 
   useEffect(() => {
     if (!record) return; // still loading: ask about a draft once, when there is something to restore it onto
-    const stored = loadDraft(localStorage, key);
-    const restore = Boolean(stored) && confirm('Có bản nháp chưa lưu. Khôi phục?');
-    if (stored && !restore) clearDraft(localStorage, key); // declined once, don't ask on every open
-    // The draft holds only the user's changed fields; everything else comes from the current record.
-    dispatch({ type: 'hydrate', draft: { ...valuesOf(record, keys), ...(restore ? stored : null) }, source: record });
+    dispatch({ type: 'hydrate', draft: valuesOf(record, keys), source: record });
+    const restore = draftToRestore(loadDraft(localStorage, key), record, keys);
+    if (!restore) { clearDraft(localStorage, key); return; }
+    // Ask after this render has painted (never inside a view-transition update). StrictMode's
+    // mount → unmount → mount cancels the first timer, so the question is asked once.
+    const timer = setTimeout(() => {
+      if (confirm('Có bản nháp chưa lưu. Khôi phục?')) dispatch({ type: 'hydrate', draft: restore, source: record });
+      else clearDraft(localStorage, key); // declined once, don't ask on every open
+    }, 0);
+    return () => clearTimeout(timer);
   }, [key, record]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => { if (dirtyCount) saveDraft(localStorage, key, changedDraft(state.draft, record ?? {}, keys)); }, [key, state.draft, dirtyCount, record, keys]);
+  useEffect(() => {
+    if (!synced) return;
+    if (dirtyCount) saveDraft(localStorage, key, changedDraft(state.draft, record ?? {}, keys));
+    else if (state.edited) clearDraft(localStorage, key); // typed, then undone by hand: nothing to restore
+  }, [key, state.draft, state.edited, dirtyCount, synced, record, keys]);
 
   const onSave = useCallback(async () => {
     if (!dirtyCount || state.status === 'saving') return;
     dispatch({ type: 'saveStart' });
-    try {
-      await save(changes);
-      clearDraft(localStorage, key);
-      dispatch({ type: 'saveOk', draft: valuesOf(await reload(), keys) });
-    } catch (error) {
-      dispatch({ type: 'saveFail', error });
-    }
+    try { await save(changes); } catch (error) { dispatch({ type: 'saveFail', error }); return; }
+    clearDraft(localStorage, key);
+    try { dispatch({ type: 'saveOk', draft: valuesOf(await reload(), keys) }); }
+    catch { dispatch({ type: 'saveFail', error: { savedButStale: true } }); } // saved; only the refresh failed
   }, [dirtyCount, state.status, changes, save, reload, key, keys]);
 
   const onDiscard = () => { clearDraft(localStorage, key); dispatch({ type: 'discard', draft: valuesOf(record, keys) }); };
@@ -53,7 +60,7 @@ export function useEditor({ scope, id, record, keys, save, reload }: Args) {
 
   // Unsaved-change guards: Ctrl+S, tab close, and a flag read by in-app navigation.
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => { if ((event.ctrlKey || event.metaKey) && event.key === 's') { event.preventDefault(); void onSave(); } };
+    const onKey = (event: KeyboardEvent) => { if (isSaveShortcut(event, location.hash)) { event.preventDefault(); void onSave(); } };
     const onUnload = (event: BeforeUnloadEvent) => { if (dirtyCount) { event.preventDefault(); event.returnValue = ''; } };
     (window as DirtyFlag).__whmxAdminDirty = dirtyCount > 0;
     addEventListener('keydown', onKey);

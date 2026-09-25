@@ -10,3 +10,7 @@ test('parses list, record and module hashes', () => {
   assert.equal(recordHref('A0001', 'history'), '#/admin/characters/A0001/history');
   assert.equal(recordHref('A0001'), '#/admin/characters/A0001');
 });
+
+test('a malformed %-escape falls back to the list instead of throwing', () => {
+  assert.deepEqual(parseCharactersRoute('#/admin/characters/%E0'), { view: 'list' });
+});

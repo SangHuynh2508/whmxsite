@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { changedDraft, changesFor, fieldValue } from './fields.mts';
+import { changedDraft, changesFor, draftToRestore, fieldValue } from './fields.mts';
 
 const record = {
   nameVi: { value: 'Lộc', source: 'Lộc', override: null, state: 'none' },
@@ -37,4 +37,12 @@ test('a restored draft carries only the fields the user changed', () => {
   const after = { nameVi: { value: 'a', source: 'a' }, tagsVi: { value: 'colleague', source: 't' } };
   const restored = { nameVi: 'a', tagsVi: 'colleague', ...stored };
   assert.deepEqual(changesFor(restored, after, k), { nameVi: 'mine' });
+});
+
+test('never offers a draft identical to the record; merges a real one over current values', () => {
+  const k = ['nameVi', 'tagsVi'];
+  const rec = { nameVi: { value: 'a', source: 'a' }, tagsVi: { value: 't', source: 't' } };
+  assert.equal(draftToRestore({ nameVi: 'a' }, rec, k), null);
+  assert.equal(draftToRestore(null, rec, k), null);
+  assert.deepEqual(draftToRestore({ nameVi: 'mine' }, rec, k), { nameVi: 'mine', tagsVi: 't' });
 });
