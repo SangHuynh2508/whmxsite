@@ -1,5 +1,7 @@
 # WHMX Engineering Principles
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 ## 1. Purpose
 
 This document is not about where files live (`WHMX_APP_ARCHITECTURE.md` already owns that). It is about **how to write the code itself** so that WHMX survives changes in technology, traffic, and requirements without either of two failure modes:

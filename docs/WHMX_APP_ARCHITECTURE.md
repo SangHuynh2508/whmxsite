@@ -1,12 +1,14 @@
 # WHMX Application Architecture
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`WHMX_ENGINEERING_PRINCIPLES.md`](WHMX_ENGINEERING_PRINCIPLES.md), [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md), [`2026-09-24-lore-pipeline-design.md`](superpowers/specs/2026-09-24-lore-pipeline-design.md). Older handoffs, `WHMX_CURRENT_STATE_FINAL_2026-09-26.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 ## 1. Purpose and scope
 
 This is the canonical guide for organizing the **WHMX application**. It governs where new application modules, domain logic, rendering, styling, APIs, database concerns, and operational tooling belong.
 
 It does not replace the repository-root [`ARCHITECTURE.md`](../ARCHITECTURE.md). That file describes the Codex Kit scaffolding (`AGENTS.md`, skills, workflows, and agents), not the WHMX product architecture.
 
-This guide governs *where code lives*. For *how to write code so it stays stable without becoming rigid* — isolating decisions that may change behind narrow interfaces, avoiding vendor lock-in, and judging when flexibility is worth its cost versus when it is premature — see [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md). For *what to actually work on next, in what order*, see [`WHMX_NEXT_STEPS.md`](./WHMX_NEXT_STEPS.md). Read all three before substantial new work.
+This guide governs *where code lives*. For *how to write code so it stays stable without becoming rigid* — isolating decisions that may change behind narrow interfaces, avoiding vendor lock-in, and judging when flexibility is worth its cost versus when it is premature — see [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md). For *what to actually work on next, in what order*, see [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](./WHMX_CURRENT_STATE_FINAL_2026-09-26.md). Read all three before substantial new work.
 
 This guide is intentionally incremental. WHMX has valid legacy Vite/vanilla-JavaScript code alongside newer Vue, Vercel Function, PostgreSQL/Drizzle, Better Auth, and R2 work. It is not authorization for a rewrite, a mass move, or a change in product behavior.
 
@@ -242,7 +244,7 @@ Do not create `src/js/` or `src/css/`. `src/styles/` is not a dumping ground: fe
 - The frontend loads `data.json`, then the text overlay, and merges them. If the overlay fails to load, the CN already present in `data.json` is shown. Preview/dev environments use a separate R2 prefix.
 - This supersedes the git-commit/GitHub Actions publish flow for text and the "Git-tracked artifact" requirement for DB-owned text in `POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md` §M.
 
-- **Status 2026-09-26:** built and live for **lore** (profile texts + lore terms: `server/profile/lore-publisher.mjs`, auto-publish ~30 s after an Admin save). Character/skin **names and descriptions** still have no publish path — their Admin overrides stay invisible publicly (backlog in the newest handoff). Original note: Not yet built: this locks the *direction*, not a shipped pipeline. Until the publisher exists, Postgres-only edits (Admin CRUD, the Character contextual inline edit) remain invisible on the public site — this is the still-open gap tracked in `WHMX_NEXT_STEPS.md`'s checkpoint item.
+- **Status 2026-09-26:** built and live for **lore** (profile texts + lore terms: `server/profile/lore-publisher.mjs`, auto-publish ~30 s after an Admin save). Character/skin **names and descriptions** still have no publish path — their Admin overrides stay invisible publicly (backlog in the newest handoff). Original note: Not yet built: this locks the *direction*, not a shipped pipeline. Until the publisher exists, Postgres-only edits (Admin CRUD, the Character contextual inline edit) remain invisible on the public site — this is the still-open gap tracked in `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`'s checkpoint item.
 
 ## 12. Source-of-truth boundaries
 

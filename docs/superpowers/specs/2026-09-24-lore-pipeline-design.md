@@ -1,5 +1,7 @@
 # Lore pipeline (character profile) — design spec
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`WHMX_DATA_PIPELINE_PLAN_2026-09-24.md`](../../plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md), [`2026-09-25-admin-khi-gia-lore-design.md`](2026-09-25-admin-khi-gia-lore-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 > Date: 2026-09-24. Status: **Approved by the owner on 2026-09-24** (including the 所属 source, §12 manual steps and the 90-day backup lifecycle). Adjusted while planning (overlay write in Python, no timestamp in the content file, publish endpoint open to editors, env segment in backup keys, empty department diff at gate 2); see the plan's last section. Implementation plan: `docs/superpowers/plans/2026-09-24-lore-pipeline.md`.
 > Source of truth for the decisions: `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` §1 (owner decisions) and §2 "P0 design — approved sections" 1–4. This spec turns those four sections into buildable detail. It does not add features. Where the approved text left a mechanism open, the choice made here is marked **[spec choice]** and listed in §11 for owner confirmation.
 

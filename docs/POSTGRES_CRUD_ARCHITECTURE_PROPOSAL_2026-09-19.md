@@ -1,5 +1,7 @@
 # WHMX PostgreSQL Hosted CRUD Architecture Proposal
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md), [`PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md`](PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md), [`2026-09-24-lore-pipeline-design.md`](superpowers/specs/2026-09-24-lore-pipeline-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 **Status:** Approved architecture; D0A implementation and migration portability closure verified on the development branch.
 **Date:** 2026-09-19
 **Scope:** Character and Skin first; supporting Series, acquisition, asset, localization, auth, audit, import, and export foundations.

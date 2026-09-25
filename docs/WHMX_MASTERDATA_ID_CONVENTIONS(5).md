@@ -1,5 +1,7 @@
 # WHMX — QUY ƯỚC ID VÀ QUAN HỆ RAW TRONG MASTERDATA
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md`](WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 **Checkpoint:** 2026-09-20  
 **Vai trò:** Tài liệu bắt buộc cho agent xử lý WHMX / WhmxCalc / NeoArtifacts khi đọc character ID, skill, buff, EX, Trí Tri, Hoán Chương, skin/Series, tag source và asset-bundle identity.
 

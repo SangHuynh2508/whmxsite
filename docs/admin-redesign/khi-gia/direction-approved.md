@@ -1,5 +1,7 @@
 # Khí Giả (React) — direction approved (huashu gate file)
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`khi-gia-direction.md`](../khi-gia-direction.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 - Date: 2026-09-25
 - Shown: A `a-gallery` (roulette → Gallery Dark), B `b-workbench` (reference → Crowdin side-by-side), C `c-catalogue` (best designer → Kenya Hara). Comparison: `direction-review.md`; screenshots `screens/`.
 - Owner's words (summary): likes C's lore fields (gold hairline beside the text, no box; A has it too but its image is too big for an edit page); likes B's navigation on desktop and phone (unit list that jumps to "Báo cáo / Tiêu đề…", especially on phones); B's 3 columns are best, but its scrollbars are too wide and white; list: C, but clicking the search box must not show a white box.

@@ -1,5 +1,7 @@
 # NeoArtifacts MasterData lore/narrative candidate audit
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`2026-09-24-lore-pipeline-design.md`](superpowers/specs/2026-09-24-lore-pipeline-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 **Audit date:** 2026-09-07  
 **Scope:** all 544 JSON tables in `NeoArtifacts/MasterData/json`  
 **Method:** inspected every filename, top-level row count, schema keys (including nested keys), and up to 500 rows of Chinese content. Candidates require narrative evidence such as sustained prose, dialogue, dossier/history text, letters, or story framing; generic `name`/`description` fields alone were not sufficient.

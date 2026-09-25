@@ -1,23 +1,16 @@
 # WHMX — New-character readiness + DB-centred data pipeline (plan)
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 > Created 2026-09-24. **Living document: update the status table and the log at the bottom whenever anything changes.**
 > A fresh agent should be able to continue from this file alone after reading the references below.
 
-## 0. Read first (in this order)
+## 0. Read first
 
-| # | File | Why |
-|---|---|---|
-| 1 | `docs/WHMX_NEXT_STEPS.md` | Global task order and status of every initiative |
-| 2 | `docs/WHMX_CURRENT_STATE_FINAL_2026-09-26.md` (newest), `docs/WHMX_CURRENT_STATE_FINAL_2026-09-25_v2.md`, `docs/WHMX_CURRENT_STATE_FINAL_2026-09-25.md`, `docs/WHMX_CURRENT_STATE_FINAL_2026-09-24.md`, then `docs/WHMX_CURRENT_STATE_FINAL_2026-09-23_v2.md` §3 | Session state + what's next; the older file has the environment gotchas (temp-account testing pattern, `vercel dev`, npm rules) |
-| 3 | **this file** | Data pipeline + new-character work |
-| 4 | `docs/plans/WHMX_ADMIN_PLAN_2026-09-23.md` | Admin UI plan (Parts A–F); Part F = Khí Giả/Lore admin brainstorm |
-| 5 | `docs/WHMX_APP_ARCHITECTURE.md` | Where code lives; §11 publication (Hướng B, LOCKED), §12 source-of-truth, the React TARGET (§4) |
-| 6 | `docs/WHMX_ENGINEERING_PRINCIPLES.md` | Per-entity resolver rule (§2 example 1) — the exporter must follow it |
-| 7 | `docs/POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md` | §B authority, §D override/conflict model, §L importer, §M DB→`public/data.json` exporter |
-| 8 | `docs/PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md` | §5 Preview→official reconciliation, §6 managed assets, §10 export rules |
-| 9 | `.agents/skills/whmx-localization/SKILL.md` + `.agents/skills/game-translator/SKILL.md` | Mandatory for any workbook/localization/data.json work |
-| 10 | `docs/WHMX_MASTERDATA_ID_CONVENTIONS(5).md` | ID meaning; never infer semantics from ID shape |
-| 11 | `../NeoArtifacts/RUNTIME_UPDATE_CAPTURE_RUNBOOK.md`, `../NeoArtifacts/HANDOFF_RUNTIME_ASSET_DISCOVERY_2026-09-10.md` | How game updates/assets are captured (MuMu + ADB) |
+1. [`../WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) — single entry point (status, infrastructure, rules, gotchas, backlog).
+2. **This file** — §4 N2 release-day runbook, §5 P5 next domains, §7 dated log (history; links there to removed docs resolve in git history).
+3. [`../superpowers/specs/2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md) and [`../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md).
+4. `.agents/skills/whmx-localization/SKILL.md` + `.agents/skills/game-translator/SKILL.md` for any workbook/localization/data.json work; [`../WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](../WHMX_MASTERDATA_ID_CONVENTIONS(5).md); `../../NeoArtifacts/RUNTIME_UPDATE_CAPTURE_RUNBOOK.md` for game updates.
 
 Working rules (from the owner, still in force): no commit/push/merge/reset/restore/clean unless asked; never touch `localization/localization_master.xlsx` except through the established safe-mutation tools with owner approval; any write/delete on the live Neon DB needs the owner to see the exact row list and say yes first; one npm command at a time, in the background; React for new UI (bare `hidden` class forbidden, use `max-md:hidden`); colours only from `src/styles/tokens.css`.
 

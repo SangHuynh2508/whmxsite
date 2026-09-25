@@ -1,5 +1,7 @@
 # Khí Giả (React) — approved visual direction (build spec)
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`direction-approved.md`](khi-gia/direction-approved.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 > Plan: `docs/superpowers/plans/2026-09-25-admin-khi-gia-phase1.md` Task 2 step 3. Gate file and owner's words:
 > `khi-gia/direction-approved.md`. Reference prototype: `khi-gia/design-demos/approved-mix.html`
 > (`#record`, `#list`) — copy measurements from it; it is not shipped.

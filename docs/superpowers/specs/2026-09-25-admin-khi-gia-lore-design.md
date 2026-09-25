@@ -1,5 +1,7 @@
 # Admin Khí Giả (React) + Lore module — design spec
 
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md), [`khi-gia-direction.md`](../../admin-redesign/khi-gia-direction.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+
 > Date: 2026-09-25. Status: sections 1–5 approved by the owner in chat on 2026-09-25; this file writes them down. Awaiting owner review of the file.
 > Builds on: `docs/superpowers/specs/2026-09-24-lore-pipeline-design.md` (DB, publish, backup — live), `docs/plans/WHMX_ADMIN_PLAN_2026-09-23.md` Part F (approach 2 "module workspace"), `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` (P4).
 
