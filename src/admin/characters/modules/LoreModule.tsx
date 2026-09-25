@@ -64,8 +64,7 @@ export function LoreModule({ data }: ModuleProps) {
   if (!lore || !record) return <SkeletonRows />;
 
   const byKey = new Map(lore.units.map((u) => [u.unitKey, u]));
-  const affinity = Object.fromEntries(Object.entries(lore.affinity).map(([k, t]) => [k, t && { nameCn: t.nameCn, nameVi: t.nameVi }]));
-  const groups = loreUnitGroups(lore.structure, keys, affinity);
+  const groups = loreUnitGroups(lore.structure, keys, lore.affinity);
   const labels = Object.fromEntries(groups.flatMap((g) => g.items.map((i) => [i.unitKey, i.label])));
   const counts = lore.units.reduce((c, u) => ({ ...c, [statusOf(u)]: c[statusOf(u)] + 1 }), { done: 0, legacy: 0, changed: 0, todo: 0 } as Record<LoreStatus, number>);
   const jump = (unitKey: string) => {
