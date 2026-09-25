@@ -242,7 +242,7 @@ Do not create `src/js/` or `src/css/`. `src/styles/` is not a dumping ground: fe
 - The frontend loads `data.json`, then the text overlay, and merges them. If the overlay fails to load, the CN already present in `data.json` is shown. Preview/dev environments use a separate R2 prefix.
 - This supersedes the git-commit/GitHub Actions publish flow for text and the "Git-tracked artifact" requirement for DB-owned text in `POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md` §M.
 
-- Not yet built: this locks the *direction*, not a shipped pipeline. Until the publisher exists, Postgres-only edits (Admin CRUD, the Character contextual inline edit) remain invisible on the public site — this is the still-open gap tracked in `WHMX_NEXT_STEPS.md`'s checkpoint item.
+- **Status 2026-09-26:** built and live for **lore** (profile texts + lore terms: `server/profile/lore-publisher.mjs`, auto-publish ~30 s after an Admin save). Character/skin **names and descriptions** still have no publish path — their Admin overrides stay invisible publicly (backlog in the newest handoff). Original note: Not yet built: this locks the *direction*, not a shipped pipeline. Until the publisher exists, Postgres-only edits (Admin CRUD, the Character contextual inline edit) remain invisible on the public site — this is the still-open gap tracked in `WHMX_NEXT_STEPS.md`'s checkpoint item.
 
 ## 12. Source-of-truth boundaries
 

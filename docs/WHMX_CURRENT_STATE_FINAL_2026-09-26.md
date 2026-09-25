@@ -40,6 +40,10 @@
 | Legacy admin CSS in `src/style.css` ~L6980–7240 | Phase 1 | Cleanup, unscheduled |
 | **Localization quality backlog**: 111 VI cells with Han leaks (83 SKILL `PENDING` rows, 6 BUFF_STATUS, 22 PROFILE — 20 schema-shift rows for S0155/S0181/V0146/W0178/W0182 + 2 partial), 42-cell rich-text repair, 2 suspicious-VI warnings, then Batch #3 export | `localization/reviews/WHMX_CHECKPOINT_2026-09-13_AFTER_BATCH2.md` (+ `localization/PHASE3_WORKFLOW.md`) | Not tracked since 2026-09-13; current counts unknown — audit read-only first (whmx-localization skill). PROFILE rows now matter less: lore VI lives in the DB |
 | Workbook reconciliation gate for admin overrides of workbook-owned fields (hosted edit = working override; export blocks unreconciled overrides) | Root `../WHMX_CURRENT_STATE_FINAL_2026-09-19.md` §42 | Never explicitly approved; decide before P5 (name overrides publish path) |
+| Stable-name asset cache headers: `vercel.json` serves every `/assets/(.*)` as `immutable` for a year, but many paths are not hashed (e.g. `/assets/characters/avatars/A0001.png`) — a corrected image may not reach returning visitors | `WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md` §22 | Infra debt, unscheduled |
+| Preview → official character promotion (reconcile a Preview when the real character ships) | Pipeline N3, 09-20 handoff §22 | After release day |
+| Open decisions: workbook → PostgreSQL localization authority transfer (beyond lore); public data chunk/version manifest | 09-20 handoff §22, migration plan §10 | Undecided |
+| Future areas: Skill/Buff DB + translation Admin, Guide, Tier List, Admin audit/operations | 09-20 handoff §22, roadmap Phase 4 | Not started |
 
 ## 3. Known limits (by design, not bugs)
 
