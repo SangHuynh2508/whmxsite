@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hồ Sơ Lưu Trữ — Hướng A · Tài liệu một cột</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<!--
+  Hướng A · "Tài liệu một cột" — logic: by-the-book, gần bố cục wiki nhất nhưng dễ đọc hơn.
+  Form đến từ nội dung: bản thân dữ liệu là một bộ hồ sơ giấy (人员评估 / 科普信息 / 本源介绍 / 历史轨迹 / 评估报告),
+  nên trang đọc như một tập hồ sơ: đề mục bằng đường kẻ vàng mảnh + nhãn nhỏ, một cột chữ ≤ 68 ký tự.
+  Báo cáo: dạng gập (details/summary), báo cáo 1 mở sẵn; điều kiện mở khoá nằm trên dòng tiêu đề như wiki.
+  Hiệu ứng chữ chạy (Q6): chỉ ở tiêu đề "Hồ Sơ Lưu Trữ" (đánh dấu ✦ trong demo).
+  Màu: chỉ token dark của tokens.css.
+-->
+<style>
+:root{--bg-main:#111315;--bg-surface:#17191C;--bg-surface-hover:#22262B;--bg-elevated:#1C2024;--border-color:#2B2F34;--border-strong:#3D434A;--text-main:#E3E5E8;--text-muted:#9097A0;--text-subtle:#6B7280;--accent:#D4B763;--accent-light:#24221A;--border-gold-subtle:rgba(212,183,99,.30);--border-gold-divider:rgba(212,183,99,.16);--font-sans:'Inter',system-ui,sans-serif;--font-serif:'Noto Serif SC',serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:15px/1.75 var(--font-sans);-webkit-font-smoothing:antialiased}
+.page{max-width:760px;margin:0 auto;padding:32px 16px 96px}
+.tab-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--border-gold-subtle)}
+.tab-head h2{margin:0;font:700 26px/1.2 var(--font-serif);letter-spacing:.01em}
+.tab-head h2 .reveal-mark{font:500 12px var(--font-sans);color:var(--accent);vertical-align:super;margin-left:6px}
+.edit-link{font-size:13px;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border-gold-subtle)}
+.sec{margin-top:40px}
+.sec-label{display:flex;align-items:center;gap:12px;margin:0 0 14px;font:600 12px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.sec-label::after{content:"";flex:1;height:1px;background:var(--border-gold-divider)}
+.prose{max-width:68ch;margin:0;white-space:pre-line;text-wrap:pretty}
+.cn{font-family:var(--font-serif);font-weight:500}
+.chip{display:inline-block;margin-left:8px;padding:0 8px;font:500 12px/20px var(--font-sans);color:var(--text-muted);border:1px solid var(--border-color);border-radius:999px;white-space:nowrap;vertical-align:1px}
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:18px;border:1px solid var(--border-color);border-radius:8px;overflow:hidden}
+.meta div{padding:10px 14px;background:var(--bg-surface)}
+.meta div+div{border-left:1px solid var(--border-color)}
+.meta dt{font-size:12px;color:var(--text-muted)}
+.meta dd{margin:2px 0 0;font-weight:500}
+.relic{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr);gap:0;border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:var(--bg-surface)}
+.relic figure{margin:0;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 45%,var(--bg-elevated),var(--bg-surface) 70%)}
+.relic img{max-width:100%;max-height:280px;object-fit:contain}
+.relic dl{margin:0;display:grid;align-content:stretch}
+.relic dl div{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:12px;padding:14px 18px;border-left:1px solid var(--border-color)}
+.relic dl div+div{border-top:1px solid var(--border-color)}
+.relic dt{font-size:12px;color:var(--text-muted)}
+.relic dd{margin:0}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{position:relative;display:grid;grid-template-columns:120px 1fr;gap:16px;padding:0 0 18px}
+.timeline li::before{content:"";position:absolute;left:127px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.timeline li::after{content:"";position:absolute;left:130px;top:22px;bottom:0;width:1px;background:var(--border-gold-divider)}
+.timeline li:last-child::after{display:none}
+.timeline .when{font-weight:600;color:var(--text-main);text-align:right;padding-right:22px}
+.timeline .what{padding-left:18px}
+details.report{border-top:1px solid var(--border-color)}
+details.report:last-of-type{border-bottom:1px solid var(--border-color)}
+details.report summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 4px;cursor:pointer}
+details.report summary::-webkit-details-marker{display:none}
+.report .num{font:700 13px var(--font-serif);color:var(--accent);width:22px}
+.report .title{font-weight:600;flex:1}
+.report .unlock{font-size:12px;color:var(--text-muted)}
+.report .unlock b{color:var(--accent);font-weight:600}
+.report .toggle{width:14px;text-align:center;color:var(--text-muted)}
+details[open] .toggle{transform:rotate(45deg)}
+.report .body{padding:0 4px 20px 38px}
+.special .num{color:var(--text-main)}
+@media (max-width:640px){
+  .meta{grid-template-columns:1fr}.meta div+div{border-left:0;border-top:1px solid var(--border-color)}
+  .relic{grid-template-columns:1fr}.relic dl div{border-left:0;border-top:1px solid var(--border-color)}
+  .timeline li{grid-template-columns:1fr;gap:2px;padding-left:22px}.timeline .when{text-align:left;padding:0}.timeline .what{padding:0}
+  .timeline li::before{left:0}.timeline li::after{left:3px}
+  .report .unlock{display:none}.report .body{padding-left:4px}
+}
+</style>
+</head>
+<body>
+<main class="page" id="app"></main>
+<script src="./a0024-data.js"></script>
+<script>
+const P = LORE.profile, R = P.relic_info;
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unit = (vi, cn) => (vi && vi.trim()) ? esc(vi) : (cn && cn.trim()) ? `<span class="cn">${esc(cn)}</span><span class="chip">Chưa dịch</span>` : '';
+const reports = P.reports.map((r, i) => `
+  <details class="report${r.kind === 'special' ? ' special' : ''}" ${i === 0 ? 'open' : ''}>
+    <summary><span class="num">${r.kind === 'special' ? 'A' : i + 1}</span><span class="title">${unit(r.title_vi, r.title)}</span>
+      ${r.unlock_name ? `<span class="unlock">Mở khoá ở cảm ứng <b>cấp ${r.unlock_level} · ${unit(r.unlock_name_vi, r.unlock_name)}</b></span>` : ''}<span class="toggle">+</span></summary>
+    <div class="body"><p class="prose">${unit(r.content_vi, r.content)}</p></div>
+  </details>`).join('');
+document.getElementById('app').innerHTML = `
+  <header class="tab-head"><h2>Hồ Sơ Lưu Trữ<span class="reveal-mark">✦ chữ chạy</span></h2><a class="edit-link" href="#">Sửa trong Admin</a></header>
+  <section class="sec"><h3 class="sec-label">Đánh giá nhân sự</h3>
+    <p class="prose">${unit(P.eval_intro_vi, P.eval_intro)}</p>
+    <dl class="meta"><div><dt>Trực thuộc</dt><dd>${esc(P.department)}</dd></div><div><dt>Tình trạng bản thể</dt><dd>${esc(P.entity_status)}</dd></div><div><dt>Mã hồ sơ</dt><dd>${esc(P.record_id)}</dd></div></dl>
+  </section>
+  <section class="sec"><h3 class="sec-label">Thông tin hiện vật</h3>
+    <div class="relic"><figure><img src="${LORE.archive.image}" alt="Hiện vật"></figure>
+      <dl><div><dt>Nơi lưu giữ</dt><dd>${unit(R.museum.vi, R.museum.cn)}</dd></div><div><dt>Loại</dt><dd>${unit(R.type.vi, R.type.cn)}</dd></div><div><dt>Niên đại</dt><dd>${unit(R.era.vi, R.era.cn)}</dd></div></dl></div>
+  </section>
+  <section class="sec"><h3 class="sec-label">Nguồn gốc</h3><p class="prose">${unit(R.intro_vi, R.intro)}</p></section>
+  <section class="sec"><h3 class="sec-label">Dòng thời gian</h3>
+    <ol class="timeline">${R.timeline.map((t) => `<li><span class="when">${unit(t.label_vi, t.label)}</span><p class="prose what">${unit(t.story_vi, t.story)}</p></li>`).join('')}</ol>
+  </section>
+  <section class="sec"><h3 class="sec-label">Báo cáo đánh giá</h3>${reports}</section>`;
+</script>
+</body>
+</html>
