@@ -23,3 +23,15 @@ test('a busy publish (409) is retried after the delay; other failures report an 
   assert.equal(calls, 2);
   assert.deepEqual(seen, ['publishing', 'waiting', 'publishing', 'error']);
 });
+
+test('leaving the page with a publish still waiting sends it right away (keepalive), exactly once', async () => {
+  const timers = fakeTimers(); let calls = 0; let leaveCalls = 0;
+  const s = createPublishScheduler({ delayMs: 30_000, publish: async () => { calls += 1; }, publishOnLeave: () => { leaveCalls += 1; }, onStatus: () => {}, timers });
+  s.leave();
+  assert.equal(leaveCalls, 0, 'nothing waiting → nothing sent');
+  s.schedule();
+  s.leave();
+  assert.equal(leaveCalls, 1);
+  await timers.flush();
+  assert.equal(calls, 0, 'the timer was cleared, so the normal publish does not run twice');
+});
