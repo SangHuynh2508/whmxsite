@@ -17,28 +17,16 @@ import { initSession } from '../auth/session.js';
 import { inject, pageview } from '@vercel/analytics';
 import { pageForHash } from '../analytics/pageRoute.mts';
 
-// Hash routing (#/characters/…) is invisible to analytics' pushState tracking, so every hash change is sent
-// as a page view: Vercel Web Analytics always, Google Analytics 4 when VITE_GA_MEASUREMENT_ID is set.
+// Hash routing (#/characters/…) is invisible to Vercel Web Analytics' pushState tracking, so every hash change
+// is sent as a page view (path + grouped route).
 function initAnalytics() {
   inject({ disableAutoTrack: true });
-  const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  if (gaId) {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', gaId, { send_page_view: false });
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`;
-    document.head.append(script);
-  }
   let last = null;
   const send = () => {
     const { path, route } = pageForHash(window.location.hash);
     if (path === last) return; // the router may rewrite the hash (e.g. '' → '#/characters')
     last = path;
     pageview({ route, path });
-    window.gtag?.('event', 'page_view', { page_path: path, page_location: `${window.location.origin}${path}`, page_title: document.title });
   };
   window.addEventListener('hashchange', send);
   send();

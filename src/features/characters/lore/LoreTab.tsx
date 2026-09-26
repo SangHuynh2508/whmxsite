@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useId, useState, type ReactNode } from 'react';
+import { StrictMode, useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 import '../styles/loreTab.css';
@@ -18,18 +18,35 @@ function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as
 }
 
 // A term that opens its description (organisation, museum, type, era) in a native popover, like the in-game popups.
-function TermPopover({ name, detail, className, children }: { name: LoreUnit | string; detail: LoreUnit | null; className: string; children: ReactNode }) {
+function TermPopover({ name, detail, className, style, children }: { name: LoreUnit | string; detail: LoreUnit | null; className: string; style?: CSSProperties; children: ReactNode }) {
   const id = useId();
-  if (!detail) return <span className={className}>{children}</span>;
+  if (!detail) return <span className={className} style={style}>{children}</span>;
   return (
     <>
-      <button type="button" className={`${className} lore-term`} popoverTarget={id}>{children}</button>
+      <button type="button" className={`${className} lore-term`} style={style} popoverTarget={id}>{children}</button>
       <div popover="auto" id={id} className="lore-popover">
         <h4>{typeof name === 'string' ? name : <Text unit={name} />}</h4>
         <Text unit={detail} as="p" className="lore-prose" />
       </div>
     </>
   );
+}
+
+// A cold deep link renders before the R2 overlay is merged into char.profile; re-render once it is.
+function useOverlayRerender() {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    let live = true;
+    void loreOverlayMerged().then(() => { if (live) setTick((n) => n + 1); });
+    return () => { live = false; };
+  }, []);
+}
+
+// The recruit line, shown on Tổng Quan (owner 2026-09-26: moved out of the lore tab).
+function LoreQuote({ char }: { char: unknown }) {
+  useOverlayRerender();
+  const quote = buildLoreView(char).quote;
+  return quote ? <blockquote className="lore-quote"><Text unit={quote} as="p" /></blockquote> : null;
 }
 
 function EditorLink({ id }: { id: string }) {
@@ -43,13 +60,7 @@ function EditorLink({ id }: { id: string }) {
 }
 
 function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) {
-  // A cold deep link renders before the R2 overlay is merged into char.profile; re-render once it is.
-  const [, setOverlayTick] = useState(0);
-  useEffect(() => {
-    let live = true;
-    void loreOverlayMerged().then(() => { if (live) setOverlayTick((n) => n + 1); });
-    return () => { live = false; };
-  }, []);
+  useOverlayRerender();
   const view = buildLoreView(char);
   const [leadOpen, setLeadOpen] = useState(false);
   const [relicPanel, setRelicPanel] = useState<'origin' | 'timeline'>('origin');
@@ -74,8 +85,10 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
               {view.relicName && <Text unit={view.relicName} as="p" className="lore-ticket-name" />}
               {view.facts.length > 0 && (
                 <div className="lore-facts">
-                  {view.facts.map((f) => (
-                    <TermPopover key={f.label} name={f.value} detail={f.detail} className="lore-fact">
+                  {view.facts.map((f, i) => (
+                    // the last fact stretches over the empty cells of its row, so the perforation runs the full width
+                    <TermPopover key={f.label} name={f.value} detail={f.detail} className="lore-fact"
+                      style={i === view.facts.length - 1 && view.facts.length % 3 ? { gridColumn: `span ${4 - (view.facts.length % 3)}` } : undefined}>
                       <span className="lore-label">{f.label}</span>
                       <Text unit={f.value} className="lore-fact-value" />
                     </TermPopover>
@@ -112,11 +125,6 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
           <h2>Hồ Sơ Lưu Trữ</h2>
           {char.id && <EditorLink id={char.id} />}
         </header>
-        {view.quote && (
-          <blockquote className="lore-quote">
-            <Text unit={view.quote} as="p" />
-          </blockquote>
-        )}
         {view.hasUntranslated && (
           <p className="lore-notice"><b>Hồ sơ này chưa dịch xong.</b> Đoạn có chấm nhỏ đang hiện bản gốc tiếng Trung.</p>
         )}
@@ -180,10 +188,22 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
 // ponytail: the router clears #character-detail-view with innerHTML when leaving a character; the detached root is
 // then freed by the next renderTabContent → unmountLoreTab (one stale tree at most). Hook the router if that ever matters.
 let root: Root | null = null;
+let quoteRoot: Root | null = null;
 
+// Called before every tab render / character change: frees both islands.
 export function unmountLoreTab() {
   root?.unmount();
   root = null;
+  quoteRoot?.unmount();
+  quoteRoot = null;
+}
+
+export function mountLoreQuote(slot: Element | null, char: unknown) {
+  quoteRoot?.unmount();
+  quoteRoot = null;
+  if (!slot) return;
+  quoteRoot = createRoot(slot);
+  quoteRoot.render(<StrictMode><LoreQuote char={char} /></StrictMode>);
 }
 
 export function mountLoreTab(container: HTMLElement, char: unknown) {

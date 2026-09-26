@@ -12,7 +12,7 @@ import { renderInfoTab } from './detail/infoView.js';
 import { renderTalentsTab } from './detail/talentsView.js';
 import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
-import { mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
+import { mountLoreQuote, mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -51,6 +51,7 @@ function renderTabContent(container, char, tabName) {
     case 'overview':
     default:
       renderOverviewTab(container, char);
+      mountLoreQuote(container.querySelector('.overview-quote-slot'), char);
       // ponytail: public inline edit (components/characterInlineEdit.js) is off until P5 publishes
       // admin overrides — until then an edit there never shows on the public page. Re-add
       // `void enhanceCharacterOverviewEditing(container, char);` here when P5 lands.
@@ -61,14 +62,10 @@ function renderTabContent(container, char, tabName) {
 function updateNavTabs(container, tabName) {
   const tabLinks = container.querySelectorAll('.cd-tab-item');
   tabLinks.forEach(link => {
-    const href = link.getAttribute('href') || '';
-    let isActive = false;
-    if (tabName === 'overview') {
-      isActive = !href.endsWith('/info') && !href.endsWith('/talents') && !href.endsWith('/build') && !href.endsWith('/gallery');
-    } else {
-      isActive = href.endsWith('/' + tabName);
-    }
-    link.classList.toggle('active', isActive);
+    // #/characters/<slug>[/<tab>] — no tab segment means Tổng Quan. (A hard-coded "not info/talents/…" list
+    // missed new tabs: Tổng Quan and Hồ Sơ Lưu Trữ were both highlighted.)
+    const linkTab = (link.getAttribute('href') || '').split('/')[3] || 'overview';
+    link.classList.toggle('active', linkTab === tabName);
   });
 
   const activeTabEl = container.querySelector('.cd-tab-item.active');

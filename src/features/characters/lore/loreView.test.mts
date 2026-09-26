@@ -102,9 +102,9 @@ test('relic tags with a confirmed label become extra facts; unconfirmed fields (
   assert.deepEqual(view.facts[1].detail, { text: '五彩是…', untranslated: true });
 });
 
-test('quote: VI else CN, counted in the untranslated notice', () => {
+test('quote: VI else CN; shown on Tổng Quan, so it does not count for the lore tab notice or emptiness', () => {
   const view = buildLoreView({ profile: { quote: '我是器者。', quote_vi: null } });
   assert.deepEqual(view.quote, { text: '我是器者。', untranslated: true });
-  assert.equal(view.hasUntranslated, true);
-  assert.equal(view.empty, false);
+  assert.equal(view.hasUntranslated, false);
+  assert.equal(view.empty, true);
 });

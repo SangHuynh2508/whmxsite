@@ -94,9 +94,13 @@ button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid va
 .lore-edit { flex: none; font-size: 13px; color: var(--accent); text-decoration: none; }
 .lore-edit:hover { text-decoration: underline; }
 .lore-footnote { margin: -6px 2px 0; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
-.lore-quote { position: relative; margin: 14px 0 0; padding: 14px 18px 14px 44px; background: var(--lore-grain), var(--bg-surface); border-radius: 8px; }
-.lore-quote::before { content: "“"; position: absolute; left: 14px; top: 2px; font: 700 40px/1 var(--lore-serif); color: var(--accent); opacity: .6; }
-.lore-quote p { margin: 0; font: 500 16px/1.8 var(--lore-serif); text-wrap: pretty; }
+/* recruit-line quote on Tổng Quan (outside .lore-tab, so it carries its own font) */
+.lore-quote { position: relative; margin: 20px 0 0; padding: 16px 48px 16px 48px; background: var(--bg-surface); border-radius: 8px; }
+.lore-quote::before, .lore-quote::after { position: absolute; font: 700 40px/1 'Noto Serif', var(--font-serif); color: var(--accent); opacity: .6; }
+.lore-quote::before { content: "“"; left: 14px; top: 6px; }
+.lore-quote::after { content: "”"; right: 14px; bottom: -8px; }
+.lore-quote p { margin: 0; font: 500 16px/1.8 'Noto Serif', var(--font-serif); text-wrap: pretty; }
+.lore-quote .lore-cn { font-family: inherit; }
 .lore-notice { margin: 12px 0 0; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text-muted); background: var(--accent-light); border-radius: 6px; }
 .lore-notice b { color: var(--text-main); font-weight: 500; }
 .lore-empty { color: var(--text-muted); }

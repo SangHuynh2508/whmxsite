@@ -115,6 +115,8 @@ export function renderOverviewTab(container, char) {
               ` : ''}
             </div>
           </div>
+          <!-- recruit-line quote: React island mounted by characterDetail (mountLoreQuote) -->
+          <div class="overview-quote-slot"></div>
         </div>
 
         <!-- Artwork Showcase Block -->

@@ -73,7 +73,7 @@ export function buildLoreView(char: unknown): LoreView {
   const view = {
     archive: str(archive.image) && str(archive.head) ? { image: str(archive.image), head: str(archive.head) } : null,
     relicName,
-    quote: pick(profile.quote_vi, profile.quote),
+    quote: pick(profile.quote_vi, profile.quote), // rendered on Tổng Quan (mountLoreQuote), not in the lore tab
     facts,
     people,
     intro: pick(profile.eval_intro_vi, profile.eval_intro),
@@ -81,9 +81,9 @@ export function buildLoreView(char: unknown): LoreView {
     relicIntro: pick(relic.intro_vi, relic.intro),
     timeline,
   };
-  const shown = [relicName, view.quote, view.intro, view.relicIntro, ...facts.map((f) => f.value),
+  const shown = [relicName, view.intro, view.relicIntro, ...facts.map((f) => f.value),
     ...reports.flatMap((r) => [r.title, r.content, r.unlock]), ...timeline.flatMap((t) => [t.label, t.story])];
   const hasUntranslated = shown.some((u) => u?.untranslated);
-  const empty = !view.archive && !facts.length && !people && !view.quote && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
+  const empty = !view.archive && !facts.length && !people && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
   return { ...view, hasUntranslated, empty };
 }
