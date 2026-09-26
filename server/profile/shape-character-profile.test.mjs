@@ -50,9 +50,22 @@ test('v2 shape publishes only admin+ok VI and resolves codes', () => {
   assert.deepEqual(v2.reports.map((r) => [r.kind, r.unlock_level, r.unlock_name, r.unlock_name_vi]), [
     ['basic', 1, '感应', null], ['basic', 5, '鹿鸣', 'Lộc Minh'], ['special', null, null, null],
   ]);
-  assert.deepEqual(v2.relic_info.type, { cn: '玉器', vi: 'Ngọc Khí' });
+  assert.deepEqual(v2.relic_info.type, { cn: '玉器', vi: 'Ngọc Khí', detail: '', detail_vi: null });
   assert.deepEqual(v2.relic_info.timeline, [{ label: '战国', label_vi: 'Chiến Quốc', story: '故事', story_vi: null }]);
   assert.ok(!JSON.stringify(v2).match(/"[KTSP]\d{4}"|V0053\d\d/), 'no raw codes or file ids');
+});
+
+test('v2 relic terms and the department carry their descriptions for the public popups (published VI only)', () => {
+  const withDetail = new Map(terms);
+  withDetail.set('K1001', { ...term('玉器', 'Ngọc Khí', 'admin'), detailCn: '玉器是…', detailVi: 'Ngọc khí là…' });
+  withDetail.set('S3059', { ...term('杭州博物馆', 'Bảo tàng Hàng Châu'), detailCn: '杭州博物馆位于…', detailVi: 'nháp' }); // not admin → withheld
+  withDetail.set('ORG_2', { ...term('商业部'), detailCn: '商业部负责…' });
+  const v2 = shapeCharacterProfile({ profile, texts }, withDetail, { shape: 'v2' });
+  assert.deepEqual(v2.relic_info.type, { cn: '玉器', vi: 'Ngọc Khí', detail: '玉器是…', detail_vi: 'Ngọc khí là…' });
+  assert.deepEqual(v2.relic_info.museum, { cn: '杭州博物馆', vi: null, detail: '杭州博物馆位于…', detail_vi: null });
+  assert.deepEqual(v2.relic_info.era, { cn: '春秋战国', vi: null, detail: '', detail_vi: null });
+  assert.deepEqual(v2.department_detail, { cn: '商业部负责…', vi: null });
+  assert.equal('department_detail' in shapeCharacterProfile({ profile, texts }, withDetail, { shape: 'legacy' }), false);
 });
 
 // Organisation names are admin VI in lore_terms since the 2026-09 seed (spec Q7): no JS name map in v2.

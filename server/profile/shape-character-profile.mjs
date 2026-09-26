@@ -17,9 +17,10 @@ function department(profile, terms, shape) {
   return map(DEPARTMENT_VI, cn);
 }
 
+// detail/detail_vi feed the public lore-tab popups (spec Q7b).
 function termPair(terms, code) {
   const row = code ? terms.get(code) : null;
-  return { cn: row?.nameCn ?? '', vi: publishableVi(row, 'nameVi') };
+  return { cn: row?.nameCn ?? '', vi: publishableVi(row, 'nameVi'), detail: row?.detailCn ?? '', detail_vi: publishableVi(row, 'detailVi') };
 }
 
 export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
@@ -45,8 +46,10 @@ export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
     };
   }
 
+  const org = profile.organisationCode ? terms.get(`ORG_${profile.organisationCode}`) : null;
   return {
     ...base,
+    department_detail: { cn: org?.detailCn ?? '', vi: publishableVi(org, 'detailVi') },
     eval_intro: cnOf(texts, 'card_intro'),
     eval_intro_vi: viOf(texts, 'card_intro'),
     reports: reports.map((r) => {

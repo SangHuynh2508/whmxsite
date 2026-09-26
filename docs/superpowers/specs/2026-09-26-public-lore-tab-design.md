@@ -25,6 +25,9 @@ exists, and nothing breaks when the overlay or an image fails to load.
 | Q5 | Editing on the public page | Not now. Signed-in owner/editor sees a **"Sửa trong Admin"** link to `#/admin/characters/<ID>/lore`. Inline lore edit comes later, after the public inline edit is fixed (P5) |
 | Q6 | Text reveal effect | Use the existing skin effect (`src/ui/loreReveal.js`) **only** on the tab heading / short intro, never on long reports; off under `prefers-reduced-motion`. Must be removable in one place if the owner dislikes it after testing |
 | Q7 | Lore-term tooltips in text | Later |
+| Q7b (2026-09-26, after the demos) | Term descriptions | **Now**: organisation, museum, relic type and era open a popup with the term's description (as in-game). Descriptions come from `lore_terms.detail_cn/detail_vi` and are added to the published lore document (§4). Inline tooltips inside running text stay "later"; "other relics of the same museum/type/era" and voice lines (separate route) are later |
+| Q8 (2026-09-26) | Visual direction | **B2 "museum object page, compact"** (`docs/public-redesign/lore-tab/design-demos/direction-b2-museum-compact.html`); decoration (tile shape, frames, ornaments) refined in one more pass |
+| Q2b (2026-09-26) | How "Chưa dịch" shows | One notice at the top of the tab ("Hồ sơ này chưa dịch xong…"), only when something is untranslated; each untranslated unit gets a small dot + screen-reader text "(chưa dịch)" instead of a chip |
 
 ## 3. What the tab shows (content, not layout)
 
@@ -50,7 +53,7 @@ Rules:
 - **Data, game channel:** `tools/build_web_data.py` emits `char.archive = {image, head}` from the R2 manifest — the prepared patch
   `D:\BaiTapCode\WHMX\_claude_scratch\archive_build_change.patch` as-is (its category `archive` already maps to the R2 folder `archives` in
   `tools/asset_publish_manifest.py` `REMOTE_CATEGORIES`, and `require_asset_url` fails loudly on a missing manifest entry). `public/data.json` is rebuilt; the **whole diff is shown to the owner before commit** (§6 rule). Only `archive` keys may change.
-- **Data, lore channel:** unchanged. No new API, no DB change, no R2 change.
+- **Data, lore channel:** the v2 shape gains term descriptions: `relic_info.type|era|museum` become `{cn, vi, detail, detail_vi}` and the profile gains `department_detail: {cn, vi}` (from the `ORG_*` term). `detail_vi` follows the same publish rule as names (`publishableVi`). No DB change; a lore re-publish (owner yes for production) ships it.
 - **Tab wiring:** `characterDetail.js` gets a sixth tab link `#/characters/<slug>/lore` and a `case 'lore'` in `renderTabContent`;
   `router.js` accepts the new tab name (same as the existing ones).
 - **Tab content:** a React + TypeScript island (precedent: `src/app/layout/AppNav.tsx` mounts with `createRoot`), e.g.
