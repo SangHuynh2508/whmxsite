@@ -137,7 +137,9 @@ try {
   assert.equal(JSON.stringify(sessionResponse.payload).includes('token'), false, 'session endpoint must not return a token');
   const unauthenticatedSessionResponse = responseCapture();
   await sessionRoute.default({ method: 'GET', headers: { host: 'localhost:5173' } }, unauthenticatedSessionResponse);
-  assert.equal(unauthenticatedSessionResponse.statusCode, 401, 'session endpoint must reject unauthenticated callers');
+  // Since c8188ed (2026-09-24) "not signed in" is a normal answer, not a 401.
+  assert.equal(unauthenticatedSessionResponse.statusCode, 200);
+  assert.deepEqual(unauthenticatedSessionResponse.payload, { authenticated: false }, 'session endpoint must not expose anything to unauthenticated callers');
 
   const editor = await provisionAdminAccount({
     actorUserId: owner.id,
