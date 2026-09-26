@@ -12,6 +12,7 @@ import { renderInfoTab } from './detail/infoView.js';
 import { renderTalentsTab } from './detail/talentsView.js';
 import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
+import { mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -30,6 +31,7 @@ function normalizeTab(activeTab) {
 }
 
 function renderTabContent(container, char, tabName) {
+  unmountLoreTab(); // every tab swap and character change goes through here
   switch (tabName) {
     case 'info':
       renderInfoTab(container, char);
@@ -42,6 +44,9 @@ function renderTabContent(container, char, tabName) {
       break;
     case 'gallery':
       renderGalleryTab(container, char);
+      break;
+    case 'lore':
+      mountLoreTab(container, char);
       break;
     case 'overview':
     default:
@@ -255,7 +260,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         </div>
       </header>
 
-      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Thư Viện -->
+      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Thư Viện | Hồ Sơ Lưu Trữ -->
       <nav class="cd-sub-nav" aria-label="Điều hướng chi tiết nhân vật">
         <div class="cd-nav-scroll-wrapper">
           <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
@@ -276,6 +281,10 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
           <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
             <span class="tab-label">Thư Viện</span>
+          </a>
+
+          <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
+            <span class="tab-label">Hồ Sơ Lưu Trữ</span>
           </a>
         </div>
       </nav>

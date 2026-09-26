@@ -1,0 +1,14 @@
+/* Hồ Sơ Lưu Trữ tab — structure only; the approved look is applied in plan Task 5. Colours from tokens.css only. */
+.lore-tab { display: grid; gap: 1rem; }
+.lore-text { white-space: pre-line; }
+.lore-untranslated {
+  margin-inline-start: .5em;
+  padding: .05em .45em;
+  font-size: .75em;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.lore-archive { margin: 0; }
+.lore-archive img { display: block; max-width: 100%; height: auto; }
