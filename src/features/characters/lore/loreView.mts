@@ -1,15 +1,19 @@
 // Turns a public `char` (v2 lore overlay shape, or the legacy CN shape when the overlay failed) into what the lore tab shows.
 export type LoreUnit = { text: string; untranslated: boolean };
-export type LoreFact = { label: string; value: LoreUnit };
+export type LoreFact = { label: string; value: LoreUnit; detail: LoreUnit | null };
+export type LorePeople = { department: string; departmentDetail: LoreUnit | null; status: string; recordId: string };
 export type LoreReport = { title: LoreUnit | null; content: LoreUnit | null; unlock: LoreUnit | null; unlockLevel: number | null; special: boolean };
 export type LoreTimelineEntry = { label: LoreUnit | null; story: LoreUnit | null };
 export type LoreView = {
   archive: { image: string; head: string } | null;
+  relicName: LoreUnit | null;
   facts: LoreFact[];
+  people: LorePeople | null;
   intro: LoreUnit | null;
   reports: LoreReport[];
   relicIntro: LoreUnit | null;
   timeline: LoreTimelineEntry[];
+  hasUntranslated: boolean;
   empty: boolean;
 };
 
@@ -25,6 +29,7 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
 }
 
 const pair = (value: unknown) => pick(obj(value).vi, obj(value).cn);
+const detailOf = (value: unknown) => pick(obj(value).detail_vi, obj(value).detail);
 
 export function buildLoreView(char: unknown): LoreView {
   const c = obj(char);
@@ -33,10 +38,15 @@ export function buildLoreView(char: unknown): LoreView {
   const archive = obj(c.archive);
 
   const legacy = 'relic_name' in relic || 'dynasty' in relic;
-  const factPairs: [string, LoreUnit | null][] = legacy
-    ? [['Hiện vật', pick(null, relic.relic_name)], ['Niên đại', pick(null, relic.dynasty)], ['Nơi lưu giữ', pick(null, relic.museum)]]
-    : [['Loại', pair(relic.type)], ['Niên đại', pair(relic.era)], ['Nơi lưu giữ', pair(relic.museum)]];
-  const facts = factPairs.filter((f): f is [string, LoreUnit] => f[1] !== null).map(([label, value]) => ({ label, value }));
+  const factRows: [string, LoreUnit | null, LoreUnit | null][] = legacy
+    ? [['Hiện vật', pick(null, relic.relic_name), null], ['Niên đại', pick(null, relic.dynasty), null], ['Nơi lưu giữ', pick(null, relic.museum), null]]
+    : [['Loại', pair(relic.type), detailOf(relic.type)], ['Niên đại', pair(relic.era), detailOf(relic.era)], ['Nơi lưu giữ', pair(relic.museum), detailOf(relic.museum)]];
+  const facts = factRows.filter((f): f is [string, LoreUnit, LoreUnit | null] => f[1] !== null).map(([label, value, detail]) => ({ label, value, detail }));
+  // fullname_vi falls back to the character name when the relic name has no translation — that is not a relic name.
+  const relicName = pick(str(c.fullname_vi) === str(c.name_vi) ? null : c.fullname_vi, c.fullname_cn);
+  const people = [profile.department, profile.entity_status, profile.record_id].some((v) => str(v))
+    ? { department: str(profile.department), departmentDetail: pick(obj(profile.department_detail).vi, obj(profile.department_detail).cn), status: str(profile.entity_status), recordId: str(profile.record_id) }
+    : null;
 
   const reports = list(profile.reports)
     .map((r) => ({
@@ -54,12 +64,17 @@ export function buildLoreView(char: unknown): LoreView {
 
   const view = {
     archive: str(archive.image) && str(archive.head) ? { image: str(archive.image), head: str(archive.head) } : null,
+    relicName,
     facts,
+    people,
     intro: pick(profile.eval_intro_vi, profile.eval_intro),
     reports,
     relicIntro: pick(relic.intro_vi, relic.intro),
     timeline,
   };
-  const empty = !view.archive && !facts.length && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
-  return { ...view, empty };
+  const shown = [relicName, view.intro, view.relicIntro, ...facts.map((f) => f.value),
+    ...reports.flatMap((r) => [r.title, r.content, r.unlock]), ...timeline.flatMap((t) => [t.label, t.story])];
+  const hasUntranslated = shown.some((u) => u?.untranslated);
+  const empty = !view.archive && !facts.length && !people && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
+  return { ...view, hasUntranslated, empty };
 }

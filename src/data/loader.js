@@ -1,6 +1,7 @@
 import { loadLoreOverlay, mergeLoreOverlay } from '../features/profile/api/loreOverlay.mts';
 
 let gameData = null;
+let loreMerged = Promise.resolve();
 
 export async function loadGameData() {
   if (gameData) return gameData;
@@ -25,7 +26,8 @@ export async function loadGameData() {
     }
     // Do not hold the app for up to 5 s: merge when the overlay arrives. Views read
     // char.profile at render time, so the next render shows it.
-    overlayPromise.then((overlay) => mergeLoreOverlay(gameData, overlay));
+    // Views that are all lore (the Hồ Sơ Lưu Trữ tab) wait on loreOverlayMerged() and re-render.
+    loreMerged = overlayPromise.then((overlay) => { mergeLoreOverlay(gameData, overlay); });
     return gameData;
   } catch (error) {
     console.error("Error loading data:", error);
@@ -35,4 +37,8 @@ export async function loadGameData() {
 
 export function getGameData() {
   return gameData;
+}
+
+export function loreOverlayMerged() {
+  return loreMerged;
 }

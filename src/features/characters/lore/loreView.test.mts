@@ -32,8 +32,8 @@ test('v2 shape: every unit VI or CN, empty units and reports dropped, special re
   assert.deepEqual(view.archive, v2.archive);
   assert.deepEqual(view.intro, { text: 'Giới thiệu', untranslated: false });
   assert.deepEqual(view.facts, [
-    { label: 'Loại', value: { text: 'Vũ khí', untranslated: false } },
-    { label: 'Niên đại', value: { text: '18世纪', untranslated: true } },
+    { label: 'Loại', value: { text: 'Vũ khí', untranslated: false }, detail: null },
+    { label: 'Niên đại', value: { text: '18世纪', untranslated: true }, detail: null },
   ]);
   assert.equal(view.reports.length, 2);
   assert.deepEqual(view.reports[0], {
@@ -67,4 +67,23 @@ test('no profile / empty relic_info / no archive → empty view, no crash', () =
     assert.equal(view.archive, null);
     assert.deepEqual(view.facts, []);
   }
+});
+
+test('term descriptions, relic name, people and the untranslated flag (B4 ticket + notice)', () => {
+  const view = buildLoreView({
+    name_vi: 'Heart Shaped Barrel', fullname_vi: 'Heart Shaped Barrel', fullname_cn: '心形枪管线膛前装燧发枪',
+    profile: {
+      department: 'Học Viện Anh Quốc', department_detail: { cn: '发端于雾都伦敦', vi: null },
+      entity_status: 'An toàn', record_id: 'E-401-176504', eval_intro: '介绍', eval_intro_vi: 'Giới thiệu',
+      relic_info: { type: { cn: '武器', vi: 'Vũ khí', detail: '武器是…', detail_vi: 'Vũ khí là…' }, era: { cn: '18世纪', vi: null, detail: '', detail_vi: null } },
+    },
+  });
+  assert.deepEqual(view.facts[0], { label: 'Loại', value: { text: 'Vũ khí', untranslated: false }, detail: { text: 'Vũ khí là…', untranslated: false } });
+  assert.equal(view.facts[1].detail, null);
+  assert.deepEqual(view.relicName, { text: '心形枪管线膛前装燧发枪', untranslated: true }); // fullname_vi = the character name, not a relic-name translation
+  assert.deepEqual(view.people, { department: 'Học Viện Anh Quốc', departmentDetail: { text: '发端于雾都伦敦', untranslated: true }, status: 'An toàn', recordId: 'E-401-176504' });
+  assert.equal(view.hasUntranslated, true);
+  assert.equal(buildLoreView({ profile: { eval_intro_vi: 'Chỉ VI' } }).hasUntranslated, false);
+  assert.equal(buildLoreView({ profile: { record_id: 'X-1' } }).empty, false);
+  assert.equal(buildLoreView({}).people, null);
 });
