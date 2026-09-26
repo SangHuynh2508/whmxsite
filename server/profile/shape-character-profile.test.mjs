@@ -94,3 +94,10 @@ test('v2 relic_info.tags lists the extra relic facts by raw field, with descript
   ]);
   assert.deepEqual(shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }).relic_info.tags, []);
 });
+
+test('v2 exports the quote (published VI only)', () => {
+  const withQuote = new Map(texts); withQuote.set('quote', t('我是器者。', 'Ta là khí giả.', 'admin'));
+  const v2 = shapeCharacterProfile({ profile, texts: withQuote }, terms, { shape: 'v2' });
+  assert.deepEqual([v2.quote, v2.quote_vi], ['我是器者。', 'Ta là khí giả.']);
+  assert.deepEqual([shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }).quote], ['']);
+});

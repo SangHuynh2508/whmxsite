@@ -15,7 +15,7 @@ export function loreUnitGroups(structure: { reports: Report[]; timeline: string[
     reports.push({ unitKey: `report.${r.fileId}.title`, label: `Tiêu đề ${suffix}`, extra }, { unitKey: `report.${r.fileId}.content`, label: `Báo cáo ${suffix}` });
   }
   const groups: { group: string; items: LoreItem[] }[] = [
-    { group: 'Giới thiệu', items: [{ unitKey: 'card_intro', label: 'Đánh giá' }] },
+    { group: 'Giới thiệu', items: [{ unitKey: 'quote', label: 'Lời chiêu mộ' }, { unitKey: 'card_intro', label: 'Đánh giá' }] },
     { group: 'Báo cáo', items: reports },
     { group: 'Hiện vật', items: [{ unitKey: 'relic_intro', label: 'Giới thiệu hiện vật' }] },
     { group: 'Dòng thời gian', items: structure.timeline.flatMap((s) => [{ unitKey: `timeline.${s}.label`, label: `Mốc ${s}` }, { unitKey: `timeline.${s}.story`, label: `Câu chuyện ${s}` }]) },

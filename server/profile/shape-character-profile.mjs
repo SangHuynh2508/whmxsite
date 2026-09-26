@@ -50,6 +50,7 @@ export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
   return {
     ...base,
     department_detail: { cn: org?.detailCn ?? '', vi: publishableVi(org, 'detailVi') },
+    quote: cnOf(texts, 'quote'), quote_vi: viOf(texts, 'quote'),
     eval_intro: cnOf(texts, 'card_intro'),
     eval_intro_vi: viOf(texts, 'card_intro'),
     reports: reports.map((r) => {

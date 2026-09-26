@@ -20,3 +20,8 @@ test('units missing from the record are left out; empty groups disappear', () =>
   const groups = loreUnitGroups({ reports: [], timeline: [] }, ['card_intro'], {});
   assert.deepEqual(groups.map((g) => [g.group, g.items.length]), [['Giới thiệu', 1]]);
 });
+
+test('the quote is translatable in the Giới thiệu group, before the evaluation', () => {
+  const groups = loreUnitGroups({ reports: [], timeline: [] }, ['card_intro', 'quote'], {});
+  assert.deepEqual(groups[0].items.map((i) => i.unitKey), ['quote', 'card_intro']);
+});

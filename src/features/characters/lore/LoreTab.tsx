@@ -101,6 +101,9 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
               )}
             </div>
           )}
+          {(view.facts.some((f) => f.detail) || view.people?.departmentDetail) && (
+            <p className="lore-footnote">* Bấm vào từng mục trong phiếu để xem ghi chú.</p>
+          )}
         </aside>
       )}
 
@@ -109,6 +112,11 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
           <h2>Hồ Sơ Lưu Trữ</h2>
           {char.id && <EditorLink id={char.id} />}
         </header>
+        {view.quote && (
+          <blockquote className="lore-quote">
+            <Text unit={view.quote} as="p" />
+          </blockquote>
+        )}
         {view.hasUntranslated && (
           <p className="lore-notice"><b>Hồ sơ này chưa dịch xong.</b> Đoạn có chấm nhỏ đang hiện bản gốc tiếng Trung.</p>
         )}

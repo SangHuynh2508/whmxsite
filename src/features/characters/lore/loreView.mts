@@ -7,6 +7,7 @@ export type LoreTimelineEntry = { label: LoreUnit | null; story: LoreUnit | null
 export type LoreView = {
   archive: { image: string; head: string } | null;
   relicName: LoreUnit | null;
+  quote: LoreUnit | null;
   facts: LoreFact[];
   people: LorePeople | null;
   intro: LoreUnit | null;
@@ -28,9 +29,9 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
   return null;
 }
 
-// Labels only for relic-tag fields confirmed in-game (owner screenshot of S0132, 2026-09-26). tag2/tag4 are imported
-// but stay hidden until their in-game labels are confirmed.
-const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag3: 'Nơi sản xuất' };
+// Labels only for relic-tag fields confirmed in-game (owner screenshots 2026-09-26: S0132 tag1 工艺 / tag3 产地,
+// A0061 tag2 出土地). tag4 is imported but stays hidden until its in-game label is confirmed.
+const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất' };
 const pair = (value: unknown) => pick(obj(value).vi, obj(value).cn);
 const detailOf = (value: unknown) => pick(obj(value).detail_vi, obj(value).detail);
 
@@ -72,6 +73,7 @@ export function buildLoreView(char: unknown): LoreView {
   const view = {
     archive: str(archive.image) && str(archive.head) ? { image: str(archive.image), head: str(archive.head) } : null,
     relicName,
+    quote: pick(profile.quote_vi, profile.quote),
     facts,
     people,
     intro: pick(profile.eval_intro_vi, profile.eval_intro),
@@ -79,9 +81,9 @@ export function buildLoreView(char: unknown): LoreView {
     relicIntro: pick(relic.intro_vi, relic.intro),
     timeline,
   };
-  const shown = [relicName, view.intro, view.relicIntro, ...facts.map((f) => f.value),
+  const shown = [relicName, view.quote, view.intro, view.relicIntro, ...facts.map((f) => f.value),
     ...reports.flatMap((r) => [r.title, r.content, r.unlock]), ...timeline.flatMap((t) => [t.label, t.story])];
   const hasUntranslated = shown.some((u) => u?.untranslated);
-  const empty = !view.archive && !facts.length && !people && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
+  const empty = !view.archive && !facts.length && !people && !view.quote && !view.intro && !reports.length && !view.relicIntro && !timeline.length;
   return { ...view, hasUntranslated, empty };
 }

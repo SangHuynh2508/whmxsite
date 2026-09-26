@@ -88,15 +88,23 @@ test('term descriptions, relic name, people and the untranslated flag (B4 ticket
   assert.equal(buildLoreView({}).people, null);
 });
 
-test('relic tags with a confirmed label become extra facts; unconfirmed fields stay hidden', () => {
+test('relic tags with a confirmed label become extra facts; unconfirmed fields (tag4) stay hidden', () => {
   const view = buildLoreView({ profile: { relic_info: {
     type: { cn: '瓷器' },
     tags: [
       { field: 'tag1', cn: '五彩', vi: null, detail: '五彩是…', detail_vi: null },
       { field: 'tag2', cn: '曾侯乙墓', vi: null, detail: '', detail_vi: null },
       { field: 'tag3', cn: '景德镇官窑', vi: 'Quan diêu Cảnh Đức Trấn', detail: '', detail_vi: null },
+      { field: 'tag4', cn: '外销文物', vi: null, detail: '', detail_vi: null },
     ],
   } } });
-  assert.deepEqual(view.facts.map((f) => [f.label, f.value.text]), [['Loại', '瓷器'], ['Kỹ thuật', '五彩'], ['Nơi sản xuất', 'Quan diêu Cảnh Đức Trấn']]);
+  assert.deepEqual(view.facts.map((f) => [f.label, f.value.text]), [['Loại', '瓷器'], ['Kỹ thuật', '五彩'], ['Nơi khai quật', '曾侯乙墓'], ['Nơi sản xuất', 'Quan diêu Cảnh Đức Trấn']]);
   assert.deepEqual(view.facts[1].detail, { text: '五彩是…', untranslated: true });
+});
+
+test('quote: VI else CN, counted in the untranslated notice', () => {
+  const view = buildLoreView({ profile: { quote: '我是器者。', quote_vi: null } });
+  assert.deepEqual(view.quote, { text: '我是器者。', untranslated: true });
+  assert.equal(view.hasUntranslated, true);
+  assert.equal(view.empty, false);
 });

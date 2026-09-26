@@ -30,6 +30,9 @@ export function normalizeProfileSources(raw, characterIds) {
   const terms = new Map();
   const profiles = [];
   const missingFromRaw = [...wanted].filter((id) => !raw.characterFiles[id]).sort();
+  // Recruit line (招集, shown by the wiki as the character quote): line bank id = the base skin's skinID.
+  const baseSkin = new Map(Object.values(raw.characterSkins ?? {}).flat().filter((sk) => sk?.bIsBaseSkin).map((sk) => [text(sk.characterId), text(sk.skinID)]));
+  const linesById = new Map(Object.values(raw.characterLines ?? {}).map((l) => [text(l?.id), l]));
 
   for (const characterId of [...wanted].sort()) {
     if (!raw.characterFiles[characterId]) continue;
@@ -37,6 +40,8 @@ export function normalizeProfileSources(raw, characterIds) {
     const relic = raw.historicalRelicsMap[characterId];
     const units = [];
     unit(units, 'card_intro', text(file.cardIntrolanText), `characterFiles:${characterId}.cardIntrolanText`);
+    const skinId = baseSkin.get(characterId);
+    if (skinId) unit(units, 'quote', text(linesById.get(skinId)?.dropLineLanText), `characterLines:${skinId}.dropLineLanText`);
 
     const reports = [];
     for (const [kind, ids, unlocks] of [

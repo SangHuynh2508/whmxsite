@@ -93,3 +93,14 @@ test('relic tags tag1..tag4 become structure.relicTags + relic_tag terms, only w
   delete withTags.historicalTextMap.H6002;
   assert.throws(() => normalizeProfileSources(withTags, ['V0053']), /H6002/);
 });
+
+test('quote = recruit line (dropLineLanText) of the base skin, as a translatable unit (owner 2026-09-26)', () => {
+  const withLines = structuredClone(raw);
+  // real shape: { characterId: [skins…] }
+  withLines.characterSkins = { V0053: [{ skinID: 'V0053002', characterId: 'V0053', bIsBaseSkin: false }, { skinID: 'V0053001', characterId: 'V0053', bIsBaseSkin: true }] };
+  withLines.characterLines = { a: { id: 'V0053002', dropLineLanText: '皮肤台词' }, b: { id: 'V0053001', dropLineLanText: ' 我是器者。 ' } };
+  const [p] = normalizeProfileSources(withLines, ['V0053']).profiles;
+  const quote = p.units.find((u) => u.unitKey === 'quote');
+  assert.deepEqual([quote.sourceCn, quote.sourceRef], ['我是器者。', 'characterLines:V0053001.dropLineLanText']);
+  assert.equal(normalizeProfileSources(raw, ['V0053']).profiles[0].units.some((u) => u.unitKey === 'quote'), false);
+});

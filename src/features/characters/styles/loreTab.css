@@ -13,10 +13,10 @@
 }
 .lore-tab--single { grid-template-columns: minmax(0, 1fr); }
 
-.lore-wrap { container-type: inline-size; }
+.lore-wrap { container-type: inline-size; position: relative; } /* containing block for .lore-sr: otherwise they escape the lenis scroller and make <html> scroll (2nd scrollbar) */
 
 /* ——— left column ——— */
-.lore-aside { position: sticky; top: 20px; display: grid; gap: 16px; }
+.lore-aside { position: sticky; top: 20px; display: grid; gap: 16px; min-width: 0; }
 .lore-plate {
   position: relative;
   margin: 0;
@@ -27,7 +27,10 @@
   background: var(--lore-grain), var(--bg-surface);
   border-radius: 6px;
 }
-.lore-plate img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.lore-plate { min-width: 0; }
+/* the image fills the square plate and scales down — a large source image must never widen the column */
+.lore-plate img { position: absolute; inset: 24px; width: calc(100% - 48px); height: calc(100% - 48px); object-fit: contain; }
+/* absolute: a %-height inside the auto-sized grid row resolved to the natural height, so tall images were cropped */
 .lore-plate::before, .lore-plate::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--accent); opacity: .7; }
 .lore-plate::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
 .lore-plate::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
@@ -39,10 +42,12 @@
 .lore-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; }
 .lore-fact { display: grid; align-content: start; gap: 2px; padding: 10px 16px 14px; text-align: left; font: inherit; color: inherit; background: none; border: 0; }
 .lore-fact { margin: -1px 0 0 -1px; border-left: 1px dashed var(--border-gold-subtle); border-top: 1px dashed var(--border-gold-subtle); }
-button.lore-fact { cursor: pointer; transition: background-color var(--motion-normal) var(--ease-standard); }
-button.lore-fact:hover { background-color: var(--bg-surface-hover); }
+/* clickable items: no underline, no colour change — the text just brightens on hover (owner 2026-09-26) */
+button.lore-fact, button.lore-stub-value { cursor: pointer; }
+button.lore-fact > *, button.lore-stub-value { opacity: .8; transition: opacity var(--motion-normal) var(--ease-standard); } /* text only: the perforation borders stay */
+button.lore-fact:is(:hover, :focus-visible) > *, button.lore-stub-value:is(:hover, :focus-visible) { opacity: 1; }
 button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-button.lore-fact .lore-fact-value, button.lore-stub-value { justify-self: start; border-bottom: 1px dashed var(--border-gold-subtle); }
+
 .lore-label { font-size: 12px; letter-spacing: .02em; color: var(--text-muted); }
 .lore-fact-value { font-weight: 500; line-height: 1.4; }
 
@@ -67,7 +72,7 @@ button.lore-fact .lore-fact-value, button.lore-stub-value { justify-self: start;
 .lore-stub .lore-serial-row { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid var(--border-color); border-left: 0; }
 .lore-serial { font: 600 14px/1.6 ui-monospace, 'SF Mono', Consolas, monospace; letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--accent) !important; }
 .lore-term { font: inherit; color: inherit; text-align: left; cursor: pointer; }
-.lore-stub-value.lore-term { padding: 0; background: none; border: 0; border-bottom: 1px dashed var(--border-gold-subtle); } /* .lore-fact keeps its own padding + perforation */
+.lore-stub-value.lore-term { padding: 0; background: none; border: 0; } /* .lore-fact keeps its own padding + perforation */
 
 .lore-popover {
   max-width: min(360px, calc(100vw - 32px));
@@ -88,6 +93,10 @@ button.lore-fact .lore-fact-value, button.lore-stub-value { justify-self: start;
 .lore-head h2 { margin: 0; font: 700 26px/1.25 var(--lore-serif); }
 .lore-edit { flex: none; font-size: 13px; color: var(--accent); text-decoration: none; }
 .lore-edit:hover { text-decoration: underline; }
+.lore-footnote { margin: -6px 2px 0; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+.lore-quote { position: relative; margin: 14px 0 0; padding: 14px 18px 14px 44px; background: var(--lore-grain), var(--bg-surface); border-radius: 8px; }
+.lore-quote::before { content: "“"; position: absolute; left: 14px; top: 2px; font: 700 40px/1 var(--lore-serif); color: var(--accent); opacity: .6; }
+.lore-quote p { margin: 0; font: 500 16px/1.8 var(--lore-serif); text-wrap: pretty; }
 .lore-notice { margin: 12px 0 0; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text-muted); background: var(--accent-light); border-radius: 6px; }
 .lore-notice b { color: var(--text-main); font-weight: 500; }
 .lore-empty { color: var(--text-muted); }
@@ -130,5 +139,5 @@ button.lore-fact .lore-fact-value, button.lore-stub-value { justify-self: start;
 }
 @media (prefers-reduced-motion: reduce) {
   .lore-plate, .lore-ticket { animation: none; }
-  button.lore-fact { transition: none; }
+  button.lore-fact > *, button.lore-stub-value { transition: none; }
 }

@@ -21,6 +21,7 @@ const SOURCES = {
   characterFiles: 'characterFiles.json', characterFileTextMap: 'characterFileTextMap.json',
   historicalRelicsMap: 'historicalRelicsMap.json', historicalTextMap: 'HistoricalTextMap.json',
   friendshipDescription: 'friendshipDescription.json', characterTable: 'characterTable.json', typeJJHMap: 'TypeJJHMap.json',
+  characterSkins: 'characterSkins.json', characterLines: 'characterLines.json',
 };
 
 function loadRaw(masterRoot) {
