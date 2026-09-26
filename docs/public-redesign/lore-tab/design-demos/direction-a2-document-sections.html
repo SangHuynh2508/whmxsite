@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hồ Sơ Lưu Trữ — A2 · Tài liệu chia mục</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<!--
+  A2 = hướng A làm lại bằng taste-skill (design-taste-frontend §4.9 Content Density, §9 AI tells).
+  Design read: trang đọc hồ sơ lore cho người chơi Việt (điện thoại + desktop), giọng lưu trữ cổ điển, điềm tĩnh;
+  CSS thuần trên token của site. Dials: VARIANCE 5 · MOTION 3 · DENSITY 3.
+  Rút ngắn: (1) chia 3 mục như menu trong game (人员评估 / 评估报告 / 科普信息) — mỗi lúc một mục;
+  (2) báo cáo = accordion độc quyền (details name=…), mỗi dòng có câu mở đầu làm xem trước;
+  (3) "Nguồn gốc | Dòng thời gian" dùng chung một khung như nút 查看本源介绍 / 查看历史轨迹 trong game;
+  (4) bỏ bảng thông số kẻ từng dòng → dòng thông tin ngắn + thẻ thuật ngữ bấm được (popover gốc của trình duyệt).
+  "Chưa dịch": một thông báo ở đầu tab (chủ dự án chọn cách b); từng đoạn chưa dịch chỉ có chấm nhỏ.
+  Mô tả thuật ngữ (bảo tàng/loại/niên đại/tổ chức) có trong DB nhưng CHƯA xuất ra site — demo để chủ dự án quyết.
+-->
+<style>
+:root{--bg-main:#111315;--bg-surface:#17191C;--bg-surface-hover:#22262B;--bg-elevated:#1C2024;--border-color:#2B2F34;--border-strong:#3D434A;--text-main:#E3E5E8;--text-muted:#9097A0;--text-subtle:#6B7280;--accent:#D4B763;--accent-light:#24221A;--border-gold-subtle:rgba(212,183,99,.30);--border-gold-divider:rgba(212,183,99,.16);--font-sans:'Inter',system-ui,sans-serif;--font-serif:'Noto Serif SC',serif;--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:15px/1.75 var(--font-sans);-webkit-font-smoothing:antialiased}
+.page{max-width:720px;margin:0 auto;padding:28px 16px 80px}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.head h2{margin:0;font:700 24px/1.25 var(--font-serif)}
+.mark{font:500 12px var(--font-sans);color:var(--accent);vertical-align:super;margin-left:6px}
+.edit{font-size:13px;color:var(--accent);text-decoration:none}
+.edit:hover{text-decoration:underline}
+.notice{margin:14px 0 0;padding:10px 14px;font-size:13px;line-height:1.6;color:var(--text-muted);background:var(--accent-light);border-radius:8px}
+.notice b{color:var(--text-main);font-weight:500}
+.seg{position:sticky;top:0;z-index:2;display:flex;gap:4px;margin:18px -16px 0;padding:10px 16px;background:var(--bg-main);border-bottom:1px solid var(--border-color)}
+.seg button{flex:none;padding:6px 14px;font:500 14px var(--font-sans);color:var(--text-muted);background:none;border:1px solid transparent;border-radius:999px;cursor:pointer;transition:color .2s var(--ease),background .2s var(--ease)}
+.seg button[aria-selected="true"]{color:var(--text-main);background:var(--bg-elevated);border-color:var(--border-color)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg .count{margin-left:6px;font-size:12px;color:var(--text-subtle)}
+.view{padding-top:22px}
+.prose{margin:0;max-width:66ch;white-space:pre-line;text-wrap:pretty}
+.cn{font-family:var(--font-serif);font-weight:500}
+.cn::after{content:"";display:inline-block;width:5px;height:5px;margin-left:6px;border-radius:50%;background:var(--text-subtle);vertical-align:middle}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.line{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:18px;font-size:14px;color:var(--text-muted)}
+.line b{color:var(--text-main);font-weight:500}
+.term{padding:0;font:inherit;color:var(--text-main);background:none;border:0;border-bottom:1px dashed var(--border-gold-subtle);cursor:help}
+.term:hover{color:var(--accent)}
+[popover]{max-width:min(360px,calc(100vw - 32px));margin:auto;padding:16px 18px;color:var(--text-main);background:var(--bg-elevated);border:1px solid var(--border-strong);border-radius:10px;font-size:14px;line-height:1.7}
+[popover]::backdrop{background:rgba(0,0,0,.35)}
+[popover] h4{margin:0 0 6px;font:700 16px var(--font-serif)}
+details.rep{border-bottom:1px solid var(--border-color)}
+details.rep:first-child{border-top:1px solid var(--border-color)}
+details.rep summary{list-style:none;display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:14px 2px;cursor:pointer}
+details.rep summary::-webkit-details-marker{display:none}
+.rep .t{font-weight:600}
+.rep .u{font-size:12px;color:var(--text-muted);text-align:right;white-space:nowrap}
+.rep .u b{color:var(--accent);font-weight:500}
+.rep .pv{grid-column:1/-1;font-size:14px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details[open].rep .pv{display:none}
+.rep .body{padding:0 2px 20px}
+.relic{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+.relic figure{margin:0;display:grid;place-items:center;aspect-ratio:4/3;padding:12px;background:var(--bg-surface);border-radius:10px}
+.relic img{max-width:100%;max-height:100%;object-fit:contain}
+.relic h3{margin:0 0 12px;font:700 18px/1.4 var(--font-serif)}
+.facts{display:grid;gap:10px;margin:0}
+.facts div{display:grid;grid-template-columns:92px 1fr;gap:8px}
+.facts dt{font-size:13px;color:var(--text-muted)}
+.facts dd{margin:0}
+.switch{display:inline-flex;margin:28px 0 14px;padding:3px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px}
+.switch button{padding:5px 14px;font:500 13px var(--font-sans);color:var(--text-muted);background:none;border:0;border-radius:6px;cursor:pointer}
+.switch button[aria-selected="true"]{color:var(--text-main);background:var(--bg-elevated)}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:128px 1fr;gap:16px;padding:12px 0}
+.tl li+li{border-top:1px solid var(--border-color)}
+.tl .when{font-weight:600;color:var(--accent)}
+@media (max-width:640px){.relic{grid-template-columns:1fr}.tl li{grid-template-columns:1fr;gap:2px}.rep .u{grid-column:1/-1;text-align:left}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="page" id="app"></main>
+<script src="./a0024-data.js"></script>
+<script>
+const L = LORE, P = L.profile, R = P.relic_info, T = L.terms;
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let untranslated = 0;
+const unit = (vi, cn) => (vi && vi.trim()) ? esc(vi) : (cn && cn.trim()) ? (untranslated++, `<span class="cn" lang="zh">${esc(cn)}<span class="sr"> (chưa dịch)</span></span>`) : '';
+let pid = 0; const pops = [];
+const term = (vi, cn) => { const t = T[cn]; const label = unit(vi, cn); if (!t) return label; const id = `p${pid++}`;
+  pops.push(`<div popover id="${id}"><h4>${unit(t.vi, cn)}</h4><p class="prose">${unit(null, t.detail)}</p></div>`);
+  return `<button class="term" popovertarget="${id}">${label}</button>`; };
+const firstLine = (s) => esc(String(s).split('\n').find((x) => x.trim()) ?? '');
+const people = `
+  <p class="prose">${unit(P.eval_intro_vi, P.eval_intro)}</p>
+  <div class="line"><span>Trực thuộc <b>${term(P.department, '不列颠学会')}</b></span><span>Bản thể <b>${esc(P.entity_status)}</b></span><span>Mã hồ sơ <b>${esc(P.record_id)}</b></span></div>`;
+const reports = P.reports.map((r, i) => `
+  <details class="rep" name="reports" ${i === 0 ? 'open' : ''}>
+    <summary><span class="t">${unit(r.title_vi, r.title)}</span>
+      ${r.unlock_name ? `<span class="u">Cảm ứng <b>cấp ${r.unlock_level} · ${unit(r.unlock_name_vi, r.unlock_name)}</b></span>` : '<span></span>'}
+      <span class="pv">${firstLine(r.content_vi || r.content)}</span></summary>
+    <div class="body"><p class="prose">${unit(r.content_vi, r.content)}</p></div>
+  </details>`).join('');
+const origin = `<p class="prose">${unit(R.intro_vi, R.intro)}</p>`;
+const timeline = `<ol class="tl">${R.timeline.map((t) => `<li><span class="when">${unit(t.label_vi, t.label)}</span><p class="prose">${unit(t.story_vi, t.story)}</p></li>`).join('')}</ol>`;
+const relic = `
+  <div class="relic"><figure><img src="${L.archive.image}" alt="Hiện vật"></figure>
+    <div><h3>${unit(L.fullname.vi === L.name_vi ? null : L.fullname.vi, L.fullname.cn)}</h3>
+      <dl class="facts"><div><dt>Nơi lưu giữ</dt><dd>${term(R.museum.vi, R.museum.cn)}</dd></div><div><dt>Loại</dt><dd>${term(R.type.vi, R.type.cn)}</dd></div><div><dt>Niên đại</dt><dd>${term(R.era.vi, R.era.cn)}</dd></div></dl></div></div>
+  <div class="switch" role="tablist"><button role="tab" aria-selected="true" data-k="origin">Nguồn gốc</button><button role="tab" aria-selected="false" data-k="timeline">Dòng thời gian</button></div>
+  <div id="relic-panel">${origin}</div>`;
+const views = { people, reports, relic };
+const html = `
+  <div class="head"><h2>Hồ Sơ Lưu Trữ<span class="mark">✦ chữ chạy</span></h2><a class="edit" href="#">Sửa trong Admin</a></div>
+  __NOTICE__
+  <nav class="seg" role="tablist"><button role="tab" aria-selected="true" data-v="people">Nhân sự</button><button role="tab" aria-selected="false" data-v="reports">Báo cáo<span class="count">${P.reports.length}</span></button><button role="tab" aria-selected="false" data-v="relic">Hiện vật</button></nav>
+  <section class="view" id="view">${people}</section>`;
+const notice = untranslated ? `<p class="notice"><b>Hồ sơ này chưa dịch xong.</b> Đoạn có chấm nhỏ đang hiện bản gốc tiếng Trung.</p>` : '';
+document.getElementById('app').innerHTML = html.replace('__NOTICE__', notice) + pops.join('');
+const app = document.getElementById('app');
+app.addEventListener('click', (e) => {
+  const v = e.target.closest('.seg button'); if (v) { app.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-selected', String(b === v))); document.getElementById('view').innerHTML = views[v.dataset.v]; }
+  const k = e.target.closest('.switch button'); if (k) { app.querySelectorAll('.switch button').forEach((b) => b.setAttribute('aria-selected', String(b === k))); document.getElementById('relic-panel').innerHTML = k.dataset.k === 'origin' ? origin : timeline; }
+});
+</script>
+</body>
+</html>

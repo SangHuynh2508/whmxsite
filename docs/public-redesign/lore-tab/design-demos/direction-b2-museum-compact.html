@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hồ Sơ Lưu Trữ — B2 · Hiện vật bảo tàng (gọn)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<!--
+  B2 = hướng B làm lại bằng taste-skill. Design read như A2; dials VARIANCE 6 · MOTION 3 · DENSITY 4.
+  Rút ngắn: bảng 6 dòng kẻ ngang (taste §4.9 "spec sheet" bị cấm) → 3 ô thuật ngữ (Loại/Niên đại/Nơi lưu giữ) bấm để
+  xem mô tả + 1 dòng nhân sự; giới thiệu kẹp 5 dòng + "Đọc tiếp"; "Nguồn gốc | Dòng thời gian" chung khung (như game);
+  báo cáo giữ tab (mỗi lúc một báo cáo). Cột trái dính khi cuộn ở desktop.
+  "Chưa dịch": một thông báo đầu tab + chấm nhỏ ở từng đoạn.
+-->
+<style>
+:root{--bg-main:#111315;--bg-surface:#17191C;--bg-surface-hover:#22262B;--bg-elevated:#1C2024;--border-color:#2B2F34;--border-strong:#3D434A;--text-main:#E3E5E8;--text-muted:#9097A0;--text-subtle:#6B7280;--accent:#D4B763;--accent-light:#24221A;--border-gold-subtle:rgba(212,183,99,.30);--border-gold-divider:rgba(212,183,99,.16);--font-sans:'Inter',system-ui,sans-serif;--font-serif:'Noto Serif SC',serif;--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:15px/1.75 var(--font-sans);-webkit-font-smoothing:antialiased}
+.page{max-width:1120px;margin:0 auto;padding:28px 16px 80px;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:40px;align-items:start}
+.aside{position:sticky;top:20px;display:grid;gap:14px}
+.plate{margin:0;display:grid;gap:10px}
+.plate .img{display:grid;place-items:center;aspect-ratio:1/1;padding:24px;background:var(--bg-surface);border-radius:12px}
+.plate img{max-width:100%;max-height:100%;object-fit:contain}
+.plate figcaption{font:500 14px/1.5 var(--font-serif);color:var(--text-muted)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{display:grid;gap:2px;padding:10px 12px;text-align:left;font:inherit;color:inherit;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:10px;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.tile:hover{border-color:var(--border-gold-subtle);background:var(--bg-surface-hover)}
+.tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tile small{font-size:12px;color:var(--text-muted)}
+.tile span{font-weight:500;line-height:1.4}
+.who{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--text-muted)}
+.who b{color:var(--text-main);font-weight:500}
+.term{padding:0;font:inherit;color:var(--text-main);background:none;border:0;border-bottom:1px dashed var(--border-gold-subtle);cursor:help}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.head h2{margin:0;font:700 26px/1.25 var(--font-serif)}
+.mark{font:500 12px var(--font-sans);color:var(--accent);vertical-align:super;margin-left:6px}
+.edit{font-size:13px;color:var(--accent);text-decoration:none}
+.notice{margin:12px 0 0;padding:10px 14px;font-size:13px;line-height:1.6;color:var(--text-muted);background:var(--accent-light);border-radius:8px}
+.notice b{color:var(--text-main);font-weight:500}
+.lead{margin:20px 0 0}
+.lead .prose{font-size:16px;line-height:1.85;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.lead.open .prose{display:block}
+.more{margin-top:6px;padding:0;font:500 13px var(--font-sans);color:var(--accent);background:none;border:0;cursor:pointer}
+.prose{margin:0;max-width:66ch;white-space:pre-line;text-wrap:pretty}
+.cn{font-family:var(--font-serif);font-weight:500}
+.cn::after{content:"";display:inline-block;width:5px;height:5px;margin-left:6px;border-radius:50%;background:var(--text-subtle);vertical-align:middle}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.block{margin-top:32px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.bar h3{margin:0;font:700 17px/1.3 var(--font-serif)}
+.switch{display:inline-flex;padding:3px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px}
+.switch button{padding:4px 12px;font:500 13px var(--font-sans);color:var(--text-muted);background:none;border:0;border-radius:6px;cursor:pointer}
+.switch button[aria-selected="true"]{color:var(--text-main);background:var(--bg-elevated)}
+.tl{list-style:none;margin:0;padding:0 0 0 16px;border-left:1px solid var(--border-gold-divider)}
+.tl li{position:relative;padding:0 0 14px}
+.tl li::before{content:"";position:absolute;left:-20px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.tl .when{display:block;font-weight:600}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:none;padding:6px 12px;font:500 13px var(--font-sans);color:var(--text-muted);background:none;border:1px solid transparent;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--text-main);background:var(--bg-elevated);border-color:var(--border-color)}
+.unlock{margin:0 0 10px;font-size:13px;color:var(--text-muted)}
+.unlock b{color:var(--accent);font-weight:500}
+[popover]{max-width:min(360px,calc(100vw - 32px));margin:auto;padding:16px 18px;color:var(--text-main);background:var(--bg-elevated);border:1px solid var(--border-strong);border-radius:10px;font-size:14px;line-height:1.7}
+[popover]::backdrop{background:rgba(0,0,0,.35)}
+[popover] h4{margin:0 0 6px;font:700 16px var(--font-serif)}
+@media (max-width:900px){.page{grid-template-columns:1fr;gap:24px}.aside{position:static}.plate .img{aspect-ratio:4/3}}
+@media (max-width:420px){.tiles{grid-template-columns:1fr 1fr}.tiles .tile:last-child{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="page" id="app"></main>
+<script src="./a0024-data.js"></script>
+<script>
+const L = LORE, P = L.profile, R = P.relic_info, T = L.terms;
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let untranslated = 0;
+const unit = (vi, cn) => (vi && vi.trim()) ? esc(vi) : (cn && cn.trim()) ? (untranslated++, `<span class="cn" lang="zh">${esc(cn)}<span class="sr"> (chưa dịch)</span></span>`) : '';
+let pid = 0; const pops = [];
+const pop = (vi, cn) => { const t = T[cn]; if (!t) return null; const id = `p${pid++}`; pops.push(`<div popover id="${id}"><h4>${unit(t.vi, cn)}</h4><p class="prose">${unit(null, t.detail)}</p></div>`); return id; };
+const tile = (label, pair) => { const id = pop(pair.vi, pair.cn); return `<button class="tile" ${id ? `popovertarget="${id}"` : ''}><small>${label}</small><span>${unit(pair.vi, pair.cn)}</span></button>`; };
+const orgId = pop(P.department, '不列颠学会');
+const origin = `<p class="prose">${unit(R.intro_vi, R.intro)}</p>`;
+const timeline = `<ol class="tl">${R.timeline.map((t) => `<li><span class="when">${unit(t.label_vi, t.label)}</span><span class="prose">${unit(t.story_vi, t.story)}</span></li>`).join('')}</ol>`;
+const report = (i) => { const r = P.reports[i]; return `${r.unlock_name ? `<p class="unlock">Mở khoá ở cảm ứng <b>cấp ${r.unlock_level} · ${unit(r.unlock_name_vi, r.unlock_name)}</b></p>` : ''}<p class="prose">${unit(r.content_vi, r.content)}</p>`; };
+const reportCache = P.reports.map((_, i) => report(i));
+const body = `
+  <aside class="aside">
+    <figure class="plate"><div class="img"><img src="${L.archive.image}" alt="Hiện vật"></div><figcaption>${unit(L.fullname.vi === L.name_vi ? null : L.fullname.vi, L.fullname.cn)}</figcaption></figure>
+    <div class="tiles">${tile('Loại', R.type)}${tile('Niên đại', R.era)}${tile('Nơi lưu giữ', R.museum)}</div>
+    <div class="who"><span>Trực thuộc <b>${orgId ? `<button class="term" popovertarget="${orgId}">${esc(P.department)}</button>` : esc(P.department)}</b></span><span>Bản thể <b>${esc(P.entity_status)}</b></span><span>Mã <b>${esc(P.record_id)}</b></span></div>
+  </aside>
+  <article>
+    <div class="head"><h2>Hồ Sơ Lưu Trữ<span class="mark">✦ chữ chạy</span></h2><a class="edit" href="#">Sửa trong Admin</a></div>
+    __NOTICE__
+    <div class="lead" id="lead"><p class="prose">${unit(P.eval_intro_vi, P.eval_intro)}</p><button class="more" id="more">Đọc tiếp</button></div>
+    <section class="block"><div class="bar"><h3>Hiện vật</h3><div class="switch" role="tablist"><button role="tab" aria-selected="true" data-k="o">Nguồn gốc</button><button role="tab" aria-selected="false" data-k="t">Dòng thời gian</button></div></div><div id="relic-panel">${origin}</div></section>
+    <section class="block"><div class="bar"><h3>Báo cáo đánh giá</h3></div>
+      <div class="tabs" role="tablist">${P.reports.map((r, i) => `<button role="tab" aria-selected="${i === 0}" data-i="${i}">${r.kind === 'special' ? 'Mật A' : `Báo cáo ${i + 1}`}</button>`).join('')}</div>
+      <div id="rep" style="margin-top:14px">${reportCache[0]}</div></section>
+  </article>`;
+const notice = untranslated ? `<p class="notice"><b>Hồ sơ này chưa dịch xong.</b> Đoạn có chấm nhỏ đang hiện bản gốc tiếng Trung.</p>` : '';
+const app = document.getElementById('app');
+app.innerHTML = body.replace('__NOTICE__', notice) + pops.join('');
+app.addEventListener('click', (e) => {
+  if (e.target.id === 'more') { const l = document.getElementById('lead'); l.classList.toggle('open'); e.target.textContent = l.classList.contains('open') ? 'Thu gọn' : 'Đọc tiếp'; }
+  const k = e.target.closest('.switch button'); if (k) { app.querySelectorAll('.switch button').forEach((b) => b.setAttribute('aria-selected', String(b === k))); document.getElementById('relic-panel').innerHTML = k.dataset.k === 'o' ? origin : timeline; }
+  const t = e.target.closest('.tabs button'); if (t) { app.querySelectorAll('.tabs button').forEach((b) => b.setAttribute('aria-selected', String(b === t))); document.getElementById('rep').innerHTML = reportCache[+t.dataset.i]; }
+});
+</script>
+</body>
+</html>
