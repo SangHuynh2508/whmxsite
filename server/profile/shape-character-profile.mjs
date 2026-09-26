@@ -66,6 +66,7 @@ export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
       type: termPair(terms, profile.relicTypeCode),
       era: termPair(terms, profile.eraCode),
       museum: termPair(terms, profile.museumCode),
+      tags: (profile.structure.relicTags ?? []).map(({ field, code }) => ({ field, ...termPair(terms, code) })),
       intro: cnOf(texts, 'relic_intro'), intro_vi: viOf(texts, 'relic_intro'),
       timeline: profile.structure.timeline.map((slot) => ({
         label: cnOf(texts, `timeline.${slot}.label`), label_vi: viOf(texts, `timeline.${slot}.label`),

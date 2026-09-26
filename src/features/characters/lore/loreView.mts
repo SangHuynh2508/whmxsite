@@ -28,6 +28,9 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
   return null;
 }
 
+// Labels only for relic-tag fields confirmed in-game (owner screenshot of S0132, 2026-09-26). tag2/tag4 are imported
+// but stay hidden until their in-game labels are confirmed.
+const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag3: 'Nơi sản xuất' };
 const pair = (value: unknown) => pick(obj(value).vi, obj(value).cn);
 const detailOf = (value: unknown) => pick(obj(value).detail_vi, obj(value).detail);
 
@@ -41,6 +44,10 @@ export function buildLoreView(char: unknown): LoreView {
   const factRows: [string, LoreUnit | null, LoreUnit | null][] = legacy
     ? [['Hiện vật', pick(null, relic.relic_name), null], ['Niên đại', pick(null, relic.dynasty), null], ['Nơi lưu giữ', pick(null, relic.museum), null]]
     : [['Loại', pair(relic.type), detailOf(relic.type)], ['Niên đại', pair(relic.era), detailOf(relic.era)], ['Nơi lưu giữ', pair(relic.museum), detailOf(relic.museum)]];
+  for (const tag of list(relic.tags)) {
+    const label = TAG_LABELS[str(tag.field)];
+    if (label) factRows.push([label, pair(tag), detailOf(tag)]);
+  }
   const facts = factRows.filter((f): f is [string, LoreUnit, LoreUnit | null] => f[1] !== null).map(([label, value, detail]) => ({ label, value, detail }));
   // fullname_vi falls back to the character name when the relic name has no translation — that is not a relic name.
   const relicName = pick(str(c.fullname_vi) === str(c.name_vi) ? null : c.fullname_vi, c.fullname_cn);

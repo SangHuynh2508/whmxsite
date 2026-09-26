@@ -95,3 +95,8 @@ test('the lore record lists present units with previous CN only for changed ones
   assert.equal(r.relic.era, null);
   assert.equal(r.revision, 3);
 });
+
+test('termUsage counts relic tags too', () => {
+  const p = { characterId: 'S0132', structure: { reports: [], relicTags: [{ field: 'tag1', code: 'M4012' }, { field: 'tag3', code: 'H6002' }] } };
+  assert.deepEqual(termUsage([p]), { M4012: ['S0132'], H6002: ['S0132'] });
+});

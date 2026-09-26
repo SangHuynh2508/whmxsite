@@ -79,3 +79,17 @@ test('a DB character missing from raw is reported, not given an empty profile (r
   assert.deepEqual(out.missingFromRaw, ['Z9999']);
   assert.deepEqual(out.profiles.map((p) => p.characterId), ['V0053']);
 });
+
+test('relic tags tag1..tag4 become structure.relicTags + relic_tag terms, only when present (owner 2026-09-26)', () => {
+  const withTags = structuredClone(raw);
+  Object.assign(withTags.historicalRelicsMap.V0053, { tag1: 'M4012', tag2: '', tag3: 'H6002', tag4: '' });
+  Object.assign(withTags.historicalTextMap, { M4012: { Text: '五彩', TextIntroduce: '五彩介绍' }, H6002: { Text: '景德镇官窑', TextIntroduce: '官窑' } });
+  const [p] = normalizeProfileSources(withTags, ['V0053']).profiles;
+  assert.deepEqual(p.structure.relicTags, [{ field: 'tag1', code: 'M4012' }, { field: 'tag3', code: 'H6002' }]);
+  const terms = normalizeProfileSources(withTags, ['V0053']).terms.filter((t) => t.kind === 'relic_tag');
+  assert.deepEqual(terms.map((t) => [t.code, t.nameCn, t.detailCn]), [['H6002', '景德镇官窑', '官窑'], ['M4012', '五彩', '五彩介绍']]);
+  // no tags → no key, so existing profiles keep their source hash
+  assert.equal('relicTags' in normalizeProfileSources(raw, ['V0053']).profiles[0].structure, false);
+  delete withTags.historicalTextMap.H6002;
+  assert.throws(() => normalizeProfileSources(withTags, ['V0053']), /H6002/);
+});

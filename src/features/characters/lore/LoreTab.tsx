@@ -1,15 +1,11 @@
-import { StrictMode, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { StrictMode, useEffect, useId, useState, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 import '../styles/loreTab.css';
 import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
-import { createLoreReveal } from '../../../ui/loreReveal.js';
 import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
 import { buildLoreView, type LoreUnit } from './loreView.mts';
-
-// Owner Q6: the text reveal runs only on the tab heading. To drop the effect set this to false (or delete the effect below).
-const LORE_TAB_REVEAL = true;
 
 function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -58,14 +54,6 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
   const [leadOpen, setLeadOpen] = useState(false);
   const [relicPanel, setRelicPanel] = useState<'origin' | 'timeline'>('origin');
   const [report, setReport] = useState(0);
-  const headingRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!LORE_TAB_REVEAL || !headingRef.current) return;
-    const reveal = createLoreReveal(headingRef.current);
-    reveal.start('Hồ Sơ Lưu Trữ');
-    return () => reveal.cancel();
-  }, []);
 
   const current = view.reports[report];
   const hasRelic = Boolean(view.relicIntro || view.timeline.length);
@@ -118,8 +106,7 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
 
       <article className="lore-main">
         <header className="lore-head">
-          {/* loreReveal owns this span's children, so React renders it empty when the effect is on */}
-          <h2 aria-label="Hồ Sơ Lưu Trữ"><span ref={headingRef} aria-hidden="true">{LORE_TAB_REVEAL ? null : 'Hồ Sơ Lưu Trữ'}</span></h2>
+          <h2>Hồ Sơ Lưu Trữ</h2>
           {char.id && <EditorLink id={char.id} />}
         </header>
         {view.hasUntranslated && (

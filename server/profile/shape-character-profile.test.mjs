@@ -81,3 +81,16 @@ test('no relic entry gives an empty legacy relic_info', () => {
   const noRelic = { ...profile, legacyRelicFields: { hasEntry: false, relicName: '', dynasty: '', museum: '' } };
   assert.deepEqual(shapeCharacterProfile({ profile: noRelic, texts: new Map() }, terms, { shape: 'legacy' }).relic_info, {});
 });
+
+test('v2 relic_info.tags lists the extra relic facts by raw field, with descriptions (published VI only)', () => {
+  const tagged = { ...profile, structure: { ...profile.structure, relicTags: [{ field: 'tag1', code: 'M4012' }, { field: 'tag3', code: 'H6002' }] } };
+  const withTags = new Map(terms);
+  withTags.set('M4012', { ...term('五彩', 'Ngũ Thái', 'admin'), detailCn: '五彩是…' });
+  withTags.set('H6002', { ...term('景德镇官窑'), detailCn: '官窑…' });
+  const v2 = shapeCharacterProfile({ profile: tagged, texts }, withTags, { shape: 'v2' });
+  assert.deepEqual(v2.relic_info.tags, [
+    { field: 'tag1', cn: '五彩', vi: 'Ngũ Thái', detail: '五彩是…', detail_vi: null },
+    { field: 'tag3', cn: '景德镇官窑', vi: null, detail: '官窑…', detail_vi: null },
+  ]);
+  assert.deepEqual(shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }).relic_info.tags, []);
+});

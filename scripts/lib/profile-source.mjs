@@ -17,6 +17,8 @@ const text = (value) => (value === null || value === undefined ? '' : String(val
 const SLOTS = ['A', 'B', 'C', 'D', 'E', 'F'];
 // Kind comes from the raw field that references the code, never from the code's first letter.
 const FIELD_KIND = { relics: 'relic_type', dynasty: 'era', museum: 'museum', photoDynasty: 'era_range' };
+// Extra relic facts shown in-game under the relic (tag1 = 工艺, tag3 = 产地 confirmed by the owner's screenshot of S0132).
+const TAG_FIELDS = ['tag1', 'tag2', 'tag3', 'tag4'];
 
 function unit(units, unitKey, sourceCn, sourceRef) {
   if (sourceCn) units.push({ unitKey, sourceCn, sourceRef, sourceHash: sha256(sourceCn) });
@@ -57,6 +59,7 @@ export function normalizeProfileSources(raw, characterIds) {
     }
 
     const timeline = [];
+    const relicTags = [];
     if (relic) {
       unit(units, 'relic_intro', text(relic.introductionlanText), `historicalRelicsMap:${characterId}.introductionlanText`);
       for (const slot of SLOTS) {
@@ -73,6 +76,14 @@ export function normalizeProfileSources(raw, characterIds) {
         const entry = raw.historicalTextMap[code];
         if (!entry) throw new Error(`HistoricalTextMap has no entry for ${code} (${characterId}.${field})`);
         addTerm(terms, code, kind, text(entry.Text), text(entry.TextIntroduce));
+      }
+      for (const field of TAG_FIELDS) {
+        const code = text(relic[field]);
+        if (!code) continue;
+        const entry = raw.historicalTextMap[code];
+        if (!entry) throw new Error(`HistoricalTextMap has no entry for ${code} (${characterId}.${field})`);
+        relicTags.push({ field, code });
+        addTerm(terms, code, 'relic_tag', text(entry.Text), text(entry.TextIntroduce));
       }
     }
 
@@ -99,7 +110,8 @@ export function normalizeProfileSources(raw, characterIds) {
         dynasty: text(relic?.dynastylanText),
         museum: text(relic?.museumlanText),
       },
-      structure: { reports, timeline },
+      // relicTags only when present, so profiles without tags keep their source hash
+      structure: { reports, timeline, ...(relicTags.length ? { relicTags } : {}) },
       units,
     };
     const { units: _u, ...structural } = profile;

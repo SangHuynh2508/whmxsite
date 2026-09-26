@@ -260,7 +260,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         </div>
       </header>
 
-      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Thư Viện | Hồ Sơ Lưu Trữ -->
+      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Hồ Sơ Lưu Trữ | Thư Viện (gallery stays last) -->
       <nav class="cd-sub-nav" aria-label="Điều hướng chi tiết nhân vật">
         <div class="cd-nav-scroll-wrapper">
           <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
@@ -279,13 +279,14 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
             <span class="tab-label">Build</span>
           </a>
 
+          <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
+            <span class="tab-label">Hồ Sơ Lưu Trữ</span>
+          </a>
+
           <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
             <span class="tab-label">Thư Viện</span>
           </a>
 
-          <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
-            <span class="tab-label">Hồ Sơ Lưu Trữ</span>
-          </a>
         </div>
       </nav>
 

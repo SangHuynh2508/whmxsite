@@ -62,6 +62,7 @@ export function termUsage(profiles) {
     add(p.organisationCode ? `ORG_${p.organisationCode}` : null, p.characterId);
     for (const code of [p.relicTypeCode, p.eraCode, p.museumCode, p.eraRangeCode]) add(code, p.characterId);
     for (const r of p.structure?.reports ?? []) if (r.kind === 'basic' && r.unlock?.type === 2) add(`AFFINITY_${r.unlock.elementId}`, p.characterId);
+    for (const t of p.structure?.relicTags ?? []) add(t.code, p.characterId);
   }
   return Object.fromEntries([...usage].map(([code, ids]) => [code, [...ids].sort()]));
 }

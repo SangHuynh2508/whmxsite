@@ -34,14 +34,11 @@
 
 .lore-ticket { position: relative; background: var(--lore-grain), var(--bg-surface); border: 1px solid var(--border-gold-subtle); border-radius: 8px; }
 .lore-ticket-name { margin: 0; padding: 14px 16px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
-.lore-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); }
+/* perforations: every fact draws its left/top dashed edge 1px outside itself; the grid clips the outer ones,
+   so only the lines between facts show — also when a second row starts (5 facts with 工艺/产地). */
+.lore-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; }
 .lore-fact { display: grid; align-content: start; gap: 2px; padding: 10px 16px 14px; text-align: left; font: inherit; color: inherit; background: none; border: 0; }
-.lore-fact ~ .lore-fact { /* ~ not +: each fact button is followed by its popover element */
-  background-image: linear-gradient(var(--border-gold-subtle) 50%, transparent 0);
-  background-size: 1px 6px;
-  background-repeat: repeat-y;
-  background-position: left;
-}
+.lore-fact { margin: -1px 0 0 -1px; border-left: 1px dashed var(--border-gold-subtle); border-top: 1px dashed var(--border-gold-subtle); }
 button.lore-fact { cursor: pointer; transition: background-color var(--motion-normal) var(--ease-standard); }
 button.lore-fact:hover { background-color: var(--bg-surface-hover); }
 button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
@@ -69,8 +66,8 @@ button.lore-fact .lore-fact-value, button.lore-stub-value { justify-self: start;
 .lore-stub dd { margin: 0; font-weight: 500; color: var(--text-main); }
 .lore-stub .lore-serial-row { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid var(--border-color); border-left: 0; }
 .lore-serial { font: 600 14px/1.6 ui-monospace, 'SF Mono', Consolas, monospace; letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--accent) !important; }
-.lore-term { font: inherit; color: inherit; border: 0; text-align: left; cursor: pointer; }
-.lore-stub-value.lore-term { padding: 0; background: none; } /* .lore-fact keeps its own padding + perforation */
+.lore-term { font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.lore-stub-value.lore-term { padding: 0; background: none; border: 0; border-bottom: 1px dashed var(--border-gold-subtle); } /* .lore-fact keeps its own padding + perforation */
 
 .lore-popover {
   max-width: min(360px, calc(100vw - 32px));

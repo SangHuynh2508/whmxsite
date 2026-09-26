@@ -15,6 +15,7 @@ type Term = {
 const KINDS: [string, string][] = [
   ['organisation', 'Tổ chức'], ['relic_type', 'Loại hiện vật'], ['era', 'Triều đại'],
   ['museum', 'Bảo tàng'], ['era_range', 'Giai đoạn'], ['affinity_level', 'Mức thiện cảm'],
+  ['relic_tag', 'Mục phụ hiện vật'],
 ];
 const KEYS = ['nameVi', 'detailVi'];
 const official = (t: Term) => t.viOrigin === 'admin' && t.state === 'ok';

@@ -8,7 +8,7 @@ import { managedEntities, sourceSnapshots } from './core.mjs';
 
 export const viOrigin = pgEnum('vi_origin', ['legacy_workbook', 'admin']);
 export const loreTextState = pgEnum('lore_text_state', ['ok', 'source_changed']);
-export const loreTermKind = pgEnum('lore_term_kind', ['relic_type', 'era', 'museum', 'era_range', 'affinity_level', 'organisation']);
+export const loreTermKind = pgEnum('lore_term_kind', ['relic_type', 'era', 'museum', 'era_range', 'affinity_level', 'organisation', 'relic_tag']);
 
 const timestamps = {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

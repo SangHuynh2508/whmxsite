@@ -87,3 +87,16 @@ test('term descriptions, relic name, people and the untranslated flag (B4 ticket
   assert.equal(buildLoreView({ profile: { record_id: 'X-1' } }).empty, false);
   assert.equal(buildLoreView({}).people, null);
 });
+
+test('relic tags with a confirmed label become extra facts; unconfirmed fields stay hidden', () => {
+  const view = buildLoreView({ profile: { relic_info: {
+    type: { cn: '瓷器' },
+    tags: [
+      { field: 'tag1', cn: '五彩', vi: null, detail: '五彩是…', detail_vi: null },
+      { field: 'tag2', cn: '曾侯乙墓', vi: null, detail: '', detail_vi: null },
+      { field: 'tag3', cn: '景德镇官窑', vi: 'Quan diêu Cảnh Đức Trấn', detail: '', detail_vi: null },
+    ],
+  } } });
+  assert.deepEqual(view.facts.map((f) => [f.label, f.value.text]), [['Loại', '瓷器'], ['Kỹ thuật', '五彩'], ['Nơi sản xuất', 'Quan diêu Cảnh Đức Trấn']]);
+  assert.deepEqual(view.facts[1].detail, { text: '五彩是…', untranslated: true });
+});
