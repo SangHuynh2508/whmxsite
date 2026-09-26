@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi" data-theme="dark" data-heading="panel">
+<html lang="vi" data-theme="dark" data-heading="book">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,9 +44,15 @@ body{margin:0;background:var(--bg-main);color:var(--text-main);font:15px/1.75 va
 .fact .v{font-weight:500;line-height:1.4}
 .fact .v{justify-self:start;border-bottom:1px dashed var(--border-gold-subtle)}
 .tear{position:relative;height:0;border-top:1px dashed var(--border-gold-subtle);margin:0 14px}
-.tear::before,.tear::after{content:"";position:absolute;top:-8px;width:16px;height:16px;border-radius:50%;background:var(--bg-main);border:1px solid var(--border-gold-subtle)}
-.tear::before{left:-23px;clip-path:inset(0 0 0 50%)}
-.tear::after{right:-23px;clip-path:inset(0 50% 0 0)}
+/* notches: fill layer (covers the ticket border, clipped 2px past the centre for any device-pixel rounding)
+   + outline layer (clipped exactly at the centre, so no stray ticks). */
+.notch{position:absolute;top:-8px;width:16px;height:16px}
+.notch.l{left:-23px}.notch.r{right:-23px}
+.notch::before,.notch::after{content:"";position:absolute;inset:0;border-radius:50%}
+.notch::before{background:var(--bg-main)}
+.notch::after{border:1px solid var(--border-gold-subtle)}
+.notch.l::before{clip-path:inset(-1px -1px -1px calc(50% - 2px))}.notch.l::after{clip-path:inset(0 0 0 50%)}
+.notch.r::before{clip-path:inset(-1px calc(50% - 2px) -1px -1px)}.notch.r::after{clip-path:inset(0 50% 0 0)}
 .stub{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:10px 0;margin:0;padding:12px 0 14px}
 .stub div{display:grid;gap:2px;padding:0 16px}
 .stub div:nth-child(2){border-left:1px solid var(--border-color)}
@@ -131,7 +137,7 @@ const body = `
     <div class="ticket">
       <p class="t-name">${unit(L.fullname.vi === L.name_vi ? null : L.fullname.vi, L.fullname.cn)}</p>
       <div class="t-facts">${fact('Loại', R.type)}${fact('Niên đại', R.era)}${fact('Nơi lưu giữ', R.museum)}</div>
-      <div class="tear" aria-hidden="true"></div>
+      <div class="tear" aria-hidden="true"><span class="notch l"></span><span class="notch r"></span></div>
       <dl class="stub">
         <div><dt class="label">Trực thuộc</dt><dd>${orgId ? `<button class="term" popovertarget="${orgId}">${esc(P.department)}</button>` : esc(P.department)}</dd></div>
         <div><dt class="label">Bản thể</dt><dd>${esc(P.entity_status)}</dd></div>
@@ -162,7 +168,7 @@ const presets = [['panel', 'Tiêu đề: thanh panel'], ['book', 'Tiêu đề: k
 const setHeading = (h) => { document.documentElement.dataset.heading = h; document.querySelectorAll('.heading-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.h === h))); };
 document.body.insertAdjacentHTML('beforeend', `<div class="heading-switch" role="group" aria-label="Kiểu tiêu đề">${presets.map(([h, n]) => `<button data-h="${h}">${n}</button>`).join('')}</div>`);
 document.querySelector('.heading-switch').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setHeading(b.dataset.h); });
-setHeading(new URLSearchParams(location.search).get('heading') || 'panel');
+setHeading(new URLSearchParams(location.search).get('heading') || 'book');
 </script>
 </body>
 </html>
