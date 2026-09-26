@@ -29,9 +29,18 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
   return null;
 }
 
-// Labels only for relic-tag fields confirmed in-game (owner screenshots 2026-09-26: S0132 tag1 工艺 / tag3 产地,
-// A0061 tag2 出土地). tag4 is imported but stays hidden until its in-game label is confirmed.
-const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất' };
+// Relic-tag labels confirmed by the owner (2026-09-26): in-game S0132 tag1 工艺 / tag3 产地, A0061 tag2 出土地;
+// tag4 其他 from the wiki (外销文物).
+const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất', tag4: 'Khác' };
+
+// Column spans on the ticket's 6-column grid: 3 facts per row; the last row is filled evenly —
+// one leftover fact takes the whole row, two share it (owner 2026-09-26).
+export function factSpans(n: number): number[] {
+  const spans = Array.from({ length: n }, () => 2);
+  const rest = n % 3;
+  for (let i = n - rest; i < n; i++) spans[i] = 6 / rest;
+  return spans;
+}
 const pair = (value: unknown) => pick(obj(value).vi, obj(value).cn);
 const detailOf = (value: unknown) => pick(obj(value).detail_vi, obj(value).detail);
 

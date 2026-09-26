@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildLoreView, pick } from './loreView.mts';
+import { buildLoreView, factSpans, pick } from './loreView.mts';
 
 test('pick: VI wins, else CN flagged untranslated, blank VI counts as missing', () => {
   assert.deepEqual(pick('Tên', '名'), { text: 'Tên', untranslated: false });
@@ -88,7 +88,7 @@ test('term descriptions, relic name, people and the untranslated flag (B4 ticket
   assert.equal(buildLoreView({}).people, null);
 });
 
-test('relic tags with a confirmed label become extra facts; unconfirmed fields (tag4) stay hidden', () => {
+test('relic tags become extra facts; tag4 = 其他 (Khác) per the owner-confirmed wiki', () => {
   const view = buildLoreView({ profile: { relic_info: {
     type: { cn: '瓷器' },
     tags: [
@@ -98,7 +98,7 @@ test('relic tags with a confirmed label become extra facts; unconfirmed fields (
       { field: 'tag4', cn: '外销文物', vi: null, detail: '', detail_vi: null },
     ],
   } } });
-  assert.deepEqual(view.facts.map((f) => [f.label, f.value.text]), [['Loại', '瓷器'], ['Kỹ thuật', '五彩'], ['Nơi khai quật', '曾侯乙墓'], ['Nơi sản xuất', 'Quan diêu Cảnh Đức Trấn']]);
+  assert.deepEqual(view.facts.map((f) => [f.label, f.value.text]), [['Loại', '瓷器'], ['Kỹ thuật', '五彩'], ['Nơi khai quật', '曾侯乙墓'], ['Nơi sản xuất', 'Quan diêu Cảnh Đức Trấn'], ['Khác', '外销文物']]);
   assert.deepEqual(view.facts[1].detail, { text: '五彩是…', untranslated: true });
 });
 
@@ -107,4 +107,14 @@ test('quote: VI else CN; shown on Tổng Quan, so it does not count for the lore
   assert.deepEqual(view.quote, { text: '我是器者。', untranslated: true });
   assert.equal(view.hasUntranslated, false);
   assert.equal(view.empty, true);
+});
+
+test('factSpans: 3 per row on a 6-column grid; a lone last item takes the whole row, two share it evenly', () => {
+  assert.deepEqual(factSpans(3), [2, 2, 2]);
+  assert.deepEqual(factSpans(4), [2, 2, 2, 6]);
+  assert.deepEqual(factSpans(5), [2, 2, 2, 3, 3]);
+  assert.deepEqual(factSpans(6), [2, 2, 2, 2, 2, 2]);
+  assert.deepEqual(factSpans(1), [6]);
+  assert.deepEqual(factSpans(2), [3, 3]);
+  assert.deepEqual(factSpans(0), []);
 });

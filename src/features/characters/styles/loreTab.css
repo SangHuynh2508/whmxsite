@@ -39,7 +39,8 @@
 .lore-ticket-name { margin: 0; padding: 14px 16px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
 /* perforations: every fact draws its left/top dashed edge 1px outside itself; the grid clips the outer ones,
    so only the lines between facts show — also when a second row starts (5 facts with 工艺/产地). */
-.lore-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; }
+.lore-facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: hidden; } /* spans from factSpans(): 3 per row */
+.lore-fact--solo { justify-items: center; text-align: center; }
 .lore-fact { display: grid; align-content: start; gap: 2px; padding: 10px 16px 14px; text-align: left; font: inherit; color: inherit; background: none; border: 0; }
 .lore-fact { margin: -1px 0 0 -1px; border-left: 1px dashed var(--border-gold-subtle); border-top: 1px dashed var(--border-gold-subtle); }
 /* clickable items: no underline, no colour change — the text just brightens on hover (owner 2026-09-26) */

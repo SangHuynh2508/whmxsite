@@ -5,7 +5,7 @@ import '../styles/loreTab.css';
 import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
 import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
-import { buildLoreView, type LoreUnit } from './loreView.mts';
+import { buildLoreView, factSpans, type LoreUnit } from './loreView.mts';
 
 function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -66,6 +66,7 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
   const [relicPanel, setRelicPanel] = useState<'origin' | 'timeline'>('origin');
   const [report, setReport] = useState(0);
 
+  const spans = factSpans(view.facts.length);
   const current = view.reports[report];
   const hasRelic = Boolean(view.relicIntro || view.timeline.length);
   const hasAside = Boolean(view.archive || view.relicName || view.facts.length || view.people);
@@ -86,9 +87,9 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
               {view.facts.length > 0 && (
                 <div className="lore-facts">
                   {view.facts.map((f, i) => (
-                    // the last fact stretches over the empty cells of its row, so the perforation runs the full width
-                    <TermPopover key={f.label} name={f.value} detail={f.detail} className="lore-fact"
-                      style={i === view.facts.length - 1 && view.facts.length % 3 ? { gridColumn: `span ${4 - (view.facts.length % 3)}` } : undefined}>
+                    // spans fill the last row evenly (factSpans); a fact alone on its row is centred
+                    <TermPopover key={f.label} name={f.value} detail={f.detail} className={spans[i] === 6 ? 'lore-fact lore-fact--solo' : 'lore-fact'}
+                      style={{ gridColumn: `span ${spans[i]}` }}>
                       <span className="lore-label">{f.label}</span>
                       <Text unit={f.value} className="lore-fact-value" />
                     </TermPopover>
