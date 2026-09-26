@@ -7,6 +7,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { and, eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const baseUrl = process.env.D2_BASE_URL || 'http://localhost:3000';
 const debugPort = 9237;
 const marker = `character-cms-browser-${randomUUID()}`;
@@ -83,8 +85,8 @@ try {
   console.log(JSON.stringify({ test:'character-cms-browser-ui-proof', status:'PASS', characterRows:listCount, searchCount, savedState, characterWorkbookVisible, characterRawCnStable, tagsRawCnStable, characterSourcePairStable, tagsFieldName, tagsEditable, skinSelected, skinRawCnStable, discardClean, conflictVisible, avatarValid, characterApiRequests:requestSummary, detailRequests:{ first:detailRequests(firstId).length, second:detailRequests(secondId).length, third:detailRequests(thirdId).length }, canceledCharacterRequests:failedRequests.filter((item)=>/abort|cancel/i.test(item)).length, layout, timings }));
 } finally {
   try { ws?.close(); } catch {} try { chrome?.kill(); } catch {} await new Promise((resolve) => setTimeout(resolve, 300)); await rm(profileDir, { recursive:true, force:true }).catch(() => undefined);
-  if (db && entityId) { await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entityId)).catch(() => undefined); if (originalOverrides.length) await db.insert(schema.fieldOverrides).values(originalOverrides).catch(() => undefined); await db.update(schema.managedEntities).set({ revision:originalRevision, editedByUserId:null, updatedAt:new Date() }).where(eq(schema.managedEntities.id, entityId)).catch(() => undefined); }
-  if (db && skinEntityId) { await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, skinEntityId)).catch(() => undefined); if (originalSkinOverrides.length) await db.insert(schema.fieldOverrides).values(originalSkinOverrides).catch(() => undefined); await db.update(schema.managedEntities).set({ revision:originalSkinRevision, editedByUserId:null, updatedAt:new Date() }).where(eq(schema.managedEntities.id, skinEntityId)).catch(() => undefined); }
-  if (db && fixtureUserId) { await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(() => undefined); const authSchema = await import('../db/schema/auth.mjs'); await db.delete(authSchema.users).where(eq(authSchema.users.id, fixtureUserId)).catch(() => undefined); }
+  if (db && entityId) { await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entityId)).catch(cleanupFailed); if (originalOverrides.length) await db.insert(schema.fieldOverrides).values(originalOverrides).catch(cleanupFailed); await db.update(schema.managedEntities).set({ revision:originalRevision, editedByUserId:null, updatedAt:new Date() }).where(eq(schema.managedEntities.id, entityId)).catch(cleanupFailed); }
+  if (db && skinEntityId) { await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, skinEntityId)).catch(cleanupFailed); if (originalSkinOverrides.length) await db.insert(schema.fieldOverrides).values(originalSkinOverrides).catch(cleanupFailed); await db.update(schema.managedEntities).set({ revision:originalSkinRevision, editedByUserId:null, updatedAt:new Date() }).where(eq(schema.managedEntities.id, skinEntityId)).catch(cleanupFailed); }
+  if (db && fixtureUserId) { await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(cleanupFailed); const authSchema = await import('../db/schema/auth.mjs'); await db.delete(authSchema.users).where(eq(authSchema.users.id, fixtureUserId)).catch(cleanupFailed); }
   const { closeDb } = await import('../db/client.mjs'); await closeDb();
 }

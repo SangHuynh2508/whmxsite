@@ -3,6 +3,8 @@ import { randomBytes, randomUUID } from 'node:crypto';
 
 import { eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const baseUrl = 'http://localhost:3000';
 const marker = `local-vercel-auth-${randomUUID()}`;
 const email = `${marker}@d1.invalid`;
@@ -105,8 +107,8 @@ try {
   console.log('LOCAL_VERCEL_AUTH_PROOF=PASS');
 } finally {
   if (db && fixtureUserId) {
-    await db.execute(sql`delete from admin_account_audits where actor_user_id = ${fixtureUserId} or subject_user_id = ${fixtureUserId}`).catch(() => undefined);
-    await db.delete(users).where(eq(users.id, fixtureUserId)).catch(() => undefined);
+    await db.execute(sql`delete from admin_account_audits where actor_user_id = ${fixtureUserId} or subject_user_id = ${fixtureUserId}`).catch(cleanupFailed);
+    await db.delete(users).where(eq(users.id, fixtureUserId)).catch(cleanupFailed);
   }
   const { closeDb } = await import('../db/client.mjs');
   await closeDb();

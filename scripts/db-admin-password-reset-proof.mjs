@@ -10,6 +10,8 @@ import sessionRoute from '../api/admin/session.js';
 import { closeDb, getDb } from '../db/client.mjs';
 import { accounts, adminAccountAudits, sessions, users, verifications } from '../db/schema/auth.mjs';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const marker = `d1-password-reset-${randomUUID()}`;
 const email = `${marker}@d1.invalid`;
 const missingEmail = `${marker}-missing@d1.invalid`;
@@ -72,9 +74,9 @@ async function cleanupFixture(db, userId) {
   await db.delete(adminAccountAudits).where(or(
     eq(adminAccountAudits.actorUserId, userId),
     eq(adminAccountAudits.subjectUserId, userId),
-  )).catch(() => undefined);
-  await db.delete(verifications).where(eq(verifications.value, userId)).catch(() => undefined);
-  await db.delete(users).where(eq(users.id, userId)).catch(() => undefined);
+  )).catch(cleanupFailed);
+  await db.delete(verifications).where(eq(verifications.value, userId)).catch(cleanupFailed);
+  await db.delete(users).where(eq(users.id, userId)).catch(cleanupFailed);
 }
 
 let db;

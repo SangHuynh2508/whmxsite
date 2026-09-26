@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { and, eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const baseUrl = process.env.D2_BASE_URL || 'http://localhost:3003';
 const marker = `d2-http-${randomUUID()}`;
 const email = `${marker}@d2.invalid`;
@@ -72,13 +74,13 @@ try {
   console.log(JSON.stringify({ test: 'd2-local-vercel-proof', status: 'PASS', characters: listPayload.characters.length, staleStatus: stale.status, selfAssertStatus: selfAssert.status, protectedStatus: protectedField.status, spaStatus: spa.status }));
 } finally {
   if (db && entityId) {
-    await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entityId)).catch(() => undefined);
-    if (originalOverrides.length) await db.insert(schema.fieldOverrides).values(originalOverrides).catch(() => undefined);
-    await db.update(schema.managedEntities).set({ revision: originalRevision, editedByUserId: null, updatedAt: new Date() }).where(eq(schema.managedEntities.id, entityId)).catch(() => undefined);
+    await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entityId)).catch(cleanupFailed);
+    if (originalOverrides.length) await db.insert(schema.fieldOverrides).values(originalOverrides).catch(cleanupFailed);
+    await db.update(schema.managedEntities).set({ revision: originalRevision, editedByUserId: null, updatedAt: new Date() }).where(eq(schema.managedEntities.id, entityId)).catch(cleanupFailed);
   }
   if (db && fixtureUserId) {
-    await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(() => undefined);
-    await db.delete((await import('../db/schema/auth.mjs')).users).where(eq((await import('../db/schema/auth.mjs')).users.id, fixtureUserId)).catch(() => undefined);
+    await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(cleanupFailed);
+    await db.delete((await import('../db/schema/auth.mjs')).users).where(eq((await import('../db/schema/auth.mjs')).users.id, fixtureUserId)).catch(cleanupFailed);
   }
   const { closeDb } = await import('../db/client.mjs');
   await closeDb();

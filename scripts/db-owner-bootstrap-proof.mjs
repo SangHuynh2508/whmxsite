@@ -11,6 +11,8 @@ import sessionRoute from '../api/admin/session.js';
 import { closeDb, getDb } from '../db/client.mjs';
 import { accounts, adminAccountAudits, sessions, users, verifications } from '../db/schema/auth.mjs';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const marker = `d1-bootstrap-proof-${randomUUID()}`;
 const candidateEmail = `${marker}-candidate@d1.invalid`;
 const ownerEmail = `${marker}-owner@d1.invalid`;
@@ -73,10 +75,10 @@ async function cleanupUser(db, userId, email) {
     await db.delete(adminAccountAudits).where(or(
       eq(adminAccountAudits.actorUserId, userId),
       eq(adminAccountAudits.subjectUserId, userId),
-    )).catch(() => undefined);
-    await db.delete(users).where(eq(users.id, userId)).catch(() => undefined);
+    )).catch(cleanupFailed);
+    await db.delete(users).where(eq(users.id, userId)).catch(cleanupFailed);
   }
-  await db.delete(verifications).where(eq(verifications.identifier, email)).catch(() => undefined);
+  await db.delete(verifications).where(eq(verifications.identifier, email)).catch(cleanupFailed);
 }
 
 let db;

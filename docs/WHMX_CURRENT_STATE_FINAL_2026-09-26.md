@@ -95,10 +95,17 @@
 - `vercel build` / `vercel dev` locally ignore `.vercelignore` — an ignored import only fails after upload. Verify important changes on the real deploy.
 - The built-in browser pane can stop responding; **Playwright MCP** works: open `localhost:3003`, the owner signs in once in that window, drive it with `browser_run_code_unsafe`. When its window isn't in front, Chrome paints few frames (smooth scroll finishes late). Neither can click native `confirm()` — stub `window.confirm`. `innerText` applies CSS uppercase — use `textContent`.
 - npm: one command at a time, in the background, no short timeout (a killed install once left a half-installed package).
-- Authenticated tests without the owner: temp account via a one-off `scripts/_tmp-*.mjs` (`provisioningAuth.api.signUpEmail`, random password, set the role in the DB), then delete in FK order `character_publication_states` → `edit_history` → `preview_characters` → `managed_entities` → `admin_account_audits` → `users`; owner approval first (DB write).
+- Authenticated tests without the owner: temp account via a one-off `scripts/_tmp-*.mjs` (`provisioningAuth.api.signUpEmail`, random password, set the role in the DB), then delete in FK order `character_publication_states` → `edit_history` → `preview_characters` → `managed_entities` → `admin_account_audits` → `users`; owner approval first (DB write). The `scripts/db-*` proof/test scripts use random passwords and report failed cleanup via `scripts/lib/cleanup.mjs` `cleanupFailed` (logs `[cleanup failed]`, exit code 1) — never `.catch(() => undefined)` on a DB cleanup step (2026-09-26; both DBs had no leftover test users then).
 - ocr (`open-code-review`) is installed but has no LLM key (owner declined paid keys).
 
 ## 8. Backlog (everything unfinished, collected from all old docs)
+
+> ## ⚠️⚠️ OWNER WILL FIX LATER — DO NOT FORGET: skill ↔ buff POPUPS and ORPHAN SKILL TRANSLATIONS ⚠️⚠️
+> The owner has seen **many** broken popup cases on the site (more than the validator lists). Not fixed yet, on purpose — the owner will do it in a later session. Evidence (`python tools/validate_data.py`, 2026-09-26: 30 warnings, data still "passes"):
+> - **Popups:** skill text names a buff but the popup can't be resolved by the exact BUFF_STATUS VI name (e.g. A007005 / A007003ex `Buff_SpecialDamgeP_Lan`, A007302 `Buff_Bleed`), or a coloured buff has no popup target (A006106 `Buff_Disarm`).
+> - **Translations like the buffs:** localized skills with no public record (S0155061, W0134061, D018305ex_2/3, W002104ex) — check whether they belong to a record under another ID before deleting anything.
+> - Also listed there: 3 missing item icons (`itemicon_10140/20140/9183002.png`).
+> Start with a read-only triage of every warning + the owner's own cases; workbook edits only via `tools/safe_workbook_mutation.py` with the localization skills.
 
 | Item | State / next action |
 |---|---|
@@ -110,12 +117,10 @@
 | Public lore UI spec (layout of images/text, inline lore edit for editors) + `char.archive` in data.json (patch `D:\BaiTapCode\WHMX\_claude_scratch\archive_build_change.patch`) | Not started |
 | **Localization → PostgreSQL authority transfer**: owner decision 2026-09-26 — yes, but only after the DB has every feature it needs; not now | Deferred by decision |
 | Localization quality (2026-09-13 checkpoint: Han leaks, 42-cell rich-text repair, suspicious VI) | **Re-checked clean 2026-09-26** (read-only): `validate_no_han_characters` 0/8 907 populated VI, `validate_placeholders` 0/8 800, `check_suspicious_vi` 0 (scope phase3_batch1), `validate_public_output` 0. These only look at *populated* cells — untranslated (empty VI) coverage is a separate question. Batch #3 not started |
-| `validate_data.py` warnings (30, data still passes) | Not triaged: 3 item icons missing (`itemicon_10140/20140/9183002.png`), skill popups whose buff can't be matched by exact BUFF_STATUS VI name (e.g. A007005 `Buff_SpecialDamgeP_Lan`, A007302 `Buff_Bleed`), coloured buffs with no popup target (A006106 `Buff_Disarm`), localized skills with no public record (S0155061, W0134061, D018305ex_2/3, W002104ex) |
 | Story lore (`WHMX_Lore_*`, candidates in `MASTERDATA_LORE_CANDIDATES_2026-09-07.md`) | Not planned |
 | Future admin areas: Skill/Buff DB + translation, Guide, Tier List, admin audit/operations | Not started |
 | Logged-in admin check at 768–1279 px (icon column) | Not verified (375 px verified) |
 | Preview-URL admin check (sign in on the Preview alias; a save must not touch production) | Owner, needs Vercel SSO |
-| `scripts/db-*-proof/test.mjs` create users with fixed passwords and swallow cleanup errors | Hardening |
 | Shared S3 client; lore restore by date | Deferred review items |
 | Legacy admin CSS in `src/style.css` ~L6980–7240 (mixed with public classes) | Cleanup |
 | "Layered ticket asset" rarity visual | Idea |

@@ -3,6 +3,8 @@ import { randomBytes, randomUUID } from 'node:crypto';
 
 import { and, eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const marker = `d2-proof-${randomUUID()}`;
 const email = `${marker}@d2.invalid`;
 const password = randomBytes(24).toString('base64url');
@@ -62,16 +64,16 @@ try {
   console.log(JSON.stringify({ test: 'd2-character-skin-admin-proof', status: 'PASS', characters: listed.length, skinsForCharacter: detail.skins.length, optimisticConflict: stale.code, editorWrite: true, ownerWrite: ownerWrite.changed, audits: Number(auditCount[0]?.count ?? 0) }));
 } finally {
   if (db && fixtureUserId) {
-    await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(() => undefined);
+    await db.execute(sql`delete from edit_history where actor_user_id = ${fixtureUserId}`).catch(cleanupFailed);
   }
   if (db && characterId && originalCharacter) {
     const entities = schema?.managedEntities;
     if (entities) {
       const [entity] = await db.select({ id: entities.id, revision: entities.revision }).from(entities).where(and(eq(entities.entityType, 'character'), eq(entities.sourceKey, characterId)));
       if (entity) {
-        await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entity.id)).catch(() => undefined);
-        await db.update(entities).set({ revision: originalCharacter.revision, editedByUserId: null, updatedAt: new Date() }).where(eq(entities.id, entity.id)).catch(() => undefined);
-        if (originalCharacterOverrides.length) await db.insert(schema.fieldOverrides).values(originalCharacterOverrides).catch(() => undefined);
+        await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entity.id)).catch(cleanupFailed);
+        await db.update(entities).set({ revision: originalCharacter.revision, editedByUserId: null, updatedAt: new Date() }).where(eq(entities.id, entity.id)).catch(cleanupFailed);
+        if (originalCharacterOverrides.length) await db.insert(schema.fieldOverrides).values(originalCharacterOverrides).catch(cleanupFailed);
       }
     }
   }
@@ -80,15 +82,15 @@ try {
     if (entities) {
       const [entity] = await db.select({ id: entities.id }).from(entities).where(and(eq(entities.entityType, 'skin'), eq(entities.sourceKey, skinId)));
       if (entity) {
-        await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entity.id)).catch(() => undefined);
-        await db.update(entities).set({ revision: originalSkin.revision, editedByUserId: null, updatedAt: new Date() }).where(eq(entities.id, entity.id)).catch(() => undefined);
-        if (originalSkinOverrides.length) await db.insert(schema.fieldOverrides).values(originalSkinOverrides).catch(() => undefined);
+        await db.delete(schema.fieldOverrides).where(eq(schema.fieldOverrides.entityId, entity.id)).catch(cleanupFailed);
+        await db.update(entities).set({ revision: originalSkin.revision, editedByUserId: null, updatedAt: new Date() }).where(eq(entities.id, entity.id)).catch(cleanupFailed);
+        if (originalSkinOverrides.length) await db.insert(schema.fieldOverrides).values(originalSkinOverrides).catch(cleanupFailed);
       }
     }
   }
   if (db && fixtureUserId) {
     const authSchema = await import('../db/schema/auth.mjs');
-    await db.delete(authSchema.users).where(eq(authSchema.users.id, fixtureUserId)).catch(() => undefined);
+    await db.delete(authSchema.users).where(eq(authSchema.users.id, fixtureUserId)).catch(cleanupFailed);
   }
   const { closeDb } = await import('../db/client.mjs');
   await closeDb();

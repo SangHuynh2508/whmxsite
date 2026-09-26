@@ -13,6 +13,8 @@ import {
   updatePreviewCharacter,
 } from '../server/preview-characters/preview-character-operations.mjs';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 const marker = `d0c-admin-${randomUUID()}`;
 let db;
 let ownerId;
@@ -96,11 +98,11 @@ try {
       await tx.delete(characterPublicationStates).where(eq(characterPublicationStates.entityId, entityId));
       await tx.delete(previewCharacters).where(eq(previewCharacters.entityId, entityId));
       await tx.delete(managedEntities).where(eq(managedEntities.id, entityId));
-    }).catch(() => undefined);
+    }).catch(cleanupFailed);
   }
   if (db) {
-    if (ownerId) await db.delete(users).where(eq(users.id, ownerId)).catch(() => undefined);
-    if (editorId) await db.delete(users).where(eq(users.id, editorId)).catch(() => undefined);
+    if (ownerId) await db.delete(users).where(eq(users.id, ownerId)).catch(cleanupFailed);
+    if (editorId) await db.delete(users).where(eq(users.id, editorId)).catch(cleanupFailed);
   }
   await closeDb();
 }

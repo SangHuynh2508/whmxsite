@@ -4,6 +4,8 @@ import { Readable } from 'node:stream';
 
 import { eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 // A process-only test secret keeps the real local/deployed secret out of this
 // proof. It is never persisted or printed.
 process.env.BETTER_AUTH_SECRET ??= randomBytes(32).toString('base64url');
@@ -11,8 +13,8 @@ process.env.BETTER_AUTH_ALLOWED_HOSTS ??= 'localhost:5173,localhost:3000';
 
 const marker = `d1-auth-${randomUUID()}`;
 const ownerEmail = `${marker}-owner@d1.invalid`;
-const ownerPassword = 'D1TestPassword-Only-For-Fixture';
-const editorPassword = 'D1EditorPassword-Only-For-Fixture';
+const ownerPassword = randomBytes(24).toString('base64url');
+const editorPassword = randomBytes(24).toString('base64url');
 
 function requestFor(path, body, cookie) {
   return new Request(`http://localhost:5173${path}`, {
@@ -229,8 +231,8 @@ try {
       delete from admin_account_audits
       where actor_user_id in (select id from users where email like ${`${marker}%`})
          or subject_user_id in (select id from users where email like ${`${marker}%`})
-    `).catch(() => undefined);
-    await db.execute(sql`delete from users where email like ${`${marker}%`}`).catch(() => undefined);
+    `).catch(cleanupFailed);
+    await db.execute(sql`delete from users where email like ${`${marker}%`}`).catch(cleanupFailed);
   }
   const { closeDb } = await import('../db/client.mjs');
   await closeDb();

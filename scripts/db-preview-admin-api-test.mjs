@@ -3,6 +3,8 @@ import { randomBytes, randomUUID } from 'node:crypto';
 
 import { and, eq, sql } from 'drizzle-orm';
 
+import { cleanupFailed } from './lib/cleanup.mjs';
+
 process.env.BETTER_AUTH_SECRET ??= randomBytes(32).toString('base64url');
 process.env.BETTER_AUTH_ALLOWED_HOSTS ??= 'localhost:5173,localhost:3000';
 
@@ -16,7 +18,7 @@ async function bodyRequest(method, body, cookie, query = {}) {
 
 const marker = `d0c-api-${randomUUID()}`;
 const email = `${marker}@d0c.invalid`;
-const password = 'D0C-API-Fixture-Password-Only';
+const password = randomBytes(24).toString('base64url');
 let db;
 let owner;
 let entityId;
@@ -117,14 +119,14 @@ try {
   console.log('DB_PREVIEW_ADMIN_API_D0C_TEST=PASS');
 } finally {
   if (db && entityId) {
-    await db.execute(sql`delete from edit_history where entity_id = ${entityId}`).catch(() => undefined);
-    await db.execute(sql`delete from character_publication_states where entity_id = ${entityId}`).catch(() => undefined);
-    await db.execute(sql`delete from preview_characters where entity_id = ${entityId}`).catch(() => undefined);
-    await db.execute(sql`delete from managed_entities where id = ${entityId}`).catch(() => undefined);
+    await db.execute(sql`delete from edit_history where entity_id = ${entityId}`).catch(cleanupFailed);
+    await db.execute(sql`delete from character_publication_states where entity_id = ${entityId}`).catch(cleanupFailed);
+    await db.execute(sql`delete from preview_characters where entity_id = ${entityId}`).catch(cleanupFailed);
+    await db.execute(sql`delete from managed_entities where id = ${entityId}`).catch(cleanupFailed);
   }
   if (db && owner) {
-    await db.execute(sql`delete from admin_account_audits where actor_user_id = ${owner.id} or subject_user_id = ${owner.id}`).catch(() => undefined);
-    await db.execute(sql`delete from users where id = ${owner.id}`).catch(() => undefined);
+    await db.execute(sql`delete from admin_account_audits where actor_user_id = ${owner.id} or subject_user_id = ${owner.id}`).catch(cleanupFailed);
+    await db.execute(sql`delete from users where id = ${owner.id}`).catch(cleanupFailed);
   }
   const { closeDb } = await import('../db/client.mjs');
   await closeDb();
