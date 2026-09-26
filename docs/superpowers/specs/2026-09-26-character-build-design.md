@@ -37,12 +37,12 @@ the public Build tab ~30 s after saving; every game term shows VI when translate
 | Weapon lore | `equipmentFiles.json` (110) | classify / material / maker / text (optional in the popup later) |
 | Weapon skills | `equipmentSkills.json` | `NameLanText`, `DescriptionLanText` with parameter templates (`[Effect1Para,1]`) → resolved like character skills |
 | Weapon icons | `Assets/ItemIcons/itemicon_<id>.png` | 105/110 present; 5 missing → empty frame until found |
-| Rarity frames | `Assets/Packet61_AllSprites/…/itemRare0..5.png` (+ `itemRareK`) | 0 grey, 1 green, 2 teal, 3 yellow, 4 red, 5 multicolour (manual scan `allsprites_manual_scan/page_009.jpg`). **Assumption to verify:** frame = `itemRare{rare}`; confirm with one in-game rare-5 weapon screenshot before shipping |
+| Rarity frames | `Assets/Packet61_AllSprites/…/itemRare0..5.png` (+ `itemRareK`) | 0 grey, 1 green, 2 teal, 3 yellow, 4 red, **5 multicolour = highest** (owner confirmed 2026-09-26; manual scan `allsprites_manual_scan/page_009.jpg`). Frame = `itemRare{rare}` — weapons use 2–5 |
 | Affixes | `additionalAttrs.json` (24) | name, `%` display, `addAttr`, allowed `job[]`, values per rarity |
 | 深造 styles | `jobStyleMap.json` (15 = 3 per job) | name (e.g. 固防), icon, `styleTalent`, 4 `sector` ids |
 | 深造 columns | `sectorMap.json` (60) | name (e.g. 重峦), icon, 7 talent ids (one per point) |
 | Column talents | `talentBankMap.json` | plain text, e.g. `D20101` "护盾增益+15%" |
-| Character styles + game recommendation | `characterTable.json` `JobStyle`, `TalentRecommend` | e.g. D0017: styles 101/102/103, recommend `DK_1002` + sectors `D2_01, D3_01, D1_03`. The sector list spans **three different styles** (D1_/D2_/D3_), so its meaning is unknown — imported as-is, **not used** until confirmed in-game |
+| Character styles + game recommendation | `characterTable.json` `JobStyle`, `TalentRecommend` | e.g. D0017: styles 101/102/103; `TalentRecommend[0]` = a `styleTalent` (e.g. `DK_1002` = 固防) → prefills the style. The rest of `TalentRecommend` (a sector list spanning several styles) is **ignored** (owner 2026-09-26: set aside) |
 | Skills | already in `data.json` (with icons) | picked for rotations |
 
 ## 4. Architecture
