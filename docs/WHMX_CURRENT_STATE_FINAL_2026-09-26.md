@@ -42,7 +42,8 @@
 
 | Area | State |
 |---|---|
-| Git | Branch `feat/postgres-admin-crud`; `main` fast-forwards to it (both pushed). Deploy = push `main` (Production) / branch (Preview); push `main` first so Production builds first |
+| Git | Work on `feat/postgres-admin-crud`; `origin/main` = the same commit. Deploy with `git push origin HEAD:main` (Production) then `git push origin feat/postgres-admin-crud` (Preview). The **local `main` branch is stale (e140ade) and unused** — never check it out or merge into it; `origin/main` is what matters |
+| Working tree (not mine to commit) | Many untracked/modified owner files (workbook, `localization/*`, root scratch files, `.agents/`, `.codex*/`). **`package-lock.json` is modified by an agent** (2026-09-26 00:43, side effect of a local `npx vercel build`): only `devOptional` → `dev` flags, no version changes — harmless; discard it with the owner's OK (`git checkout -- package-lock.json` counts as a restore) or leave it. Don't run `vercel build` locally again without cleaning up |
 | Lore pipeline (DB → R2 → site) | ✅ Live. Importer `scripts/import-character-profile.mjs`; overlay `scripts/export-profile-overlay.mjs \| tools/apply_profile_overlay.py`; publisher `scripts/publish-lore.mjs` (+ `--repoint` rollback) and `POST /api/admin/lore/publish`; daily private backup in R2 bucket `whmx-backups`; restore `scripts/restore-lore-snapshot.mjs` |
 | Admin Khí Giả (React) + Lore module + terms page | ✅ Live 2026-09-26. Code `src/admin/characters/` (list, record, modules, `useEditor`, pure libs `lib/*.mts` with tests); lore API `server/profile/lore-admin.mjs` + planners `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs` via `api/admin/[...].js`. Saves auto-publish lore ~30 s later; owners also have "Xuất bản ngay" |
 | Lore data | 536 report titles ("Báo cáo quan sát 1–4", "Báo cáo mật A") + 10 organisation names seeded as admin VI (development + production); 15 characters still have legacy "bản cũ" units to confirm |
@@ -86,6 +87,7 @@
 - Scratch on drive D (`D:\BaiTapCode\WHMX\_claude_scratch\`); nothing left on C; delete `%LOCALAPPDATA%\Temp\claude\bash-edit-diff` at the end of each work block.
 - Repo is public: never commit screenshots with emails or anything secret.
 - Evidence rule: nothing inferred from ID shape; MasterData must match the live launch version before importing.
+- **When the owner asks for a state/handoff file, write it complete**: every change you made and left uncommitted (incl. side effects of tools, e.g. lockfiles), local vs remote branch state, pending questions, decisions taken, what was verified and what was not. The next agent must not have to ask about anything you already knew (owner, 2026-09-26).
 
 ## 7. Environment gotchas
 
