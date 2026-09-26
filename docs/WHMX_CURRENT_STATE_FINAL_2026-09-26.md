@@ -109,7 +109,8 @@
 | P5 next domains: Hoán Chương, archive-image asset role, skills (translation frame) | Not started |
 | Public lore UI spec (layout of images/text, inline lore edit for editors) + `char.archive` in data.json (patch `D:\BaiTapCode\WHMX\_claude_scratch\archive_build_change.patch`) | Not started |
 | **Localization → PostgreSQL authority transfer**: owner decision 2026-09-26 — yes, but only after the DB has every feature it needs; not now | Deferred by decision |
-| Localization quality backlog (2026-09-13 checkpoint): 111 VI cells with Han leaks (83 SKILL `PENDING`, 6 BUFF_STATUS, 22 PROFILE), 42-cell rich-text repair, 2 suspicious-VI warnings, then Batch #3 | Not tracked since 09-13 — audit read-only first |
+| Localization quality (2026-09-13 checkpoint: Han leaks, 42-cell rich-text repair, suspicious VI) | **Re-checked clean 2026-09-26** (read-only): `validate_no_han_characters` 0/8 907 populated VI, `validate_placeholders` 0/8 800, `check_suspicious_vi` 0 (scope phase3_batch1), `validate_public_output` 0. These only look at *populated* cells — untranslated (empty VI) coverage is a separate question. Batch #3 not started |
+| `validate_data.py` warnings (30, data still passes) | Not triaged: 3 item icons missing (`itemicon_10140/20140/9183002.png`), skill popups whose buff can't be matched by exact BUFF_STATUS VI name (e.g. A007005 `Buff_SpecialDamgeP_Lan`, A007302 `Buff_Bleed`), coloured buffs with no popup target (A006106 `Buff_Disarm`), localized skills with no public record (S0155061, W0134061, D018305ex_2/3, W002104ex) |
 | Story lore (`WHMX_Lore_*`, candidates in `MASTERDATA_LORE_CANDIDATES_2026-09-07.md`) | Not planned |
 | Future admin areas: Skill/Buff DB + translation, Guide, Tier List, admin audit/operations | Not started |
 | Logged-in admin check at 768–1279 px (icon column) | Not verified (375 px verified) |
