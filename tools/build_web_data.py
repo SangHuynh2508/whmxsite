@@ -56,6 +56,17 @@ def build_exact_filename_index(asset_dir, asset_label):
         casefold[folded] = name
     return exact, casefold
 
+def archive_urls(assets_root, cid, manifest):
+    """Archive (hiện vật) image URLs on R2, or None when the character has no archive folder / pair."""
+    folder = Path(assets_root) / "characters" / cid / "archive"
+    image, head = folder / f"{cid.lower()}.png", folder / f"head_{cid.lower()}.png"
+    if not (image.exists() and head.exists()):
+        return None
+    return {
+        "image": require_asset_url(manifest, cid, "archive", image.name),
+        "head": require_asset_url(manifest, cid, "archive", head.name),
+    }
+
 def load_json(name):
     return json.loads((MASTER / name).read_text(encoding="utf-8"))
 
@@ -2307,6 +2318,7 @@ def build():
             "is_limited": bool(data.get("Linkage")),
             "icon": f"assets/characters/avatars/{cid}.png",
             "cards": char_cards.get(cid, []),
+            **({"archive": archive} if (archive := archive_urls(MASTER.parent.parent / "Assets", cid, remote_asset_manifest)) else {}),
             "skins": char_skins_processed.get(cid, []),
             "talents": talents,
             "skills": char_skills.get(cid, []),
