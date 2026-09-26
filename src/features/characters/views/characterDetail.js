@@ -12,7 +12,6 @@ import { renderInfoTab } from './detail/infoView.js';
 import { renderTalentsTab } from './detail/talentsView.js';
 import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
-import { enhanceCharacterOverviewEditing } from '../components/characterInlineEdit.js';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -47,9 +46,9 @@ function renderTabContent(container, char, tabName) {
     case 'overview':
     default:
       renderOverviewTab(container, char);
-      // Roadmap Phase 3: fire-and-forget — hidden entirely for anonymous
-      // visitors, this only checks the already-cached boot-time session.
-      void enhanceCharacterOverviewEditing(container, char);
+      // ponytail: public inline edit (components/characterInlineEdit.js) is off until P5 publishes
+      // admin overrides — until then an edit there never shows on the public page. Re-add
+      // `void enhanceCharacterOverviewEditing(container, char);` here when P5 lands.
       break;
   }
 }
