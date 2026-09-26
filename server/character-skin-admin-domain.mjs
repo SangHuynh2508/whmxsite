@@ -90,6 +90,15 @@ function normalizeText(value) {
   return normalized || null;
 }
 
+// null/empty input means "back to source"; returns null when nothing changes.
+export function planFieldChange(sourceValue, existing, rawValue) {
+  const source = normalizeText(sourceValue);
+  const next = normalizeText(rawValue) ?? source;
+  const previous = existing && existing.state !== 'cleared' ? existing.overrideValue : source;
+  if (jsonEqual(previous, next)) return null;
+  return { previous, next, clear: jsonEqual(source, next) };
+}
+
 function jsonValue(value) {
   return value === null ? sql`'null'::jsonb` : value;
 }
@@ -356,13 +365,13 @@ async function updateEntity(entityType, identifier, rawInput) {
     let changed = false;
     for (const [fieldName, rawValue] of Object.entries(input.changes)) {
       if (!(fieldName in config) || rawValue === undefined) continue;
-      const nextValue = normalizeText(rawValue);
       const sourceValue = row[config[fieldName].sourceKey] ?? null;
       const existing = existingByField.get(config[fieldName].fieldName);
-      const previousValue = existing && existing.state !== 'cleared' ? existing.overrideValue : sourceValue;
-      if (jsonEqual(previousValue, nextValue)) continue;
+      const plan = planFieldChange(sourceValue, existing, rawValue);
+      if (!plan) continue;
+      const { previous: previousValue, next: nextValue } = plan;
       changed = true;
-      if (jsonEqual(sourceValue, nextValue)) {
+      if (plan.clear) {
         if (existing) {
           await tx.update(fieldOverrides).set({ overrideValue: jsonValue(sourceValue), state: 'cleared', updatedByUserId: actor.id, updatedAt: now }).where(eq(fieldOverrides.id, existing.id));
         }

@@ -48,7 +48,7 @@
 | Admin Khí Giả (React) + Lore module + terms page | ✅ Live 2026-09-26. Code `src/admin/characters/` (list, record, modules, `useEditor`, pure libs `lib/*.mts` with tests); lore API `server/profile/lore-admin.mjs` + planners `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs` via `api/admin/[...].js`. Saves auto-publish lore ~30 s later; owners also have "Xuất bản ngay" |
 | Lore data | 536 report titles ("Báo cáo quan sát 1–4", "Báo cáo mật A") + 10 organisation names seeded as admin VI (development + production); 15 characters still have legacy "bản cũ" units to confirm |
 | Performance | Functions run in **sin1** (Neon is ap-southeast-1). Warm API 0.3–0.7 s; first call after idle ~3 s (cold start) |
-| Tests | `npm test` (77, node:test, <2 s), `npm run test:tools` (Python tools), typecheck `node_modules/.bin/tsc -p tsconfig.json --noEmit`, `npm run build`. Validators: `python tools/validate_{data,public_output,skin_roster,skin_assets}.py` |
+| Tests | `npm test` (82, node:test, <2 s), `npm run test:tools` (Python tools), typecheck `node_modules/.bin/tsc -p tsconfig.json --noEmit`, `npm run build`. Validators: `python tools/validate_{data,public_output,skin_roster,skin_assets}.py` |
 | New character (~2026-10-01) | Owner updates the game ~1 day before; then run **runbook N2** ([pipeline plan §4](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md), 8 steps, owner yes at each DB/workbook write) and N3 |
 
 ## 3. Infrastructure
@@ -61,7 +61,7 @@
 
 ## 4. Admin / API facts an agent must know
 
-- **Character/skin overrides** (`server/character-skin-admin-domain.mjs` `updateEntity`): an override is cleared only when the server receives the **source value**; `null` is stored as an *empty override*. The React admin sends the source value for an emptied field (`src/admin/characters/lib/fields.mts`). The public inline edit (`src/features/characters/components/characterInlineEdit.js`) still sends `null` → backlog.
+- **Character/skin overrides** (`server/character-skin-admin-domain.mjs` `updateEntity`): `null`/empty or the (trimmed) source value clears the override — decision in the pure `planFieldChange` (tests `server/character-skin-admin-domain.test.mjs`; fixed 2026-09-26, before that `null` was stored as an *empty override*; none existed in dev/prod when checked). The React admin sends the source value for an emptied field (`src/admin/characters/lib/fields.mts`); the public inline edit (`src/features/characters/components/characterInlineEdit.js`) sends `null`, both now work.
 - **Lore saves** (`PATCH /api/admin/lore/characters/:id`, `{expectedRevision, texts: {unitKey: string|null}}`): empty → `vi = null, viOrigin = null` ("chưa dịch"); text → `viOrigin = admin, state = ok` (also makes legacy / CN-changed units official); stale revision → 409; unknown unit → 422; one `edit_history` row per unit; `lore_publish_state.last_edit_at` updated. Terms: `PATCH /api/admin/lore/terms/:code`. Progress: `GET /api/admin/lore/progress`. Record: `GET /api/admin/lore/characters/:id`.
 - Only `viOrigin = admin` + `state = ok` text is published (`publishableVi` in `server/profile/shape-character-profile.mjs`); `legacy_workbook` VI and `source_changed` units are withheld until re-saved.
 - **Editor** (`src/admin/characters/useEditor.ts` + `lib/editorState.mts`): drafts in localStorage keep only changed fields and restore over the current record; 409 → "Xem khác biệt" / "Tải bản mới"; the leave-page guard is one capture-phase listener in `src/admin/layout/AdminApp.tsx` (`lib/leaveGuard.mts`); Ctrl+S works only while Khí Giả is visible.
@@ -104,7 +104,7 @@
 |---|---|
 | Owner: translate lore in Admin; confirm the 15 characters' legacy units ("Dùng bản này") | Ongoing |
 | Release day (~2026-10-01): runbook N2 → N3 (DB import of the new character; Preview reconciliation if one exists, see the Preview proposal §5) | Waiting for the game update |
-| Server `null` override fix (treat `null` as clear, compare `normalizeText(source)`); the public inline edit sends `null` | Open (small) |
+| Public inline edit (`characterInlineEdit.js` L142): after emptying a field it shows blank until reload, but the server now falls back to the source value (and admin overrides aren't public at all until P5) → the page misleads the editor | **Bug, open** — ask the owner: show the source after save, or hide the public inline edit until P5 |
 | Publish path for character/skin **names/descriptions** (Admin overrides are invisible publicly) — needs the **workbook reconciliation gate** decision (hosted edit = working override; export blocks unreconciled overrides) | Not started (P5) |
 | P5 next domains: Hoán Chương, archive-image asset role, skills (translation frame) | Not started |
 | Public lore UI spec (layout of images/text, inline lore edit for editors) + `char.archive` in data.json (patch `D:\BaiTapCode\WHMX\_claude_scratch\archive_build_change.patch`) | Not started |
