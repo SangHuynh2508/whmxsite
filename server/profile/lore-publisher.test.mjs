@@ -18,7 +18,7 @@ function fakes({ locked = true, publishedHash = null, failPointer = false, liveP
     envName: 'development',
     readPointerFile: async () => livePointerFile,
     publicFileExists: async (name) => name === 'lore.aaaaaaaaaaaa.json',
-    putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body]); },
+    putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body, opts.contentEncoding]); },
     putBackup: async (key, buffer) => writes.push(['backup', key, JSON.parse(gunzipSync(buffer).toString())]),
   };
   return { repo, storage, writes, getState: () => state };
@@ -74,4 +74,15 @@ test('repoint rolls back under the lock, only to an existing file, and marks liv
   assert.deepEqual(f.getState(), { publishedHash: 'aaaaaaaaaaaa', publishedFile: 'lore.aaaaaaaaaaaa.json', publishedAt: null, publishedByUserId: null });
   const busy = fakes({ locked: false });
   assert.deepEqual(await repointLore({ repo: busy.repo, storage: busy.storage, fileName: 'lore.aaaaaaaaaaaa.json', now }), { status: 'busy' });
+});
+
+test('the content file is uploaded gzip-encoded (1.8 MB of JSON → a fraction); the pointer stays plain', async () => {
+  const f = fakes();
+  await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u1', now });
+  const content = f.writes.find((w) => w[0] === 'public' && !w[1].startsWith('lore.pointer'));
+  const pointer = f.writes.find((w) => w[0] === 'public' && w[1].startsWith('lore.pointer'));
+  assert.equal(content[4], 'gzip');
+  assert.deepEqual(JSON.parse(gunzipSync(content[3]).toString()).characters, { A0001: { record_id: '1' } });
+  assert.equal(pointer[4], undefined);
+  assert.equal(JSON.parse(pointer[3]).file, content[1]);
 });

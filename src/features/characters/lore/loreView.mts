@@ -59,8 +59,8 @@ export function buildLoreView(char: unknown): LoreView {
     if (label) factRows.push([label, pair(tag), detailOf(tag)]);
   }
   const facts = factRows.filter((f): f is [string, LoreUnit, LoreUnit | null] => f[1] !== null).map(([label, value, detail]) => ({ label, value, detail }));
-  // fullname_vi falls back to the character name when the relic name has no translation — that is not a relic name.
-  const relicName = pick(str(c.fullname_vi) === str(c.name_vi) ? null : c.fullname_vi, c.fullname_cn);
+  // fullname_vi is the workbook's translation of the full (relic) name — used as-is, even when it equals the name.
+  const relicName = pick(c.fullname_vi, c.fullname_cn);
   const people = [profile.department, profile.entity_status, profile.record_id].some((v) => str(v))
     ? { department: str(profile.department), departmentDetail: pick(obj(profile.department_detail).vi, obj(profile.department_detail).cn), status: str(profile.entity_status), recordId: str(profile.record_id) }
     : null;

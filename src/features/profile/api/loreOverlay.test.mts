@@ -41,3 +41,13 @@ test('merge replaces only known characters', () => {
   assert.deepEqual(data.characters.A0001.profile, { record_id: 'new' });
   assert.deepEqual(data.characters.A0002.profile, { record_id: 'keep' });
 });
+
+test('the pointer is always revalidated (no-cache): a reload right after a publish must not reuse the old pointer', async () => {
+  const init: (RequestInit | undefined)[] = [];
+  const fetchImpl = async (url: string, options?: RequestInit) => {
+    init.push(options);
+    return url.endsWith('pointer.json') ? ok({ file: 'lore.0123456789ab.json' }) : ok({ version: 1, characters: {} });
+  };
+  await loadLoreOverlay(POINTER, fetchImpl as typeof fetch);
+  assert.equal(init[0]?.cache, 'no-cache');
+});

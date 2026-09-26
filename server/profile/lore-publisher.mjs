@@ -14,7 +14,8 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
       await repo.writeState(tx, { publishedAt: now, publishedByUserId: actorUserId }); // the live file is current
       return { status: 'unchanged', file: doc.fileName };
     }
-    await storage.putPublic(doc.fileName, doc.body, { cacheControl: IMMUTABLE });
+    // gzip on the wire (R2 serves it with Content-Encoding: gzip; browsers inflate): ~1.8 MB of JSON otherwise.
+    await storage.putPublic(doc.fileName, gzipSync(doc.body), { cacheControl: IMMUTABLE, contentEncoding: 'gzip' });
     await storage.putPublic(POINTER_NAME, buildPointer(doc.fileName, now), { cacheControl: POINTER_CACHE });
     await repo.writeState(tx, { publishedFile: doc.fileName, publishedHash: doc.hash, publishedAt: now, publishedByUserId: actorUserId });
     return { status: 'published', file: doc.fileName };

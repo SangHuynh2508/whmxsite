@@ -3,12 +3,15 @@
 export type LoreOverlay = { version: 1; characters: Record<string, unknown> };
 type GameData = { characters?: Record<string, { profile?: unknown }> };
 
-export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 5000): Promise<LoreOverlay | null> {
+// 20 s: the overlay is merged after the page renders (never blocks it), and the lore file is ~0.3–1.8 MB.
+export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<LoreOverlay | null> {
   if (!pointerUrl) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const pointerResponse = await fetchImpl(pointerUrl, { signal: controller.signal });
+    // no-cache: revalidate the tiny pointer every load (304 when unchanged), so a reload right after a publish
+    // shows it — the pointer's max-age=60 kept the previous file for up to a minute.
+    const pointerResponse = await fetchImpl(pointerUrl, { signal: controller.signal, cache: 'no-cache' });
     if (!pointerResponse.ok) throw new Error(`pointer HTTP ${pointerResponse.status}`);
     const pointer = await pointerResponse.json();
     if (typeof pointer?.file !== 'string' || !/^lore\.[0-9a-f]{12}\.json$/.test(pointer.file)) throw new Error('invalid pointer');

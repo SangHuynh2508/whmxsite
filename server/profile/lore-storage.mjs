@@ -21,8 +21,8 @@ export function createLoreStorage(config) {
   const client = new S3Client({ region: 'auto', endpoint: config.endpoint, credentials: { accessKeyId: config.accessKeyId, secretAccessKey: config.secretAccessKey } });
   return {
     envName: config.envName,
-    async putPublic(name, body, { cacheControl }) {
-      await client.send(new PutObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}${name}`, Body: body, ContentType: 'application/json; charset=utf-8', CacheControl: cacheControl }));
+    async putPublic(name, body, { cacheControl, contentEncoding }) {
+      await client.send(new PutObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}${name}`, Body: body, ContentType: 'application/json; charset=utf-8', CacheControl: cacheControl, ContentEncoding: contentEncoding }));
     },
     async publicFileExists(name) {
       try {

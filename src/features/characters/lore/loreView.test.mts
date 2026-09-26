@@ -80,7 +80,7 @@ test('term descriptions, relic name, people and the untranslated flag (B4 ticket
   });
   assert.deepEqual(view.facts[0], { label: 'Loại', value: { text: 'Vũ khí', untranslated: false }, detail: { text: 'Vũ khí là…', untranslated: false } });
   assert.equal(view.facts[1].detail, null);
-  assert.deepEqual(view.relicName, { text: '心形枪管线膛前装燧发枪', untranslated: true }); // fullname_vi = the character name, not a relic-name translation
+  assert.deepEqual(view.relicName, { text: 'Heart Shaped Barrel', untranslated: false }); // fullname_vi is the workbook's value, used as-is
   assert.deepEqual(view.people, { department: 'Học Viện Anh Quốc', departmentDetail: { text: '发端于雾都伦敦', untranslated: true }, status: 'An toàn', recordId: 'E-401-176504' });
   assert.equal(view.hasUntranslated, true);
   assert.equal(buildLoreView({ profile: { eval_intro_vi: 'Chỉ VI' } }).hasUntranslated, false);
@@ -117,4 +117,9 @@ test('factSpans: 3 per row on a 6-column grid; a lone last item takes the whole 
   assert.deepEqual(factSpans(1), [6]);
   assert.deepEqual(factSpans(2), [3, 3]);
   assert.deepEqual(factSpans(0), []);
+});
+
+test('relic name = fullname_vi even when it equals the character name (秋操杯: full name = name)', () => {
+  assert.deepEqual(buildLoreView({ name_vi: 'Thu Thao Bôi', fullname_vi: 'Thu Thao Bôi', fullname_cn: '秋操杯' }).relicName, { text: 'Thu Thao Bôi', untranslated: false });
+  assert.deepEqual(buildLoreView({ fullname_vi: '', fullname_cn: '秋操杯' }).relicName, { text: '秋操杯', untranslated: true });
 });
