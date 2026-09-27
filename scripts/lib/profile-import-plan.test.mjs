@@ -71,3 +71,11 @@ test('profiles and terms gone from raw are marked absent once, never deleted (re
   assert.equal(plan.counts.absent, 2);
   assert.ok(plan.touchedProfiles.has('Z9999') && plan.touchedTerms.has('K9999'));
 });
+
+test('terms owned by the game-reference importer (weapon, 深造 …) are never marked absent by the profile import', () => {
+  const current = empty();
+  current.terms.set('weapon:30111', { entityId: 'e9', kind: 'weapon', sourceHash: 'W', nameVi: null, detailVi: null, state: 'ok', sourcePresent: true });
+  current.terms.set('K0000', { entityId: 'e8', kind: 'relic_type', sourceHash: 'X', nameVi: null, detailVi: null, state: 'ok', sourcePresent: true });
+  const plan = planProfileImport({ normalized: { profiles: [], terms: [] }, current });
+  assert.deepEqual(plan.terms, [{ code: 'K0000', action: 'absent', patch: { sourcePresent: false } }]);
+});
