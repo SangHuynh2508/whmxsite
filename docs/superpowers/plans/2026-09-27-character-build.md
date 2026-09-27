@@ -22,6 +22,7 @@
 ### A. Reference data (importer)
 
 1. ☁ **Normaliser** `scripts/lib/game-ref-source.mjs` — pure, MasterData (the 10 fixture files) → `{ refs: [{kind, code, data, sourceHash}], terms: [{code, kind, nameCn, detailCn, sourceHash}] }`.
+   - (Owner 2026-09-27: texts go to their own table **`game_texts`**, not `lore_terms`.)
    - `weapon`: `equipments` rows whose id is an `itemMap` row with `type: 9` (fixture `weaponItems`); `data = {job, rare, series, skillIds, iconKey|null}` (`iconKey` only when the id is in `weaponIconsPresent`). Term `weapon:<id>` (name).
    - `weapon_skill`: one term per `equipSkill` group (name + **resolved** description, task 2).
    - `weapon_affix`: `additionalAttrs` → `data = {addAttr, percent (attrDisplayType), jobs, rareValues}`; term = name.
@@ -47,10 +48,10 @@
 
 9. ☁ **Domain** `server/builds/build-admin.mjs` + pure planner: list/get builds of a character (with revision), save one build (`expectedRevision`, 409 on stale, 422 with the validator's paths), add/remove/reorder builds, one `edit_history` row per save; triggers the same publish scheduling as lore (`lore_publish_state.last_edit_at`). Routes in `server/admin-api-routes/builds.mjs`, wired through the existing `api/admin/[...].js` (**no new file under `api/`**). Pure planner tests; the DB code itself is checked in 🖥 step 16.
 
-### E. Publishing
+### E. Publishing (owner decision 2026-09-27: game data is its own file, lore untouched)
 
-10. ☁ **Document shape**: `buildLoreDocument(profiles, { builds, refs })` → `{version: 1, characters, builds: {characterId: Build[]}, refs: {weapons, weaponSkills, affixes, styles, sectors, talents}}` with CN + publishable VI only (`publishableVi`); refs trimmed to what the public tab needs. Tests: shape, VI withheld unless `viOrigin=admin` + `state=ok`, a document without builds is byte-identical to today's (so the next publish without builds doesn't change the file hash).
-11. ☁ Publisher/repository read builds + refs (fake-repo test like `lore-publisher.test.mjs`); public loader keeps `builds`/`refs` from the overlay (`mergeLoreOverlay` test).
+10. ☁ **Game document** `server/game/game-document.mjs` (PR 1, done): `game.<hash>.json` = `{version, refs: {kind: {code: data}}, texts: {kind: {code: {cn, vi, detail, detail_vi}}}, builds: {characterId: [doc]}}` — the **whole** catalogue (popups, later weapon/team pages), VI with the lore rule, objects gone from MasterData kept only while a build uses them.
+11. ☁ **Game publisher** (PR 2): same order and safety as the lore publisher (backup → content → `game.pointer.json` → state), next to the lore files under the same R2 prefix; triggered by build/game-text saves (~30 s, like lore) and a script; public loader fetches the game pointer (URL derived from `VITE_LORE_POINTER_URL`'s folder, no new Vercel variable).
 
 ### F. UI (function first; visual design later with huashu + taste on the owner's machine)
 
@@ -68,6 +69,6 @@
 
 ## Order and PRs
 
-- PR 1 (this branch): A1–A4, B6, C8, E10–E11 — data + rules + publish shape, all tested, no UI change.
-- PR 2: D9, F12–F15 — admin module, public tab on sample data, icon category.
+- PR 1 (this branch): A1–A4, B6, C8, E10 — data + rules + game document shape, all tested, no UI change, lore untouched.
+- PR 2: D9, E11, F12–F15 — admin module (+ game-text translation page), game publisher, public tab on sample data, icon category.
 - Each PR: state file §2/§8/§11 updated in the same PR; the PR description lists the 🖥 commands that remain and which need the owner's yes.
