@@ -1,0 +1,747 @@
+[
+ {
+  "id": "30111",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "路边物件盾",
+  "DescriptionLanText": "器者装备。\n外出时得到的灵感，设计者本来想使用“修自行车”的字样，被同僚制止了。"
+ },
+ {
+  "id": "30112",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "路边禁行刀",
+  "DescriptionLanText": "器者装备。\n仿真设计，紧急事态下可以直接放置在平地上当禁止标识，但平时请勿乱拿乱放，以免影响正常非机动车行驶。"
+ },
+ {
+  "id": "30113",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "路障弩",
+  "DescriptionLanText": "器者装备。\n抽象工业设计，将路障一分为二再度组合，配色中设计充满了设计师的随意和天马行空。"
+ },
+ {
+  "id": "30114",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "夜芒灯",
+  "DescriptionLanText": "器者装备。\n为不会使用电器的器者提供全新的选择。您夜晚归家路上的好伙伴。"
+ },
+ {
+  "id": "30115",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "路边物件炮",
+  "DescriptionLanText": "器者装备。\n曾被外部人士误用，可喷出的不是消防泡沫，是炮火——经过沉重的教训，现已添加灭火功能，请阅读说明书进行模式切换。"
+ },
+ {
+  "id": "30121",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "路边物件盾",
+  "DescriptionLanText": "器者装备。\n外出时得到的灵感，设计者本来想使用“修自行车”的字样，被同僚制止了。"
+ },
+ {
+  "id": "30122",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "路边禁行刀",
+  "DescriptionLanText": "器者装备。\n仿真设计，紧急事态下可以直接放置在平地上当禁止标识，但平时请勿乱拿乱放，以免影响正常非机动车行驶。"
+ },
+ {
+  "id": "30123",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "路障弩",
+  "DescriptionLanText": "器者装备。\n抽象工业设计，将路障一分为二再度组合，配色中设计充满了设计师的随意和天马行空。"
+ },
+ {
+  "id": "30124",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "夜芒灯",
+  "DescriptionLanText": "器者装备。\n为不会使用电器的器者提供全新的选择。您夜晚归家路上的好伙伴。"
+ },
+ {
+  "id": "30125",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "路边物件炮",
+  "DescriptionLanText": "器者装备。\n曾被外部人士误用，可喷出的不是消防泡沫，是炮火——经过沉重的教训，现已添加灭火功能，请阅读说明书进行模式切换。"
+ },
+ {
+  "id": "30201",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "菱纹盾",
+  "DescriptionLanText": "器者装备。\n在画图软件使用模板拉出的图形基础上，增添了设计师用以找补的设计，倒三角形状显出充沛的设计感和他的头秃。"
+ },
+ {
+  "id": "30202",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "菱纹刀",
+  "DescriptionLanText": "器者装备。\n双刀的轻盈姿态，配合菱式系列的标准图形，令使用者不禁感慨：我这一刀下去，能不能削出个标准菱形啊？"
+ },
+ {
+  "id": "30203",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "菱纹弩",
+  "DescriptionLanText": "器者装备。\n漆黑涂料尽显尊贵，对称菱形设计展露平衡，颇受部分有强迫症的器者喜爱。"
+ },
+ {
+  "id": "30204",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "蓝菱杖",
+  "DescriptionLanText": "器者装备。\n色彩与图案的灵活运用，是设计师憧憬着宇宙飞船时的精心设计。虽然不能带你上太空，但能让敌人就此升天。"
+ },
+ {
+  "id": "30205",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "菱纹炮",
+  "DescriptionLanText": "器者装备。\n菱式系列，以极简几何设计夺得器者们的目光……本来只是随便用画图软件拉出来的图形，是谁放到装备上的！"
+ },
+ {
+  "id": "30211",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "菱纹盾",
+  "DescriptionLanText": "器者装备。\n在画图软件使用模板拉出的图形基础上，增添了设计师用以找补的设计，倒三角形状显出充沛的设计感和他的头秃。"
+ },
+ {
+  "id": "30212",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "菱纹刀",
+  "DescriptionLanText": "器者装备。\n双刀的轻盈姿态，配合菱式系列的标准图形，令使用者不禁感慨：我这一刀下去，能不能削出个标准菱形啊？"
+ },
+ {
+  "id": "30213",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "菱纹弩",
+  "DescriptionLanText": "器者装备。\n漆黑涂料尽显尊贵，对称菱形设计展露平衡，颇受部分有强迫症的器者喜爱。"
+ },
+ {
+  "id": "30214",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "菱纹杖",
+  "DescriptionLanText": "器者装备。\n色彩与图案的灵活运用，是设计师憧憬着宇宙飞船时的精心设计。虽然不能带你上太空，但能让敌人就此升天。"
+ },
+ {
+  "id": "30215",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "菱纹炮",
+  "DescriptionLanText": "器者装备。\n菱式系列，以极简几何设计夺得器者们的目光……本来只是随便用画图软件拉出来的图形，是谁放到装备上的！"
+ },
+ {
+  "id": "30221",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "菱纹盾",
+  "DescriptionLanText": "器者装备。\n在画图软件使用模板拉出的图形基础上，增添了设计师用以找补的设计，倒三角形状显出充沛的设计感和他的头秃。"
+ },
+ {
+  "id": "30222",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "菱纹刀",
+  "DescriptionLanText": "器者装备。\n双刀的轻盈姿态，配合菱式系列的标准图形，令使用者不禁感慨：我这一刀下去，能不能削出个标准菱形啊？"
+ },
+ {
+  "id": "30223",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "菱纹弩",
+  "DescriptionLanText": "器者装备。\n漆黑涂料尽显尊贵，对称菱形设计展露平衡，颇受部分有强迫症的器者喜爱。"
+ },
+ {
+  "id": "30224",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "菱纹杖",
+  "DescriptionLanText": "器者装备。\n色彩与图案的灵活运用，是设计师憧憬着宇宙飞船时的精心设计。虽然不能带你上太空，但能让敌人就此升天。"
+ },
+ {
+  "id": "30225",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "菱纹炮",
+  "DescriptionLanText": "器者装备。\n菱式系列，以极简几何设计夺得器者们的目光……本来只是随便用画图软件拉出来的图形，是谁放到装备上的！"
+ },
+ {
+  "id": "30301",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "青玉盾",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，望这份光风霁月的品德能为使用者抵挡攻击和灾厄，拨开迷雾，迎来胜利。"
+ },
+ {
+  "id": "30302",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "青玉剑",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，饰以龙纹，以玉为剑，以德为器，相信世间再无无法斩断之物。"
+ },
+ {
+  "id": "30303",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "青玉弩",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成如意弓弩。弩箭锋利，锐不可当，愿君以此弓征战四野，还我辈文明一方安稳。"
+ },
+ {
+  "id": "30304",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "青玉盘",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成悬盘。曾是衣着配饰，如今化为装备悬浮于手，红光集中聚能，热气可暖手。"
+ },
+ {
+  "id": "30305",
+  "type": 9,
+  "rare": 2,
+  "nameLanText": "青玉炮",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成鼎状短炮。危机四伏，黯夜无光，唯有品德可做勘破迷惘的装备。"
+ },
+ {
+  "id": "30311",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "青玉盾",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，望这份光风霁月的品德能为使用者抵挡攻击和灾厄，拨开迷雾，迎来胜利。"
+ },
+ {
+  "id": "30312",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "青玉剑",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，饰以龙纹，以玉为剑，以德为器，相信世间再无无法斩断之物。"
+ },
+ {
+  "id": "30313",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "青玉弩",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成如意弓弩。弩箭锋利，锐不可当，愿君以此弓征战四野，还我辈文明一方安稳。"
+ },
+ {
+  "id": "30314",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "青玉盘",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成悬盘。曾是衣着配饰，如今化为装备悬浮于手，红光集中聚能，热气可暖手。"
+ },
+ {
+  "id": "30315",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "青玉炮",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成鼎状短炮。危机四伏，黯夜无光，唯有品德可做勘破迷惘的装备。"
+ },
+ {
+  "id": "30321",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "青玉盾",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，望这份光风霁月的品德能为使用者抵挡攻击和灾厄，拨开迷雾，迎来胜利。"
+ },
+ {
+  "id": "30322",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "青玉剑",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，饰以龙纹，以玉为剑，以德为器，相信世间再无无法斩断之物。"
+ },
+ {
+  "id": "30323",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "青玉弩",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成如意弓弩。弩箭锋利，锐不可当，愿君以此弓征战四野，还我辈文明一方安稳。"
+ },
+ {
+  "id": "30324",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "青玉盘",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成悬盘。曾是衣着配饰，如今化为装备悬浮于手，红光集中聚能，热气可暖手。"
+ },
+ {
+  "id": "30325",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "青玉炮",
+  "DescriptionLanText": "器者装备。\n以青玉为装备，取其碧青高洁之意，制成鼎状短炮。危机四伏，黯夜无光，唯有品德可做勘破迷惘的装备。"
+ },
+ {
+  "id": "30411",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "麻雀牌盾",
+  "DescriptionLanText": "器者装备。\n不同地区的麻将有不同的花色，东南西北坐镇四方，为下一把的手气增光添彩。"
+ },
+ {
+  "id": "30412",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "麻雀牌剑",
+  "DescriptionLanText": "器者装备。\n虽然明知凑出这种花色对于赢牌没有任何帮助，但是设计师坚持认为这赏心悦目，值得作为剑器展示出来。"
+ },
+ {
+  "id": "30413",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "麻雀牌弩",
+  "DescriptionLanText": "器者装备。\n又名清一色复合弩，纪念一次难忘的胜利。"
+ },
+ {
+  "id": "30414",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "麻雀牌悬仪",
+  "DescriptionLanText": "器者装备。\n麻将牌花色迥然缠绕悬仪，经典排布从古至今，取下小小一颗麻将即可作为炮弹发射。注：麻将不能作为炮弹，请不要尝试。"
+ },
+ {
+  "id": "30415",
+  "type": 9,
+  "rare": 3,
+  "nameLanText": "麻雀牌炮",
+  "DescriptionLanText": "器者装备。\n筒子花色圆润大方，置于短炮上更添一份“今晚再搓一把”的冲动……只要别在战斗的时候突然跑去打麻将，应该也没问题。"
+ },
+ {
+  "id": "30421",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "麻雀牌盾",
+  "DescriptionLanText": "器者装备。\n不同地区的麻将有不同的花色，东南西北坐镇四方，为下一把的手气增光添彩。"
+ },
+ {
+  "id": "30422",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "麻雀牌剑",
+  "DescriptionLanText": "器者装备。\n虽然明知凑出这种花色对于赢牌没有任何帮助，但是设计师坚持认为这赏心悦目，值得作为剑器展示出来。"
+ },
+ {
+  "id": "30423",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "麻雀牌弩",
+  "DescriptionLanText": "器者装备。\n又名清一色复合弩，纪念一次难忘的胜利。"
+ },
+ {
+  "id": "30424",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "麻雀牌悬仪",
+  "DescriptionLanText": "器者装备。\n麻将牌花色迥然缠绕悬仪，经典排布从古至今，取下小小一颗麻将即可作为炮弹发射。注：麻将不能作为炮弹，请不要尝试。"
+ },
+ {
+  "id": "30425",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "麻雀牌炮",
+  "DescriptionLanText": "器者装备。\n筒子花色圆润大方，置于短炮上更添一份“今晚再搓一把”的冲动……只要别在战斗的时候突然跑去打麻将，应该也没问题。"
+ },
+ {
+  "id": "30521",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "铜青盾",
+  "DescriptionLanText": "器者装备。\n造型让部分器者产生了强烈的情绪。在四川地区使用时请小心。"
+ },
+ {
+  "id": "30522",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "铜青双刃",
+  "DescriptionLanText": "器者装备。\n刀身上活灵活现，栩栩如生的龙，仿佛正要吞噬敌人——另有发光限量版限时售卖！"
+ },
+ {
+  "id": "30523",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "铜青弩",
+  "DescriptionLanText": "器者装备。\n“再次重申，敲击两边的编钟会缩短装备的使用寿命，请勿随意敲击。”"
+ },
+ {
+  "id": "30524",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "铜青香炉",
+  "DescriptionLanText": "器者装备。\n注：烟雾为模拟虚景，可以放心在烟雾报警器下使用。"
+ },
+ {
+  "id": "30525",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "铜青樽炮",
+  "DescriptionLanText": "器者装备。\n使用特殊的燃料驱动，可以有效使敌方晕厥。注意：可能烫手。"
+ },
+ {
+  "id": "30621",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "国际象棋盾",
+  "DescriptionLanText": "器者装备。\n娱乐，实用和战斗性的完美结合，请注意不要在战场上掉落棋子，对敌人造成没必要的嘲讽。"
+ },
+ {
+  "id": "30622",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "五子剑",
+  "DescriptionLanText": "器者装备。\n五子连珠方为胜利。棋盘上尔虞我诈、你下我堵，在即将失败之际，如何挽回颓势？用这把剑直接划破棋盘吧！"
+ },
+ {
+  "id": "30623",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "花牌劲弩",
+  "DescriptionLanText": "器者装备。\n春夏秋冬，梅兰竹菊，四时之景，四季之花，尽于牌面弩间。"
+ },
+ {
+  "id": "30624",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "跳棋珠球",
+  "DescriptionLanText": "器者装备。\n仪身圆润晶莹，高强度重组玻璃材质。跳棋棋盘对称设计，不同组合可以拼成不同类型的棋盘，请尽情探索。"
+ },
+ {
+  "id": "30625",
+  "type": 9,
+  "rare": 4,
+  "nameLanText": "叶骰炮",
+  "DescriptionLanText": "器者装备。\n叶子戏辅以骰子，每次投掷都精准落到“六”点，人工保障使用者的幸运。纸牌之下，是一颗飞速推演计算的心。"
+ },
+ {
+  "id": "30741",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "珐琅盾",
+  "DescriptionLanText": "器者装备。\n一挡毫发无伤，二挡人生无忧，三挡寿比南山。除了不适合给老人家祝寿以外，一切都很完美。"
+ },
+ {
+  "id": "30742",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "珐琅双钩",
+  "DescriptionLanText": "器者装备。\n比起攻击敌人，更经常被用来勾树枝。实用构造，优美设计。"
+ },
+ {
+  "id": "30743",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "珐琅弩",
+  "DescriptionLanText": "器者装备。\n这一箭，射出的不是鸡鸣，而是荣华富贵利禄之心。"
+ },
+ {
+  "id": "30744",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "珐琅兽杖",
+  "DescriptionLanText": "器者装备。\n吉祥如意迎喜事，威风凛凛退来敌。兼备招猫逗狗哄小孩等多种功能，使用时记得关闭攻击按钮。"
+ },
+ {
+  "id": "30745",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "珐琅炮",
+  "DescriptionLanText": "器者装备。\n请收下这一击行星毁灭级真诚祝福，祝各位阖家欢乐，新年财气旺……我开玩笑的别拿这个对着人啊！"
+ },
+ {
+  "id": "30841",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "铜犴盾",
+  "DescriptionLanText": "器者装备。\n以狴犴镇压奸妄，以正义抵挡敌人。持此沉重铜盾，坚定向前，排除一切扰乱内心的话语，堡垒般绝不后退。"
+ },
+ {
+  "id": "30842",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "铜犴剑",
+  "DescriptionLanText": "器者装备。\n以狴犴为剑，剑指混沌纷杂的乱世，刀光剑影背后，是一派河清海晏。"
+ },
+ {
+  "id": "30843",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "铜犴弩",
+  "DescriptionLanText": "器者装备。\n龙之第七子，狱门之守，百姓之护。注：该弩后坐力极强，建议谨慎使用。"
+ },
+ {
+  "id": "30844",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "铜犴仪",
+  "DescriptionLanText": "器者装备。\n仪器悬浮于手，如一颗心脏，时时刻刻鼓动不停，为公平公正的脉搏输送血液。"
+ },
+ {
+  "id": "30845",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "铜犴炮",
+  "DescriptionLanText": "器者装备。\n以狴犴为炮，轰出最激烈的镀铜炮弹，让狴犴形状的爆炸云升腾在保卫平安的战场上。"
+ },
+ {
+  "id": "30941",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "旧画盾",
+  "DescriptionLanText": "器者装备。\n树枝清雅，花苞微绽，暮光悠悠……本来只是一幅画，被设计师征用拿来印在盾牌上，还用科技骨架裱了起来。"
+ },
+ {
+  "id": "30942",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "旧画刀",
+  "DescriptionLanText": "器者装备。\n青山绿水尽镶于玲珑刀柄，精选美工刀制式进行设计，古画与现代简便器具两相结合，一份猜不透的作品。"
+ },
+ {
+  "id": "30943",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "山水弩",
+  "DescriptionLanText": "器者装备。\n青松蓊郁，山水匆匆，人行其间，天地几何？折扇折住风流，扇去清风。"
+ },
+ {
+  "id": "30944",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "旧画扇",
+  "DescriptionLanText": "器者装备。\n本来是想做一把蒲扇，事情怎么变成了这样……只要不嫌重，也可以拿来扇风。"
+ },
+ {
+  "id": "30945",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "山水炮",
+  "DescriptionLanText": "器者装备。\n黄山之奇，独一无二。原本是作为元宵节的花灯设计，设计师的确也往里面安装了灯管，虽然是拿来聚能射击而不是照亮的……"
+ },
+ {
+  "id": "31041",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "瓶内词话盾",
+  "DescriptionLanText": "器者装备。\n纤纤碧色，春色觅红，尽是风雅。瓶内词话，黄粱一梦。"
+ },
+ {
+  "id": "31042",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "瓶内词话剑",
+  "DescriptionLanText": "器者装备。\n设计者痴迷武侠作品之产物。轻盈如风，优美如月，瓷白如雪。瓶内词话，黄粱一梦。"
+ },
+ {
+  "id": "31043",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "瓶内词话弩",
+  "DescriptionLanText": "器者装备。\n矫健身姿，白燕作形，飞鸟相伴。瓶内词话，黄粱一梦。"
+ },
+ {
+  "id": "31044",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "瓶内词话炮",
+  "DescriptionLanText": "器者装备。\n轻瓷白釉，花开几枝，尽态极妍。瓶内词话，黄粱一梦。"
+ },
+ {
+  "id": "31045",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "瓶内词话仪",
+  "DescriptionLanText": "器者装备。\n——碧坠轻晃，凌凌声响，圆仪清润。瓶内词话，黄粱一梦。"
+ },
+ {
+  "id": "31141",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "熊猫竹盾",
+  "DescriptionLanText": "器者装备。\n大熊猫敦实的身体将牢牢守护在你的身前，防御一切敌人的进攻！大熊猫，冲锋！"
+ },
+ {
+  "id": "31142",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "熊猫竹剑",
+  "DescriptionLanText": "器者装备。\n特质光学打印金属上色，仿竹剑设计，削铁如泥，难道是参观大熊猫基地时逗熊猫的不二法宝？"
+ },
+ {
+  "id": "31143",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "熊猫竹弩",
+  "DescriptionLanText": "器者装备。\n竹筒望远镜为你的眺望散发一份清香，竹筒弩身为你的射击更添一份精准，大熊猫装饰激励你的成长。"
+ },
+ {
+  "id": "31144",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "熊猫竹灯",
+  "DescriptionLanText": "器者装备。\n熊猫图案印于悬器，摇摇摆摆之间更显憨态可掬，中间的竹子可有效蓄水，野外生存时可以利用这一点。"
+ },
+ {
+  "id": "31145",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "熊猫竹炮",
+  "DescriptionLanText": "器者装备。\n简洁设计，竹子排列，巴蜀大地的清香意趣尽在其中，悉心为大熊猫图案系上蝴蝶结，从今天起，你也有了自己的“大熊猫”。"
+ },
+ {
+  "id": "31241",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "金桂抱月盾"
+ },
+ {
+  "id": "31242",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "金桂抱月剑"
+ },
+ {
+  "id": "31243",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "金桂抱月弩"
+ },
+ {
+  "id": "31244",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "金桂抱月灯"
+ },
+ {
+  "id": "31245",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "金桂抱月炮"
+ },
+ {
+  "id": "31341",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "流云鸣沙盾"
+ },
+ {
+  "id": "31342",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "流云鸣沙刃"
+ },
+ {
+  "id": "31343",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "流云鸣沙弩"
+ },
+ {
+  "id": "31344",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "流云鸣沙乐"
+ },
+ {
+  "id": "31345",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "流云鸣沙炮"
+ },
+ {
+  "id": "31441",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "太虚恒光盾"
+ },
+ {
+  "id": "31442",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "太虚恒光剑"
+ },
+ {
+  "id": "31443",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "太虚恒光弩"
+ },
+ {
+  "id": "31444",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "太虚恒光仪"
+ },
+ {
+  "id": "31445",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "太虚恒光炮"
+ },
+ {
+  "id": "31541",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "绮木覆花盾"
+ },
+ {
+  "id": "31542",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "绮木覆花剑"
+ },
+ {
+  "id": "31543",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "绮木覆花弩"
+ },
+ {
+  "id": "31544",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "绮木覆花仪"
+ },
+ {
+  "id": "31545",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "绮木覆花炮"
+ },
+ {
+  "id": "39001",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "刀币刀"
+ },
+ {
+  "id": "39002",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "古典松木弩"
+ },
+ {
+  "id": "39004",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "象经盾"
+ },
+ {
+  "id": "39006",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "星霞"
+ },
+ {
+  "id": "39007",
+  "type": 9,
+  "rare": 5,
+  "nameLanText": "雪绒万花炮"
+ }
+]

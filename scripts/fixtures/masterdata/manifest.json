@@ -1,0 +1,27 @@
+{
+ "exportedAt": "2026-09-27T06:11:00.716Z",
+ "source": "NeoArtifacts/MasterData/json (+ Assets/ItemIcons for weaponIconsPresent)",
+ "sourceSha256": {
+  "equipments.json": "fd2b7b2b0ce4b89a34e9f647993e8104264992cf2de7c3a079b0e68cf8a6f454",
+  "equipmentSkills.json": "b87d7d99c91d884846056a3fc4073e5185983282e4d29115251378b71611458a",
+  "additionalAttrs.json": "6d309960a14e647f0fa2503ed8112304e0de3076ed701c8aa0fd26a105b270e6",
+  "jobStyleMap.json": "8fac33a727549cc044242b98ae81126c4de7fb9121f742cd572632fc99b602a7",
+  "sectorMap.json": "12435cc1f048546d389433d05d653de4672e2f72087158c763bc9ee28f552536",
+  "talentBankMap.json": "79618db7c6e3dc96393e6d79d2f41ece26cc33159e9f5f36c5698af3a069735a",
+  "characterTable.json": "1bc96fc1bb7546f0a991dd3d2dd8c7b1fb281fa27178558ad791c4ff452081b8",
+  "itemMap.json": "7b20ccf00c65accd70f9348775bfeb95dc0d09eb52d53150fa40455214745181",
+  "equipmentFiles.json": "fed7e271b253f44fc36cc49e27acc9334b3d6cf3c9308d3159a192cd5da707cc"
+ },
+ "counts": {
+  "equipments.json": 110,
+  "equipmentSkills.json": 684,
+  "equipmentFiles.json": 110,
+  "additionalAttrs.json": 24,
+  "jobStyleMap.json": 15,
+  "sectorMap.json": 60,
+  "talentBankMap.json": 445,
+  "characterStyles.json": 143,
+  "weaponItems.json": 110,
+  "weaponIconsPresent.json": 105
+ }
+}
