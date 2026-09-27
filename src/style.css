@@ -3728,6 +3728,38 @@
   font-family: var(--font-sans);
 }
 
+/* ✕ at the end of the search box, shown while it has text */
+.catalog-search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
+}
+
+.catalog-search-clear[hidden] {
+  display: none;
+}
+
+.catalog-search-clear:hover {
+  color: var(--text-main);
+  background: var(--bg-surface-hover);
+}
+
+.catalog-search-clear:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
 .catalog-filter-toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -3783,24 +3815,56 @@
 }
 
 .catalog-expandable-filters {
-  background: transparent;
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0;
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-4px);
-  overflow: hidden;
-  transition: max-height var(--motion-slow) var(--ease-enter), opacity var(--motion-slow) var(--ease-enter), transform var(--motion-slow) var(--ease-enter), padding var(--motion-slow) var(--ease-enter);
+  /* Opens to its real height: grid rows 0fr -> 1fr (max-height 0 -> 520px finished early on open
+     and waited before closing, which read as a stutter). */
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-exit);
 }
 
 .catalog-expandable-filters.open {
-  max-height: 520px;
-  opacity: 1;
-  transform: translateY(0);
-  padding: 14px 0 16px 0;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.catalog-filters-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.catalog-filters-body {
+  padding: 14px 0 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 180ms var(--ease-exit);
+}
+
+.catalog-expandable-filters.open .catalog-filters-body {
+  opacity: 1;
+  transition: opacity 220ms var(--ease-enter);
+}
+
+/* The groups rise in one after another while the panel opens; they fade out together on close. */
+.catalog-filters-body .compact-filter-group,
+.catalog-filters-body .filter-bottom-actions {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 140ms var(--ease-exit), transform 140ms var(--ease-exit);
+}
+
+.catalog-expandable-filters.open .compact-filter-group,
+.catalog-expandable-filters.open .filter-bottom-actions {
+  opacity: 1;
+  transform: none;
+  transition: opacity 260ms var(--ease-enter) var(--stagger, 0ms), transform 380ms cubic-bezier(0.16, 1, 0.3, 1) var(--stagger, 0ms);
+}
+
+.catalog-filters-body .compact-filter-group:nth-child(2) { --stagger: 35ms; }
+.catalog-filters-body .compact-filter-group:nth-child(3) { --stagger: 70ms; }
+.catalog-filters-body .compact-filter-group:nth-child(4) { --stagger: 105ms; }
+.catalog-filters-body .compact-filter-group:nth-child(5) { --stagger: 140ms; }
+.catalog-filters-body .filter-bottom-actions { --stagger: 175ms; }
 
 .compact-filter-grid {
   display: flex;
@@ -3877,12 +3941,17 @@
   filter: brightness(1);
 }
 
-/* Active State: Restrained Mineral / Lacquer Fills with High Contrast */
+/* Active state (owner 2026-09-27): only the fill changes; the text turns bright white on a light
+   translucent fill, no gold. Rarity and Limited chips have their own colours below. */
 .seg-btn.active {
-  background: rgba(212, 183, 99, 0.12);
-  color: #E2C987;
-  border-color: rgba(212, 183, 99, 0.40);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.32);
   font-weight: 500;
+}
+
+.seg-btn.active:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .seg-btn.active .seg-btn-job-icon {
@@ -3890,53 +3959,43 @@
   filter: brightness(1.15);
 }
 
-/* Material / Lacquer / Mineral Rarity Active States */
-.seg-btn.seg-ssr.active {
-  background: rgba(145, 55, 45, 0.48);
-  border-color: rgba(210, 92, 76, 0.55);
-  color: #F0A08F;
+/* Rarity + Limited: bold coloured text at rest; selected = solid colour fill with dark text. */
+.seg-btn.seg-ssr { --chip: var(--rarity-ssr-vivid); }
+.seg-btn.seg-sr { --chip: var(--rarity-sr-vivid); }
+.seg-btn.seg-r { --chip: var(--rarity-r-vivid); }
+.seg-btn[data-val="limited"] { --chip: var(--pool-limited-vivid); }
+
+.seg-btn.seg-ssr,
+.seg-btn.seg-sr,
+.seg-btn.seg-r,
+.seg-btn[data-val="limited"] {
+  color: var(--chip);
+  font-weight: 700;
 }
 
-.seg-btn.seg-ssr.active:hover {
-  background: rgba(165, 65, 55, 0.60);
-  border-color: rgba(225, 105, 88, 0.70);
-  color: #F7B5A6;
+.seg-btn.seg-ssr:hover,
+.seg-btn.seg-sr:hover,
+.seg-btn.seg-r:hover,
+.seg-btn[data-val="limited"]:hover {
+  color: var(--chip);
+  border-color: var(--chip);
 }
 
-.seg-btn.seg-sr.active {
-  background: rgba(128, 98, 30, 0.48);
-  border-color: rgba(214, 176, 68, 0.55);
-  color: #E7C96D;
-}
-
-.seg-btn.seg-sr.active:hover {
-  background: rgba(148, 114, 38, 0.60);
-  border-color: rgba(230, 192, 82, 0.70);
-  color: #F2D888;
-}
-
-.seg-btn.seg-r.active {
-  background: rgba(52, 82, 116, 0.50);
-  border-color: rgba(105, 149, 202, 0.55);
-  color: #AFCDF1;
-}
-
-.seg-btn.seg-r.active:hover {
-  background: rgba(62, 96, 134, 0.62);
-  border-color: rgba(122, 168, 224, 0.70);
-  color: #C6DEFA;
-}
-
+.seg-btn.seg-ssr.active,
+.seg-btn.seg-sr.active,
+.seg-btn.seg-r.active,
 .seg-btn[data-val="limited"].active {
-  background: rgba(140, 78, 36, 0.48);
-  border-color: rgba(215, 130, 70, 0.55);
-  color: #F0BC98;
+  background: var(--chip);
+  border-color: var(--chip);
+  color: var(--on-vivid);
+  font-weight: 700;
 }
 
+.seg-btn.seg-ssr.active:hover,
+.seg-btn.seg-sr.active:hover,
+.seg-btn.seg-r.active:hover,
 .seg-btn[data-val="limited"].active:hover {
-  background: rgba(158, 90, 42, 0.60);
-  border-color: rgba(230, 145, 85, 0.70);
-  color: #F7CDAE;
+  filter: brightness(1.08);
 }
 
 /* Filter Section Divider */
@@ -4029,6 +4088,9 @@
 
   .filter-chevron-icon,
   .catalog-expandable-filters,
+  .catalog-filters-body,
+  .catalog-filters-body .compact-filter-group,
+  .catalog-filters-body .filter-bottom-actions,
   .seg-btn,
   .cc-card {
     transition: none !important;
@@ -6939,6 +7001,34 @@
   transform: translateY(-50%) translateX(0);
 }
 
+/* "Về đầu trang" takes the feedback button's old place; feedback sits one button (46px + 8px) above.
+   The top button appears after scrolling (src/app/layout/backToTopButton.js). */
+.whmx-feedback-btn--raised {
+  --raise: 54px;
+  bottom: calc(24px + var(--raise) + env(safe-area-inset-bottom, 0px));
+}
+
+.whmx-top-btn {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity var(--motion-normal, 180ms) ease, transform var(--motion-normal, 180ms) ease, visibility 0s linear var(--motion-normal, 180ms);
+}
+
+.whmx-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--motion-normal, 180ms) ease, transform var(--motion-normal, 180ms) ease, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whmx-top-btn,
+  .whmx-top-btn.is-visible {
+    transition: none;
+  }
+}
+
 /* Mobile & Touch Layout */
 @media (max-width: 768px) {
   .whmx-feedback-btn {
@@ -6946,6 +7036,10 @@
     right: calc(16px + env(safe-area-inset-right, 0px));
     width: 46px;
     height: 46px;
+  }
+
+  .whmx-feedback-btn--raised {
+    bottom: calc(16px + var(--raise) + var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
   }
 
   .feedback-badge {

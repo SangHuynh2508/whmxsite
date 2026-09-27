@@ -195,6 +195,9 @@ export function renderCharacterCatalogView(container) {
                      placeholder="Tìm kiếm theo tên nhân vật..." 
                      value="${catalogSearchQuery}" 
                      autocomplete="off" />
+              <button type="button" id="catalog-search-clear" class="catalog-search-clear" aria-label="Xóa nội dung tìm kiếm" ${catalogSearchQuery ? '' : 'hidden'}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
             </div>
 
             <button type="button" 
@@ -208,6 +211,8 @@ export function renderCharacterCatalogView(container) {
 
           <!-- Collapsible Expandable Filters Toolbar (Continuous Layout without Dividers) -->
           <div class="catalog-expandable-filters ${isFilterExpanded ? 'open' : ''}" id="catalog-expandable-filters">
+            <div class="catalog-filters-clip">
+            <div class="catalog-filters-body">
             <div class="compact-filter-grid">
               <!-- Job Segmented Control -->
               <div class="compact-filter-group group-job">
@@ -283,6 +288,8 @@ export function renderCharacterCatalogView(container) {
                 <button type="button" class="catalog-clear-filters-btn" id="catalog-clear-filters-btn">Xóa bộ lọc</button>
               </div>
             ` : ''}
+            </div>
+            </div>
           </div>
         </section>
 
@@ -299,11 +306,28 @@ export function renderCharacterCatalogView(container) {
 
   function attachEvents() {
     const searchInput = container.querySelector('#catalog-search-input');
+    const searchClear = container.querySelector('#catalog-search-clear');
     if (searchInput) {
+      const clearSearch = () => {
+        searchInput.value = '';
+        catalogSearchQuery = '';
+        if (searchClear) searchClear.hidden = true;
+        updateGrid();
+        searchInput.focus();
+      };
       searchInput.addEventListener('input', (e) => {
         catalogSearchQuery = e.target.value.trim();
+        if (searchClear) searchClear.hidden = !e.target.value;
         updateGrid();
       });
+      // Esc clears a typed name, like the ✕.
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchInput.value) {
+          e.preventDefault();
+          clearSearch();
+        }
+      });
+      searchClear?.addEventListener('click', clearSearch);
     }
 
     const filterToggleBtn = container.querySelector('#catalog-filter-toggle');

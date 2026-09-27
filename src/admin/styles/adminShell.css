@@ -8,7 +8,8 @@
 body.admin-route-active>#drawer-backdrop,
 body.admin-route-active>#app,
 body.admin-route-active>#calc-char-picker-backdrop,
-body.admin-route-active>#whmx-feedback-btn {
+body.admin-route-active>#whmx-feedback-btn,
+body.admin-route-active>#whmx-top-btn {
   display: none !important;
 }
 

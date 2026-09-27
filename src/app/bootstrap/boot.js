@@ -12,6 +12,7 @@ import { initAppNav } from '../layout/AppNav.tsx';
 import { initRouter, handleRoute } from '../router/router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
 import { initFeedbackButton } from '../layout/feedbackButton.js';
+import { initBackToTopButton } from '../layout/backToTopButton.js';
 import { initAdminShell } from '../../admin/layout/mount.tsx';
 import { initSession } from '../auth/session.js';
 import { inject, pageview } from '@vercel/analytics';
@@ -39,6 +40,7 @@ export async function boot() {
   initAppNav();
   initTheme();
   initFeedbackButton();
+  initBackToTopButton();
   const gameData = await loadGameData();
 
   initCalcPicker();

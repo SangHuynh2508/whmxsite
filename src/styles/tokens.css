@@ -45,6 +45,14 @@
   --rarity-r-text: #AFCDF1;
   --rarity-r-border: rgba(105, 149, 202, 0.55);
 
+  /* Vivid rarity / Limited colours for filter chips (owner 2026-09-27): coloured bold text at
+     rest, a solid fill with dark text when selected. */
+  --rarity-ssr-vivid: #F0564B;
+  --rarity-sr-vivid: #F2C14E;
+  --rarity-r-vivid: #4FA3F7;
+  --pool-limited-vivid: #F2C14E;
+  --on-vivid: #111315;
+
   /* Legacy aliases mapping to authoritative global rarity tokens */
   --rare-5: #b93232;
   --rare-4: var(--rarity-ssr);
