@@ -50,27 +50,36 @@ export function planProfileImport({ normalized, current }) {
     counts.absent += 1;
   }
 
-  for (const term of normalized.terms) {
-    const old = current.terms.get(term.code);
-    if (!old) { plan.terms.push({ code: term.code, action: 'insert', row: term }); counts.inserted += 1; plan.touchedTerms.add(term.code); continue; }
-    if (old.sourceHash === term.sourceHash && old.sourcePresent) { plan.terms.push({ code: term.code, action: 'unchanged' }); counts.unchanged += 1; continue; }
+  planTerms(plan, normalized.terms, current.terms);
+  return plan;
+}
+
+// Translatable terms (lore_terms, game_texts): insert new ones, update CN (a changed CN under a VI → source_changed),
+// mark the ones gone from raw as absent. Never deletes, never writes VI. Shared by the profile and game-reference
+// importers; `keyOf` names a row the way `currentTerms` is keyed.
+export function planTerms(plan, terms, currentTerms, keyOf = (t) => t.code) {
+  const { counts } = plan;
+  for (const term of terms) {
+    const key = keyOf(term);
+    const old = currentTerms.get(key);
+    if (!old) { plan.terms.push({ code: key, action: 'insert', row: term }); counts.inserted += 1; plan.touchedTerms.add(key); continue; }
+    if (old.sourceHash === term.sourceHash && old.sourcePresent) { plan.terms.push({ code: key, action: 'unchanged' }); counts.unchanged += 1; continue; }
     const patch = { kind: term.kind, nameCn: term.nameCn, detailCn: term.detailCn, sourceHash: term.sourceHash, sourcePresent: true };
     if (old.sourceHash !== term.sourceHash) {
       plan.cnChanged = true;
       if (old.nameVi !== null || old.detailVi !== null) { patch.state = 'source_changed'; counts.conflicted += 1; } else counts.updated += 1;
-      plan.audits.push({ scope: 'term', key: term.code, fieldName: 'name_detail', oldValue: { sourceHash: old.sourceHash }, newValue: { nameCn: term.nameCn, detailCn: term.detailCn } });
+      plan.audits.push({ scope: 'term', key, fieldName: 'name_detail', oldValue: { sourceHash: old.sourceHash }, newValue: { nameCn: term.nameCn, detailCn: term.detailCn } });
     } else counts.updated += 1;
-    plan.terms.push({ code: term.code, action: 'update', patch });
-    plan.touchedTerms.add(term.code);
+    plan.terms.push({ code: key, action: 'update', patch });
+    plan.touchedTerms.add(key);
   }
-  const normalizedCodes = new Set(normalized.terms.map((t) => t.code));
-  for (const [code, old] of current.terms) {
-    if (normalizedCodes.has(code) || !old.sourcePresent) continue;
+  const codes = new Set(terms.map(keyOf));
+  for (const [code, old] of currentTerms) {
+    if (codes.has(code) || !old.sourcePresent) continue;
     plan.terms.push({ code, action: 'absent', patch: { sourcePresent: false } });
     plan.touchedTerms.add(code);
     counts.absent += 1;
   }
-  return plan;
 }
 
 // Any change to what the published document is built from means the live lore is stale.

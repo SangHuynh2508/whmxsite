@@ -35,7 +35,8 @@ export const characterProfiles = pgTable('character_profiles', {
   ...timestamps,
 }, (table) => [uniqueIndex('character_profiles_character_unique').on(table.characterEntityId)]);
 
-const viColumns = {
+// Shared by every translatable text table (lore units, lore terms, game texts).
+export const viColumns = {
   viOrigin: viOrigin('vi_origin'),
   state: loreTextState('state').notNull().default('ok'),
   viUpdatedByUserId: uuid('vi_updated_by_user_id').references(() => users.id, { onDelete: 'restrict' }),

@@ -66,7 +66,7 @@ function summarize(plan, normalized, seeds) {
   };
 }
 
-async function ensureEntities(tx, entityType, keys) {
+export async function ensureEntities(tx, entityType, keys) {
   if (keys.length) await tx.insert(managedEntities).values(keys.map((sourceKey) => ({ entityType, sourceKey }))).onConflictDoNothing();
   const rows = keys.length ? await tx.select().from(managedEntities).where(inArray(managedEntities.sourceKey, keys)) : [];
   return new Map(rows.filter((r) => r.entityType === entityType).map((r) => [r.sourceKey, r.id]));

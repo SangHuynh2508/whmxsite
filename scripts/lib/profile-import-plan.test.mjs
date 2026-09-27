@@ -71,3 +71,4 @@ test('profiles and terms gone from raw are marked absent once, never deleted (re
   assert.equal(plan.counts.absent, 2);
   assert.ok(plan.touchedProfiles.has('Z9999') && plan.touchedTerms.has('K9999'));
 });
+

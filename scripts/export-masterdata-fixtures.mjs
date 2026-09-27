@@ -7,6 +7,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { BUILD_TABLES, FULL_TABLES, selectBuildTables } from './lib/game-ref-source.mjs';
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const MASTER = resolve(ROOT, '..', 'NeoArtifacts', 'MasterData', 'json');
 const ICONS = resolve(ROOT, '..', 'NeoArtifacts', 'Assets', 'ItemIcons');
@@ -18,43 +20,13 @@ const load = (name) => {
   sources[name] = createHash('sha256').update(buffer).digest('hex');
   return JSON.parse(buffer.toString('utf8'));
 };
-const rows = (json) => (Array.isArray(json) ? json : Object.values(json));
 
-const equipments = rows(load('equipments.json'));
-const weaponIds = new Set(equipments.map((w) => String(w.id)));
-const skillGroups = new Set(equipments.flatMap((w) => w.equipSkill ?? []));
-// equipmentSkills.json: { "<n>": { GroupId, Level, … } } rows — keep every level of the referenced groups
-const equipmentSkills = rows(load('equipmentSkills.json')).flatMap((r) => (r && r.GroupId ? [r] : Object.values(r ?? {}))).filter((r) => skillGroups.has(r?.GroupId));
-const additionalAttrs = rows(load('additionalAttrs.json'));
-const jobStyleMap = rows(load('jobStyleMap.json'));
-const sectorMap = rows(load('sectorMap.json'));
-const talentIds = new Set([
-  ...jobStyleMap.flatMap((s) => s.styleTalent ?? []),
-  ...sectorMap.flatMap((s) => (s.sectorTalent ?? []).flat()),
-]);
-const talentBankMap = rows(load('talentBankMap.json')).filter((t) => talentIds.has(t.id));
-const characterStyles = rows(load('characterTable.json'))
-  .filter((c) => c.JobStyle)
-  .map((c) => ({ id: c.id, job: c.job ?? c.Job ?? null, JobStyle: c.JobStyle, TalentRecommend: c.TalentRecommend ?? null }));
-const weaponItems = rows(load('itemMap.json'))
-  .filter((i) => i.type === 9)
-  .map((i) => ({ id: String(i.id), type: i.type, rare: i.rare, nameLanText: i.nameLanText, DescriptionLanText: i.DescriptionLanText }));
-const equipmentFiles = rows(load('equipmentFiles.json')).filter((f) => weaponIds.has(String(f.id)));
-const weaponIconsPresent = [...weaponIds].filter((id) => existsSync(join(ICONS, `itemicon_${id}.png`))).sort();
+// Same selection as scripts/import-game-references.mjs (selectBuildTables), so the fixtures are what the importer reads.
+const full = Object.fromEntries(Object.entries(FULL_TABLES).map(([key, name]) => [key, load(name)]));
+const tables = selectBuildTables(full, (id) => existsSync(join(ICONS, `itemicon_${id}.png`)));
 
 mkdirSync(OUT, { recursive: true });
-const files = {
-  'equipments.json': equipments,
-  'equipmentSkills.json': equipmentSkills,
-  'equipmentFiles.json': equipmentFiles,
-  'additionalAttrs.json': additionalAttrs,
-  'jobStyleMap.json': jobStyleMap,
-  'sectorMap.json': sectorMap,
-  'talentBankMap.json': talentBankMap,
-  'characterStyles.json': characterStyles,
-  'weaponItems.json': weaponItems,
-  'weaponIconsPresent.json': weaponIconsPresent,
-};
+const files = Object.fromEntries(BUILD_TABLES.map((name) => [`${name}.json`, tables[name]]));
 for (const [name, data] of Object.entries(files)) writeFileSync(join(OUT, name), `${JSON.stringify(data, null, 1)}\n`);
 writeFileSync(join(OUT, 'manifest.json'), `${JSON.stringify({
   exportedAt: new Date().toISOString(),
