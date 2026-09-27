@@ -8,15 +8,25 @@
 export const MAX_WEAPONS = 4;
 export const MAX_COLUMN_POINTS = 7;
 export const MAX_TOTAL_POINTS = 11;
+export const MAX_DEEPENS = 3;
 const LIMITS = { name: 60, rating: 20, summary: 2000, label: 60, tip: 500, note: 500, teamOther: 500 };
-const FIELDS = ['name', 'rating', 'summary', 'weapons', 'affixes', 'deepen', 'rotations', 'tips', 'teams', 'teamOther'];
+const FIELDS = ['name', 'rating', 'summary', 'weapons', 'affixes', 'deepens', 'rotations', 'tips', 'teams', 'teamOther'];
 
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+
+// Up to 3 深造 suggestions per build (owner 2026-09-27). Documents saved before that hold one `deepen`: read, saved and
+// published as `deepens` (used by the validator, the admin read and the game document).
+export function withDeepens(doc) {
+  if (!isObject(doc) || !('deepen' in doc)) return doc;
+  const { deepen, ...rest } = doc;
+  return { ...rest, deepens: rest.deepens ?? (isObject(deepen) ? [{ label: '', ...deepen }] : []) };
+}
 
 export function validateBuild(input, ctx) {
   const errors = [];
   const fail = (path, code) => { errors.push({ path, code }); };
   if (!isObject(input)) return { doc: null, errors: [{ path: '', code: 'BAD_SHAPE' }] };
+  input = withDeepens(input);
 
   const str = (value, path, limit) => {
     if (value === undefined || value === null) return '';
@@ -70,19 +80,18 @@ export function validateBuild(input, ctx) {
     }
   }
 
-  let deepen = null;
-  if (input.deepen !== undefined && input.deepen !== null) {
-    if (!isObject(input.deepen)) fail('deepen', 'BAD_SHAPE');
-    else {
-      const styleId = String(input.deepen.styleId ?? '');
-      if (!character.styleIds.includes(styleId)) fail('deepen.styleId', 'FOREIGN_STYLE');
-      const points = input.deepen.points;
-      const valid = Array.isArray(points) && points.length === 4 && points.every((p) => Number.isInteger(p) && p >= 0 && p <= MAX_COLUMN_POINTS);
-      if (!valid) fail('deepen.points', 'BAD_POINTS');
-      else if (points.reduce((a, b) => a + b, 0) > MAX_TOTAL_POINTS) fail('deepen.points', 'TOO_MANY_POINTS');
-      deepen = { styleId, points: valid ? [...points] : [0, 0, 0, 0] };
-    }
-  }
+  const deepenList = list(input.deepens, 'deepens');
+  if (deepenList.length > MAX_DEEPENS) fail('deepens', 'TOO_MANY');
+  const deepens = deepenList.map((d, i) => {
+    if (!isObject(d)) { fail(`deepens.${i}`, 'BAD_SHAPE'); return null; }
+    const styleId = String(d.styleId ?? '');
+    if (!character.styleIds.includes(styleId)) fail(`deepens.${i}.styleId`, 'FOREIGN_STYLE');
+    const { points } = d;
+    const valid = Array.isArray(points) && points.length === 4 && points.every((p) => Number.isInteger(p) && p >= 0 && p <= MAX_COLUMN_POINTS);
+    if (!valid) fail(`deepens.${i}.points`, 'BAD_POINTS');
+    else if (points.reduce((a, b) => a + b, 0) > MAX_TOTAL_POINTS) fail(`deepens.${i}.points`, 'TOO_MANY_POINTS');
+    return { label: str(d.label, `deepens.${i}.label`, LIMITS.label), styleId, points: valid ? [...points] : [0, 0, 0, 0] };
+  });
 
   const skills = new Set(character.skillIds);
   const doc = {
@@ -91,7 +100,7 @@ export function validateBuild(input, ctx) {
     summary: str(input.summary, 'summary', LIMITS.summary),
     weapons: docWeapons.filter(Boolean),
     affixes,
-    deepen,
+    deepens: deepens.filter(Boolean),
     rotations: list(input.rotations, 'rotations').map((r, i) => ({
       label: str(r?.label, `rotations.${i}.label`, LIMITS.label),
       skillIds: ids(r?.skillIds, `rotations.${i}.skillIds`, (id) => (skills.has(id) ? null : 'UNKNOWN_SKILL')),

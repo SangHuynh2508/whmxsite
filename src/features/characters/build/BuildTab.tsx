@@ -59,17 +59,22 @@ function BuildTab({ views }: { views: BuildView[] }) {
           ))}
         </section>
       )}
-      {v.deepen && (
+      {v.deepens.length > 0 && (
         <section className="build-block">
-          <h3>Thâm tạo · <Text unit={v.deepen.style} /> <span className="build-muted">{v.deepen.total}/11</span></h3>
-          <div className="build-columns">
-            {v.deepen.columns.map((c, i) => (
-              <details key={i} className="build-column">
-                <summary><Text unit={c.name} /> <b>{c.points}</b></summary>
-                <ol>{c.talents.map((t) => <li key={t.point} className={t.reached ? 'is-reached' : undefined}><Text unit={t.text} /></li>)}</ol>
-              </details>
-            ))}
-          </div>
+          <h3>Thâm tạo</h3>
+          {v.deepens.map((d, n) => (
+            <div key={n} className="build-group">
+              <span className="build-group-label">{d.label && `${d.label} · `}<Text unit={d.style} /> <span className="build-muted">{d.total}/11</span></span>
+              <div className="build-columns">
+                {d.columns.map((c, i) => (
+                  <details key={i} className="build-column">
+                    <summary><Text unit={c.name} /> <b>{c.points}</b></summary>
+                    <ol>{c.talents.map((t) => <li key={t.point} className={t.reached ? 'is-reached' : undefined}><Text unit={t.text} /></li>)}</ol>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))}
         </section>
       )}
       {v.rotations.length > 0 && (

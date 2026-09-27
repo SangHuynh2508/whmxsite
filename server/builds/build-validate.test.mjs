@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { validateBuild } from './build-validate.mjs';
+import { validateBuild, withDeepens } from './build-validate.mjs';
 
 // D0017 (Túc Vệ, job 1, styles 101/102/103) with two real weapons of its job and one of another job.
 const ctx = {
@@ -14,7 +14,7 @@ const build = (patch = {}) => ({
   name: 'Chuẩn', rating: 'S', summary: 'Chống chịu tốt',
   weapons: [{ weaponId: '30111', label: 'Chịu đòn' }],
   affixes: { noReroll: true, groups: [{ label: 'Ưu tiên', affixIds: ['AA001001'] }] },
-  deepen: { styleId: '102', points: [7, 4, 0, 0] },
+  deepens: [{ label: '', styleId: '102', points: [7, 4, 0, 0] }],
   rotations: [{ label: '0 dupe', skillIds: ['D001701', 'D001702'] }],
   tips: ['Mở đầu bằng khiên'],
   teams: [{ label: 'Đội chính', characterIds: ['A0001', 'W0182'], note: '' }],
@@ -44,14 +44,35 @@ test('affixes: must exist and allow the character\'s job', () => {
   ]);
 });
 
-test('深造: the style must be one of the character\'s 3; 4 points, each 0–7, total ≤ 11', () => {
-  assert.deepEqual(codes({ deepen: { styleId: '301', points: [0, 0, 0, 0] } }), ['deepen.styleId FOREIGN_STYLE']);
-  assert.deepEqual(codes({ deepen: { styleId: '102', points: [8, 0, 0, 0] } }), ['deepen.points BAD_POINTS']);
-  assert.deepEqual(codes({ deepen: { styleId: '102', points: [1.5, 0, 0, 0] } }), ['deepen.points BAD_POINTS']);
-  assert.deepEqual(codes({ deepen: { styleId: '102', points: [7, 5] } }), ['deepen.points BAD_POINTS']);
-  assert.deepEqual(codes({ deepen: { styleId: '102', points: [7, 5, 0, 0] } }), ['deepen.points TOO_MANY_POINTS']);
-  assert.deepEqual(codes({ deepen: { styleId: '102', points: [7, 4, 0, 0] } }), []);
-  assert.deepEqual(codes({ deepen: null }), []); // no 深造 yet
+test("深造: the style must be one of the character's 3; 4 points, each 0–7, total ≤ 11", () => {
+  const d = (styleId, points) => ({ deepens: [{ label: '', styleId, points }] });
+  assert.deepEqual(codes(d('301', [0, 0, 0, 0])), ['deepens.0.styleId FOREIGN_STYLE']);
+  assert.deepEqual(codes(d('102', [8, 0, 0, 0])), ['deepens.0.points BAD_POINTS']);
+  assert.deepEqual(codes(d('102', [1.5, 0, 0, 0])), ['deepens.0.points BAD_POINTS']);
+  assert.deepEqual(codes(d('102', [7, 5])), ['deepens.0.points BAD_POINTS']);
+  assert.deepEqual(codes(d('102', [7, 5, 0, 0])), ['deepens.0.points TOO_MANY_POINTS']);
+  assert.deepEqual(codes(d('102', [7, 4, 0, 0])), []);
+  assert.deepEqual(codes({ deepens: [] }), []); // no 深造 yet
+});
+
+test('深造: up to 3 suggestions per build (owner 2026-09-27), each with its own label', () => {
+  const s = (label, styleId, points) => ({ label, styleId, points });
+  const three = [s('Chuẩn', '101', [7, 2, 0, 2]), s('Lục Trí', '102', [7, 2, 2, 0]), s('', '103', [0, 0, 0, 0])];
+  const { errors, doc } = validateBuild(build({ deepens: three }), ctx);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(doc.deepens.map((x) => x.label), ['Chuẩn', 'Lục Trí', '']);
+  assert.deepEqual(codes({ deepens: [...three, s('', '101', [0, 0, 0, 0])] }), ['deepens TOO_MANY']);
+  assert.deepEqual(codes({ deepens: [s('x'.repeat(61), '101', [0, 0, 0, 0])] }), ['deepens.0.label TOO_LONG']);
+});
+
+test('a document saved before 2026-09-27 (one `deepen`) reads and saves as `deepens`', () => {
+  const legacy = { name: 'Cũ', deepen: { styleId: '102', points: [7, 4, 0, 0] } };
+  assert.deepEqual(withDeepens(legacy), { name: 'Cũ', deepens: [{ label: '', styleId: '102', points: [7, 4, 0, 0] }] });
+  assert.deepEqual(withDeepens({ name: 'Cũ', deepen: null }), { name: 'Cũ', deepens: [] });
+  const { errors, doc } = validateBuild(legacy, ctx);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(doc.deepens, [{ label: '', styleId: '102', points: [7, 4, 0, 0] }]);
+  assert.equal('deepen' in doc, false);
 });
 
 test('rotation skills must be the character\'s; team members must exist', () => {
@@ -71,5 +92,5 @@ test('shape: unknown fields, wrong types and over-long text are rejected', () =>
 test('missing lists default to empty (a new, blank build is valid)', () => {
   const { errors, doc } = validateBuild({ name: 'Mới' }, ctx);
   assert.deepEqual(errors, []);
-  assert.deepEqual(doc, { name: 'Mới', rating: '', summary: '', weapons: [], affixes: { noReroll: false, groups: [] }, deepen: null, rotations: [], tips: [], teams: [], teamOther: '' });
+  assert.deepEqual(doc, { name: 'Mới', rating: '', summary: '', weapons: [], affixes: { noReroll: false, groups: [] }, deepens: [], rotations: [], tips: [], teams: [], teamOther: '' });
 });

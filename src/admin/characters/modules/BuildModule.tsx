@@ -4,7 +4,7 @@ import { Button, Field, Notice, SectionTitle, Select, SkeletonRows, describeErro
 import { loadGameData } from '../../../data/loader.js';
 import { createBuild, deleteBuild, getBuilds, saveBuild } from '../buildApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
-import { MAX_COLUMN, MAX_TOTAL, MAX_WEAPONS, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from '../lib/buildDoc.mts';
+import { MAX_COLUMN, MAX_DEEPENS, MAX_TOTAL, MAX_WEAPONS, addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from '../lib/buildDoc.mts';
 import type { ModuleProps } from '../types';
 
 // Shapes of GET /api/admin/builds/characters/:id (server/builds/build-editor.mjs).
@@ -192,22 +192,32 @@ export function BuildModule({ data }: ModuleProps) {
         </section>
 
         <section>
-          <SectionTitle aside={draft.deepen && <span className={cn('text-xs', totalPoints(draft) === MAX_TOTAL ? 'text-(--accent)' : 'text-(--text-subtle)')}>{totalPoints(draft)}/{MAX_TOTAL} điểm</span>}>Thâm tạo</SectionTitle>
-          <Select aria-label="Hướng thâm tạo" className="mb-3 max-w-sm" value={draft.deepen?.styleId ?? ''}
-            onChange={(e) => upd({ deepen: e.target.value ? { styleId: e.target.value, points: draft.deepen?.points ?? [0, 0, 0, 0] } : null })}>
-            <option value="">Không ghi thâm tạo</option>
-            {catalogue.styles.map((s) => <option key={s.id} value={s.id}>{nm(s.name)}{s.id === editor.character.recommendedStyleId ? ' (game gợi ý)' : ''}</option>)}
-          </Select>
-          {draft.deepen && (
-            <div className="grid gap-3 sm:grid-cols-4">
-              {(styleOf(draft.deepen.styleId)?.sectors ?? []).map((sector, i) => (
-                <Field key={sector.id} label={nm(sector.name)}
-                  hint={<span className="grid gap-0.5">{sector.talents.map((point, p) => <span key={p} className={p < (draft.deepen?.points[i] ?? 0) ? 'text-(--text-main)' : undefined}>{p + 1}. {point.map((t) => nm(t.text)).join(' / ')}</span>)}</span>}>
-                  <input type="number" min={0} max={MAX_COLUMN} className={cn(inputClass, 'h-9')} value={draft.deepen?.points[i] ?? 0} onChange={(e) => setDraft(setPoint(draft, i, Number(e.target.value)))} />
-                </Field>
-              ))}
-            </div>
-          )}
+          <SectionTitle>Thâm tạo</SectionTitle>
+          {draft.deepens.map((d, n) => {
+            const set = (patch: Partial<typeof d>) => upd({ deepens: draft.deepens.map((x, j) => (j === n ? { ...x, ...patch } : x)) });
+            return (
+              <div key={n} className="mb-3 grid gap-3 border-b border-(--border-color) pb-3">
+                <span className="flex flex-wrap items-center gap-2">
+                  <input aria-label={`Nhãn thâm tạo ${n + 1}`} className={cn(inputClass, 'h-9 max-w-48')} value={d.label} maxLength={60} placeholder="Chuẩn, Lục Trí…" onChange={(e) => set({ label: e.target.value })} />
+                  <Select aria-label={`Hướng thâm tạo ${n + 1}`} className="max-w-sm" value={d.styleId} onChange={(e) => set({ styleId: e.target.value })}>
+                    {catalogue.styles.map((s) => <option key={s.id} value={s.id}>{nm(s.name)}{s.id === editor.character.recommendedStyleId ? ' (game gợi ý)' : ''}</option>)}
+                  </Select>
+                  <span className={cn('text-xs', totalPoints(d) === MAX_TOTAL ? 'text-(--accent)' : 'text-(--text-subtle)')}>{totalPoints(d)}/{MAX_TOTAL} điểm</span>
+                  <Button variant="ghost" onClick={() => upd({ deepens: draft.deepens.filter((_, j) => j !== n) })}>Bỏ</Button>
+                </span>
+                <div className="grid gap-3 sm:grid-cols-4">
+                  {(styleOf(d.styleId)?.sectors ?? []).map((sector, i) => (
+                    <Field key={sector.id} label={nm(sector.name)}
+                      hint={<span className="grid gap-0.5">{sector.talents.map((point, p) => <span key={p} className={p < (d.points[i] ?? 0) ? 'text-(--text-main)' : undefined}>{p + 1}. {point.map((t) => nm(t.text)).join(' / ')}</span>)}</span>}>
+                      <input type="number" min={0} max={MAX_COLUMN} aria-label={`Thâm tạo ${n + 1} · ${nm(sector.name)}`} className={cn(inputClass, 'h-9')} value={d.points[i] ?? 0} onChange={(e) => setDraft(setPoint(draft, n, i, Number(e.target.value)))} />
+                    </Field>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          <Button disabled={draft.deepens.length >= MAX_DEEPENS || !catalogue.styles.length}
+            onClick={() => setDraft(addDeepen(draft, editor.character.recommendedStyleId ?? catalogue.styles[0].id))}>+ Thêm thâm tạo</Button>
         </section>
 
         <section>

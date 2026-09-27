@@ -25,10 +25,11 @@ const characterStyle = { job: 1, styleIds: ['101', '102', '103'], recommendedSty
 test('editor payload: builds in position order; weapons and affixes of the character\'s job only (present ones), rarest first', () => {
   const out = shapeBuildEditor({
     characterId: 'D0017', characterStyle, refs, texts,
-    builds: [{ entityId: 'b2', position: 1, revision: 3, doc: { name: 'Boss' } }, { entityId: 'b1', position: 0, revision: 1, doc: { name: 'Chuẩn' } }],
+    builds: [{ entityId: 'b2', position: 1, revision: 3, doc: { name: 'Boss', deepen: { styleId: '102', points: [7, 4, 0, 0] } } }, { entityId: 'b1', position: 0, revision: 1, doc: { name: 'Chuẩn' } }],
   });
   assert.deepEqual(out.character, { id: 'D0017', job: 1, styleIds: ['101', '102', '103'], recommendedStyleId: '102' });
   assert.deepEqual(out.builds.map((b) => [b.id, b.revision, b.doc.name]), [['b1', 1, 'Chuẩn'], ['b2', 3, 'Boss']]);
+  assert.deepEqual(out.builds[1].doc.deepens, [{ label: '', styleId: '102', points: [7, 4, 0, 0] }]); // saved before multi-深造
   assert.deepEqual(out.catalogue.weapons.map((w) => w.id), ['30150', '30111']);
   assert.deepEqual(out.catalogue.weapons[1], { id: '30111', rare: 3, icon: 'itemicon_30111', name: { cn: '路边物件盾', vi: 'Khiên' }, skills: [{ id: 'ED2031', name: { cn: '路障庇护', vi: null }, detail: { cn: '提高10%', vi: null } }] });
   assert.deepEqual(out.catalogue.affixes, [{ id: 'AA001001', percent: false, name: { cn: '生命值', vi: null } }]);

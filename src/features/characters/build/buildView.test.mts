@@ -28,7 +28,7 @@ const doc = {
   name: 'Chuẩn', rating: 'S', summary: 'Tốt',
   weapons: [{ weaponId: '30111', label: 'Chịu đòn' }, { weaponId: '99999', label: '' }],
   affixes: { noReroll: true, groups: [{ label: 'Ưu tiên', affixIds: ['AA001001', 'AA001002'] }] },
-  deepen: { styleId: '102', points: [2, 0, 0, 0] },
+  deepens: [{ label: 'Chuẩn', styleId: '102', points: [2, 0, 0, 0] }, { label: 'Lục Trí', styleId: '102', points: [0, 7, 0, 0] }],
   rotations: [{ label: '0 dupe', skillIds: ['D001701', 'X'] }],
   tips: ['Mở khiên'], teams: [{ label: 'Chính', characterIds: ['A0001'], note: '' }], teamOther: '',
 };
@@ -44,13 +44,18 @@ test('names: VI when published, else CN marked untranslated; unknown ids are lef
   assert.equal(v.affixes.noReroll, true);
 });
 
-test('深造: style, each column with its points and the talents reached so far', () => {
+test('深造: every suggestion (up to 3) with its label, style, columns, points and the talents reached so far', () => {
   const [v] = buildViews([doc], game, characters, 'D0017');
-  assert.deepEqual(v.deepen?.style, { text: 'Cố Phòng', untranslated: false });
-  assert.equal(v.deepen?.total, 2);
-  const column = v.deepen!.columns[0];
+  assert.deepEqual(v.deepens.map((d) => [d.label, d.style.text, d.total]), [['Chuẩn', 'Cố Phòng', 2], ['Lục Trí', 'Cố Phòng', 7]]);
+  const column = v.deepens[0].columns[0];
   assert.equal(column.points, 2);
   assert.deepEqual(column.talents.map((t) => [t.point, t.reached, t.text.text]), [[1, true, 'Khiên +15%'], [2, true, 'D20102 / D20103']]);
+});
+
+test('深造: a game document published before 2026-09-27 (one `deepen`) still shows it', () => {
+  const { deepens, ...rest } = doc;
+  const [v] = buildViews([{ ...rest, deepen: { styleId: '102', points: [2, 0, 0, 0] } }], game, characters, 'D0017');
+  assert.deepEqual(v.deepens.map((d) => [d.label, d.total]), [['', 2]]);
 });
 
 test('rotations use the character\'s own skills (name + icon); teams link to existing characters', () => {

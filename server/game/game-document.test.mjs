@@ -42,6 +42,13 @@ test('an object gone from MasterData stays published while a build still uses it
   assert.equal(doc.texts.weapon['30999'].cn, '旧盾');
 });
 
+test('a build saved before 2026-09-27 is published with `deepens`; its styles count as used', () => {
+  const builds = [{ characterId: 'D0017', position: 0, doc: { name: 'Cũ', weapons: [], affixes: { groups: [] }, deepen: { styleId: '102', points: [7, 4, 0, 0] } } }];
+  const doc = JSON.parse(buildGameDocument({ refs, texts, builds }).body);
+  assert.deepEqual(doc.builds.D0017[0].deepens, [{ label: '', styleId: '102', points: [7, 4, 0, 0] }]);
+  assert.equal('deepen' in doc.builds.D0017[0], false);
+});
+
 test('builds grouped per character in position order', () => {
   const b = (name) => ({ name, weapons: [], affixes: { groups: [] }, deepen: null });
   const doc = JSON.parse(buildGameDocument({ refs, texts, builds: [

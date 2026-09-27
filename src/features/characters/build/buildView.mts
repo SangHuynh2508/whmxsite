@@ -4,11 +4,13 @@
 import type { GameDocument, GameText } from '../../profile/api/loreOverlay.mts';
 
 export type Unit = { text: string; untranslated: boolean };
+type Deepen = { label: string; styleId: string; points: number[] };
 type Doc = {
   name?: string; rating?: string; summary?: string;
   weapons?: { weaponId: string; label: string }[];
   affixes?: { noReroll?: boolean; groups?: { label: string; affixIds: string[] }[] };
-  deepen?: { styleId: string; points: number[] } | null;
+  deepens?: Deepen[]; // up to 3 深造 suggestions (owner 2026-09-27)
+  deepen?: Omit<Deepen, 'label'> | null; // game documents published before that
   rotations?: { label: string; skillIds: string[] }[];
   tips?: string[];
   teams?: { label: string; characterIds: string[]; note: string }[];
@@ -29,7 +31,7 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
   const skills = new Map((characters[characterId]?.skills ?? []).map((s) => [s.group_id, s.levels?.[0] ?? {}]));
 
   return docs.map((doc) => {
-    const style = doc.deepen ? ref('job_style', doc.deepen.styleId) : null;
+    const deepens: Deepen[] = doc.deepens ?? (doc.deepen ? [{ label: '', ...doc.deepen }] : []);
     return {
       name: doc.name ?? '', rating: doc.rating ?? '', summary: doc.summary ?? '',
       weapons: (doc.weapons ?? []).flatMap((w) => {
@@ -50,21 +52,24 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
           return ref('weapon_affix', id).percent ? { ...u, text: `${u.text} %` } : u;
         }) })),
       },
-      deepen: style && doc.deepen ? {
-        style: unit(text('job_style', doc.deepen.styleId)),
-        total: doc.deepen.points.reduce((a, b) => a + b, 0),
-        columns: (style.sectorIds as string[]).map((sectorId, i) => {
-          const points = doc.deepen!.points[i] ?? 0;
-          const talentIds: string[][] = ref('style_sector', sectorId)?.talentIds ?? [];
-          return {
-            name: unit(text('style_sector', sectorId)), points,
-            talents: talentIds.map((ids, p) => {
-              const parts = ids.map((id) => unit(text('style_talent', id)));
-              return { point: p + 1, reached: p < points, text: { text: parts.map((u, k) => u.text || ids[k]).join(' / '), untranslated: parts.some((u) => u.untranslated) } };
-            }),
-          };
-        }),
-      } : null,
+      deepens: deepens.flatMap((d) => {
+        const style = ref('job_style', d.styleId);
+        if (!style) return [];
+        return [{
+          label: d.label, style: unit(text('job_style', d.styleId)), total: d.points.reduce((a, b) => a + b, 0),
+          columns: (style.sectorIds as string[]).map((sectorId, i) => {
+            const points = d.points[i] ?? 0;
+            const talentIds: string[][] = ref('style_sector', sectorId)?.talentIds ?? [];
+            return {
+              name: unit(text('style_sector', sectorId)), points,
+              talents: talentIds.map((ids, p) => {
+                const parts = ids.map((id) => unit(text('style_talent', id)));
+                return { point: p + 1, reached: p < points, text: { text: parts.map((u, k) => u.text || ids[k]).join(' / '), untranslated: parts.some((u) => u.untranslated) } };
+              }),
+            };
+          }),
+        }];
+      }),
       rotations: (doc.rotations ?? []).map((r) => ({
         label: r.label,
         skills: r.skillIds.filter((id) => skills.has(id)).map((id) => { const s = skills.get(id)!; return { id, name: s.name_vi || s.name_cn || id, icon: asset(s.icon) }; }),
