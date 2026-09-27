@@ -508,6 +508,16 @@ def build():
             for item in value:
                 yield from walk_strings(item)
 
+    def walk_nodes(value):
+        """Every dict inside value, parents before children."""
+        if isinstance(value, dict):
+            yield value
+            for item in value.values():
+                yield from walk_nodes(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from walk_nodes(item)
+
     # Character-owned raw relations provide a deterministic tiebreaker for the
     # rare case where a card names a status without a marker and the global name is
     # duplicated.  The tiebreaker is still only used as a final exact-name fallback.
@@ -584,6 +594,10 @@ def build():
         An empty operand is no slot at all ("Buff_S0103_5_A,,#1" hands over #1 = 50).
         """
         arg_tokens = [arg for arg in arg_tokens if safe_str(arg)]
+        if not arg_tokens:
+            # "Effect1,string,Buff_W0165_19" (no operand) hands the parent's own arguments on: 78 such
+            # buff→buff edges feed a child that reads #k (W0165 烟雾 reads #1 = 30/35/40, wiki).
+            return list(local_args) if local_args else list(inherited_args)
         values = [resolve_positional_arg(arg, local_args, inherited_args) for arg in arg_tokens]
         values = ["" if value is None else value for value in values]
         slots = [int(safe_str(arg)[1:]) if re.fullmatch(r'#\d+', safe_str(arg)) else None for arg in arg_tokens]
@@ -595,7 +609,31 @@ def build():
             values = kept
         return values if any(safe_str(value) for value in values) else list(local_args)
 
-    def resolve_buff_tree(buff_key, passed_args, depth=0, visited=None, path=None):
+    # Only two Effect shapes hand a status its arguments: the Buff_ operand first ("Buff_X,#1,#2") or a
+    # timing verb + target before it ("Before,Self,Buff_X,#1,#2").  Every other verb (CleanBuff,
+    # ModifyBuffLayer, TriggerSourceBuff/TriggerTargetBuff, ImmunizeBuff, CopyBuff, …) acts on an existing
+    # status; its numbers are layer deltas, flags or weights ("ModifyBuffLayer,Buff_W0081_1,4" = +4 layers,
+    # not heal +4%).  MasterData 2026-09-27: 1954 timing edges, 3300+ other-verb edges.
+    ARG_TIMING_VERBS = {"Release", "Before", "After", "BattleBegin", "ChargeEnd"}
+
+    # A trigger with its own EffectNPara and no operand after the status hands that Para over
+    # ("After,Covered,TriggerTargetBuff,Buff_D0128_4_1" + Para "30,40" → D0128 30% dmg below 40% HP).
+    def unbound_edge(params, buff_idx, arg_tokens, local_args):
+        if buff_idx == 0 or (buff_idx == 2 and safe_str(params[0]) in ARG_TIMING_VERBS):
+            return False
+        return any(safe_str(arg) for arg in arg_tokens) or not any(safe_str(arg) for arg in local_args)
+
+    def args_cover(template, args, unbound):
+        """True when every [EffectParam,n] of the template reads a real raw argument (no fallback guess)."""
+        if unbound:
+            return False
+        for n in re.findall(r'\[(?:EffectParam|EffectPara|BuffParam),(\d+)\]', template):
+            value = safe_str(args[int(n) - 2]) if 0 <= int(n) - 2 < len(args) else ""
+            if not value or raw_hash_param_re.search(value):
+                return False
+        return True
+
+    def resolve_buff_tree(buff_key, passed_args, depth=0, visited=None, path=None, unbound=False):
         if visited is None: visited = set()
         if path is None: path = []
         if buff_key in visited or depth > 5: return []
@@ -622,6 +660,7 @@ def build():
                 "args": passed_args,
                 "raw_path": path + [buff_key],
                 "child_buff_ids": sorted(child_buff_ids),
+                "args_unbound": unbound,
             })
             
         for key, params in b_attr.items():
@@ -640,8 +679,10 @@ def build():
                     )
                     arg_tokens = params[buff_idx + 1:next_buff_idx]
                     para_key = f"{key}Para"
-                    child_args = edge_args(child_key, arg_tokens, b_attr.get(para_key, []), passed_args)
-                    results.extend(resolve_buff_tree(child_key, child_args, depth + 1, visited.copy(), path + [buff_key]))
+                    child_unbound = unbound_edge(params, buff_idx, arg_tokens, b_attr.get(para_key, []))
+                    child_args = [] if child_unbound else edge_args(child_key, arg_tokens, b_attr.get(para_key, []), passed_args)
+                    results.extend(resolve_buff_tree(child_key, child_args, depth + 1, visited.copy(), path + [buff_key],
+                                                     unbound or child_unbound))
                     
         return results
 
@@ -667,9 +708,10 @@ def build():
                     b_key = params[buff_idx]
                     arg_tokens = params[buff_idx + 1:]
                     para_key = f"{key}Para"
-                    resolved_b_args = edge_args(b_key, arg_tokens, s_attr.get(para_key, []), [])
+                    b_unbound = unbound_edge(params, buff_idx, arg_tokens, s_attr.get(para_key, []))
+                    resolved_b_args = [] if b_unbound else edge_args(b_key, arg_tokens, s_attr.get(para_key, []), [])
 
-                    sub_m = resolve_buff_tree(b_key, resolved_b_args)
+                    sub_m = resolve_buff_tree(b_key, resolved_b_args, unbound=b_unbound)
                     for m in sub_m:
                         # Raw Effect roots are often invisible controller buffs.  The
                         # first player-facing descendant is direct only when its own
@@ -686,6 +728,7 @@ def build():
             if not buff_key.startswith("Buff_"): continue
             
             match_args = []
+            match_unbound = False
             for k, v in s_attr.items():
                 if k.startswith("Effect") and not k.endswith("Para") and not k.endswith("Tips"):
                     buff_idx = -1
@@ -705,9 +748,10 @@ def build():
                     if buff_idx != -1:
                         arg_tokens = v[buff_idx + 1:]
                         para_key = f"{k}Para"
-                        match_args = edge_args(buff_key, arg_tokens, s_attr.get(para_key, []), [])
+                        match_unbound = unbound_edge(v, buff_idx, arg_tokens, s_attr.get(para_key, []))
+                        match_args = [] if match_unbound else edge_args(buff_key, arg_tokens, s_attr.get(para_key, []), [])
                         break
-            sub_m = resolve_buff_tree(buff_key, match_args)
+            sub_m = resolve_buff_tree(buff_key, match_args, unbound=match_unbound)
             for m in sub_m:
                 if (m["key"] == buff_key or
                         (clean_rich_text(m.get("name_cn", "")) and
@@ -723,6 +767,7 @@ def build():
             def candidate_score(candidate):
                 args = [safe_str(x) for x in candidate.get("args", [])]
                 return (
+                    args_cover(candidate.get("template", ""), args, candidate.get("args_unbound")),
                     not any(raw_hash_param_re.search(x) for x in args),
                     len([x for x in args if x]),
                     len(candidate.get("raw_path", [])),
@@ -733,6 +778,29 @@ def build():
                 mechanic["is_direct_popup_target"] = True
         return mechs
 
+    # A card that only stacks / removes / triggers a status (or passes it no arguments) has no numbers for
+    # it: show the numbers of the character's own skill that grants it with real arguments (wiki shows
+    # them the same way).  Groups in id order: base skill before its ex form ("V009104" < "V009104ex").
+    # ponytail: no granting skill (shared Buff_Atk_Up/AllDmgIncrease only stacked by layers) keeps the guess.
+    BORROWED_FIELDS = ("desc_cn", "desc_vi", "canonical_vi_missing", "effect_param_values_by_level",
+                       "aggregated_effect_param_values")
+    granting_cache = {}
+    unsourced_popups = set()
+
+    def granting_numbers(hero_id):
+        if hero_id not in granting_cache:
+            groups, donors = {}, {}
+            for raw_skill in hero_skill_records.get(hero_id, []):
+                groups.setdefault(safe_str(raw_skill.get("GroupId")), []).append(raw_skill)
+            for _, group_levels in sorted(groups.items()):
+                group_levels = sorted(group_levels, key=raw_record_level)
+                for mech in merge_mechs_across_levels([extract_skill_level_mechs(sk) for sk in group_levels]):
+                    if (not mech.get("numbers_guessed") and mech.get("desc_cn")
+                            and not contains_unresolved_player_parameter(mech["desc_cn"])):
+                        donors.setdefault(mech["key"], mech)
+            granting_cache[hero_id] = donors
+        return granting_cache[hero_id]
+
     def attach_popup_terms(raw_desc, mechanics, hero_id="", display_desc_vi="", raw_skill_records=()):
         """Attach only deterministic, displayable buff references to each mechanic.
 
@@ -741,6 +809,14 @@ def build():
         its exact normalized Chinese name maps to exactly one BUFF_STATUS record.
         In both cases the source description must actually contain that name.
         """
+        for mechanic in mechanics:
+            if isinstance(mechanic, dict) and mechanic.pop("numbers_guessed", False):
+                donor = granting_numbers(hero_id).get(mechanic.get("key"))
+                if donor:
+                    mechanic.update({field: donor[field] for field in BORROWED_FIELDS if field in donor})
+                    mechanic["args_from_granting_card"] = True
+                elif mechanic.get("is_direct_popup_target"):
+                    unsourced_popups.add((hero_id, mechanic.get("key")))
         source_text = clean_rich_text(raw_desc)
         if not source_text:
             return mechanics
@@ -805,17 +881,19 @@ def build():
                     if marker in safe_str(hero_skill.get("DescriptionLanText")):
                         grouped_sources.setdefault(safe_str(hero_skill.get("GroupId")), []).append(hero_skill)
                 candidates = []
-                for group_levels in grouped_sources.values():
+                # Base group before its ex form ("W001102" < "W001102ex"), numbers read from real raw
+                # arguments only — the same order the granting-card borrow below uses (wiki shows the base).
+                for _, group_levels in sorted(grouped_sources.items()):
                     group_levels.sort(key=raw_record_level)
                     resolved_group = merge_mechs_across_levels([
                         extract_skill_level_mechs(skill) for skill in group_levels
                     ])
                     candidate = next((entry for entry in resolved_group if entry.get("key") == buff_id), None)
-                    if candidate and not re.search(placeholder_re, candidate.get("desc_cn", "")):
+                    if (candidate and not candidate.get("numbers_guessed")
+                            and not re.search(placeholder_re, candidate.get("desc_cn", ""))):
                         candidates.append(candidate)
-                unique_candidates = {candidate.get("desc_cn", ""): candidate for candidate in candidates}
-                if len(unique_candidates) == 1:
-                    rendered = next(iter(unique_candidates.values()))
+                if candidates:
+                    rendered = candidates[0]
                 if rendered and not re.search(placeholder_re, rendered.get("desc_cn", "")):
                     node = rendered
                 else:
@@ -1058,6 +1136,16 @@ def build():
                     break
         return val
 
+    # 提高/降低/减少… in the placeholder's clause ("降低移动力[EffectParam,3]") already states the direction; a negative raw value there
+    # is how the game stores "Res/Reduce" properties (未琢 "受到的追击伤害提高[EffectParam,2]%" with
+    # BeChaseAttackedDmgReduce -30 = +30%, wiki), so the number is shown without its sign.
+    DIRECTION_WORDS = ("提高", "提升", "增加", "降低", "减少", "无视", "消耗", "减")
+
+    def magnitude_tokens(template):
+        text = re.sub(r'<[^>]+>', '', template)
+        return {m.group(0) for m in re.finditer(r'\[[A-Za-z0-9_]+,\d+\]', text)
+                if any(word in re.split(r'[，。；;,\n]', text[:m.start()])[-1] for word in DIRECTION_WORDS)}
+
     def merge_mechs_across_levels(mechs_by_lvl):
         if not mechs_by_lvl: return []
         mech_groups = {}
@@ -1089,6 +1177,13 @@ def build():
             canonical_vi_missing = not bool(b_desc_vi_raw)
             
             args_per_lvl = [m["args"] for _, m in entries]
+            unsigned = magnitude_tokens(template)
+
+            def param_value(pname, idx_str, args, *rest):
+                value = get_buff_param_val(pname, idx_str, args, b_attr_dict, *rest)
+                if value is not None and f"[{pname},{idx_str}]" in unsigned:
+                    value = str(value).lstrip("-")
+                return value
             same_template = all(m["template"] == template for _, m in entries)
             
             # Keep the exact parameter provenance on the card-local binding.  This
@@ -1102,9 +1197,7 @@ def build():
                     continue
                 values = []
                 for args in args_per_lvl:
-                    value = get_buff_param_val(
-                        pname, idx_str, args, b_attr_dict,
-                    )
+                    value = param_value(pname, idx_str, args)
                     values.append(str(value) if value is not None else token)
                 effect_param_values_by_level[token] = values
             aggregated_effect_param_values = {
@@ -1120,7 +1213,7 @@ def build():
                     idx_str = m.group(3) or "1"
                     closing_tags = m.group(4) or ""
                     unit = m.group(5) or ""
-                    val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags)
+                    val = param_value(pname, idx_str, args, unit, closing_tags)
                     if val is None: val = full_p
                     return f"{val}{unit}{closing_tags}"
                 return single_replacer
@@ -1145,7 +1238,7 @@ def build():
                     
                     vals = []
                     for args in args_per_lvl:
-                        val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags)
+                        val = param_value(pname, idx_str, args, unit, closing_tags)
                         if val is None: val = full_p
                         vals.append(val)
                         
@@ -1221,6 +1314,8 @@ def build():
                     "aggregated_effect_param_values": aggregated_effect_param_values,
                 })
                 
+            if not all(args_cover(m["template"], m["args"], m.get("args_unbound")) for _, m in entries):
+                merged_list[-1]["numbers_guessed"] = True
         return merged_list
 
     # Provenance is serialized with Trí Tri/EX output.  It lets audits prove
@@ -1238,6 +1333,7 @@ def build():
         mechanics = attach_popup_terms(raw_desc, mechanics, safe_str(skill_obj.get("HeroId")), raw_desc_vi, [skill_obj])
         
         pattern = r'(\[([A-Za-z0-9_]+),(?:(\d+))?\])(\s*(?:<\/span>|<\/color>)*\s*)(%|倍|格|回合|点|层|次)?'
+        unsigned = magnitude_tokens(raw_desc)
 
         def single_replacer(m):
             full_p = m.group(1)
@@ -1256,6 +1352,7 @@ def build():
                     params = attr_dict[pname]
                     if 1 <= idx <= len(params): val = str(params[idx - 1])
             if val is None: val = full_p
+            elif full_p in unsigned: val = val.lstrip("-")
             return f"{val}{unit}{closing_tags}"
 
         clean_desc = re.sub(pattern, single_replacer, raw_desc)
@@ -1300,6 +1397,7 @@ def build():
             return d_clean, d_clean_vi, multi_mechs, True
 
         raw_descs = [sk.get("DescriptionLanText", "") for sk in lvls]
+        unsigned = magnitude_tokens(raw_descs[0])
         is_template_same = len(set(raw_descs)) == 1
 
         attr_dicts = [parse_attr(sk.get("Attr", [])) for sk in lvls]
@@ -1345,7 +1443,7 @@ def build():
             for ad in attr_dicts:
                 v = get_param_val(pname, idx, ad)
                 if v is not None:
-                    vals.append(v)
+                    vals.append(str(v).lstrip("-") if full_p in unsigned else v)
                 else:
                     vals.append(full_p)
 
@@ -2345,6 +2443,13 @@ def build():
             }
         }
         
+    for char in chars_db.values():
+        for node in walk_nodes(char):
+            node.pop("numbers_guessed", None)
+    if unsourced_popups:
+        print(f"[WARN] {len(unsourced_popups)} popup(s) show numbers the game data does not give: "
+              + ", ".join(f"{cid}:{key}" for cid, key in sorted(unsourced_popups)))
+
     # Popup text is canonical per exact Buff_ID.  Card mechanics below only carry
     # the proven local closure and term-to-ID bindings; they are never a second
     # competing source of localized popup text.
