@@ -3847,14 +3847,14 @@
 
 /* The groups rise in one after another while the panel opens; they fade out together on close. */
 .catalog-filters-body .compact-filter-group,
-.catalog-filters-body .filter-bottom-actions {
+.catalog-filters-body .compact-filter-clear {
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity 140ms var(--ease-exit), transform 140ms var(--ease-exit);
 }
 
 .catalog-expandable-filters.open .compact-filter-group,
-.catalog-expandable-filters.open .filter-bottom-actions {
+.catalog-expandable-filters.open .compact-filter-clear {
   opacity: 1;
   transform: none;
   transition: opacity 260ms var(--ease-enter) var(--stagger, 0ms), transform 380ms cubic-bezier(0.16, 1, 0.3, 1) var(--stagger, 0ms);
@@ -3864,7 +3864,7 @@
 .catalog-filters-body .compact-filter-group:nth-child(3) { --stagger: 70ms; }
 .catalog-filters-body .compact-filter-group:nth-child(4) { --stagger: 105ms; }
 .catalog-filters-body .compact-filter-group:nth-child(5) { --stagger: 140ms; }
-.catalog-filters-body .filter-bottom-actions { --stagger: 175ms; }
+.catalog-filters-body .compact-filter-clear { --stagger: 175ms; }
 
 .compact-filter-grid {
   display: flex;
@@ -4052,14 +4052,6 @@
   font-weight: 500;
 }
 
-.filter-bottom-actions {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: flex-end;
-}
-
 /* Synchronized Synchronous Dark → Normal Reveal for Character Database Results */
 @keyframes cardSyncReveal {
   from {
@@ -4069,13 +4061,14 @@
 
   to {
     opacity: 1;
-    filter: brightness(1);
+    filter: none;
   }
 }
 
+/* Ends on filter: none with no will-change, so the 133 cards don't each stay a filtered GPU layer
+   (those are drawn with half-pixel edges at fractional zoom levels). */
 .cc-card.card-result-reveal {
   animation: cardSyncReveal 200ms var(--ease-enter) forwards;
-  will-change: opacity, filter;
 }
 
 /* Accessibility: Reduced Motion Support */
@@ -4090,11 +4083,23 @@
   .catalog-expandable-filters,
   .catalog-filters-body,
   .catalog-filters-body .compact-filter-group,
-  .catalog-filters-body .filter-bottom-actions,
+  .catalog-filters-body .compact-filter-clear,
   .seg-btn,
   .cc-card {
     transition: none !important;
   }
+}
+
+/* "Xóa bộ lọc" is the last item of the filter row (right-aligned, on the Sắp xếp line when it fits).
+   It always keeps its place, hidden while nothing is filtered, so choosing a filter never makes
+   the panel taller. */
+.compact-filter-clear {
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+.compact-filter-clear.is-idle {
+  visibility: hidden;
 }
 
 .catalog-clear-filters-btn {
@@ -4197,10 +4202,10 @@
 /* z-index 1: Subtle dark readability overlay over lower 38% */
 .card-bottom-overlay {
   position: absolute;
-  bottom: 0;
+  bottom: -1px; /* 1px past the edge (clipped by .card-media): no sliver of artwork under the fade */
   left: 0;
   right: 0;
-  height: 38%;
+  height: calc(38% + 1px);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
   z-index: 1;
   pointer-events: none;
@@ -7001,11 +7006,32 @@
   transform: translateY(-50%) translateX(0);
 }
 
-/* "Về đầu trang" takes the feedback button's old place; feedback sits one button (46px + 8px) above.
-   The top button appears after scrolling (src/app/layout/backToTopButton.js). */
-.whmx-feedback-btn--raised {
-  --raise: 54px;
-  bottom: calc(24px + var(--raise) + env(safe-area-inset-bottom, 0px));
+/* Feedback sits bottom-left beside the nav rail and follows it when the rail opens on hover
+   (60px -> 170px, "Compact Overlay Rail" rules); "Về đầu trang" keeps the bottom-right spot
+   (src/app/layout/backToTopButton.js). */
+:root {
+  --app-rail: 60px;
+}
+
+:root:has(.app-nav:hover, .app-nav:focus-within) {
+  --app-rail: 170px;
+}
+
+.whmx-feedback-btn--left {
+  right: auto;
+  left: calc(var(--app-rail) + 24px + env(safe-area-inset-left, 0px));
+  transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* same as .app-nav width */
+}
+
+.whmx-feedback-btn--left .feedback-tooltip {
+  right: auto;
+  left: calc(100% + 8px);
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.whmx-feedback-btn--left:hover .feedback-tooltip,
+.whmx-feedback-btn--left:focus-visible .feedback-tooltip {
+  transform: translateY(-50%) translateX(0);
 }
 
 .whmx-top-btn {
@@ -7038,8 +7064,9 @@
     height: 46px;
   }
 
-  .whmx-feedback-btn--raised {
-    bottom: calc(16px + var(--raise) + var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
+  .whmx-feedback-btn--left {
+    right: auto;
+    left: calc(16px + env(safe-area-inset-left, 0px));
   }
 
   .feedback-badge {

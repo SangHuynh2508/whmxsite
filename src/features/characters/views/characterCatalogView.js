@@ -172,11 +172,13 @@ export function renderCharacterCatalogView(container) {
     }).join('');
   }
 
-  function renderToolbarHtml() {
+  // Inner markup of .character-catalog-page. The page element itself is created once and kept:
+  // Lenis measures it (src/app/runtime/smoothScroll.js), so replacing it left the scroll limit stuck
+  // at the height of the first re-render (e.g. 473px after filtering R, on a 5 200px page).
+  function renderPageInnerHtml() {
     const activeCount = getActiveFilterCount();
 
     return `
-      <div class="character-catalog-page">
         <!-- Full-Width Visual Hero Header -->
         <section class="catalog-hero">
           <div class="catalog-hero-content">
@@ -281,13 +283,12 @@ export function renderCharacterCatalogView(container) {
                   <button class="seg-btn ${catalogSortOption === 'res' ? 'active' : ''}" data-sort="res">RES</button>
                 </div>
               </div>
-            </div>
 
-            ${activeCount > 0 ? `
-              <div class="filter-bottom-actions">
+              <!-- Always in place (hidden while idle) so a first filter never makes the panel taller -->
+              <div class="compact-filter-clear ${activeCount > 0 ? '' : 'is-idle'}">
                 <button type="button" class="catalog-clear-filters-btn" id="catalog-clear-filters-btn">Xóa bộ lọc</button>
               </div>
-            ` : ''}
+            </div>
             </div>
             </div>
           </div>
@@ -297,11 +298,10 @@ export function renderCharacterCatalogView(container) {
         <div class="catalog-grid-container" id="catalog-cards-grid">
           ${renderGridHtml()}
         </div>
-      </div>
     `;
   }
 
-  container.innerHTML = renderToolbarHtml();
+  container.innerHTML = `<div class="character-catalog-page">${renderPageInnerHtml()}</div>`;
   attachEvents();
 
   function attachEvents() {
@@ -410,7 +410,9 @@ export function renderCharacterCatalogView(container) {
   }
 
   function refreshUI() {
-    container.innerHTML = renderToolbarHtml();
+    const page = container.querySelector('.character-catalog-page');
+    if (page) page.innerHTML = renderPageInnerHtml();
+    else container.innerHTML = `<div class="character-catalog-page">${renderPageInnerHtml()}</div>`;
     attachEvents();
   }
 
