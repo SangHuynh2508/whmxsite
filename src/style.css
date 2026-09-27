@@ -3713,11 +3713,6 @@
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.catalog-search-box:focus-within {
-  border-color: var(--border-strong);
-  background: var(--bg-surface-hover);
-}
-
 .catalog-search-box input {
   border: none;
   background: transparent;
