@@ -6,7 +6,7 @@ import { IMMUTABLE, POINTER_CACHE, POINTER_NAME, backupKey, buildLoreDocument, b
 
 export async function publishLore({ repo, storage, actorUserId = null, now = new Date() }) {
   return repo.withPublishLock(async (tx) => {
-    const doc = buildLoreDocument(await repo.loadPublishProfiles(tx), await repo.loadPublishBuilds(tx));
+    const doc = buildLoreDocument(await repo.loadPublishProfiles(tx));
     await storage.putBackup(backupKey(storage.envName, now), gzipSync(JSON.stringify(await repo.loadBackupPayload(tx))));
     // Compare with the live pointer of this environment, not the DB row: the state row is
     // per database, so a new environment (or a branch copied from another) would look current.

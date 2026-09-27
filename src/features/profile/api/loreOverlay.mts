@@ -1,8 +1,7 @@
 // src/features/profile/api/loreOverlay.mts
 // DB-owned lore text published on R2 (architecture §11). Any failure keeps the CN in data.json.
-// builds / refs: the Build tab (server/builds/build-publish.mjs); absent until the first build is saved.
-export type LoreOverlay = { version: 1; characters: Record<string, unknown>; builds?: Record<string, unknown[]>; refs?: Record<string, unknown> };
-type GameData = { characters?: Record<string, { profile?: unknown }>; builds?: Record<string, unknown[]>; buildRefs?: Record<string, unknown> | null };
+export type LoreOverlay = { version: 1; characters: Record<string, unknown> };
+type GameData = { characters?: Record<string, { profile?: unknown }> };
 
 // 20 s: the overlay is merged after the page renders (never blocks it), and the lore file is ~0.3–1.8 MB.
 export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<LoreOverlay | null> {
@@ -31,8 +30,6 @@ export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fet
 
 export function mergeLoreOverlay(gameData: GameData, overlay: LoreOverlay | null): number {
   if (!overlay || !gameData.characters) return 0;
-  gameData.builds = overlay.builds ?? {};
-  gameData.buildRefs = overlay.refs ?? null;
   let merged = 0;
   for (const [id, profile] of Object.entries(overlay.characters)) {
     const character = gameData.characters[id];

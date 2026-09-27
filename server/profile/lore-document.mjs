@@ -5,10 +5,8 @@ export const POINTER_NAME = 'lore.pointer.json';
 export const IMMUTABLE = 'public, max-age=31536000, immutable';
 export const POINTER_CACHE = 'public, max-age=60';
 
-// builds = shapePublishedBuilds(...) (server/builds/build-publish.mjs): { builds, refs } or null. Without builds the
-// document is exactly what it was before the Build feature, so its file name (content hash) doesn't change.
-export function buildLoreDocument(profiles, builds = null) {
-  const body = JSON.stringify({ version: 1, characters: Object.fromEntries(profiles), ...(builds ?? {}) });
+export function buildLoreDocument(profiles) {
+  const body = JSON.stringify({ version: 1, characters: Object.fromEntries(profiles) });
   const hash = createHash('sha256').update(body).digest('hex').slice(0, 12);
   return { body, hash, fileName: `lore.${hash}.json` };
 }

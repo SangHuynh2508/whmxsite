@@ -4,13 +4,12 @@ import assert from 'node:assert/strict';
 import { gunzipSync } from 'node:zlib';
 import { publishLore, repointLore } from './lore-publisher.mjs';
 
-function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null, builds = null } = {}) {
+function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null } = {}) {
   const writes = [];
   let state = { publishedHash };
   const repo = {
     withPublishLock: async (fn) => (locked ? fn('tx') : { status: 'busy' }),
     loadPublishProfiles: async () => [['A0001', { record_id: '1' }]],
-    loadPublishBuilds: async () => builds,
     loadBackupPayload: async () => ({ version: 1, profileTexts: [] }),
     readState: async () => state,
     writeState: async (_tx, patch) => { state = { ...state, ...patch }; writes.push(['state', patch]); },
@@ -86,11 +85,4 @@ test('the content file is uploaded gzip-encoded (1.8 MB of JSON → a fraction);
   assert.deepEqual(JSON.parse(gunzipSync(content[3]).toString()).characters, { A0001: { record_id: '1' } });
   assert.equal(pointer[4], undefined);
   assert.equal(JSON.parse(pointer[3]).file, content[1]);
-});
-
-test('saved builds are published in the same lore file (builds + refs)', async () => {
-  const f = fakes({ builds: { builds: { A0001: [{ name: 'Chuẩn' }] }, refs: { weapons: {} } } });
-  await publishLore({ repo: f.repo, storage: f.storage, now });
-  const content = f.writes.find((w) => w[0] === 'public' && w[1].startsWith('lore.') && w[1] !== 'lore.pointer.json');
-  assert.deepEqual(JSON.parse(gunzipSync(content[3]).toString()).builds, { A0001: [{ name: 'Chuẩn' }] });
 });

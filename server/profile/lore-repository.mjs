@@ -1,11 +1,9 @@
 // server/profile/lore-repository.mjs
 import { eq, getTableColumns, inArray, sql } from 'drizzle-orm';
 
-import { characterBuilds, gameReferences } from '../../db/schema/build.mjs';
 import { characters } from '../../db/schema/character-skin.mjs';
 import { editHistory } from '../../db/schema/core.mjs';
 import { characterProfiles, lorePublishLockKey, lorePublishState, loreTerms, profileTexts } from '../../db/schema/profile.mjs';
-import { shapePublishedBuilds } from '../builds/build-publish.mjs';
 import { loadProfileContext, resolveAllProfiles } from './resolve-character-profile.mjs';
 
 // Profile texts carry their character ID so a backup can be matched against a rebuilt DB.
@@ -28,15 +26,6 @@ export function createLoreRepository(db) {
     async loadPublishProfiles(tx) {
       return resolveAllProfiles(await loadProfileContext(tx), { shape: 'v2' });
     },
-    // Build tab: saved builds + the game references they use (null when there is no build yet).
-    async loadPublishBuilds(tx) {
-      const builds = await tx.select({ characterId: characters.characterId, position: characterBuilds.position, doc: characterBuilds.doc })
-        .from(characterBuilds).innerJoin(characters, eq(characters.entityId, characterBuilds.characterEntityId));
-      if (!builds.length) return null;
-      const refs = new Map((await tx.select().from(gameReferences)).map((r) => [`${r.kind}|${r.code}`, r.data]));
-      const terms = new Map((await tx.select().from(loreTerms)).map((t) => [t.code, t]));
-      return shapePublishedBuilds({ builds, refs, terms });
-    },
     async loadBackupPayload(tx) {
       return {
         version: 2,
@@ -45,8 +34,7 @@ export function createLoreRepository(db) {
         profileTexts: await selectProfileTextsWithCharacterId(tx),
         loreTerms: await tx.select().from(loreTerms),
         lorePublishState: await tx.select().from(lorePublishState),
-        characterBuilds: await tx.select().from(characterBuilds),
-        editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term', 'character_build'])),
+        editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term'])),
       };
     },
     async readState(tx) {
