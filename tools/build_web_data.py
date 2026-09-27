@@ -564,6 +564,37 @@ def build():
                     return candidate
         return None
 
+    def buff_arg_reads(buff_key):
+        """The raw #k slots a buff reads: #k in its Attr and [EffectParam,k+1] in its text."""
+        b_def = buff_map_raw.get(buff_key) or {}
+        reads = {int(k) for k in re.findall(r'#(\d+)', "\n".join(walk_strings(b_def.get("Attr", []))))}
+        reads.update(int(n) - 1 for n in re.findall(
+            r'\[(?:EffectParam|EffectPara|BuffParam),(\d+)\]', safe_str(b_def.get("DescriptionLanText"))))
+        return reads
+
+    def edge_args(child_key, arg_tokens, local_args, inherited_args):
+        """Argument vector a raw Effect edge "child,#a,#b" hands to a buff.
+
+        Slots stay positional (an unresolved token leaves "" in place, it never shifts the
+        rest).  When the child reads its values by the parent's own slot numbers (every #k
+        it reads is one of the listed #k — e.g. Buff_W0176_5 "Buff_W0176_5_2,#2" and the
+        child reads #2), each value keeps its slot; otherwise the list is renumbered from #1
+        (e.g. "Buff_Poisoning,#3,#4" read as #1, #2).  Evidence: MasterData 2026-09-27,
+        139 keep-slot vs 29 renumber edges outside the 5002 identity "#1,#2,…" edges.
+        An empty operand is no slot at all ("Buff_S0103_5_A,,#1" hands over #1 = 50).
+        """
+        arg_tokens = [arg for arg in arg_tokens if safe_str(arg)]
+        values = [resolve_positional_arg(arg, local_args, inherited_args) for arg in arg_tokens]
+        values = ["" if value is None else value for value in values]
+        slots = [int(safe_str(arg)[1:]) if re.fullmatch(r'#\d+', safe_str(arg)) else None for arg in arg_tokens]
+        reads = buff_arg_reads(child_key)
+        if reads and all(slot is not None for slot in slots) and reads <= set(slots):
+            kept = [""] * max(slots)
+            for slot, value in zip(slots, values):
+                kept[slot - 1] = value
+            values = kept
+        return values if any(safe_str(value) for value in values) else list(local_args)
+
     def resolve_buff_tree(buff_key, passed_args, depth=0, visited=None, path=None):
         if visited is None: visited = set()
         if path is None: path = []
@@ -609,13 +640,7 @@ def build():
                     )
                     arg_tokens = params[buff_idx + 1:next_buff_idx]
                     para_key = f"{key}Para"
-                    para_vals = b_attr.get(para_key, [])
-                    child_args = []
-                    for arg in arg_tokens:
-                        resolved_arg = resolve_positional_arg(arg, para_vals, passed_args)
-                        if resolved_arg not in (None, ""):
-                            child_args.append(resolved_arg)
-                    if not child_args: child_args = para_vals
+                    child_args = edge_args(child_key, arg_tokens, b_attr.get(para_key, []), passed_args)
                     results.extend(resolve_buff_tree(child_key, child_args, depth + 1, visited.copy(), path + [buff_key]))
                     
         return results
@@ -642,14 +667,8 @@ def build():
                     b_key = params[buff_idx]
                     arg_tokens = params[buff_idx + 1:]
                     para_key = f"{key}Para"
-                    para_vals = s_attr.get(para_key, [])
-                    resolved_b_args = []
-                    for arg in arg_tokens:
-                        resolved_arg = resolve_positional_arg(arg, para_vals, [])
-                        if resolved_arg not in (None, ""):
-                            resolved_b_args.append(resolved_arg)
-                    if not resolved_b_args: resolved_b_args = para_vals
-                    
+                    resolved_b_args = edge_args(b_key, arg_tokens, s_attr.get(para_key, []), [])
+
                     sub_m = resolve_buff_tree(b_key, resolved_b_args)
                     for m in sub_m:
                         # Raw Effect roots are often invisible controller buffs.  The
@@ -686,12 +705,7 @@ def build():
                     if buff_idx != -1:
                         arg_tokens = v[buff_idx + 1:]
                         para_key = f"{k}Para"
-                        para_vals = s_attr.get(para_key, [])
-                        for arg in arg_tokens:
-                            resolved_arg = resolve_positional_arg(arg, para_vals, [])
-                            if resolved_arg not in (None, ""):
-                                match_args.append(resolved_arg)
-                        if not match_args: match_args = para_vals
+                        match_args = edge_args(buff_key, arg_tokens, s_attr.get(para_key, []), [])
                         break
             sub_m = resolve_buff_tree(buff_key, match_args)
             for m in sub_m:
@@ -995,9 +1009,10 @@ def build():
         mechanics.extend(composite_bindings)
         return mechanics
 
-    def get_buff_param_val(pname, idx_str, args, b_attr_dict, unit="", closing_tags="", placeholder_to_pos=None):
-        if placeholder_to_pos is None: placeholder_to_pos = {}
-        pos = placeholder_to_pos.get(idx_str, int(idx_str) - 1)
+    def get_buff_param_val(pname, idx_str, args, b_attr_dict, unit="", closing_tags=""):
+        # [EffectParam,n] reads the buff's raw argument #(n-1) (Effect row "Buff_X,#1,#2" →
+        # [EffectParam,2], [EffectParam,3]); never the placeholder's order in the text (V0141 2% vs 20%).
+        pos = int(idx_str) - 2
         val = None
         if pname in ["EffectParam", "EffectPara", "BuffParam"]:
             if 0 <= pos < len(args) and args[pos] != '':
@@ -1076,12 +1091,6 @@ def build():
             args_per_lvl = [m["args"] for _, m in entries]
             same_template = all(m["template"] == template for _, m in entries)
             
-            param_matches = re.findall(r'\[(?:EffectParam|EffectPara|BuffParam),(?:(\d+))?\]', template)
-            placeholder_to_pos = {}
-            for pos, idx_str in enumerate(param_matches):
-                if idx_str not in placeholder_to_pos:
-                    placeholder_to_pos[idx_str] = pos
-
             # Keep the exact parameter provenance on the card-local binding.  This
             # is diagnostic metadata, not a second resolver or a global value cache.
             effect_param_values_by_level = {}
@@ -1095,7 +1104,6 @@ def build():
                 for args in args_per_lvl:
                     value = get_buff_param_val(
                         pname, idx_str, args, b_attr_dict,
-                        placeholder_to_pos=placeholder_to_pos,
                     )
                     values.append(str(value) if value is not None else token)
                 effect_param_values_by_level[token] = values
@@ -1112,7 +1120,7 @@ def build():
                     idx_str = m.group(3) or "1"
                     closing_tags = m.group(4) or ""
                     unit = m.group(5) or ""
-                    val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags, placeholder_to_pos)
+                    val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags)
                     if val is None: val = full_p
                     return f"{val}{unit}{closing_tags}"
                 return single_replacer
@@ -1137,7 +1145,7 @@ def build():
                     
                     vals = []
                     for args in args_per_lvl:
-                        val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags, placeholder_to_pos)
+                        val = get_buff_param_val(pname, idx_str, args, b_attr_dict, unit, closing_tags)
                         if val is None: val = full_p
                         vals.append(val)
                         
