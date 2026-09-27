@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { loreUnitGroups } from './loreUnits.mts';
+import { loreUnitGroups, termProgress } from './loreUnits.mts';
 
 test('groups units in reading order with Vietnamese labels, numbering basic reports and naming secret ones', () => {
   const structure = { reports: [
@@ -24,4 +24,10 @@ test('units missing from the record are left out; empty groups disappear', () =>
 test('the quote is translatable in the Giới thiệu group, before the evaluation', () => {
   const groups = loreUnitGroups({ reports: [], timeline: [] }, ['card_intro', 'quote'], {});
   assert.deepEqual(groups[0].items.map((i) => i.unitKey), ['quote', 'card_intro']);
+});
+
+test('termProgress: shared terms the character uses, each counted once; missing terms are not counted', () => {
+  const t = (code: string, done: boolean) => ({ code, done });
+  assert.deepEqual(termProgress([t('K1', true), null, t('Y1', false), t('K1', true), t('ORG_3', true)]), { done: 2, total: 3 });
+  assert.deepEqual(termProgress([]), { done: 0, total: 0 });
 });

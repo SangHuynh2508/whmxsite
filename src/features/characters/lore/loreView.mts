@@ -31,7 +31,7 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
 
 // Relic-tag labels confirmed by the owner (2026-09-26): in-game S0132 tag1 工艺 / tag3 产地, A0061 tag2 出土地;
 // tag4 其他 from the wiki (外销文物).
-const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất', tag4: 'Khác' };
+export const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất', tag4: 'Khác' };
 
 // Ticket layout (owner 2026-09-27, demo "Phiếu Hồ Sơ Lưu Trữ"): Vietnamese values are 3-4x longer than the CN ones,
 // so 3 fixed columns wrapped most of them. Each value is sized by its measured width: S fits one line in a third of

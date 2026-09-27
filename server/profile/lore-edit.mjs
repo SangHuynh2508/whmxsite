@@ -85,7 +85,9 @@ export function archiveImagesFor(manifest, characterId) {
 
 const termView = (terms, code) => {
   const t = code ? terms.get(code) : null;
-  return t ? { code: t.code, kind: t.kind, nameCn: t.nameCn, nameVi: t.nameVi, official: official(t) } : null;
+  // done = what the public page shows in VI: an official name, and the description too when the term has one
+  const done = (row) => official(row) && Boolean(row.nameVi) && (!row.detailCn || Boolean(row.detailVi));
+  return t ? { code: t.code, kind: t.kind, nameCn: t.nameCn, nameVi: t.nameVi, official: official(t), done: done(t) } : null;
 };
 
 export function shapeLoreRecord({ characterId, revision, profile, texts, terms, history, archiveImages }) {
@@ -104,6 +106,7 @@ export function shapeLoreRecord({ characterId, revision, profile, texts, terms, 
       type: termView(terms, profile.relicTypeCode), era: termView(terms, profile.eraCode),
       museum: termView(terms, profile.museumCode), eraRange: termView(terms, profile.eraRangeCode),
     } : null,
+    relicTags: (profile.structure.relicTags ?? []).map((tag) => ({ field: tag.field, term: termView(terms, tag.code) })),
     affinity: Object.fromEntries(basicUnlocks.map((r) => [r.unlock.elementId, termView(terms, `AFFINITY_${r.unlock.elementId}`)])),
     archiveImages,
     history,

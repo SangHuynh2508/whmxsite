@@ -5,7 +5,8 @@ import { getLore, patchLore } from '../loreApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
 import { useEditor } from '../useEditor';
 import { useIsOwner } from '../useIsOwner';
-import { loreUnitGroups } from '../lib/loreUnits.mts';
+import { loreUnitGroups, termProgress } from '../lib/loreUnits.mts';
+import { TAG_LABELS } from '../../../features/characters/lore/loreView.mts';
 import { termHref } from '../lib/route.mts';
 import { BilingualText, type LoreStatus } from '../components/BilingualText';
 import { PairHead } from '../components/OverridableField';
@@ -15,7 +16,7 @@ import { invalidateLoreProgress } from '../CharacterList';
 import type { ModuleProps } from '../types';
 
 type Unit = { unitKey: string; sourceCn: string; vi: string | null; viOrigin: 'admin' | 'legacy_workbook' | null; state: 'ok' | 'source_changed'; previousCn: string | null };
-type TermView = { code: string; nameCn: string; nameVi: string | null; official: boolean } | null;
+type TermView = { code: string; nameCn: string; nameVi: string | null; official: boolean; done: boolean } | null;
 type Lore = {
   characterId: string;
   revision: number;
@@ -23,6 +24,7 @@ type Lore = {
   units: Unit[];
   organisation: TermView;
   relic: { type: TermView; era: TermView; museum: TermView; eraRange: TermView } | null;
+  relicTags: { field: string; term: TermView }[];
   affinity: Record<string, TermView>;
   archiveImages: { url: string }[];
   history: HistoryEntry[];
@@ -67,6 +69,12 @@ export function LoreModule({ data }: ModuleProps) {
   const groups = loreUnitGroups(lore.structure, keys, lore.affinity);
   const labels = Object.fromEntries(groups.flatMap((g) => g.items.map((i) => [i.unitKey, i.label])));
   const counts = lore.units.reduce((c, u) => ({ ...c, [statusOf(u)]: c[statusOf(u)] + 1 }), { done: 0, legacy: 0, changed: 0, todo: 0 } as Record<LoreStatus, number>);
+  const termRows: [string, TermView][] = [
+    ['Loại', lore.relic?.type ?? null], ['Triều đại', lore.relic?.era ?? null], ['Bảo tàng', lore.relic?.museum ?? null], ['Giai đoạn', lore.relic?.eraRange ?? null],
+    ...(lore.relicTags ?? []).map((t): [string, TermView] => [TAG_LABELS[t.field] ?? t.field, t.term]),
+    ['Trực thuộc', lore.organisation],
+  ];
+  const terms = termProgress([...termRows.map(([, t]) => t), ...Object.values(lore.affinity)]);
   const jump = (unitKey: string) => {
     document.getElementById(`pair-${unitKey}`)?.scrollIntoView({ behavior: smooth(), block: 'start' });
     (document.getElementById(`vi-${unitKey}`) as HTMLTextAreaElement | null)?.focus({ preventScroll: true });
@@ -76,7 +84,7 @@ export function LoreModule({ data }: ModuleProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-subtle) lg:px-5">
-        <span className="tabular-nums">{counts.done}/{lore.units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch</span>
+        <span className="tabular-nums">{counts.done}/{lore.units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></span>
         <span role="status" className="ml-auto">{publish.state !== 'idle' && publish.message}</span>
         {isOwner && <Button variant="ghost" className="h-7" onClick={() => lorePublisher.now()} disabled={publish.state === 'publishing'}>Xuất bản ngay</Button>}
       </div>
@@ -153,10 +161,10 @@ export function LoreModule({ data }: ModuleProps) {
           <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Hiện vật</h3>
           {lore.archiveImages[0] && <img src={lore.archiveImages[0].url} alt="" loading="lazy" className="mb-3 aspect-square w-full rounded-md bg-(--bg-elevated) object-contain" />}
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            {([['Loại', lore.relic?.type], ['Triều đại', lore.relic?.era], ['Bảo tàng', lore.relic?.museum], ['Giai đoạn', lore.relic?.eraRange], ['Trực thuộc', lore.organisation]] as const).map(([label, t]) => (
+            {termRows.map(([label, t]) => (
               <Fragment key={label}>
                 <dt className="text-(--text-subtle)">{label}</dt>
-                <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? t.nameVi : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-subtle)">(chưa dịch)</span></>}</a> : '—'}</dd>
+                <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-subtle)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-subtle)">(chưa dịch)</span></>}</a> : '—'}</dd>
               </Fragment>
             ))}
           </dl>

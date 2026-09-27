@@ -22,3 +22,10 @@ export function loreUnitGroups(structure: { reports: Report[]; timeline: string[
   ];
   return groups.map((g) => ({ ...g, items: g.items.filter((i) => present.has(i.unitKey)) })).filter((g) => g.items.length);
 }
+
+// Shared terms (type, era, museum, relic tags, organisation, affinity levels…) show on the public lore tab too;
+// they are translated on the terms page, so the unit count alone can read "19/19" while the page still shows CN.
+export function termProgress(terms: ({ code: string; done: boolean } | null)[]) {
+  const unique = new Map(terms.flatMap((t) => (t ? [[t.code, t.done] as const] : [])));
+  return { done: [...unique.values()].filter(Boolean).length, total: unique.size };
+}

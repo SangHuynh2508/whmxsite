@@ -91,9 +91,18 @@ test('the lore record lists present units with previous CN only for changed ones
   const history = [{ fieldName: 'card_intro', eventType: 'source_import', oldValue: { sourceCn: '旧' }, editedAt: '2026-09-25T00:00:00Z' }];
   const r = shapeLoreRecord({ characterId: 'A1', revision: 3, profile, texts, terms, history, archiveImages: [] });
   assert.deepEqual(r.units.map((u) => [u.unitKey, u.previousCn]), [['card_intro', '旧'], ['relic_intro', null]]);
-  assert.deepEqual(r.relic.type, { code: 'K1', kind: 'relic_type', nameCn: '金银器', nameVi: null, official: false });
+  assert.deepEqual(r.relic.type, { code: 'K1', kind: 'relic_type', nameCn: '金银器', nameVi: null, official: false, done: false });
   assert.equal(r.relic.era, null);
   assert.equal(r.revision, 3);
+});
+
+test('the lore record lists the relic tags too; a term is done only with an official name and, when it has one, description', () => {
+  const t = (code, patch) => [code, { code, kind: 'relic_tag', nameCn: '甲', nameVi: 'Giáp', detailCn: '', detailVi: null, viOrigin: 'admin', state: 'ok', ...patch }];
+  const terms = new Map([t('M1'), t('Y1', { detailCn: '李静训的外祖母', detailVi: null }), t('Y2', { detailCn: '说明', detailVi: 'Mô tả' })]);
+  const profile = { organisationCode: null, relicTypeCode: null, eraCode: null, museumCode: null, eraRangeCode: null,
+    structure: { reports: [], timeline: [], relicTags: [{ field: 'tag1', code: 'M1' }, { field: 'tag4', code: 'Y1' }, { field: 'tag2', code: 'Y2' }, { field: 'tag3', code: 'GONE' }] } };
+  const r = shapeLoreRecord({ characterId: 'W0182', revision: 1, profile, texts: [], terms, history: [], archiveImages: [] });
+  assert.deepEqual(r.relicTags.map((x) => [x.field, x.term?.code, x.term?.done]), [['tag1', 'M1', true], ['tag4', 'Y1', false], ['tag2', 'Y2', true], ['tag3', undefined, undefined]]);
 });
 
 test('termUsage counts relic tags too', () => {
