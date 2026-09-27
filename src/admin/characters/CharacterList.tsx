@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button, Notice, SkeletonRows } from '../layout/ui';
 import { listCharacters } from './charactersApi.js';
 import { getLoreProgress } from './loreApi.js';
-import { TERMS_HREF, recordHref } from './lib/route.mts';
+import { GAME_TERMS_HREF, TERMS_HREF, recordHref } from './lib/route.mts';
 import { filterCharacters, type LoreFilter } from './lib/listFilter.mts';
 import { Avatar, characterAvatar } from './components/Avatar';
 import { RARE_LABEL, type Character } from './types';
@@ -55,6 +55,7 @@ export function CharacterList() {
             <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} className={filter === id ? 'text-[13px] text-(--text-main)' : 'text-[13px] text-(--text-subtle) transition-colors hover:text-(--text-main)'}>{label}</button>
           ))}
           <a href={TERMS_HREF} className="text-[13px] text-(--text-subtle) transition-colors hover:text-(--text-main)">Thuật ngữ lore →</a>
+          <a href={GAME_TERMS_HREF} className="text-[13px] text-(--text-subtle) transition-colors hover:text-(--text-main)">Thuật ngữ game →</a>
         </div>
         {error && <Notice className="my-4">Không tải được danh sách. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>}
         {!items && !error && <SkeletonRows count={8} />}
