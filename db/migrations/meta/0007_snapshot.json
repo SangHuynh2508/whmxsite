@@ -1,5 +1,5 @@
 {
-  "id": "f771fdb4-bc5a-4059-afc6-c54cf2237aae",
+  "id": "f54de398-1a67-4aa4-b0bb-09aa8ca5f159",
   "prevId": "6a7bbc50-9f5c-4905-b738-b0393b6c213e",
   "version": "7",
   "dialect": "postgresql",
@@ -4741,6 +4741,171 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.game_texts": {
+      "name": "game_texts",
+      "schema": "",
+      "columns": {
+        "entity_id": {
+          "name": "entity_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "game_text_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name_cn": {
+          "name": "name_cn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "detail_cn": {
+          "name": "detail_cn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "name_vi": {
+          "name": "name_vi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "detail_vi": {
+          "name": "detail_vi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vi_origin": {
+          "name": "vi_origin",
+          "type": "vi_origin",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "name": "state",
+          "type": "lore_text_state",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ok'"
+        },
+        "vi_updated_by_user_id": {
+          "name": "vi_updated_by_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vi_updated_at": {
+          "name": "vi_updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_hash": {
+          "name": "source_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_present": {
+          "name": "source_present",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "game_texts_kind_code_unique": {
+          "name": "game_texts_kind_code_unique",
+          "columns": [
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "game_texts_entity_id_managed_entities_id_fk": {
+          "name": "game_texts_entity_id_managed_entities_id_fk",
+          "tableFrom": "game_texts",
+          "tableTo": "managed_entities",
+          "columnsFrom": [
+            "entity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "game_texts_vi_updated_by_user_id_users_id_fk": {
+          "name": "game_texts_vi_updated_by_user_id_users_id_fk",
+          "tableFrom": "game_texts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "vi_updated_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "game_texts_vi_origin_pairing": {
+          "name": "game_texts_vi_origin_pairing",
+          "value": "(\"game_texts\".\"name_vi\" is null and \"game_texts\".\"detail_vi\" is null) = (\"game_texts\".\"vi_origin\" is null)"
+        }
+      },
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -4801,7 +4966,8 @@
         "preview_character",
         "character_profile",
         "lore_term",
-        "character_build"
+        "character_build",
+        "game_text"
       ]
     },
     "public.source_kind": {
@@ -4968,13 +5134,7 @@
         "era_range",
         "affinity_level",
         "organisation",
-        "relic_tag",
-        "weapon",
-        "weapon_skill",
-        "weapon_affix",
-        "job_style",
-        "style_sector",
-        "style_talent"
+        "relic_tag"
       ]
     },
     "public.lore_text_state": {
@@ -5002,6 +5162,18 @@
         "job_style",
         "style_sector",
         "character_style"
+      ]
+    },
+    "public.game_text_kind": {
+      "name": "game_text_kind",
+      "schema": "public",
+      "values": [
+        "weapon",
+        "weapon_skill",
+        "weapon_affix",
+        "job_style",
+        "style_sector",
+        "style_talent"
       ]
     }
   },

@@ -2,19 +2,19 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
-import { BUILD_TABLES, GAME_REF_TERM_KINDS, normalizeGameReferences, selectBuildTables } from './game-ref-source.mjs';
+import { BUILD_TABLES, GAME_TEXT_KINDS, normalizeGameReferences, selectBuildTables } from './game-ref-source.mjs';
 
 const fixture = (name) => JSON.parse(readFileSync(new URL(`../fixtures/masterdata/${name}.json`, import.meta.url), 'utf8'));
 const raw = () => Object.fromEntries(BUILD_TABLES.map((name) => [name, fixture(name)]));
 const byKind = (rows, kind) => rows.filter((r) => r.kind === kind);
 const ref = (out, kind, code) => out.refs.find((r) => r.kind === kind && r.code === code);
-const term = (out, code) => out.terms.find((t) => t.code === code);
+const text = (out, key) => { const [kind, code] = key.split(':'); return out.texts.find((t) => t.kind === kind && t.code === code); };
 
-test('fixtures: one ref per weapon / affix / style / column / character, one term per translatable name', () => {
+test('fixtures: one ref per weapon / affix / style / column / character, one text per translatable name', () => {
   const out = normalizeGameReferences(raw());
-  const count = (rows) => Object.fromEntries(['weapon', 'weapon_affix', 'job_style', 'style_sector', 'character_style', ...GAME_REF_TERM_KINDS].map((k) => [k, byKind(rows, k).length]).filter(([, n]) => n));
+  const count = (rows) => Object.fromEntries(['weapon', 'weapon_affix', 'job_style', 'style_sector', 'character_style', ...GAME_TEXT_KINDS].map((k) => [k, byKind(rows, k).length]).filter(([, n]) => n));
   assert.deepEqual(count(out.refs), { weapon: 110, weapon_affix: 24, job_style: 15, style_sector: 60, character_style: 143 });
-  assert.deepEqual(count(out.terms), { weapon: 110, weapon_skill: 114, weapon_affix: 24, job_style: 15, style_sector: 60, style_talent: 428 });
+  assert.deepEqual(count(out.texts), { weapon: 110, weapon_skill: 114, weapon_affix: 24, job_style: 15, style_sector: 60, style_talent: 428 });
   assert.deepEqual(out.problems, []);
   // 22 weapons per job
   const perJob = {};
@@ -22,11 +22,11 @@ test('fixtures: one ref per weapon / affix / style / column / character, one ter
   assert.deepEqual(perJob, { 1: 22, 2: 22, 3: 22, 4: 22, 5: 22 });
 });
 
-test('weapon: job, rarity, skills and icon key; its name is a term; its skill text is resolved', () => {
+test('weapon: job, rarity, skills and icon key; its name is a game text; its skill text is resolved', () => {
   const out = normalizeGameReferences(raw());
   assert.deepEqual(ref(out, 'weapon', '30111').data, { job: 1, rare: 3, series: 10, skillIds: ['ED2031'], icon: 'itemicon_30111' });
-  assert.deepEqual(term(out, 'weapon:30111'), { code: 'weapon:30111', kind: 'weapon', nameCn: '路边物件盾', detailCn: '', sourceHash: term(out, 'weapon:30111').sourceHash });
-  const skill = term(out, 'weapon_skill:ED2031');
+  assert.deepEqual(text(out, 'weapon:30111'), { kind: 'weapon', code: '30111', nameCn: '路边物件盾', detailCn: '', sourceHash: text(out, 'weapon:30111').sourceHash });
+  const skill = text(out, 'weapon_skill:ED2031');
   assert.equal(skill.nameCn, '路障庇护');
   assert.equal(skill.detailCn, '装备者常击造成的伤害提高10%/11%/12%/13%/14%/15%。');
 });
@@ -38,25 +38,25 @@ test('weapon without an icon file → icon null; equipment that is not an itemMa
   tables.weaponItems = tables.weaponItems.filter((i) => i.id !== '30111');
   const out = normalizeGameReferences(tables);
   assert.equal(ref(out, 'weapon', '30111'), undefined);
-  assert.equal(term(out, 'weapon:30111'), undefined);
+  assert.equal(text(out, 'weapon:30111'), undefined);
   assert.deepEqual(out.skipped, ['equipments:30111 (no itemMap type 9 row)']);
 });
 
 test('深造: a style has a job (from the characters that list it), 4 columns; a column has 7 points of talents', () => {
   const out = normalizeGameReferences(raw());
   assert.deepEqual(ref(out, 'job_style', '101').data, { job: 1, styleTalent: ['DB_1001'], sectorIds: ['D1_01', 'D1_02', 'D1_03', 'D1_04'], icon: 'Speciality_101' });
-  assert.equal(term(out, 'job_style:101').nameCn, '迅疾');
+  assert.equal(text(out, 'job_style:101').nameCn, '迅疾');
   const column = ref(out, 'style_sector', 'A1_01').data;
   assert.equal(column.talentIds.length, 7);
   assert.deepEqual(column.talentIds[0], ['A10101']);
-  assert.equal(term(out, 'style_sector:A1_01').nameCn, '重峦');
-  assert.equal(term(out, 'style_talent:A10101').nameCn, '瞄准伤害+10%');
+  assert.equal(text(out, 'style_sector:A1_01').nameCn, '重峦');
+  assert.equal(text(out, 'style_talent:A10101').nameCn, '瞄准伤害+10%');
 });
 
 test('character style: its 3 styles + the game recommendation, matched through styleTalent (D0017 → 102 固防)', () => {
   const out = normalizeGameReferences(raw());
   assert.deepEqual(ref(out, 'character_style', 'D0017').data, { job: 1, styleIds: ['101', '102', '103'], recommendedStyleId: '102' });
-  assert.equal(term(out, 'job_style:102').nameCn, '固防');
+  assert.equal(text(out, 'job_style:102').nameCn, '固防');
   // no TalentRecommend → no recommendation
   assert.equal(ref(out, 'character_style', 'ES013').data.recommendedStyleId, null);
 });
@@ -75,7 +75,7 @@ test('affix: attribute, % display, allowed jobs and values per rarity', () => {
   const affix = ref(out, 'weapon_affix', 'AA001001').data;
   assert.deepEqual({ ...affix, rareValues: undefined }, { addAttr: 'Hp_FIX', percent: false, jobs: [1, 2, 3, 4, 5], rareValues: undefined });
   assert.deepEqual(affix.rareValues['5'], { initValue: 189, growValue: 320 });
-  assert.equal(term(out, 'weapon_affix:AA001001').nameCn, '生命值');
+  assert.equal(text(out, 'weapon_affix:AA001001').nameCn, '生命值');
 });
 
 test('sourceHash does not depend on key order, and changes with the content', () => {

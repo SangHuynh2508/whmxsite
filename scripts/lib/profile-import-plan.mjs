@@ -1,7 +1,5 @@
 // scripts/lib/profile-import-plan.mjs
 // Pure: what the importer must write. Never deletes; VI is never touched here.
-import { GAME_REF_TERM_KINDS } from './game-ref-source.mjs';
-
 export function planProfileImport({ normalized, current }) {
   const counts = { inserted: 0, updated: 0, unchanged: 0, conflicted: 0, absent: 0 };
   const plan = { profiles: [], textInserts: [], textUpdates: [], terms: [], audits: [], touchedProfiles: new Set(), touchedTerms: new Set(), cnChanged: false, counts };
@@ -52,31 +50,32 @@ export function planProfileImport({ normalized, current }) {
     counts.absent += 1;
   }
 
-  planTerms(plan, normalized.terms, current.terms, (kind) => !GAME_REF_TERM_KINDS.includes(kind));
+  planTerms(plan, normalized.terms, current.terms);
   return plan;
 }
 
-// Terms (lore_terms rows) of the kinds an importer owns: insert new ones, update CN (a changed CN under a VI →
-// source_changed), mark the owned ones gone from raw as absent. Never deletes, never writes VI. Shared by the profile
-// and game-reference importers; each passes `owns` so neither marks the other's terms absent.
-export function planTerms(plan, terms, currentTerms, owns) {
+// Translatable terms (lore_terms, game_texts): insert new ones, update CN (a changed CN under a VI → source_changed),
+// mark the ones gone from raw as absent. Never deletes, never writes VI. Shared by the profile and game-reference
+// importers; `keyOf` names a row the way `currentTerms` is keyed.
+export function planTerms(plan, terms, currentTerms, keyOf = (t) => t.code) {
   const { counts } = plan;
   for (const term of terms) {
-    const old = currentTerms.get(term.code);
-    if (!old) { plan.terms.push({ code: term.code, action: 'insert', row: term }); counts.inserted += 1; plan.touchedTerms.add(term.code); continue; }
-    if (old.sourceHash === term.sourceHash && old.sourcePresent) { plan.terms.push({ code: term.code, action: 'unchanged' }); counts.unchanged += 1; continue; }
+    const key = keyOf(term);
+    const old = currentTerms.get(key);
+    if (!old) { plan.terms.push({ code: key, action: 'insert', row: term }); counts.inserted += 1; plan.touchedTerms.add(key); continue; }
+    if (old.sourceHash === term.sourceHash && old.sourcePresent) { plan.terms.push({ code: key, action: 'unchanged' }); counts.unchanged += 1; continue; }
     const patch = { kind: term.kind, nameCn: term.nameCn, detailCn: term.detailCn, sourceHash: term.sourceHash, sourcePresent: true };
     if (old.sourceHash !== term.sourceHash) {
       plan.cnChanged = true;
       if (old.nameVi !== null || old.detailVi !== null) { patch.state = 'source_changed'; counts.conflicted += 1; } else counts.updated += 1;
-      plan.audits.push({ scope: 'term', key: term.code, fieldName: 'name_detail', oldValue: { sourceHash: old.sourceHash }, newValue: { nameCn: term.nameCn, detailCn: term.detailCn } });
+      plan.audits.push({ scope: 'term', key, fieldName: 'name_detail', oldValue: { sourceHash: old.sourceHash }, newValue: { nameCn: term.nameCn, detailCn: term.detailCn } });
     } else counts.updated += 1;
-    plan.terms.push({ code: term.code, action: 'update', patch });
-    plan.touchedTerms.add(term.code);
+    plan.terms.push({ code: key, action: 'update', patch });
+    plan.touchedTerms.add(key);
   }
-  const codes = new Set(terms.map((t) => t.code));
+  const codes = new Set(terms.map(keyOf));
   for (const [code, old] of currentTerms) {
-    if (codes.has(code) || !old.sourcePresent || !owns(old.kind)) continue;
+    if (codes.has(code) || !old.sourcePresent) continue;
     plan.terms.push({ code, action: 'absent', patch: { sourcePresent: false } });
     plan.touchedTerms.add(code);
     counts.absent += 1;

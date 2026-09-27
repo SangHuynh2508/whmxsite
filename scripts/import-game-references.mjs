@@ -1,6 +1,7 @@
 // scripts/import-game-references.mjs
-// Build feature: MasterData → game_references + the Build term kinds in lore_terms
-// (spec docs/superpowers/specs/2026-09-26-character-build-design.md §4).
+// Game database for the Build feature (and later popups / weapon / team pages): MasterData → game_references +
+// game_texts (spec docs/superpowers/specs/2026-09-26-character-build-design.md §4; owner 2026-09-27: own tables,
+// nothing in lore).
 // Default: read-only plan. --apply writes (owner approval required). --check: no DB, prints what would be imported.
 //   node --env-file=.env.local scripts/import-game-references.mjs            # plan against the development DB
 //   node --env-file=.env.local scripts/import-game-references.mjs --apply    # write (owner yes)
@@ -12,11 +13,10 @@ import { fileURLToPath } from 'node:url';
 import { eq, inArray, sql } from 'drizzle-orm';
 
 import { closeDb, getDb } from '../db/client.mjs';
-import { gameReferences } from '../db/schema/build.mjs';
+import { gameReferences, gameTexts } from '../db/schema/build.mjs';
 import { editHistory, importRuns, managedEntities, sourceSnapshots } from '../db/schema/core.mjs';
-import { lorePublishState, loreTerms } from '../db/schema/profile.mjs';
 import { ensureEntities } from './import-character-profile.mjs';
-import { planGameRefImport } from './lib/game-ref-import-plan.mjs';
+import { planGameRefImport, textKey } from './lib/game-ref-import-plan.mjs';
 import { BUILD_TABLES, FULL_TABLES, normalizeGameReferences, selectBuildTables } from './lib/game-ref-source.mjs';
 import { hashValue, sha256 } from './lib/profile-source.mjs';
 
@@ -41,8 +41,8 @@ function loadTables({ fixtures, masterRoot, iconRoot }) {
 
 async function loadCurrent(db) {
   const refs = await db.select({ id: gameReferences.id, kind: gameReferences.kind, code: gameReferences.code, sourceHash: gameReferences.sourceHash, sourcePresent: gameReferences.sourcePresent }).from(gameReferences);
-  const terms = await db.select().from(loreTerms);
-  return { refs: new Map(refs.map((r) => [`${r.kind}|${r.code}`, r])), terms: new Map(terms.map((t) => [t.code, t])) };
+  const texts = await db.select().from(gameTexts);
+  return { refs: new Map(refs.map((r) => [`${r.kind}|${r.code}`, r])), texts: new Map(texts.map((t) => [textKey(t), t])) };
 }
 
 const counts = (rows) => rows.reduce((out, r) => ({ ...out, [r.kind]: (out[r.kind] ?? 0) + 1 }), {});
@@ -61,12 +61,12 @@ function summarize(plan, normalized) {
   return {
     counts: plan.counts,
     refs: counts(normalized.refs),
-    terms: counts(normalized.terms),
+    texts: counts(normalized.texts),
     skipped: normalized.skipped,
     problems: normalized.problems,
     // grouped per action and kind, with a few examples (the full list runs to 1 000+ lines on a first import)
     refChanges: grouped(plan.refs.filter((r) => r.action !== 'unchanged').map((r) => [r.action, r.key.split('|')[0], r.key])),
-    termChanges: grouped(plan.terms.filter((t) => t.action !== 'unchanged').map((t) => [t.action, t.code.split(':')[0], t.code])),
+    textChanges: grouped(plan.terms.filter((t) => t.action !== 'unchanged').map((t) => [t.action, t.code.split('|')[0], t.code])),
   };
 }
 
@@ -84,20 +84,21 @@ async function apply(db, { plan, receipt }) {
       else await tx.update(gameReferences).set({ ...r.patch, ...(r.action === 'update' ? { sourceSeenAt: now } : {}), updatedAt: now }).where(sql`${gameReferences.kind} = ${kind} and ${gameReferences.code} = ${code}`);
     }
 
-    const termEntity = await ensureEntities(tx, 'lore_term', plan.terms.map((t) => t.code));
+    // game_texts: one managed entity per text (source_key "kind|code") for revisions + edit history
+    const textEntity = await ensureEntities(tx, 'game_text', plan.terms.map((t) => t.code));
     for (const t of plan.terms) {
-      if (t.action === 'insert') await tx.insert(loreTerms).values({ entityId: termEntity.get(t.code), code: t.code, kind: t.row.kind, nameCn: t.row.nameCn, detailCn: t.row.detailCn, sourceHash: t.row.sourceHash });
-      if (t.action === 'update' || t.action === 'absent') await tx.update(loreTerms).set({ ...t.patch, updatedAt: now }).where(eq(loreTerms.code, t.code));
+      const [kind, code] = t.code.split('|');
+      if (t.action === 'insert') await tx.insert(gameTexts).values({ entityId: textEntity.get(t.code), kind, code, nameCn: t.row.nameCn, detailCn: t.row.detailCn, sourceHash: t.row.sourceHash });
+      if (t.action === 'update' || t.action === 'absent') await tx.update(gameTexts).set({ ...t.patch, updatedAt: now }).where(sql`${gameTexts.kind} = ${kind} and ${gameTexts.code} = ${code}`);
     }
     const audits = plan.audits.map((a) => ({
       changeGroupId: run.id, requestId: run.id, importRunId: run.id, eventType: 'source_import',
-      entityId: termEntity.get(a.key), entityType: 'lore_term', fieldName: a.fieldName, oldValue: a.oldValue, newValue: a.newValue, metadata: {},
+      entityId: textEntity.get(a.key), entityType: 'game_text', fieldName: a.fieldName, oldValue: a.oldValue, newValue: a.newValue, metadata: {},
     }));
     if (audits.length) await tx.insert(editHistory).values(audits);
-    const bumpIds = [...plan.touchedTerms].map((code) => termEntity.get(code));
+    const bumpIds = [...plan.touchedTerms].map((key) => textEntity.get(key));
     if (bumpIds.length) await tx.update(managedEntities).set({ revision: sql`${managedEntities.revision} + 1`, updatedAt: now }).where(inArray(managedEntities.id, bumpIds));
-    // refs and terms are part of the published lore document
-    if (plan.changed) await tx.insert(lorePublishState).values({ id: 1, lastEditAt: now }).onConflictDoUpdate({ target: lorePublishState.id, set: { lastEditAt: now } });
+    // Nothing is published from here: the game document (game.<hash>.json) gets its publisher in Build PR 2.
 
     const status = plan.counts.conflicted ? 'completed_with_conflicts' : 'completed';
     await tx.update(importRuns).set({ status, finishedAt: new Date(), counts: plan.counts }).where(eq(importRuns.id, run.id));
@@ -126,7 +127,7 @@ if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
     const { tables, receipt } = loadTables(args);
     const normalized = normalizeGameReferences(tables);
     if (args.check) {
-      console.log(JSON.stringify({ check: normalized.problems.length ? 'problems' : 'ok', refs: counts(normalized.refs), terms: counts(normalized.terms), skipped: normalized.skipped, problems: normalized.problems }, null, 2));
+      console.log(JSON.stringify({ check: normalized.problems.length ? 'problems' : 'ok', refs: counts(normalized.refs), texts: counts(normalized.texts), skipped: normalized.skipped, problems: normalized.problems }, null, 2));
       if (normalized.problems.length) process.exitCode = 1;
     } else {
       db = getDb();

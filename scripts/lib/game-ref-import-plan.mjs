@@ -1,10 +1,12 @@
 // scripts/lib/game-ref-import-plan.mjs
-// Pure: what the game-reference importer must write (game_references rows + its lore_terms kinds).
+// Pure: what the game-reference importer must write (game_references + game_texts rows).
 // Never deletes; VI is never touched (planTerms).
-import { GAME_REF_TERM_KINDS } from './game-ref-source.mjs';
 import { planTerms } from './profile-import-plan.mjs';
 
-// current.refs: Map "kind|code" → { id, sourceHash, sourcePresent }; current.terms: Map code → lore_terms row (all kinds).
+export const textKey = (t) => `${t.kind}|${t.code}`;
+
+// current.refs: Map "kind|code" → { sourceHash, sourcePresent }; current.texts: Map "kind|code" → game_texts row.
+// plan.terms = the game_texts changes (keyed "kind|code"), named like the profile plan so planTerms fills it.
 export function planGameRefImport({ normalized, current }) {
   const counts = { inserted: 0, updated: 0, unchanged: 0, conflicted: 0, absent: 0 };
   const plan = { refs: [], terms: [], audits: [], touchedTerms: new Set(), cnChanged: false, counts };
@@ -25,7 +27,7 @@ export function planGameRefImport({ normalized, current }) {
     counts.absent += 1;
   }
 
-  planTerms(plan, normalized.terms, current.terms, (kind) => GAME_REF_TERM_KINDS.includes(kind));
+  planTerms(plan, normalized.texts, current.texts, textKey);
   plan.changed = plan.refs.some((r) => r.action !== 'unchanged') || plan.touchedTerms.size > 0;
   return plan;
 }

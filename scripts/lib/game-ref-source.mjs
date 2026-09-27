@@ -1,5 +1,5 @@
 // scripts/lib/game-ref-source.mjs
-// Pure: MasterData → game reference rows (structure) + translatable terms, for the Build feature
+// Pure: MasterData → game reference rows (structure) + their translatable texts (game_texts), for the Build feature
 // (spec docs/superpowers/specs/2026-09-26-character-build-design.md §3–§4). No I/O, no DB.
 // Relations come from the data (itemMap type 9, styleTalent, JobStyle lists), never from the shape of an id.
 import { hashValue } from './profile-source.mjs';
@@ -16,8 +16,8 @@ export const FULL_TABLES = {
   additionalAttrs: 'additionalAttrs.json', jobStyleMap: 'jobStyleMap.json', sectorMap: 'sectorMap.json',
   talentBankMap: 'talentBankMap.json', characterTable: 'characterTable.json', itemMap: 'itemMap.json',
 };
-// lore_terms kinds owned by the game-reference importer (the profile importer owns the others).
-export const GAME_REF_TERM_KINDS = ['weapon', 'weapon_skill', 'weapon_affix', 'job_style', 'style_sector', 'style_talent'];
+// game_texts kinds (db/schema/build.mjs game_text_kind).
+export const GAME_TEXT_KINDS = ['weapon', 'weapon_skill', 'weapon_affix', 'job_style', 'style_sector', 'style_talent'];
 
 const rows = (json) => (Array.isArray(json) ? json : Object.values(json ?? {}));
 const text = (value) => (value === null || value === undefined ? '' : String(value).trim());
@@ -51,13 +51,13 @@ export function selectBuildTables(full, iconExists) {
 
 export function normalizeGameReferences(tables) {
   const refs = [];
-  const terms = [];
+  const texts = [];
   const skipped = [];
   const problems = [];
   const addRef = (kind, code, data) => refs.push({ kind, code: String(code), data, sourceHash: hashValue(data) });
-  const addTerm = (kind, code, nameCn, detailCn = '') => {
+  const addText = (kind, code, nameCn, detailCn = '') => {
     const row = { nameCn: text(nameCn), detailCn: text(detailCn) };
-    terms.push({ code: `${kind}:${code}`, kind, ...row, sourceHash: hashValue(row) });
+    texts.push({ kind, code: String(code), ...row, sourceHash: hashValue(row) });
   };
 
   // Weapons: equipments rows that are itemMap type-9 rows (all weapons are; anything else is not a weapon).
@@ -78,16 +78,16 @@ export function normalizeGameReferences(tables) {
       else problems.push(`equipments:${id} skill ${skillId} not in equipmentSkills`);
     }
     addRef('weapon', id, { job: weapon.job, rare: weapon.rare, series: weapon.Series ?? null, skillIds: ids, icon: icons.has(id) ? `itemicon_${id}` : null });
-    addTerm('weapon', id, weapon.NameLanText);
+    addText('weapon', id, weapon.NameLanText);
   }
   for (const skillId of [...skillIds].sort()) {
     const levels = skillLevels.get(skillId).slice().sort((a, b) => a.Level - b.Level);
-    addTerm('weapon_skill', skillId, levels[0].NameLanText, resolveSkillText(levels));
+    addText('weapon_skill', skillId, levels[0].NameLanText, resolveSkillText(levels));
   }
 
   for (const affix of rows(tables.additionalAttrs)) {
     addRef('weapon_affix', affix.id, { addAttr: affix.addAttr, percent: affix.attrDisplayType === '%', jobs: affix.job ?? [], rareValues: affix.rareAttrs ?? {} });
-    addTerm('weapon_affix', affix.id, affix.NameLanText);
+    addText('weapon_affix', affix.id, affix.NameLanText);
   }
 
   // 深造: a style's job = the job of the characters that list it in JobStyle.
@@ -105,7 +105,7 @@ export function normalizeGameReferences(tables) {
     if (jobs.length !== 1) problems.push(`jobStyleMap:${id} is listed by characters of ${jobs.length} jobs`);
     for (const sectorId of style.sector ?? []) if (!sectors.has(String(sectorId))) problems.push(`jobStyleMap:${id} column ${sectorId} not in sectorMap`);
     addRef('job_style', id, { job: jobs.length === 1 ? jobs[0] : null, styleTalent: style.styleTalent ?? [], sectorIds: (style.sector ?? []).map(String), icon: style.styleIcon ?? null });
-    addTerm('job_style', id, style.styleNameLanText || style.styleName);
+    addText('job_style', id, style.styleNameLanText || style.styleName);
   }
   const usedTalents = new Set();
   for (const [id, sector] of sectors) {
@@ -115,9 +115,9 @@ export function normalizeGameReferences(tables) {
       else problems.push(`sectorMap:${id} talent ${talentId} not in talentBankMap`);
     }
     addRef('style_sector', id, { talentIds, icon: sector.sectorIcon ?? null });
-    addTerm('style_sector', id, sector.branchNameLanText || sector.branchName);
+    addText('style_sector', id, sector.branchNameLanText || sector.branchName);
   }
-  for (const id of [...usedTalents].sort()) addTerm('style_talent', id, talents.get(id).DescriptionLanText);
+  for (const id of [...usedTalents].sort()) addText('style_talent', id, talents.get(id).DescriptionLanText);
 
   // The game's recommendation: TalentRecommend[0][0] is a styleTalent; only one of the character's own styles counts.
   for (const c of characters) {
@@ -133,5 +133,5 @@ export function normalizeGameReferences(tables) {
   }
 
   const order = (a, b) => (a.kind === b.kind ? a.code.localeCompare(b.code) : a.kind.localeCompare(b.kind));
-  return { refs: refs.sort(order), terms: terms.sort(order), skipped, problems };
+  return { refs: refs.sort(order), texts: texts.sort(order), skipped, problems };
 }
