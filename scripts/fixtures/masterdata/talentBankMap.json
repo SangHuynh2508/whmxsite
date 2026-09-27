@@ -1,0 +1,8011 @@
+[
+ {
+  "id": "A10101",
+  "type": 2,
+  "talentParam1": [
+   "SnipeDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10101",
+  "DescriptionLanText": "瞄准伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10102",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10102",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10104",
+  "type": 2,
+  "talentParam1": [
+   "SnipeDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10104",
+  "DescriptionLanText": "瞄准伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10105",
+  "type": 2,
+  "talentParam1": [
+   "SnipeResetRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10105",
+  "DescriptionLanText": "瞄准冷却率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10106",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10106",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10107",
+  "type": 4,
+  "talentParam1": [
+   "SZA0101,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10201",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10201",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10202",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10202",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10204",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10204",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10205",
+  "type": 2,
+  "talentParam1": [
+   "SnipeResetRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10205",
+  "DescriptionLanText": "瞄准冷却率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10206",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10206",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10207",
+  "type": 4,
+  "talentParam1": [
+   "SZA0102,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10301",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10301",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10302",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10302",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10304",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10304",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10305",
+  "type": 2,
+  "talentParam1": [
+   "SnipeResetRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10305",
+  "DescriptionLanText": "瞄准冷却率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10306",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10306",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10307",
+  "type": 4,
+  "talentParam1": [
+   "SZA0103,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10405",
+  "type": 2,
+  "talentParam1": [
+   "SnipeResetRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10405",
+  "DescriptionLanText": "瞄准冷却率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A10407",
+  "type": 4,
+  "talentParam1": [
+   "SZA0104,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A10407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20105a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20105a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20105b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20105b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20107",
+  "type": 4,
+  "talentParam1": [
+   "SZA0201,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20205a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20205a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20205b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20205b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20207",
+  "type": 4,
+  "talentParam1": [
+   "SZA0202,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20305a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20305a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20305b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20305b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20307",
+  "type": 4,
+  "talentParam1": [
+   "SZA0203,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20405a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20405a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20405b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20405b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A20407",
+  "type": 4,
+  "talentParam1": [
+   "SZA0204,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A20407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30105",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30105",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30107",
+  "type": 4,
+  "talentParam1": [
+   "SZA0301,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30205",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30205",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30207",
+  "type": 4,
+  "talentParam1": [
+   "SZA0302,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30305",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30305",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30307",
+  "type": 4,
+  "talentParam1": [
+   "SZA0303,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30405",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30405",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "A30407",
+  "type": 4,
+  "talentParam1": [
+   "SZA0304,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_A30407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "AB_3001",
+  "type": 2,
+  "talentParam1": [
+   "SnipeResetRate_FIX,40"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_AB_3001",
+  "DescriptionLanText": "瞄准冷却率+40%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "AH_3003",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_AH_3003",
+  "DescriptionLanText": "防御穿透+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "AK_3002a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_AK_3002a",
+  "DescriptionLanText": "回击伤害+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "AK_3002b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_AK_3002b",
+  "DescriptionLanText": "连击伤害+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10101",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10101",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10102",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10102",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10104",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10104",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10105",
+  "type": 2,
+  "talentParam1": [
+   "Speed_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10105",
+  "DescriptionLanText": "速度+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10106",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10106",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10107",
+  "type": 4,
+  "talentParam1": [
+   "SZD0101,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10201",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10201",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10202",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10202",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10204",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10204",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10205",
+  "type": 2,
+  "talentParam1": [
+   "Speed_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10205",
+  "DescriptionLanText": "速度+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10206",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10206",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10207",
+  "type": 4,
+  "talentParam1": [
+   "SZD0102,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10302",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10302",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10304",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10304",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10305",
+  "type": 2,
+  "talentParam1": [
+   "Speed_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10305",
+  "DescriptionLanText": "速度+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10306",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10306",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10307",
+  "type": 4,
+  "talentParam1": [
+   "SZD0103,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10405",
+  "type": 2,
+  "talentParam1": [
+   "Speed_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10405",
+  "DescriptionLanText": "速度+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D10407",
+  "type": 4,
+  "talentParam1": [
+   "SZD0104,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D10407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20101",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20101",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20102",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20102",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20104",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20104",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20105",
+  "type": 2,
+  "talentParam1": [
+   "AllDefIncrease_FIX,30"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20105",
+  "DescriptionLanText": "全防御增加+30%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20106",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20106",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20107",
+  "type": 4,
+  "talentParam1": [
+   "SZD0201,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20201",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20201",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20202",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20202",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20204",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20204",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20205",
+  "type": 2,
+  "talentParam1": [
+   "AllDefIncrease_FIX,30"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20205",
+  "DescriptionLanText": "全防御增加+30%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20206",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20206",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20207",
+  "type": 4,
+  "talentParam1": [
+   "SZD0202,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20301",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20301",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20304",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20304",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20305",
+  "type": 2,
+  "talentParam1": [
+   "AllDefIncrease_FIX,30"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20305",
+  "DescriptionLanText": "全防御增加+30%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20307",
+  "type": 4,
+  "talentParam1": [
+   "SZD0203,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20401",
+  "type": 2,
+  "talentParam1": [
+   "HealedIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20401",
+  "DescriptionLanText": "受治疗提升+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20404",
+  "type": 2,
+  "talentParam1": [
+   "HealedIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20404",
+  "DescriptionLanText": "受治疗提升+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20405",
+  "type": 2,
+  "talentParam1": [
+   "AllDefIncrease_FIX,30"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20405",
+  "DescriptionLanText": "全防御增加+30%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D20407",
+  "type": 4,
+  "talentParam1": [
+   "SZD0204,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D20407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30101",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30101",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30102",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30102",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30104",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30104",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30105",
+  "type": 2,
+  "talentParam1": [
+   "Block_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30105",
+  "DescriptionLanText": "格挡率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30106",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30106",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30107",
+  "type": 4,
+  "talentParam1": [
+   "SZD0301,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30201",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30201",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30202",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30202",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30204",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30204",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30205",
+  "type": 2,
+  "talentParam1": [
+   "Block_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30205",
+  "DescriptionLanText": "格挡率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30206",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30206",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30207",
+  "type": 4,
+  "talentParam1": [
+   "SZD0302,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30301",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30301",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30304",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30304",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30305",
+  "type": 2,
+  "talentParam1": [
+   "Block_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30305",
+  "DescriptionLanText": "格挡率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30307",
+  "type": 4,
+  "talentParam1": [
+   "SZD0303,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30401",
+  "type": 2,
+  "talentParam1": [
+   "HealedIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30401",
+  "DescriptionLanText": "受治疗提升+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30404",
+  "type": 2,
+  "talentParam1": [
+   "HealedIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30404",
+  "DescriptionLanText": "受治疗提升+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30405",
+  "type": 2,
+  "talentParam1": [
+   "Block_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30405",
+  "DescriptionLanText": "格挡率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "D30407",
+  "type": 4,
+  "talentParam1": [
+   "SZD0304,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_D30407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "DB_1001",
+  "type": 2,
+  "talentParam1": [
+   "Speed_FIX,40"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_DB_1001",
+  "DescriptionLanText": "速度+40",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "DH_1003",
+  "type": 2,
+  "talentParam1": [
+   "Block_FIX,40"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_DH_1003",
+  "DescriptionLanText": "格挡率+40%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "DK_1002",
+  "type": 2,
+  "talentParam1": [
+   "AllDefIncrease_FIX,60"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_DK_1002",
+  "DescriptionLanText": "全防御+60%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10105",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackExtraBullet_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10105",
+  "DescriptionLanText": "额外装填礼弹+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10107",
+  "type": 4,
+  "talentParam1": [
+   "SZS0101,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10205",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackExtraBullet_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10205",
+  "DescriptionLanText": "额外装填礼弹+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10207",
+  "type": 4,
+  "talentParam1": [
+   "SZS0102,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10301",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10301",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10304",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10304",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10305",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackExtraBullet_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10305",
+  "DescriptionLanText": "额外装填礼弹+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10307",
+  "type": 4,
+  "talentParam1": [
+   "SZS0103,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10401",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10401",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10404",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackRangeIncrease_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10404",
+  "DescriptionLanText": "额外警戒距离+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10405",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackExtraBullet_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10405",
+  "DescriptionLanText": "额外装填礼弹+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10406",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10406",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S10407",
+  "type": 4,
+  "talentParam1": [
+   "SZS0104,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S10407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20105",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20105",
+  "DescriptionLanText": "警戒伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20107",
+  "type": 4,
+  "talentParam1": [
+   "SZS0201,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20205",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20205",
+  "DescriptionLanText": "警戒伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20207",
+  "type": 4,
+  "talentParam1": [
+   "SZS0202,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20305",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20305",
+  "DescriptionLanText": "警戒伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20307",
+  "type": 4,
+  "talentParam1": [
+   "SZS0203,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20401",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20401",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20404",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackRangeIncrease_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20404",
+  "DescriptionLanText": "额外警戒距离+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20405",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20405",
+  "DescriptionLanText": "警戒伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20406",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20406",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S20407",
+  "type": 4,
+  "talentParam1": [
+   "SZS0204,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S20407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30105",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30105",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30107",
+  "type": 4,
+  "talentParam1": [
+   "SZS0301,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30205",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30205",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30207",
+  "type": 4,
+  "talentParam1": [
+   "SZS0302,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30301",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30301",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30304",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30304",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30305",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30305",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30307",
+  "type": 4,
+  "talentParam1": [
+   "SZS0303,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30401",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30401",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30404",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30404",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30405",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30405",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "S30407",
+  "type": 4,
+  "talentParam1": [
+   "SZS0304,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_S30407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "SB_5001",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackExtraBullet_FIX,2"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_SB_5001",
+  "DescriptionLanText": "额外装填礼弹+2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "SH_5003",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_SH_5003",
+  "DescriptionLanText": "治疗量增益+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "SK_5002",
+  "type": 2,
+  "talentParam1": [
+   "AlertAttackDmgIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_SK_5002",
+  "DescriptionLanText": "警戒伤害+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10105a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10105a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10105b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10107",
+  "type": 4,
+  "talentParam1": [
+   "SZV0101,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10205a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10205a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10205b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10205b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10207",
+  "type": 4,
+  "talentParam1": [
+   "SZV0102,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10305a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10305a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10305b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10305b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10307",
+  "type": 4,
+  "talentParam1": [
+   "SZV0103,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10405a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10405a",
+  "DescriptionLanText": "回击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10405b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10405b",
+  "DescriptionLanText": "连击伤害+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V10407",
+  "type": 4,
+  "talentParam1": [
+   "SZV0104,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V10407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20105",
+  "type": 2,
+  "talentParam1": [
+   "PenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20105",
+  "DescriptionLanText": "贯穿率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20107",
+  "type": 4,
+  "talentParam1": [
+   "SZV0201,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20205",
+  "type": 2,
+  "talentParam1": [
+   "PenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20205",
+  "DescriptionLanText": "贯穿率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20207",
+  "type": 4,
+  "talentParam1": [
+   "SZV0202,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20305",
+  "type": 2,
+  "talentParam1": [
+   "PenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20305",
+  "DescriptionLanText": "贯穿率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20307",
+  "type": 4,
+  "talentParam1": [
+   "SZV0203,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20405",
+  "type": 2,
+  "talentParam1": [
+   "PenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20405",
+  "DescriptionLanText": "贯穿率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V20407",
+  "type": 4,
+  "talentParam1": [
+   "SZV0204,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V20407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30105",
+  "type": 2,
+  "talentParam1": [
+   "HurtHealRate_FIX,5"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30105",
+  "DescriptionLanText": "生命偷取率+5%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30107",
+  "type": 4,
+  "talentParam1": [
+   "SZV0301,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30205",
+  "type": 2,
+  "talentParam1": [
+   "HurtHealRate_FIX,5"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30205",
+  "DescriptionLanText": "生命偷取率+5%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30207",
+  "type": 4,
+  "talentParam1": [
+   "SZV0302,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30305",
+  "type": 2,
+  "talentParam1": [
+   "HurtHealRate_FIX,5"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30305",
+  "DescriptionLanText": "生命偷取率+5%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30307",
+  "type": 4,
+  "talentParam1": [
+   "SZV0303,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30405",
+  "type": 2,
+  "talentParam1": [
+   "HurtHealRate_FIX,5"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30405",
+  "DescriptionLanText": "生命偷取率+5%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "V30407",
+  "type": 4,
+  "talentParam1": [
+   "SZV0304,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_V30407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "VB_2001a",
+  "type": 2,
+  "talentParam1": [
+   "FightBackDmgIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_VB_2001a",
+  "DescriptionLanText": "回击伤害+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "VB_2001b",
+  "type": 2,
+  "talentParam1": [
+   "DoubleHitDmgIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_VB_2001b",
+  "DescriptionLanText": "连击伤害+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "VH_2003",
+  "type": 2,
+  "talentParam1": [
+   "HurtHealRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_VH_2003",
+  "DescriptionLanText": "生命偷取率+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "VK_2002",
+  "type": 2,
+  "talentParam1": [
+   "PenetrationRate_FIX,40"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_VK_2002",
+  "DescriptionLanText": "贯穿率+40%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10105",
+  "type": 2,
+  "talentParam1": [
+   "EnergyRecoveryCycle_FIX,50"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10105",
+  "DescriptionLanText": "能量自动获取+0.5",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10107",
+  "type": 4,
+  "talentParam1": [
+   "SZW0101,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10202",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10202",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10204",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10204",
+  "DescriptionLanText": "初始能量+1%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10205",
+  "type": 2,
+  "talentParam1": [
+   "EnergyRecoveryCycle_FIX,50"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10205",
+  "DescriptionLanText": "能量自动获取+0.5",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10207",
+  "type": 4,
+  "talentParam1": [
+   "SZW0102,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10301",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10301",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10302",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10302",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10304",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10304",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10305",
+  "type": 2,
+  "talentParam1": [
+   "EnergyRecoveryCycle_FIX,50"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10305",
+  "DescriptionLanText": "能量自动获取+0.5",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10306",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10306",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10307",
+  "type": 4,
+  "talentParam1": [
+   "SZW0103,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10401",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10401",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10404",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10404",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10405",
+  "type": 2,
+  "talentParam1": [
+   "EnergyRecoveryCycle_FIX,50"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10405",
+  "DescriptionLanText": "能量自动获取+0.5",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W10407",
+  "type": 4,
+  "talentParam1": [
+   "SZW0104,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W10407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20105",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20105",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20107",
+  "type": 4,
+  "talentParam1": [
+   "SZW0201,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20205",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20205",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20207",
+  "type": 4,
+  "talentParam1": [
+   "SZW0202,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20301",
+  "type": 2,
+  "talentParam1": [
+   "PhysicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20301",
+  "DescriptionLanText": "物理防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20304",
+  "type": 2,
+  "talentParam1": [
+   "MagicDef_PERCENT,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20304",
+  "DescriptionLanText": "构素防御+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20305",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20305",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20307",
+  "type": 4,
+  "talentParam1": [
+   "SZW0203,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20401",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20401",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20404",
+  "type": 2,
+  "talentParam1": [
+   "MissRate_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20404",
+  "DescriptionLanText": "闪避率+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20405",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20405",
+  "DescriptionLanText": "防御穿透+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W20407",
+  "type": 4,
+  "talentParam1": [
+   "SZW0204,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W20407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30101",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30101",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30102",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30102",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30103",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30103",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30104",
+  "type": 2,
+  "talentParam1": [
+   "Critical_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30104",
+  "DescriptionLanText": "暴击率+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30105",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30105",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30106",
+  "type": 2,
+  "talentParam1": [
+   "CritDmg_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30106",
+  "DescriptionLanText": "暴击伤害+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30107",
+  "type": 4,
+  "talentParam1": [
+   "SZW0301,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30107",
+  "DescriptionLanText": "技能效果测试，流派1-1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30201",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,114"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30201",
+  "DescriptionLanText": "攻击力+114",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30202",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30202",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30203",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30203",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30204",
+  "type": 2,
+  "talentParam1": [
+   "Atk_FIX,159"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30204",
+  "DescriptionLanText": "攻击力+159",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30205",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30205",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30206",
+  "type": 2,
+  "talentParam1": [
+   "Atk_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30206",
+  "DescriptionLanText": "攻击力+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30207",
+  "type": 4,
+  "talentParam1": [
+   "SZW0302,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30207",
+  "DescriptionLanText": "技能效果测试，流派1-2",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30301",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,335"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30301",
+  "DescriptionLanText": "生命值+335",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30302",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30302",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30303",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30303",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30304",
+  "type": 2,
+  "talentParam1": [
+   "Hp_FIX,468"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30304",
+  "DescriptionLanText": "生命值+468",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30305",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30305",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30306",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30306",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30307",
+  "type": 4,
+  "talentParam1": [
+   "SZW0303,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30307",
+  "DescriptionLanText": "技能效果测试，流派1-3",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30401",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30401",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30402",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30402",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30403",
+  "type": 2,
+  "talentParam1": [
+   "InaitialEnergy_FIX,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30403",
+  "DescriptionLanText": "初始能量+1",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30404",
+  "type": 2,
+  "talentParam1": [
+   "SheildIncrease_FIX,15"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30404",
+  "DescriptionLanText": "护盾增益+15%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30405",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30405",
+  "DescriptionLanText": "治疗增益+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30406",
+  "type": 2,
+  "talentParam1": [
+   "Hp_PERCENT,10"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30406",
+  "DescriptionLanText": "生命值+10%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "W30407",
+  "type": 4,
+  "talentParam1": [
+   "SZW0304,1"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_W30407",
+  "DescriptionLanText": "技能效果测试，流派1-4",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "WB_4001",
+  "type": 2,
+  "talentParam1": [
+   "EnergyRecoveryCycle_FIX,50"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_WB_4001",
+  "DescriptionLanText": "能量自动获取+0.5",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "WH_4003",
+  "type": 2,
+  "talentParam1": [
+   "HealIncrease_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_WH_4003",
+  "DescriptionLanText": "治疗量增益+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ },
+ {
+  "id": "WK_4002",
+  "type": 2,
+  "talentParam1": [
+   "AllDefPenetrationRate_FIX,20"
+  ],
+  "talentParam2": 0,
+  "DescriptionLan": "characterlan_talentBank_descriptionLan_WK_4002",
+  "DescriptionLanText": "防御穿透+20%",
+  "showType": 0,
+  "showTypeIcon": "",
+  "showTypeNameLan": "",
+  "icon": "",
+  "pitch": "",
+  "unlock": "",
+  "descriptionRemLan": "",
+  "shadow": ""
+ }
+]

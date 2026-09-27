@@ -1,4 +1,4 @@
-# WHMX — Current state (single entry point, 2026-09-26)
+# WHMX — Current state (single entry point, 2026-09-26 · updated 2026-09-27)
 
 > **Start here.** This file replaces every older `WHMX_CURRENT_STATE_*`, `WHMX_NEXT_STEPS.md` and the finished plans
 > (removed 2026-09-26; they remain in git history). Read this file fully, then open only the references a task needs.
@@ -19,6 +19,9 @@
 | [`D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md`](./D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md) | R2 managed-upload pipeline (env vars, prefixes, flow) |
 | [`ADMIN_AUTH_OPERATIONS.md`](./ADMIN_AUTH_OPERATIONS.md) | Admin accounts/auth operations |
 | [`MASTERDATA_LORE_CANDIDATES_2026-09-07.md`](./MASTERDATA_LORE_CANDIDATES_2026-09-07.md) | Raw tables that hold lore/narrative (input for the future story-lore work) |
+| [`superpowers/specs/2026-09-26-character-build-design.md`](./superpowers/specs/2026-09-26-character-build-design.md) | **Build tab spec — approved 2026-09-26**, next feature (see §10, §11) |
+| [`superpowers/specs/2026-09-26-public-lore-tab-design.md`](./superpowers/specs/2026-09-26-public-lore-tab-design.md) + [`superpowers/plans/2026-09-26-public-lore-tab.md`](./superpowers/plans/2026-09-26-public-lore-tab.md) + [`public-redesign/lore-tab/direction-approved.md`](./public-redesign/lore-tab/direction-approved.md) | Public lore tab (shipped): spec, plan, approved design (B4 ticket) and the demos next to it |
+| `../scripts/fixtures/masterdata/` (+ `manifest.json`) | Trimmed MasterData for the Build feature (weapons, weapon skills, affixes, 深造 styles/columns/talents, character styles, weapon items, which weapon icons exist) — lets a session without NeoArtifacts (cloud) write and test the importer. Refresh locally: `node scripts/export-masterdata-fixtures.mjs` |
 | [`plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md`](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md) | **Release-day runbook N2** (§4), P5 next domains, dated log of 24–26/9 |
 | [`superpowers/specs/2026-09-24-lore-pipeline-design.md`](./superpowers/specs/2026-09-24-lore-pipeline-design.md) | Lore data model, importer, parity gates, R2 publish/backup design |
 | [`superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](./superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md) | Admin Khí Giả + Lore spec (owner decisions Q1–Q15) |
@@ -38,17 +41,18 @@
 - **Lore flow:** character profiles, reports, relic info, timeline and lore terms live in the DB → published as versioned JSON on R2 (`lore/<env>/lore.<hash>.json` + pointer) → the site overlays it on `data.json` (CN fallback).
 - **Admin** (`#/admin…`; signed-out visitors see `#/login`): Khí Giả (per character: Tổng quan / **Lore** / Trang phục / Nguồn / Lịch sử), Thuật ngữ lore, Preview (unreleased characters), Tài khoản (owner only).
 
-## 2. Status (2026-09-26)
+## 2. Status (2026-09-27)
 
 | Area | State |
 |---|---|
-| Git | Work on `feat/postgres-admin-crud`; `origin/main` = the same commit. Deploy with `git push origin HEAD:main` (Production) then `git push origin feat/postgres-admin-crud` (Preview). The **local `main` branch is stale (e140ade) and unused** — never check it out or merge into it; `origin/main` is what matters |
-| Working tree (not mine to commit) | Many untracked/modified owner files (workbook, `localization/*`, root scratch files, `.agents/`, `.codex*/`). **`package-lock.json` is modified by an agent** (2026-09-26 00:43, side effect of a local `npx vercel build`): only `devOptional` → `dev` flags, no version changes — harmless; discard it with the owner's OK (`git checkout -- package-lock.json` counts as a restore) or leave it. Don't run `vercel build` locally again without cleaning up |
+| Git | **Two ways of working now** (2026-09-27): (1) **local** (this Windows machine, branch `feat/postgres-admin-crud`) — push with `git push origin HEAD:main` (Production) then `git push origin feat/postgres-admin-crud` (Preview); (2) **cloud Claude sessions** push `claude/*` branches and open a **PR on GitHub**; merging the PR into `main` deploys Production. Before any local push: `git fetch` and make sure `origin/main` is an ancestor of `HEAD` (`git merge --ff-only origin/main` when it moved — that is how cloud PR #1 was taken in on 2026-09-27; never force-push, never reset). **Open cloud branch not merged yet:** `claude/compassionate-dirac-s37nsf` → `1084898` (catalog: back-to-top button, search clear ✕, smoother filter panel, vivid chips; touches `index.html`, `src/style.css`, `tokens.css`, `boot.js`, `smoothScroll.js`, `characterCatalogView.js`) — owner to review/merge. The local `main` branch is stale and unused |
+| Working tree (not mine to commit) | Only the owner's files: `localization/localization_master.xlsx` (modified) + many untracked (`localization/*`, root scratch files, `.agents/`, `.codex*/`, `AGENTS.md`, `WHMX_COMMAND_CHEATSHEET.md`). The agent's `package-lock.json` side effect was discarded with the owner's OK on 2026-09-26. **None of these exist in a cloud session** (see §10) |
 | Lore pipeline (DB → R2 → site) | ✅ Live. Importer `scripts/import-character-profile.mjs`; overlay `scripts/export-profile-overlay.mjs \| tools/apply_profile_overlay.py`; publisher `scripts/publish-lore.mjs` (+ `--repoint` rollback) and `POST /api/admin/lore/publish`; daily private backup in R2 bucket `whmx-backups`; restore `scripts/restore-lore-snapshot.mjs` |
 | Admin Khí Giả (React) + Lore module + terms page | ✅ Live 2026-09-26. Code `src/admin/characters/` (list, record, modules, `useEditor`, pure libs `lib/*.mts` with tests); lore API `server/profile/lore-admin.mjs` + planners `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs` via `api/admin/[...].js`. Saves auto-publish lore ~30 s later; owners also have "Xuất bản ngay" (closing/reloading the admin while a publish is waiting now sends it at once via a keepalive request — `publishScheduler.leave()` on `pagehide`, 2026-09-26; not browser-verified with a signed-in session) |
 | Lore data | 536 report titles ("Báo cáo quan sát 1–4", "Báo cáo mật A") + 10 organisation names seeded as admin VI (development + production); 15 characters still have legacy "bản cũ" units to confirm |
 | Performance | Functions run in **sin1** (Neon is ap-southeast-1). Warm API 0.3–0.7 s; first call after idle ~3 s (cold start) |
-| Tests | `npm test` (100, node:test, <2 s), `npm run test:tools` (Python tools), typecheck `node_modules/.bin/tsc -p tsconfig.json --noEmit`, `npm run build`. Validators: `python tools/validate_{data,public_output,skin_roster,skin_assets}.py` |
+| Tests | `npm test` (108, node:test, <2 s), `npm run test:tools` (Python tools), typecheck `node_modules/.bin/tsc -p tsconfig.json --noEmit`, `npm run build`. Validators: `python tools/validate_{data,public_output,skin_roster,skin_assets}.py` |
+| Lore editing (owner facts, 2026-09-26) | Ctrl+S / Lưu saves **every changed unit of the open character** in one request; ~30 s after the last save the admin publishes once (debounce: each publish rebuilds the whole lore file, uploads it and writes a backup — saving many characters in a row becomes one publish). Closing the tab during the wait now publishes at once (keepalive). Visitors see it on the next reload (pointer fetched `no-cache`). Unsaved typing stays a browser draft + "Rời trang?" guard. Legacy "bản cũ" units publish only after "Dùng bản này"/re-save. The relic name on the ticket is the character's **Tên đầy đủ** (Admin → Tổng quan / workbook), not a lore unit |
 | New character (~2026-10-01) | Owner updates the game ~1 day before; then run **runbook N2** ([pipeline plan §4](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md), 8 steps, owner yes at each DB/workbook write) and N3 |
 
 ## 3. Infrastructure
@@ -74,6 +78,7 @@
 - DB migrations: `npm run db:migrate -- --target=development`; production `node --env-file=.env.production.local scripts/db-migrate.mjs --target=production` (owner yes).
 - Publish lore: development `node --env-file=.env --env-file=.env.local scripts/publish-lore.mjs`; production `LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.production.local scripts/publish-lore.mjs` (owner yes).
 - Profile importer sources (2026-09-26): characterFiles, characterFileTextMap, historicalRelicsMap (+ `tag1..tag4`), HistoricalTextMap, friendshipDescription, characterTable, TypeJJHMap, **characterSkins** (base skin = `bIsBaseSkin`), **characterLines** (`dropLineLanText` → unit `quote`). Migration 0006 (`lore_term_kind` + `relic_tag`) applied on development and production 2026-09-26.
+- MasterData fixtures for cloud work: `node scripts/export-masterdata-fixtures.mjs` (local only; reads `../NeoArtifacts`).
 - Importers (plan first; `--apply` needs owner yes): `scripts/import-character-skin.mjs --check`, `scripts/import-character-profile.mjs`.
 - One-time seeds (applied everywhere; a re-run prints 0 writes): `scripts/seed-lore-admin-vi.mjs --part=titles|orgs [--apply]`.
 - Local full stack: `preview_start whmxcalc-vercel-dev` (port 3003, development DB; config `.claude/launch.json`). `vercel dev` crashed twice on 2026-09-26 (connection reset) — for public-page-only checks use `preview_start whmxcalc-dev` (Vite, port 5173, reads `.env.local` → development lore pointer). Design demos: `preview_start design-demos` (port 8765, `docs/public-redesign/lore-tab/design-demos`; configs live in `D:\BaiTapCode\WHMX\.claude\launch.json`, the parent folder, which is what the app reads).
@@ -120,7 +125,7 @@
 | **Localization → PostgreSQL authority transfer**: owner decision 2026-09-26 — yes, but only after the DB has every feature it needs; not now | Deferred by decision |
 | Localization quality (2026-09-13 checkpoint: Han leaks, 42-cell rich-text repair, suspicious VI) | **Re-checked clean 2026-09-26** (read-only): `validate_no_han_characters` 0/8 907 populated VI, `validate_placeholders` 0/8 800, `check_suspicious_vi` 0 (scope phase3_batch1), `validate_public_output` 0. These only look at *populated* cells — untranslated (empty VI) coverage is a separate question. Batch #3 not started |
 | **Analytics** | Vercel Web Analytics records every hash route (`src/app/analytics/pageRoute.mts` → `pageview({route, path})` on hashchange, `inject({disableAutoTrack:true})` in `boot.js`). **Google Analytics: not used** (owner 2026-09-26 — it needs cookies/consent). Analytics does not affect SEO |
-| **Character Build tab** | Spec written, waiting for owner review: [`superpowers/specs/2026-09-26-character-build-design.md`](./superpowers/specs/2026-09-26-character-build-design.md) (DB-first reference import + builds in DB → R2). Then design (huashu + taste), plan. **Next after it: Tier list** (s1n.gg-style curated lists: tiers with a description line, variant badge, tile → build). **Info/database section** (Vũ khí, Item tabs) later reuses the weapon popup |
+| **Character Build tab** | **Spec approved 2026-09-26** ([spec](./superpowers/specs/2026-09-26-character-build-design.md)): DB-first reference import (weapons, affixes, 深造) + builds in DB → published with the lore document on R2; admin module "Build" with pickers + team blocks ("Thêm đội hình", avatar picker); public Build tab + weapon popup (rarity frame `itemRare{rare}`, 5 = multicolour highest, owner-confirmed); max 7 points per 深造 column, total ≤ 11; `TalentRecommend` → only the style is used. Fixtures in `scripts/fixtures/masterdata/`. Next: `writing-plans` → implement (cloud does the pure parts, §10) → visual design (huashu + taste) later |
 | Lore delivery (fixed 2026-09-26, 30f5156) | Pointer fetched with `cache: 'no-cache'` (a reload right after a publish used to show the previous file for ≤ 60 s → CN until Shift+F5); lore file published **gzip** (dev test: 1.43 MB → 570 KB) — production gets gzip at the **next content change** (an unchanged publish skips the upload); overlay timeout 20 s. Relic name = `fullname_vi` as-is. Note: 6 characters have `fullname_vi` equal to the short name while `fullname_cn` is a longer relic name (A0024, A0063, A0167, S0149, W0168, W0173) — owner may translate their full names in the workbook | Done |
 | **SEO** (owner asked 2026-09-26) | Not started. Hash URLs (`#/characters/…`) are one page to search engines: only `/` is indexed and every share shows the same title/preview. Real gains need path URLs (history routing + Vercel rewrite to `index.html`), a per-page `<title>`/description/Open Graph, `sitemap.xml` + `robots.txt`, and ideally prerendered character pages. Needs a design/decision round |
 | **Voice lines (通讯记录)** — owner 2026-09-26: later, on a **separate route** (not the lore tab). Only the base skin's recruit line (`dropLineLanText`) is imported now, as unit `quote`. Source: MasterData `characterLines.json` (142) + `CharacterLinesLanMap.json` (23 variants); not imported anywhere yet | Not started (later) |
@@ -140,3 +145,27 @@
 ## 9. Skills the owner expects
 
 `superpowers:brainstorming` → spec → `superpowers:writing-plans` → `superpowers:executing-plans` (native) for features (the owner likes all questions at once, each with a recommendation); `superpowers:test-driven-development`, `superpowers:systematic-debugging`, `superpowers:verification-before-completion` for every change; `ponytail:ponytail` for coding and `ponytail:ponytail-review` for review; `huashu-design` for new visuals; `.agents/skills/whmx-localization` + `game-translator` for translation work.
+
+## 10. Cloud sessions (Claude on GitHub) — what can be done where
+
+A cloud session has **only the git repo**. It does **not** have: `.env*` (no DB, no R2, no auth secrets), `../NeoArtifacts` (MasterData, asset bundles, icons), the untracked localization data, `.agents/skills/*` (localization + taste skills), `AGENTS.md`, `WHMX_COMMAND_CHEATSHEET.md`, the Vercel CLI login, a signed-in admin browser.
+
+| Can do in the cloud | Must be done locally (this machine) |
+|---|---|
+| Specs, plans, docs; brainstorming questions to the owner | Anything with `--env-file=.env*`: DB migrations, importers `--apply`, lore publish, seeds, read-only DB checks |
+| Pure code + `node:test` tests (`npm test`), `tsc --noEmit`, `npm run build`, Python tools that don't need NeoArtifacts | Reading NeoArtifacts (MasterData refresh → `scripts/export-masterdata-fixtures.mjs`, icons, runtime updates, runbook N2) |
+| Build feature: importer **normaliser** against `scripts/fixtures/masterdata/`, weapon-skill parameter resolver (port of `tools/build_web_data.py` `get_param_val`), build **validator**, drizzle schema + `npm run db:generate` (writes the migration file, doesn't apply it), publish-document shape, admin module + public tab UI on sample data | Applying migrations, running the importer on dev/prod, uploading weapon icons/frames to R2 (`tools/publish_assets.py`), `data.json` rebuilds (workbook + NeoArtifacts), workbook edits |
+| Push a `claude/*` branch → Vercel builds a **Preview** (behind Vercel SSO, development DB) → open a PR | Pruning Vercel deployments to 5 (`npx vercel …`), Vercel env changes (owner) |
+| Owner on GitHub: review the PR diff, **Merge** (→ Production deploy), **Revert** (creates a revert PR), small edits in the web editor | Browser checks of the admin while signed in; checks needing the local dev DB |
+
+Rule for cloud work: keep every PR shippable without the local steps (code for data that doesn't exist yet must render its empty state), and write in the PR description exactly which local steps remain (commands + which need the owner's yes).
+
+## 11. Roadmap (owner's direction, 2026-09-26/27)
+
+1. **Build tab** — spec approved; plan → implement (§10 split) → visual design (huashu 3 directions + taste; reference = the owner's content-creator build card: weapons + labels, affixes, 深造 0550-style points, rating, rotation + tips, team comps).
+2. **Tier list** — after Build; s1n.gg model (curated list(s) with author, tiers with a description line, variant badge, tile → character build, Info/Solo/Team tabs); admin drag-and-drop editor, public read-only with job filter. Needs its own brainstorming/spec.
+3. **Info / database section** — tabs Vũ khí, Item… reusing the Build weapon popup (replaces the `#/weapons` placeholder); game boss/tower team recommendations (`Recommends`, `BossTowerRecommendedMap`) can live here.
+4. **SEO** — path URLs + per-page meta/OG + sitemap (§8 row); needs a decision round.
+5. **Voice lines** — separate route (`characterLines`), later.
+6. **P5** — publish admin name/description overrides (workbook reconciliation gate), then re-enable the public inline edit.
+7. Owner-side: buff popup / orphan translation fixes (§8 banner), lore translation, Vercel secrets → Secret type, translate the full names of A0024/A0063/A0167/S0149/W0168/W0173.
