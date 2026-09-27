@@ -89,7 +89,7 @@ export function requestId(body) {
 }
 
 export function sendAdminError(response, error) {
-  if (error instanceof AdminApiError) return response.status(error.status).json({ error: { code: error.code } });
+  if (error instanceof AdminApiError) return response.status(error.status).json({ error: { code: error.code, ...(error.details ? { details: error.details } : {}) } });
   if (error?.name === 'ZodError') return response.status(422).json({ error: { code: 'VALIDATION_ERROR' } });
   if (error instanceof PreviewDomainError || error instanceof ManagedAssetError) {
     const status = error.code === 'FORBIDDEN' ? 403 : error.code === 'NOT_FOUND' ? 404 : error.code === 'VERSION_CONFLICT' ? 409 : 400;
