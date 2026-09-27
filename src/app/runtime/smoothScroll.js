@@ -172,6 +172,28 @@ export function setScrollPositionImmediate(position = 0) {
 }
 
 /**
+ * The route container that scrolls on desktop (null before the first route).
+ * On phones the document scrolls instead (see scrollActiveToTop).
+ */
+export function getActiveScrollContainer() {
+  return currentContainer;
+}
+
+/**
+ * Scrolls the page back to the top: the route container (through Lenis when active)
+ * and the document, whichever of them is scrolled.
+ */
+export function scrollActiveToTop() {
+  const smooth = !isReducedMotion();
+  if (activeLenis) {
+    activeLenis.scrollTo(0, smooth ? { duration: 0.9 } : { immediate: true });
+  } else if (currentContainer) {
+    currentContainer.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+  }
+  window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+}
+
+/**
  * Destroys any active Lenis instance cleanly
  */
 export function destroySmoothScroll() {

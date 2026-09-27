@@ -172,11 +172,13 @@ export function renderCharacterCatalogView(container) {
     }).join('');
   }
 
-  function renderToolbarHtml() {
+  // Inner markup of .character-catalog-page. The page element itself is created once and kept:
+  // Lenis measures it (src/app/runtime/smoothScroll.js), so replacing it left the scroll limit stuck
+  // at the height of the first re-render (e.g. 473px after filtering R, on a 5 200px page).
+  function renderPageInnerHtml() {
     const activeCount = getActiveFilterCount();
 
     return `
-      <div class="character-catalog-page">
         <!-- Full-Width Visual Hero Header -->
         <section class="catalog-hero">
           <div class="catalog-hero-content">
@@ -195,6 +197,9 @@ export function renderCharacterCatalogView(container) {
                      placeholder="Tìm kiếm theo tên nhân vật..." 
                      value="${catalogSearchQuery}" 
                      autocomplete="off" />
+              <button type="button" id="catalog-search-clear" class="catalog-search-clear" aria-label="Xóa nội dung tìm kiếm" ${catalogSearchQuery ? '' : 'hidden'}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
             </div>
 
             <button type="button" 
@@ -208,6 +213,8 @@ export function renderCharacterCatalogView(container) {
 
           <!-- Collapsible Expandable Filters Toolbar (Continuous Layout without Dividers) -->
           <div class="catalog-expandable-filters ${isFilterExpanded ? 'open' : ''}" id="catalog-expandable-filters">
+            <div class="catalog-filters-clip">
+            <div class="catalog-filters-body">
             <div class="compact-filter-grid">
               <!-- Job Segmented Control -->
               <div class="compact-filter-group group-job">
@@ -276,13 +283,14 @@ export function renderCharacterCatalogView(container) {
                   <button class="seg-btn ${catalogSortOption === 'res' ? 'active' : ''}" data-sort="res">RES</button>
                 </div>
               </div>
-            </div>
 
-            ${activeCount > 0 ? `
-              <div class="filter-bottom-actions">
+              <!-- Always in place (hidden while idle) so a first filter never makes the panel taller -->
+              <div class="compact-filter-clear ${activeCount > 0 ? '' : 'is-idle'}">
                 <button type="button" class="catalog-clear-filters-btn" id="catalog-clear-filters-btn">Xóa bộ lọc</button>
               </div>
-            ` : ''}
+            </div>
+            </div>
+            </div>
           </div>
         </section>
 
@@ -290,20 +298,36 @@ export function renderCharacterCatalogView(container) {
         <div class="catalog-grid-container" id="catalog-cards-grid">
           ${renderGridHtml()}
         </div>
-      </div>
     `;
   }
 
-  container.innerHTML = renderToolbarHtml();
+  container.innerHTML = `<div class="character-catalog-page">${renderPageInnerHtml()}</div>`;
   attachEvents();
 
   function attachEvents() {
     const searchInput = container.querySelector('#catalog-search-input');
+    const searchClear = container.querySelector('#catalog-search-clear');
     if (searchInput) {
+      const clearSearch = () => {
+        searchInput.value = '';
+        catalogSearchQuery = '';
+        if (searchClear) searchClear.hidden = true;
+        updateGrid();
+        searchInput.focus();
+      };
       searchInput.addEventListener('input', (e) => {
         catalogSearchQuery = e.target.value.trim();
+        if (searchClear) searchClear.hidden = !e.target.value;
         updateGrid();
       });
+      // Esc clears a typed name, like the ✕.
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchInput.value) {
+          e.preventDefault();
+          clearSearch();
+        }
+      });
+      searchClear?.addEventListener('click', clearSearch);
     }
 
     const filterToggleBtn = container.querySelector('#catalog-filter-toggle');
@@ -386,7 +410,9 @@ export function renderCharacterCatalogView(container) {
   }
 
   function refreshUI() {
-    container.innerHTML = renderToolbarHtml();
+    const page = container.querySelector('.character-catalog-page');
+    if (page) page.innerHTML = renderPageInnerHtml();
+    else container.innerHTML = `<div class="character-catalog-page">${renderPageInnerHtml()}</div>`;
     attachEvents();
   }
 

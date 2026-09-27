@@ -3713,11 +3713,6 @@
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.catalog-search-box:focus-within {
-  border-color: var(--border-strong);
-  background: var(--bg-surface-hover);
-}
-
 .catalog-search-box input {
   border: none;
   background: transparent;
@@ -3726,6 +3721,38 @@
   width: 100%;
   outline: none;
   font-family: var(--font-sans);
+}
+
+/* ✕ at the end of the search box, shown while it has text */
+.catalog-search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
+}
+
+.catalog-search-clear[hidden] {
+  display: none;
+}
+
+.catalog-search-clear:hover {
+  color: var(--text-main);
+  background: var(--bg-surface-hover);
+}
+
+.catalog-search-clear:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 .catalog-filter-toggle-btn {
@@ -3783,24 +3810,56 @@
 }
 
 .catalog-expandable-filters {
-  background: transparent;
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0;
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-4px);
-  overflow: hidden;
-  transition: max-height var(--motion-slow) var(--ease-enter), opacity var(--motion-slow) var(--ease-enter), transform var(--motion-slow) var(--ease-enter), padding var(--motion-slow) var(--ease-enter);
+  /* Opens to its real height: grid rows 0fr -> 1fr (max-height 0 -> 520px finished early on open
+     and waited before closing, which read as a stutter). */
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-exit);
 }
 
 .catalog-expandable-filters.open {
-  max-height: 520px;
-  opacity: 1;
-  transform: translateY(0);
-  padding: 14px 0 16px 0;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.catalog-filters-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.catalog-filters-body {
+  padding: 14px 0 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 180ms var(--ease-exit);
+}
+
+.catalog-expandable-filters.open .catalog-filters-body {
+  opacity: 1;
+  transition: opacity 220ms var(--ease-enter);
+}
+
+/* The groups rise in one after another while the panel opens; they fade out together on close. */
+.catalog-filters-body .compact-filter-group,
+.catalog-filters-body .compact-filter-clear {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 140ms var(--ease-exit), transform 140ms var(--ease-exit);
+}
+
+.catalog-expandable-filters.open .compact-filter-group,
+.catalog-expandable-filters.open .compact-filter-clear {
+  opacity: 1;
+  transform: none;
+  transition: opacity 260ms var(--ease-enter) var(--stagger, 0ms), transform 380ms cubic-bezier(0.16, 1, 0.3, 1) var(--stagger, 0ms);
+}
+
+.catalog-filters-body .compact-filter-group:nth-child(2) { --stagger: 35ms; }
+.catalog-filters-body .compact-filter-group:nth-child(3) { --stagger: 70ms; }
+.catalog-filters-body .compact-filter-group:nth-child(4) { --stagger: 105ms; }
+.catalog-filters-body .compact-filter-group:nth-child(5) { --stagger: 140ms; }
+.catalog-filters-body .compact-filter-clear { --stagger: 175ms; }
 
 .compact-filter-grid {
   display: flex;
@@ -3877,12 +3936,17 @@
   filter: brightness(1);
 }
 
-/* Active State: Restrained Mineral / Lacquer Fills with High Contrast */
+/* Active state (owner 2026-09-27): only the fill changes; the text turns bright white on a light
+   translucent fill, no gold. Rarity and Limited chips have their own colours below. */
 .seg-btn.active {
-  background: rgba(212, 183, 99, 0.12);
-  color: #E2C987;
-  border-color: rgba(212, 183, 99, 0.40);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.32);
   font-weight: 500;
+}
+
+.seg-btn.active:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .seg-btn.active .seg-btn-job-icon {
@@ -3890,53 +3954,43 @@
   filter: brightness(1.15);
 }
 
-/* Material / Lacquer / Mineral Rarity Active States */
-.seg-btn.seg-ssr.active {
-  background: rgba(145, 55, 45, 0.48);
-  border-color: rgba(210, 92, 76, 0.55);
-  color: #F0A08F;
+/* Rarity + Limited: bold coloured text at rest; selected = solid colour fill with dark text. */
+.seg-btn.seg-ssr { --chip: var(--rarity-ssr-vivid); }
+.seg-btn.seg-sr { --chip: var(--rarity-sr-vivid); }
+.seg-btn.seg-r { --chip: var(--rarity-r-vivid); }
+.seg-btn[data-val="limited"] { --chip: var(--pool-limited-vivid); }
+
+.seg-btn.seg-ssr,
+.seg-btn.seg-sr,
+.seg-btn.seg-r,
+.seg-btn[data-val="limited"] {
+  color: var(--chip);
+  font-weight: 700;
 }
 
-.seg-btn.seg-ssr.active:hover {
-  background: rgba(165, 65, 55, 0.60);
-  border-color: rgba(225, 105, 88, 0.70);
-  color: #F7B5A6;
+.seg-btn.seg-ssr:hover,
+.seg-btn.seg-sr:hover,
+.seg-btn.seg-r:hover,
+.seg-btn[data-val="limited"]:hover {
+  color: var(--chip);
+  border-color: var(--chip);
 }
 
-.seg-btn.seg-sr.active {
-  background: rgba(128, 98, 30, 0.48);
-  border-color: rgba(214, 176, 68, 0.55);
-  color: #E7C96D;
-}
-
-.seg-btn.seg-sr.active:hover {
-  background: rgba(148, 114, 38, 0.60);
-  border-color: rgba(230, 192, 82, 0.70);
-  color: #F2D888;
-}
-
-.seg-btn.seg-r.active {
-  background: rgba(52, 82, 116, 0.50);
-  border-color: rgba(105, 149, 202, 0.55);
-  color: #AFCDF1;
-}
-
-.seg-btn.seg-r.active:hover {
-  background: rgba(62, 96, 134, 0.62);
-  border-color: rgba(122, 168, 224, 0.70);
-  color: #C6DEFA;
-}
-
+.seg-btn.seg-ssr.active,
+.seg-btn.seg-sr.active,
+.seg-btn.seg-r.active,
 .seg-btn[data-val="limited"].active {
-  background: rgba(140, 78, 36, 0.48);
-  border-color: rgba(215, 130, 70, 0.55);
-  color: #F0BC98;
+  background: var(--chip);
+  border-color: var(--chip);
+  color: var(--on-vivid);
+  font-weight: 700;
 }
 
+.seg-btn.seg-ssr.active:hover,
+.seg-btn.seg-sr.active:hover,
+.seg-btn.seg-r.active:hover,
 .seg-btn[data-val="limited"].active:hover {
-  background: rgba(158, 90, 42, 0.60);
-  border-color: rgba(230, 145, 85, 0.70);
-  color: #F7CDAE;
+  filter: brightness(1.08);
 }
 
 /* Filter Section Divider */
@@ -3993,14 +4047,6 @@
   font-weight: 500;
 }
 
-.filter-bottom-actions {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: flex-end;
-}
-
 /* Synchronized Synchronous Dark → Normal Reveal for Character Database Results */
 @keyframes cardSyncReveal {
   from {
@@ -4010,13 +4056,14 @@
 
   to {
     opacity: 1;
-    filter: brightness(1);
+    filter: none;
   }
 }
 
+/* Ends on filter: none with no will-change, so the 133 cards don't each stay a filtered GPU layer
+   (those are drawn with half-pixel edges at fractional zoom levels). */
 .cc-card.card-result-reveal {
   animation: cardSyncReveal 200ms var(--ease-enter) forwards;
-  will-change: opacity, filter;
 }
 
 /* Accessibility: Reduced Motion Support */
@@ -4029,10 +4076,25 @@
 
   .filter-chevron-icon,
   .catalog-expandable-filters,
+  .catalog-filters-body,
+  .catalog-filters-body .compact-filter-group,
+  .catalog-filters-body .compact-filter-clear,
   .seg-btn,
   .cc-card {
     transition: none !important;
   }
+}
+
+/* "Xóa bộ lọc" is the last item of the filter row (right-aligned, on the Sắp xếp line when it fits).
+   It always keeps its place, hidden while nothing is filtered, so choosing a filter never makes
+   the panel taller. */
+.compact-filter-clear {
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+.compact-filter-clear.is-idle {
+  visibility: hidden;
 }
 
 .catalog-clear-filters-btn {
@@ -4135,10 +4197,10 @@
 /* z-index 1: Subtle dark readability overlay over lower 38% */
 .card-bottom-overlay {
   position: absolute;
-  bottom: 0;
+  bottom: -1px; /* 1px past the edge (clipped by .card-media): no sliver of artwork under the fade */
   left: 0;
   right: 0;
-  height: 38%;
+  height: calc(38% + 1px);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
   z-index: 1;
   pointer-events: none;
@@ -6939,6 +7001,55 @@
   transform: translateY(-50%) translateX(0);
 }
 
+/* Feedback sits bottom-left beside the nav rail and follows it when the rail opens on hover
+   (60px -> 170px, "Compact Overlay Rail" rules); "Về đầu trang" keeps the bottom-right spot
+   (src/app/layout/backToTopButton.js). */
+:root {
+  --app-rail: 60px;
+}
+
+:root:has(.app-nav:hover, .app-nav:focus-within) {
+  --app-rail: 170px;
+}
+
+.whmx-feedback-btn--left {
+  right: auto;
+  left: calc(var(--app-rail) + 24px + env(safe-area-inset-left, 0px));
+  transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* same as .app-nav width */
+}
+
+.whmx-feedback-btn--left .feedback-tooltip {
+  right: auto;
+  left: calc(100% + 8px);
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.whmx-feedback-btn--left:hover .feedback-tooltip,
+.whmx-feedback-btn--left:focus-visible .feedback-tooltip {
+  transform: translateY(-50%) translateX(0);
+}
+
+.whmx-top-btn {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity var(--motion-normal, 180ms) ease, transform var(--motion-normal, 180ms) ease, visibility 0s linear var(--motion-normal, 180ms);
+}
+
+.whmx-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--motion-normal, 180ms) ease, transform var(--motion-normal, 180ms) ease, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whmx-top-btn,
+  .whmx-top-btn.is-visible {
+    transition: none;
+  }
+}
+
 /* Mobile & Touch Layout */
 @media (max-width: 768px) {
   .whmx-feedback-btn {
@@ -6946,6 +7057,11 @@
     right: calc(16px + env(safe-area-inset-right, 0px));
     width: 46px;
     height: 46px;
+  }
+
+  .whmx-feedback-btn--left {
+    right: auto;
+    left: calc(16px + env(safe-area-inset-left, 0px));
   }
 
   .feedback-badge {
