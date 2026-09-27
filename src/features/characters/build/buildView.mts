@@ -44,7 +44,11 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
       }),
       affixes: {
         noReroll: Boolean(doc.affixes?.noReroll),
-        groups: (doc.affixes?.groups ?? []).map((g) => ({ label: g.label, items: g.affixIds.filter((id) => ref('weapon_affix', id)).map((id) => unit(text('weapon_affix', id))) })),
+        // HP and HP% share one name (生命值): the % tells them apart, like the admin picker
+        groups: (doc.affixes?.groups ?? []).map((g) => ({ label: g.label, items: g.affixIds.filter((id) => ref('weapon_affix', id)).map((id) => {
+          const u = unit(text('weapon_affix', id));
+          return ref('weapon_affix', id).percent ? { ...u, text: `${u.text} %` } : u;
+        }) })),
       },
       deepen: style && doc.deepen ? {
         style: unit(text('job_style', doc.deepen.styleId)),

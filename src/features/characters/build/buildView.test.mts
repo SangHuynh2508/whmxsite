@@ -6,14 +6,14 @@ const game = {
   version: 1 as const,
   refs: {
     weapon: { 30111: { job: 1, rare: 3, skillIds: ['ED2031'], icon: 'itemicon_30111' } },
-    weapon_affix: { AA001001: { percent: false, jobs: [1] } },
+    weapon_affix: { AA001001: { percent: false, jobs: [1] }, AA001002: { percent: true, jobs: [1] } },
     job_style: { 102: { sectorIds: ['D2_01'] } },
     style_sector: { D2_01: { talentIds: [['D20101'], ['D20102', 'D20103']] } },
   },
   texts: {
     weapon: { 30111: { cn: '路边物件盾', vi: 'Khiên Ven Đường', detail: '', detail_vi: null } },
     weapon_skill: { ED2031: { cn: '路障庇护', vi: null, detail: '提高10%', detail_vi: null } },
-    weapon_affix: { AA001001: { cn: '生命值', vi: 'Máu', detail: '', detail_vi: null } },
+    weapon_affix: { AA001001: { cn: '生命值', vi: 'Máu', detail: '', detail_vi: null }, AA001002: { cn: '生命值', vi: null, detail: '', detail_vi: null } },
     job_style: { 102: { cn: '固防', vi: 'Cố Phòng', detail: '', detail_vi: null } },
     style_sector: { D2_01: { cn: '重峦', vi: null, detail: '', detail_vi: null } },
     style_talent: { D20101: { cn: '护盾+15%', vi: 'Khiên +15%', detail: '', detail_vi: null } },
@@ -27,7 +27,7 @@ const characters = {
 const doc = {
   name: 'Chuẩn', rating: 'S', summary: 'Tốt',
   weapons: [{ weaponId: '30111', label: 'Chịu đòn' }, { weaponId: '99999', label: '' }],
-  affixes: { noReroll: true, groups: [{ label: 'Ưu tiên', affixIds: ['AA001001'] }] },
+  affixes: { noReroll: true, groups: [{ label: 'Ưu tiên', affixIds: ['AA001001', 'AA001002'] }] },
   deepen: { styleId: '102', points: [2, 0, 0, 0] },
   rotations: [{ label: '0 dupe', skillIds: ['D001701', 'X'] }],
   tips: ['Mở khiên'], teams: [{ label: 'Chính', characterIds: ['A0001'], note: '' }], teamOther: '',
@@ -39,7 +39,8 @@ test('names: VI when published, else CN marked untranslated; unknown ids are lef
     id: '30111', label: 'Chịu đòn', rare: 3, icon: '/assets/items/itemicon_30111.png', name: { text: 'Khiên Ven Đường', untranslated: false },
     skills: [{ name: { text: '路障庇护', untranslated: true }, text: { text: '提高10%', untranslated: true } }],
   }]);
-  assert.deepEqual(v.affixes.groups[0].items, [{ text: 'Máu', untranslated: false }]);
+  // HP and HP% share the name 生命值: the % must show, like the admin picker
+  assert.deepEqual(v.affixes.groups[0].items, [{ text: 'Máu', untranslated: false }, { text: '生命值 %', untranslated: true }]);
   assert.equal(v.affixes.noReroll, true);
 });
 
