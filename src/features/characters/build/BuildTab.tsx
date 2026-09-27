@@ -19,6 +19,7 @@ function Weapon({ weapon }: { weapon: BuildView['weapons'][number] }) {
   return (
     <>
       <button type="button" className={`build-weapon build-rare-${weapon.rare}`} popoverTarget={id}>
+        {weapon.icon && <img src={weapon.icon} alt="" loading="lazy" />}
         <Text unit={weapon.name} className="build-weapon-name" />
         {weapon.label && <span className="build-weapon-label">{weapon.label}</span>}
       </button>

@@ -36,7 +36,9 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
         const weapon = ref('weapon', w.weaponId);
         if (!weapon) return [];
         return [{
-          id: w.weaponId, label: w.label, rare: weapon.rare as number, name: unit(text('weapon', w.weaponId)),
+          id: w.weaponId, label: w.label, rare: weapon.rare as number,
+          // the importer's icon key = a file under public/assets/items (null when MasterData has no icon)
+          icon: weapon.icon ? `/assets/items/${weapon.icon}.png` : '', name: unit(text('weapon', w.weaponId)),
           skills: (weapon.skillIds as string[]).map((id) => ({ name: unit(text('weapon_skill', id)), text: unit(text('weapon_skill', id), 'detail') })),
         }];
       }),

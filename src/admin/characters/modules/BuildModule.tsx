@@ -13,7 +13,7 @@ type Editor = {
   character: { id: string; job: number | null; styleIds: string[]; recommendedStyleId: string | null };
   builds: { id: string; revision: number; doc: BuildDoc }[];
   catalogue: {
-    weapons: { id: string; rare: number; name: Name; skills: { id: string; name: Name; detail: Name }[] }[];
+    weapons: { id: string; rare: number; icon: string | null; name: Name; skills: { id: string; name: Name; detail: Name }[] }[];
     affixes: { id: string; percent: boolean; name: Name }[];
     styles: { id: string; name: Name; sectors: { id: string; name: Name; talents: { id: string; text: Name }[][] }[] }[];
   };
@@ -151,10 +151,13 @@ export function BuildModule({ data }: ModuleProps) {
             const set = (patch: Partial<typeof w>) => upd({ weapons: draft.weapons.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
             return (
               <div key={i} className="mb-3 grid gap-2 border-b border-(--border-color) pb-3 sm:grid-cols-[2fr_1fr_auto]">
-                <Select aria-label={`Vũ khí ${i + 1}`} value={w.weaponId} onChange={(e) => set({ weaponId: e.target.value })}>
-                  {!weapon && <option value={w.weaponId}>{w.weaponId} (không có trong danh sách)</option>}
-                  {catalogue.weapons.map((x) => <option key={x.id} value={x.id}>★{x.rare} · {nm(x.name)}</option>)}
-                </Select>
+                <span className="flex items-center gap-2">
+                  {weapon?.icon && <img src={`/assets/items/${weapon.icon}.png`} alt="" className="size-9 flex-none object-contain" />}
+                  <Select aria-label={`Vũ khí ${i + 1}`} value={w.weaponId} onChange={(e) => set({ weaponId: e.target.value })}>
+                    {!weapon && <option value={w.weaponId}>{w.weaponId} (không có trong danh sách)</option>}
+                    {catalogue.weapons.map((x) => <option key={x.id} value={x.id}>★{x.rare} · {nm(x.name)}</option>)}
+                  </Select>
+                </span>
                 <input aria-label={`Nhãn vũ khí ${i + 1}`} className={cn(inputClass, 'h-9')} value={w.label} maxLength={60} placeholder="Chịu đòn, Hồi năng…" onChange={(e) => set({ label: e.target.value })} />
                 <span className="flex gap-1">
                   <Button variant="ghost" aria-label="Lên" onClick={() => upd({ weapons: move(draft.weapons, i, -1) })}>↑</Button>

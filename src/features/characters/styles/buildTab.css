@@ -19,8 +19,9 @@
 .build-rare-5 { border-left-color: var(--accent); }
 .build-weapon-name { font-weight: 600; }
 .build-weapon-label { font-size: 12px; color: var(--text-muted); }
+.build-weapon:has(img) { grid-template-columns: 48px 1fr; column-gap: 10px; align-items: center; }
+.build-weapon img { grid-row: span 2; width: 48px; height: 48px; object-fit: contain; }
 .build-popover { max-width: min(380px, calc(100vw - 32px)); margin: auto; padding: 16px 18px; color: var(--text-main); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; line-height: 1.7; }
-.build-popover::backdrop { background: rgba(0, 0, 0, .35); }
 .build-popover h4 { margin: 0 0 8px; font-size: 16px; }
 .build-popover p { margin: 0 0 8px; }
 .build-group, .build-rotation, .build-team { display: grid; gap: 6px; margin-bottom: 12px; }

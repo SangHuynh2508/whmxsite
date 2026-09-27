@@ -36,7 +36,7 @@ const doc = {
 test('names: VI when published, else CN marked untranslated; unknown ids are left out', () => {
   const [v] = buildViews([doc], game, characters, 'D0017');
   assert.deepEqual(v.weapons, [{
-    id: '30111', label: 'Chịu đòn', rare: 3, name: { text: 'Khiên Ven Đường', untranslated: false },
+    id: '30111', label: 'Chịu đòn', rare: 3, icon: '/assets/items/itemicon_30111.png', name: { text: 'Khiên Ven Đường', untranslated: false },
     skills: [{ name: { text: '路障庇护', untranslated: true }, text: { text: '提高10%', untranslated: true } }],
   }]);
   assert.deepEqual(v.affixes.groups[0].items, [{ text: 'Máu', untranslated: false }]);
