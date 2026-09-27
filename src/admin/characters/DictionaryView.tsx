@@ -89,6 +89,9 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
   const kinds = useMemo(() => new Set(config.kinds.map(([k]) => k)), [config]);
   const listed = useMemo(() => (terms ?? []).filter((t) => kinds.has(t.kind)), [terms, kinds]);
   const childrenOf = useCallback((t: Term) => (config.children ? config.children(t, terms ?? []) : []), [config, terms]);
+  // The editor's record must keep its identity across re-renders (search, publish status): a new array makes
+  // useEditor treat it as a freshly loaded record — typing reset to the saved value, "bản nháp" prompt.
+  const groups = useMemo(() => new Map(listed.map((t) => [t.code, [t, ...childrenOf(t)]])), [listed, childrenOf]);
   // A link to a weapon skill (old game-terms links, history) opens the weapon that has it.
   const openRow = useMemo(() => {
     if (!open || listed.some((t) => t.code === open)) return open;
@@ -157,7 +160,7 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
                       <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">{t.usedBy.map((id) => <a key={id} href={recordHref(id, 'lore')} className="font-mono hover:text-(--text-main)">{id}</a>)}</p>
                     </details>
                   )}
-                  {openRow === t.code && <GroupEditor key={t.code} terms={[t, ...children]} reload={load} config={config} />}
+                  {openRow === t.code && <GroupEditor key={t.code} terms={groups.get(t.code)!} reload={load} config={config} />}
                 </div>
               );
             })}
