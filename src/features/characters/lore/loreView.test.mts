@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildLoreView, factSpans, pick } from './loreView.mts';
+import { buildLoreView, factSize, factSpans, keepTogether, pick } from './loreView.mts';
 
 test('pick: VI wins, else CN flagged untranslated, blank VI counts as missing', () => {
   assert.deepEqual(pick('Tên', '名'), { text: 'Tên', untranslated: false });
@@ -109,14 +109,42 @@ test('quote: VI else CN; shown on Tổng Quan, so it does not count for the lore
   assert.equal(view.empty, true);
 });
 
-test('factSpans: 3 per row on a 6-column grid; a lone last item takes the whole row, two share it evenly', () => {
-  assert.deepEqual(factSpans(3), [2, 2, 2]);
-  assert.deepEqual(factSpans(4), [2, 2, 2, 6]);
-  assert.deepEqual(factSpans(5), [2, 2, 2, 3, 3]);
-  assert.deepEqual(factSpans(6), [2, 2, 2, 2, 2, 2]);
-  assert.deepEqual(factSpans(1), [6]);
-  assert.deepEqual(factSpans(2), [3, 3]);
-  assert.deepEqual(factSpans(0), []);
+test('factSize: a value that fits one line of a third / half of the ticket is S / M, anything longer is L', () => {
+  // 362px facts row, 32px padding: a third holds 88.67px, a half 149px
+  assert.equal(factSize(88, 362, 32), 'S');
+  assert.equal(factSize(89, 362, 32), 'M');
+  assert.equal(factSize(149, 362, 32), 'M');
+  assert.equal(factSize(150, 362, 32), 'L');
+});
+
+test('factSpans: packs facts in order into rows of 3 (all short), 2 (none long) or 1 (a long one, or a leftover)', () => {
+  assert.deepEqual(factSpans(['S', 'S', 'S']), [2, 2, 2]);
+  assert.deepEqual(factSpans(['S', 'S', 'S', 'S', 'S', 'S']), [2, 2, 2, 2, 2, 2]);
+  assert.deepEqual(factSpans(['S', 'S', 'L', 'S']), [3, 3, 6, 6]); // 杨丽华 row: Loại | Niên đại, museum, Khác
+  assert.deepEqual(factSpans(['M', 'M', 'L', 'S', 'S']), [3, 3, 6, 3, 3]);
+  assert.deepEqual(factSpans(['S', 'S', 'M']), [3, 3, 6]);
+  assert.deepEqual(factSpans(['S', 'L', 'S']), [6, 6, 6]);
+  assert.deepEqual(factSpans(['S', 'S', 'S', 'S']), [2, 2, 2, 6]);
+  assert.deepEqual(factSpans(['L']), [6]);
+  assert.deepEqual(factSpans([]), []);
+});
+
+test('keepTogether: compounds and runs of capitalised syllables stay on one line; " - " keeps its dash at the line end', () => {
+  const nb = (s: string) => s.replaceAll('_', '\u00A0');
+  assert.equal(keepTogether('Bảo tàng Quốc gia Trung Quốc'), nb('Bảo_tàng Quốc_gia Trung_Quốc'));
+  assert.equal(keepTogether('Đồ vàng bạc'), nb('Đồ vàng_bạc'));
+  assert.equal(keepTogether('Khắc đá gạch ngói'), nb('Khắc_đá gạch_ngói'));
+  assert.equal(keepTogether('Ngũ Đại Thập Quốc'), nb('Ngũ_Đại_Thập_Quốc'));
+  assert.equal(keepTogether('Ngụy - Tấn - Nam Bắc triều'), nb('Ngụy_- Tấn_- Nam_Bắc_triều'));
+  // a compound ends a run: "Viện" does not glue onto "Bảo tàng" and the name after it
+  assert.equal(keepTogether('Viện Bảo tàng Lăng Tần Thủy Hoàng'), nb('Viện Bảo_tàng Lăng_Tần_Thủy_Hoàng'));
+  assert.equal(keepTogether('Bảo tàng tỉnh Hắc Long Giang'), nb('Bảo_tàng tỉnh Hắc_Long_Giang'));
+  assert.equal(keepTogether('Bảo tàng Khảo cổ Trung Quốc (Đang triển lãm)'), nb('Bảo_tàng Khảo_cổ Trung_Quốc (Đang_triển_lãm)'));
+  assert.equal(keepTogether('Thế kỷ 19 - Đầu thế kỷ 20'), nb('Thế_kỷ_19_- Đầu thế_kỷ_20'));
+  assert.equal(keepTogether('Đầu thế kỷ 18 TCN'), nb('Đầu thế_kỷ_18_TCN'));
+  assert.equal(keepTogether('Đông Cốc · Liên Minh Hàng Hải'), nb('Đông_Cốc · Liên_Minh_Hàng_Hải'));
+  assert.equal(keepTogether('Khắp nơi trên thế giới'), nb('Khắp_nơi trên thế_giới'));
+  assert.equal(keepTogether(''), '');
 });
 
 test('relic name = fullname_vi even when it equals the character name (秋操杯: full name = name)', () => {

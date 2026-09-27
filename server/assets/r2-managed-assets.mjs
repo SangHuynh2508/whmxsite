@@ -79,6 +79,10 @@ export function createR2ManagedAssetStorage(config = loadR2ManagedAssetConfig())
     endpoint: config.endpoint,
     forcePathStyle: false,
     credentials: { accessKeyId: config.accessKeyId, secretAccessKey: config.secretAccessKey },
+    // The SDK default (WHEN_SUPPORTED) signs a presigned PUT with the CRC32 of an
+    // empty body (x-amz-checksum-crc32=AAAAAA==), so R2 rejects the browser's real bytes.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
   });
   return {
     bucket: config.bucket,

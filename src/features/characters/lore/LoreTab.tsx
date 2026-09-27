@@ -1,11 +1,11 @@
-import { StrictMode, useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react';
+import { StrictMode, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 import '../styles/loreTab.css';
 import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
 import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
-import { buildLoreView, factSpans, type LoreUnit } from './loreView.mts';
+import { buildLoreView, factSize, factSpans, keepTogether, type FactSize, type LoreFact, type LoreUnit } from './loreView.mts';
 
 function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -31,6 +31,47 @@ function TermPopover({ name, detail, className, style, children }: { name: LoreU
     </>
   );
 }
+
+let canvas: CanvasRenderingContext2D | null = null;
+function textWidth(text: string, el: Element) {
+  canvas ??= document.createElement('canvas').getContext('2d');
+  if (!canvas) return 0;
+  const style = getComputedStyle(el);
+  canvas.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+  const dot = el.classList.contains('lore-cn') ? 11 : 0; // .lore-cn::after: 5px dot + 6px gap
+  return canvas.measureText(text).width + dot;
+}
+
+// Sizes each fact value against the facts row as it is laid out now (ticket width, fonts), again on resize and
+// once the web fonts arrive. Runs before paint, so the first frame already has the final layout.
+function useFactSizes(row: RefObject<HTMLDivElement | null>, facts: LoreFact[]): FactSize[] {
+  const texts = facts.map((f) => f.value.text);
+  const key = texts.join('\u0000');
+  const [sizes, setSizes] = useState<FactSize[]>(() => texts.map(() => 'S'));
+  useLayoutEffect(() => {
+    const box = row.current;
+    if (!box) return;
+    let live = true;
+    const measure = () => {
+      const cells = [...box.querySelectorAll('.lore-fact')];
+      const values = [...box.querySelectorAll('.lore-fact-value')];
+      if (!live || !cells.length || values.length !== texts.length) return;
+      const style = getComputedStyle(cells[0]);
+      const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+      const next = values.map((el, i) => factSize(textWidth(texts[i], el), box.clientWidth, padding));
+      setSizes((prev) => (prev.join() === next.join() ? prev : next));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    void document.fonts?.ready.then(measure);
+    return () => { live = false; observer.disconnect(); };
+  }, [key]); // `key` stands for `texts`
+  return sizes.length === texts.length ? sizes : texts.map(() => 'S');
+}
+
+// Shown text of a fact: a translated value only breaks between words (keepTogether).
+const shown = (unit: LoreUnit): LoreUnit => (unit.untranslated ? unit : { ...unit, text: keepTogether(unit.text) });
 
 // A cold deep link renders before the R2 overlay is merged into char.profile; re-render once it is.
 function useOverlayRerender() {
@@ -66,7 +107,9 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
   const [relicPanel, setRelicPanel] = useState<'origin' | 'timeline'>('origin');
   const [report, setReport] = useState(0);
 
-  const spans = factSpans(view.facts.length);
+  const factsRow = useRef<HTMLDivElement>(null);
+  const facts = view.facts.map((f) => ({ ...f, value: shown(f.value) }));
+  const spans = factSpans(useFactSizes(factsRow, facts));
   const current = view.reports[report];
   const hasRelic = Boolean(view.relicIntro || view.timeline.length);
   const hasAside = Boolean(view.archive || view.relicName || view.facts.length || view.people);
@@ -83,13 +126,14 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
           )}
           {(view.relicName || view.facts.length > 0 || view.people) && (
             <div className="lore-ticket">
+              <span className="lore-corner lore-corner--tl" aria-hidden="true" /><span className="lore-corner lore-corner--tr" aria-hidden="true" />
+              <span className="lore-corner lore-corner--bl" aria-hidden="true" /><span className="lore-corner lore-corner--br" aria-hidden="true" />
               {view.relicName && <Text unit={view.relicName} as="p" className="lore-ticket-name" />}
-              {view.facts.length > 0 && (
-                <div className="lore-facts">
-                  {view.facts.map((f, i) => (
-                    // spans fill the last row evenly (factSpans); a fact alone on its row is centred
-                    <TermPopover key={f.label} name={f.value} detail={f.detail} className={spans[i] === 6 ? 'lore-fact lore-fact--solo' : 'lore-fact'}
-                      style={{ gridColumn: `span ${spans[i]}` }}>
+              {facts.length > 0 && (
+                <div className="lore-facts" ref={factsRow}>
+                  {facts.map((f, i) => (
+                    // 3, 2 or 1 per row by measured length (factSpans)
+                    <TermPopover key={f.label} name={f.value} detail={f.detail} className="lore-fact" style={{ gridColumn: `span ${spans[i]}` }}>
                       <span className="lore-label">{f.label}</span>
                       <Text unit={f.value} className="lore-fact-value" />
                     </TermPopover>
@@ -105,7 +149,7 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
                     {view.people.department && (
                       <div>
                         <dt className="lore-label">Trực thuộc</dt>
-                        <dd><TermPopover name={view.people.department} detail={view.people.departmentDetail} className="lore-stub-value">{view.people.department}</TermPopover></dd>
+                        <dd><TermPopover name={view.people.department} detail={view.people.departmentDetail} className="lore-stub-value">{keepTogether(view.people.department)}</TermPopover></dd>
                       </div>
                     )}
                     {view.people.status && <div><dt className="lore-label">Bản thể</dt><dd>{view.people.status}</dd></div>}

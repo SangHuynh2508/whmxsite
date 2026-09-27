@@ -40,8 +40,14 @@ export async function uploadAsset(preview, role, file, provenance, isOwner, onSt
   onStatus('Requesting upload intent…');
   const intent = await api('/api/admin/assets/upload-intents', json('POST', { entityId: preview.entityId, expectedRevision: preview.revision, assetRole: role, requestedFilename: file.name, requestedProvenance: provenance, requestId: requestId() }));
   onStatus('Uploading…');
-  const put = await fetch(intent.uploadUrl, { method: 'PUT', body: file, headers: { 'content-type': file.type } });
-  if (!put.ok) throw new Error('UPLOAD_FAILED');
+  // A network-level rejection (no response at all) is almost always the R2 bucket's CORS policy.
+  const put = await fetch(intent.uploadUrl, { method: 'PUT', body: file, headers: { 'content-type': file.type } })
+    .catch(() => { throw new Error('UPLOAD_BLOCKED'); });
+  if (!put.ok) {
+    const error = new Error('UPLOAD_FAILED');
+    error.status = put.status;
+    throw error;
+  }
   onStatus('Uploaded to quarantine. Owner finalization required.');
   if (!isOwner) return { finalized: false };
   onStatus('Verifying and activating…');

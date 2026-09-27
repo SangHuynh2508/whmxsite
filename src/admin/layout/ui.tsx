@@ -23,12 +23,19 @@ const ERROR_VI: Record<string, string> = {
   FORBIDDEN: 'Máy chủ từ chối quyền thực hiện.',
   OBJECT_NOT_FOUND: 'Tệp chưa được tải lên.',
   UPLOAD_FAILED: 'Tải tệp lên thất bại.',
+  UPLOAD_BLOCKED: 'Trình duyệt không gửi được tệp lên kho ảnh (thường do cấu hình CORS của bucket R2).',
+  OBJECT_INVALID: 'Tệp không phải ảnh PNG/JPEG/WebP hợp lệ.',
+  OBJECT_TOO_LARGE: 'Ảnh vượt dung lượng cho phép của loại ảnh này.',
+  UPLOAD_EXPIRED: 'Phiếu tải lên đã hết hạn, hãy tải lại ảnh.',
+  UPLOAD_NOT_PENDING: 'Phiếu tải lên này đã được xử lý.',
   REQUEST_FAILED: 'Yêu cầu thất bại.',
   VERSION_CONFLICT: 'Bản ghi đã thay đổi ở nơi khác.',
 };
 export function describeError(failure: unknown) {
   const code = failure instanceof Error ? failure.message : String(failure);
-  return ERROR_VI[code] ? `${ERROR_VI[code]} (${code})` : `Lỗi: ${code}`;
+  const status = statusOf(failure);
+  const tag = status ? `${code} ${status}` : code;
+  return ERROR_VI[code] ? `${ERROR_VI[code]} (${tag})` : `Lỗi: ${tag}`;
 }
 export const statusOf = (failure: unknown) => (failure as { status?: number } | null)?.status;
 
