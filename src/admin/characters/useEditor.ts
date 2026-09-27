@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { changedDraft, changesFor, conflictRows, draftToRestore, fieldValue } from './lib/fields.mts';
 import { isSaveShortcut } from './lib/shortcut.mts';
 import { clearDraft, draftKey, loadDraft, saveDraft } from './lib/draft.mts';
@@ -21,6 +21,7 @@ const valuesOf = (record: Rec | null, keys: string[]) => Object.fromEntries(keys
 
 export function useEditor({ scope, id, record, keys, save, reload, peek }: Args) {
   const key = draftKey(scope, id);
+  const openedAt = useRef(location.hash); // the admin area this editor lives in (see isSaveShortcut)
   const [state, dispatch] = useReducer(editorReducer, initialEditor(valuesOf(record, keys), record));
   // Until the hydrate for a newly loaded record lands, the draft belongs to the previous one: no changes, no draft write.
   const synced = state.source === record;
@@ -64,7 +65,7 @@ export function useEditor({ scope, id, record, keys, save, reload, peek }: Args)
 
   // Unsaved-change guards: Ctrl+S, tab close, and a flag read by in-app navigation.
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => { if (isSaveShortcut(event, location.hash)) { event.preventDefault(); void onSave(); } };
+    const onKey = (event: KeyboardEvent) => { if (isSaveShortcut(event, location.hash, openedAt.current)) { event.preventDefault(); void onSave(); } };
     const onUnload = (event: BeforeUnloadEvent) => { if (dirtyCount) { event.preventDefault(); event.returnValue = ''; } };
     (window as DirtyFlag).__whmxAdminDirty = dirtyCount > 0;
     addEventListener('keydown', onKey);

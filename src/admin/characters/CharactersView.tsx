@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { parseCharactersRoute } from './lib/route.mts';
 import { CharacterList } from './CharacterList';
 import { CharacterRecord } from './CharacterRecord';
-import { GameTermsView, LoreTermsView } from './LoreTermsView';
+import { legacyTermsHref } from './lib/dictionary.mts';
 
 const LIST = '#/admin/characters';
 const inCharacters = (hash: string) => hash === LIST || hash.startsWith(`${LIST}/`);
@@ -27,8 +27,10 @@ export default function CharactersView() {
     return () => removeEventListener('hashchange', onHash);
   }, []);
 
+  // The old terms pages moved to the Từ điển (bookmarks, history links, the lore module's term links).
+  useEffect(() => { if (route.view === 'terms' || route.view === 'gameTerms') location.replace(legacyTermsHref(route)); }, [route]);
+
   if (route.view === 'list') return <CharacterList />;
-  if (route.view === 'terms') return <LoreTermsView code={route.code} />;
-  if (route.view === 'gameTerms') return <GameTermsView code={route.code} />;
+  if (route.view === 'terms' || route.view === 'gameTerms') return null;
   return <CharacterRecord key={route.id} id={route.id} module={route.module} />;
 }

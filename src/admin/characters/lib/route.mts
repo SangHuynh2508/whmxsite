@@ -1,6 +1,8 @@
 export const MODULE_IDS = ['overview', 'lore', 'build', 'skins', 'source', 'history'] as const;
 export type ModuleId = (typeof MODULE_IDS)[number];
 export type CharactersRoute = { view: 'list' } | { view: 'terms'; code?: string } | { view: 'gameTerms'; code?: string } | { view: 'record'; id: string; module: ModuleId };
+import { dictionaryHref, tabOfGameKind } from './dictionary.mts';
+
 const BASE = '#/admin/characters';
 
 export function parseCharactersRoute(hash: string): CharactersRoute {
@@ -14,7 +16,6 @@ export function parseCharactersRoute(hash: string): CharactersRoute {
 }
 
 export const recordHref = (id: string, module?: ModuleId) => `${BASE}/${encodeURIComponent(id)}${module ? `/${module}` : ''}`;
-export const TERMS_HREF = `${BASE}/terms`;
-export const termHref = (code: string) => `${TERMS_HREF}/${encodeURIComponent(code)}`;
-export const GAME_TERMS_HREF = `${BASE}/game-terms`;
-export const gameTermHref = (code: string) => `${GAME_TERMS_HREF}/${encodeURIComponent(code)}`;
+// Shared terms live in the admin Từ điển (the old …/terms and …/game-terms pages redirect there).
+export const termHref = (code: string) => dictionaryHref('lore', code);
+export const gameTermHref = (code: string) => dictionaryHref(tabOfGameKind(code.split(':')[0]), code);

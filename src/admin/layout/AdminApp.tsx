@@ -7,6 +7,7 @@ import { Button, Field, Notice, ViewHeader, inputClass } from '@/ui';
 import PreviewView from '../preview/PreviewView';
 import AccountsView from '../users/AccountsView';
 import CharactersView from '../characters/CharactersView';
+import { DictionaryView } from '../characters/DictionaryView';
 import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav';
 import { LOGIN_HASH, authRedirect } from './lib/authRoute.mts';
 import { mustAskBeforeLeaving } from './lib/leaveGuard.mts';
@@ -167,6 +168,12 @@ export default function AdminApp() {
           </div>
         )}
         {section === 'accounts' && <AccountsView isOwner={isOwner} />}
+        {section === 'dictionary' && (
+          <div className={shown(true)}>
+            <ViewHeader title="Từ điển" meta="Bản dịch dùng chung · vũ khí, dòng thuộc tính, thâm tạo, lore" />
+            <DictionaryView />
+          </div>
+        )}
         {charactersMounted && (
           <div hidden={section !== 'characters'} className={shown(section === 'characters')}>
             <ViewHeader title="Khí Giả" meta="Nhân vật & trang phục · bản dịch tiếng Việt" />

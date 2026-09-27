@@ -13,4 +13,6 @@ test('hash routes become analytics pages: real path + grouped route, no query st
   assert.deepEqual(pageForHash('#calc?char=W0182'), { path: '/calc', route: '/calc' });
   assert.deepEqual(pageForHash('#/admin/characters/A0001/lore'), { path: '/admin/characters/A0001/lore', route: '/admin/characters/[id]/lore' });
   assert.deepEqual(pageForHash('#/admin/characters/terms'), { path: '/admin/characters/terms', route: '/admin/characters/terms' });
+  assert.deepEqual(pageForHash('#/admin/dictionary/weapons/weapon%3A31244'), { path: '/admin/dictionary/weapons/weapon%3A31244', route: '/admin/dictionary/weapons/[code]' });
+  assert.deepEqual(pageForHash('#/admin/dictionary/lore'), { path: '/admin/dictionary/lore', route: '/admin/dictionary/lore' });
 });

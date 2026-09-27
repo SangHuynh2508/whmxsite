@@ -168,7 +168,7 @@ export function LoreModule({ data }: ModuleProps) {
               </Fragment>
             ))}
           </dl>
-          <p className="mt-2 text-xs text-(--text-subtle)">Thuật ngữ dùng chung: sửa ở trang thuật ngữ sẽ đổi cho mọi nhân vật.</p>
+          <p className="mt-2 text-xs text-(--text-subtle)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
           <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
           <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
             <HistoryList entries={lore.history.filter((h) => h.eventType === 'human_edit').slice(0, 5)} labels={labels} />

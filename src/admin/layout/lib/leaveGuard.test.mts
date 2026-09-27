@@ -9,4 +9,7 @@ test('asks only when leaving a Khí Giả page with unsaved edits', () => {
   assert.equal(mustAskBeforeLeaving('#/admin/characters/A0001', '#/admin', false), false);
   assert.equal(mustAskBeforeLeaving('#/admin/characters/A0001', '#/admin/characters/A0001', true), false);
   assert.equal(mustAskBeforeLeaving('#/admin', '#/admin/accounts', true), false);
+  // Từ điển has editors too
+  assert.equal(mustAskBeforeLeaving('#/admin/dictionary/weapons', '#/admin/dictionary/lore', true), true);
+  assert.equal(mustAskBeforeLeaving('#/admin/dictionary/weapons', '#/admin', false), false);
 });

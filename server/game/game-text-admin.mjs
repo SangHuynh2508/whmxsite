@@ -4,19 +4,28 @@ import { randomUUID } from 'node:crypto';
 
 import { and, eq } from 'drizzle-orm';
 
-import { gameTexts } from '../../db/schema/build.mjs';
+import { gameReferences, gameTexts } from '../../db/schema/build.mjs';
 import { editHistory, managedEntities } from '../../db/schema/core.mjs';
 import { AdminApiError } from '../admin-api.mjs';
 import { bumpRevision } from '../profile/lore-admin.mjs';
 import { planTermEdit } from '../profile/lore-edit.mjs';
 import { createLoreRepository } from '../profile/lore-repository.mjs';
 
+// Pure: each weapon text gets its skill codes (weapon reference data.skillIds), so the admin Từ điển shows a
+// weapon's name and its skills in one place.
+export function withWeaponSkills(texts, refs) {
+  const skillsOf = new Map(refs.filter((r) => r.kind === 'weapon').map((r) => [r.code, r.data?.skillIds ?? []]));
+  return texts.map((t) => (t.kind === 'weapon' ? { ...t, skillCodes: skillsOf.get(t.code) ?? [] } : t));
+}
+
 export async function listGameTexts(db) {
   const rows = await db.select({ text: gameTexts, revision: managedEntities.revision })
     .from(gameTexts).innerJoin(managedEntities, eq(managedEntities.id, gameTexts.entityId)).where(eq(gameTexts.sourcePresent, true));
-  return rows
+  const texts = rows
     .map(({ text: t, revision }) => ({ kind: t.kind, code: t.code, nameCn: t.nameCn, detailCn: t.detailCn, nameVi: t.nameVi, detailVi: t.detailVi, viOrigin: t.viOrigin, state: t.state, revision }))
     .sort((a, b) => a.kind.localeCompare(b.kind) || a.code.localeCompare(b.code));
+  const weaponRefs = await db.select({ kind: gameReferences.kind, code: gameReferences.code, data: gameReferences.data }).from(gameReferences).where(eq(gameReferences.kind, 'weapon'));
+  return withWeaponSkills(texts, weaponRefs);
 }
 
 export async function saveGameText(db, kind, code, { expectedRevision, nameVi, detailVi, actorUserId, requestId = randomUUID(), now = new Date() }) {

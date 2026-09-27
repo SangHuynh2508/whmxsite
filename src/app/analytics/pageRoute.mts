@@ -5,6 +5,7 @@ const DYNAMIC: [RegExp, string][] = [
   [/^\/characters\/[^/]+(?<tail>\/[^/]+)?$/, '/characters/[slug]'],
   [/^\/skins\/[^/]+$/, '/skins/[id]'],
   [/^\/admin\/characters\/(?!terms(?:\/|$))[^/]+(?<tail>\/[^/]+)?$/, '/admin/characters/[id]'],
+  [/^\/admin\/dictionary\/(?<tab>[^/]+)\/[^/]+$/, '/admin/dictionary/[tab]/[code]'],
 ];
 
 export function pageForHash(hash: string): { path: string; route: string } {
@@ -12,7 +13,7 @@ export function pageForHash(hash: string): { path: string; route: string } {
   const path = bare || '/';
   for (const [pattern, base] of DYNAMIC) {
     const m = path.match(pattern);
-    if (m) return { path, route: base + (m.groups?.tail ?? '') };
+    if (m) return { path, route: base.replace('[tab]', m.groups?.tab ?? '[tab]') + (m.groups?.tail ?? '') };
   }
   return { path, route: path };
 }

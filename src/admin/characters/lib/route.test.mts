@@ -19,12 +19,12 @@ test('terms page and lore module routes', () => {
   assert.deepEqual(parseCharactersRoute('#/admin/characters/terms'), { view: 'terms' });
   assert.deepEqual(parseCharactersRoute('#/admin/characters/terms/K12'), { view: 'terms', code: 'K12' });
   assert.deepEqual(parseCharactersRoute('#/admin/characters/A0144/lore'), { view: 'record', id: 'A0144', module: 'lore' });
-  assert.equal(termHref('ORG_3'), '#/admin/characters/terms/ORG_3');
+  assert.equal(termHref('ORG_3'), '#/admin/dictionary/lore/ORG_3');
 });
 
 test('game-text translation page and the Build module', () => {
   assert.deepEqual(parseCharactersRoute('#/admin/characters/game-terms'), { view: 'gameTerms' });
   assert.deepEqual(parseCharactersRoute('#/admin/characters/game-terms/weapon%3A30111'), { view: 'gameTerms', code: 'weapon:30111' });
-  assert.equal(gameTermHref('weapon:30111'), '#/admin/characters/game-terms/weapon%3A30111');
+  assert.equal(gameTermHref('weapon:30111'), '#/admin/dictionary/weapons/weapon%3A30111');
   assert.deepEqual(parseCharactersRoute('#/admin/characters/D0017/build'), { view: 'record', id: 'D0017', module: 'build' });
 });
