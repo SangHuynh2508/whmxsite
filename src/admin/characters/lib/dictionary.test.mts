@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { dictionaryHref, isDone, legacyTermsHref, parseDictionaryRoute, progress, tabOfGameKind } from './dictionary.mts';
+import { dictionaryHref, isDone, legacyTermsHref, mergeSameText, outOfStep, parseDictionaryRoute, progress, tabOfGameKind } from './dictionary.mts';
 
 test('Từ điển routes: tab + optional code, weapons by default', () => {
   assert.deepEqual(parseDictionaryRoute('#/admin/dictionary'), { tab: 'weapons' });
@@ -34,4 +34,20 @@ test('done = what the public page shows in VI: official name, and the descriptio
   assert.deepEqual(progress([t(), t({ nameVi: null }), t()]), { done: 2, total: 3 });
   // a game row with no Chinese at all (weapon skill EW4034) has nothing to translate
   assert.equal(isDone(t({ nameCn: '', nameVi: null, viOrigin: null })), true);
+});
+
+test('same Chinese in one kind → one row (the 深造 columns: 4 names × 15 styles); the row shows a translated twin', () => {
+  const t = (kind: string, code: string, nameCn: string, patch = {}) =>
+    ({ kind, code, nameCn, detailCn: '', nameVi: null, detailVi: null, viOrigin: null, state: 'ok' as const, ...patch });
+  const rows = mergeSameText([
+    t('style_sector', 'A1_01', '重峦'), t('style_sector', 'A2_01', '重峦', { nameVi: 'Trùng Loan', viOrigin: 'admin' }),
+    t('style_sector', 'A1_02', '源流'), t('style_talent', 'X', '重峦'), t('style_sector', 'D1_01', '重峦'),
+  ]);
+  assert.deepEqual(rows.map((r) => [r.code, r.twins.map((x) => x.code)]),
+    [['A2_01', ['A1_01', 'A2_01', 'D1_01']], ['A1_02', ['A1_02']], ['X', ['X']]]);
+  // twins not carrying the row's translation (to offer "Áp dụng cho các mục còn lại")
+  assert.deepEqual(outOfStep(rows[0]).map((x) => x.code), ['A1_01', 'D1_01']);
+  assert.deepEqual(outOfStep(rows[1]), []);
+  // a different description is a different text
+  assert.equal(mergeSameText([t('style_talent', 'a', '伤害', { detailCn: '1' }), t('style_talent', 'b', '伤害', { detailCn: '2' })]).length, 2);
 });
