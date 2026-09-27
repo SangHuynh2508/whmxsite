@@ -16,3 +16,12 @@ test('pointer and backup key', () => {
   assert.deepEqual(JSON.parse(buildPointer('lore.abc.json', now)), { file: 'lore.abc.json', publishedAt: '2026-09-24T23:59:00.000Z' });
   assert.equal(backupKey('production', now), 'backups/lore/production/2026-09-24.json.gz');
 });
+
+test('builds: a document without builds is byte-identical to before (same file name); with builds it gains builds + refs', () => {
+  const profiles = [['A0001', { record_id: '1' }]];
+  const before = buildLoreDocument(profiles);
+  assert.equal(buildLoreDocument(profiles, null).body, before.body);
+  const withBuilds = buildLoreDocument(profiles, { builds: { A0001: [{ name: 'Chuẩn' }] }, refs: { weapons: {} } });
+  assert.deepEqual(JSON.parse(withBuilds.body), { version: 1, characters: { A0001: { record_id: '1' } }, builds: { A0001: [{ name: 'Chuẩn' }] }, refs: { weapons: {} } });
+  assert.notEqual(withBuilds.fileName, before.fileName);
+});

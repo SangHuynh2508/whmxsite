@@ -51,3 +51,12 @@ test('the pointer is always revalidated (no-cache): a reload right after a publi
   await loadLoreOverlay(POINTER, fetchImpl as typeof fetch);
   assert.equal(init[0]?.cache, 'no-cache');
 });
+
+test('merge keeps the published builds and their game references (Build tab); none → empty', () => {
+  const data: { characters: Record<string, { profile?: unknown }>; builds?: unknown; buildRefs?: unknown } = { characters: {} };
+  mergeLoreOverlay(data, { version: 1, characters: {}, builds: { A0001: [{ name: 'Chuẩn' }] }, refs: { weapons: { 30111: {} } } });
+  assert.deepEqual(data.builds, { A0001: [{ name: 'Chuẩn' }] });
+  assert.deepEqual(data.buildRefs, { weapons: { 30111: {} } });
+  mergeLoreOverlay(data, { version: 1, characters: {} });
+  assert.deepEqual([data.builds, data.buildRefs], [{}, null]);
+});

@@ -18,7 +18,7 @@ function department(profile, terms, shape) {
 }
 
 // detail/detail_vi feed the public lore-tab popups (spec Q7b).
-function termPair(terms, code) {
+export function termPair(terms, code) {
   const row = code ? terms.get(code) : null;
   return { cn: row?.nameCn ?? '', vi: publishableVi(row, 'nameVi'), detail: row?.detailCn ?? '', detail_vi: publishableVi(row, 'detailVi') };
 }
