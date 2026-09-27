@@ -16,19 +16,13 @@ export function selectProfileTextsWithCharacterId(db) {
     .innerJoin(characters, eq(characters.entityId, characterProfiles.characterEntityId));
 }
 
-const firstRow = (result) => (Array.isArray(result) ? result[0] : result.rows?.[0]); // same shape handling as db/client.mjs
-
-// The Build tables arrive with migration 0007; until it is applied, lore publishing and backups carry on without them.
-async function hasBuildTables(tx) {
-  return Boolean(firstRow(await tx.execute(sql`select to_regclass('public.character_builds') is not null as present`))?.present);
-}
-
 export function createLoreRepository(db) {
   return {
     async withPublishLock(fn) {
       return db.transaction(async (tx) => {
         const result = await tx.execute(sql`select pg_try_advisory_xact_lock(${lorePublishLockKey}) as locked`);
-        return firstRow(result)?.locked ? fn(tx) : { status: 'busy' };
+        const row = Array.isArray(result) ? result[0] : result.rows?.[0]; // same shape handling as db/client.mjs
+        return row?.locked ? fn(tx) : { status: 'busy' };
       }, { isolationLevel: 'repeatable read' }); // one snapshot for every read that builds the document
     },
     async loadPublishProfiles(tx) {
@@ -36,7 +30,6 @@ export function createLoreRepository(db) {
     },
     // Build tab: saved builds + the game references they use (null when there is no build yet).
     async loadPublishBuilds(tx) {
-      if (!(await hasBuildTables(tx))) return null;
       const builds = await tx.select({ characterId: characters.characterId, position: characterBuilds.position, doc: characterBuilds.doc })
         .from(characterBuilds).innerJoin(characters, eq(characters.entityId, characterBuilds.characterEntityId));
       if (!builds.length) return null;
@@ -52,7 +45,7 @@ export function createLoreRepository(db) {
         profileTexts: await selectProfileTextsWithCharacterId(tx),
         loreTerms: await tx.select().from(loreTerms),
         lorePublishState: await tx.select().from(lorePublishState),
-        characterBuilds: (await hasBuildTables(tx)) ? await tx.select().from(characterBuilds) : [],
+        characterBuilds: await tx.select().from(characterBuilds),
         editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term', 'character_build'])),
       };
     },
