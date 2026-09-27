@@ -47,6 +47,16 @@ async function loadCurrent(db) {
 
 const counts = (rows) => rows.reduce((out, r) => ({ ...out, [r.kind]: (out[r.kind] ?? 0) + 1 }), {});
 
+function grouped(changes) {
+  const out = {};
+  for (const [action, kind, key] of changes) {
+    const g = ((out[action] ??= {})[kind] ??= { count: 0, examples: [] });
+    g.count += 1;
+    if (g.examples.length < 3) g.examples.push(key);
+  }
+  return out;
+}
+
 function summarize(plan, normalized) {
   return {
     counts: plan.counts,
@@ -54,8 +64,9 @@ function summarize(plan, normalized) {
     terms: counts(normalized.terms),
     skipped: normalized.skipped,
     problems: normalized.problems,
-    refChanges: plan.refs.filter((r) => r.action !== 'unchanged').map((r) => `${r.action} ${r.key}`),
-    termChanges: plan.terms.filter((t) => t.action !== 'unchanged').map((t) => `${t.action} ${t.code}`),
+    // grouped per action and kind, with a few examples (the full list runs to 1 000+ lines on a first import)
+    refChanges: grouped(plan.refs.filter((r) => r.action !== 'unchanged').map((r) => [r.action, r.key.split('|')[0], r.key])),
+    termChanges: grouped(plan.terms.filter((t) => t.action !== 'unchanged').map((t) => [t.action, t.code.split(':')[0], t.code])),
   };
 }
 
