@@ -35,12 +35,11 @@
 .lore-plate::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
 .lore-plate::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
 
-.lore-ticket { position: relative; background: var(--lore-grain), var(--bg-surface); border: 1px solid var(--border-gold-subtle); border-radius: 8px; }
-.lore-ticket-name { margin: 0; padding: 14px 16px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
+.lore-ticket { position: relative; background: var(--lore-grain), var(--bg-surface); border: 1px solid var(--border-gold-subtle); }
+.lore-ticket-name { margin: 0; padding: 16px 24px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
 /* perforations: every fact draws its left/top dashed edge 1px outside itself; the grid clips the outer ones,
    so only the lines between facts show — also when a second row starts (5 facts with 工艺/产地). */
-.lore-facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: hidden; } /* spans from factSpans(): 3 per row */
-.lore-fact--solo { justify-items: center; text-align: center; }
+.lore-facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: hidden; } /* spans from factSpans(): 3, 2 or 1 per row by length */
 .lore-fact { display: grid; align-content: start; gap: 2px; padding: 10px 16px 14px; text-align: left; font: inherit; color: inherit; background: none; border: 0; }
 .lore-fact { margin: -1px 0 0 -1px; border-left: 1px dashed var(--border-gold-subtle); border-top: 1px dashed var(--border-gold-subtle); }
 /* clickable items: no underline, no colour change — the text just brightens on hover (owner 2026-09-26) */
@@ -50,7 +49,7 @@ button.lore-fact:is(:hover, :focus-visible) > *, button.lore-stub-value:is(:hove
 button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 .lore-label { font-size: 12px; letter-spacing: .02em; color: var(--text-muted); }
-.lore-fact-value { font-weight: 500; line-height: 1.4; }
+.lore-fact-value { font-weight: 500; line-height: 1.4; text-wrap: balance; } /* the rare value that still wraps splits evenly */
 
 /* tear line: notch = fill layer (covers the ticket border, clipped 2px past the centre for any device-pixel rounding)
    + outline layer (clipped exactly at the centre, so no stray ticks) */
@@ -58,13 +57,27 @@ button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid va
 .lore-notch { position: absolute; top: -8px; width: 16px; height: 16px; }
 .lore-notch--l { left: -23px; }
 .lore-notch--r { right: -23px; }
-.lore-notch::before, .lore-notch::after { content: ""; position: absolute; inset: 0; border-radius: 50%; }
-.lore-notch::before { background: var(--bg-main); }
-.lore-notch::after { border: 1px solid var(--border-gold-subtle); }
+.lore-notch::before, .lore-notch::after, .lore-corner::before, .lore-corner::after { content: ""; position: absolute; inset: 0; border-radius: 50%; }
+.lore-notch::before, .lore-corner::before { background: var(--bg-main); }
+.lore-notch::after, .lore-corner::after { border: 1px solid var(--border-gold-subtle); }
 .lore-notch--l::before { clip-path: inset(-1px -1px -1px calc(50% - 2px)); }
 .lore-notch--l::after { clip-path: inset(0 0 0 50%); }
 .lore-notch--r::before { clip-path: inset(-1px calc(50% - 2px) -1px -1px); }
 .lore-notch--r::after { clip-path: inset(0 50% 0 0); }
+/* concave corners (owner 2026-09-27): the same fill + outline layers, a quarter of each circle inside the ticket */
+.lore-corner { position: absolute; z-index: 1; width: 28px; height: 28px; pointer-events: none; }
+.lore-corner--tl { top: -15px; left: -15px; }
+.lore-corner--tr { top: -15px; right: -15px; }
+.lore-corner--bl { bottom: -15px; left: -15px; }
+.lore-corner--br { bottom: -15px; right: -15px; }
+.lore-corner--tl::before { clip-path: inset(calc(50% - 2px) -1px -1px calc(50% - 2px)); }
+.lore-corner--tl::after { clip-path: inset(50% 0 0 50%); }
+.lore-corner--tr::before { clip-path: inset(calc(50% - 2px) calc(50% - 2px) -1px -1px); }
+.lore-corner--tr::after { clip-path: inset(50% 50% 0 0); }
+.lore-corner--bl::before { clip-path: inset(-1px -1px calc(50% - 2px) calc(50% - 2px)); }
+.lore-corner--bl::after { clip-path: inset(0 0 50% 50%); }
+.lore-corner--br::before { clip-path: inset(-1px calc(50% - 2px) calc(50% - 2px) -1px); }
+.lore-corner--br::after { clip-path: inset(0 50% 50% 0); }
 
 .lore-stub { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 10px 0; margin: 0; padding: 12px 0 14px; }
 .lore-stub > div { display: grid; gap: 2px; padding: 0 16px; }

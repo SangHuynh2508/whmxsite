@@ -33,14 +33,61 @@ export function pick(vi: unknown, cn: unknown): LoreUnit | null {
 // tag4 其他 from the wiki (外销文物).
 const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất', tag4: 'Khác' };
 
-// Column spans on the ticket's 6-column grid: 3 facts per row; the last row is filled evenly —
-// one leftover fact takes the whole row, two share it (owner 2026-09-26).
-export function factSpans(n: number): number[] {
-  const spans = Array.from({ length: n }, () => 2);
-  const rest = n % 3;
-  for (let i = n - rest; i < n; i++) spans[i] = 6 / rest;
+// Ticket layout (owner 2026-09-27, demo "Phiếu Hồ Sơ Lưu Trữ"): Vietnamese values are 3-4x longer than the CN ones,
+// so 3 fixed columns wrapped most of them. Each value is sized by its measured width: S fits one line in a third of
+// the 6-column facts row, M in a half, L needs the whole row.
+export type FactSize = 'S' | 'M' | 'L';
+export function factSize(textWidth: number, rowWidth: number, padding: number): FactSize {
+  const inner = (span: number) => (rowWidth / 6) * span - padding;
+  return textWidth <= inner(2) ? 'S' : textWidth <= inner(3) ? 'M' : 'L';
+}
+
+// Column spans, packed in order (Loại, Niên đại, Nơi lưu giữ, tags): three short values share a row, two values
+// that are not long share a row, anything else takes the whole row.
+export function factSpans(sizes: FactSize[]): number[] {
+  const spans: number[] = [];
+  let i = 0;
+  while (i < sizes.length) {
+    if (sizes[i] === 'S' && sizes[i + 1] === 'S' && sizes[i + 2] === 'S') { spans.push(2, 2, 2); i += 3; }
+    else if (i + 1 < sizes.length && sizes[i] !== 'L' && sizes[i + 1] !== 'L') { spans.push(3, 3); i += 2; }
+    else { spans.push(6); i += 1; }
+  }
   return spans;
 }
+
+const NBSP = '\u00A0';
+// Lower-case compounds from the lore glossary; proper names (runs of capitalised syllables) are kept together by rule.
+const COMPOUNDS = [
+  'Bảo tàng', 'Quốc gia', 'Khu tự trị', 'Nghệ thuật', 'Hiện đại', 'Lịch sử', 'Khảo cổ', 'Di chỉ', 'Nghiên cứu',
+  'Công viên', 'Lâu đài', 'Dãy núi', 'Khắp nơi', 'thế giới', 'Lưu giữ', 'hai nơi', 'Đang triển lãm', 'Nam Bắc triều',
+  'Khắc đá', 'gạch ngói', 'vàng bạc', 'dệt thêu', 'sơn mài', 'thủy tinh', 'da thuộc', 'Trang phục', 'Văn hóa', 'dân gian',
+  'Văn bản', 'lưu trữ', 'Cấu kiện', 'kiến trúc', 'Kiến trúc', 'Mô hình', 'điêu khắc', 'Điêu khắc', 'cổ đại', 'Sách cổ',
+  'bản quý', 'Hội họa', 'Thư pháp', 'Nhạc cụ', 'Vũ khí', 'Châu báu', 'Giáp cốt', 'Phù bài', 'Thẻ tre', 'Ấn chương',
+  'Đồng hồ', 'đến nay', 'Hầm giấu', 'Quần thể', 'mộ cổ',
+].sort((a, b) => b.length - a.length);
+const COMPOUND_PATTERNS = COMPOUNDS.map((phrase) => [new RegExp(`(?<=^|[\\s(])${phrase}(?=$|[\\s),])`, 'g'), phrase.replaceAll(' ', NBSP)] as const);
+const CAPITALISED = /^\p{Lu}[\p{L}\p{M}]*$/u;
+
+// Line breaks only between words: joins compounds, 2-5 capitalised syllables in a row, "thế kỷ 19", "18 TCN",
+// and keeps the " - " of a period at the end of the line. The result is plain text with no-break spaces.
+export function keepTogether(text: string): string {
+  let out = text
+    .replace(/ - /g, `${NBSP}- `)
+    .replace(/([Tt]hế) kỷ (\d+)/g, `$1${NBSP}kỷ${NBSP}$2`)
+    .replace(/([Nn]ăm) (\d+)/g, `$1${NBSP}$2`)
+    .replace(/(\d+) (TCN|SCN)/g, `$1${NBSP}$2`);
+  for (const [pattern, joined] of COMPOUND_PATTERNS) out = out.replace(pattern, joined);
+  const words = out.split(' ');
+  const result: string[] = [];
+  for (let i = 0; i < words.length;) {
+    let j = i;
+    while (j < words.length && CAPITALISED.test(words[j])) j++;
+    if (j - i >= 2 && j - i <= 5) { result.push(words.slice(i, j).join(NBSP)); i = j; }
+    else { result.push(words[i]); i++; }
+  }
+  return result.join(' ');
+}
+
 const pair = (value: unknown) => pick(obj(value).vi, obj(value).cn);
 const detailOf = (value: unknown) => pick(obj(value).detail_vi, obj(value).detail);
 
