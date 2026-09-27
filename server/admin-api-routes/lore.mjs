@@ -28,13 +28,14 @@ export async function lorePublish(request, response) {
 const textsBody = (z) => z.object({ expectedRevision: z.coerce.number().int().positive(), texts: z.record(z.string(), z.string().max(20_000).nullable()), requestId: z.string().uuid().optional() });
 const termBody = (z) => z.object({ expectedRevision: z.coerce.number().int().positive(), nameVi: z.string().max(500).nullable(), detailVi: z.string().max(20_000).nullable(), requestId: z.string().uuid().optional() });
 
-async function withAdmin(request, response, methods, handle) {
+// `domain` = the module the handler works with (lore by default; builds.mjs passes its own).
+export async function withAdmin(request, response, methods, handle, domain = () => import('../profile/lore-admin.mjs')) {
   if (!methods.includes(request.method)) {
     response.setHeader('Allow', methods.join(', '));
     return response.status(405).json({ error: { code: 'METHOD_NOT_ALLOWED' } });
   }
   try {
-    const [api, { getDb }, lore, { z }] = await Promise.all([import('../admin-api.mjs'), import('../../db/client.mjs'), import('../profile/lore-admin.mjs'), import('zod')]);
+    const [api, { getDb }, lore, { z }] = await Promise.all([import('../admin-api.mjs'), import('../../db/client.mjs'), domain(), import('zod')]);
     const user = await api.authenticatedUser(request, { requireOrigin: request.method !== 'GET' });
     return await handle({ api, db: getDb(), lore, z, user });
   } catch (error) {

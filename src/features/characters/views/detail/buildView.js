@@ -1,86 +1,23 @@
 /**
  * Build Sub-View Component (/characters/:characterId/build)
- * Editorial & Community Build Guides Schema & Template
+ * Builds written in Admin, published in game.<hash>.json (src/features/characters/build/).
  */
+import { mountBuildTab } from '../../build/BuildTab.tsx';
+
+// Empty state first; mountBuildTab replaces it once the published game document has builds for this character.
 export function renderBuildTab(container, char) {
-  const buildData = char.build || null;
-
-  if (!buildData || Object.keys(buildData).length === 0) {
-    container.innerHTML = `
-      <div class="build-page-wrapper">
-        <div class="build-empty-state">
-          <div class="build-empty-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-          </div>
-          <h3 class="build-empty-title">Chưa có hướng dẫn build</h3>
-          <p class="build-empty-desc">
-            Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho <strong>${char.name_vi || char.name_cn}</strong> đang chưa được làm.
-          </p>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // Render editorial build data if present in char.build
   container.innerHTML = `
     <div class="build-page-wrapper">
-      <div class="build-header">
-        <h2>HƯỚNG DẪN BUILD & NÂNG CẤP</h2>
-        <span class="build-author">Biên tập: ${buildData.author || "Cộng đồng"}</span>
-      </div>
-
-      <div class="build-sections-grid">
-        <!-- 1. Role / Summary -->
-        <div class="build-card role-card">
-          <h3>Vai trò trong đội hình</h3>
-          <p>${buildData.role || "Chưa có thông tin"}</p>
+      <div class="build-empty-state">
+        <div class="build-empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
         </div>
-
-        <!-- 2. Recommended Weapons -->
-        <div class="build-card weapons-card">
-          <h3>Vũ khí đề xuất</h3>
-          <ul class="build-item-list">
-            ${(buildData.weapons || []).map(w => `<li><strong>${w.name}</strong> - ${w.desc}</li>`).join('') || '<li>Đang cập nhật...</li>'}
-          </ul>
-        </div>
-
-        <!-- 3. Engravings / Thâm tạo -->
-        <div class="build-card engraving-card">
-          <h3>Thâm Tạo (Bộ trang bị)</h3>
-          <ul class="build-item-list">
-            ${(buildData.engravings || []).map(e => `<li><strong>${e.name}</strong>: ${e.effect}</li>`).join('') || '<li>Đang cập nhật...</li>'}
-          </ul>
-        </div>
-
-        <!-- 4. Team Comps -->
-        <div class="build-card team-card">
-          <h3>Đội hình phù hợp</h3>
-          <p>${buildData.team_comps || "Đang cập nhật..."}</p>
-        </div>
-
-        <!-- 5. Rotation / Playstyle -->
-        <div class="build-card rotation-card">
-          <h3>Cách chơi / Rotation</h3>
-          <p>${buildData.rotation || "Đang cập nhật..."}</p>
-        </div>
-
-        <!-- 6. Pros & Cons -->
-        <div class="build-card pros-cons-card">
-          <div class="pros-col">
-            <h4 class="pros-title">Ưu điểm</h4>
-            <ul>
-              ${(buildData.pros || []).map(p => `<li>${p}</li>`).join('') || '<li>Chưa liệt kê</li>'}
-            </ul>
-          </div>
-          <div class="cons-col">
-            <h4 class="cons-title">Nhược điểm</h4>
-            <ul>
-              ${(buildData.cons || []).map(c => `<li>${c}</li>`).join('') || '<li>Chưa liệt kê</li>'}
-            </ul>
-          </div>
-        </div>
+        <h3 class="build-empty-title">Chưa có hướng dẫn build</h3>
+        <p class="build-empty-desc">
+          Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho <strong>${char.name_vi || char.name_cn}</strong> đang chưa được làm.
+        </p>
       </div>
     </div>
   `;
+  mountBuildTab(container, char);
 }

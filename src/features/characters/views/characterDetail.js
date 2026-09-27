@@ -13,6 +13,7 @@ import { renderTalentsTab } from './detail/talentsView.js';
 import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
 import { mountLoreQuote, mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
+import { unmountBuildTab } from '../build/BuildTab.tsx';
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
@@ -32,6 +33,7 @@ function normalizeTab(activeTab) {
 
 function renderTabContent(container, char, tabName) {
   unmountLoreTab(); // every tab swap and character change goes through here
+  unmountBuildTab();
   switch (tabName) {
     case 'info':
       renderInfoTab(container, char);

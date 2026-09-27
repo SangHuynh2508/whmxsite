@@ -7,6 +7,7 @@ import { recordHref, type ModuleId } from './lib/route.mts';
 import { Avatar, characterAvatar } from './components/Avatar';
 import { OverviewModule } from './modules/OverviewModule';
 import { LoreModule } from './modules/LoreModule';
+import { BuildModule } from './modules/BuildModule';
 import { SkinsModule } from './modules/SkinsModule';
 import { SourceModule } from './modules/SourceModule';
 import { HistoryModule } from './modules/HistoryModule';
@@ -16,6 +17,7 @@ import type { CharacterData, ModuleProps } from './types';
 export const MODULES: { id: ModuleId; label: string; Component: ComponentType<ModuleProps> }[] = [
   { id: 'overview', label: 'Tổng quan', Component: OverviewModule },
   { id: 'lore', label: 'Lore', Component: LoreModule },
+  { id: 'build', label: 'Build', Component: BuildModule },
   { id: 'skins', label: 'Trang phục', Component: SkinsModule },
   { id: 'source', label: 'Nguồn', Component: SourceModule },
   { id: 'history', label: 'Lịch sử', Component: HistoryModule },

@@ -52,6 +52,18 @@ module.exports = async function adminApiDispatcher(request, response) {
         if (rest.length === 2 && rest[0] === 'characters') { request.query.characterId = rest[1]; return lore.loreCharacter(request, response); }
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
       }
+      case 'builds': {
+        const builds = await import('../../server/admin-api-routes/builds.mjs');
+        if (rest.length === 2 && rest[0] === 'characters') { request.query.characterId = rest[1]; return builds.characterBuilds(request, response); }
+        if (rest.length === 1) { request.query.buildId = rest[0]; return builds.build(request, response); }
+        return response.status(404).json({ error: { code: 'NOT_FOUND' } });
+      }
+      case 'game-texts': {
+        const builds = await import('../../server/admin-api-routes/builds.mjs');
+        if (rest.length === 0) return builds.gameTextList(request, response);
+        if (rest.length === 2) { request.query.kind = rest[0]; request.query.code = rest[1]; return builds.gameText(request, response); }
+        return response.status(404).json({ error: { code: 'NOT_FOUND' } });
+      }
       default:
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
     }

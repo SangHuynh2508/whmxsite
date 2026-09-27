@@ -20,7 +20,7 @@ async function profileOf(tx, characterId) {
   return row;
 }
 
-async function bumpRevision(tx, entityId, expectedRevision, actorUserId, now) {
+export async function bumpRevision(tx, entityId, expectedRevision, actorUserId, now) {
   const [row] = await tx.update(managedEntities)
     .set({ revision: sql`${managedEntities.revision} + 1`, updatedAt: now, editedByUserId: actorUserId })
     .where(and(eq(managedEntities.id, entityId), eq(managedEntities.revision, expectedRevision)))

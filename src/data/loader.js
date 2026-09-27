@@ -1,13 +1,17 @@
-import { loadLoreOverlay, mergeLoreOverlay } from '../features/profile/api/loreOverlay.mts';
+import { loadGameDocument, loadLoreOverlay, mergeLoreOverlay } from '../features/profile/api/loreOverlay.mts';
 
 let gameData = null;
 let loreMerged = Promise.resolve();
+// Game database + builds (Build tab); null until published / when it fails to load.
+/** @type {Promise<import("../features/profile/api/loreOverlay.mts").GameDocument | null>} */
+let gameDocument = Promise.resolve(null);
 
 export async function loadGameData() {
   if (gameData) return gameData;
   try {
     // Started in parallel with data.json; resolves to null on any failure (CN fallback).
     const overlayPromise = loadLoreOverlay(import.meta.env.VITE_LORE_POINTER_URL);
+    gameDocument = loadGameDocument(import.meta.env.VITE_LORE_POINTER_URL);
     const res = await fetch('/data.json');
     gameData = await res.json();
     if (gameData && gameData.characters) {
@@ -37,6 +41,10 @@ export async function loadGameData() {
 
 export function getGameData() {
   return gameData;
+}
+
+export function loadedGameDocument() {
+  return gameDocument;
 }
 
 export function loreOverlayMerged() {

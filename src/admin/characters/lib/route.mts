@@ -1,6 +1,6 @@
-export const MODULE_IDS = ['overview', 'lore', 'skins', 'source', 'history'] as const;
+export const MODULE_IDS = ['overview', 'lore', 'build', 'skins', 'source', 'history'] as const;
 export type ModuleId = (typeof MODULE_IDS)[number];
-export type CharactersRoute = { view: 'list' } | { view: 'terms'; code?: string } | { view: 'record'; id: string; module: ModuleId };
+export type CharactersRoute = { view: 'list' } | { view: 'terms'; code?: string } | { view: 'gameTerms'; code?: string } | { view: 'record'; id: string; module: ModuleId };
 const BASE = '#/admin/characters';
 
 export function parseCharactersRoute(hash: string): CharactersRoute {
@@ -9,9 +9,12 @@ export function parseCharactersRoute(hash: string): CharactersRoute {
   const [id, module] = parts;
   if (!id) return { view: 'list' };
   if (id === 'terms') return module ? { view: 'terms', code: module } : { view: 'terms' };
+  if (id === 'game-terms') return module ? { view: 'gameTerms', code: module } : { view: 'gameTerms' };
   return { view: 'record', id, module: (MODULE_IDS as readonly string[]).includes(module) ? (module as ModuleId) : 'overview' };
 }
 
 export const recordHref = (id: string, module?: ModuleId) => `${BASE}/${encodeURIComponent(id)}${module ? `/${module}` : ''}`;
 export const TERMS_HREF = `${BASE}/terms`;
 export const termHref = (code: string) => `${TERMS_HREF}/${encodeURIComponent(code)}`;
+export const GAME_TERMS_HREF = `${BASE}/game-terms`;
+export const gameTermHref = (code: string) => `${GAME_TERMS_HREF}/${encodeURIComponent(code)}`;
