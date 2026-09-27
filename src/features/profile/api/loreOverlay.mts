@@ -3,8 +3,9 @@
 export type LoreOverlay = { version: 1; characters: Record<string, unknown> };
 type GameData = { characters?: Record<string, { profile?: unknown }> };
 
-// 20 s: the overlay is merged after the page renders (never blocks it), and the lore file is ~0.3–1.8 MB.
-export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<LoreOverlay | null> {
+// A published DB document: tiny pointer → immutable content file next to it. Any failure → null (the page keeps
+// what it has). 20 s: loaded after the page renders (never blocks it); the lore file is ~0.3–1.8 MB.
+async function loadPointed<T>(pointerUrl: string | undefined, fileName: RegExp, valid: (doc: any) => boolean, fetchImpl: typeof fetch, timeoutMs: number, label: string): Promise<T | null> {
   if (!pointerUrl) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -14,18 +15,32 @@ export async function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fet
     const pointerResponse = await fetchImpl(pointerUrl, { signal: controller.signal, cache: 'no-cache' });
     if (!pointerResponse.ok) throw new Error(`pointer HTTP ${pointerResponse.status}`);
     const pointer = await pointerResponse.json();
-    if (typeof pointer?.file !== 'string' || !/^lore\.[0-9a-f]{12}\.json$/.test(pointer.file)) throw new Error('invalid pointer');
+    if (typeof pointer?.file !== 'string' || !fileName.test(pointer.file)) throw new Error('invalid pointer');
     const response = await fetchImpl(new URL(pointer.file, pointerUrl).toString(), { signal: controller.signal });
-    if (!response.ok) throw new Error(`lore HTTP ${response.status}`);
+    if (!response.ok) throw new Error(`${label} HTTP ${response.status}`);
     const doc = await response.json();
-    if (doc?.version !== 1 || typeof doc.characters !== 'object' || doc.characters === null) throw new Error('invalid lore document');
-    return doc as LoreOverlay;
+    if (!valid(doc)) throw new Error(`invalid ${label} document`);
+    return doc as T;
   } catch (error) {
-    console.warn('[lore] overlay not loaded; showing CN from data.json:', error instanceof Error ? error.message : error);
+    console.warn(`[${label}] not loaded:`, error instanceof Error ? error.message : error);
     return null;
   } finally {
     clearTimeout(timer);
   }
+}
+
+const isObject = (v: unknown) => typeof v === 'object' && v !== null;
+
+export function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<LoreOverlay | null> {
+  return loadPointed(pointerUrl, /^lore\.[0-9a-f]{12}\.json$/, (doc) => doc?.version === 1 && isObject(doc.characters), fetchImpl, timeoutMs, 'lore');
+}
+
+// Game database + builds (server/game/game-document.mjs), published next to the lore pointer: no extra setting.
+export type GameDocument = { version: 1; refs: Record<string, Record<string, any>>; texts: Record<string, Record<string, GameText>>; builds: Record<string, any[]> };
+export type GameText = { cn: string; vi: string | null; detail: string; detail_vi: string | null };
+export function loadGameDocument(lorePointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<GameDocument | null> {
+  const pointerUrl = lorePointerUrl ? new URL('game.pointer.json', lorePointerUrl).toString() : undefined;
+  return loadPointed(pointerUrl, /^game\.[0-9a-f]{12}\.json$/, (doc) => doc?.version === 1 && isObject(doc.refs) && isObject(doc.texts) && isObject(doc.builds), fetchImpl, timeoutMs, 'game');
 }
 
 export function mergeLoreOverlay(gameData: GameData, overlay: LoreOverlay | null): number {

@@ -1,7 +1,7 @@
 // src/features/profile/api/loreOverlay.test.mts
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { loadLoreOverlay, mergeLoreOverlay } from './loreOverlay.mts';
+import { loadGameDocument, loadLoreOverlay, mergeLoreOverlay } from './loreOverlay.mts';
 
 const POINTER = 'https://cdn.example/lore/production/lore.pointer.json';
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
@@ -50,4 +50,19 @@ test('the pointer is always revalidated (no-cache): a reload right after a publi
   };
   await loadLoreOverlay(POINTER, fetchImpl as typeof fetch);
   assert.equal(init[0]?.cache, 'no-cache');
+});
+
+test('game document: game.pointer.json next to the lore pointer, then its game.<hash>.json; anything odd → null', async () => {
+  const seen: string[] = [];
+  const doc = { version: 1, refs: { weapon: {} }, texts: {}, builds: { D0017: [] } };
+  const fetchImpl = async (url: string) => {
+    seen.push(url);
+    return url.endsWith('pointer.json') ? ok({ file: 'game.0123456789ab.json' }) : ok(doc);
+  };
+  assert.deepEqual(await loadGameDocument(POINTER, fetchImpl as typeof fetch), doc);
+  assert.deepEqual(seen, ['https://cdn.example/lore/production/game.pointer.json', 'https://cdn.example/lore/production/game.0123456789ab.json']);
+  assert.equal(await loadGameDocument(undefined), null);
+  assert.equal(await loadGameDocument(POINTER, (async () => ok({ file: 'lore.0123456789ab.json' })) as typeof fetch), null);
+  const noBuilds = async (url: string) => (url.endsWith('pointer.json') ? ok({ file: 'game.0123456789ab.json' }) : ok({ version: 1, refs: {} }));
+  assert.equal(await loadGameDocument(POINTER, noBuilds as typeof fetch), null);
 });
