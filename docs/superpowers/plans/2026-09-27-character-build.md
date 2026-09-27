@@ -1,7 +1,7 @@
 # Character Build — implementation plan
 
 > Date: 2026-09-27. Spec: [`../specs/2026-09-26-character-build-design.md`](../specs/2026-09-26-character-build-design.md) (approved).
-> Branch `claude/build-tab` (from `origin/main` ccc6cb6). Status: **approved 2026-09-27** (Q1–Q5: as recommended). PR 1 (A1–A4, B6, C8, E10–E11) done on the branch; PR 2 next.
+> Branch `claude/build-tab` (from `origin/main` ccc6cb6). Status: **approved 2026-09-27** (Q1–Q5: as recommended). PR 1 (A1–A4, B6, C8, E10) merged (PR #3); steps 5 + 7 run on development and production 2026-09-27. PR 2 (D9, E11, F12–F15) on branch `claude/build-pr2`.
 > Split per state file §10: tasks marked ☁ run in a cloud session (pure code, `npm test`, `tsc`, `npm run build`,
 > `npm run db:generate`); tasks marked 🖥 need the owner's machine (DB, R2, NeoArtifacts, signed-in admin).
 > Every ☁ task: failing `node:test` first, then the least code that passes, then `npm test` + `tsc` + `npm run build`.
@@ -59,6 +59,7 @@
 13. ☁ **Thuật ngữ page**: the new term kinds appear as filter groups (existing page, data-driven).
 14. ☁ **Public Build tab**: React island replacing `views/detail/buildView.js`'s empty state when the overlay has builds: tabs, weapon tiles → popup (icon in `itemRare{rare}` frame, name, resolved skill text), affix groups, 深造 panel (style + 4 columns, hover → talents), rotations as skill icons, tips, team blocks (avatars link to characters), rating + summary. No build → exactly today's empty state. Pure view-model tests; browser check on a stubbed overlay built from the fixtures (375 px + desktop).
 15. ☁ **Icons**: weapon icons + frames as a new R2 asset category in `tools/publish_assets.py` + URL helper in `src/features/assets/assetPaths.js` (missing icon → empty frame). Code + Python test only.
+    - Done differently (PR 2): the icons are already in `public/assets/items` (`itemicon_<id>.png`, all 105 weapons with an icon key), so no new R2 category; rarity is a coloured tile edge for now, the `itemRare{rare}` frame comes with the visual design.
 
 ### G. Local steps (owner's machine, in this order)
 
