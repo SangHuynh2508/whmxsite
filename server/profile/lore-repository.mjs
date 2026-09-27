@@ -1,6 +1,7 @@
 // server/profile/lore-repository.mjs
 import { eq, getTableColumns, inArray, sql } from 'drizzle-orm';
 
+import { characterBuilds, gameReferences, gameTexts } from '../../db/schema/build.mjs';
 import { characters } from '../../db/schema/character-skin.mjs';
 import { editHistory } from '../../db/schema/core.mjs';
 import { characterProfiles, lorePublishLockKey, lorePublishState, loreTerms, profileTexts } from '../../db/schema/profile.mjs';
@@ -26,6 +27,15 @@ export function createLoreRepository(db) {
     async loadPublishProfiles(tx) {
       return resolveAllProfiles(await loadProfileContext(tx), { shape: 'v2' });
     },
+    // game.<hash>.json input (server/game/game-document.mjs): the whole game catalogue, its texts and every build.
+    async loadGameDocumentInput(tx) {
+      return {
+        refs: await tx.select().from(gameReferences),
+        texts: await tx.select().from(gameTexts),
+        builds: await tx.select({ characterId: characters.characterId, position: characterBuilds.position, doc: characterBuilds.doc })
+          .from(characterBuilds).innerJoin(characters, eq(characters.entityId, characterBuilds.characterEntityId)),
+      };
+    },
     async loadBackupPayload(tx) {
       return {
         version: 2,
@@ -34,7 +44,10 @@ export function createLoreRepository(db) {
         profileTexts: await selectProfileTextsWithCharacterId(tx),
         loreTerms: await tx.select().from(loreTerms),
         lorePublishState: await tx.select().from(lorePublishState),
-        editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term'])),
+        // human-written game data (game_references are re-imported from MasterData, not backed up)
+        characterBuilds: await tx.select().from(characterBuilds),
+        gameTexts: await tx.select().from(gameTexts),
+        editHistory: await tx.select().from(editHistory).where(inArray(editHistory.entityType, ['character_profile', 'lore_term', 'character_build', 'game_text'])),
       };
     },
     async readState(tx) {

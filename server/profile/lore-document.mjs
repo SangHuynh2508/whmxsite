@@ -2,6 +2,7 @@
 import { createHash } from 'node:crypto';
 
 export const POINTER_NAME = 'lore.pointer.json';
+export const GAME_POINTER_NAME = 'game.pointer.json'; // server/game/game-document.mjs, same folder as the lore files
 export const IMMUTABLE = 'public, max-age=31536000, immutable';
 export const POINTER_CACHE = 'public, max-age=60';
 

@@ -33,9 +33,9 @@ export function createLoreStorage(config) {
         throw error;
       }
     },
-    async readPointerFile() {
+    async readPointerFile(name = 'lore.pointer.json') {
       try {
-        const response = await client.send(new GetObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}lore.pointer.json` }));
+        const response = await client.send(new GetObjectCommand({ Bucket: config.bucket, Key: `${config.prefix}${name}` }));
         return JSON.parse(await response.Body.transformToString()).file ?? null;
       } catch (error) {
         if (error?.name === 'NoSuchKey' || error?.$metadata?.httpStatusCode === 404) return null;
