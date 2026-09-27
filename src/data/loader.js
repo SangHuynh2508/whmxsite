@@ -3,6 +3,7 @@ import { loadGameDocument, loadLoreOverlay, mergeLoreOverlay } from '../features
 let gameData = null;
 let loreMerged = Promise.resolve();
 // Game database + builds (Build tab); null until published / when it fails to load.
+/** @type {Promise<import("../features/profile/api/loreOverlay.mts").GameDocument | null>} */
 let gameDocument = Promise.resolve(null);
 
 export async function loadGameData() {
