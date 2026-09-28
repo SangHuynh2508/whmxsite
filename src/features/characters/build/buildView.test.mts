@@ -77,6 +77,12 @@ test('rotations: steps with their slot tag, type, icon and notes; a rotation not
   ] }]);
 });
 
+test('a rotation with no label, no note and no known skill is dropped (it rendered a blank row)', () => {
+  const rotations = [{ label: '', note: '', steps: [{ skillId: 'X', note: 'lost' }] }, { label: 'Giữ', note: '', steps: [] }];
+  const [v] = buildViews([{ ...doc, rotations }], game, characters, 'D0017');
+  assert.deepEqual(v.rotations, [{ label: 'Giữ', note: '', steps: [] }]);
+});
+
 test('rotations published before 2026-09-28 (`skillIds`) show as steps without notes', () => {
   const [v] = buildViews([doc], game, characters, 'D0017'); // doc.rotations = [{ label: '0 dupe', skillIds: ['D001701', 'X'] }]
   assert.deepEqual(v.rotations, [{ label: '0 dupe', note: '', steps: [{ id: 'D001701', name: 'Bát Dứu', type: 'Đánh Thường', tag: 'ATK', icon: '/assets/skills/a.png', note: '' }] }]);

@@ -30,7 +30,7 @@ export function TeamsBlock({ teams, teamOther, span, action }: { teams: BuildVie
           {shown.map((t, i) => (
             <div key={i} className="bs-team" style={{ '--n': teamSpan(t), '--n-phone': Math.min(teamSpan(t), 4) } as CSSProperties}>
               {t.label && <h4>{t.label}</h4>}
-              <div className="bs-members">{t.members.map((m) => <a key={m.id} href={m.href}>{m.icon && <img src={m.icon} alt="" />}<span>{m.name}</span></a>)}</div>
+              <div className="bs-members">{t.members.map((m) => <a key={m.id} href={m.href}>{m.icon && <img src={m.icon} alt="" loading="lazy" />}<span>{m.name}</span></a>)}</div>
               {t.note && <p>{t.note}</p>}
             </div>
           ))}

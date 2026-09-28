@@ -1,0 +1,6 @@
+/* Selection ink of segmented controls / tab rows in the character islands (motion.ts useSlider): one lifted-slate
+   block under the buttons that travels to the selected one. The selected button itself stays transparent. */
+.lore-switch, .lore-tabs, .build-tabs { position: relative; }
+.seg-ink { position: absolute; top: 0; left: 0; width: 0; pointer-events: none; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; }
+.lore-switch > .seg-ink { border: 0; border-radius: 4px; } /* inside the switch's 3px padding: concentric with its 6px corner */
+.lore-switch > [role="tab"], .lore-tabs > [role="tab"], .build-tabs > [role="tab"] { position: relative; z-index: 1; transition: color var(--motion-normal) var(--ease-standard); }

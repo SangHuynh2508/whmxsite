@@ -20,6 +20,7 @@ colors:
   rarity-sr: "#c4a265"
   rarity-r: "#4e7091"
   rarity-ssr-text: "#F0A08F"
+  rarity-ssr-on-fill: "#FFD6CC"
   rarity-sr-text: "#E7C96D"
   rarity-r-text: "#AFCDF1"
   rarity-ssr-vivid: "#F0564B"
@@ -191,6 +192,7 @@ shown in Chinese with a small dot, never guessed.
 - Inter for interface, Noto Serif for Vietnamese headings and reading, Noto Serif SC for Chinese.
 - One corner radius (6 px) with three deliberate exceptions.
 - Game sprites are shown as the game draws them; the UI frames them, never redraws them.
+- Motion explains a change: a selection ink that stretches to the new choice, text that arrives in reading order (see Components → Motion).
 
 ## Colors
 
@@ -220,7 +222,7 @@ A near-neutral charcoal ramp with a faint cool cast, one antique gold, and the g
 - **Bone** (`bone-text`): primary text.
 - **Ash** (`ash-text`): all secondary text — labels, captions, hints, notes. `--text-subtle` in code is the same role
   and will be merged into `--text-muted` (owner 2026-09-28); do not introduce a third grey.
-- **Scrim** (`scrim`): the backdrop behind every popover and dialog (canonical 60 %; no token yet — add `--scrim`).
+- **Scrim** (`scrim`, token `--scrim`): the backdrop behind every popover (Build and Lore since 2026-09-28; the Admin dialog still mixes its own).
 
 ### Named Rules
 **The One Lamp Rule.** Antique gold is the only accent. It marks state, structure or a number worth reading; it is
@@ -327,13 +329,13 @@ Tactile and quiet.
 ### Tabs
 - **Page tabs** (character sub-nav: Tổng Quan … Thư Viện): framed tabs in one scrolling row; active = bone text,
   brighter frame and a 2 px antique-gold underline. Layout stays as it is.
-- **In-content tabs** (build variants, lore report tabs, lore switch): 6 px, ash text; selected = lifted-slate fill,
-  hairline border, bone text.
+- **In-content tabs** (build variants, lore report tabs, lore switch): 6 px, ash text; selected = bone text over a
+  lifted-slate "ink" with a hairline border that slides between the buttons (see Motion).
 
 ### Chips
 - **Variant chip** (build variants, 深造 labels): 1 px strong-hairline outline, 600 12 px bone text, 6 px.
 - **Role chip:** outlined pill — the tag's own `--tag-*` colour on text and border (60 %), no fill (owner 2026-09-28, option C). Mapping in `src/ui/utils/tagColors.mts`; a test over `public/data.json` guarantees no two tags of one character share a colour; rare tags share `tag-neutral`.
-- **Rarity chip / badge:** translucent rarity background with its `-text` colour.
+- **Rarity chip / badge:** translucent rarity background with its `-text` colour; on the solid SSR badge fill the text is `rarity-ssr-on-fill` (6.1:1; `rarity-ssr-text` was 3.9:1).
 
 ### Inputs / Fields
 - **Style:** lifted-slate fill, input-hairline border, 6 px, 36 px tall, 14 px text, ash placeholder.
@@ -345,10 +347,22 @@ The small window that opens from a weapon tile, a 深造 unit, a skill cue or a 
 - **Canonical (Build):** lifted-slate, strong-hairline border, 6 px, max 440 px, 16/18 px padding, 14 px/1.7 text,
   serif 17 px title with the game icon beside it, an "Đóng" button, scrim behind. ≤ 640 px it becomes a bottom sheet
   (full width, max 85 dvh, top corners rounded).
-- **Archive variant (Lore):** same shape and behaviour, plus gold-hairline border and paper grain (converge: 6 px
-  corners, the canonical scrim, "Đóng" and the phone bottom sheet).
-- **Thâm tạo popover (planned, owner 2026-09-28):** its four columns (points + talents) sit in a 2 × 2 grid instead of
-  one tall stack, so it stays compact and does not fill the screen.
+- **Archive variant (Lore):** same shape and behaviour (6 px, `--scrim`, "Đóng", phone bottom sheet) plus the
+  gold-hairline border and paper grain.
+- **Thâm tạo popover:** 560 px wide, its four columns (points + talents) in a 2 × 2 grid so it stays compact; on phones
+  the pips drop under each column name (owner 2026-09-28).
+
+### Motion
+One vocabulary for the character-page islands (`src/features/characters/motion.ts`, GSAP, owner 2026-09-28: "ấn tượng
+chút, đừng làm quá"):
+- **Selection ink** (`useSlider`): the leading edge runs to the new choice (0.3 s, expo-out) and the trailing edge
+  follows a beat later (0.55 s), so the ink stretches across and settles. No bounce.
+- **Arrival** (`useReveal`): blocks and paragraphs come in reading order — 10 px rise (or 24 px from the side of the
+  control pressed), 6 px blur → sharp, opacity 0 → 1, 0.6 s expo-out, the whole group starting within 0.3 s.
+- **Reduced motion:** the ink jumps; arrival is a 0.15 s fade. Text is forced visible after 1.5 s if the page gets
+  no animation frames.
+- Tab bodies still cross-fade through `characterDetail.js` (GSAP, ~0.1 s out / 0.16 s in); the islands render
+  synchronously so that fade measures the real height.
 
 ### Build sheet (signature)
 - **Band:** name in serif title, rating as a gold block with night-ink text, credit line ("Tham khảo build của 新月")

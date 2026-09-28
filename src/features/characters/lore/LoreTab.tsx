@@ -1,4 +1,5 @@
 import { StrictMode, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 
 import '../styles/loreTab.css';
@@ -6,6 +7,7 @@ import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
 import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
 import { buildLoreView, factSize, factSpans, keepTogether, type FactSize, type LoreFact, type LoreUnit } from './loreView.mts';
+import { useReveal, useSlider } from '../motion';
 
 function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -25,7 +27,10 @@ function TermPopover({ name, detail, className, style, children }: { name: LoreU
     <>
       <button type="button" className={`${className} lore-term`} style={style} popoverTarget={id}>{children}</button>
       <div popover="auto" id={id} className="lore-popover">
-        <h4>{typeof name === 'string' ? name : <Text unit={name} />}</h4>
+        <div className="lore-pop-head">
+          <h4>{typeof name === 'string' ? name : <Text unit={name} />}</h4>
+          <button type="button" className="lore-close" popoverTarget={id} popoverTargetAction="hide">Đóng</button>
+        </div>
         <Text unit={detail} as="p" className="lore-prose" />
       </div>
     </>
@@ -105,7 +110,21 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
   const view = buildLoreView(char);
   const [leadOpen, setLeadOpen] = useState(false);
   const [relicPanel, setRelicPanel] = useState<'origin' | 'timeline'>('origin');
-  const [report, setReport] = useState(0);
+  const [{ report, reportDir }, setReportState] = useState({ report: 0, reportDir: 0 });
+  const setReport = (i: number) => setReportState((s) => ({ report: i, reportDir: Math.sign(i - s.report) }));
+
+  // motion (../motion.ts): the tab arrives block by block; switches slide their ink and bring the new text in from
+  // the side that was pressed
+  const tabRef = useRef<HTMLElement>(null);
+  const switchRef = useRef<HTMLDivElement>(null);
+  const relicRef = useRef<HTMLDivElement>(null);
+  const reportsRef = useRef<HTMLDivElement>(null);
+  const reportRef = useRef<HTMLDivElement>(null);
+  useReveal(tabRef, '.lore-aside > *, .lore-main > *', char.id);
+  useSlider(switchRef, relicPanel === 'origin' ? 0 : 1);
+  useReveal(relicRef, ':scope > p, :scope > ol > li', relicPanel, relicPanel === 'origin' ? -1 : 1, true);
+  useSlider(reportsRef, report);
+  useReveal(reportRef, ':scope > *', report, reportDir, true);
 
   const factsRow = useRef<HTMLDivElement>(null);
   const facts = view.facts.map((f) => ({ ...f, value: shown(f.value) }));
@@ -116,7 +135,7 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
 
   return (
     <div className="lore-wrap">
-    <section className={hasAside ? 'lore-tab' : 'lore-tab lore-tab--single'} aria-label="Hồ Sơ Lưu Trữ">
+    <section ref={tabRef} className={hasAside ? 'lore-tab' : 'lore-tab lore-tab--single'} aria-label="Hồ Sơ Lưu Trữ">
       {hasAside && (
         <aside className="lore-aside">
           {view.archive && (
@@ -186,11 +205,13 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
           <section className="lore-block">
             <h3 className="lore-title">Hiện vật</h3>
             {view.relicIntro && view.timeline.length > 0 && (
-              <div className="lore-switch" role="tablist" aria-label="Hiện vật">
+              <div className="lore-switch" role="tablist" aria-label="Hiện vật" ref={switchRef}>
+                <span className="seg-ink" aria-hidden="true" />
                 <button type="button" role="tab" aria-selected={relicPanel === 'origin'} onClick={() => setRelicPanel('origin')}>Nguồn gốc</button>
                 <button type="button" role="tab" aria-selected={relicPanel === 'timeline'} onClick={() => setRelicPanel('timeline')}>Dòng thời gian</button>
               </div>
             )}
+            <div ref={relicRef}>
             {(relicPanel === 'origin' || !view.timeline.length) && view.relicIntro
               ? <Text unit={view.relicIntro} as="p" className="lore-prose" />
               : (
@@ -200,13 +221,15 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
                   ))}
                 </ol>
               )}
+            </div>
           </section>
         )}
 
         {view.reports.length > 0 && current && (
           <section className="lore-block">
             <h3 className="lore-title">Báo cáo đánh giá</h3>
-            <div className="lore-tabs" role="tablist" aria-label="Báo cáo đánh giá">
+            <div className="lore-tabs" role="tablist" aria-label="Báo cáo đánh giá" ref={reportsRef}>
+              <span className="seg-ink" aria-hidden="true" />
               {view.reports.map((r, i) => (
                 <button key={i} type="button" role="tab" aria-selected={i === report} onClick={() => setReport(i)}>
                   {r.special
@@ -215,7 +238,7 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
                 </button>
               ))}
             </div>
-            <div role="tabpanel" className="lore-report">
+            <div role="tabpanel" className="lore-report" ref={reportRef}>
               {current.title && <Text unit={current.title} as="p" className="lore-report-title" />}
               {current.unlock && (
                 <p className="lore-unlock">Mở khoá ở cảm ứng <b>{current.unlockLevel !== null && `cấp ${current.unlockLevel} · `}<Text unit={current.unlock} /></b></p>
@@ -255,5 +278,8 @@ export function mountLoreTab(container: HTMLElement, char: unknown) {
   unmountLoreTab();
   container.innerHTML = '';
   root = createRoot(container);
-  root.render(<StrictMode><LoreTab char={char as { id?: string } & Record<string, unknown>} /></StrictMode>);
+  // flushSync: commit now, so characterDetail's tab transition measures the real height (async render made the
+  // lore and build tabs jump in after the fade; owner 2026-09-28 "bị giật")
+  const mounted = root;
+  flushSync(() => mounted.render(<StrictMode><LoreTab char={char as { id?: string } & Record<string, unknown>} /></StrictMode>));
 }

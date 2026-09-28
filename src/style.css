@@ -4478,7 +4478,7 @@
 
 .cd-rarity-badge-large.ssr {
   background: rgba(168, 48, 40, 0.85);
-  color: var(--rarity-ssr-text);
+  color: var(--rarity-ssr-on-fill);
   border: 1px solid rgba(220, 95, 80, 0.65);
 }
 
@@ -4504,7 +4504,7 @@
 
 .rarity-badge.ssr {
   background: rgba(168, 48, 40, 0.85);
-  color: var(--rarity-ssr-text);
+  color: var(--rarity-ssr-on-fill);
   border: 1px solid rgba(220, 95, 80, 0.65);
 }
 

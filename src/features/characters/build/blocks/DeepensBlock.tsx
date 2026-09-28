@@ -17,12 +17,14 @@ function DeepenUnit({ d }: { d: Deepen }) {
         <figure>{d.icon && <img src={d.icon} alt="" />}<figcaption><Text unit={d.style} /></figcaption></figure>
         <span className="bs-serial">{d.serial}{d.variant && <span className="bs-chip">{d.variant}</span>}<small>Xem thiên phú ›</small></span>
       </button>
-      <div popover="auto" id={id} className="bs-pop">
+      <div popover="auto" id={id} className="bs-pop bs-pop-wide">
         <div className="bs-pop-head">
           {d.icon && <img src={d.icon} alt="" />}
           <div><h4><Text unit={d.style} /> · {d.serial}</h4><small>{d.label && `${d.label} · `}{d.total}/11 điểm</small></div>
           <button type="button" className="bs-close" popoverTarget={id} popoverTargetAction="hide">Đóng</button>
         </div>
+        {/* 2 × 2, not one tall stack (owner 2026-09-28: "gọn lại, không chiếm hết màn") */}
+        <div className="bs-cols">
         {d.columns.map((c, i) => (
           <div key={i} className="bs-col">
             <h5>
@@ -33,6 +35,7 @@ function DeepenUnit({ d }: { d: Deepen }) {
             <ol>{c.talents.map((t) => <li key={t.point} className={t.reached ? 'is-reached' : undefined}><Text unit={t.text} /></li>)}</ol>
           </div>
         ))}
+        </div>
       </div>
     </>
   );

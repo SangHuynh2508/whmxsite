@@ -12,13 +12,13 @@ export function RotationBlock({ rotations, span, action }: { rotations: BuildVie
       <div className="bs-rots">
         {rotations.map((r, i) => (
           <div key={i} className="bs-rot">
-            <h4>{r.label}</h4>
+            {r.label && <h4>{r.label}</h4>}
             <div>
               {r.note && <p className="bs-rot-note">{r.note}</p>}
               <ol className="bs-seq">
                 {r.steps.map((s, k) => (
                   <li key={k} title={s.type ? `${s.name} · ${s.type}` : s.name}>
-                    {s.icon ? <img src={s.icon} alt={s.name} /> : <span className="bs-noicon">{s.name}</span>}
+                    {s.icon ? <img src={s.icon} alt={s.name} loading="lazy" /> : <span className="bs-noicon">{s.name}</span>}
                     <b>{s.tag}</b>
                     {s.note && <small>{s.note}</small>}
                   </li>

@@ -28,6 +28,7 @@ document.addEventListener('click', (event) => {
 let currentRenderedCharId = null;
 let currentActiveTab = null;
 let activeTabTransition = null;
+let tabSwitchToken = 0; // bumps on every tab swap; a late island mount checks it before animating
 
 function isReducedMotion() {
   return typeof window !== 'undefined' && 
@@ -41,6 +42,7 @@ function normalizeTab(activeTab) {
 }
 
 function renderTabContent(container, char, tabName) {
+  tabSwitchToken += 1;
   unmountLoreTab(); // every tab swap and character change goes through here
   unmountBuildTab();
   switch (tabName) {
@@ -51,8 +53,7 @@ function renderTabContent(container, char, tabName) {
       renderTalentsTab(container, char);
       break;
     case 'build':
-      renderBuildTab(container, char);
-      break;
+      return renderBuildTab(container, char); // resolves when the sheet is in the DOM
     case 'gallery':
       renderGalleryTab(container, char);
       break;
@@ -155,48 +156,59 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
       duration: 0.09,
       ease: 'power1.out',
       onComplete: () => {
-        // Swap content inside hidden container
-        renderTabContent(tabContentContainer, char, normTab);
+        // Swap content inside hidden container. The Build island fills in after the game document resolves: wait for
+        // it (at most 300 ms, then the empty state animates in and the sheet replaces it) so the height measured
+        // below is the real one — measuring too early made Build/Lore jump in after the fade (owner 2026-09-28).
+        const ready = renderTabContent(tabContentContainer, char, normTab);
+        const token = tabSwitchToken;
+        Promise.race([ready, new Promise((resolve) => setTimeout(resolve, 300))]).then(() => {
+          if (token !== tabSwitchToken) return; // another tab was picked meanwhile
 
-        // Measure next natural content height
-        tabContentContainer.style.height = 'auto';
-        const targetHeight = tabContentContainer.offsetHeight;
+          // Measure next natural content height
+          tabContentContainer.style.height = 'auto';
+          const targetHeight = tabContentContainer.offsetHeight;
 
-        // Constrain height temporarily to prevent layout jump
-        tabContentContainer.style.height = startHeight + 'px';
-        tabContentContainer.style.overflow = 'hidden';
+          // Constrain height temporarily to prevent layout jump
+          tabContentContainer.style.height = startHeight + 'px';
+          tabContentContainer.style.overflow = 'hidden';
 
-        // Set incoming initial state (+4px offset, opacity 0)
-        gsap.set(tabContentContainer, { opacity: 0, y: 4 });
+          // Set incoming initial state (+4px offset, opacity 0)
+          gsap.set(tabContentContainer, { opacity: 0, y: 4 });
 
-        // Coordinated incoming timeline
-        const incomingTl = gsap.timeline({
-          onComplete: () => {
-            // Restore natural flow layout
-            gsap.set(tabContentContainer, { clearProps: 'transform,opacity,height,overflow' });
-            tabContentContainer.style.height = '';
-            tabContentContainer.style.overflow = '';
-            activeTabTransition = null;
-          }
+          // Start on the next frame: rendering a big island costs a frame, and a timeline created before it jumped
+          // ahead by that much (first visible frame already at 40 % opacity).
+          requestAnimationFrame(() => {
+            if (token !== tabSwitchToken) return;
+            // Coordinated incoming timeline
+            const incomingTl = gsap.timeline({
+              onComplete: () => {
+                // Restore natural flow layout
+                gsap.set(tabContentContainer, { clearProps: 'transform,opacity,height,overflow' });
+                tabContentContainer.style.height = '';
+                tabContentContainer.style.overflow = '';
+                activeTabTransition = null;
+              }
+            });
+            activeTabTransition = incomingTl;
+
+            // Height stabilization interpolation (~180ms, power2.out)
+            if (Math.abs(targetHeight - startHeight) > 2) {
+              incomingTl.to(tabContentContainer, {
+                height: targetHeight,
+                duration: 0.18,
+                ease: 'power2.out'
+              }, 0);
+            }
+
+            // Incoming content fade & settle (~160ms, power2.out)
+            incomingTl.to(tabContentContainer, {
+              opacity: 1,
+              y: 0,
+              duration: 0.16,
+              ease: 'power2.out'
+            }, 0);
+          });
         });
-        activeTabTransition = incomingTl;
-
-        // Height stabilization interpolation (~180ms, power2.out)
-        if (Math.abs(targetHeight - startHeight) > 2) {
-          incomingTl.to(tabContentContainer, {
-            height: targetHeight,
-            duration: 0.18,
-            ease: 'power2.out'
-          }, 0);
-        }
-
-        // Incoming content fade & settle (~160ms, power2.out)
-        incomingTl.to(tabContentContainer, {
-          opacity: 1,
-          y: 0,
-          duration: 0.16,
-          ease: 'power2.out'
-        }, 0);
       }
     });
 

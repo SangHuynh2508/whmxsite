@@ -19,5 +19,5 @@ export function renderBuildTab(container, char) {
       </div>
     </div>
   `;
-  mountBuildTab(container, char);
+  return mountBuildTab(container, char);
 }

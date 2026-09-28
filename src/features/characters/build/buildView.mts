@@ -101,7 +101,7 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
           const k = skills.get(s.skillId)!;
           return { id: s.skillId, name: k.name_vi || k.name_cn || s.skillId, type: k.type ?? '', tag: TAGS[k.slot ?? ''] ?? k.type ?? '', icon: asset(k.icon), note: s.note ?? '' };
         }),
-      })),
+      })).filter((r) => r.label || r.note || r.steps.length), // nothing left to show → no blank row
       tips: (doc.tips ?? []).filter((t) => t.trim()),
       teams: (doc.teams ?? []).map((t) => ({
         label: t.label, note: t.note,

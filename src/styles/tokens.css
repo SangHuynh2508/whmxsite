@@ -35,6 +35,7 @@
 
   --rarity-ssr-bg: rgba(145, 55, 45, 0.48);
   --rarity-ssr-text: #F0A08F;
+  --rarity-ssr-on-fill: #FFD6CC; /* text on the SSR badge fill: 6.1:1 (--rarity-ssr-text was 3.9:1; owner 2026-09-28) */
   --rarity-ssr-border: rgba(210, 92, 76, 0.55);
 
   --rarity-sr-bg: rgba(128, 98, 30, 0.48);
@@ -67,6 +68,9 @@
   --tag-indigo: #9FA8F5;
   --tag-teal: #7FD4CF;
   --tag-neutral: #C9CDD2;
+
+  /* Backdrop behind every popover / dialog (DESIGN.md: one scrim). */
+  --scrim: rgb(0 0 0 / .6);
 
   /* Legacy aliases mapping to authoritative global rarity tokens */
   --rare-5: #b93232;
