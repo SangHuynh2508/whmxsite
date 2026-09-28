@@ -4228,7 +4228,7 @@
 }
 
 .character-name {
-  font-family: 'Noto Serif', 'Noto Serif SC', 'Lora', Georgia, serif;
+  font-family: var(--font-serif);
   color: #ffffff;
   line-height: 1.14;
   text-align: center;
@@ -4355,7 +4355,7 @@
 }
 
 .cd-name-vi {
-  font-family: 'Noto Serif', 'Noto Serif SC', 'Lora', Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 21px;
   font-weight: 700;
   color: var(--text-main);
@@ -4942,6 +4942,8 @@
 
 .info-section-header {
   display: flex;
+  flex-wrap: wrap; /* the Lv toggle drops under the title on narrow phones instead of being cut (2026-09-28) */
+  gap: 8px 12px;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
@@ -5763,6 +5765,8 @@
   align-items: center;
   gap: 12px;
 }
+
+.stats-lvl-toggle { flex: none; } /* never shrink: "Lv.120" was cut at 390px */
 
 .stats-lvl-toggle {
   display: flex;

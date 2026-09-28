@@ -41,42 +41,42 @@ colors:
   tag-neutral: "#C9CDD2"
 typography:
   display:
-    fontFamily: "'Noto Serif', 'Noto Serif SC', serif"
+    fontFamily: "Literata, 'Noto Serif SC', serif"
     fontSize: "26px"
     fontWeight: 700
     lineHeight: 1.25
   headline:
-    fontFamily: "'Noto Serif', 'Noto Serif SC', serif"
+    fontFamily: "Literata, 'Noto Serif SC', serif"
     fontSize: "21px"
     fontWeight: 700
     lineHeight: 1.5
   title:
-    fontFamily: "'Noto Serif', 'Noto Serif SC', serif"
+    fontFamily: "Literata, 'Noto Serif SC', serif"
     fontSize: "20px"
     fontWeight: 600
     lineHeight: 1.3
   section:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "'IBM Plex Sans', system-ui, sans-serif"
     fontSize: "16px"
     fontWeight: 600
     lineHeight: 1.3
   body:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "'IBM Plex Sans', system-ui, sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.65
   prose:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "'IBM Plex Sans', system-ui, sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.75
   label:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "'IBM Plex Sans', system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 600
     lineHeight: 1.3
   serial:
-    fontFamily: "'Noto Serif', 'Noto Serif SC', serif"
+    fontFamily: "Literata, 'Noto Serif SC', serif"
     fontSize: "30px"
     fontWeight: 700
     lineHeight: 1
@@ -189,7 +189,8 @@ shown in Chinese with a small dot, never guessed.
 **Key Characteristics:**
 - Charcoal tonal layers (night-ink → archive-slate → lifted-slate); hairline dividers, no drop shadows.
 - One accent: antique gold, used sparingly.
-- Inter for interface, Noto Serif for Vietnamese headings and reading, Noto Serif SC for Chinese.
+- IBM Plex Sans for interface, Literata for Vietnamese headings and reading, Noto Serif SC for Chinese (typography B,
+  2026-09-28).
 - One corner radius (6 px) with three deliberate exceptions.
 - Game sprites are shown as the game draws them; the UI frames them, never redraws them.
 - Motion explains a change: a selection ink that stretches to the new choice, text that arrives in reading order (see Components → Motion).
@@ -239,36 +240,38 @@ forced dark) and is not part of the system.
 
 ## Typography
 
-**Display / heading font:** Noto Serif (with Noto Serif SC, serif)
-**Interface font:** Inter (with system-ui, sans-serif)
-**Chinese:** Noto Serif SC
+**Display / heading font:** Literata (with Noto Serif SC, serif) — `--font-serif`
+**Interface font:** IBM Plex Sans (with system-ui, sans-serif) — `--font-sans`
+**Chinese:** Noto Serif SC — reached through `--font-serif`'s fallback (Literata has no CJK), so a Vietnamese name
+and a Chinese one in the same run each get the right face
 
-**Character:** Inter keeps lookup surfaces crisp and compact; Noto Serif gives Vietnamese headings and archive
-reading the weight of a printed catalogue; Chinese text sits in Noto Serif SC so an untranslated name reads as an
-original, not as UI.
+**Character:** IBM Plex Sans is an engineered, catalogue-like grotesque: crisp at 12–14 px, even tabular numerals for
+build numbers, full Vietnamese. Literata, drawn for long reading, gives Vietnamese headings and the archive the
+weight of a printed catalogue. Chinese sits in Noto Serif SC so an untranslated name reads as an original, not as UI.
+Chosen by the owner from three options on real content (`docs/public-redesign/typography/`).
 
 ### Hierarchy
 - **Display** (700, 26 px, 1.25, serif): the Hồ Sơ Lưu Trữ tab heading.
 - **Headline** (700, 21 px, 1.5, serif): the character name in the detail header.
 - **Title** (600, 20 px, 1.3, serif): the build name in the Build band; popover titles use 600 17 px serif.
-- **Section** (600, 16 px, 1.3, Inter): module headings ("Vũ khí", "Dòng thuộc tính"…), sentence case, no numbers.
+- **Section** (600, 16 px, 1.3, sans): module headings ("Vũ khí", "Dòng thuộc tính"…), sentence case, no numbers.
   Lore section titles are 700 17 px serif over a 1 px full-width rule ("book" headings).
-- **Body** (400, 15 px, 1.65, Inter): lookup text. Lists and cells use 14 px; notes 13 px.
-- **Prose** (400, 15–16 px, 1.75–1.85, Inter): lore reading, max 66 ch, `text-wrap: pretty`.
-- **Label** (500–600, 12–13 px, Inter): tags, chips, captions, tab labels (13 px). **12 px is the floor for UI text.**
+- **Body** (400, 15 px, 1.65, sans): lookup text. Lists and cells use 14 px; notes 13 px.
+- **Prose** (400, 15–16 px, 1.75–1.85, sans): lore reading, max 66 ch, `text-wrap: pretty`.
+- **Label** (500–600, 12–13 px, sans): tags, chips, captions, tab labels (13 px). **12 px is the floor for UI text.**
 - **Serial** (700, 30 px, serif, 0.14 em tracking, tabular numerals): the 深造 serial (7202); 22 px on phones. The
   lore "Mã hồ sơ" serial is monospace 600 14 px in gold — a record number, not a build code.
 
 ### Named Rules
-**The Two Voices Rule.** Serif speaks for the archive (names, headings, reading, serials); Inter speaks for the tool
-(labels, controls, data). Vietnamese serif text uses Noto Serif, never Noto Serif SC first (add a
-`--font-serif-vi` token; the Build band and popovers currently fall to SC).
+**The Two Voices Rule.** Serif (`--font-serif`, Literata) speaks for the archive (names, headings, reading, serials);
+IBM Plex Sans (`--font-sans`) speaks for the tool (labels, controls, data). Never name a font family in feature CSS —
+use the two tokens.
 
 **The Original Name Rule.** Untranslated text stays Chinese, set in Noto Serif SC, followed by a small ash dot
 (one size for the whole site, 4–5 px today) and "(chưa dịch)" for screen readers. Never a guessed translation.
 
 **Drift:** 30+ font sizes in legacy CSS (10–11.5 px, 12.5 px, 13.5 px, rem and px mixed; 128 undersized-text
-findings from the detector); the Chinese name under the character title renders in Inter.
+findings from the detector); the Chinese name under the character title renders in the sans.
 
 ## Layout
 
@@ -321,7 +324,7 @@ belong to archival objects, hairlines to everything else. The image plate carrie
 
 ### Buttons
 Tactile and quiet.
-- **Shape:** 6 px corners, 32 px tall, 12 px side padding, 500 14 px Inter.
+- **Shape:** 6 px corners, 32 px tall, 12 px side padding, 500 14 px sans.
 - **Primary:** antique-gold fill, night-ink text, 600 weight. At most one per view.
 - **Secondary (default):** archive-slate fill, strong-hairline border, bone text; hover-slate on hover.
 - **Ghost:** ash text, no border; bone text on hover-slate on hover.

@@ -86,8 +86,10 @@
   --ease-enter: cubic-bezier(0, 0, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Noto Serif SC', serif;
+  /* Typography B (owner 2026-09-28, docs/public-redesign/typography/): IBM Plex Sans for the interface; Literata for
+     Vietnamese headings/reading — it has no CJK, so Chinese in the same run falls back to Noto Serif SC. */
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif: 'Literata', 'Noto Serif SC', serif;
 
   /* App Rail Layout Variables */
   --app-nav-collapsed-width: 72px;

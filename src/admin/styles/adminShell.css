@@ -42,7 +42,7 @@ html:has(> body.admin-route-active), body.admin-route-active { overflow-x: clip;
   .admin-react-root * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 }
 
-.admin-serif { font-family: 'Noto Serif', var(--font-serif); }
+.admin-serif { font-family: var(--font-serif); }
 .admin-cn { font-family: var(--font-serif); }
 .admin-num { font-variant-numeric: tabular-nums; }
 
