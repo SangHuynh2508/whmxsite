@@ -81,6 +81,28 @@ export function LoreModule({ data }: ModuleProps) {
     setActive(unitKey);
   };
 
+  // Relic + shared terms + recent history: a column on wide screens, a collapsible block at the top of the editor below
+  // 1280 px (owner 2026-09-28: on phones the column was hidden, so editors could not find where to translate the terms).
+  const info = (
+    <>
+      <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Hiện vật</h3>
+      {lore.archiveImages[0] && <img src={lore.archiveImages[0].url} alt="" loading="lazy" className="mb-3 aspect-square w-full max-w-64 rounded-md bg-(--bg-elevated) object-contain" />}
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
+        {termRows.map(([label, t]) => (
+          <Fragment key={label}>
+            <dt className="text-(--text-subtle)">{label}</dt>
+            <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-subtle)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-subtle)">(chưa dịch)</span></>}</a> : '—'}</dd>
+          </Fragment>
+        ))}
+      </dl>
+      <p className="mt-2 text-xs text-(--text-subtle)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
+      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
+      <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
+        <HistoryList entries={lore.history.filter((h) => h.eventType === 'human_edit').slice(0, 5)} labels={labels} />
+      </div>
+    </>
+  );
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-subtle) lg:px-5">
@@ -130,6 +152,10 @@ export function LoreModule({ data }: ModuleProps) {
           onFocus={(event) => { const unit = (event.target as HTMLElement).closest<HTMLElement>('[data-unit]')?.dataset.unit; if (unit) setActive(unit); }}
           className="max-lg:pb-16 lg:h-full lg:overflow-y-auto"
         >
+          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] md:px-8 xl:hidden">
+            <summary className="cursor-pointer text-(--text-muted)">Hiện vật và thuật ngữ · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></summary>
+            <div className="mt-3">{info}</div>
+          </details>
           <PairHead />
           {groups.map((g) => (
             <Fragment key={g.group}>
@@ -157,23 +183,7 @@ export function LoreModule({ data }: ModuleProps) {
           ))}
         </section>
 
-        <aside aria-label="Hiện vật và thuật ngữ" className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">
-          <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Hiện vật</h3>
-          {lore.archiveImages[0] && <img src={lore.archiveImages[0].url} alt="" loading="lazy" className="mb-3 aspect-square w-full rounded-md bg-(--bg-elevated) object-contain" />}
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            {termRows.map(([label, t]) => (
-              <Fragment key={label}>
-                <dt className="text-(--text-subtle)">{label}</dt>
-                <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-subtle)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-subtle)">(chưa dịch)</span></>}</a> : '—'}</dd>
-              </Fragment>
-            ))}
-          </dl>
-          <p className="mt-2 text-xs text-(--text-subtle)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
-          <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
-          <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
-            <HistoryList entries={lore.history.filter((h) => h.eventType === 'human_edit').slice(0, 5)} labels={labels} />
-          </div>
-        </aside>
+        <aside aria-label="Hiện vật và thuật ngữ" className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">{info}</aside>
       </div>
       <SaveBar {...editor} labels={labels} />
     </div>

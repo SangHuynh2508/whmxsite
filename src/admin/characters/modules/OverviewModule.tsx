@@ -26,10 +26,30 @@ export function OverviewModule({ data, reload }: ModuleProps) {
   const peek = useCallback(() => getCharacter(c.characterId).then((d: { character: Character }) => d.character), [c.characterId]);
   const editor = useEditor({ scope: 'character', id: c.characterId, record: c, keys: KEYS, save, reload, peek });
 
+  // Avatar, code, revision, recent history: a column on wide screens, a collapsible block at the top below 1280 px
+  // (owner 2026-09-28: the column was hidden on phones).
+  const info = (
+    <>
+      <Avatar src={characterAvatar(c.characterId)} label={c.characterId} className="mb-4 size-28 rounded-full" />
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
+        <dt className="text-(--text-subtle)">Mã</dt><dd className="font-mono">{c.characterId}</dd>
+        <dt className="text-(--text-subtle)">Phiên bản</dt><dd className="font-mono">{c.revision}</dd>
+      </dl>
+      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
+      <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
+        <HistoryList entries={data.history.filter((h) => h.entityId === c.entityId && !h.eventType.startsWith('source_')).slice(0, 5)} labels={CHARACTER_FIELD_LABELS} />
+      </div>
+    </>
+  );
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 xl:grid xl:grid-cols-[1fr_280px]">
         <section aria-label="Tổng quan" className="max-lg:pb-16 lg:h-full lg:overflow-y-auto">
+          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] md:px-8 xl:hidden">
+            <summary className="cursor-pointer text-(--text-muted)">Thông tin hồ sơ</summary>
+            <div className="mt-3">{info}</div>
+          </details>
           <PairHead />
           {FIELDS.map((f) => {
             const state = c[f.key] as Character['nameVi'];
@@ -48,17 +68,7 @@ export function OverviewModule({ data, reload }: ModuleProps) {
             );
           })}
         </section>
-        <aside aria-label="Thông tin hồ sơ" className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">
-          <Avatar src={characterAvatar(c.characterId)} label={c.characterId} className="mb-4 size-28 rounded-full" />
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            <dt className="text-(--text-subtle)">Mã</dt><dd className="font-mono">{c.characterId}</dd>
-            <dt className="text-(--text-subtle)">Phiên bản</dt><dd className="font-mono">{c.revision}</dd>
-          </dl>
-          <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
-          <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
-            <HistoryList entries={data.history.filter((h) => h.entityId === c.entityId && !h.eventType.startsWith('source_')).slice(0, 5)} labels={CHARACTER_FIELD_LABELS} />
-          </div>
-        </aside>
+        <aside aria-label="Thông tin hồ sơ" className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">{info}</aside>
       </div>
       <SaveBar {...editor} labels={Object.fromEntries(FIELDS.map((f) => [f.key, f.label]))} />
     </div>
