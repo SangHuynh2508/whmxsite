@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build — C · Tấm thẻ build</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Hướng C · Tấm thẻ build (logic 3: "nhà thiết kế hợp nhất" = Massimo Vignelli — Unigrid, lưới 12 cột, băng tiêu đề,
+  mô-đun đánh số, thông tin dày mà vẫn trật tự). Form lấy từ nội dung: thẻ build của content creator (新月) — cả build
+  thấy trong một khung, chụp màn hình là chia sẻ được (a) — nhưng mỗi mô-đun là một khối riêng có số, đọc như bảng
+  tra (c). Vòng 2 (2026-09-28, xem direction-approved.md): dòng thuộc tính kiểu B; thâm tạo = biểu tượng lưu phái của game
+  (Speciality_<styleId>) + tên dưới, bộ số bên cạnh, bấm mở popup chi tiết; xoay vòng có nhãn ATK/SKILL/ULT.
+-->
+<style>
+.sheet{border:1px solid var(--border-strong);border-radius:6px;overflow:hidden;background:var(--bg-surface)}
+.band{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px 24px;padding:18px 22px;border-bottom:2px solid var(--accent)}
+.band h2{margin:0;font:700 30px/1.1 var(--font-serif)}
+.band p{margin:0;color:var(--text-muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr))}
+.mod{padding:18px 22px 20px;border-right:1px solid var(--border-color);border-bottom:1px solid var(--border-color);min-width:0}
+.mod h3{margin:0 0 14px;font:600 16px/1.3 var(--font-sans);color:var(--text-main)}
+.deep:active,.wtile:active{transform:scale(.98)}
+/* rows are pairs split at different columns (5|7, then 4|8) so the vertical rules never line up — the staggered
+   Unigrid look; a pair only holds while both halves stay short, otherwise each half takes the full width (pairOk) */
+.s4{grid-column:span 4}.s5{grid-column:span 5}.s7{grid-column:span 7;border-right:0}.s8{grid-column:span 8;border-right:0}.s12{grid-column:1/-1;border-right:0}.mod:last-child{border-bottom:0}
+/* weapons: big tiles side by side with the label under */
+.ws{display:flex;gap:16px}
+.ws figure{margin:0;display:grid;gap:6px;justify-items:start;width:136px}
+.ws figcaption{font-size:13px;line-height:1.35}
+.ws figcaption em{display:block;color:var(--accent);font-style:normal;font-size:12px;font-weight:600}
+/* affix tiers — B's cells (owner: easier to read) */
+.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.cell{padding:12px 14px;background:var(--bg-elevated);border-radius:6px}
+.cell h4{margin:0 0 8px;font:600 12px/1.3 var(--font-sans);letter-spacing:.1em;color:var(--accent)}
+.cell ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:14px}
+/* 深造: game emblem (Speciality_<styleId>) + name under it, serial beside; the whole unit opens the detail popup */
+.deeps{display:flex;flex-wrap:wrap;gap:12px 28px}
+.deep{display:grid;grid-template-columns:auto auto;align-items:center;gap:0 12px;padding:6px 10px 6px 4px;border:0;border-radius:6px;background:none;cursor:pointer;text-align:left}
+.deep:hover{background:var(--bg-surface-hover)}
+.deep:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.deep figure{margin:0;display:grid;justify-items:center;gap:2px;width:72px}
+.deep figure img{width:60px;height:60px}
+.deep figcaption{font-size:12px;line-height:1.3;text-align:center}
+.deep .num{font:700 30px/1 var(--font-serif);letter-spacing:.14em}
+.deep .num small{display:block;margin-top:6px;font:500 12px/1 var(--font-sans);letter-spacing:0;color:var(--text-subtle)}
+.pop-deep .pop-head img{width:52px;height:52px}
+.col{margin-top:12px}
+.col h5{display:grid;grid-template-columns:1fr 112px 20px;gap:10px;align-items:center;margin:0 0 4px;font-size:14px;font-weight:600}
+.col h5 b{text-align:right;font-variant-numeric:tabular-nums}
+.pips{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.pips i{height:8px;border-radius:2px;box-shadow:inset 0 0 0 1px var(--border-strong)}
+.pips i.on{background:var(--accent);box-shadow:none}
+.col ol{margin:0;padding-left:20px;font-size:13px;color:var(--text-subtle)}
+.col ol .on{color:var(--text-main)}
+/* rotation: icon + short slot tag under it */
+.seq{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap}
+.seq figure{margin:0;display:grid;justify-items:center;gap:4px}
+.seq img{width:46px;height:46px}
+.rots{display:grid;gap:14px}
+.rot{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:4px 20px;align-items:start}
+.s4 .rot{grid-template-columns:1fr}
+.rot h4{margin:0;padding-top:4px;font:600 13px/1.4 var(--font-sans);color:var(--text-muted)}
+.rot p{margin:0 0 8px;font-size:13px;color:var(--text-subtle);max-width:70ch}
+.seq figure{width:64px}.seq figure small{font-size:11px;line-height:1.3;color:var(--accent);text-align:center}
+.seq figcaption{font:600 11px/1 var(--font-sans);letter-spacing:.08em;color:var(--text-muted)}
+.seq>span{color:var(--text-subtle);padding-top:14px}
+/* tips: free text of any length, own full-width module, 2 columns on wide screens */
+.tips{margin:0;padding-left:18px;columns:2 380px;column-gap:40px;font-size:14px;color:var(--text-muted)}
+.tips li{break-inside:avoid;margin-bottom:8px}
+/* teams: packed grid. One track ≈ one avatar; a group spans as many tracks as it needs (members, label, note) and
+   `dense` backfills the gaps, so every row reaches the right edge. */
+.pack{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));grid-auto-flow:row dense;gap:18px 0}
+.pack>div{grid-column:span var(--n);padding-right:12px;min-width:0}
+@media (max-width:640px){.pack>div{grid-column:span min(var(--n),4)}}
+.pack h4{margin:0 0 6px;font:600 12px/1.3 var(--font-sans);color:var(--text-muted)}
+.pack .m{display:flex;flex-wrap:wrap;gap:4px}
+.pack .ava{width:64px;font-size:11px}.pack .ava img{width:44px;height:44px}
+.pack p{margin:4px 0 0;font-size:12px;color:var(--text-subtle)}
+@media (max-width:980px){.s4,.s5,.s7,.s8{grid-column:1/-1;border-right:0}}
+@media (max-width:640px){.cells,.rot{grid-template-columns:1fr}.mod{padding:16px}.band{padding:16px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="w0182-data.js"></script>
+<script src="common.js"></script>
+<script>
+if (location.search.includes('stress')) {
+  const x = B.build, w = x.weapons, g = x.affixes.groups, d = x.deepens;
+  x.weapons = [w[0], w[1], w[0], w[1]];
+  x.affixes.groups = [...g, { label: 'T4 – nếu dư', items: [...g[1].items, ...g[2].items] }, { label: 'Không cần', items: g[2].items }];
+  g[1].items = [...g[1].items, ...g[2].items, ...g[0].items];
+  x.deepens = [...d, { ...d[0], label: 'Đi rừng thử nghiệm' }];
+  x.rotations = [...x.rotations, { ...x.rotations[0], label: 'Khi có Mạc Cao Quật Ký' }, { ...x.rotations[0], label: 'Mở màn' }];
+  x.tips = [...x.tips, ...x.tips.map((t) => t + ' ' + t)];
+}
+if (location.search.includes('rot')) {
+  // V0055 Thố Hình Đào Huân, from the 新月 card: phases as separate rotations, a note on one step, a note on a rotation
+  const I = '../../../../public/assets/skills/skillicon_', sk = { ATK: ['Thố Đăng', 'Đánh Thường', 'Commonattack_V'], SKILL: ['Dị Vị Di Ảnh', 'Kỹ Năng Nghề', 'V005511'], ULT: ['Âm Khổng Huyễn Động', 'Tuyệt Kỹ', 'V005502'] };
+  const st = (k, note = '') => ({ name: sk[k][0], type: sk[k][1], icon: `${I}${sk[k][2]}.png`, note });
+  B.build.rotations = [
+    { label: 'Lượt đầu', note: '', skills: [st('ULT'), st('SKILL'), st('ATK')] },
+    { label: 'Các lượt sau', note: '', skills: [st('SKILL', 'dùng lên Thố Động'), st('SKILL'), st('ATK')] },
+    { label: 'Tam Trí', note: 'Tam Trí, hoặc Linh Trí mang 旧画刀 trộm năng lượng. Lượt đầu: Tuyệt Kỹ → Kỹ Năng Nghề → Đánh Thường; sau đó như dưới (Kỹ Năng Nghề đầu tiên dùng lên Thố Động).', skills: [st('SKILL'), st('ULT'), st('SKILL'), st('ATK')] },
+  ];
+}
+const b = B.build;
+// demo only: the real view reads job_style.icon (= MasterData styleIcon) and the skill slot
+const EMBLEM = { '储能': 'assets/Speciality_401.png', '威慑': 'assets/Speciality_402.png' };
+const SHORT = { 'Đánh Thường': 'ATK', 'Kỹ Năng Nghề': 'SKILL', 'Tuyệt Kỹ': 'ULT' };
+const mod = (cls, title, body) => `<section class="mod ${cls}"><h3>${title}</h3>${body}</section>`;
+const pips = (n) => `<span class="pips">${Array.from({ length: 7 }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+const deepen = (d, i) => `<button class="deep" popovertarget="deep-${i}">
+    <figure><img src="${EMBLEM[d.style.cn]}" alt=""><figcaption>${nm(d.style)}</figcaption></figure>
+    <span class="num">${d.points.join('')}<small>${esc(d.label)}</small></span></button>
+  <div popover id="deep-${i}" class="pop-deep"><div class="pop-head"><img src="${EMBLEM[d.style.cn]}" alt="">
+    <div><h4>${nm(d.style)} · ${d.points.join('')}</h4><small>${esc(d.label)} · ${d.points.reduce((x, y) => x + y, 0)}/11 điểm</small></div></div>
+    ${d.columns.map((c) => `<div class="col"><h5><span>${nm(c.name)}</span>${pips(c.points)}<b>${c.points}</b></h5>
+      <ol>${c.talents.map((t, k) => `<li class="${k < c.points ? 'on' : ''}">${esc(t)}</li>`).join('')}</ol></div>`).join('')}</div>`;
+// Pairing rule (pure, data-only → testable in the React version): the short left block sits next to the right block only
+// when the left fits its 4 columns and neither would leave a tall hole beside the other; otherwise both go full width.
+const pairOk = { top: b.weapons.length <= 2 && b.affixes.groups.length <= 3 && Math.max(0, ...b.affixes.groups.map((g) => g.items.length)) <= 5,
+  mid: b.deepens.length <= 3 && b.rotations.length <= 2 && b.rotations.every((r) => r.skills.length <= 5 && !r.note) };
+// a team group spans enough tracks for its members, its label (~9 chars/track) and its note (~3 lines)
+const teamSpan = (t) => Math.min(6, Math.max(2, t.members.length, Math.ceil(t.label.length / 9), Math.ceil((t.note ?? '').length / 30)));
+const span = (ok, cols) => (ok ? `s${cols}` : 's12');
+const blocks = [
+  [span(pairOk.top, 5), 'Vũ khí', `<div class="ws">${b.weapons.map((w) => `<figure>${weaponTile(w, 96)}<figcaption><em>${esc(w.label)}</em>${nm(w.name)}</figcaption></figure>`).join('')}</div>`],
+  [span(pairOk.top, 7), 'Dòng thuộc tính', `<div class="cells">${b.affixes.groups.map((g) => `<div class="cell"><h4>${esc(g.label)}</h4><ul>${g.items.map((a) => `<li>${affix(a)}</li>`).join('')}</ul></div>`).join('')}</div>`],
+  [span(pairOk.mid, 4), 'Xoay vòng', `<div class="rots">${b.rotations.map((r) => `<div class="rot"><h4>${esc(r.label)}</h4><div>${r.note ? `<p>${esc(r.note)}</p>` : ''}<div class="seq">${r.skills.map((s, i) => `${i ? '<span>›</span>' : ''}<figure title="${esc(s.name)} · ${esc(s.type)}"><img class="skill-ico" src="${s.icon}" alt="${esc(s.name)}"><figcaption>${SHORT[s.type] ?? esc(s.type)}</figcaption>${s.note ? `<small>${esc(s.note)}</small>` : ''}</figure>`).join('')}</div></div></div>`).join('')}</div>`],
+  [span(pairOk.mid, 8), 'Thâm tạo', `<div class="deeps">${b.deepens.map(deepen).join('')}</div>`],
+  ['s12', 'Mẹo', `<ol class="tips">${b.tips.map((t) => `<li>${esc(t)}</li>`).join('')}</ol>`],
+  ['s12', 'Đội hình', `<div class="pack">${b.teams.map((t) => `<div style="--n:${teamSpan(t)}"><h4>${esc(t.label)}</h4><div class="m">${t.members.map(avatar).join('')}</div>${t.note ? `<p>${esc(t.note)}</p>` : ''}</div>`).join('')}</div>`],
+].filter(([, , body]) => body && !/^<div class="[a-z]+"><\/div>$|^<ol class="tips"><\/ol>$/.test(body)); // empty block = not shown
+const renderBlocks = (list) => list.map(([cls, title, body]) => mod(cls, title, body)).join('');
+document.getElementById('app').innerHTML = shell(`<article class="sheet">
+  <header class="band"><h2>${esc(b.name)}</h2><p>${esc(b.summary)}</p></header>
+  <div class="grid">${renderBlocks(blocks)}</div>
+</article>`);
+</script>
+</body>
+</html>

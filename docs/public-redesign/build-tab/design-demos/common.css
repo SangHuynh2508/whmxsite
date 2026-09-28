@@ -1,0 +1,47 @@
+/* Shared by the three Build-tab demos: the site's dark tokens (src/styles/tokens.css), the character page shell,
+   the weapon tile (game rarity frame + icon), the popover and the "chưa dịch" dot. Layout lives in each demo. */
+:root{--bg-main:#111315;--bg-surface:#17191C;--bg-surface-hover:#22262B;--bg-elevated:#1C2024;--border-color:#2B2F34;--border-strong:#3D434A;
+  --text-main:#E3E5E8;--text-muted:#9097A0;--text-subtle:#8A9099;--accent:#D4B763;--accent-light:#24221A;--shadow-pop:rgba(0,0,0,.55);
+  --border-gold-subtle:rgba(212,183,99,.30);--border-gold-divider:rgba(212,183,99,.16);
+  --rarity-ssr-bg:rgba(145,55,45,.48);--rarity-ssr-text:#F0A08F;--rarity-ssr-border:rgba(210,92,76,.55);
+  --rarity-sr-bg:rgba(128,98,30,.48);--rarity-sr-text:#E7C96D;--rarity-sr-border:rgba(214,176,68,.55);
+  --rarity-r-bg:rgba(52,82,116,.50);--rarity-r-text:#AFCDF1;--rarity-r-border:rgba(105,149,202,.55);
+  --font-sans:'Inter',system-ui,sans-serif;--font-serif:'Noto Serif SC',serif;--ease:cubic-bezier(.2,0,0,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:15px/1.65 var(--font-sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+/* character page shell (as on the site) */
+.shell{max-width:1120px;margin:0 auto;padding:24px 16px 80px}
+.char{display:flex;gap:16px;align-items:center}
+.char img{width:64px;height:64px;border-radius:6px;object-fit:cover;background:var(--bg-surface)}
+.char h1{margin:0;font:600 26px/1.2 var(--font-serif)}
+.char p{margin:2px 0 0;color:var(--text-muted);font-size:13px}
+.tabs{display:flex;gap:6px;margin:20px 0 28px;overflow-x:auto;scrollbar-width:none}
+.tabs span{flex:none;padding:7px 14px;border:1px solid var(--border-color);border-radius:4px;color:var(--text-muted);font-size:14px}
+.tabs span.on{color:var(--text-main);border-color:var(--border-strong);box-shadow:inset 0 -2px var(--accent)}
+/* untranslated game name */
+.cn{font-family:var(--font-serif)}
+.cn::after{content:"";display:inline-block;width:4px;height:4px;margin:0 0 .2em .35em;border-radius:50%;background:var(--text-subtle);vertical-align:middle}
+/* weapon tile: frame is the game's itemRare{rare}; icon ~88% of the frame, nudged down (owner: smaller than the game) */
+.wtile{position:relative;flex:none;width:var(--tile,72px);aspect-ratio:1;background:center/100% no-repeat;border:0;padding:0;cursor:pointer}
+.wtile img{position:absolute;left:6%;top:9%;width:88%;height:88%;object-fit:contain;transition:transform .2s var(--ease)}
+.wtile:hover img,.wtile:focus-visible img{transform:translateY(-2px)}
+.wtile:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+/* popover (native) */
+[popover]{margin:auto;max-width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:16px 18px;border:1px solid var(--border-strong);border-radius:6px;background:var(--bg-elevated);color:var(--text-main)}
+[popover]::backdrop{background:rgba(0,0,0,.35)}
+.pop-head{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.pop-head h4{margin:0;font:600 17px/1.3 var(--font-serif)}
+.pop-head small{color:var(--text-subtle)}
+.pop-skill b{color:var(--accent);font-weight:600}
+.pop-skill h5{margin:10px 0 4px;font-size:13px;color:var(--text-muted);font-weight:600}
+.pop-skill p{margin:0;font-size:14px;line-height:1.7}
+/* avatar */
+.ava{display:grid;justify-items:center;gap:4px;width:64px;color:var(--text-muted);font-size:12px;line-height:1.3;text-align:center;text-decoration:none}
+.ava img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:var(--bg-surface);border:2px solid var(--border-strong)}
+.ava[data-rare="5"] img{border-color:var(--rarity-ssr-border)}
+.ava[data-rare="4"] img{border-color:var(--rarity-sr-border)}
+.ava[data-rare="3"] img{border-color:var(--rarity-r-border)}
+.ava:hover{color:var(--text-main)}
+.skill-ico{width:40px;height:40px;border-radius:6px;background:var(--bg-surface)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

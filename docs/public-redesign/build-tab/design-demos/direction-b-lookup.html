@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build — B · Tra cứu xếp hạng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Hướng B · Tra cứu xếp hạng (logic 2: chuẩn thực tế — prydwen.gg, trang build Honkai: Star Rail, đã xem trực tiếp
+  2026-09-27: danh sách xếp hạng #1/#2 + icon + tên + đoạn giải thích; tiêu đề mục viết hoa; mục "Best Stats" dạng lưới;
+  tab Build and teams). Chuyển sang WHMX: dải "Tóm tắt nhanh" ở đầu = phần (a) chụp chia sẻ được; bên dưới là trang
+  tra cứu (c) với mục lục dính bên trái trên desktop. Thâm tạo = 4 thanh 7 ô (điểm đọc bằng mắt, không cần đếm số).
+-->
+<style>
+.quick{display:grid;grid-template-columns:auto auto 1fr;gap:28px;align-items:center;padding:18px 20px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px}
+.quick h2{margin:0;font:700 22px/1.2 var(--font-serif)}
+.quick p{margin:4px 0 0;color:var(--text-muted);font-size:13px}
+.quick .w{display:flex;gap:8px}
+.q-lab{display:block;font:600 11px/1 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:8px}
+.q-serial{display:flex;gap:18px;justify-content:flex-end;flex-wrap:wrap}
+.q-serial div{text-align:right}
+.q-serial b{font:700 26px/1 var(--font-serif);letter-spacing:.14em}
+.layout{display:grid;grid-template-columns:170px minmax(0,1fr);gap:40px;margin-top:28px}
+.toc{position:sticky;top:20px;align-self:start;display:grid;gap:2px;font-size:14px}
+.toc a{color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+.toc a:first-child{color:var(--text-main);background:var(--bg-surface)}
+.sec{padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--border-color)}
+.sec>h3{margin:0 0 16px;font:700 13px/1 var(--font-sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+/* ranked weapons */
+.rank{display:grid;grid-template-columns:48px auto 1fr;gap:18px;align-items:start;padding:14px 0}
+.rank+.rank{border-top:1px solid var(--border-color)}
+.rank>span{font:700 28px/1 var(--font-serif);color:var(--text-subtle);padding-top:8px}
+.rank h4{margin:0;font:600 18px/1.3 var(--font-serif)}
+.rank .lab{display:inline-block;margin:4px 0 6px;padding:2px 8px;border-radius:3px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600}
+.rank .sk{margin:0;color:var(--text-muted);font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rank .sk b{color:var(--text-main);font-weight:600}
+/* stats grid */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cell{padding:14px 16px;background:var(--bg-surface);border-radius:6px}
+.cell h5{margin:0 0 8px;font:600 12px/1 var(--font-sans);letter-spacing:.14em;color:var(--text-subtle)}
+.cell ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+/* 深造 bars */
+.deep{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.deep .cell h4{display:flex;justify-content:space-between;margin:0 0 12px;font:600 15px/1.3 var(--font-sans)}
+.deep .cell h4 small{color:var(--text-subtle);font-weight:500}
+.bar{display:grid;grid-template-columns:84px 1fr 20px;gap:10px;align-items:center;font-size:13px;margin-top:6px}
+.pips{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.pips i{height:8px;border-radius:2px;background:var(--border-color)}
+.pips i.on{background:var(--accent)}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+.deep details{margin-top:10px;font-size:13px;color:var(--text-subtle)}
+.deep summary{cursor:pointer}
+/* rotation + tips */
+.chain{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chain .s{display:flex;gap:8px;align-items:center;padding:6px 10px 6px 6px;background:var(--bg-surface);border-radius:6px;font-size:13px}
+.chain .s small{display:block;color:var(--text-subtle);font-size:11px}
+.tips{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.tips li{padding-left:18px;position:relative}
+.tips li::before{content:"";position:absolute;left:2px;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+/* teams */
+.teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.teams .cell h5{letter-spacing:.06em;color:var(--text-main);font-size:13px}
+.teams .m{display:flex;flex-wrap:wrap;gap:6px}
+.teams p{margin:6px 0 0;color:var(--text-subtle);font-size:12px}
+@media (max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}.quick{grid-template-columns:1fr}.q-serial{justify-content:flex-start}.q-serial div{text-align:left}}
+@media (max-width:640px){.grid3,.teams{grid-template-columns:1fr}.rank{grid-template-columns:auto 1fr}.rank>span{display:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="w0182-data.js"></script>
+<script src="common.js"></script>
+<script>
+const b = B.build;
+const plain = (h) => h.replace(/<br>/g, ' ');
+document.getElementById('app').innerHTML = shell(`
+<section class="quick" aria-label="Tóm tắt nhanh">
+  <div><h2>${esc(b.name)}</h2><p>${esc(b.summary)}</p></div>
+  <div><span class="q-lab">Vũ khí</span><div class="w">${b.weapons.map((w) => weaponTile(w, 56)).join('')}</div></div>
+  <div class="q-serial">${b.deepens.map((d) => `<div><span class="q-lab">${esc(d.label)} · ${nm(d.style)}</span><b>${d.points.join('')}</b></div>`).join('')}</div>
+</section>
+<div class="layout">
+  <nav class="toc"><a href="#w">Vũ khí</a><a href="#a">Dòng thuộc tính</a><a href="#d">Thâm tạo</a><a href="#r">Xoay vòng &amp; mẹo</a><a href="#t">Đội hình</a></nav>
+  <div>
+    <section class="sec" id="w"><h3>Vũ khí đề xuất</h3>${b.weapons.map((w, i) => `<div class="rank"><span>${i + 1}</span>${weaponTile(w, 72)}<div><h4>${nm(w.name)}</h4><span class="lab">${esc(w.label)}</span><p class="sk">${w.skills[0] ? plain(w.skills[0].text) : ''}</p></div></div>`).join('')}</section>
+    <section class="sec" id="a"><h3>Dòng thuộc tính</h3><div class="grid3">${b.affixes.groups.map((g) => `<div class="cell"><h5>${esc(g.label)}</h5><ul>${g.items.map((a) => `<li>${affix(a)}</li>`).join('')}</ul></div>`).join('')}</div></section>
+    <section class="sec" id="d"><h3>Thâm tạo</h3><div class="deep">${b.deepens.map((d) => `<div class="cell"><h4>${esc(d.label)} <small>${nm(d.style)} · ${d.points.reduce((x, y) => x + y, 0)}/11</small></h4>
+      ${d.columns.map((c) => `<div class="bar"><span>${nm(c.name)}</span><span class="pips">${Array.from({ length: 7 }, (_, i) => `<i class="${i < c.points ? 'on' : ''}"></i>`).join('')}</span><b>${c.points}</b></div>`).join('')}
+      <details><summary>Thiên phú đã đạt</summary><ul>${d.columns.flatMap((c) => c.talents.slice(0, c.points).map((t) => `<li>${nm(c.name)}: ${esc(t)}</li>`)).join('')}</ul></details></div>`).join('')}</div></section>
+    <section class="sec" id="r"><h3>Xoay vòng &amp; mẹo</h3>${b.rotations.map((r) => `<div class="chain">${r.skills.map((s, i) => `${i ? '<span style="color:var(--text-subtle)">→</span>' : ''}<span class="s"><img class="skill-ico" src="${s.icon}" alt=""><span>${esc(s.name)}<small>${esc(s.type)}</small></span></span>`).join('')}</div>`).join('')}
+      <ul class="tips">${b.tips.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></section>
+    <section class="sec" id="t"><h3>Đội hình</h3><div class="teams">${b.teams.map((t) => `<div class="cell"><h5>${esc(t.label)}</h5><div class="m">${t.members.map(avatar).join('')}</div>${t.note ? `<p>${esc(t.note)}</p>` : ''}</div>`).join('')}</div></section>
+  </div>
+</div>`);
+</script>
+</body>
+</html>

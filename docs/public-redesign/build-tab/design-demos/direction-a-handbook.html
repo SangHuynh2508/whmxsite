@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build — A · Sổ tay</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Hướng A · Sổ tay (logic 1: quay số 51 % 20 + 1 = 12 → "Warm Editorial" của huashu, chuyển sang tông tối vì site chỉ dùng dark).
+  Form lấy từ nội dung: một build là một trang sổ tay hướng dẫn — đọc từ trên xuống theo thứ tự chơi thật
+  (trang bị → dòng → thâm tạo → cách đánh → ghép đội). Cột đọc hẹp (~720px) + lề phải ghi chú kiểu sách (marginalia)
+  trên desktop. Bộ số thâm tạo 7·2·0·2 in to bằng serif như số seri trên thẻ của 新月 (mô-típ lấy từ ảnh tham khảo).
+  Không thẻ lồng thẻ: phân mục bằng tiêu đề chương + đường kẻ mảnh.
+-->
+<style>
+.book{display:grid;grid-template-columns:minmax(0,720px) minmax(0,1fr);gap:0 56px}
+.head{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;padding-bottom:20px;border-bottom:1px solid var(--border-strong)}
+.head h2{margin:0;font:700 40px/1.1 var(--font-serif);letter-spacing:.01em}
+.head p{margin:0;color:var(--text-muted)}
+.chap{grid-column:1;padding:28px 0 8px;border-bottom:1px solid var(--border-color)}
+.chap>h3{display:flex;align-items:baseline;gap:12px;margin:0 0 16px;font:600 20px/1.3 var(--font-serif)}
+.chap>h3 i{font-style:normal;font:500 13px/1 var(--font-sans);letter-spacing:.2em;color:var(--accent)}
+.note{grid-column:2;align-self:start;padding-top:34px;font-size:13px;color:var(--text-muted);line-height:1.6}
+.note b{color:var(--text-main);font-weight:600}
+/* weapons: one line each, like an entry in a catalogue */
+.wrow{display:flex;gap:18px;align-items:center;padding:10px 0}
+.wrow+.wrow{border-top:1px dashed var(--border-color)}
+.wrow h4{margin:0;font:600 18px/1.3 var(--font-serif)}
+.wrow em{display:block;color:var(--accent);font-style:normal;font-size:13px;letter-spacing:.04em}
+.wrow small{color:var(--text-subtle);font-size:13px}
+/* affix tiers */
+.tiers{display:grid;gap:10px;margin:0}
+.tiers div{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:baseline}
+.tiers dt{font:600 13px/1.4 var(--font-sans);color:var(--accent);letter-spacing:.08em}
+.tiers dd{margin:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px}
+/* 深造 */
+.deep{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px}
+.deep h4{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px;font:600 14px/1.4 var(--font-sans);color:var(--text-muted)}
+.serial{font:700 44px/1 var(--font-serif);letter-spacing:.18em;color:var(--text-main)}
+.serial span{color:var(--text-subtle)}
+.cols{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px}
+.cols li{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:baseline;font-size:14px}
+.cols li::after{content:"";grid-column:2;grid-row:1;border-bottom:1px dotted var(--border-strong);transform:translateY(-4px)}
+.cols b{grid-column:3;font-variant-numeric:tabular-nums}
+.cols details{grid-column:1/-1}
+.cols summary{cursor:pointer;color:var(--text-subtle);font-size:12px}
+.cols ol{margin:4px 0 8px;padding-left:20px;color:var(--text-subtle);font-size:13px}
+.cols ol .on{color:var(--text-main)}
+/* rotation */
+.rot{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.rot figure{margin:0;display:grid;justify-items:center;gap:4px;width:84px;text-align:center;font-size:12px;color:var(--text-muted);line-height:1.3}
+.rot .arrow{color:var(--text-subtle)}
+.tips{margin:0;padding-left:22px;display:grid;gap:8px}
+.tips li::marker{color:var(--accent);font-family:var(--font-serif)}
+/* teams */
+.team{display:grid;grid-template-columns:200px 1fr;gap:12px 20px;padding:12px 0}
+.team+.team{border-top:1px dashed var(--border-color)}
+.team h4{margin:4px 0 0;font:600 15px/1.4 var(--font-serif)}
+.team p{margin:2px 0 0;color:var(--text-subtle);font-size:13px}
+.team .m{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:900px){.book{grid-template-columns:1fr}.note{grid-column:1;padding-top:8px}.team{grid-template-columns:1fr}}
+@media (max-width:480px){.head h2{font-size:32px}.serial{font-size:36px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="w0182-data.js"></script>
+<script src="common.js"></script>
+<script>
+const b = B.build;
+const chap = (n, title, body, note = '') => `<section class="chap"><h3><i>${n}</i>${title}</h3>${body}</section>${note ? `<aside class="note">${note}</aside>` : '<span></span>'}`;
+document.getElementById('app').innerHTML = shell(`<article class="book">
+  <header class="head"><h2>${esc(b.name)}</h2><p>${esc(b.summary)}</p></header>
+  ${chap('I', 'Vũ khí', b.weapons.map((w) => `<div class="wrow">${weaponTile(w, 84)}<div><em>${esc(w.label)}</em><h4>${nm(w.name)}</h4><small>★${w.rare} · bấm icon để xem kỹ năng</small></div></div>`).join(''),
+    'Bấm vào icon để xem kỹ năng vũ khí theo 6 cấp.')}
+  ${chap('II', 'Dòng thuộc tính', `<dl class="tiers">${b.affixes.groups.map((g) => `<div><dt>${esc(g.label.split(' ')[0])}</dt><dd>${g.items.map((a) => `<span>${affix(a)}</span>`).join('')}</dd></div>`).join('')}</dl>`,
+    `<b>Mốc</b> · ${esc(b.tips[3].split(': ')[1] ?? '')}`)}
+  ${chap('III', 'Thâm tạo', `<div class="deep">${b.deepens.map((d) => `<div><h4><span>${esc(d.label)}</span><span>${nm(d.style)}</span></h4>
+      <div class="serial">${d.points.map((p) => (p ? p : `<span>${p}</span>`)).join('')}</div>
+      <ul class="cols">${d.columns.map((c) => `<li><span>${nm(c.name)}</span><b>${c.points}</b><details><summary>thiên phú</summary><ol>${c.talents.map((t, i) => `<li class="${i < c.points ? 'on' : ''}">${esc(t)}</li>`).join('')}</ol></details></li>`).join('')}</ul></div>`).join('')}</div>`,
+    'Mỗi cột tối đa 7 điểm, tổng 11. Bấm "thiên phú" để xem từng mốc; các mốc đã đạt được in sáng.')}
+  ${chap('IV', 'Xoay vòng', b.rotations.map((r) => `<p style="margin:0 0 10px;color:var(--text-muted);font-size:13px">${esc(r.label)}</p><div class="rot">${r.skills.map((s, i) => `${i ? '<span class="arrow">→</span>' : ''}<figure><img class="skill-ico" src="${s.icon}" alt=""><figcaption>${esc(s.name)}<br><span style="color:var(--text-subtle)">${esc(s.type)}</span></figcaption></figure>`).join('')}</div>`).join('')
+    + `<ol class="tips" style="margin-top:20px">${b.tips.slice(0, 3).map((t) => `<li>${esc(t)}</li>`).join('')}</ol>`)}
+  ${chap('V', 'Đội hình', b.teams.map((t) => `<div class="team"><div><h4>${esc(t.label)}</h4>${t.note ? `<p>${esc(t.note)}</p>` : ''}</div><div class="m">${t.members.map(avatar).join('')}</div></div>`).join(''))}
+</article>`);
+</script>
+</body>
+</html>
