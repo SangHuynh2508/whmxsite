@@ -98,6 +98,7 @@ test('variantOf: a weapon label names a 深造 variant exactly or as a prefix + 
   assert.deepEqual(variantOf('Tốc độ | Sát thương', v), { variant: '', rest: 'Tốc độ | Sát thương' });
   assert.deepEqual(variantOf('Chuẩnxác', v), { variant: '', rest: 'Chuẩnxác' }); // no separator → not a variant
   assert.deepEqual(variantOf('Lục Trí', []), { variant: '', rest: 'Lục Trí' });
+  assert.deepEqual(variantOf('Chuẩn (dự phòng)', v), { variant: 'Chuẩn', rest: 'dự phòng' }); // no stray ")" (final review)
 });
 
 test('weapons carry their variant chip; 深造 are variants; empty weapon skills are dropped', () => {

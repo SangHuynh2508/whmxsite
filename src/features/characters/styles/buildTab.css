@@ -15,14 +15,15 @@
 .bs-band p { margin: 0; max-width: 70ch; font-size: 13px; color: var(--text-muted); white-space: pre-line; }
 .bs-rating { padding: 2px 10px; font-weight: 700; color: var(--on-vivid); background: var(--accent); border-radius: 6px; }
 
-.bs-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
-.bs-mod { min-width: 0; padding: 18px 22px 20px; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
-.bs-mod:last-child { border-bottom: 0; }
+.bs-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1px; overflow: hidden; background: var(--border-color); border-radius: 0 0 6px 6px; }
+/* dividers = the 1px grid gaps showing the border colour: right between any two modules whatever their order
+   (per-module borders broke when ≤ 980px reorders blocks; final review). overflow only rounds the bottom corners:
+   everything inside wraps, and popovers render in the top layer. */
+.bs-mod { min-width: 0; padding: 18px 22px 20px; background: var(--bg-surface); }
 .bs-s4 { grid-column: span 4; }
 .bs-s6 { grid-column: span 6; }
 .bs-s8 { grid-column: span 8; }
 .bs-s12 { grid-column: 1 / -1; }
-.bs-s8, .bs-s12, .bs-b-deepens { border-right: 0; } /* right half of a pair, or a full row */
 .bs-mod-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .bs-mod-head h3 { margin: 0; font: 600 16px/1.3 var(--font-sans); }
 .bs-note { margin: 10px 0 0; font-size: 13px; color: var(--text-muted); }
@@ -113,7 +114,7 @@
 @media (prefers-reduced-motion: reduce) { .bs-tile img { transition: none; } .bs-tile:active, .bs-deep:active { transform: none; } }
 
 @media (max-width: 980px) {
-  .bs-s4, .bs-s6, .bs-s8 { grid-column: 1 / -1; border-right: 0; }
+  .bs-s4, .bs-s6, .bs-s8 { grid-column: 1 / -1; }
   /* Thâm tạo right after Vũ khí when stacked (spec C1); DOM order stays the desktop order */
   .bs-b-weapons { order: 1; } .bs-b-deepens { order: 2; } .bs-b-affixes { order: 3; } .bs-b-rotations { order: 4; } .bs-b-tips { order: 5; } .bs-b-teams { order: 6; }
 }

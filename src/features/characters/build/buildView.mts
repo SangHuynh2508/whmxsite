@@ -37,7 +37,11 @@ export function variantOf(label: string, variants: string[]) {
   const text = label.trim();
   for (const v of [...variants].filter(Boolean).sort((a, b) => b.length - a.length)) {
     if (text === v) return { variant: v, rest: '' };
-    if (text.startsWith(v) && SEP.test(text.slice(v.length))) return { variant: v, rest: text.slice(v.length).replace(SEP, '').trim() };
+    const after = text.slice(v.length);
+    if (text.startsWith(v) && SEP.test(after)) {
+      const rest = after.replace(SEP, '').trim();
+      return { variant: v, rest: /^\s*\(/.test(after) && rest.endsWith(')') ? rest.slice(0, -1).trim() : rest }; // "Chuẩn (dự phòng)"
+    }
   }
   return { variant: '', rest: text };
 }
