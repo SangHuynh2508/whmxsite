@@ -10,6 +10,7 @@ import { renderDataView } from '../../ui/dataView.js';
 import { renderCatalog } from '../layout/sidebar.js';
 import { selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
+import { canonicalCharacterHash } from './characterHash.mts';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
@@ -348,6 +349,16 @@ export function handleRoute() {
   if (!gameData) return;
 
   const route = parseHash();
+
+  // One URL per character: an ID URL (#/characters/W0182) is rewritten to the slug URL in place.
+  if (route.view === 'character') {
+    const char = getCharBySlugOrId(route.slug);
+    const canonical = canonicalCharacterHash(route.slug, route.subtab, char);
+    if (canonical) {
+      history.replaceState(null, '', canonical);
+      route.slug = char.slug;
+    }
+  }
 
   // Redirect / or empty hash to canonical #/characters
   const rawHash = window.location.hash;

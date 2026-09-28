@@ -36,7 +36,9 @@
 .lore-plate::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
 
 .lore-ticket { position: relative; background: var(--lore-grain), var(--bg-surface); border: 1px solid var(--border-gold-subtle); }
-.lore-ticket-name { margin: 0; padding: 16px 24px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
+/* 16px sides like the facts and stub below (was 24px: "Khảm Trân Châu Bảo Thạch Kim Hạng Liên" needed 315px of 311px
+   at 1440 and broke in two with room to spare; owner 2026-09-28) */
+.lore-ticket-name { margin: 0; padding: 16px 16px 10px; font: 500 15px/1.45 var(--lore-serif); text-wrap: balance; }
 /* perforations: every fact draws its left/top dashed edge 1px outside itself; the grid clips the outer ones,
    so only the lines between facts show — also when a second row starts (5 facts with 工艺/产地). */
 .lore-facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: hidden; } /* spans from factSpans(): 3, 2 or 1 per row by length */

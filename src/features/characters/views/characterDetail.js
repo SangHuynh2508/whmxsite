@@ -4,7 +4,7 @@
 import { gsap } from 'gsap';
 import { getGameData } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
-import { renderTagChipsHtml } from '../../../ui/utils/tagColors.js';
+import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 
 import { renderOverviewTab } from './detail/overviewView.js';
@@ -14,6 +14,15 @@ import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
 import { mountLoreQuote, mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
 import { unmountBuildTab } from '../build/BuildTab.tsx';
+
+// A tab switch replaces the history entry, so Back leaves the character page instead of stepping back through
+// every tab opened (owner 2026-09-28, like s1n.gg). Modified clicks (new tab/window) keep the browser default.
+document.addEventListener('click', (event) => {
+  const link = event.target instanceof Element ? event.target.closest('a.cd-tab-item') : null;
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  window.location.replace(link.getAttribute('href'));
+});
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;

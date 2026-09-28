@@ -1,5 +1,5 @@
 import { state } from '../../../data/state.js';
-import { renderTagChipsHtml } from '../../../ui/utils/tagColors.js';
+import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';

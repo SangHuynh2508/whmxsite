@@ -256,7 +256,7 @@ export function renderCatalog() {
       if (currentRoute.view === 'character') {
         closeMobileDrawer();
         const subtab = (currentRoute.subtab && currentRoute.subtab !== 'overview') ? currentRoute.subtab : '';
-        window.location.hash = subtab ? `#/characters/${char.id}/${subtab}` : `#/characters/${char.id}`;
+        window.location.hash = subtab ? `#/characters/${char.slug || char.id}/${subtab}` : `#/characters/${char.slug || char.id}`;
       } else {
         selectCalculatorCharacter(char);
       }

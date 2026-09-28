@@ -4434,14 +4434,15 @@
   margin-top: 2px;
 }
 
+/* Role tags (owner 2026-09-28, option C): the tag's own colour on text + border, no fill; --tag is set per chip
+   by src/ui/utils/tagColors.mts from the --tag-* tokens. */
 .cd-tag-chip {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 3px 12px;
+  padding: 2px 11px;
   border-radius: 9999px;
-  border: 1px solid;
-  letter-spacing: 0.2px;
-  color: #ffffff !important;
+  border: 1px solid color-mix(in oklch, var(--tag, var(--tag-neutral)) 60%, transparent);
+  color: var(--tag, var(--tag-neutral));
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
@@ -5238,14 +5239,41 @@
     gap: 10px;
   }
 
-  .cd-shared-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
+  /* Phones (owner 2026-09-28): no "Danh Sách Khí Giả" button — the system Back and the dock menu (☰ → Khí Giả)
+     do that — and the class icon + rarity sit small beside the Chinese name instead of on a row of their own.
+     One grid: the wrappers step aside (display: contents) so avatar, name, CN name, badges and tags share it. */
+  .cd-breadcrumb-bar {
+    display: none;
   }
 
+  .cd-shared-header {
+    display: grid;
+    grid-template-columns: 60px auto 1fr;
+    align-items: center;
+    gap: 4px 14px;
+    padding: 4px 0 16px;
+  }
+
+  .cd-header-left,
+  .cd-identity-box,
   .cd-header-right {
-    justify-content: flex-end;
+    display: contents;
+  }
+
+  .cd-avatar-box { grid-column: 1; grid-row: 1 / span 3; align-self: start; }
+  .cd-title-row { grid-column: 2 / -1; grid-row: 1; }
+  .cd-name-cn { grid-column: 2; grid-row: 2; }
+  .cd-class-rarity-block { grid-column: 3; grid-row: 2; justify-self: start; gap: 8px; }
+  .cd-tags-list { grid-column: 2 / -1; grid-row: 3; }
+
+  .cd-job-large-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .cd-rarity-badge-large {
+    padding: 0 7px;
+    font-size: 12px;
   }
 
   .overview-top-section {

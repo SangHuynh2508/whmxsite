@@ -26,6 +26,18 @@ colors:
   rarity-sr-vivid: "#F2C14E"
   rarity-r-vivid: "#4FA3F7"
   on-vivid: "#111315"
+  tag-sky: "#8DB8F2"
+  tag-coral: "#F2937F"
+  tag-amber: "#F2B35E"
+  tag-violet: "#C6A6F5"
+  tag-steel: "#A9BCD0"
+  tag-lime: "#B8D86B"
+  tag-green: "#7FD39B"
+  tag-pink: "#F29BB8"
+  tag-magenta: "#E58AD0"
+  tag-indigo: "#9FA8F5"
+  tag-teal: "#7FD4CF"
+  tag-neutral: "#C9CDD2"
 typography:
   display:
     fontFamily: "'Noto Serif', 'Noto Serif SC', serif"
@@ -127,9 +139,9 @@ components:
     rounded: "{rounded.sm}"
     padding: "0 6px"
   chip-role:
-    textColor: "#FFFFFF"
+    textColor: "{colors.tag-sky}"
     rounded: "{rounded.full}"
-    padding: "2px 10px"
+    padding: "2px 11px"
   popover:
     backgroundColor: "{colors.lifted-slate}"
     textColor: "{colors.bone-text}"
@@ -260,7 +272,7 @@ findings from the detector); the Chinese name under the character title renders 
 
 - **App shell:** a left nav rail on desktop (renders 60 px; the `--app-nav-collapsed-width` token says 72 px —
   reconcile), a bottom dock on phones (≤ 768 px). Content max width ~1360 px on character pages.
-- **Character page:** header (avatar, serif name, Chinese name, role chips, rarity badge) → page tabs → tab body.
+- **Character page:** header (avatar, serif name, Chinese name, role chips, class icon + rarity badge) → page tabs → tab body. ≤ 768 px the "Danh Sách Khí Giả" button is dropped (system Back and the dock menu cover it) and the class icon + rarity sit small beside the Chinese name. Page tabs replace the history entry: Back leaves the character page.
 - **Build sheet:** one bordered sheet: a band (name, rating, credit) over a 12-column grid whose 1 px gaps show the
   hairline colour — the gaps are the dividers, so they stay right whatever order the modules take. Paired modules
   are staggered by content (Vũ khí 4 | Dòng thuộc tính 8, Xoay vòng 6 | Thâm tạo 6) so the vertical rules never line
@@ -320,7 +332,7 @@ Tactile and quiet.
 
 ### Chips
 - **Variant chip** (build variants, 深造 labels): 1 px strong-hairline outline, 600 12 px bone text, 6 px.
-- **Role chip:** pill, white text on the role's own colour (colours are hard-coded today — move to tokens).
+- **Role chip:** outlined pill — the tag's own `--tag-*` colour on text and border (60 %), no fill (owner 2026-09-28, option C). Mapping in `src/ui/utils/tagColors.mts`; a test over `public/data.json` guarantees no two tags of one character share a colour; rare tags share `tag-neutral`.
 - **Rarity chip / badge:** translucent rarity background with its `-text` colour.
 
 ### Inputs / Fields

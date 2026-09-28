@@ -53,6 +53,21 @@
   --pool-limited-vivid: #F2C14E;
   --on-vivid: #111315;
 
+  /* Character role tags (owner 2026-09-28, option C): outlined chips, text + border in the tag's colour.
+     Mapping in src/ui/utils/tagColors.mts; no two tags of one character share a colour (tagColors.test.mts). */
+  --tag-sky: #8DB8F2;
+  --tag-coral: #F2937F;
+  --tag-amber: #F2B35E;
+  --tag-violet: #C6A6F5;
+  --tag-steel: #A9BCD0;
+  --tag-lime: #B8D86B;
+  --tag-green: #7FD39B;
+  --tag-pink: #F29BB8;
+  --tag-magenta: #E58AD0;
+  --tag-indigo: #9FA8F5;
+  --tag-teal: #7FD4CF;
+  --tag-neutral: #C9CDD2;
+
   /* Legacy aliases mapping to authoritative global rarity tokens */
   --rare-5: #b93232;
   --rare-4: var(--rarity-ssr);
