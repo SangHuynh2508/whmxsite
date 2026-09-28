@@ -52,8 +52,8 @@ export function useSlider(list: RefObject<HTMLElement | null>, index: number) {
 }
 
 /**
- * Children matching `selector` inside `scope` arrive in order: they rise a few px (or slide in from the side of the
- * control that was pressed, `dir` ±1), sharpen from a light blur and fade in. Re-runs whenever `key` changes;
+ * Children matching `selector` inside `scope` arrive in order: they rise 6 px (or slide 16 px in from the side of the
+ * control that was pressed, `dir` ±1), sharpen from a 2 px blur and fade in. Re-runs whenever `key` changes;
  * `skipFirst` leaves the first paint to the enclosing reveal. Reduced motion keeps a short fade only.
  */
 export function useReveal(scope: RefObject<HTMLElement | null>, selector: string, key: unknown, dir = 0, skipFirst = false) {
@@ -73,7 +73,8 @@ export function useReveal(scope: RefObject<HTMLElement | null>, selector: string
         tween = gsap.fromTo(items, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: 'power1.out', clearProps: 'opacity' });
         return;
       }
-      tween = gsap.fromTo(items, { opacity: 0, x: dir * 24, y: dir ? 0 : 10, filter: 'blur(6px)' }, {
+      // light blur (owner 2026-09-28: "bớt mờ lại"): readable from the first frames
+      tween = gsap.fromTo(items, { opacity: 0, x: dir * 16, y: dir ? 0 : 6, filter: 'blur(2px)' }, {
         opacity: 1,
         x: 0,
         y: 0,
@@ -91,3 +92,37 @@ export function useReveal(scope: RefObject<HTMLElement | null>, selector: string
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 }
+
+/**
+ * A box that grows or shrinks when something toggles ("Đọc tiếp", "Xem thêm"): call the returned `capture()` right
+ * before the state change; after the re-render the box eases from the captured height to its new one.
+ */
+export function useHeightTween(box: RefObject<HTMLElement | null>, key: unknown) {
+  const from = useRef<number | null>(null);
+  useLayoutEffect(() => {
+    const el = box.current;
+    const start = from.current;
+    from.current = null;
+    if (!el || start === null || reduced()) return;
+    const end = el.offsetHeight;
+    if (Math.abs(end - start) < 2) return;
+    const tween = gsap.fromTo(el, { height: start, overflow: 'hidden' }, { height: end, duration: 0.45, ease: 'expo.out', clearProps: 'height,overflow' });
+    return () => { tween.revert(); };
+  }, [box, key]);
+  return () => { if (box.current) from.current = box.current.offsetHeight; };
+}
+
+// Popovers of the islands (Build weapon / Thâm tạo, Lore terms) settle in when they open: a small scale-and-rise on
+// wide screens, the bottom sheet slides up on phones. `beforetoggle` runs before the first paint (no flash); closing
+// stays instant. One capturing listener: toggle events don't bubble.
+const POPOVERS = '.bs-pop, .lore-popover';
+document.addEventListener('beforetoggle', (event) => {
+  const el = event.target;
+  if (!(el instanceof HTMLElement) || !el.matches(POPOVERS) || (event as ToggleEvent).newState !== 'open' || reduced()) return;
+  const sheet = matchMedia('(max-width: 640px)').matches;
+  gsap.fromTo(el, sheet ? { yPercent: 100 } : { opacity: 0, scale: 0.97, y: 6 }, {
+    ...(sheet ? { yPercent: 0, duration: 0.42 } : { opacity: 1, scale: 1, y: 0, duration: 0.3 }),
+    ease: 'expo.out',
+    clearProps: 'transform,opacity',
+  });
+}, true);

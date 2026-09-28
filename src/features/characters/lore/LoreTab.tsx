@@ -7,7 +7,7 @@ import { getSession, isAuthorizedEditor } from '../../../app/auth/session.js';
 import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
 import { buildLoreView, factSize, factSpans, keepTogether, type FactSize, type LoreFact, type LoreUnit } from './loreView.mts';
-import { useReveal, useSlider } from '../motion';
+import { useHeightTween, useReveal, useSlider } from '../motion';
 
 function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -125,6 +125,8 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
   useReveal(relicRef, ':scope > p, :scope > ol > li', relicPanel, relicPanel === 'origin' ? -1 : 1, true);
   useSlider(reportsRef, report);
   useReveal(reportRef, ':scope > *', report, reportDir, true);
+  const leadRef = useRef<HTMLDivElement>(null);
+  const captureLead = useHeightTween(leadRef, leadOpen);
 
   const factsRow = useRef<HTMLDivElement>(null);
   const facts = view.facts.map((f) => ({ ...f, value: shown(f.value) }));
@@ -195,9 +197,9 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
         {view.empty && <p className="lore-empty">Chưa có hồ sơ lưu trữ.</p>}
 
         {view.intro && (
-          <div className={leadOpen ? 'lore-lead is-open' : 'lore-lead'}>
+          <div className={leadOpen ? 'lore-lead is-open' : 'lore-lead'} ref={leadRef}>
             <Text unit={view.intro} as="p" className="lore-prose" />
-            <button type="button" className="lore-more" aria-expanded={leadOpen} onClick={() => setLeadOpen((v) => !v)}>{leadOpen ? 'Thu gọn' : 'Đọc tiếp'}</button>
+            <button type="button" className="lore-more" aria-expanded={leadOpen} onClick={() => { captureLead(); setLeadOpen((v) => !v); }}>{leadOpen ? 'Thu gọn' : 'Đọc tiếp'}</button>
           </div>
         )}
 

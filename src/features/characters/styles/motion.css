@@ -4,3 +4,8 @@
 .seg-ink { position: absolute; top: 0; left: 0; width: 0; pointer-events: none; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; }
 .lore-switch > .seg-ink { border: 0; border-radius: 4px; } /* inside the switch's 3px padding: concentric with its 6px corner */
 .lore-switch > [role="tab"], .lore-tabs > [role="tab"], .build-tabs > [role="tab"] { position: relative; z-index: 1; transition: color var(--motion-normal) var(--ease-standard); }
+
+/* the scrim fades in with the popover (motion.ts; a pseudo-element GSAP can't reach) */
+.bs-pop::backdrop, .lore-popover::backdrop { animation: scrim-in .25s ease-out; }
+@keyframes scrim-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .bs-pop::backdrop, .lore-popover::backdrop { animation: none; } }

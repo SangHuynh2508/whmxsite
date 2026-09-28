@@ -357,8 +357,12 @@ One vocabulary for the character-page islands (`src/features/characters/motion.t
 chút, đừng làm quá"):
 - **Selection ink** (`useSlider`): the leading edge runs to the new choice (0.3 s, expo-out) and the trailing edge
   follows a beat later (0.55 s), so the ink stretches across and settles. No bounce.
-- **Arrival** (`useReveal`): blocks and paragraphs come in reading order — 10 px rise (or 24 px from the side of the
-  control pressed), 6 px blur → sharp, opacity 0 → 1, 0.6 s expo-out, the whole group starting within 0.3 s.
+- **Arrival** (`useReveal`): blocks and paragraphs come in reading order — 6 px rise (or 16 px from the side of the
+  control pressed), 2 px blur → sharp (owner: "bớt mờ"), opacity 0 → 1, 0.6 s expo-out, the group starting within 0.3 s.
+  Text uses this one arrival only — no split-letter or scramble effects (owner 2026-09-28: not a GSAP showcase).
+- **Popover open:** 97 % → 100 % scale with a 6 px rise and fade (0.3 s); on phones the sheet slides up (0.42 s); the
+  scrim fades in; closing is instant.
+- **Expand** (`useHeightTween`): "Đọc tiếp / Thu gọn" and "Xem thêm" ease the box to its new height (0.45 s).
 - **Reduced motion:** the ink jumps; arrival is a 0.15 s fade. Text is forced visible after 1.5 s if the page gets
   no animation frames.
 - Tab bodies still cross-fade through `characterDetail.js` (GSAP, ~0.1 s out / 0.16 s in); the islands render

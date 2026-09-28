@@ -1,7 +1,8 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Block } from '../Block';
 import type { BuildView } from '../buildView.mts';
 import { teamSpan, type Span } from '../sheetLayout.mts';
+import { useHeightTween } from '../../motion';
 
 const PHONE = '(max-width: 640px)';
 const SHOWN_ON_PHONE = 4;
@@ -22,11 +23,13 @@ function usePhone() {
 export function TeamsBlock({ teams, teamOther, span, action }: { teams: BuildView['teams']; teamOther: string; span: Span; action?: ReactNode }) {
   const phone = usePhone();
   const [all, setAll] = useState(false);
+  const packRef = useRef<HTMLDivElement>(null);
+  const capturePack = useHeightTween(packRef, all);
   const shown = phone && !all ? teams.slice(0, SHOWN_ON_PHONE) : teams;
   return (
     <Block id="teams" title="Đội hình" span={span} action={action}>
       {shown.length > 0 && (
-        <div className="bs-pack">
+        <div className="bs-pack" ref={packRef}>
           {shown.map((t, i) => (
             <div key={i} className="bs-team" style={{ '--n': teamSpan(t), '--n-phone': Math.min(teamSpan(t), 4) } as CSSProperties}>
               {t.label && <h4>{t.label}</h4>}
@@ -36,7 +39,7 @@ export function TeamsBlock({ teams, teamOther, span, action }: { teams: BuildVie
           ))}
         </div>
       )}
-      {shown.length < teams.length && <button type="button" className="bs-more" onClick={() => setAll(true)}>Xem thêm {teams.length - shown.length} nhóm</button>}
+      {shown.length < teams.length && <button type="button" className="bs-more" onClick={() => { capturePack(); setAll(true); }}>Xem thêm {teams.length - shown.length} nhóm</button>}
       {teamOther && <p className="bs-note">Khác: {teamOther}</p>}
     </Block>
   );
