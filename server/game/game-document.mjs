@@ -8,7 +8,7 @@
 // Objects gone from MasterData (source_present = false) are published only while a build still uses them.
 import { createHash } from 'node:crypto';
 
-import { withDeepens } from '../builds/build-validate.mjs';
+import { normalizeBuild } from '../builds/build-validate.mjs';
 import { publishableVi } from '../profile/shape-character-profile.mjs';
 
 const byKindCode = (a, b) => a.kind.localeCompare(b.kind) || a.code.localeCompare(b.code);
@@ -19,7 +19,7 @@ function usedByBuilds(builds) {
   for (const { doc } of builds) {
     for (const w of doc.weapons ?? []) used.add(`weapon|${w.weaponId}`);
     for (const g of doc.affixes?.groups ?? []) for (const id of g.affixIds ?? []) used.add(`weapon_affix|${id}`);
-    for (const d of withDeepens(doc).deepens ?? []) used.add(`job_style|${d.styleId}`);
+    for (const d of normalizeBuild(doc).deepens ?? []) used.add(`job_style|${d.styleId}`);
   }
   return used;
 }
@@ -37,7 +37,7 @@ export function buildGameDocument({ refs, texts, builds }) {
   }
   const outBuilds = {};
   for (const { characterId, doc } of [...builds].sort((a, b) => a.characterId.localeCompare(b.characterId) || a.position - b.position)) {
-    (outBuilds[characterId] ??= []).push(withDeepens(doc));
+    (outBuilds[characterId] ??= []).push(normalizeBuild(doc));
   }
 
   const body = JSON.stringify({ version: 1, refs: outRefs, texts: outTexts, builds: outBuilds });

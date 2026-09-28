@@ -2,7 +2,7 @@
 // Pure: DB rows → what the admin Build module needs (the character's builds + the game data it may pick from),
 // and the context validateBuild checks a save against. Names are { cn, vi } with the current VI (admins see drafts).
 
-import { withDeepens } from './build-validate.mjs';
+import { normalizeBuild } from './build-validate.mjs';
 
 function lookup(refs, texts) {
   const refOf = new Map(refs.map((r) => [`${r.kind}|${r.code}`, r]));
@@ -22,7 +22,7 @@ export function shapeBuildEditor({ characterId, characterStyle, job = null, refs
   const styleIds = characterStyle?.styleIds ?? [];
   return {
     character: { id: characterId, job: characterJob, styleIds, recommendedStyleId: characterStyle?.recommendedStyleId ?? null },
-    builds: [...builds].sort((a, b) => a.position - b.position).map((b) => ({ id: b.entityId, revision: b.revision, doc: withDeepens(b.doc) })),
+    builds: [...builds].sort((a, b) => a.position - b.position).map((b) => ({ id: b.entityId, revision: b.revision, doc: normalizeBuild(b.doc) })),
     catalogue: {
       weapons: present(refs, 'weapon').filter((r) => r.data.job === characterJob)
         .sort((a, b) => b.data.rare - a.data.rare || a.code.localeCompare(b.code))

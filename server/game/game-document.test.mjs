@@ -64,3 +64,9 @@ test('immutable file name from the content: game.<12 hex>.json, stable for the s
   assert.equal(buildGameDocument({ refs: [...refs].reverse(), texts: [...texts].reverse(), builds: [] }).fileName, a.fileName);
   assert.notEqual(buildGameDocument({ refs: refs.slice(1), texts, builds: [] }).fileName, a.fileName);
 });
+
+test('a build saved before 2026-09-28 is published with rotation steps', () => {
+  const builds = [{ characterId: 'D0017', position: 0, doc: { name: 'Cũ', weapons: [], affixes: { groups: [] }, deepens: [], rotations: [{ label: '0 dupe', skillIds: ['D001701'] }] } }];
+  const doc = JSON.parse(buildGameDocument({ refs, texts, builds }).body);
+  assert.deepEqual(doc.builds.D0017[0].rotations, [{ label: '0 dupe', note: '', steps: [{ skillId: 'D001701', note: '' }] }]);
+});

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { validateBuild, withDeepens } from './build-validate.mjs';
+import { normalizeBuild, validateBuild, withDeepens, withSteps } from './build-validate.mjs';
 
 // D0017 (Túc Vệ, job 1, styles 101/102/103) with two real weapons of its job and one of another job.
 const ctx = {
@@ -76,7 +76,7 @@ test('a document saved before 2026-09-27 (one `deepen`) reads and saves as `deep
 });
 
 test('rotation skills must be the character\'s; team members must exist', () => {
-  assert.deepEqual(codes({ rotations: [{ label: '', skillIds: ['A000101'] }] }), ['rotations.0.skillIds.0 UNKNOWN_SKILL']);
+  assert.deepEqual(codes({ rotations: [{ label: '', skillIds: ['A000101'] }] }), ['rotations.0.steps.0.skillId UNKNOWN_SKILL']);
   assert.deepEqual(codes({ teams: [{ label: '', characterIds: ['ZZ999'], note: '' }] }), ['teams.0.characterIds.0 UNKNOWN_CHARACTER']);
 });
 
@@ -93,4 +93,28 @@ test('missing lists default to empty (a new, blank build is valid)', () => {
   const { errors, doc } = validateBuild({ name: 'Mới' }, ctx);
   assert.deepEqual(errors, []);
   assert.deepEqual(doc, { name: 'Mới', rating: '', summary: '', weapons: [], affixes: { noReroll: false, groups: [] }, deepens: [], rotations: [], tips: [], teams: [], teamOther: '' });
+});
+
+test('rotations: steps with notes; old `skillIds` rotations become steps (spec 2026-09-28 §3.1)', () => {
+  assert.deepEqual(withSteps({ rotations: [{ label: 'x', skillIds: ['D001701', 'D001701'] }] }).rotations,
+    [{ label: 'x', note: '', steps: [{ skillId: 'D001701', note: '' }, { skillId: 'D001701', note: '' }] }]);
+  const doc = { rotations: [{ label: 'x', note: '', steps: [] }] };
+  assert.equal(withSteps(doc), doc); // already new: untouched
+  assert.deepEqual(normalizeBuild({ deepen: null, rotations: [{ label: '', skillIds: [] }] }),
+    { deepens: [], rotations: [{ label: '', note: '', steps: [] }] });
+
+  const { errors, doc: out } = validateBuild(build({ rotations: [{ label: ' Lượt đầu ', note: ' Tam Trí ', steps: [
+    { skillId: 'D001702', note: ' dùng lên Thố Động ' }, { skillId: 'D001702', note: '' }] }] }), ctx);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(out.rotations, [{ label: 'Lượt đầu', note: 'Tam Trí', steps: [{ skillId: 'D001702', note: 'dùng lên Thố Động' }, { skillId: 'D001702', note: '' }] }]);
+  // a document saved before 2026-09-28 still validates and comes out in the new shape
+  assert.deepEqual(validateBuild(build(), ctx).doc.rotations, [{ label: '0 dupe', note: '', steps: [{ skillId: 'D001701', note: '' }, { skillId: 'D001702', note: '' }] }]);
+});
+
+test('rotations: note ≤ 500, step note ≤ 60, a step must be an object with a skill of the character', () => {
+  const r = (patch) => ({ rotations: [{ label: '', note: '', steps: [{ skillId: 'D001701', note: '' }], ...patch }] });
+  assert.deepEqual(codes(r({ note: 'a'.repeat(501) })), ['rotations.0.note TOO_LONG']);
+  assert.deepEqual(codes(r({ steps: [{ skillId: 'D001701', note: 'a'.repeat(61) }] })), ['rotations.0.steps.0.note TOO_LONG']);
+  assert.deepEqual(codes(r({ steps: ['D001701'] })), ['rotations.0.steps.0 BAD_SHAPE']);
+  assert.deepEqual(codes(r({ steps: 'D001701' })), ['rotations.0.steps BAD_SHAPE']);
 });

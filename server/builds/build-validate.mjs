@@ -22,11 +22,27 @@ export function withDeepens(doc) {
   return { ...rest, deepens: rest.deepens ?? (isObject(deepen) ? [{ label: '', ...deepen }] : []) };
 }
 
+// Rotations saved before 2026-09-28 hold `skillIds`: read, saved and published as `steps` with notes (spec 2026-09-28
+// §3.1). A non-array `skillIds` is passed through as `steps` so the validator reports it.
+const oldRotation = (r) => isObject(r) && 'skillIds' in r && !('steps' in r);
+export function withSteps(doc) {
+  if (!isObject(doc) || !Array.isArray(doc.rotations) || !doc.rotations.some(oldRotation)) return doc;
+  return {
+    ...doc,
+    rotations: doc.rotations.map((r) => (oldRotation(r)
+      ? { label: r.label ?? '', note: r.note ?? '', steps: Array.isArray(r.skillIds) ? r.skillIds.map((skillId) => ({ skillId, note: '' })) : r.skillIds }
+      : r)),
+  };
+}
+
+// Every stored or published build goes through this: the validator, the admin read and the game document.
+export const normalizeBuild = (doc) => withSteps(withDeepens(doc));
+
 export function validateBuild(input, ctx) {
   const errors = [];
   const fail = (path, code) => { errors.push({ path, code }); };
   if (!isObject(input)) return { doc: null, errors: [{ path: '', code: 'BAD_SHAPE' }] };
-  input = withDeepens(input);
+  input = normalizeBuild(input);
 
   const str = (value, path, limit) => {
     if (value === undefined || value === null) return '';
@@ -103,7 +119,14 @@ export function validateBuild(input, ctx) {
     deepens: deepens.filter(Boolean),
     rotations: list(input.rotations, 'rotations').map((r, i) => ({
       label: str(r?.label, `rotations.${i}.label`, LIMITS.label),
-      skillIds: ids(r?.skillIds, `rotations.${i}.skillIds`, (id) => (skills.has(id) ? null : 'UNKNOWN_SKILL')),
+      note: str(r?.note, `rotations.${i}.note`, LIMITS.note),
+      steps: list(r?.steps, `rotations.${i}.steps`).map((s, j) => {
+        const at = `rotations.${i}.steps.${j}`;
+        if (!isObject(s)) { fail(at, 'BAD_SHAPE'); return null; }
+        const skillId = String(s.skillId ?? '');
+        if (!skills.has(skillId)) fail(`${at}.skillId`, 'UNKNOWN_SKILL');
+        return { skillId, note: str(s.note, `${at}.note`, LIMITS.label) };
+      }).filter(Boolean),
     })),
     tips: list(input.tips, 'tips').map((t, i) => str(t, `tips.${i}`, LIMITS.tip)),
     teams: list(input.teams, 'teams').map((t, i) => ({
