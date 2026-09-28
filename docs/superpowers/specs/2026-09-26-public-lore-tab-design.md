@@ -1,6 +1,6 @@
 # Public lore tab ("Hồ Sơ Lưu Trữ") — design
 
-> Date: 2026-09-26. Status: **draft, waiting for owner review.** Owner answers to Q1–Q7 given in chat on 2026-09-26 (below).
+> Date: 2026-09-26. Status: **approved and implemented — live 2026-09-26** (design: `public-redesign/lore-tab/direction-approved.md`). Owner answers to Q1–Q7 given in chat on 2026-09-26 (below).
 > Visual design is **not** decided here: after this spec is approved, the look goes through `huashu-design` (3 directions, owner picks)
 > **and** the owner's `taste-skill` pack (`.agents/skills/design-taste-frontend`, `high-end-visual-design`, `redesign-existing-projects`, …:
 > reference-quality patterns), with huashu as the rule book. Folding/expanding of reports is part of that UI step, not of this spec.

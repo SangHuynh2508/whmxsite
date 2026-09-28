@@ -1,6 +1,6 @@
 # Public Build tab (direction C) + rotation notes — design
 
-> Date: 2026-09-28. Status: **design approved in chat (owner: "duyệt"), spec waiting for owner review.**
+> Date: 2026-09-28. Status: **approved** (design "duyệt", spec reviewed → "tiếp đi"), extended with the critique decisions C1–C4; **implemented and live 2026-09-28** (`b970d83`, verified on production).
 > Extends [`2026-09-26-character-build-design.md`](./2026-09-26-character-build-design.md) (data, admin, publish) — only
 > the parts below change. Visual direction: [`public-redesign/build-tab/direction-approved.md`](../../public-redesign/build-tab/direction-approved.md)
 > (C · Tấm thẻ build, with B's affix cells, taste + impeccable passes); the approved demo is

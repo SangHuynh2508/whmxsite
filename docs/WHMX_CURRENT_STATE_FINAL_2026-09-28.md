@@ -1,0 +1,184 @@
+# WHMX — Current state (single entry point, 2026-09-28)
+
+> **Start here.** This file replaces `WHMX_CURRENT_STATE_FINAL_2026-09-26.md` (renamed with `git mv` on 2026-09-28, owner:
+> "viết state mới") and every older `WHMX_CURRENT_STATE_*` / `WHMX_NEXT_STEPS.md` (in git history). Read it fully, then
+> open only the references a task needs. Keep it current: edit the relevant section when something changes; make a new
+> dated copy only when the owner asks for a session-end handoff.
+
+## 0. Map of the documentation (every kept file)
+
+| File | What it is for |
+|---|---|
+| **this file** | Status, infrastructure, rules, gotchas, backlog, roadmap |
+| [`../PRODUCT.md`](../PRODUCT.md) | **Product truth** (impeccable `init`, owner answers 2026-09-28): users, purpose, positioning, binding constraints (dark only, no horizontal scroll at 390 px). Read before any UI work |
+| [`WHMX_APP_ARCHITECTURE.md`](./WHMX_APP_ARCHITECTURE.md) | Where code lives; §11 publication model (Hướng B: static `data.json` + DB text overlay on R2); §12 source-of-truth boundaries |
+| [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md) | How to write code here (per-entity resolvers, bounded changes) |
+| [`WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md`](./WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md) | Deep background (still valid): runtime update pipeline, AssetBundle decrypt, R2/CDN, skin/series/acquisition invariants, localization workflow, NeoArtifacts history. Its status/next-step sections (§11–§25) are superseded by this file |
+| [`WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](./WHMX_MASTERDATA_ID_CONVENTIONS(5).md) | Meaning of raw MasterData IDs — never infer semantics from ID shape |
+| [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](./POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md) | DB design: §B authority, §D override/conflict model, §L importer, §M exporter |
+| [`PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md`](./PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md) | Preview characters, managed assets, §5 Preview → official reconciliation |
+| [`D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md`](./D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md) | R2 managed-upload pipeline (env vars, prefixes, flow) |
+| [`ADMIN_AUTH_OPERATIONS.md`](./ADMIN_AUTH_OPERATIONS.md) | Admin accounts/auth operations |
+| [`MASTERDATA_LORE_CANDIDATES_2026-09-07.md`](./MASTERDATA_LORE_CANDIDATES_2026-09-07.md) | Raw tables that hold lore/narrative (input for the future story-lore work) |
+| **Build tab** — [`superpowers/specs/2026-09-26-character-build-design.md`](./superpowers/specs/2026-09-26-character-build-design.md) + [`superpowers/plans/2026-09-27-character-build.md`](./superpowers/plans/2026-09-27-character-build.md) (data, admin, publish; done) → [`superpowers/specs/2026-09-28-build-tab-public-design.md`](./superpowers/specs/2026-09-28-build-tab-public-design.md) + [`superpowers/plans/2026-09-28-build-tab-public.md`](./superpowers/plans/2026-09-28-build-tab-public.md) + [`public-redesign/build-tab/direction-approved.md`](./public-redesign/build-tab/direction-approved.md) (build sheet + rotation notes; **live 2026-09-28**) | Build tab: data model, admin, publish, then the public visual design (demos in `public-redesign/build-tab/design-demos/`) |
+| [`superpowers/specs/2026-09-26-public-lore-tab-design.md`](./superpowers/specs/2026-09-26-public-lore-tab-design.md) + [`superpowers/plans/2026-09-26-public-lore-tab.md`](./superpowers/plans/2026-09-26-public-lore-tab.md) + [`public-redesign/lore-tab/direction-approved.md`](./public-redesign/lore-tab/direction-approved.md) | Public lore tab (live): spec, plan, approved design (B4 ticket) and its demos |
+| `../scripts/fixtures/masterdata/` (+ `manifest.json`) | Trimmed MasterData for the Build feature — refresh locally: `node scripts/export-masterdata-fixtures.mjs` |
+| [`plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md`](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md) | **Release-day runbook N2** (§4), P5 next domains, dated log of 24–26/9 |
+| [`superpowers/specs/2026-09-24-lore-pipeline-design.md`](./superpowers/specs/2026-09-24-lore-pipeline-design.md) | Lore data model, importer, parity gates, R2 publish/backup design |
+| [`superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](./superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md) | Admin Khí Giả + Lore spec (owner decisions Q1–Q15) |
+| [`admin-redesign/direction-approved.md`](./admin-redesign/direction-approved.md) | Admin shell look (Direction B, 2026-09-23) |
+| [`admin-redesign/khi-gia-direction.md`](./admin-redesign/khi-gia-direction.md) + [`khi-gia/direction-approved.md`](./admin-redesign/khi-gia/direction-approved.md) + [`khi-gia/design-demos/approved-mix.html`](./admin-redesign/khi-gia/design-demos/approved-mix.html) | Khí Giả/Lore admin visual spec — reuse for any new admin module |
+| `../.impeccable/critique/` (untracked) | `/impeccable critique` snapshots (2026-09-28: Build demo C, 22/40) — `/impeccable polish` reads them |
+| `../localization/reviews/WHMX_CHECKPOINT_2026-09-13_AFTER_BATCH2.md`, `../localization/PHASE3_WORKFLOW.md` | Localization batch workflow + quality backlog |
+| `../WHMX_COMMAND_CHEATSHEET.md` (untracked, owner's) | Copy-paste commands (NeoArtifacts, MuMu/ADB, validators, assets) — dates from 2026-09-15; prefer §5 below |
+| `../.agents/skills/whmx-localization/SKILL.md`, `../.agents/skills/game-translator/SKILL.md` | Mandatory for any workbook / localization / `data.json` / translation work |
+| `D:\BaiTapCode\WHMX\NeoArtifacts\RUNTIME_UPDATE_CAPTURE_RUNBOOK.md`, `…\HANDOFF_RUNTIME_ASSET_DISCOVERY_2026-09-10.md` | How game updates/assets are captured (MuMu + ADB) — used by runbook N2 |
+
+## 1. What WHMX is
+
+- Vietnamese wiki + calculator for the game 物华弥新 ("Vật Hoa Di Tân"). Public site **https://whmxsite.vercel.app** (Vercel project `siro-da-bao/whmxsite`). Product truth: [`PRODUCT.md`](../PRODUCT.md).
+- Repo `D:\BaiTapCode\WHMX\WhmxCalc` (GitHub `SangHuynh2508/whmxsite`, **public**): Vite + vanilla JS public site with React 19 + TS islands (lore tab, build tab), React 19 + TypeScript + Tailwind v4 Admin (`src/admin/`), serverless API under `api/` (4 of 12 Hobby functions), Neon PostgreSQL via drizzle (`db/`), Cloudflare R2 for images and published JSON.
+- Sibling folders: `D:\BaiTapCode\WHMX\NeoArtifacts` (game data extraction: MasterData JSON, assets incl. `Assets/Packet61_AllSprites`, runtime updates), `WHMX_Lore_*` (story lore source text, not yet used).
+- **Gameplay text flow:** NeoArtifacts `MasterData` → workbook `localization/localization_master.xlsx` (human translations) → `tools/build_web_data.py` → `public/data.json` (committed) → site.
+- **Lore flow:** profiles, reports, relic info, timeline and lore terms live in the DB → `lore/<env>/lore.<hash>.json` + pointer on R2 → overlaid on `data.json` (CN fallback).
+- **Game database flow (Build):** MasterData → `game_references` + `game_texts` (importer) + `character_builds` → the same publish writes `game.<hash>.json` + `game.pointer.json` next to the lore pointer → the Build tab.
+- **Admin** (`#/admin…`; signed-out visitors see `#/login`): Khí Giả (per character: Tổng quan / Lore / **Build** / Trang phục / Nguồn / Lịch sử), **Từ điển** (shared translations: Vũ khí, Dòng thuộc tính, Thâm tạo, Lore), Preview (unreleased characters), Tài khoản (owner only).
+
+## 2. Status (2026-09-28)
+
+| Area | State |
+|---|---|
+| Git | **Local only** (owner 2026-09-27: cloud sessions not used; `gh` not installed — read PRs with `curl https://api.github.com/repos/SangHuynh2508/whmxsite/pulls/<n>`). Branch `feat/postgres-admin-crud`; push = `git fetch`, check `git merge-base --is-ancestor origin/main HEAD` (else a normal `git merge origin/main`; never reset/force), `git push origin HEAD:main` (Production) then `git push origin HEAD` (Preview). **2026-09-28:** `main` had PR #5/#6 (Từ điển fixes, made in cloud sessions) → merged locally (`22df247`, one conflict in this file resolved by keeping both); pushed `22df247` (admin side-panel fix) and `b970d83` (build sheet). `origin/main` = `b970d83` = local `HEAD` (before this docs commit). The local `main` branch is stale and unused |
+| Working tree (not mine to commit) | Owner files only: `localization/localization_master.xlsx` (modified) + untracked (`localization/*`, root scratch files, `.agents/`, `.codex*/`, `.claude/` (project skills + `launch.json`), `AGENTS.md`, `WHMX_COMMAND_CHEATSHEET.md`, `.mcp.json`, `skills-lock.json` …). Agent-created, untracked: `.impeccable/` (critique snapshot + empty `live/` dirs from the critique's detector run) — keep for `/impeccable polish`, or add to `.gitignore` if the owner prefers |
+| Lore pipeline (DB → R2 → site) | ✅ Live. Importer `scripts/import-character-profile.mjs`; overlay `scripts/export-profile-overlay.mjs \| tools/apply_profile_overlay.py`; publisher `scripts/publish-lore.mjs` (+ `--repoint`) and `POST /api/admin/lore/publish`; daily private backup in R2 `whmx-backups`; restore `scripts/restore-lore-snapshot.mjs` (lore only) |
+| Admin Khí Giả + Lore + **Từ điển** | ✅ Live. Code `src/admin/characters/`; lore API `server/profile/lore-admin.mjs` + `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs`. Saves auto-publish ~30 s later; owners also have "Xuất bản ngay" (closing the tab while a publish waits sends it via keepalive — `publishScheduler.leave()`; **still not browser-verified with a signed-in session**). **Từ điển** `#/admin/dictionary/<tab>[/<code>]`: Vũ khí (weapon + its skills in one save), Dòng thuộc tính, Thâm tạo (one row per identical Chinese text: 60 columns → 4 rows, 428 talents → 35 rows; saving writes every twin; "Áp dụng bản dịch này cho N mục còn lại"; PR #6), Lore; "Đã dịch x/y", "Chỉ hiện chưa dịch"; PR #5 fixed the "Khôi phục bản nháp?" prompt after every save. Lore module counter "thuật ngữ x/y" includes relic tags. **2026-09-28 (live, `22df247`):** the Lore side panel (relic, shared terms → Từ điển links, history) and the Tổng quan side panel were `max-xl:hidden` — invisible below 1280 px; now a collapsible block at the top of the editor below 1280 px ("Hiện vật và thuật ngữ · thuật ngữ x/y", "Thông tin hồ sơ"). Verified signed-in on the development DB at 375 / 1100 / 1440 px; production bundle checked to contain it |
+| **Build tab** | ✅ **Live 2026-09-28 (`b970d83`), verified on production** (W0182 at 1440 px: pairs 4\|8 and 6\|6, serials 7202/7220 with 储能/威慑 emblems, variant chips "Lục Trí"/"Chuẩn", tags SKILL/ULT/SKILL/ATK + key, all 34 images loaded). Details in §2.1 |
+| Design tooling | `PRODUCT.md` written (impeccable `init`). **impeccable** installed by the owner as a Claude plugin (`/impeccable …`; launcher `~/.claude/plugins/cache/impeccable/impeccable/4.4.0/skills/impeccable/scripts/impeccable`; `detect <file\|url>` runs the 61 deterministic rules, no LLM). Not set up: `/impeccable live` (needs `.impeccable/live/config.json` → `index.html` + a CSP check) and `DESIGN.md` (`/impeccable document`, next task). Taste skills in `.claude/skills/` (`design-taste-frontend` …) and `huashu-design` stay the design gate |
+| Tokens | **2026-09-28 (live):** `--text-subtle` raised to 4.5:1 on every surface — dark `#8A9099` (was `#6B7280`, 3.6:1), light `#6E6E6E` (was `#888`) in `src/styles/tokens.css` (+ fallback in `skinGallery.css`). Side effect: `--text-subtle` and `--text-muted` are now close |
+| Lore data | 536 report titles + 10 organisation names seeded as admin VI; 15 characters still have legacy "bản cũ" units to confirm |
+| Performance | Functions in **sin1** (Neon ap-southeast-1). Warm API 0.3–0.7 s; cold ~3 s. Right after a deploy the CDN serves new images slowly for a minute |
+| Tests | `npm test` (**189**, node:test), `npm run test:tools` (45 Python tests), typecheck `npx tsc --noEmit -p tsconfig.json` (**`*.test.mts` are excluded from tsc** — a type-level test needs a real consumer), `npm run build`. Validators: `python tools/validate_{data,public_output,skin_roster,skin_assets}.py` |
+| Lore editing (owner facts) | Ctrl+S saves every changed unit of the open character; one publish ~30 s after the last save; visitors see it on reload (pointer `no-cache`). Legacy units publish only after "Dùng bản này"/re-save. The ticket's relic name is the character's **Tên đầy đủ** (Admin → Tổng quan / workbook) |
+| New character (~2026-10-01) | Owner updates the game ~1 day before; then **runbook N2** ([pipeline plan §4](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md), owner yes at each DB/workbook write) and N3; also run `scripts/import-game-references.mjs` (plan → `--apply` with owner yes) and copy any new `Speciality_*` / item icons |
+
+### 2.1 Build tab (what exists)
+
+- **Data** ([spec 09-26](./superpowers/specs/2026-09-26-character-build-design.md), [plan 09-27](./superpowers/plans/2026-09-27-character-build.md), PR #3/#4): `game_references` + `game_texts` (migration `0007`, importer `scripts/import-game-references.mjs`, applied on development + production 2026-09-27, 1103 rows), `character_builds`; validator `server/builds/build-validate.mjs`; game document `server/game/game-document.mjs`, published by `server/profile/lore-publisher.mjs` as `game.<hash>.json` + `game.pointer.json`; public loader `loadGameDocument` (`src/features/profile/api/loreOverlay.mts`).
+- **Document shape** (`normalizeBuild = withSteps(withDeepens(doc))` runs on validate, admin read and publish): `{ name, rating, summary, weapons: [{weaponId, label}] ≤ 4, affixes: {noReroll, groups: [{label, affixIds}]}, deepens: [{label, styleId, points[4]}] ≤ 3 (each 0–7, total ≤ 11), rotations: [{label, note ≤ 500, steps: [{skillId, note ≤ 60}]}], tips[], teams: [{label, characterIds, note}], teamOther }`. Old `deepen` (one) and old rotation `skillIds` are converted; stored production rows keep the old shape until re-saved (publish converts; the public view reads both).
+- **Admin** module Build (`modules/BuildModule.tsx`, `lib/buildDoc.mts`): pickers for everything, "+ Thêm thâm tạo" with labels, **a note per rotation and per step** (2026-09-28).
+- **Public** ([spec 09-28](./superpowers/specs/2026-09-28-build-tab-public-design.md), [plan 09-28](./superpowers/plans/2026-09-28-build-tab-public.md), [direction](./public-redesign/build-tab/direction-approved.md)): `src/features/characters/build/` — `BuildTab.tsx` (island + build tabs), `BuildSheet.tsx` (band: name 20 px, rating, summary, `action` slot), `Block.tsx` (title + `action` slot — where a later public "Sửa/Tạo build" plugs in), `blocks/{Weapons,Affixes,Rotation,Deepens,Tips,Teams}Block.tsx`, `Text.tsx`, pure `buildView.mts` (frames `/assets/frames/itemRare{2..5,K}.png`, emblems `/assets/styles/Speciality_<styleId>.png` from MasterData `styleIcon`, serial, `variantOf` = 深造 labels are variants and a weapon label starting with one gets its chip, tags ATK/SKILL/ULT/P1–P3 from the skill `slot`, empty weapon skills and empty tips dropped) and pure `sheetLayout.mts` (pairs 4\|8 and 6\|6 while short, else full width; Thâm tạo after Vũ khí at ≤ 980 px via CSS `order`; `teamSpan`); CSS `src/features/characters/styles/buildTab.css` (tokens only, dividers = 1 px grid gaps, popovers become bottom sheets ≤ 640 px, "Đóng" button, "Xem kỹ năng ›"/"Xem thiên phú ›" cues, tag key under Xoay vòng, 深造 `aria-label` "7-2-0-2").
+- **Design history** (all in `direction-approved.md`): huashu 3 directions (A handbook / B lookup / C sheet) → C with B's affix cells → taste pass → impeccable pass (L-shaped tips/teams dropped) → `/impeccable critique` (dual-agent, 22/40) → owner choices C1–C4 (content-sized stagger, shared variant chip, phone + popover + a11y fixes, demoted build name).
+- **Verification**: TDD per task; dev server D0017 + V0055 test builds at 1440 / ~800 / 390 px; final whole-branch review (reviewer subagent — the owner has since said not to use review subagents) → 2 fixes (`(` label left a stray ")"; dividers wrong when ≤ 980 px reorders a build without tips/teams); production W0182 checked after deploy.
+- **Rulings taken in execution** (cost if wrong in brackets): type test RED taken from tsc on `BuildModule.tsx` [none]; one-token patch in the old `BuildTab.tsx` to keep each commit type-checking [none]; phone 深造 unit grid 48\|76 px with the chip on its own line so two fit at 390 [cosmetic]; team span cap on phones computed in `TeamsBlock` (`--n-phone`) rather than CSS `span min()` [one extra variable]; V0055 test build created through the admin API client, not by clicking the form [step-note inputs not clicked by hand]; popover backdrop is a literal `rgb(0 0 0 / .6)` scrim (no token exists) [add a token]; 7-pip bars keep a 2 px radius [cosmetic]; build tabs lack tabpanel/arrow keys (predates) [keyboard users tab through]; a variant chip may name a hidden 深造 (stale data only) [orphan chip]; the 深造 `aria-label` cannot carry `lang="zh"` [TTS may misread a CN style name]; rotation label sits above the sequence at span 6 (as in the demo) [layout tweak].
+- **Known limits**: restore/repoint cover lore only (not builds/game texts); server validation reads skills/characters from `public/data.json`; MasterData point-7 talents read `技能效果测试，流派1-x` (looks like a game placeholder); a tab opened before the first game publish shows "no build" until reloaded.
+
+## 3. Infrastructure
+
+- **Neon** project `empty-smoke-82458354`, ap-southeast-1: `production` = real data (endpoint `ep-rapid-dust-azdtb39r`), `development` = local work + Vercel Preview (`ep-blue-dust-azcwulyc`), `backup-2026-09-25` (no compute), `production-old-empty` (unused; delete later — ask the owner).
+- **Env files** (git-ignored; secrets never printed): `.env` (R2), `.env.local` → **development** DB, `.env.production.local` → **production** DB (anything touching real data runs with `--env-file=.env.production.local`).
+- **Vercel**: Production and Preview each have 10 vars; the 4 secret ones (`BETTER_AUTH_SECRET`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `R2_SECRET_ACCESS_KEY`) are type Config with "Needs Attention" — owner to switch them to Secret. Preview login only on `whmxsite-git-feat-postgres-admin-crud-siro-da-bao.vercel.app` (Vercel SSO). `vercel.json`: `regions: ["sin1"]`, `api/admin/*.js` `maxDuration: 30`; `/assets/<file>` (Vite hashed) immutable 1 year, `/assets/<dir>/…` images `max-age=3600, stale-while-revalidate=604800` (test `server/vercel-cache-headers.test.mjs`). **Never add files under `api/`**. `.vercelignore` must not exclude anything the server imports (`server/vercelignore.test.mjs`).
+- **Deployments**: owner keeps only the **5 newest** (≈95 MB each: ~4 000 images in `public/assets` ship with every build). **2026-09-28 added 2 production deployments (`22df247`, `b970d83`) — not pruned yet (ask the owner).** Prune: `npx vercel ls whmxsite --format=json` (paginate `--next`), keep the Production alias, `npx vercel remove <url> --yes`.
+- **R2**: public bucket `whmx-assets` (images; `lore/{production,preview,development}/` incl. `game.pointer.json`), private `whmx-backups` (90-day lifecycle; never public). Public base `https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev`.
+- **Logs**: `npx vercel logs https://whmxsite.vercel.app --json`. Unexpected admin errors are logged by `sendAdminError` (`server/admin-api.mjs`).
+
+## 4. Admin / API facts an agent must know
+
+- **Character/skin overrides** (`server/character-skin-admin-domain.mjs` `updateEntity`): `null`/empty or the source value clears the override (`planFieldChange`). The React admin sends the source value for an emptied field (`src/admin/characters/lib/fields.mts`); the public inline edit is switched off until P5 (§8).
+- **Lore saves** (`PATCH /api/admin/lore/characters/:id`, `{expectedRevision, texts}`): empty → `vi = null`; text → `viOrigin = admin, state = ok`; stale revision → 409; unknown unit → 422; one `edit_history` row per unit. Terms: `PATCH /api/admin/lore/terms/:code`. Only `viOrigin = admin` + `state = ok` text is published (`publishableVi`).
+- **Builds** (`server/admin-api-routes/builds.mjs` via `api/admin/[...].js`): `GET/POST builds/characters/:id`, `PATCH/DELETE builds/:buildId` (`expectedRevision`; 422 `INVALID_BUILD` with the validator's `details` → `buildErrors` in `lib/buildDoc.mts` names the section; 409 on a stale revision); `game-texts`, `game-texts/:kind/:code`. From a signed-in dev page: `await import('/src/admin/characters/buildApi.js')` and `await import('/src/admin/characters/lorePublish.ts')` (`lorePublisher.now()`) drive the same endpoints.
+- **Editor** (`useEditor.ts` + `lib/editorState.mts`): localStorage drafts of changed fields; 409 → "Xem khác biệt" / "Tải bản mới"; one capture-phase leave guard in `AdminApp.tsx` (`lib/leaveGuard.mts`); Ctrl+S per area (`lib/shortcut.mts areaOf`).
+- v2 public `department` = admin VI of the `ORG_*` lore term, else CN.
+
+## 5. Common commands
+
+- DB migrations: `npm run db:migrate -- --target=development`; production `node --env-file=.env.production.local scripts/db-migrate.mjs --target=production` (owner yes).
+- Publish lore + game document: development `node --env-file=.env --env-file=.env.local scripts/publish-lore.mjs`; production `LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.production.local scripts/publish-lore.mjs` (owner yes).
+- Importers (plan first; `--apply` needs owner yes): `scripts/import-character-skin.mjs --check`, `scripts/import-character-profile.mjs`, `scripts/import-game-references.mjs` (`--check --fixtures` runs without DB/NeoArtifacts).
+- MasterData fixtures: `node scripts/export-masterdata-fixtures.mjs` (local; reads `../NeoArtifacts`).
+- Game sprites: `D:\BaiTapCode\WHMX\allsprites_manual_scan\INDEX.csv` maps every `Packet61_AllSprites` file (e.g. `Speciality_101…503` = 深造 style emblems in `cf505fca…/`, `itemRare0..5/K` = rarity tiles).
+- Local full stack: `preview_start whmxcalc-vercel-dev` (port 3003, development DB; the owner signs in). Public pages only: `preview_start whmxcalc-dev` (Vite 5173) — it does **not** load the lore/game overlay, so the lore ticket and builds need 3003. Design demos: `python -m http.server <port>` from the repo root, open `docs/public-redesign/<area>/design-demos/*.html`.
+- impeccable: `"<launcher>" detect [--viewport 390x844] <file|url>`, `"<launcher>" critique-storage …`; slash commands `/impeccable critique|audit|polish|layout|document|live …`.
+
+## 6. Owner rules (also in the agent memory `whmx-working-rules`)
+
+- Reply in Vietnamese, "tôi/bạn". Short progress notes; spend tokens carefully.
+- **No subagents unless the owner asks in that message** (repeated 2026-09-28: "đừng sử dụng subagent rà nữa"). A skill that calls a subagent review mandatory (executing-plans final review, impeccable critique) is not a request — do a self-review and say so. Review with `ponytail:ponytail-review`.
+- Code with `ponytail`; TDD (failing test first); evidence before "done". Anything that crashes, loses/changes data, saves the wrong thing or misleads the user is a **bug**, never a deferred "minor".
+- Commit own files when verified; push `main` when the merged result is error-free. Never reset/restore/clean; never stage the workbook or other people's files.
+- Production DB writes, Vercel config/env changes, account changes, deletions outside the project: show the exact action, wait for yes.
+- Workbook only through `tools/safe_workbook_mutation.py`. `public/data.json` rebuilds: diff the whole file and show the owner.
+- New UI: React + TypeScript, colours only from `src/styles/tokens.css`, dark-only, never the bare `hidden` class; **a panel hidden at some width must appear somewhere else at that width** (2026-09-28 bug). New visual areas: `huashu-design` (3 real directions, owner picks, `direction-approved.md`) + taste skills + impeccable (`PRODUCT.md`; `detect` on the result; `critique` when the owner asks). Motion: CSS / View Transitions first.
+- Scratch on drive D (`D:\BaiTapCode\WHMX\_claude_scratch\`); nothing left on C; delete `%LOCALAPPDATA%\Temp\claude\bash-edit-diff` at the end of each work block.
+- Repo is public: never commit screenshots with emails or anything secret.
+- Evidence rule: nothing inferred from ID shape; MasterData must match the live launch version before importing.
+- **A state/handoff file is written complete**: every uncommitted change and tool side effect, branch state, pending questions, decisions, what was and was not verified.
+
+## 7. Environment gotchas
+
+- `vercel dev` (Windows) sometimes crashes (`0xC0000409`) → restart; first API calls 8–15 s. Check port 3000 isn't the owner's own `vercel dev`.
+- `vercel build` / `vercel dev` locally ignore `.vercelignore` — verify important changes on the real deploy.
+- Browser pane: viewport emulation resets at the end of each turn; `location.reload()` inside a script cuts the script (reload, then run a second script); read layout facts with `getBoundingClientRect`/`getComputedStyle` (for `grid-column: span N` the span is in `gridColumnStart`, not `gridColumnEnd`). **Playwright MCP** also works (writes snapshots to `D:\BaiTapCode\WHMX\.playwright-mcp\`). Neither can click native `confirm()` — stub `window.confirm`. `innerText` applies CSS uppercase — use `textContent`.
+- npm: one command at a time, in the background, no short timeout.
+- Authenticated tests without the owner: temp account via a one-off `scripts/_tmp-*.mjs`, owner approval first (DB write); `scripts/db-*` proofs report failed cleanup via `scripts/lib/cleanup.mjs`.
+- ocr (`open-code-review`) is installed but has no LLM key (owner declined paid keys).
+
+## 8. Backlog (everything unfinished)
+
+> ## ⚠️⚠️ OWNER WILL FIX LATER — DO NOT FORGET: skill ↔ buff POPUPS and ORPHAN SKILL TRANSLATIONS ⚠️⚠️
+> The owner has seen **many** broken popup cases on the site (more than the validator lists). Evidence (`python tools/validate_data.py`, 2026-09-26: 30 warnings):
+> - **Popups:** skill text names a buff but the popup can't be resolved by the exact BUFF_STATUS VI name (A007005 / A007003ex `Buff_SpecialDamgeP_Lan`, A007302 `Buff_Bleed`), or a coloured buff has no popup target (A006106 `Buff_Disarm`).
+> - **Translations like the buffs:** localized skills with no public record (S0155061, W0134061, D018305ex_2/3, W002104ex) — check whether they belong to a record under another ID before deleting anything.
+> - 3 missing item icons (`itemicon_10140/20140/9183002.png`).
+> - **Popup numbers — fixed 2026-09-27** (`tools/build_web_data.py`, test `tools/test_buff_param_regression.py`): `[EffectParam,n]` = the buff's argument #(n-1); only `Buff_X,#…` and `<Release|Before|After|BattleBegin|ChargeEnd>,<target>,Buff_X,…` hand a status its arguments; buff→buff edges keep/renumber slots, no operand = the parent's arguments; a card that only mentions a status shows the granting skill's numbers; negative values in 提高/降低/减少… clauses lose their sign. ~330 popups corrected, 18 new.
+> - **Still open:** D0035 禁酒填字游戏 immunity to 止戈/肃静 has no popup (owner: keep); 7 new popups whose VI skill text uses a different name than the BUFF_STATUS VI name (V0112 `Buff_SpecialDamgeP_Lan`, V001804 `Buff_V0018_9`, A006104 `Buff_Disarm`).
+> Start with a read-only triage; workbook edits only via `tools/safe_workbook_mutation.py` with the localization skills.
+
+| Item | State / next action |
+|---|---|
+| **Next task (owner order 2026-09-28): `/impeccable document`** → `DESIGN.md` from the shipped site (tokens, type, components) so later design work keeps the identity | Not started |
+| **Bug (owner 2026-09-28): relic name on the lore ticket breaks into two short lines with room to spare** | Not fixed (owner: later). Production W0182 at 1440 px: ticket column 359 px, `.lore-ticket-name` padding 24 px each side → 311 px; "Khảm Trân Châu Bảo Thạch Kim Hạng Liên" needs 315 px, and `text-wrap: balance` (`loreTab.css` L39) splits it 154/157 px. At 855 px it fits on one line. Options: 20 px side padding, `text-wrap: pretty` (237/75), or a smaller name size on the narrow ticket; test the longest relic names at 1440/1024/390 |
+| **Build tab — deferred minors (final review 2026-09-28)** | Empty `<h4>` when a rotation has no label; a weapon with no skills still opens a header-only popover from its tile; `loading="lazy"` dropped on skill icons/avatars; a rotation with no label, no note and no known skill renders a blank row; `key={w.id}` duplicates if the same weapon is listed twice (predates) |
+| **Build tab — open critique points** (`/impeccable critique` 22/40, snapshot in `.impeccable/critique/`) | Affix names and weapon popovers are still Chinese on production (translate in Admin → Từ điển: Dòng thuộc tính, Vũ khí — owner); benchmark values (e.g. "Bạo kích 51,4%") live in a free-text tip — a per-affix target field was offered and not chosen; "7202" and the "•" dot are never explained on the page; re-run `/impeccable critique` on the live tab after translations |
+| **Site-wide detector findings** (`impeccable detect` on a character page, 2026-09-28) | 128 `undersized-ui-text` (shell/other tabs), rarity chip `#F0A08F` on `#912C25` 3.9:1, 1 skipped heading, `layout-transition`, `dark-glow`, `clipped-overflow-container`, thin-border + wide-shadow (advisory) — for a later `/impeccable audit` |
+| Owner: translate lore in Admin; confirm the 15 characters' legacy units ("Dùng bản này") | Ongoing |
+| Release day (~2026-10-01): runbook N2 → N3 (+ game references import, new sprites) | Waiting for the game update |
+| Public inline edit ("Sửa" on Tổng quan, `characterInlineEdit.js`) | Switched off 2026-09-26; re-enable with P5 and fix L142 then |
+| Public "Sửa build" / "Tạo build" on the Build tab | Slots exist (`action` on `Block` and `BuildSheet`); buttons, session check and admin deep link not built |
+| Publish path for character/skin names/descriptions (P5; workbook reconciliation gate decision) | Not started |
+| P5 next domains: Hoán Chương, archive-image asset role, skills (translation frame) | Not started |
+| Admin Build module visual redesign | Later (owner: public first) |
+| Localization → PostgreSQL authority transfer | Deferred by decision (after the DB has every feature) |
+| Localization quality | Re-checked clean 2026-09-26 (populated cells); untranslated coverage is a separate question; batch #3 not started |
+| **SEO** | Not started: hash URLs are one page to search engines; needs path URLs, per-page meta/OG, sitemap; decision round |
+| Voice lines (通讯记录) — separate route, `characterLines` | Not started (later) |
+| Story lore (`WHMX_Lore_*`) | Not planned |
+| Future admin areas: Skill/Buff DB + translation, Guide, Tier List, audit/operations | Not started |
+| Logged-in admin check at 768–1279 px | **1100 px checked 2026-09-28** (Lore / Tổng quan modules, collapsible panel); the icon-column shell at 768–1024 px not checked |
+| Preview-URL admin check (a save must not touch production) | Owner, needs Vercel SSO |
+| `publishScheduler.leave()` keepalive publish on tab close | Not browser-verified |
+| Shared S3 client; lore restore by date; restore/repoint for builds + game texts | Deferred |
+| Legacy admin CSS in `src/style.css` ~L6980–7240 | Cleanup |
+| **Pending owner answers** | Keep or delete the development-DB test data: builds "Chuẩn" (D0017) and "Thử nghiệm" (V0055), VI "Pháp Lang Thuẫn" (30741), "Kim Quế Bão Nguyệt Đăng" (31244), "Nguyệt Quế Huy" (EW4033); prune Vercel deployments to 5; delete Neon `production-old-empty`; repo public vs private; `.impeccable/` in `.gitignore`? |
+
+**Known limits (by design):** a cancelled "Rời trang?" still adds one history entry; "Dùng bản này" is not kept in the browser draft.
+
+**Deferred on purpose (don't start without the owner):** runtime HTTP transport reverse, Packet61 card reconstruction, parked buff-closure auto-apply, mass JS → TS rewrite, big-bang reorganisation.
+
+## 9. Skills the owner expects
+
+`superpowers:brainstorming` (all questions at once, each with a recommendation) → spec → `superpowers:writing-plans` → `superpowers:executing-plans` (native, ledger in `.superpowers/sdd/`, final review = **self-review**); `superpowers:test-driven-development`, `systematic-debugging`, `verification-before-completion` for every change; `ponytail:ponytail` + `ponytail:ponytail-review`; new visuals: `huashu-design` + taste skills (`.claude/skills/`) + **impeccable** (`/impeccable init|document|critique|audit|polish|layout|live`); translation: `.agents/skills/whmx-localization` + `game-translator`.
+
+## 10. Cloud sessions
+
+> **Not used** (owner, 2026-09-27). A cloud session has only the git repo (no `.env*`, no NeoArtifacts, no untracked localization data or skills, no signed-in browser); it can write specs/plans, pure code + `npm test`, `tsc`, `npm run build`, and push a `claude/*` branch for a PR. Everything with DB/R2/NeoArtifacts/workbook/Vercel CLI is local. PRs #5/#6 (2026-09-28) came from such sessions and were merged into the local branch.
+
+## 11. Roadmap (owner's direction)
+
+1. **`DESIGN.md`** via `/impeccable document` (next).
+2. **Tier list** — s1n.gg model (curated lists with author, tiers with a description line, variant badge, tile → character build, Info/Solo/Team tabs); admin drag-and-drop editor, public read-only with job filter. Needs brainstorming/spec. Guides after it (PRODUCT.md: neither exists elsewhere).
+3. **Info / database section** — Vũ khí, Item… reusing the Build weapon popup (replaces `#/weapons`); boss/tower team recommendations.
+4. Public "Sửa/Tạo build" on the Build tab (slots ready).
+5. **SEO** — path URLs + per-page meta/OG + sitemap; decision round.
+6. **Voice lines** — separate route, later.
+7. **P5** — publish admin name/description overrides, then re-enable the public inline edit.
+8. Owner-side: buff popup / orphan translation fixes (§8 banner), lore + Từ điển translation (affixes, weapons), Vercel secrets → Secret, full names of A0024/A0063/A0167/S0149/W0168/W0173.

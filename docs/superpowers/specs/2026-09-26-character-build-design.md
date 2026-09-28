@@ -1,6 +1,6 @@
 # Character Build (tab "Build") — design
 
-> Date: 2026-09-26. Status: **draft, waiting for owner review.** Owner answers given in chat on 2026-09-26 (§2).
+> Date: 2026-09-26. Status: **approved 2026-09-26; implemented** (PR #3/#4, live 2026-09-27). Later owner changes: up to 3 深造 per build (`deepens`, 2026-09-27), rotation notes and the public build sheet ([`2026-09-28-build-tab-public-design.md`](./2026-09-28-build-tab-public-design.md)). Owner answers given in chat on 2026-09-26 (§2).
 > Visual design is decided after this spec: `huashu-design` (3 directions, owner picks) + the taste pack, with the owner's
 > reference build card (content creator's 幻戏图 build: weapons, affixes, 深造, rating, rotation, tips, team comps) as input.
 

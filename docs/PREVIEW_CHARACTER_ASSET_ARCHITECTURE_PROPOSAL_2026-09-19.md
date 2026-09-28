@@ -1,6 +1,6 @@
 # WHMX — Preview Character + Managed Asset Architecture Proposal
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md), [`D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md`](D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](WHMX_CURRENT_STATE_FINAL_2026-09-28.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md), [`D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md`](D0B_R2_MANAGED_ASSET_IMPLEMENTATION_2026-09-19.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 **Status:** Milestone C.5 / D0 design proposal only. No schema, migration, API, UI, R2, database, workbook, or public-data change is authorized by this document.  
 **Date:** 2026-09-19  

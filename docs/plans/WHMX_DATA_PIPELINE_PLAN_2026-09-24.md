@@ -1,13 +1,13 @@
 # WHMX — New-character readiness + DB-centred data pipeline (plan)
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../PRODUCT.md). Related: [`2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 > Created 2026-09-24. **Living document: update the status table and the log at the bottom whenever anything changes.**
 > A fresh agent should be able to continue from this file alone after reading the references below.
 
 ## 0. Read first
 
-1. [`../WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) — single entry point (status, infrastructure, rules, gotchas, backlog).
+1. [`../WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) — single entry point (status, infrastructure, rules, gotchas, backlog).
 2. **This file** — §4 N2 release-day runbook, §5 P5 next domains, §7 dated log (history; links there to removed docs resolve in git history).
 3. [`../superpowers/specs/2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md) and [`../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md).
 4. `.agents/skills/whmx-localization/SKILL.md` + `.agents/skills/game-translator/SKILL.md` for any workbook/localization/data.json work; [`../WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](../WHMX_MASTERDATA_ID_CONVENTIONS(5).md); `../../NeoArtifacts/RUNTIME_UPDATE_CAPTURE_RUNBOOK.md` for game updates.
@@ -133,6 +133,7 @@ Facts that shaped this plan:
 | P4 | Admin Khí Giả (React) + Lore module + terms + seeds | ✅ Done and live 2026-09-26 |
 | P5 | Next domains: character/skin names publish path, Hoán Chương, archive images role, skills (Part D) | Not started |
 | P6 | Backup/restore | ✅ Daily private R2 snapshot + restore CLI (2026-09-24); restore-by-date deferred |
+| Build | Game database (`game_references`, `game_texts`, `character_builds`) published as `game.<hash>.json` next to the lore pointer; admin Build module; public Build tab | ✅ Data + admin live 2026-09-27 (PR #3/#4); build sheet + rotation notes live 2026-09-28 (`b970d83`). Release day: also run `scripts/import-game-references.mjs` |
 
 ## 4. Part N — new character readiness (specific order)
 

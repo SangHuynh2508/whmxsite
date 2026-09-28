@@ -66,4 +66,4 @@ Vũ khí on ≤ 980 px), a **shared variant chip** (深造 labels = variants, we
 bottom sheet on phones, tag key + a11y labels, build name demoted. Recorded in the spec (C1–C4, §4.1) and the plan;
 the demo HTML is not updated (the React build is the reference from here).
 
-Implemented 2026-09-28 in `src/features/characters/build/` (`BuildSheet.tsx`, `blocks/*`, `sheetLayout.mts`, `buildView.mts`) and `src/features/characters/styles/buildTab.css`.
+Implemented and **live 2026-09-28** (`b970d83`, verified on production W0182) in `src/features/characters/build/` (`BuildSheet.tsx`, `blocks/*`, `sheetLayout.mts`, `buildView.mts`) and `src/features/characters/styles/buildTab.css`.

@@ -1,7 +1,7 @@
 # Character Build — implementation plan
 
 > Date: 2026-09-27. Spec: [`../specs/2026-09-26-character-build-design.md`](../specs/2026-09-26-character-build-design.md) (approved).
-> Branch `claude/build-tab` (from `origin/main` ccc6cb6). Status: **approved 2026-09-27** (Q1–Q5: as recommended). PR 1 (A1–A4, B6, C8, E10) merged (PR #3); steps 5 + 7 run on development and production 2026-09-27. PR 2 (D9, E11, F12–F15) on branch `claude/build-pr2`.
+> Branch `claude/build-tab` (from `origin/main` ccc6cb6). Status: **done** — approved 2026-09-27 (Q1–Q5: as recommended); PR #3 and PR #4 merged, production verified 2026-09-27 (first build W0182); the public visual design followed in `2026-09-28-build-tab-public.md`. PR 1 (A1–A4, B6, C8, E10) merged (PR #3); steps 5 + 7 run on development and production 2026-09-27. PR 2 (D9, E11, F12–F15) on branch `claude/build-pr2`.
 > Split per state file §10: tasks marked ☁ run in a cloud session (pure code, `npm test`, `tsc`, `npm run build`,
 > `npm run db:generate`); tasks marked 🖥 need the owner's machine (DB, R2, NeoArtifacts, signed-in admin).
 > Every ☁ task: failing `node:test` first, then the least code that passes, then `npm test` + `tsc` + `npm run build`.

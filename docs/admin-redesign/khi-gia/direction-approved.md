@@ -1,6 +1,6 @@
 # Khí Giả (React) — direction approved (huashu gate file)
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`khi-gia-direction.md`](../khi-gia-direction.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../../PRODUCT.md). Related: [`khi-gia-direction.md`](../khi-gia-direction.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 - Date: 2026-09-25
 - Shown: A `a-gallery` (roulette → Gallery Dark), B `b-workbench` (reference → Crowdin side-by-side), C `c-catalogue` (best designer → Kenya Hara). Comparison: `direction-review.md`; screenshots `screens/`.

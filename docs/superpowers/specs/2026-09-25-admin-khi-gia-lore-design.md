@@ -1,8 +1,8 @@
 # Admin Khí Giả (React) + Lore module — design spec
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-26.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-26.md) (status, infrastructure, rules, backlog). Related: [`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md), [`khi-gia-direction.md`](../../admin-redesign/khi-gia-direction.md). Older handoffs, `WHMX_NEXT_STEPS.md` and finished plans were removed on 2026-09-26 — links to them below resolve in git history only.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../../PRODUCT.md). Related: [`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md), [`khi-gia-direction.md`](../../admin-redesign/khi-gia-direction.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
-> Date: 2026-09-25. Status: sections 1–5 approved by the owner in chat on 2026-09-25; this file writes them down. Awaiting owner review of the file.
+> Date: 2026-09-25. Status: sections 1–5 approved by the owner in chat on 2026-09-25; **implemented — live 2026-09-26** (Admin Khí Giả + Lore; the terms pages became **Từ điển** on 2026-09-27).
 > Builds on: `docs/superpowers/specs/2026-09-24-lore-pipeline-design.md` (DB, publish, backup — live), `docs/plans/WHMX_ADMIN_PLAN_2026-09-23.md` Part F (approach 2 "module workspace"), `docs/plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md` (P4).
 
 ## 1. Goal and scope
