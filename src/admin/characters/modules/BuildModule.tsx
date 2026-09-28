@@ -224,18 +224,26 @@ export function BuildModule({ data }: ModuleProps) {
           <SectionTitle>Xoay vòng kỹ năng</SectionTitle>
           {draft.rotations.map((r, i) => {
             const set = (patch: Partial<typeof r>) => upd({ rotations: draft.rotations.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
+            const setStep = (k: number, note: string) => set({ steps: r.steps.map((s, j) => (j === k ? { ...s, note } : s)) });
             return (
               <div key={i} className="mb-3 grid gap-2 border-b border-(--border-color) pb-3">
                 <span className="flex gap-2">
-                  <input aria-label={`Nhãn xoay vòng ${i + 1}`} className={cn(inputClass, 'h-9')} value={r.label} maxLength={60} placeholder="0 dupe…" onChange={(e) => set({ label: e.target.value })} />
+                  <input aria-label={`Nhãn xoay vòng ${i + 1}`} className={cn(inputClass, 'h-9')} value={r.label} maxLength={60} placeholder="Lượt đầu, Tam Trí…" onChange={(e) => set({ label: e.target.value })} />
                   <Button variant="ghost" onClick={() => upd({ rotations: draft.rotations.filter((_, j) => j !== i) })}>Bỏ</Button>
                 </span>
-                <Chips items={r.skillIds.map((s) => [s, skillName(s)])} onRemove={(k) => set({ skillIds: r.skillIds.filter((_, j) => j !== k) })} onMove={(k, d) => set({ skillIds: move(r.skillIds, k, d) })} />
-                <Adder label="Thêm kỹ năng…" options={site.skills.map((s) => [s.id, s.name])} onAdd={(s) => set({ skillIds: [...r.skillIds, s] })} />
+                <textarea aria-label={`Ghi chú xoay vòng ${i + 1}`} className={cn(inputClass, 'min-h-16 py-2')} value={r.note} maxLength={500} placeholder="Ghi chú cho cả vòng (tuỳ chọn): điều kiện, lượt đầu…" onChange={(e) => set({ note: e.target.value })} />
+                <Chips items={r.steps.map((s) => [s.skillId, skillName(s.skillId)])} onRemove={(k) => set({ steps: r.steps.filter((_, j) => j !== k) })} onMove={(k, d) => set({ steps: move(r.steps, k, d) })} />
+                {r.steps.map((s, k) => (
+                  <label key={k} className="flex items-center gap-2 text-xs text-(--text-muted)">
+                    <span className="w-44 truncate">{k + 1}. {skillName(s.skillId)}</span>
+                    <input aria-label={`Ghi chú bước ${k + 1} của xoay vòng ${i + 1}`} className={cn(inputClass, 'h-8')} value={s.note} maxLength={60} placeholder="Ghi chú bước (tuỳ chọn), vd: dùng lên Thố Động" onChange={(e) => setStep(k, e.target.value)} />
+                  </label>
+                ))}
+                <Adder label="Thêm kỹ năng…" options={site.skills.map((s) => [s.id, s.name])} onAdd={(s) => set({ steps: [...r.steps, { skillId: s, note: '' }] })} />
               </div>
             );
           })}
-          <Button onClick={() => upd({ rotations: [...draft.rotations, { label: '', skillIds: [] }] })}>+ Thêm xoay vòng</Button>
+          <Button onClick={() => upd({ rotations: [...draft.rotations, { label: '', note: '', steps: [] }] })}>+ Thêm xoay vòng</Button>
           <Field label="Mẹo (mỗi dòng một mẹo)" className="mt-4"><textarea className={cn(inputClass, 'min-h-24 py-2')} value={draft.tips.join('\n')} onChange={(e) => upd({ tips: e.target.value.split('\n') })} /></Field>
         </section>
 

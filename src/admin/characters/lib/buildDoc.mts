@@ -1,12 +1,14 @@
 // Pure helpers for the admin Build module. The document shape and the rules are the server's
 // (server/builds/build-validate.mjs); these keep the editor inside them while typing.
 export type Deepen = { label: string; styleId: string; points: number[] };
+export type Step = { skillId: string; note: string };
+export type Rotation = { label: string; note: string; steps: Step[] }; // notes: owner 2026-09-28 (新月's V0055 card)
 export type BuildDoc = {
   name: string; rating: string; summary: string;
   weapons: { weaponId: string; label: string }[];
   affixes: { noReroll: boolean; groups: { label: string; affixIds: string[] }[] };
   deepens: Deepen[]; // up to 3 深造 suggestions (owner 2026-09-27)
-  rotations: { label: string; skillIds: string[] }[];
+  rotations: Rotation[];
   tips: string[];
   teams: { label: string; characterIds: string[]; note: string }[];
   teamOther: string;

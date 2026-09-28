@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints } from './buildDoc.mts';
+import { addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from './buildDoc.mts';
 
 test('a new build starts from the game\'s recommended style (0 points), or without 深造 when there is none', () => {
   assert.deepEqual(emptyBuild('102'), {
@@ -52,4 +52,14 @@ test('server 422 details → one Vietnamese line per problem', () => {
     'Thâm tạo 2: tổng điểm vượt 11',
     'x: NEW_CODE',
   ]);
+});
+
+test('server errors inside a rotation step name the rotation', () => {
+  assert.deepEqual(buildErrors([{ path: 'rotations.1.steps.0.note', code: 'TOO_LONG' }, { path: 'rotations.0.steps.2.skillId', code: 'UNKNOWN_SKILL' }]),
+    ['Xoay vòng 2: quá dài', 'Xoay vòng 1: kỹ năng không thuộc nhân vật']);
+});
+
+test('a rotation is { label, note, steps }', () => {
+  const doc: BuildDoc = { ...emptyBuild(null), rotations: [{ label: 'Lượt đầu', note: '', steps: [{ skillId: 'V005502', note: '' }] }] };
+  assert.equal(doc.rotations[0].steps[0].skillId, 'V005502');
 });
