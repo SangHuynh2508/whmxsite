@@ -13,6 +13,7 @@ export async function loadGameData() {
     const overlayPromise = loadLoreOverlay(import.meta.env.VITE_LORE_POINTER_URL);
     gameDocument = loadGameDocument(import.meta.env.VITE_LORE_POINTER_URL);
     const res = await fetch('/data.json');
+    if (!res.ok) throw new Error(`data.json HTTP ${res.status}`);
     gameData = await res.json();
     if (gameData && gameData.characters) {
       Object.values(gameData.characters).forEach(char => {

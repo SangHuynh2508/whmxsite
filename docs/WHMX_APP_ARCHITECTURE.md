@@ -28,7 +28,7 @@ Audit snapshot: 2026-09-21. The repository is a deliberately mixed application, 
 | Area | Observed current state | Status |
 | --- | --- | --- |
 | Public browser app | Vite serves `index.html`; `src/main.js` delegates startup to `src/app/bootstrap/boot.js`, and `src/app/router/router.js` drives the hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | Current hybrid boundary |
-| Public UI | `src/features/characters/`, `src/features/skins/`, `src/features/calculator/`, and `src/features/weapons/` own their respective public renderers. `src/ui/` now holds only the remaining shared/Character-adjacent Calculator modules (`calcCharacterPicker.js`, `talentGraph.js`, `resourceSummary.js`, `loreReveal.js`, `utils/`) and the orphaned `dataView.js` placeholder, kept in their legacy location because they are genuinely shared with the Character feature or app shell rather than Calculator/Weapons-exclusive. Global navigation, sidebar, feedback, theme, and smooth-scroll behavior live in `src/app/`. | Current hybrid boundary |
+| Public UI | `src/features/characters/`, `src/features/skins/`, `src/features/calculator/`, and `src/features/weapons/` own their respective public renderers. `src/ui/` now holds only the remaining shared/Character-adjacent Calculator modules (`calcCharacterPicker.js`, `talentGraph.js`, `resourceSummary.js`, `loreReveal.js`, `utils/`), kept in their legacy location because they are genuinely shared with the Character feature or app shell rather than Calculator/Weapons-exclusive. Global navigation, sidebar, feedback, theme, and smooth-scroll behavior live in `src/app/`. | Current hybrid boundary |
 | Vue | Vue 3 is used as a dynamically imported, programmatically mounted Character/Skin Admin island in `src/admin/character-skin/characterSkinAdminWorkspace.js`. There are currently no `.vue` SFCs or a Vite Vue-plugin boundary. | Current hybrid boundary |
 | Admin shell | React + Tailwind (2026-09-23, direction B): `src/admin/layout/AdminApp.tsx` owns route/session/login and the nav array; `src/admin/preview/PreviewView.tsx`/`PreviewDetail.tsx` and `src/admin/users/AccountsView.tsx` call the `previewApi.js`/`usersApi.js` data layer. The Vue Khí Giả island is mounted inside it unchanged. | Current hybrid boundary |
 | API runtime | `api/` contains Node-style Vercel Function adapters for auth, session, Admin Character/Skin/Preview/User routes, managed-asset upload intents, and DB health. Preview routes delegate transaction-scoped reads/mutations into `server/preview-characters/`. | Current foundation |
@@ -207,7 +207,7 @@ TypeScript improves development-time checking and refactoring confidence. It doe
 
 ## 10. Styling policy
 
-**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/talent.css` and `src/features/skins/styles/skinGallery.css` as established local exceptions. This remains a gradual extraction, not a required CSS migration and not a Tailwind mandate.
+**TARGET with a LOCKED visual invariant.** Current styling is primarily `src/style.css`, with `src/features/skins/styles/skinGallery.css` as an established local exception. This remains a gradual extraction, not a required CSS migration and not a Tailwind mandate.
 
 **LOCKED placement convention.** The repository is domain-first, not file-type-first:
 

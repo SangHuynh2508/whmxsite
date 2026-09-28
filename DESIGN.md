@@ -212,6 +212,10 @@ A near-neutral charcoal ramp with a faint cool cast, one antique gold, and the g
   Their `-text` variants are for text on the translucent rarity chips; the `-vivid` set is only for the catalogue
   filter chips (coloured text at rest, solid fill with `on-vivid` text when selected).
 
+- **Buff keyword orange** (`#ff6724`, `.mechanic-keyword.status-keyword` in `style.css`): the colour the game's own
+  skill text gives a buff/status name. Like the rarity colours it is game data, not a second UI accent (owner
+  2026-09-28); keep it, and make it a token when that CSS is next touched.
+
 ### Neutral
 - **Night Ink** (`night-ink`): page background.
 - **Archive Slate** (`archive-slate`): cards, the Build sheet, the lore ticket, the nav rail, Admin headers.
@@ -258,7 +262,7 @@ Chosen by the owner from three options on real content (`docs/public-redesign/ty
   Lore section titles are 700 17 px serif over a 1 px full-width rule ("book" headings).
 - **Body** (400, 15 px, 1.65, sans): lookup text. Lists and cells use 14 px; notes 13 px.
 - **Prose** (400, 15–16 px, 1.75–1.85, sans): lore reading, max 66 ch, `text-wrap: pretty`.
-- **Label** (500–600, 12–13 px, sans): tags, chips, captions, tab labels (13 px). **12 px is the floor for UI text.**
+- **Label** (500–600, 12–13 px, sans): tags, chips, captions, tab labels (13 px). **12 px is the floor for UI text**, except small secondary labels — rarity / LIMITED badges, acquisition chips, counters — which stay at 9.6–11 px on purpose (owner 2026-09-28: chữ phụ; not a finding).
 - **Serial** (700, 30 px, serif, 0.14 em tracking, tabular numerals): the 深造 serial (7202); 22 px on phones. The
   lore "Mã hồ sơ" serial is monospace 600 14 px in gold — a record number, not a build code.
 
@@ -416,7 +420,7 @@ hover.
 - **Don't** add drop shadows, glows or gradients; depth is tonal.
 - **Don't** add a second accent colour or another grey for secondary text.
 - **Don't** put coloured side bars before headings, "01"-style module numbers or uppercase tracked eyebrows.
-- **Don't** set UI text below 12 px.
+- **Don't** set UI text below 12 px (small secondary labels excepted, see Typography).
 - **Don't** redraw or restyle game assets, or guess a translation for an untranslated name.
 - **Don't** hide a panel at some width without showing it somewhere else at that width.
 - **Don't** use the light-theme tokens; they are not part of the system.

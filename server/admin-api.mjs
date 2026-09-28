@@ -5,11 +5,7 @@ import { eq } from 'drizzle-orm';
 
 import { getDb } from '../db/client.mjs';
 import { users } from '../db/schema/auth.mjs';
-import { AdminAccountDomainError } from './admin/accounts/admin-account-domain.mjs';
 import { auth } from './auth.mjs';
-import { ManagedAssetError } from './assets/r2-managed-assets.mjs';
-import { PreviewDomainError } from './preview-characters/preview-character-domain.mjs';
-import { CharacterSkinDomainError } from './character-skin-admin-domain.mjs';
 
 export class AdminApiError extends Error {
   constructor(status, code, message) {
@@ -88,17 +84,19 @@ export function requestId(body) {
   return typeof body.requestId === 'string' && body.requestId ? body.requestId : randomUUID();
 }
 
+// Domain errors are told apart by name, not instanceof: importing their modules here would load the upload stack
+// (sharp, AWS SDK) on every admin request (server/admin-api.test.mjs).
 export function sendAdminError(response, error) {
   if (error instanceof AdminApiError) return response.status(error.status).json({ error: { code: error.code, ...(error.details ? { details: error.details } : {}) } });
   if (error?.name === 'ZodError') return response.status(422).json({ error: { code: 'VALIDATION_ERROR' } });
-  if (error instanceof PreviewDomainError || error instanceof ManagedAssetError) {
+  if (error?.name === 'PreviewDomainError' || error?.name === 'ManagedAssetError') {
     const status = error.code === 'FORBIDDEN' ? 403 : error.code === 'NOT_FOUND' ? 404 : error.code === 'VERSION_CONFLICT' ? 409 : 400;
     return response.status(status).json({ error: { code: error.code } });
   }
-  if (error instanceof AdminAccountDomainError) {
+  if (error?.name === 'AdminAccountDomainError') {
     return response.status(error.status).json({ error: { code: error.code } });
   }
-  if (error instanceof CharacterSkinDomainError) {
+  if (error?.name === 'CharacterSkinDomainError') {
     const status = error.status || (error.code === 'NOT_FOUND' ? 404 : error.code === 'VERSION_CONFLICT' ? 409 : error.code === 'FORBIDDEN' ? 403 : 400);
     return response.status(status).json({ error: { code: error.code, ...(error.details ? { details: error.details } : {}) } });
   }

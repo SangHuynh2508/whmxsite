@@ -6,9 +6,8 @@ import { setCharacter, state } from '../../data/state.js';
 import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
 import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
-import { renderDataView } from '../../ui/dataView.js';
 import { renderCatalog } from '../layout/sidebar.js';
-import { selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
+import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
@@ -349,6 +348,11 @@ export function handleRoute() {
   if (!gameData) return;
 
   const route = parseHash();
+
+  // A new route closes what the old page left open: the calculator picker, and the scroll lock of a skin lightbox
+  // (the lightbox's own close never runs once its page is replaced, which froze the next page on phones).
+  closeCalcPicker();
+  document.body.style.overflow = '';
 
   // One URL per character: an ID URL (#/characters/W0182) is rewritten to the slug URL in place.
   if (route.view === 'character') {

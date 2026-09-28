@@ -32,7 +32,6 @@
     "db:owner-bootstrap-proof": "node --env-file=.env --env-file=.env.local scripts/db-owner-bootstrap-proof.mjs",
     "db:d2-character-skin-proof": "node --env-file=.env --env-file=.env.local scripts/db-d2-character-skin-proof.mjs",
     "db:d2-local-vercel-proof": "node --env-file=.env --env-file=.env.local scripts/db-d2-local-vercel-proof.mjs",
-    "db:d2-browser-proof": "node --env-file=.env --env-file=.env.local scripts/db-d2-browser-proof.mjs",
     "admin:bootstrap-owner": "node --env-file=.env --env-file=.env.local scripts/admin-bootstrap-owner.mjs",
     "admin:reset-password": "node --env-file=.env --env-file=.env.local scripts/admin-reset-password.mjs"
   },
