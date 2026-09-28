@@ -83,7 +83,7 @@ function BuildTab({ views }: { views: BuildView[] }) {
           {v.rotations.map((r, i) => (
             <div key={i} className="build-rotation">
               {r.label && <span className="build-group-label">{r.label}</span>}
-              <ol>{r.skills.map((s, k) => <li key={k}>{s.icon && <img src={s.icon} alt="" loading="lazy" />}{s.name}</li>)}</ol>
+              <ol>{r.steps.map((s, k) => <li key={k}>{s.icon && <img src={s.icon} alt="" loading="lazy" />}{s.name}</li>)}</ol>
             </div>
           ))}
         </section>
