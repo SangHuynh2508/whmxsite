@@ -5,13 +5,14 @@ import { getGameTexts, getLoreTerms, patchGameText, patchLoreTerm } from './lore
 import { lorePublisher, usePublishStatus } from './lorePublish';
 import { useEditor } from './useEditor';
 import { recordHref } from './lib/route.mts';
-import { DICTIONARY_TABS, dictionaryHref, isDone, parseDictionaryRoute, progress, type DictionaryTab } from './lib/dictionary.mts';
+import { DICTIONARY_TABS, dictionaryHref, isDone, mergeSameText, outOfStep, parseDictionaryRoute, progress, type DictionaryTab } from './lib/dictionary.mts';
 import { PairRow, ViCell } from './components/Pair';
 import { SaveBar } from './components/SaveBar';
 
 type Term = {
   code: string; kind: string; nameCn: string; detailCn: string; nameVi: string | null; detailVi: string | null;
   viOrigin: 'admin' | null; state: 'ok' | 'source_changed'; revision: number; usedBy: string[]; skillCodes?: string[];
+  twins?: Term[]; // rows merged by identical Chinese (sameText tabs); saved together
 };
 type Vi = { expectedRevision: number; nameVi: string | null; detailVi: string | null };
 // One tab = one source (lore_terms or game_texts) and the kinds it lists; `children` = terms edited with a row
@@ -20,6 +21,7 @@ type TabConfig = {
   intro: string; kinds: [string, string][];
   load: () => Promise<Term[]>; save: (term: Term, vi: Vi) => Promise<unknown>;
   children?: (term: Term, all: Term[]) => Term[];
+  sameText?: boolean; // one row per identical Chinese text of a kind (mergeSameText)
 };
 
 // Game texts are keyed kind + code; the page uses "kind:code" as the term code.
@@ -35,6 +37,7 @@ const TABS: Record<DictionaryTab, TabConfig> = {
   deepen: {
     intro: 'Thâm tạo: hướng, cột và thiên phú theo điểm.',
     kinds: [['job_style', 'Hướng thâm tạo'], ['style_sector', 'Cột thâm tạo'], ['style_talent', 'Thiên phú thâm tạo']], load: loadGame, save: saveGame,
+    sameText: true,
   },
   lore: {
     intro: 'Thuật ngữ lore: sửa ở đây đổi cho mọi nhân vật dùng thuật ngữ.',
@@ -48,6 +51,8 @@ const TABS: Record<DictionaryTab, TabConfig> = {
 };
 
 const official = (t: Term) => t.viOrigin === 'admin' && t.state === 'ok';
+const twinsOf = (t: Term) => t.twins ?? [t];
+const behind = (t: Term) => (t.twins ? outOfStep({ ...t, twins: t.twins }) : []);
 const field = (code: string, key: 'nameVi' | 'detailVi') => `${code}|${key}`;
 
 // Shared translations, one tab per part of the game (Vũ khí, Dòng thuộc tính, Thâm tạo, Lore).
@@ -87,22 +92,28 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
   useEffect(() => { if (code) setOpen(code); }, [code]);
 
   const kinds = useMemo(() => new Set(config.kinds.map(([k]) => k)), [config]);
-  const listed = useMemo(() => (terms ?? []).filter((t) => kinds.has(t.kind)), [terms, kinds]);
+  const listed = useMemo(() => {
+    const rows = (terms ?? []).filter((t) => kinds.has(t.kind));
+    return config.sameText ? mergeSameText(rows) : rows;
+  }, [terms, kinds, config]);
   const childrenOf = useCallback((t: Term) => (config.children ? config.children(t, terms ?? []) : []), [config, terms]);
+  // The editor's record must keep its identity across re-renders (search, publish status): a new array makes
+  // useEditor treat it as a freshly loaded record — typing reset to the saved value, "bản nháp" prompt.
+  const groups = useMemo(() => new Map(listed.map((t) => [t.code, [t, ...childrenOf(t)]])), [listed, childrenOf]);
   // A link to a weapon skill (old game-terms links, history) opens the weapon that has it.
   const openRow = useMemo(() => {
     if (!open || listed.some((t) => t.code === open)) return open;
-    return listed.find((t) => childrenOf(t).some((c) => c.code === open))?.code ?? open;
+    return listed.find((t) => [...twinsOf(t), ...childrenOf(t)].some((c) => c.code === open))?.code ?? open;
   }, [open, listed, childrenOf]);
   useEffect(() => {
     if (terms && openRow) document.getElementById(`term-${openRow}`)?.scrollIntoView({ block: 'start' });
   }, [terms, openRow]);
 
-  const count = useMemo(() => progress(listed.flatMap((t) => [t, ...childrenOf(t)])), [listed, childrenOf]);
+  const count = useMemo(() => progress(listed.flatMap((t) => [...twinsOf(t), ...childrenOf(t)])), [listed, childrenOf]);
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     return listed.filter((t) => {
-      const group = [t, ...childrenOf(t)];
+      const group = [...twinsOf(t), ...childrenOf(t)];
       return (!q || group.some((x) => [x.code, x.nameCn, x.nameVi].some((v) => v?.toLowerCase().includes(q))))
         && (!todoOnly || group.some((x) => !isDone(x)));
     });
@@ -147,7 +158,8 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
                       <span className="ml-3 text-sm text-(--text-muted)">{t.nameVi ?? <span className="italic text-(--text-subtle)">chưa dịch</span>}</span>
                       {t.nameVi && t.detailCn && !t.detailVi && <span className="ml-3 text-xs italic text-(--text-subtle)">chưa dịch mô tả</span>}
                       {childTodo > 0 && <span className="ml-3 text-xs italic text-(--text-subtle)">{childTodo}/{children.length} kỹ năng chưa dịch</span>}
-                      {[t, ...children].some((x) => x.state === 'source_changed') && <span className="ml-3 text-xs text-(--rarity-ssr-text)">Tiếng Trung đã đổi</span>}
+                      {twinsOf(t).length > 1 && <span className="ml-3 text-xs text-(--text-subtle)">{twinsOf(t).length} mục{behind(t).length > 0 && `, ${behind(t).length} chưa theo bản dịch này`}</span>}
+                      {[...twinsOf(t), ...children].some((x) => x.state === 'source_changed') && <span className="ml-3 text-xs text-(--rarity-ssr-text)">Tiếng Trung đã đổi</span>}
                     </span>
                     <span className="font-mono text-xs text-(--text-subtle)">{t.code}</span>
                   </button>
@@ -157,7 +169,7 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
                       <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">{t.usedBy.map((id) => <a key={id} href={recordHref(id, 'lore')} className="font-mono hover:text-(--text-main)">{id}</a>)}</p>
                     </details>
                   )}
-                  {openRow === t.code && <GroupEditor key={t.code} terms={[t, ...children]} reload={load} config={config} />}
+                  {openRow === t.code && <GroupEditor key={t.code} terms={groups.get(t.code)!} reload={load} config={config} />}
                 </div>
               );
             })}
@@ -185,13 +197,28 @@ function GroupEditor({ terms, reload, config }: { terms: Term[]; reload: () => P
     for (const t of terms) {
       const name = field(t.code, 'nameVi'); const detail = field(t.code, 'detailVi');
       if (!(name in c) && !(detail in c)) continue;
-      await config.save(t, { expectedRevision: t.revision, nameVi: name in c ? c[name] : t.nameVi, detailVi: detail in c ? c[detail] : t.detailVi });
+      const vi = { nameVi: name in c ? c[name] : t.nameVi, detailVi: detail in c ? c[detail] : t.detailVi };
+      for (const x of twinsOf(t)) {
+        if (official(x) && x.nameVi === vi.nameVi && x.detailVi === vi.detailVi) continue; // already this translation
+        await config.save(x, { expectedRevision: x.revision, ...vi });
+      }
     }
     lorePublisher.schedule();
   }, [terms, config]);
   const find = useCallback(async () => pick(await reload()), [pick, reload]);
   const peek = useCallback(async () => pick(await config.load()), [pick, config]);
   const editor = useEditor({ scope: 'term', id: terms[0].code, record, keys, save, reload: find, peek });
+  const lagging = behind(terms[0]);
+  const [applying, setApplying] = useState<string | null>(null);
+  const applyAll = async () => {
+    setApplying('Đang áp dụng…');
+    try {
+      for (const x of lagging) await config.save(x, { expectedRevision: x.revision, nameVi: terms[0].nameVi, detailVi: terms[0].detailVi });
+      lorePublisher.schedule();
+      setApplying(null);
+    } catch { setApplying('Áp dụng chưa xong. Tải lại trang rồi thử lại.'); }
+    await reload().catch(() => undefined);
+  };
   const labels = Object.fromEntries(terms.flatMap((t, i) => {
     const who = i === 0 ? '' : `Kỹ năng ${t.nameVi || t.nameCn}: `;
     return [[field(t.code, 'nameVi'), `${who}Tên`], [field(t.code, 'detailVi'), `${who}Mô tả`]];
@@ -206,6 +233,15 @@ function GroupEditor({ terms, reload, config }: { terms: Term[]; reload: () => P
   );
   return (
     <div className="-mx-4 mb-3 bg-(--bg-surface) md:-mx-8">
+      {twinsOf(terms[0]).length > 1 && (
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 pt-3 text-xs text-(--text-subtle) md:px-8">
+          <span>Dùng chung cho {twinsOf(terms[0]).length} mục cùng chữ Trung: <span className="font-mono">{twinsOf(terms[0]).map((x) => x.code.split(':')[1]).join(', ')}</span>.</span>
+          {lagging.length > 0 && official(terms[0]) && (
+            <Button variant="ghost" disabled={Boolean(editor.dirtyCount) || applying === 'Đang áp dụng…'} onClick={() => void applyAll()}>Áp dụng bản dịch này cho {lagging.length} mục còn lại</Button>
+          )}
+          {applying && <span role="status">{applying}</span>}
+        </p>
+      )}
       {terms.map((t, i) => (
         <div key={t.code} className={cn(i > 0 && 'border-t border-(--border-color)')}>
           {i > 0 && <p className="px-4 pt-3 text-[11px] uppercase tracking-[.2em] text-(--text-subtle) md:px-8">Kỹ năng {i}</p>}

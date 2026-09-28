@@ -33,3 +33,20 @@ type Translated = { nameCn: string; nameVi: string | null; detailCn: string; det
 export const isDone = (t: Translated) => (!t.nameCn && !t.detailCn)
   || (t.viOrigin === 'admin' && t.state === 'ok' && (!t.nameCn || Boolean(t.nameVi)) && (!t.detailCn || Boolean(t.detailVi)));
 export const progress = (terms: Translated[]) => ({ done: terms.filter(isDone).length, total: terms.length });
+
+// Rows of one kind with the same Chinese (name + description) share one translation (owner 2026-09-27: the 60 深造
+// columns are 4 names × 15 styles, 428 talents are 35 texts). The evidence is the identical source text, never the
+// code. The row stands for its twins and shows a translated one when there is one.
+type Keyed = Translated & { kind: string; code: string };
+export function mergeSameText<T extends Keyed>(terms: T[]): (T & { twins: T[] })[] {
+  const groups = new Map<string, T[]>();
+  for (const t of terms) {
+    const key = JSON.stringify([t.kind, t.nameCn, t.detailCn]);
+    groups.set(key, [...(groups.get(key) ?? []), t]);
+  }
+  return [...groups.values()].map((twins) => ({ ...(twins.find(isDone) ?? twins.find((t) => t.nameVi || t.detailVi) ?? twins[0]), twins }));
+}
+const official = (t: Translated) => t.viOrigin === 'admin' && t.state === 'ok';
+// Twins whose published translation differs from the row's.
+export const outOfStep = <T extends Keyed>(row: T & { twins: T[] }) =>
+  row.twins.filter((t) => t.nameVi !== row.nameVi || t.detailVi !== row.detailVi || official(t) !== official(row));

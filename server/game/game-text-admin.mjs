@@ -10,13 +10,7 @@ import { AdminApiError } from '../admin-api.mjs';
 import { bumpRevision } from '../profile/lore-admin.mjs';
 import { planTermEdit } from '../profile/lore-edit.mjs';
 import { createLoreRepository } from '../profile/lore-repository.mjs';
-
-// Pure: each weapon text gets its skill codes (weapon reference data.skillIds), so the admin Từ điển shows a
-// weapon's name and its skills in one place.
-export function withWeaponSkills(texts, refs) {
-  const skillsOf = new Map(refs.filter((r) => r.kind === 'weapon').map((r) => [r.code, r.data?.skillIds ?? []]));
-  return texts.map((t) => (t.kind === 'weapon' ? { ...t, skillCodes: skillsOf.get(t.code) ?? [] } : t));
-}
+import { withWeaponSkills } from './weapon-skills.mjs';
 
 export async function listGameTexts(db) {
   const rows = await db.select({ text: gameTexts, revision: managedEntities.revision })

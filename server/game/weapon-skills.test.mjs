@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { withWeaponSkills } from './game-text-admin.mjs';
+import { withWeaponSkills } from './weapon-skills.mjs';
 
 test('each weapon text carries its skill codes (from the weapon reference), so the Từ điển edits them together', () => {
   const texts = [
