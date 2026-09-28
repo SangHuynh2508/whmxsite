@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mobile nav · A · Mục lục</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:wght@500;700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<!--
+  Direction A · "Mục lục" (by the book, closest to today's sheet).
+  Assumptions: phones ≤ 768 px; the bottom dock is gone; ☰ sits bottom-left under the report badge (owner 2026-09-28).
+  Motion (GSAP): sheet fades in 0.22 s, rows rise 8 px in order; ☰ lines morph into ✕ in place; results arrive the same way.
+  Search: characters + skins from data.json (search-data.js), accent-insensitive ("thuong chu").
+-->
+<style>
+:root{--bg:#111315;--surface:#17191C;--lifted:#1C2024;--hover:#22262B;--line:#2B2F34;--line2:#3D434A;--text:#E3E5E8;--ash:#9097A0;--gold:#D4B763;--goldline:rgba(212,183,99,.3)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;gap:14px;background:#0a0b0c;font-family:Inter,system-ui,sans-serif;color:var(--text);padding:24px}
+.cap{font-size:13px;color:var(--ash);text-align:center;max-width:390px}
+.phone{position:relative;width:390px;height:844px;overflow:hidden;background:var(--bg);border-radius:28px;outline:1px solid var(--line)}
+/* floating stack, bottom-left: report above, ☰ at the corner */
+.fab{position:absolute;left:16px;z-index:30;display:grid;place-items:center;width:44px;height:44px;color:var(--ash);background:rgba(23,25,28,.92);border:1px solid var(--goldline);border-radius:6px;cursor:pointer}
+.fab:focus-visible,.row:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.search input:focus{outline:none} .search:focus-within{border-color:var(--gold)} /* the box border is the focus mark */
+.fab-report{bottom:72px}.fab-menu{bottom:20px;color:var(--text)}
+.fab svg line{transform-origin:12px 12px}
+.sheet{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;background:var(--bg);padding:20px 0 84px}
+.search{margin:0 20px 14px;display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;background:var(--lifted);border:1px solid var(--line2);border-radius:6px;color:var(--ash)}
+.search input{flex:1;min-width:0;height:100%;background:none;border:0;color:var(--text);font:16px Inter,system-ui,sans-serif}
+.search input::placeholder{color:var(--ash)}
+.label{margin:10px 20px 4px;font-size:12px;font-weight:600;color:var(--ash)}
+.row{display:flex;align-items:center;gap:14px;width:100%;min-height:52px;padding:0 20px;background:none;border:0;color:var(--text);font:16px Inter,system-ui,sans-serif;text-align:left;cursor:pointer}
+.row:hover{background:var(--hover)}.row.on{color:var(--gold);font-weight:600}
+.res img{width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:var(--lifted);object-fit:cover}
+.res b{display:block;font-weight:500}.res small{color:var(--ash);font-size:12px}.res em{margin-left:auto;font-style:normal;font-size:12px;color:var(--ash);border:1px solid var(--line2);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.empty{margin:18px 20px;color:var(--ash);font-size:14px}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div id="page"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-label="Menu">
+    <label class="search">__SEARCH__<input id="q" placeholder="Tìm Khí Giả hoặc trang phục" autocomplete="off"></label>
+    <div id="list"></div>
+  </div>
+  <button class="fab fab-report" aria-label="Báo lỗi">__FLAG__</button>
+  <button class="fab fab-menu" id="menu" aria-label="Menu" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line id="l1" x1="4" y1="6" x2="20" y2="6"/><line id="l2" x1="4" y1="12" x2="20" y2="12"/><line id="l3" x1="4" y1="18" x2="20" y2="18"/></svg>
+  </button>
+</div>
+<p class="cap">A · Mục lục — menu phủ kín, ô tìm kiếm ở đầu, ☰ hoá ✕ tại chỗ. Bấm ☰, gõ “thuong”, “家” hoặc tên trang phục.</p>
+<script src="/node_modules/gsap/dist/gsap.min.js"></script>
+<script src="search-data.js"></script>
+<script src="mock-common.js"></script>
+<script>
+document.head.insertAdjacentHTML('beforeend', `<style>${FAKE_PAGE_CSS}</style>`);
+document.getElementById('page').innerHTML = fakePage();
+document.querySelector('.search').innerHTML = icon('search', 18) + document.querySelector('.search').innerHTML.replace('__SEARCH__', '');
+document.querySelector('.fab-report').innerHTML = icon('flag', 18);
+const sheet = document.getElementById('sheet'), list = document.getElementById('list'), q = document.getElementById('q'), menu = document.getElementById('menu');
+const navHtml = () => `<p class="label">Trang</p>${NAV.map((n) => `<button class="row${n.active ? ' on' : ''}">${icon(n.icon)}${n.label}</button>`).join('')}<p class="label">Tài khoản</p><button class="row">${icon('login')}Đăng nhập</button>`;
+const resHtml = (r) => r.length ? r.map((x) => `<button class="row res"><img src="${avatar(x.avatar)}" alt="">${'<span>'}<b>${x.title}</b><small>${x.sub}</small></span><em>${x.kind}</em></button>`).join('') : '<p class="empty">Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.</p>';
+const arrive = () => gsap.fromTo(list.children, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out', stagger: 0.03 });
+let open = false;
+function morph(toX) {
+  gsap.to('#l1', { attr: toX ? { x1: 6, y1: 6, x2: 18, y2: 18 } : { x1: 4, y1: 6, x2: 20, y2: 6 }, duration: 0.3, ease: 'expo.out' });
+  gsap.to('#l2', { opacity: toX ? 0 : 1, duration: 0.15 });
+  gsap.to('#l3', { attr: toX ? { x1: 6, y1: 18, x2: 18, y2: 6 } : { x1: 4, y1: 18, x2: 20, y2: 18 }, duration: 0.3, ease: 'expo.out' });
+}
+function toggle() {
+  open = !open; menu.setAttribute('aria-expanded', open); morph(open);
+  if (open) {
+    list.innerHTML = navHtml(); q.value = '';
+    gsap.set(sheet, { display: 'flex' });
+    gsap.fromTo(sheet, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' });
+    gsap.fromTo([q.parentElement, ...list.children], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out', stagger: 0.035 });
+  } else gsap.to(sheet, { opacity: 0, duration: 0.15, onComplete: () => gsap.set(sheet, { display: 'none' }) });
+}
+menu.onclick = toggle;
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) toggle(); });
+q.oninput = () => { list.innerHTML = q.value.trim() ? resHtml(searchAll(q.value)) : navHtml(); arrive(); };
+</script>
+</body>
+</html>

@@ -26,8 +26,8 @@
   font-feature-settings: "tnum";
 }
 
-/* Mobile bottom dock (React: src/app/layout/AppNav.tsx): shown only ≤768px (rules in the mobile breakpoint below). */
-.mobile-dock {
+/* Mobile menu button (React: src/app/layout/AppNav.tsx): shown only ≤768px (rules in the mobile breakpoint below). */
+.mobile-menu-fab {
   display: none;
 }
 
@@ -1738,127 +1738,48 @@
     overflow: hidden !important;
   }
 
-  /* Mobile bottom dock (replaces the old top bar): src/app/layout/AppNav.tsx. */
+  /* Mobile menu (src/app/layout/AppNav.tsx; owner 2026-09-28, direction A "Mục lục", replaces the bottom dock):
+   * a floating ☰ bottom-left with the report badge above it; the sheet is a full-screen modal <dialog> with a
+   * global search on top. The ✕ inside the sheet sits exactly where ☰ is. Motion is GSAP (open only). */
   :root {
-    --mobile-dock-h: 56px;
+    --mobile-fab-zone: calc(76px + env(safe-area-inset-bottom, 0px)); /* ☰ 44px + 20px gap + air */
   }
 
   body {
-    padding-bottom: calc(var(--mobile-dock-h) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: var(--mobile-fab-zone); /* the last content can scroll clear of ☰ */
   }
 
-  body.mobile-dock-collapsed {
-    padding-bottom: 0;
-  }
-
-  .mobile-dock {
-    display: block;
+  .mobile-menu-fab {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: calc(16px + env(safe-area-inset-left, 0px));
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     z-index: 900;
-    pointer-events: none; /* only the bar/tab take clicks, not the empty box left while collapsed */
-  }
-
-  .mobile-dock-bar {
-    position: relative;
-    display: flex;
-    height: calc(var(--mobile-dock-h) + env(safe-area-inset-bottom, 0px));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: var(--bg-surface);
-    border-top: 1px solid var(--border-color);
-    pointer-events: auto;
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* Fills any sliver under the bar (fractional viewport heights, a mobile
-   * browser toolbar sliding away) so page content never peeks through. */
-  .mobile-dock-bar::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    height: 64px;
-    background: var(--bg-surface);
-  }
-
-  .mobile-dock-bar button,
-  .mobile-dock-tab {
-    flex: 1;
     display: grid;
     place-items: center;
-    border: 0;
-    background: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    pointer-events: auto;
-  }
-
-  /* Keeps ☰ centred when the page has no search box (🔍 is not rendered). */
-  .mobile-dock-spacer {
-    flex: 1;
-  }
-
-  /* ˅ slides the bar down, then the ˄ tab fades up; ˄ reverses it. Visibility
-   * flips instantly on show so focus can move straight to the revealed control. */
-  .mobile-dock-collapsed .mobile-dock-bar {
-    transform: translateY(calc(100% + 64px));
-    visibility: hidden;
-    transition: transform 0.24s cubic-bezier(0.7, 0, 0.84, 0), visibility 0s linear 0.24s;
-  }
-
-  .mobile-dock-tab {
-    position: absolute;
-    left: 50%;
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-    width: 56px;
-    height: 32px;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    background: var(--bg-surface);
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, 12px);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
-  }
-
-  .mobile-dock-collapsed .mobile-dock-tab {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
-    transition: opacity 0.2s ease 0.18s, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) 0.18s, visibility 0s;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .mobile-dock-bar,
-    .mobile-dock-tab,
-    .mobile-dock-collapsed .mobile-dock-bar,
-    .mobile-dock-collapsed .mobile-dock-tab {
-      transition: none;
-    }
-  }
-
-  .mobile-dock-bar button:hover,
-  .mobile-dock-tab:hover,
-  .mobile-dock-sheet a:hover,
-  .mobile-dock-sheet button:hover {
+    width: 44px;
+    height: 44px;
+    padding: 0;
     color: var(--text-main);
+    background: rgba(23, 25, 28, 0.92);
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-dock button:focus-visible,
-  .mobile-dock-sheet a:focus-visible,
-  .mobile-dock-sheet button:focus-visible {
+  .mobile-menu-fab:focus-visible,
+  .mobile-menu-sheet a:focus-visible,
+  .mobile-menu-sheet li button:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: -2px;
+    outline-offset: 2px;
   }
 
-  /* ☰ sheet: a full-height modal <dialog>; its close row sits where the dock bar is.
-   * Open/close: the sheet fades (allow-discrete keeps it in the top layer while fading
-   * out) and the items rise slightly. The close row doesn't move, so the ☰↔✕ morph
-   * stays in place. Browsers without @starting-style just show it instantly. */
-  .mobile-dock-sheet {
+  /* the report badge steps aside while the menu is open (owner) */
+  body.mobile-menu-open #whmx-feedback-btn {
+    visibility: hidden;
+  }
+
+  .mobile-menu-sheet {
     position: fixed;
     inset: 0;
     width: 100%;
@@ -1870,107 +1791,137 @@
     border: 0;
     background: var(--bg-main);
     color: var(--text-main);
-    opacity: 0;
-    transition: opacity 0.22s ease, overlay 0.22s allow-discrete, display 0.22s allow-discrete;
   }
 
-  .mobile-dock-sheet[open] {
-    opacity: 1;
-  }
-
-  .mobile-dock-sheet-body > :not(.mobile-dock-sheet-close) {
-    transform: translateY(12px);
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .mobile-dock-sheet[open] .mobile-dock-sheet-body > :not(.mobile-dock-sheet-close) {
-    transform: none;
-  }
-
-  @starting-style {
-    .mobile-dock-sheet[open] {
-      opacity: 0;
-    }
-
-    .mobile-dock-sheet[open] .mobile-dock-sheet-body > :not(.mobile-dock-sheet-close) {
-      transform: translateY(12px);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .mobile-dock-sheet,
-    .mobile-dock-sheet-body > * {
-      transition: none;
-    }
-  }
-
-  .mobile-dock-sheet::backdrop {
+  .mobile-menu-sheet::backdrop {
     background: transparent;
   }
 
-  .mobile-dock-sheet-body {
-    display: flex;
-    flex-direction: column;
+  .mobile-menu-body {
     min-height: 100%;
-    padding-top: env(safe-area-inset-top, 0px);
+    padding: calc(20px + env(safe-area-inset-top, 0px)) 0 var(--mobile-fab-zone);
     box-sizing: border-box;
   }
 
-  .mobile-dock-sheet ul {
+  .mobile-menu-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 48px;
+    margin: 0 20px 12px;
+    padding: 0 14px;
+    color: var(--text-muted);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+  }
+
+  .mobile-menu-search:focus-within {
+    border-color: var(--accent); /* the box border is the focus mark */
+  }
+
+  .mobile-menu-search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    color: var(--text-main);
+    font: 16px var(--font-sans); /* 16px: iOS doesn't zoom into the field */
+    background: none;
+    border: 0;
+    outline: none;
+  }
+
+  .mobile-menu-search input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .mobile-menu-search input::-webkit-search-cancel-button {
+    filter: grayscale(1) brightness(1.6);
+  }
+
+  .mobile-menu-sheet ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .mobile-dock-brand,
-  .mobile-dock-heading {
+  .mobile-menu-heading {
     margin: 0;
-    padding: 20px 20px 8px;
+    padding: 12px 20px 4px;
     color: var(--text-muted);
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
   }
 
-  .mobile-dock-sheet a,
-  .mobile-dock-sheet li button {
+  .mobile-menu-sheet a,
+  .mobile-menu-sheet li button {
     display: flex;
     align-items: center;
     gap: 14px;
     width: 100%;
-    min-height: 48px;
+    min-height: 52px;
     padding: 0 20px;
-    border: 0;
-    background: none;
     color: var(--text-main);
-    font: inherit;
-    font-size: 1rem;
+    font: 16px var(--font-sans);
+    text-align: left;
     text-decoration: none;
+    background: none;
+    border: 0;
     cursor: pointer;
   }
 
-  .mobile-dock-sheet a.active {
+  .mobile-menu-sheet a:hover,
+  .mobile-menu-sheet li button:hover {
+    background: var(--bg-surface-hover);
+  }
+
+  .mobile-menu-sheet a.active {
     color: var(--accent);
     font-weight: 600;
   }
 
-  .mobile-dock-sheet-close {
-    margin-top: auto;
-    border-top: 1px solid var(--border-color);
-    background: var(--bg-surface);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+  .mobile-menu-result img {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
   }
 
-  .mobile-dock-sheet-close button {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: var(--mobile-dock-h);
-    border: 0;
-    background: none;
+  .mobile-menu-result span {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-menu-result b {
+    display: block;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .mobile-menu-result small {
     color: var(--text-muted);
-    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .mobile-menu-result em {
+    flex: none;
+    padding: 2px 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: normal;
+    white-space: nowrap;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+  }
+
+  .mobile-menu-empty {
+    margin: 16px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
   }
 
   .app-layout {
@@ -1978,7 +1929,7 @@
     margin-left: 0 !important;
     width: 100% !important;
     height: auto;
-    min-height: calc(100dvh - var(--mobile-dock-h));
+    min-height: 100dvh;
     overflow-x: hidden;
   }
 
@@ -7081,7 +7032,7 @@
 /* Mobile & Touch Layout */
 @media (max-width: 768px) {
   .whmx-feedback-btn {
-    bottom: calc(16px + var(--mobile-dock-h, 0px) + env(safe-area-inset-bottom, 0px));
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)); /* stacked above the ☰ menu button (bottom 20px + 44px + 8px) */
     right: calc(16px + env(safe-area-inset-right, 0px));
     width: 46px;
     height: 46px;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -20,16 +20,11 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@500;700&display=swap"
     rel="stylesheet">
 
-  <!-- Early Theme & Nav script to prevent FOUC -->
+  <!-- Early nav script to prevent FOUC (the site is dark only: data-theme="dark" is on <html>; the old theme
+       pick here painted light pages for light-OS visitors or a saved "light" until theme.js ran) -->
   <script>
     (function () {
       try {
-        var savedTheme = localStorage.getItem('whmx_theme');
-        var theme = (savedTheme === 'dark' || savedTheme === 'light')
-          ? savedTheme
-          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', theme);
-
         var savedNav = localStorage.getItem('whmx_nav_expanded');
         var expanded = savedNav === 'true';
         document.documentElement.setAttribute('data-nav-expanded', expanded ? 'true' : 'false');
@@ -50,8 +45,9 @@
 
   <div id="app" class="app-layout">
 
-    <!-- Sidebar: Catalog -->
-    <aside class="sidebar" id="sidebar" data-lenis-prevent>
+    <!-- Legacy catalog drawer + calculator empty state: hidden from the first paint (owner 2026-09-28: the old
+         calculator screen showed while data.json loaded); the router keeps them hidden on every route. -->
+    <aside class="sidebar hidden" id="sidebar" data-lenis-prevent>
       <header class="sidebar-header">
         <div class="sidebar-header-title">
           <h1>Vật Hoa Di Tân</h1>
@@ -252,7 +248,7 @@
       </footer>
     </main>
 
-    <div id="empty-state" class="empty-state">
+    <div id="empty-state" class="empty-state hidden">
       <div class="empty-state-content">
         <div class="empty-state-icon">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"

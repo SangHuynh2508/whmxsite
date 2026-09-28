@@ -273,7 +273,9 @@ findings from the detector); the Chinese name under the character title renders 
 ## Layout
 
 - **App shell:** a left nav rail on desktop (renders 60 px; the `--app-nav-collapsed-width` token says 72 px —
-  reconcile), a bottom dock on phones (≤ 768 px). Content max width ~1360 px on character pages.
+  reconcile). Phones (≤ 768 px): no dock — a floating ☰ bottom-left (report badge above it) opens a full-screen menu
+  with a global search (characters + skins) on top; mobile-nav direction A, 2026-09-28. Content max width ~1360 px on
+  character pages.
 - **Character page:** header (avatar, serif name, Chinese name, role chips, class icon + rarity badge) → page tabs → tab body. ≤ 768 px the "Danh Sách Khí Giả" button is dropped (system Back and the dock menu cover it) and the class icon + rarity sit small beside the Chinese name. Page tabs replace the history entry: Back leaves the character page.
 - **Build sheet:** one bordered sheet: a band (name, rating, credit) over a 12-column grid whose 1 px gaps show the
   hairline colour — the gaps are the dividers, so they stay right whatever order the modules take. Paired modules

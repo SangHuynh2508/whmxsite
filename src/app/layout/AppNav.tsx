@@ -1,17 +1,20 @@
 import { StrictMode, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Calculator, ChevronDown, ChevronUp, LogIn, LogOut, Search, ShieldCheck, Shirt, Sword, UsersRound } from 'lucide-react';
+import { Calculator, LogIn, LogOut, Search, ShieldCheck, Shirt, Sword, UsersRound } from 'lucide-react';
 import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
 import { calculatorHash, parseHash } from '../router/router.js';
-import { openMobileDrawer } from './sidebar.js';
+import { gsap } from 'gsap';
+import { getGameData } from '../../data/loader.js';
+import { getCharacterAvatarUrl } from '../../ui/utils/avatar.js';
+import { searchSite } from './siteSearch.mts';
 import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
 /*
  * Global navigation, one React root: the desktop rail (≥769px) and the mobile
- * bottom dock (≤768px) share the link list, the active-route rule and the
- * session state. Which one shows is pure CSS (src/style.css .app-nav*, .mobile-dock*).
+ * menu (≤768px: floating ☰ + full-screen sheet with search) share the link list, the active-route rule and
+ * the session state. Which one shows is pure CSS (src/style.css .app-nav*, .mobile-menu*).
  */
 
 const PUBLIC_LINKS = [
@@ -50,7 +53,7 @@ function AppNav() {
   return (
     <>
       <DesktopRail view={view} authorized={authorized} />
-      <MobileDock view={view} authorized={authorized} />
+      <MobileMenu view={view} authorized={authorized} />
     </>
   );
 }
@@ -132,70 +135,56 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
   );
 }
 
-/* ---------- Mobile dock: 🔍 focus the page's search box, ☰ menu sheet, ˅ collapse to a ˄ tab ---------- */
+/* ---------- Mobile menu (≤768px, owner 2026-09-28, direction A "Mục lục", docs/public-redesign/mobile-nav/): the
+ * bottom dock is gone; a floating ☰ sits bottom-left under the report badge and opens a full-screen sheet with a
+ * global search on top. ---------- */
 
-const COLLAPSED_KEY = 'whmx:mobile-dock-collapsed';
-const BAR_STROKE = 2.5; // dock icons a touch bolder than lucide's default 2 (owner request)
+const BAR_STROKE = 2.5; // icons a touch bolder than lucide's default 2 (owner request)
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Every search box in the app (catalog, gallery, admin lists) has a "Tìm…" placeholder.
-const visibleSearch = () =>
-  [...document.querySelectorAll<HTMLInputElement>('input[placeholder^="Tìm"]')].find((input) => input.checkVisibility({ visibilityProperty: true }));
-// The calculator's search lives in the (closed) character drawer.
-const onCalculator = () => location.hash.startsWith('#calc');
-
-function readCollapsed() {
-  try { return localStorage.getItem(COLLAPSED_KEY) === '1'; } catch { return false; }
-}
-
-function MobileDock({ view, authorized }: { view: string; authorized: boolean }) {
+function MobileMenu({ view, authorized }: { view: string; authorized: boolean }) {
   const [open, setOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(readCollapsed);
-  const [hasSearch, setHasSearch] = useState(false);
+  const [query, setQuery] = useState('');
   const sheetRef = useRef<HTMLDialogElement>(null);
-  const menuRef = useRef<HTMLButtonElement>(null);
-  const tabRef = useRef<HTMLButtonElement>(null);
-  const toggled = useRef(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    document.body.classList.toggle('mobile-dock-collapsed', collapsed);
-    try { localStorage.setItem(COLLAPSED_KEY, collapsed ? '1' : ''); } catch { /* storage blocked: not remembered */ }
-    // Move focus to whichever control just appeared (not on first mount).
-    if (toggled.current) (collapsed ? tabRef : menuRef).current?.focus();
-  }, [collapsed]);
-
-  // Native modal <dialog>: Esc, focus move and an inert page come for free.
+  // Native modal <dialog>: Esc, focus trap and an inert page come for free. The report badge steps aside while it
+  // is open (owner: "ẩn nút report đi cho đỡ vướng").
   useEffect(() => {
     const sheet = sheetRef.current;
-    if (open && !sheet?.open) sheet?.showModal();
+    if (open && !sheet?.open) {
+      sheet?.showModal();
+      closeRef.current?.focus(); // showModal focuses the search box, which pops the phone keyboard over the menu
+    }
     if (!open && sheet?.open) sheet.close();
+    document.body.classList.toggle('mobile-menu-open', open);
+    if (!open) setQuery('');
   }, [open]);
 
-  useEffect(() => {
-    // ponytail: re-checks on any DOM change (one rAF per batch) because views render async;
-    // tag search inputs explicitly if this ever shows up in a profile.
-    let frame = 0;
-    const sync = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        setHasSearch(Boolean(visibleSearch()) || onCalculator());
-      });
-    };
-    const observer = new MutationObserver(sync);
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'hidden'] });
-    sync();
-    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
-  }, []);
+  // GSAP: the sheet fades in and its blocks rise in order; closing is instant.
+  useLayoutEffect(() => {
+    const sheet = sheetRef.current;
+    if (!open || !sheet || reducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(sheet, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' });
+      gsap.fromTo(sheet.querySelectorAll('.mobile-menu-search, .mobile-menu-list > *'), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out', stagger: 0.035, clearProps: 'opacity,transform' });
+    }, sheet);
+    return () => ctx.revert();
+  }, [open]);
+  // A new query brings its results in the same way.
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!open || !list || reducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(list.children, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out', stagger: 0.03, clearProps: 'opacity,transform' });
+    }, list);
+    return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
-  const toggleCollapsed = (value: boolean) => {
-    toggled.current = true;
-    setCollapsed(value);
-  };
-  const search = () => {
-    const input = visibleSearch();
-    if (input) input.focus();
-    else if (onCalculator()) openMobileDrawer();
-  };
+  const characters = (getGameData()?.characters ?? {}) as Record<string, { id: string; icon?: string }>;
+  const results = query.trim() ? searchSite(query, characters) : [];
   // Any link in the sheet closes it; the hash change does the navigation.
   const closeOnLink = (event: MouseEvent) => {
     if ((event.target as HTMLElement).closest('a')) setOpen(false);
@@ -204,65 +193,76 @@ function MobileDock({ view, authorized }: { view: string; authorized: boolean })
 
   return (
     <>
-      <nav className="mobile-dock" aria-label="Điều hướng">
-        <div className="mobile-dock-bar">
-          {hasSearch ? (
-            <button type="button" aria-label="Tìm kiếm" onClick={search}><Search size={20} strokeWidth={BAR_STROKE} /></button>
-          ) : (
-            <span aria-hidden className="mobile-dock-spacer" />
-          )}
-          <button ref={menuRef} type="button" aria-label="Menu" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
+      <button type="button" className="mobile-menu-fab" aria-label="Menu" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
+        <MorphIcon icon={Menu} size={20} strokeWidth={BAR_STROKE} reducedMotion="user" />
+      </button>
+
+      <dialog ref={sheetRef} className="mobile-menu-sheet" aria-label="Menu" onClose={() => setOpen(false)}>
+        <div className="mobile-menu-body" onClick={closeOnLink}>
+          <label className="mobile-menu-search">
+            <Search size={18} aria-hidden />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={(event) => { if (event.key === 'Enter' && results[0]) { location.hash = results[0].href; setOpen(false); } }}
+              placeholder="Tìm Khí Giả hoặc trang phục"
+              aria-label="Tìm Khí Giả hoặc trang phục"
+              autoComplete="off"
+              enterKeyHint="search"
+            />
+          </label>
+          <div ref={listRef} className="mobile-menu-list">
+            {query.trim() ? (
+              results.length ? results.map((r) => (
+                <a key={r.href} href={r.href} className="mobile-menu-result">
+                  <img src={getCharacterAvatarUrl(characters[r.characterId])} alt="" loading="lazy" />
+                  <span><b>{r.title}</b><small>{r.sub}</small></span>
+                  <em>{r.kind === 'character' ? 'Khí Giả' : 'Trang phục'}</em>
+                </a>
+              )) : <p className="mobile-menu-empty">Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.</p>
+            ) : (
+              <>
+                <p className="mobile-menu-heading">Trang</p>
+                <ul>
+                  {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
+                    <li key={href}>
+                      <a href={href} className={views.includes(view) ? 'active' : undefined} aria-current={views.includes(view) ? 'page' : undefined} onClick={linkClick(href)}>
+                        <Icon size={20} />{label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                {authorized ? (
+                  <>
+                    <p className="mobile-menu-heading">Quản trị</p>
+                    <ul>
+                      {NAV.map(({ id, href, label, icon: Icon }) => (
+                        <li key={id}>
+                          <a href={href} className={section === id ? 'active' : undefined} aria-current={section === id ? 'page' : undefined}>
+                            <Icon size={20} />{label}
+                          </a>
+                        </li>
+                      ))}
+                      <li>
+                        <button type="button" onClick={() => { setOpen(false); void signOut(); }}><LogOut size={20} />Đăng xuất</button>
+                      </li>
+                    </ul>
+                  </>
+                ) : (
+                  <>
+                    <p className="mobile-menu-heading">Tài khoản</p>
+                    <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />Đăng nhập</a>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+          {/* Exactly where ☰ is, morphing with the same `open ? X : Menu`; focused on open so the phone keyboard stays
+              down until the search box is tapped. */}
+          <button ref={closeRef} type="button" className="mobile-menu-fab" aria-label="Đóng menu" onClick={() => setOpen(false)}>
             <MorphIcon icon={open ? X : Menu} size={20} strokeWidth={BAR_STROKE} reducedMotion="user" />
           </button>
-          <button type="button" aria-label="Thu gọn thanh điều hướng" onClick={() => toggleCollapsed(true)}><ChevronDown size={20} strokeWidth={BAR_STROKE} /></button>
-        </div>
-        <button ref={tabRef} type="button" className="mobile-dock-tab" aria-label="Mở thanh điều hướng" onClick={() => toggleCollapsed(false)}>
-          <ChevronUp size={20} strokeWidth={BAR_STROKE} />
-        </button>
-      </nav>
-
-      <dialog ref={sheetRef} className="mobile-dock-sheet" aria-label="Menu" onClose={() => setOpen(false)}>
-        <div className="mobile-dock-sheet-body" onClick={closeOnLink}>
-          <p className="mobile-dock-brand">Vật Hoa Di Tân</p>
-          <ul>
-            {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  className={views.includes(view) ? 'active' : undefined}
-                  aria-current={views.includes(view) ? 'page' : undefined}
-                  onClick={linkClick(href)}
-                >
-                  <Icon size={20} />{label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          {authorized ? (
-            <>
-              <p className="mobile-dock-heading">Quản trị</p>
-              <ul>
-                {NAV.map(({ id, href, label, icon: Icon }) => (
-                  <li key={id}>
-                    <a href={href} className={section === id ? 'active' : undefined} aria-current={section === id ? 'page' : undefined}>
-                      <Icon size={20} />{label}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <button type="button" onClick={() => { setOpen(false); void signOut(); }}><LogOut size={20} />Đăng xuất</button>
-                </li>
-              </ul>
-            </>
-          ) : (
-            <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />Đăng nhập</a>
-          )}
-          {/* Sits exactly where ☰ is, morphing with the same `open ? X : Menu`. */}
-          <div className="mobile-dock-sheet-close">
-            <button type="button" aria-label="Đóng menu" onClick={() => setOpen(false)}>
-              <MorphIcon icon={open ? X : Menu} size={20} strokeWidth={BAR_STROKE} reducedMotion="user" />
-            </button>
-          </div>
         </div>
       </dialog>
     </>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mobile nav · B · Ngăn kéo lưu trữ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:wght@500;700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<!--
+  Direction B · "Ngăn kéo lưu trữ" (the archive drawer; reference: the lore ticket in DESIGN.md).
+  Assumptions: phones ≤ 768 px; no dock; ☰ bottom-left under the report badge; the page stays visible behind the drawer.
+  Motion (GSAP): drawer slides from the left edge (0.45 s expo-out) while the page dims and drifts 24 px right;
+  entries arrive in order; tapping the dimmed page or ✕ closes (0.25 s).
+  Material: paper grain + gold hairline like the lore ticket; entries separated by dashed perforations.
+-->
+<style>
+:root{--bg:#111315;--surface:#17191C;--lifted:#1C2024;--hover:#22262B;--line:#2B2F34;--line2:#3D434A;--text:#E3E5E8;--ash:#9097A0;--gold:#D4B763;--goldline:rgba(212,183,99,.3);
+--grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;gap:14px;background:#0a0b0c;font-family:Inter,system-ui,sans-serif;color:var(--text);padding:24px}
+.cap{font-size:13px;color:var(--ash);text-align:center;max-width:390px}
+.phone{position:relative;width:390px;height:844px;overflow:hidden;background:var(--bg);border-radius:28px;outline:1px solid var(--line)}
+#page{position:absolute;inset:0}
+.scrim{position:absolute;inset:0;z-index:10;display:none;background:rgb(0 0 0 / .6)}
+.fab{position:absolute;left:16px;z-index:30;display:grid;place-items:center;width:44px;height:44px;color:var(--ash);background:rgba(23,25,28,.92);border:1px solid var(--goldline);border-radius:6px;cursor:pointer}
+.fab-report{bottom:72px}.fab-menu{bottom:20px;color:var(--text)}
+.fab:focus-visible,.entry:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.field input:focus{outline:none} .field:focus-within{border-bottom-color:var(--gold)} /* the rule is the focus mark */
+.drawer{position:absolute;top:0;bottom:0;left:0;z-index:20;width:86%;display:flex;flex-direction:column;padding:34px 24px 90px;background:var(--grain),var(--surface);border-right:1px solid var(--goldline);transform:translateX(-101%)}
+.brand{margin:0;font:700 22px/1.2 'Noto Serif',serif}.brand small{display:block;margin-top:4px;font:500 13px 'Noto Serif SC',serif;color:var(--ash);letter-spacing:.2em}
+.field{display:flex;align-items:center;gap:10px;margin:24px 0 8px;padding:0 0 8px;border-bottom:1px solid var(--goldline);color:var(--ash)}
+.field input{flex:1;min-width:0;background:none;border:0;color:var(--text);font:16px Inter,system-ui,sans-serif;padding:6px 0}
+.field input::placeholder{color:var(--ash)}
+.entries{margin-top:8px}
+.entry{display:flex;align-items:baseline;justify-content:space-between;gap:12px;width:100%;padding:16px 0;background:none;border:0;border-bottom:1px dashed var(--goldline);color:var(--text);text-align:left;cursor:pointer}
+.entry span{font:500 19px/1.3 'Noto Serif',serif}.entry small{font:500 13px 'Noto Serif SC',serif;color:var(--ash)}
+.entry.on span{color:var(--gold)}
+.entry.res{align-items:center;padding:12px 0}.entry.res img{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--lifted);object-fit:cover;flex:none}
+.entry.res .t{flex:1;min-width:0}.entry.res .t span{display:block;font-size:16px}.entry.res em{font-style:normal;font-size:12px;color:var(--ash)}
+.foot{margin-top:auto;padding-left:44px;font-size:14px;color:var(--ash)} /* clear of the floating report + ☰ buttons */.foot button{background:none;border:0;color:var(--text);font:inherit;padding:0;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.empty{margin:18px 0;color:var(--ash);font-size:14px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div id="page"></div>
+  <div class="scrim" id="scrim"></div>
+  <nav class="drawer" id="drawer" aria-label="Menu">
+    <p class="brand">Vật Hoa Di Tân<small>物华弥新</small></p>
+    <label class="field" id="field"><input id="q" placeholder="Tìm Khí Giả, trang phục…" autocomplete="off"></label>
+    <div class="entries" id="list"></div>
+    <div class="foot"><button id="login"></button></div>
+  </nav>
+  <button class="fab fab-report" aria-label="Báo lỗi"></button>
+  <button class="fab fab-menu" id="menu" aria-label="Menu" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line id="l1" x1="4" y1="6" x2="20" y2="6"/><line id="l2" x1="4" y1="12" x2="20" y2="12"/><line id="l3" x1="4" y1="18" x2="20" y2="18"/></svg>
+  </button>
+</div>
+<p class="cap">B · Ngăn kéo lưu trữ — ngăn kéo trượt từ trái, trang lùi lại phía sau; chất liệu phiếu Lore (giấy, viền vàng, răng cưa). Bấm vùng tối để đóng.</p>
+<script src="/node_modules/gsap/dist/gsap.min.js"></script>
+<script src="search-data.js"></script>
+<script src="mock-common.js"></script>
+<script>
+document.head.insertAdjacentHTML('beforeend', `<style>${FAKE_PAGE_CSS}</style>`);
+document.getElementById('page').innerHTML = fakePage();
+document.getElementById('field').insertAdjacentHTML('afterbegin', icon('search', 18));
+document.querySelector('.fab-report').innerHTML = icon('flag', 18);
+document.getElementById('login').innerHTML = icon('login', 18) + 'Đăng nhập';
+const drawer = document.getElementById('drawer'), scrim = document.getElementById('scrim'), page = document.getElementById('page'), list = document.getElementById('list'), q = document.getElementById('q'), menu = document.getElementById('menu');
+const navHtml = () => NAV.map((n) => `<button class="entry${n.active ? ' on' : ''}"><span>${n.label}</span><small>${n.cn}</small></button>`).join('');
+const resHtml = (r) => r.length ? r.map((x) => `<button class="entry res"><img src="${avatar(x.avatar)}" alt=""><span class="t"><span>${x.title}</span><em>${x.kind} · ${x.sub}</em></span></button>`).join('') : '<p class="empty">Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.</p>';
+const arrive = (els) => gsap.fromTo(els, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.45, ease: 'expo.out', stagger: 0.04 });
+let open = false;
+function morph(toX) {
+  gsap.to('#l1', { attr: toX ? { x1: 6, y1: 6, x2: 18, y2: 18 } : { x1: 4, y1: 6, x2: 20, y2: 6 }, duration: 0.3, ease: 'expo.out' });
+  gsap.to('#l2', { opacity: toX ? 0 : 1, duration: 0.15 });
+  gsap.to('#l3', { attr: toX ? { x1: 6, y1: 18, x2: 18, y2: 6 } : { x1: 4, y1: 18, x2: 20, y2: 18 }, duration: 0.3, ease: 'expo.out' });
+}
+function toggle() {
+  open = !open; menu.setAttribute('aria-expanded', open); morph(open);
+  if (open) {
+    list.innerHTML = navHtml(); q.value = '';
+    gsap.set(scrim, { display: 'block' });
+    gsap.timeline()
+      .fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+      .to(page, { x: 24, duration: 0.5, ease: 'expo.out' }, 0)
+      .to(drawer, { xPercent: 101, duration: 0.45, ease: 'expo.out' }, 0);
+    arrive([document.querySelector('.brand'), document.getElementById('field'), ...list.children]);
+  } else {
+    gsap.timeline({ onComplete: () => gsap.set(scrim, { display: 'none' }) })
+      .to(drawer, { xPercent: 0, duration: 0.25, ease: 'power2.in' }, 0)
+      .to(page, { x: 0, duration: 0.25, ease: 'power2.in' }, 0)
+      .to(scrim, { opacity: 0, duration: 0.25 }, 0);
+  }
+}
+menu.onclick = toggle; scrim.onclick = () => open && toggle();
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) toggle(); });
+q.oninput = () => { list.innerHTML = q.value.trim() ? resHtml(searchAll(q.value)) : navHtml(); arrive(list.children); };
+</script>
+</body>
+</html>
