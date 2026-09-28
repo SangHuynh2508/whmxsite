@@ -1149,7 +1149,7 @@
   justify-content: space-between;
   gap: 6px;
   font-size: 11px;
-  color: var(--text-subtle, #6B7280);
+  color: var(--text-subtle, #8A9099);
 }
 
 .gallery-card-cn {

@@ -11,7 +11,7 @@
   --border-strong: #D4D4D4;
   --text-main: #1A1A1A;
   --text-muted: #666666;
-  --text-subtle: #888888;
+  --text-subtle: #6E6E6E; /* ≥4.5:1 on every light surface (was #888, 3.2–3.5:1) */
   --accent: #B89947; /* Muted gold/bronze inspired by antiques */
   --accent-light: #F4F1E9;
   --shadow-pop: rgba(0, 0, 0, 0.16);
@@ -91,7 +91,7 @@
   --border-strong: #3D434A;
   --text-main: #E3E5E8;
   --text-muted: #9097A0;
-  --text-subtle: #6B7280;
+  --text-subtle: #8A9099; /* ≥4.5:1 on every dark surface incl. hover (was #6B7280, 3.6:1) */
   --accent: #D4B763;
   --accent-light: #24221A;
   --shadow-pop: rgba(0, 0, 0, 0.55);
