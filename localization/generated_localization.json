@@ -28384,9 +28384,9 @@
     "Buff_CritDmg_Once_Up": {
       "group_root_id": "Buff_CritDmg_Once_Up",
       "buff_name_cn": "爆焱",
-      "buff_name_vi": "",
+      "buff_name_vi": "Bạo Diễm",
       "buff_desc_cn": "自身下<color=#158bdb>1</color>次造成技能伤害时，暴击伤害提高<color=#158bdb>40%</color>，持续<color=#158bdb>1</color>回合。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khi bản thân gây sát thương kỹ năng ở <color=#158bdb>1</color> lần kế tiếp, sát thương bạo kích tăng <color=#158bdb>40%</color>, duy trì <color=#158bdb>1</color> hiệp.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -31858,9 +31858,9 @@
     "Buff_HealedIncrease_Down": {
       "group_root_id": "Buff_HealedIncrease_Down",
       "buff_name_cn": "降愈",
-      "buff_name_vi": "",
+      "buff_name_vi": "Giảm Hồi Máu",
       "buff_desc_cn": "降低受到治疗量<color=#158bdb>[EffectParam,3]%</color>，持续<color=#158bdb>[EffectParam,2]</color>回合，可叠加<color=#158bdb>1</color>层。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Giảm lượng trị liệu nhận vào <color=#158bdb>[EffectParam,3]%</color>, duy trì <color=#158bdb>[EffectParam,2]</color> hiệp, có thể cộng dồn <color=#158bdb>1</color> tầng.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -32461,9 +32461,9 @@
     "Buff_MA06303_5": {
       "group_root_id": "Buff_MA06303_5",
       "buff_name_cn": "浊渊",
-      "buff_name_vi": "",
+      "buff_name_vi": "Trọc Uyên",
       "buff_desc_cn": "处于此状态时，受到敌方任意攻击或自身回合结束时，自身受到敌方雾鹿·渊攻击力<color=#158bdb>100%</color>的物理伤害。\n触发伤害效果后，此状态消除。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khi ở trong trạng thái này, khi chịu bất kỳ đòn tấn công nào từ phe địch hoặc khi kết thúc hiệp của bản thân, bản thân phải chịu lượng sát thương vật lý bằng <color=#158bdb>100%</color> sức tấn công của Vụ Lộc - Uyên phe địch.\nSau khi kích hoạt hiệu quả sát thương, trạng thái này sẽ biến mất.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -32472,7 +32472,7 @@
       "buff_name_cn": "雾隐",
       "buff_name_vi": "Vụ Ẩn",
       "buff_desc_cn": "处于此状态时，闪避<color=#158bdb>1</color>次直接攻击，成功闪避后清除此状态。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khi ở trong trạng thái này, né tránh <color=#158bdb>1</color> lần đòn tấn công trực tiếp, sau khi né tránh thành công sẽ xóa bỏ trạng thái này.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -34002,16 +34002,16 @@
       "buff_name_cn": "滞缓",
       "buff_name_vi": "Trệ Hoãn",
       "buff_desc_cn": "降低移动力<color=#158bdb>[EffectParam,3]</color>，持续<color=#158bdb>[EffectParam,2]</color>回合，可叠加<color=#158bdb>1</color>层。",
-      "buff_desc_vi": "Di Động Lực giảm <color=#158bdb>[EffectParam,3]</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, tối đa cộng dồn <color=#158bdb>1</color> tầng.",
+      "buff_desc_vi": "Lực di chuyển giảm <color=#158bdb>[EffectParam,3]</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, tối đa cộng dồn <color=#158bdb>1</color> tầng.",
       "classification_scope": "UNKNOWN",
       "status": "OWNER_APPROVED"
     },
     "Buff_Mov_Down_Hard": {
       "group_root_id": "Buff_Mov_Down_Hard",
       "buff_name_cn": "降低移动力",
-      "buff_name_vi": "",
+      "buff_name_vi": "Giảm Tốc Độ Di Chuyển",
       "buff_desc_cn": "降低移动力<color=#158bdb>[EffectParam,3]</color>，持续<color=#158bdb>[EffectParam,2]</color>回合。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Giảm lực di chuyển <color=#158bdb>[EffectParam,3]</color>, duy trì <color=#158bdb>[EffectParam,2]</color> hiệp.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -34027,9 +34027,9 @@
     "Buff_Mucus": {
       "group_root_id": "Buff_Mucus",
       "buff_name_cn": "朽泥",
-      "buff_name_vi": "",
+      "buff_name_vi": "Hủ Nê",
       "buff_desc_cn": "此状态<color=#158bdb>1</color>层时，自身免疫强制位移效果，移动力减少至<color=#158bdb>1</color>；此状态叠加至<color=#158bdb>2</color>层时，立即清除此状态并使自身获得<color=#ff6724>眩晕</color>状态。<color=#ff6724>朽泥</color>状态持续<color=#158bdb>2</color>回合，无法被驱散。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khi trạng thái này ở mức <color=#158bdb>1</color> tầng, bản thân miễn nhiễm hiệu ứng dịch chuyển cưỡng chế, lực di chuyển giảm còn <color=#158bdb>1</color>; khi trạng thái này cộng dồn đến <color=#158bdb>2</color> tầng, lập tức xóa bỏ trạng thái này và khiến bản thân nhận trạng thái <color=#ff6724>Choáng</color>. Trạng thái <color=#ff6724>Hủ Nê</color> duy trì <color=#158bdb>2</color> hiệp, không thể bị xua tan.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -34126,9 +34126,9 @@
     "Buff_PhysicDmgReduce": {
       "group_root_id": "Buff_PhysicDmgReduce",
       "buff_name_cn": "弱肌",
-      "buff_name_vi": "",
+      "buff_name_vi": "Nhược Cơ",
       "buff_desc_cn": "处于此状态时，造成的物理伤害降低<color=#158bdb>[EffectParam,3]%</color>，持续<color=#158bdb>[EffectParam,2]</color>回合。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Khi ở trong trạng thái này, sát thương vật lý gây ra giảm <color=#158bdb>[EffectParam,3]%</color>, duy trì <color=#158bdb>[EffectParam,2]</color> hiệp.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -34855,9 +34855,9 @@
     "Buff_Rogue_Group1_54_01_01": {
       "group_root_id": "Buff_Rogue_Group1_54_01_01",
       "buff_name_cn": "绊足",
-      "buff_name_vi": "",
+      "buff_name_vi": "Bán Túc",
       "buff_desc_cn": "速度减少<color=#158bdb>50%</color>，持续<color=#158bdb>1</color>回合。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Tốc độ giảm <color=#158bdb>50%</color>, duy trì <color=#158bdb>1</color> hiệp.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -35440,18 +35440,18 @@
     "Buff_S0077_4": {
       "group_root_id": "Buff_S0077_4",
       "buff_name_cn": "时印",
-      "buff_name_vi": "",
+      "buff_name_vi": "Thời Ấn",
       "buff_desc_cn": "警戒状态中，每回合消耗<color=#ff6724>1</color>层时印，不足时将取消警戒状态。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Trong trạng thái cảnh giới, mỗi lượt tiêu hao <color=#ff6724>1</color> tầng Thời Ấn, khi không đủ sẽ hủy bỏ trạng thái cảnh giới.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
     "Buff_S0083_1": {
       "group_root_id": "Buff_S0083_1",
       "buff_name_cn": "星印",
-      "buff_name_vi": "",
+      "buff_name_vi": "Tinh Ấn",
       "buff_desc_cn": "每层使警戒攻击伤害提升<color=#158bdb>[EffectParam,2]%</color>，每次警戒攻击消耗<color=#158bdb>1</color>层，最高可叠加<color=#158bdb>5</color>层。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Mỗi tầng giúp sát thương đòn đánh cảnh giới tăng <color=#158bdb>[EffectParam,2]%</color>, mỗi lần tấn công cảnh giới tiêu hao <color=#158bdb>1</color> tầng, tối đa có thể cộng dồn <color=#158bdb>5</color> tầng.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -35674,9 +35674,9 @@
     "Buff_S0132_14": {
       "group_root_id": "Buff_S0132_14",
       "buff_name_cn": "肃静",
-      "buff_name_vi": "",
+      "buff_name_vi": "Túc Tĩnh",
       "buff_desc_cn": "无法释放职业技能和绝技，持续<color=#158bdb>[EffectParam,2]</color>回合。",
-      "buff_desc_vi": "",
+      "buff_desc_vi": "Không thể thi triển kỹ năng nghề nghiệp và tuyệt kỹ, duy trì <color=#158bdb>[EffectParam,2]</color> hiệp.",
       "classification_scope": "UNKNOWN",
       "status": "PENDING"
     },
@@ -42725,7 +42725,7 @@
       "buff_desc_cn": "无法释放职业技能和绝技，持续<color=#158bdb>[EffectParam,2]</color>回合。",
       "buff_desc_vi": "Không thể dùng Kỹ Năng Nghề và Tuyệt Kỹ, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt.",
       "classification_scope": "PLAYER_FACING",
-      "status": "TRANSLATED"
+      "status": "OWNER_APPROVED"
     },
     "Buff_Sleep_LAN": {
       "group_root_id": "1",
