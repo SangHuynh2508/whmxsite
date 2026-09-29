@@ -125,6 +125,9 @@ python tools/sync_masterdata_incremental.py --character NEW_ID --apply --cleanup
 # trang phục mới (skinType 3) của nhân vật ĐÃ CÓ: chỉ sheet SKIN (không chạy các sheet khác cho nhân vật cũ)
 python tools/sync_masterdata_incremental.py --character OLD_ID --sheets SKIN --dry-run
 python tools/sync_masterdata_incremental.py --character OLD_ID --sheets SKIN --apply           # ⚠️
+# Hoán Chương MỚI của nhân vật ĐÃ CÓ (vd. A0144/A0170 ở r3057): KHÔNG chạy audit_incremental_character_coverage.py --apply
+# (thêm cả trăm dòng lạ). Làm như state file §8 "Release day": apply_huanzhang_coverage_transaction.py với SNAPSHOT_ID/TARGETS
+# mới + apply_source_rows chỉ cho skill HUANZHANG_LINKED (<ID>061) và buff của nó; kiểm bằng validate_data (HUANZHANG_COVERAGE)
 ```
 
 Dịch các dòng mới theo batch (skill `whmx-localization` §6 + `game-translator`). Series mới: tên VI chỉ khi owner duyệt.
