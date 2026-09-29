@@ -521,7 +521,7 @@ def collect(character_id: str) -> tuple[dict[str, list[dict[str, Any]]], dict[st
         "character_id": character_id,
         "name_cn": first(char, "namelanText", "name"), "name_vi": "",
         "fullname_cn": first(char, "FullnameLanText", "fullname"), "fullname_vi": "",
-        "nickname_vi": "", "tags_cn": first(char, "tags", "TagsLanText"), "tags_vi": "",
+        "nickname_vi": "", "tags_cn": first(char, "CharacterTagLanText", "tags", "TagsLanText"), "tags_vi": "",
         "rare": char.get("rare", ""), "confidence": "LOW", "status": "PENDING",
         "notes": source_note(version, ["characterTable.json"], f"Switch={char.get('Switch')}")
     })
