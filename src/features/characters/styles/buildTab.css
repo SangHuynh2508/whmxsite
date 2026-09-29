@@ -51,14 +51,9 @@
 
 /* rotation */
 .bs-rots { display: grid; gap: 16px; }
-.bs-rot { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: 4px 20px; align-items: start; }
-.bs-s4 .bs-rot, .bs-s6 .bs-rot { grid-template-columns: 1fr; }
-/* A rotation without a label has no <h4>: keep its sequence in the content column, in line with the labelled ones
-   (it fell into the 180 px label column and wrapped — V0055, owner 2026-09-29); no label anywhere → full width. */
-.bs-rot > div:first-child { grid-column: 1 / -1; }
-@media (min-width: 641px) { /* the only case with two columns: a wide (8/12) block */
-  .bs-s8 .bs-rots:has(h4) .bs-rot > div:first-child, .bs-s12 .bs-rots:has(h4) .bs-rot > div:first-child { grid-column: 2; }
-}
+/* Label above its note and steps at every width, like the narrow blocks (owner 2026-09-29: the wide 180 px label
+   column left an unlabelled rotation beside a gap and the "3 Trí" label far from its steps — V0055). */
+.bs-rot { display: grid; gap: 4px; }
 .bs-rot h4 { margin: 0; padding-top: 4px; font: 600 13px/1.4 var(--font-sans); color: var(--text-muted); }
 .bs-rot-note { margin: 0 0 8px; max-width: 70ch; font-size: 13px; color: var(--text-subtle); }
 /* overflow-x: clip hides the "›" of a step that wraps to the start of a line (it sits 9 px left of the step) */
@@ -131,7 +126,6 @@
 }
 @media (max-width: 640px) {
   .bs-band, .bs-mod { padding: 16px; }
-  .bs-rot { grid-template-columns: 1fr; }
   /* compact affix rows: tier label left, items inline */
   .bs-cells { grid-template-columns: 1fr; gap: 6px; }
   .bs-cell { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; padding: 8px 12px; }
