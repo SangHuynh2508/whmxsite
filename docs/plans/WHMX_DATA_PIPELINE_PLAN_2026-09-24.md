@@ -1,13 +1,13 @@
 # WHMX — New-character readiness + DB-centred data pipeline (plan)
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../PRODUCT.md). Related: [`2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-29.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-29.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../PRODUCT.md). Related: [`2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 > Created 2026-09-24. **Living document: update the status table and the log at the bottom whenever anything changes.**
 > A fresh agent should be able to continue from this file alone after reading the references below.
 
 ## 0. Read first
 
-1. [`../WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-28.md) — single entry point (status, infrastructure, rules, gotchas, backlog).
+1. [`../WHMX_CURRENT_STATE_FINAL_2026-09-29.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-29.md) — single entry point (status, infrastructure, rules, gotchas, backlog).
 2. **This file** — §4 N2 release-day runbook, §5 P5 next domains, §7 dated log (history; links there to removed docs resolve in git history).
 3. [`../superpowers/specs/2026-09-24-lore-pipeline-design.md`](../superpowers/specs/2026-09-24-lore-pipeline-design.md) and [`../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md).
 4. `.agents/skills/whmx-localization/SKILL.md` + `.agents/skills/game-translator/SKILL.md` for any workbook/localization/data.json work; [`../WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](../WHMX_MASTERDATA_ID_CONVENTIONS(5).md); `../../NeoArtifacts/RUNTIME_UPDATE_CAPTURE_RUNBOOK.md` for game updates.

@@ -1,6 +1,6 @@
 # Public Build tab (direction C) + rotation notes — Implementation Plan
 
-> **Status: done — executed 2026-09-28 (native, TDD per task), final review fixes `b970d83`, live and verified on production.** Rulings and deferred minors are in `docs/WHMX_CURRENT_STATE_FINAL_2026-09-28.md` §2.1 / §8. The state file this plan names was renamed `…_2026-09-28.md` after execution.
+> **Status: done — executed 2026-09-28 (native, TDD per task), final review fixes `b970d83`, live and verified on production.** Rulings and deferred minors are in `docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md` §2.1 / §8. The state file this plan names was renamed `…_2026-09-28.md` after execution.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

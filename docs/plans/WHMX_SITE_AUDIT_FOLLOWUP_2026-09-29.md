@@ -3,7 +3,7 @@
 > Source: the site-wide audit of 2026-09-28 (`/impeccable audit` + `ponytail:ponytail-audit`, read-only, self-review)
 > and the fixes of 2026-09-28/29. Everything **done** is summarised in §1; everything **still open** is in §2–§6 with
 > its location, a proposal and why it was not done yet. Pick items from here; record the decision and move the line to
-> §1 when done. Entry point for the project: [`../WHMX_CURRENT_STATE_FINAL_2026-09-28.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-28.md).
+> §1 when done. Entry point for the project: [`../WHMX_CURRENT_STATE_FINAL_2026-09-29.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-29.md).
 > Detector output and the scripts used for the checks (style dumps + `diff_dumps.py`, Playwright checks):
 > `D:\BaiTapCode\WHMX\_claude_scratch\audit\` (not in git).
 
