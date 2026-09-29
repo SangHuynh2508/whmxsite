@@ -110,10 +110,12 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     currentRenderedCharId = null;
     currentActiveTab = null;
     container.innerHTML = `
-      <div class="char-not-found">
-        <h2>Không tìm thấy nhân vật</h2>
-        <p>Thẻ nhân vật "${escapeHtml(slugOrId)}" không tồn tại hoặc đã bị ẩn.</p>
-        <a href="#/characters" class="btn-primary">← Về danh sách nhân vật</a>
+      <div class="char-not-found empty-state">
+        <div class="empty-state-content">
+          <h1 class="empty-state-title">Không tìm thấy nhân vật</h1>
+          <p class="empty-state-text">Thẻ nhân vật "${escapeHtml(slugOrId)}" không tồn tại hoặc đã bị ẩn.</p>
+          <a href="#/characters" class="cd-breadcrumb-back">← Về danh sách nhân vật</a>
+        </div>
       </div>
     `;
     return;

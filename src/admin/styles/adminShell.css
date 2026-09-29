@@ -36,7 +36,7 @@ html:has(> body.admin-route-active), body.admin-route-active { overflow-x: clip;
 .admin-react-root ::-webkit-scrollbar-track { background: transparent; }
 .admin-react-root ::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
 .admin-react-root :hover::-webkit-scrollbar-thumb { background: var(--border-strong); }
-.admin-react-root ::-webkit-scrollbar-thumb:hover { background: var(--text-subtle); }
+.admin-react-root ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 @supports (-moz-appearance: none) {
   .admin-react-root * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 }

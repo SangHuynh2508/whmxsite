@@ -12,7 +12,6 @@
   --border-strong: #3D434A;
   --text-main: #E3E5E8;
   --text-muted: #9097A0;
-  --text-subtle: #8A9099; /* ≥4.5:1 on every surface incl. hover */
   --accent: #D4B763;
   --accent-light: #24221A;
   --shadow-pop: rgba(0, 0, 0, 0.55);
@@ -93,7 +92,7 @@
   --font-serif: 'Literata', 'Noto Serif SC', serif;
 
   /* App Rail Layout Variables */
-  --app-nav-collapsed-width: 72px;
+  --app-nav-collapsed-width: 72px; /* content offset beside the rail: the rail itself renders 60 px (style.css), + 12 px gap */
   --app-nav-expanded-width: 220px;
   --app-nav-width: var(--app-nav-collapsed-width);
 }

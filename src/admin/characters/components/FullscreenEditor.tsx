@@ -14,7 +14,7 @@ export function FullscreenEditor({ label, original, value, onChange, onClose }: 
           <p lang="zh" className="admin-cn whitespace-pre-line text-[15px] leading-8 text-(--text-muted)">{original}</p>
           <textarea autoFocus value={value} onChange={(e) => onChange(e.target.value)} aria-label={`${label} — tiếng Việt`} className="min-h-[60vh] w-full resize-none border-0 bg-transparent p-0 text-base font-light leading-[1.9] outline-none focus-visible:outline-none" />
         </div>
-        <div className="border-t border-(--border-color) px-4 py-2 text-right text-xs text-(--text-subtle) md:px-8">{value.length} ký tự</div>
+        <div className="border-t border-(--border-color) px-4 py-2 text-right text-xs text-(--text-muted) md:px-8">{value.length} ký tự</div>
       </div>
     </dialog>
   );

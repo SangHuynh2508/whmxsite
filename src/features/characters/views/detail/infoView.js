@@ -429,7 +429,7 @@ export function renderInfoTab(container, char) {
     if (!resolved) {
       return `
         <div class="info-section-header">
-          <h3>Chỉ Số Chiến Đấu</h3>
+          <h2>Chỉ Số Chiến Đấu</h2>
         </div>
         <p class="empty-sub-state-text">Chưa có dữ liệu chỉ số chiến đấu cho nhân vật này.</p>
       `;
@@ -486,7 +486,7 @@ export function renderInfoTab(container, char) {
 
     return `
       <div class="info-section-header">
-        <h3>Chỉ Số Chiến Đấu</h3>
+        <h2>Chỉ Số Chiến Đấu</h2>
         <div class="stats-header-actions">
           <span class="stats-level-badge">${levelBadgeText}</span>
           <div class="stats-lvl-toggle">
@@ -555,7 +555,7 @@ export function renderInfoTab(container, char) {
           <div class="skill-header-meta">
             <div class="skill-title-row">
               ${isSubEntry && subLabel ? `<span class="sub-entry-label">${subLabel}</span>` : ''}
-              <h4 class="skill-name-vi">${primaryName}</h4>
+              <h3 class="skill-name-vi">${primaryName}</h3>
               ${showTypeBadge ? `<span class="skill-type-badge type-${typeId}">${typeLabel}</span>` : ''}
             </div>
             ${secondaryName ? `<div class="skill-name-cn cn-font">${secondaryName}</div>` : ''}
@@ -838,7 +838,7 @@ export function renderInfoTab(container, char) {
 
       <div class="info-sub-section zhizhi-sub-section">
         <div class="info-section-header">
-          <h3>Trí Tri</h3>
+          <h2>Trí Tri</h2>
         </div>
         ${zhizhiHtml}
       </div>
@@ -879,7 +879,7 @@ export function renderInfoTab(container, char) {
         <!-- Dynamic Content Section -->
         <section class="info-dynamic-section">
           <div class="info-section-header">
-            <h3 id="info-mode-section-title">${sectionTitles[currentInfoMode]}</h3>
+            <h2 id="info-mode-section-title">${sectionTitles[currentInfoMode]}</h2>
           </div>
           <div id="info-mode-body">
             ${renderModeContent()}

@@ -16,7 +16,7 @@ export function SaveBar({ dirtyCount, status, message, onSave, onDiscard, onRelo
     {diff && onHideDiff && <ConflictDiff rows={diff} labels={labels ?? {}} onClose={onHideDiff} />}
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-(--border-color) bg-(--bg-surface) px-4 py-2.5 text-[13px] md:px-5">
       {dirtyCount > 0 && <span className="text-(--accent)">{dirtyCount} thay đổi chưa lưu</span>}
-      <span role="status" className="min-w-0 flex-1 text-(--text-subtle) max-md:order-first max-md:basis-full empty:max-md:hidden md:truncate">{message}</span>
+      <span role="status" className="min-w-0 flex-1 text-(--text-muted) max-md:order-first max-md:basis-full empty:max-md:hidden md:truncate">{message}</span>
       {status === 'conflict' && onShowDiff && <Button variant="ghost" onClick={onShowDiff}>Xem khác biệt</Button>}
       {status === 'conflict' && <Button onClick={onReload}>Tải bản mới</Button>}
       {dirtyCount > 0 && (

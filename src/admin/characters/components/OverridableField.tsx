@@ -16,7 +16,7 @@ type Props = {
 // Sticky column captions above a list of pairs (desktop only; phones stack the pair).
 export function PairHead() {
   return (
-    <div className="sticky top-0 z-[2] grid grid-cols-2 gap-12 border-b border-(--border-color) bg-(--bg-main) px-8 py-2.5 text-[11px] uppercase tracking-[.3em] text-(--text-subtle) max-md:hidden">
+    <div className="sticky top-0 z-[2] grid grid-cols-2 gap-12 border-b border-(--border-color) bg-(--bg-main) px-8 py-2.5 text-[11px] uppercase tracking-[.3em] text-(--text-muted) max-md:hidden">
       <span>Nguyên bản</span>
       <span>Tiếng Việt</span>
     </div>

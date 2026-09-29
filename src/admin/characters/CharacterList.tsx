@@ -38,7 +38,7 @@ export function CharacterList() {
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto max-w-[1100px] px-4 pb-24 pt-8 md:px-10 md:pt-14">
-        <p className="text-[13px] uppercase tracking-[.3em] text-(--text-subtle)">Khí Giả</p>
+        <p className="text-[13px] uppercase tracking-[.3em] text-(--text-muted)">Khí Giả</p>
         <h2 className="admin-cn mb-9 mt-4 text-3xl leading-tight md:text-[40px]">
           {items ? `${items.length} hồ sơ` : 'Hồ sơ'}
           <small className="mt-2.5 block font-sans text-sm text-(--text-muted)">Bấm một tên để mở hồ sơ.</small>
@@ -50,16 +50,16 @@ export function CharacterList() {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Tìm tên hoặc mã"
             aria-label="Tìm nhân vật"
-            className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-subtle) focus-visible:outline-none"
+            className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none"
           />
           {FILTERS.map(([id, label]) => (
-            <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} className={filter === id ? 'text-[13px] text-(--text-main)' : 'text-[13px] text-(--text-subtle) transition-colors hover:text-(--text-main)'}>{label}</button>
+            <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} className={filter === id ? 'text-[13px] text-(--text-main)' : 'text-[13px] text-(--text-muted) transition-colors hover:text-(--text-main)'}>{label}</button>
           ))}
-          <a href={DICTIONARY_HREF} className="text-[13px] text-(--text-subtle) transition-colors hover:text-(--text-main)">Từ điển →</a>
+          <a href={DICTIONARY_HREF} className="text-[13px] text-(--text-muted) transition-colors hover:text-(--text-main)">Từ điển →</a>
         </div>
         {error && <Notice className="my-4">Không tải được danh sách. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>}
         {!items && !error && <SkeletonRows count={8} />}
-        {shown && shown.length === 0 && <p className="py-8 text-sm text-(--text-subtle)">Không có nhân vật khớp.</p>}
+        {shown && shown.length === 0 && <p className="py-8 text-sm text-(--text-muted)">Không có nhân vật khớp.</p>}
         {shown && shown.length > 0 && (
           <ul className="gap-16 md:columns-2">
             {shown.map((c) => (
@@ -72,9 +72,9 @@ export function CharacterList() {
                   <span className="min-w-0">
                     <span className="admin-cn block truncate text-[17px] leading-snug">
                       {c.nameVi.value || c.nameCn}
-                      {c.nameVi.value && <small lang="zh" className="ml-2 text-[13px] text-(--text-subtle)">{c.nameCn}</small>}
+                      {c.nameVi.value && <small lang="zh" className="ml-2 text-[13px] text-(--text-muted)">{c.nameCn}</small>}
                     </span>
-                    <span className="block text-xs tracking-[.08em] text-(--text-subtle)">
+                    <span className="block text-xs tracking-[.08em] text-(--text-muted)">
                       {c.characterId}{c.protected?.rawRare != null && ` · ${RARE_LABEL[c.protected.rawRare] ?? `R${c.protected.rawRare}`}`}
                     </span>
                   </span>

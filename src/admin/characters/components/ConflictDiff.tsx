@@ -8,12 +8,12 @@ export function ConflictDiff({ rows, labels, onClose }: { rows: DiffRow[]; label
         <h3 className="font-medium">Khác biệt với bản vừa được lưu</h3>
         <button type="button" onClick={onClose} className="text-(--text-muted) hover:text-(--text-main)">Đóng</button>
       </div>
-      {rows.length === 0 && <p className="text-(--text-subtle)">Người kia sửa các trường khác; tải bản mới sẽ giữ phần bạn gõ.</p>}
+      {rows.length === 0 && <p className="text-(--text-muted)">Người kia sửa các trường khác; tải bản mới sẽ giữ phần bạn gõ.</p>}
       {rows.map((r) => (
         <div key={r.key} className="grid gap-1 border-t border-(--border-color) py-2 first:border-t-0 md:grid-cols-[160px_1fr_1fr] md:gap-4">
           <span className="text-(--text-muted)">{labels[r.key] ?? r.key}{r.theirs !== r.base && <span className="ml-2 text-(--rarity-ssr-text)">cả hai cùng sửa</span>}</span>
-          <p className="whitespace-pre-line break-words"><span className="block text-xs text-(--text-subtle)">Đang lưu trên máy chủ</span>{r.theirs || '∅'}</p>
-          <p className="whitespace-pre-line break-words"><span className="block text-xs text-(--text-subtle)">Bạn đang gõ</span>{r.yours || '∅'}</p>
+          <p className="whitespace-pre-line break-words"><span className="block text-xs text-(--text-muted)">Đang lưu trên máy chủ</span>{r.theirs || '∅'}</p>
+          <p className="whitespace-pre-line break-words"><span className="block text-xs text-(--text-muted)">Bạn đang gõ</span>{r.yours || '∅'}</p>
         </div>
       ))}
     </section>

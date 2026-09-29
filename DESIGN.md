@@ -225,9 +225,9 @@ A near-neutral charcoal ramp with a faint cool cast, one antique gold, and the g
 - **Hairline / Strong Hairline** (`hairline`, `strong-hairline`): dividers and resting borders / emphasised borders
   (sheet outline, popover outline, chips). `input-hairline` is the resting border of form fields.
 - **Bone** (`bone-text`): primary text.
-- **Ash** (`ash-text`): all secondary text — labels, captions, hints, notes. `--text-subtle` in code is the same role
-  and will be merged into `--text-muted` (owner 2026-09-28); do not introduce a third grey.
-- **Scrim** (`scrim`, token `--scrim`): the backdrop behind every popover (Build and Lore since 2026-09-28; the Admin dialog still mixes its own).
+- **Ash** (`ash-text`): all secondary text — labels, captions, hints, notes. In code it is `--text-muted`
+  (`--text-subtle` was merged into it on 2026-09-29); do not introduce a third grey.
+- **Scrim** (`scrim`, token `--scrim`): the backdrop behind every popover and the calculator picker (the Admin dialog still mixes its own; the skin image lightbox keeps its near-black viewer backdrop).
 
 ### Named Rules
 **The One Lamp Rule.** Antique gold is the only accent. It marks state, structure or a number worth reading; it is
@@ -236,7 +236,7 @@ never a background wash on large areas and never decoration for its own sake.
 **The Token Rule.** Colours come from `src/styles/tokens.css` only. A new colour is a new token, not a hex in a
 feature file.
 
-**Drift (legacy CSS, clean up later — list and proposals in `docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`):** ~54 literal `rgba(212,183,99,x)` instead of the gold tokens; the character-tab underline `#c4a265` (= `rarity-sr`) instead of `antique-gold`; `#fff`/white-alpha tab borders (37 uses); three scrims (60 %, 35 %, 70 % night-ink); teal `#23867f` on the "hồi phục" skill pill (the calculator's teal is intentional, owner 2026-09-29). **Cleaned 2026-09-29:** the second gold `#c7a86b`, the light-theme gold, the undefined `--text-secondary`/`--text-primary`, and the light-theme token block (merged into `:root`; the site is dark only).
+**Drift (legacy CSS — open items and proposals in `docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`):** white-alpha frames on the character tabs (kept: they are the "brighter frame"); teal `#23867f` on the "Hồi VP" skill pill (the calculator's teal is intentional, owner 2026-09-29). **Cleaned 2026-09-29:** the second gold `#c7a86b`, the light-theme gold, ~54 literal gold `rgba()` (now `color-mix` of `--accent`), the tab underlines `#c4a265` → `--accent`, `#fff` text → `--text-main`, the calculator picker scrim → `--scrim`, the undefined `--text-secondary`/`--text-primary`, `--text-subtle` → `--text-muted`, and the light-theme token block (merged into `:root`; the site is dark only).
 
 ## Typography
 
@@ -271,12 +271,12 @@ use the two tokens.
 (one size for the whole site, 4–5 px today) and "(chưa dịch)" for screen readers. Never a guessed translation.
 
 **Drift:** 30+ font sizes in legacy CSS (10–11.5 px, 12.5 px, 13.5 px, rem and px mixed; 128 undersized-text
-findings from the detector); the Chinese name under the character title renders in the sans.
+findings from the detector — small secondary labels are accepted, see above). The Chinese name under the character title and the "物" nav mark use `--font-serif` since 2026-09-29.
 
 ## Layout
 
-- **App shell:** a left nav rail on desktop (renders 60 px; the `--app-nav-collapsed-width` token says 72 px —
-  reconcile). Phones (≤ 768 px): no dock — a floating ☰ bottom-left (report badge above it) opens a full-screen menu
+- **App shell:** a left nav rail on desktop (renders 60 px; `--app-nav-collapsed-width` = 72 px is the content
+  offset beside it — 60 px rail + 12 px gap). Phones (≤ 768 px): no dock — a floating ☰ bottom-left (report badge above it) opens a full-screen menu
   with a global search (characters + skins) on top; mobile-nav direction A, 2026-09-28. Content max width ~1360 px on
   character pages.
 - **Character page:** header (avatar, serif name, Chinese name, role chips, class icon + rarity badge) → page tabs → tab body. ≤ 768 px the "Danh Sách Khí Giả" button is dropped (system Back and the dock menu cover it) and the class icon + rarity sit small beside the Chinese name. Page tabs replace the history entry: Back leaves the character page.

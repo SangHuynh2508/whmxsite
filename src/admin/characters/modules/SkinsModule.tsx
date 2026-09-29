@@ -26,7 +26,7 @@ export function SkinsModule({ data, reload }: ModuleProps) {
     setOpenId(skinId);
   };
 
-  if (!data.skins.length) return <p className="px-4 py-8 text-sm text-(--text-subtle) md:px-8">Không có trang phục liên kết.</p>;
+  if (!data.skins.length) return <p className="px-4 py-8 text-sm text-(--text-muted) md:px-8">Không có trang phục liên kết.</p>;
   return (
     <div className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[260px_1fr]">
       <nav aria-label="Trang phục" className="flex gap-1 overflow-x-auto border-b border-(--border-color) px-2 py-1.5 [scrollbar-width:none] lg:block lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-0 lg:py-2.5">
@@ -45,7 +45,7 @@ export function SkinsModule({ data, reload }: ModuleProps) {
             <Avatar src={skinAvatar(s.skinId)} label={s.skinId} className="size-8 rounded-md max-lg:hidden" />
             <span className="min-w-0">
               <span className="block truncate text-[13px]">{s.skinNameVi.value || s.skinNameCn}</span>
-              <span className="block truncate font-mono text-[11px] text-(--text-subtle) max-lg:hidden">{s.skinId}</span>
+              <span className="block truncate font-mono text-[11px] text-(--text-muted) max-lg:hidden">{s.skinId}</span>
             </span>
           </button>
         ))}
@@ -103,12 +103,12 @@ function SkinEditor({ skinId, summary, onSaved }: { skinId: string; summary?: Sk
         <aside aria-label="Thông tin trang phục" className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:border-l-0 max-xl:border-t">
           <img src={image?.override?.url || image?.source?.url || skinAvatar(skinId)} alt="" className="mb-3 aspect-square w-full max-w-60 rounded-md bg-(--bg-elevated) object-contain" />
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            <dt className="text-(--text-subtle)">Mã</dt><dd className="font-mono">{skin.skinId}</dd>
-            <dt className="text-(--text-subtle)">Series</dt><dd>{series ? `${series.nameVi ?? ''} ${series.nameCn ? `· ${series.nameCn}` : ''}`.trim() || series.seriesId : '—'}</dd>
-            <dt className="text-(--text-subtle)">Cách nhận</dt><dd>{acquisition ? acquisition.labelVi ?? acquisition.id : '—'}</dd>
-            <dt className="text-(--text-subtle)">Ảnh</dt><dd>{skin.assets?.map((a) => a.assetRole).join(', ') || '—'}</dd>
+            <dt className="text-(--text-muted)">Mã</dt><dd className="font-mono">{skin.skinId}</dd>
+            <dt className="text-(--text-muted)">Series</dt><dd>{series ? `${series.nameVi ?? ''} ${series.nameCn ? `· ${series.nameCn}` : ''}`.trim() || series.seriesId : '—'}</dd>
+            <dt className="text-(--text-muted)">Cách nhận</dt><dd>{acquisition ? acquisition.labelVi ?? acquisition.id : '—'}</dd>
+            <dt className="text-(--text-muted)">Ảnh</dt><dd>{skin.assets?.map((a) => a.assetRole).join(', ') || '—'}</dd>
           </dl>
-          <p className="mt-2 text-xs text-(--text-subtle)">Series, cách nhận và ảnh chỉ xem.</p>
+          <p className="mt-2 text-xs text-(--text-muted)">Series, cách nhận và ảnh chỉ xem.</p>
         </aside>
       </div>
       <SaveBar {...editor} labels={Object.fromEntries(FIELDS.map((f) => [f.key, f.label]))} />

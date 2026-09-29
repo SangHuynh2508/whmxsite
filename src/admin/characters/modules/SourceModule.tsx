@@ -5,11 +5,11 @@ const show = (value: unknown) => (value == null || value === '' ? '—' : typeof
 function Rows({ title, rows }: { title: string; rows: [string, unknown][] }) {
   return (
     <section className="px-4 py-5 md:px-8">
-      <h3 className="mb-3 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">{title}</h3>
+      <h3 className="mb-3 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">{title}</h3>
       <dl className="grid grid-cols-[minmax(0,200px)_1fr] gap-x-4 gap-y-2 text-sm">
         {rows.map(([label, value]) => (
           <div key={label} className="contents">
-            <dt className="truncate text-(--text-subtle)">{label}</dt>
+            <dt className="truncate text-(--text-muted)">{label}</dt>
             <dd className="min-w-0 break-words font-mono text-[13px] text-(--text-main)">{show(value)}</dd>
           </div>
         ))}

@@ -69,7 +69,7 @@ export function DictionaryView() {
         <nav aria-label="Phần" className="mb-2 flex flex-wrap gap-x-7 gap-y-2 border-b border-(--border-color)">
           {DICTIONARY_TABS.map(([id, label]) => (
             <a key={id} href={dictionaryHref(id)} aria-current={route.tab === id ? 'page' : undefined}
-              className={cn('-mb-px border-b-2 pb-2 text-sm transition-colors', route.tab === id ? 'border-(--accent) text-(--text-main)' : 'border-transparent text-(--text-subtle) hover:text-(--text-main)')}>{label}</a>
+              className={cn('-mb-px border-b-2 pb-2 text-sm transition-colors', route.tab === id ? 'border-(--accent) text-(--text-main)' : 'border-transparent text-(--text-muted) hover:text-(--text-main)')}>{label}</a>
           ))}
         </nav>
         <TermsTab key={route.tab} tab={route.tab} code={route.code} />
@@ -131,12 +131,12 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
       <p className="mb-6 mt-4 text-sm text-(--text-muted)">
         {config.intro} Chưa dịch thì trang công khai hiện tiếng Trung.{' '}
         {terms && <span className={cn('tabular-nums', count.done < count.total && 'text-(--accent)')}>Đã dịch {count.done}/{count.total}.</span>}{' '}
-        {publish.state !== 'idle' && <span role="status" className="text-(--text-subtle)">{publish.message}</span>}
+        {publish.state !== 'idle' && <span role="status" className="text-(--text-muted)">{publish.message}</span>}
       </p>
       <div className="mb-3 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-b border-(--border-strong) pb-3 transition-colors focus-within:border-(--accent)">
         <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Tìm mã, tên Trung hoặc Việt" aria-label="Tìm trong từ điển"
-          className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-subtle) focus-visible:outline-none" />
-        <label className="flex items-center gap-2 text-[13px] text-(--text-subtle)"><input type="checkbox" checked={todoOnly} onChange={(e) => setTodoOnly(e.target.checked)} /> Chỉ hiện chưa dịch</label>
+          className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none" />
+        <label className="flex items-center gap-2 text-[13px] text-(--text-muted)"><input type="checkbox" checked={todoOnly} onChange={(e) => setTodoOnly(e.target.checked)} /> Chỉ hiện chưa dịch</label>
       </div>
       {error && <Notice className="my-4">Không tải được từ điển. <Button variant="ghost" onClick={() => { setError(false); load().catch(() => setError(true)); }}>Thử lại</Button></Notice>}
       {!terms && !error && <SkeletonRows count={8} />}
@@ -155,16 +155,16 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
                     className={cn('grid w-full grid-cols-[1fr_auto] items-baseline gap-3 py-3 text-left transition-colors hover:bg-[linear-gradient(90deg,transparent,var(--bg-surface),transparent)]', openRow === t.code && 'text-(--accent)')}>
                     <span className="min-w-0">
                       <span lang="zh" className="admin-cn text-[17px]">{t.nameCn}</span>
-                      <span className="ml-3 text-sm text-(--text-muted)">{t.nameVi ?? <span className="italic text-(--text-subtle)">chưa dịch</span>}</span>
-                      {t.nameVi && t.detailCn && !t.detailVi && <span className="ml-3 text-xs italic text-(--text-subtle)">chưa dịch mô tả</span>}
-                      {childTodo > 0 && <span className="ml-3 text-xs italic text-(--text-subtle)">{childTodo}/{children.length} kỹ năng chưa dịch</span>}
-                      {twinsOf(t).length > 1 && <span className="ml-3 text-xs text-(--text-subtle)">{twinsOf(t).length} mục{behind(t).length > 0 && `, ${behind(t).length} chưa theo bản dịch này`}</span>}
+                      <span className="ml-3 text-sm text-(--text-muted)">{t.nameVi ?? <span className="italic text-(--text-muted)">chưa dịch</span>}</span>
+                      {t.nameVi && t.detailCn && !t.detailVi && <span className="ml-3 text-xs italic text-(--text-muted)">chưa dịch mô tả</span>}
+                      {childTodo > 0 && <span className="ml-3 text-xs italic text-(--text-muted)">{childTodo}/{children.length} kỹ năng chưa dịch</span>}
+                      {twinsOf(t).length > 1 && <span className="ml-3 text-xs text-(--text-muted)">{twinsOf(t).length} mục{behind(t).length > 0 && `, ${behind(t).length} chưa theo bản dịch này`}</span>}
                       {[...twinsOf(t), ...children].some((x) => x.state === 'source_changed') && <span className="ml-3 text-xs text-(--rarity-ssr-text)">Tiếng Trung đã đổi</span>}
                     </span>
-                    <span className="font-mono text-xs text-(--text-subtle)">{t.code}</span>
+                    <span className="font-mono text-xs text-(--text-muted)">{t.code}</span>
                   </button>
                   {t.usedBy.length > 0 && (
-                    <details className="pb-2 text-xs text-(--text-subtle)">
+                    <details className="pb-2 text-xs text-(--text-muted)">
                       <summary className="cursor-pointer">đang dùng bởi {t.usedBy.length} nhân vật</summary>
                       <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">{t.usedBy.map((id) => <a key={id} href={recordHref(id, 'lore')} className="font-mono hover:text-(--text-main)">{id}</a>)}</p>
                     </details>
@@ -234,7 +234,7 @@ function GroupEditor({ terms, reload, config }: { terms: Term[]; reload: () => P
   return (
     <div className="-mx-4 mb-3 bg-(--bg-surface) md:-mx-8">
       {twinsOf(terms[0]).length > 1 && (
-        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 pt-3 text-xs text-(--text-subtle) md:px-8">
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 pt-3 text-xs text-(--text-muted) md:px-8">
           <span>Dùng chung cho {twinsOf(terms[0]).length} mục cùng chữ Trung: <span className="font-mono">{twinsOf(terms[0]).map((x) => x.code.split(':')[1]).join(', ')}</span>.</span>
           {lagging.length > 0 && official(terms[0]) && (
             <Button variant="ghost" disabled={Boolean(editor.dirtyCount) || applying === 'Đang áp dụng…'} onClick={() => void applyAll()}>Áp dụng bản dịch này cho {lagging.length} mục còn lại</Button>
@@ -244,7 +244,7 @@ function GroupEditor({ terms, reload, config }: { terms: Term[]; reload: () => P
       )}
       {terms.map((t, i) => (
         <div key={t.code} className={cn(i > 0 && 'border-t border-(--border-color)')}>
-          {i > 0 && <p className="px-4 pt-3 text-[11px] uppercase tracking-[.2em] text-(--text-subtle) md:px-8">Kỹ năng {i}</p>}
+          {i > 0 && <p className="px-4 pt-3 text-[11px] uppercase tracking-[.2em] text-(--text-muted) md:px-8">Kỹ năng {i}</p>}
           <PairRow id={`${t.code}-name`} label="Tên" original={t.nameCn}>
             <ViCell id={`${t.code}-name`} value={editor.draft[field(t.code, 'nameVi')] ?? ''} dirty={field(t.code, 'nameVi') in editor.changes} placeholder="Tên tiếng Việt…" onChange={(v) => editor.setField(field(t.code, 'nameVi'), v)} notes={notes(t, field(t.code, 'nameVi'))} />
           </PairRow>

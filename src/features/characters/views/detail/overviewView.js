@@ -27,7 +27,7 @@ export function renderOverviewTab(container, char) {
         <!-- Compact Profile List Block -->
         <div class="overview-info-block">
           <div class="overview-section-header">
-            <h3>Hồ Sơ Khí Giả</h3>
+            <h2>Hồ Sơ Khí Giả</h2>
             <span class="rarity-badge ${rarityInfo.class}">${rarityInfo.label}</span>
           </div>
 

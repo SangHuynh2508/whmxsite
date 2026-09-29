@@ -1,7 +1,7 @@
 // `claimedRawIdEvidence` and `manualMetadata` are free JSON objects that nothing
 // reads yet. Editors only see a plain-text "Căn cứ" note, stored as
 // `claimedRawIdEvidence.note`; every other key is owner-only and must round-trip.
-// Check: `node src/admin/preview/evidence.check.mjs`.
+// Test: `src/admin/preview/evidence.test.mjs` (npm test).
 
 const isObject = (value) => typeof value === 'object' && value !== null && !Array.isArray(value);
 

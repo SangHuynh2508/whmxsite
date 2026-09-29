@@ -32,10 +32,10 @@ export function OverviewModule({ data, reload }: ModuleProps) {
     <>
       <Avatar src={characterAvatar(c.characterId)} label={c.characterId} className="mb-4 size-28 rounded-full" />
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-        <dt className="text-(--text-subtle)">Mã</dt><dd className="font-mono">{c.characterId}</dd>
-        <dt className="text-(--text-subtle)">Phiên bản</dt><dd className="font-mono">{c.revision}</dd>
+        <dt className="text-(--text-muted)">Mã</dt><dd className="font-mono">{c.characterId}</dd>
+        <dt className="text-(--text-muted)">Phiên bản</dt><dd className="font-mono">{c.revision}</dd>
       </dl>
-      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
+      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">Lịch sử gần đây</h3>
       <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
         <HistoryList entries={data.history.filter((h) => h.entityId === c.entityId && !h.eventType.startsWith('source_')).slice(0, 5)} labels={CHARACTER_FIELD_LABELS} />
       </div>

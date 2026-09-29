@@ -131,7 +131,7 @@ button.lore-fact:focus-visible, .lore-term:focus-visible { outline: 2px solid va
 .lore-empty { color: var(--text-muted); }
 .lore-prose { margin: 0; max-width: 66ch; white-space: pre-line; text-wrap: pretty; }
 .lore-cn { font-family: var(--lore-serif); font-weight: 500; }
-.lore-cn::after { content: ""; display: inline-block; width: 5px; height: 5px; margin-left: 6px; border-radius: 50%; background: var(--text-subtle); vertical-align: middle; }
+.lore-cn::after { content: ""; display: inline-block; width: 5px; height: 5px; margin-left: 6px; border-radius: 50%; background: var(--text-muted); vertical-align: middle; }
 .lore-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .lore-lead { margin-top: 20px; }

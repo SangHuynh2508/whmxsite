@@ -1,4 +1,4 @@
-// Run: node src/admin/preview/evidence.check.mjs
+// Runs with `npm test` (node --test).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 

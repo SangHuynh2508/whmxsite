@@ -45,7 +45,7 @@ export function CharacterRecord({ id, module }: { id: string; module: ModuleId }
         <Avatar src={characterAvatar(id)} label={id} className="size-9 rounded-md" />
         <h2 className="min-w-0 truncate text-base font-semibold">
           {c?.nameVi.value || c?.nameCn || id}
-          {c?.nameVi.value && <small lang="zh" className="admin-cn ml-1.5 font-normal text-(--text-subtle)">{c.nameCn}</small>}
+          {c?.nameVi.value && <small lang="zh" className="admin-cn ml-1.5 font-normal text-(--text-muted)">{c.nameCn}</small>}
         </h2>
         <nav aria-label="Mục hồ sơ" className="flex gap-0.5 overflow-x-auto [scrollbar-width:none] max-lg:w-full lg:ml-6">
           {MODULES.map((m) => (

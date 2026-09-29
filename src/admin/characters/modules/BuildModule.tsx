@@ -128,7 +128,7 @@ export function BuildModule({ data }: ModuleProps) {
           ))}
           {active !== editor.builds.length && <Button variant="ghost" onClick={() => choose(editor.builds.length)}>+ Thêm build</Button>}
         </nav>
-        <span className="ml-auto text-xs text-(--text-subtle)" role="status">{publish.state !== 'idle' ? publish.message : dirty ? 'Chưa lưu' : ''}</span>
+        <span className="ml-auto text-xs text-(--text-muted)" role="status">{publish.state !== 'idle' ? publish.message : dirty ? 'Chưa lưu' : ''}</span>
         {current && <Button variant="ghost" disabled={busy} onClick={remove}>Xoá build</Button>}
         <Button variant="primary" disabled={busy || !dirty} onClick={save}>{busy ? 'Đang lưu…' : current ? 'Lưu' : 'Tạo build'}</Button>
       </div>
@@ -145,7 +145,7 @@ export function BuildModule({ data }: ModuleProps) {
         </section>
 
         <section>
-          <SectionTitle aside={<span className="text-xs text-(--text-subtle)">{draft.weapons.length}/{MAX_WEAPONS}</span>}>Vũ khí</SectionTitle>
+          <SectionTitle aside={<span className="text-xs text-(--text-muted)">{draft.weapons.length}/{MAX_WEAPONS}</span>}>Vũ khí</SectionTitle>
           {draft.weapons.map((w, i) => {
             const weapon = weaponOf(w.weaponId);
             const set = (patch: Partial<typeof w>) => upd({ weapons: draft.weapons.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
@@ -169,7 +169,7 @@ export function BuildModule({ data }: ModuleProps) {
             );
           })}
           <Adder label="Thêm vũ khí…" disabled={draft.weapons.length >= MAX_WEAPONS} options={catalogue.weapons.map((x) => [x.id, `★${x.rare} · ${nm(x.name)}`])} onAdd={(weaponId) => setDraft(addWeapon(draft, weaponId))} />
-          {!catalogue.weapons.length && <p className="text-sm text-(--text-subtle)">Chưa có dữ liệu vũ khí (chạy importer kho game).</p>}
+          {!catalogue.weapons.length && <p className="text-sm text-(--text-muted)">Chưa có dữ liệu vũ khí (chạy importer kho game).</p>}
         </section>
 
         <section>
@@ -202,7 +202,7 @@ export function BuildModule({ data }: ModuleProps) {
                   <Select aria-label={`Hướng thâm tạo ${n + 1}`} className="max-w-sm" value={d.styleId} onChange={(e) => set({ styleId: e.target.value })}>
                     {catalogue.styles.map((s) => <option key={s.id} value={s.id}>{nm(s.name)}{s.id === editor.character.recommendedStyleId ? ' (game gợi ý)' : ''}</option>)}
                   </Select>
-                  <span className={cn('text-xs', totalPoints(d) === MAX_TOTAL ? 'text-(--accent)' : 'text-(--text-subtle)')}>{totalPoints(d)}/{MAX_TOTAL} điểm</span>
+                  <span className={cn('text-xs', totalPoints(d) === MAX_TOTAL ? 'text-(--accent)' : 'text-(--text-muted)')}>{totalPoints(d)}/{MAX_TOTAL} điểm</span>
                   <Button variant="ghost" onClick={() => upd({ deepens: draft.deepens.filter((_, j) => j !== n) })}>Bỏ</Button>
                 </span>
                 <div className="grid gap-3 sm:grid-cols-4">
@@ -288,10 +288,10 @@ function Chips({ items, onRemove, onMove }: { items: [string, string][]; onRemov
     <ol className="flex flex-wrap gap-1.5">
       {items.map(([key, text], i) => (
         <li key={`${key}-${i}`} className="flex items-center gap-1 rounded-md border border-(--border-color) bg-(--bg-surface) px-2 py-1 text-[13px]">
-          <button type="button" aria-label="Lùi" className="text-(--text-subtle) hover:text-(--text-main)" onClick={() => onMove(i, -1)}>‹</button>
+          <button type="button" aria-label="Lùi" className="text-(--text-muted) hover:text-(--text-main)" onClick={() => onMove(i, -1)}>‹</button>
           {text}
-          <button type="button" aria-label="Tiến" className="text-(--text-subtle) hover:text-(--text-main)" onClick={() => onMove(i, 1)}>›</button>
-          <button type="button" aria-label={`Bỏ ${text}`} className="ml-1 text-(--text-subtle) hover:text-(--text-main)" onClick={() => onRemove(i)}>✕</button>
+          <button type="button" aria-label="Tiến" className="text-(--text-muted) hover:text-(--text-main)" onClick={() => onMove(i, 1)}>›</button>
+          <button type="button" aria-label={`Bỏ ${text}`} className="ml-1 text-(--text-muted) hover:text-(--text-main)" onClick={() => onRemove(i)}>✕</button>
         </li>
       ))}
     </ol>

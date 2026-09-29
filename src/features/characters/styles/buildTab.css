@@ -5,7 +5,7 @@
 .build-tabs button { padding: 6px 12px; font: 500 13px var(--font-sans); color: var(--text-muted); background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
 .build-tabs button[aria-selected="true"] { color: var(--text-main); } /* fill = the sliding .seg-ink (motion.css) */
 .build-cn { font-family: var(--font-serif); }
-.build-cn::after { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 0 .2em .35em; border-radius: 50%; background: var(--text-subtle); vertical-align: middle; }
+.build-cn::after { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 0 .2em .35em; border-radius: 50%; background: var(--text-muted); vertical-align: middle; }
 
 /* no overflow:hidden on the sheet: it clipped the 4th weapon at 390px (critique P0) */
 .bs-sheet { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: 6px; }
@@ -28,7 +28,7 @@
 .bs-mod-head h3 { margin: 0; font: 600 16px/1.3 var(--font-sans); }
 .bs-note { margin: 10px 0 0; font-size: 13px; color: var(--text-muted); }
 .bs-chip { display: inline-block; margin-right: 6px; padding: 0 6px; font: 600 12px/1.6 var(--font-sans); letter-spacing: 0; color: var(--text-main); vertical-align: middle; border: 1px solid var(--border-strong); border-radius: 6px; }
-.bs-cue { display: block; margin-top: 2px; padding: 0; font: 500 12px/1.5 var(--font-sans); color: var(--text-subtle); text-align: left; background: none; border: 0; cursor: pointer; }
+.bs-cue { display: block; margin-top: 2px; padding: 0; font: 500 12px/1.5 var(--font-sans); color: var(--text-muted); text-align: left; background: none; border: 0; cursor: pointer; }
 .bs-cue:hover { color: var(--text-main); }
 
 /* weapons */
@@ -55,16 +55,16 @@
    column left an unlabelled rotation beside a gap and the "3 Trí" label far from its steps — V0055). */
 .bs-rot { display: grid; gap: 4px; }
 .bs-rot h4 { margin: 0; padding-top: 4px; font: 600 13px/1.4 var(--font-sans); color: var(--text-muted); }
-.bs-rot-note { margin: 0 0 8px; max-width: 70ch; font-size: 13px; color: var(--text-subtle); }
+.bs-rot-note { margin: 0 0 8px; max-width: 70ch; font-size: 13px; color: var(--text-muted); }
 /* overflow-x: clip hides the "›" of a step that wraps to the start of a line (it sits 9 px left of the step) */
 .bs-seq { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0; padding: 0; list-style: none; overflow-x: clip; }
 .bs-seq li { position: relative; display: grid; justify-items: center; align-content: start; gap: 4px; width: 64px; text-align: center; }
-.bs-seq li + li::before { content: "›"; position: absolute; left: -9px; top: 12px; color: var(--text-subtle); }
+.bs-seq li + li::before { content: "›"; position: absolute; left: -9px; top: 12px; color: var(--text-muted); }
 .bs-seq img { width: 46px; height: 46px; background: var(--bg-elevated); border-radius: 6px; }
 .bs-noicon { display: grid; place-items: center; width: 46px; height: 46px; overflow: hidden; font-size: 12px; line-height: 1.2; background: var(--bg-elevated); border-radius: 6px; }
 .bs-seq b { font: 600 12px/1 var(--font-sans); letter-spacing: .06em; color: var(--text-muted); }
 .bs-seq small { font-size: 12px; line-height: 1.3; color: var(--accent); }
-.bs-key { margin: 12px 0 0; font-size: 12px; color: var(--text-subtle); }
+.bs-key { margin: 12px 0 0; font-size: 12px; color: var(--text-muted); }
 
 /* 深造 */
 .bs-deeps { display: flex; flex-wrap: wrap; gap: 12px 28px; }
@@ -75,7 +75,7 @@
 .bs-deep figcaption { font-size: 12px; line-height: 1.3; text-align: center; }
 .bs-serial { font: 700 30px/1 var(--font-serif); letter-spacing: .14em; font-variant-numeric: tabular-nums; }
 .bs-serial .bs-chip { display: block; width: fit-content; margin: 6px 0 0; } /* own line: inline it widened the unit so two did not fit at 390px */
-.bs-serial small { display: block; margin-top: 6px; font: 500 12px/1 var(--font-sans); letter-spacing: 0; color: var(--text-subtle); }
+.bs-serial small { display: block; margin-top: 6px; font: 500 12px/1 var(--font-sans); letter-spacing: 0; color: var(--text-muted); }
 
 /* tips */
 .bs-tips { margin: 0; padding-left: 18px; columns: 2 380px; column-gap: 40px; font-size: 14px; color: var(--text-muted); }
@@ -85,7 +85,7 @@
 .bs-pack { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); grid-auto-flow: row dense; gap: 18px 0; }
 .bs-team { grid-column: span var(--n); min-width: 0; padding-right: 12px; }
 .bs-team h4 { margin: 0 0 6px; font: 600 12px/1.3 var(--font-sans); color: var(--text-muted); }
-.bs-team p { margin: 4px 0 0; font-size: 12px; color: var(--text-subtle); }
+.bs-team p { margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
 .bs-members { display: flex; flex-wrap: wrap; gap: 4px; }
 .bs-members a { display: grid; justify-items: center; gap: 4px; width: 64px; font-size: 12px; line-height: 1.3; text-align: center; color: var(--text-muted); text-decoration: none; }
 .bs-members a:hover { color: var(--text-main); }
@@ -98,7 +98,7 @@
 .bs-pop-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .bs-pop-head > img { width: 52px; height: 52px; }
 .bs-pop-head h4 { margin: 0; font: 600 17px/1.3 var(--font-serif); }
-.bs-pop-head small { font-size: 12px; color: var(--text-subtle); }
+.bs-pop-head small { font-size: 12px; color: var(--text-muted); }
 .bs-close { align-self: start; margin-left: auto; padding: 4px 10px; font: 500 13px var(--font-sans); color: var(--text-muted); background: none; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; }
 .bs-close:hover { color: var(--text-main); }
 .bs-skill h5 { margin: 10px 0 4px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
@@ -111,7 +111,7 @@
 .bs-pips { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
 .bs-pips i { height: 8px; border-radius: 2px; box-shadow: inset 0 0 0 1px var(--border-strong); }
 .bs-pips i.is-on { background: var(--accent); box-shadow: none; }
-.bs-col ol { margin: 0; padding-left: 20px; font-size: 13px; color: var(--text-subtle); }
+.bs-col ol { margin: 0; padding-left: 20px; font-size: 13px; color: var(--text-muted); }
 .bs-col li.is-reached { color: var(--text-main); }
 
 /* states */

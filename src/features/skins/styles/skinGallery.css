@@ -63,7 +63,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--accent, #D4B763);
-  box-shadow: 0 0 3px rgba(212, 183, 99, 0.3);
+  box-shadow: 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 .skin-gallery-title {
@@ -94,10 +94,10 @@
   overflow: hidden;
   background-color: transparent;
   background-image:
-    radial-gradient(ellipse 85% 80% at 72% 50%, rgba(212, 183, 99, 0.08) 0%, rgba(212, 183, 99, 0.025) 45%, rgba(212, 183, 99, 0.005) 70%, transparent 88%),
+    radial-gradient(ellipse 85% 80% at 72% 50%, color-mix(in srgb, var(--accent) 8%, transparent) 0%, color-mix(in srgb, var(--accent) 2.5%, transparent) 45%, color-mix(in srgb, var(--accent) 0.5%, transparent) 70%, transparent 88%),
     radial-gradient(ellipse 95% 85% at 65% 50%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
   border: none;
-  border-bottom: 1px solid rgba(212, 183, 99, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
   margin-bottom: 32px;
 }
 
@@ -130,7 +130,7 @@
   letter-spacing: 0.14em;
   color: var(--accent, #D4B763);
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(212, 183, 99, 0.18);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   padding-bottom: 10px;
   margin-bottom: 16px;
   display: flex;
@@ -146,7 +146,7 @@
 }
 
 .museum-seal-dot {
-  color: rgba(212, 183, 99, 0.45);
+  color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .museum-seal-badge-text {
@@ -221,7 +221,7 @@
 
 .museum-data-table {
   font-size: 11px;
-  border-top: 1px solid rgba(212, 183, 99, 0.12);
+  border-top: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
   padding-top: 12px;
   display: flex;
   flex-direction: column;
@@ -232,7 +232,7 @@
 .museum-data-row {
   display: flex;
   justify-content: space-between;
-  color: var(--text-subtle, #7A8290);
+  color: var(--text-muted);
 }
 
 .museum-data-row .val {
@@ -252,7 +252,7 @@
   gap: 12px;
   margin-top: auto;
   padding-top: 14px;
-  border-top: 1px solid rgba(212, 183, 99, 0.12);
+  border-top: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .museum-explore-btn {
@@ -260,8 +260,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: rgba(212, 183, 99, 0.10);
-  border: 1px solid rgba(212, 183, 99, 0.45);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
   color: var(--accent, #D4B763);
   padding: 8px 16px;
   border-radius: 4px;
@@ -298,7 +298,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(14, 16, 20, 0.65);
-  border: 1px solid rgba(212, 183, 99, 0.24);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
   border-radius: 4px;
   color: var(--accent);
   cursor: pointer;
@@ -309,23 +309,23 @@
 }
 
 .museum-nav-btn:hover {
-  background: rgba(212, 183, 99, 0.06);
-  border-color: rgba(212, 183, 99, 0.48);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
   color: #E2C987;
   box-shadow: none;
   transform: none;
 }
 
 .museum-nav-btn:focus-visible {
-  outline: 1px solid rgba(212, 183, 99, 0.6);
+  outline: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
   outline-offset: 1px;
-  border-color: rgba(212, 183, 99, 0.48);
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
 }
 
 .museum-nav-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  border-color: rgba(212, 183, 99, 0.12);
+  border-color: color-mix(in srgb, var(--accent) 12%, transparent);
   color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
@@ -356,21 +356,21 @@
 
 .hero-progress-segment.is-distant {
   width: 6px;
-  background-color: rgba(212, 183, 99, 0.16);
+  background-color: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .hero-progress-segment.is-nearby {
   width: 6px;
-  background-color: rgba(212, 183, 99, 0.42);
+  background-color: color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 .hero-progress-segment.is-active {
   width: 14px;
-  background-color: rgba(212, 183, 99, 0.96);
+  background-color: color-mix(in srgb, var(--accent) 96%, transparent);
 }
 
 .hero-progress-segment:hover {
-  background-color: rgba(212, 183, 99, 0.75);
+  background-color: color-mix(in srgb, var(--accent) 75%, transparent);
 }
 
 .museum-nav-counter {
@@ -378,7 +378,7 @@
   font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: rgba(212, 183, 99, 0.45);
+  color: color-mix(in srgb, var(--accent) 45%, transparent);
   line-height: 1;
   text-align: center;
   user-select: none;
@@ -494,7 +494,7 @@
   right: 0;
   background: transparent;
   border: none;
-  color: rgba(212, 183, 99, 0.35);
+  color: color-mix(in srgb, var(--accent) 35%, transparent);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -512,7 +512,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(212, 183, 99, 0.4);
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 /* ==================================================
@@ -1048,7 +1048,7 @@
 }
 
 .gallery-skin-card:hover {
-  border-color: rgba(212, 183, 99, 0.45);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   background: #181B20;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
@@ -1095,7 +1095,7 @@
 }
 
 .gallery-card-series-badge.is-highskin {
-  filter: drop-shadow(0 2px 8px rgba(212, 183, 99, 0.4)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--accent) 40%, transparent)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
 }
 
 .gallery-card-content {
@@ -1134,7 +1134,7 @@
   justify-content: space-between;
   gap: 6px;
   font-size: 11px;
-  color: var(--text-subtle, #8A9099);
+  color: var(--text-muted);
 }
 
 .gallery-card-cn {
@@ -1180,8 +1180,8 @@
 /* 1. Cao Cấp (High Skin) */
 .gallery-card-price.gallery-card-highskin {
   color: #E5C365;
-  background: rgba(212, 183, 99, 0.14);
-  border: 1px solid rgba(212, 183, 99, 0.35);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 /* 2. Du Lịch (Travel unlock) */
@@ -1291,10 +1291,10 @@
   overflow: hidden;
   background-color: transparent;
   background-image: 
-    radial-gradient(ellipse 80% 70% at 72% 50%, rgba(212, 183, 99, 0.07) 0%, rgba(212, 183, 99, 0.025) 35%, rgba(212, 183, 99, 0.005) 60%, transparent 85%),
+    radial-gradient(ellipse 80% 70% at 72% 50%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, color-mix(in srgb, var(--accent) 2.5%, transparent) 35%, color-mix(in srgb, var(--accent) 0.5%, transparent) 60%, transparent 85%),
     radial-gradient(ellipse 95% 85% at 68% 50%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
   border: none;
-  border-bottom: 1px solid rgba(212, 183, 99, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
   box-shadow: none;
   display: grid;
   grid-template-columns: 440px 1fr;
@@ -1343,8 +1343,8 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--accent, #D4B763);
-  background: rgba(212, 183, 99, 0.12);
-  border: 1px solid rgba(212, 183, 99, 0.25);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   padding: 2px 7px;
   border-radius: 3px;
 }
@@ -1354,7 +1354,7 @@
   align-items: center;
   gap: 6px;
   background: rgba(20, 23, 27, 0.88);
-  border: 1px solid rgba(212, 183, 99, 0.38);
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
   color: var(--accent, #D4B763);
   font-size: 10px;
   font-weight: 600;
@@ -1448,7 +1448,7 @@
 .hero-concise-meta {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px dashed rgba(212, 183, 99, 0.2);
+  border-top: 1px dashed color-mix(in srgb, var(--accent) 20%, transparent);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1685,7 +1685,7 @@
 }
 
 .asset-preview-item:hover .asset-thumb-wrap {
-  border-color: rgba(212, 183, 99, 0.45);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .asset-thumb-wrap.drawing-wrap {
@@ -1855,7 +1855,7 @@
     padding: 24px 20px;
     min-height: auto;
     background-image: 
-      radial-gradient(ellipse 85% 65% at 50% 30%, rgba(212, 183, 99, 0.07) 0%, rgba(212, 183, 99, 0.02) 45%, transparent 75%),
+      radial-gradient(ellipse 85% 65% at 50% 30%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, color-mix(in srgb, var(--accent) 2%, transparent) 45%, transparent 75%),
       radial-gradient(ellipse 100% 90% at 50% 40%, rgba(24, 27, 33, 0.35) 0%, rgba(17, 19, 21, 0.12) 60%, transparent 95%);
   }
   .spotlight-artwork-stage {

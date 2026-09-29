@@ -31,7 +31,7 @@ type Lore = {
 };
 
 const statusOf = (u: Unit): LoreStatus => (u.state === 'source_changed' ? 'changed' : u.viOrigin === 'legacy_workbook' ? 'legacy' : u.vi ? 'done' : 'todo');
-const DOT: Record<LoreStatus, string> = { done: 'bg-(--text-muted)', legacy: 'bg-(--accent)', changed: 'bg-(--rarity-ssr-text)', todo: 'border border-(--text-subtle)' };
+const DOT: Record<LoreStatus, string> = { done: 'bg-(--text-muted)', legacy: 'bg-(--accent)', changed: 'bg-(--rarity-ssr-text)', todo: 'border border-(--text-muted)' };
 const smooth = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
 // Units as editor fields: `value` is the shown text (legacy / CN-changed text is pre-filled), `official` says
@@ -85,18 +85,18 @@ export function LoreModule({ data }: ModuleProps) {
   // 1280 px (owner 2026-09-28: on phones the column was hidden, so editors could not find where to translate the terms).
   const info = (
     <>
-      <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Hiện vật</h3>
+      <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">Hiện vật</h3>
       {lore.archiveImages[0] && <img src={lore.archiveImages[0].url} alt="" loading="lazy" className="mb-3 aspect-square w-full max-w-64 rounded-md bg-(--bg-elevated) object-contain" />}
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
         {termRows.map(([label, t]) => (
           <Fragment key={label}>
-            <dt className="text-(--text-subtle)">{label}</dt>
-            <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-subtle)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-subtle)">(chưa dịch)</span></>}</a> : '—'}</dd>
+            <dt className="text-(--text-muted)">{label}</dt>
+            <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-muted)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-muted)">(chưa dịch)</span></>}</a> : '—'}</dd>
           </Fragment>
         ))}
       </dl>
-      <p className="mt-2 text-xs text-(--text-subtle)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
-      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-subtle)">Lịch sử gần đây</h3>
+      <p className="mt-2 text-xs text-(--text-muted)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
+      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">Lịch sử gần đây</h3>
       <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
         <HistoryList entries={lore.history.filter((h) => h.eventType === 'human_edit').slice(0, 5)} labels={labels} />
       </div>
@@ -105,7 +105,7 @@ export function LoreModule({ data }: ModuleProps) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-subtle) lg:px-5">
+      <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-muted) lg:px-5">
         <span className="tabular-nums">{counts.done}/{lore.units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></span>
         <span role="status" className="ml-auto">{publish.state !== 'idle' && publish.message}</span>
         {isOwner && <Button variant="ghost" className="h-7" onClick={() => lorePublisher.now()} disabled={publish.state === 'publishing'}>Xuất bản ngay</Button>}
@@ -118,7 +118,7 @@ export function LoreModule({ data }: ModuleProps) {
         >
           {groups.map((g) => (
             <Fragment key={g.group}>
-              <p className="px-4 pb-1.5 pt-3 text-[11px] uppercase tracking-[.12em] text-(--text-subtle) max-lg:hidden">{g.group}</p>
+              <p className="px-4 pb-1.5 pt-3 text-[11px] uppercase tracking-[.12em] text-(--text-muted) max-lg:hidden">{g.group}</p>
               {g.items.map((i) => {
                 const u = byKey.get(i.unitKey)!;
                 return (
@@ -137,7 +137,7 @@ export function LoreModule({ data }: ModuleProps) {
                     <span aria-hidden className={cn('mt-1.5 size-[7px] shrink-0 rounded-full', DOT[statusOf(u)])} />
                     <span className="min-w-0">
                       <span className="block whitespace-nowrap text-[13px]">{i.label}</span>
-                      <span lang="zh" className="admin-cn block max-w-[190px] truncate text-xs text-(--text-subtle) max-lg:hidden">{u.sourceCn.slice(0, 24)}</span>
+                      <span lang="zh" className="admin-cn block max-w-[190px] truncate text-xs text-(--text-muted) max-lg:hidden">{u.sourceCn.slice(0, 24)}</span>
                     </span>
                   </button>
                 );

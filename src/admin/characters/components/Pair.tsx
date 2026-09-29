@@ -13,7 +13,7 @@ export function PairRow({ id, label, extra, original, children }: { id: string; 
     <div id={`pair-${id}`} data-unit={id} className="grid scroll-mt-12 grid-cols-1 gap-x-12 gap-y-3 border-t border-(--border-color) py-5 pl-7 pr-4 first:border-t-0 max-lg:scroll-mt-14 md:grid-cols-2 md:px-8 md:py-6">
       <div className="flex flex-wrap items-baseline gap-x-3.5 text-xs md:col-span-2">
         <label htmlFor={`vi-${id}`} className="font-medium tracking-wide text-(--text-muted)">{label}</label>
-        {extra && <span className="text-(--text-subtle)">{extra}</span>}
+        {extra && <span className="text-(--text-muted)">{extra}</span>}
       </div>
       <div id={`cn-${id}`} lang="zh" className="admin-cn min-w-0 whitespace-pre-line text-[15px] leading-8 text-(--text-muted)">{original || '—'}</div>
       {children}
@@ -29,9 +29,9 @@ export function ViCell({ id, value, dirty, placeholder, multiline, onChange, not
         id={`vi-${id}`} ref={fit} rows={1} value={value} placeholder={placeholder}
         aria-describedby={`cn-${id} note-${id}`}
         onChange={(event) => { onChange(event.target.value); fit(event.target); }}
-        className={cn('block w-full resize-none border-0 bg-transparent p-0 text-base font-light leading-[1.9] text-(--text-main) outline-none [field-sizing:content] placeholder:italic placeholder:text-(--text-subtle) focus-visible:outline-none', multiline ? 'min-h-16' : 'min-h-8')}
+        className={cn('block w-full resize-none border-0 bg-transparent p-0 text-base font-light leading-[1.9] text-(--text-main) outline-none [field-sizing:content] placeholder:italic placeholder:text-(--text-muted) focus-visible:outline-none', multiline ? 'min-h-16' : 'min-h-8')}
       />
-      <div id={`note-${id}`} className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-(--text-subtle)">{notes}</div>
+      <div id={`note-${id}`} className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-(--text-muted)">{notes}</div>
     </div>
   );
 }
