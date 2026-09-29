@@ -33,6 +33,8 @@ const HUES: Record<string, string> = {
   'hút máu': 'pink',
   'giải trừ': 'teal',
   'sát thương kỹ năng': 'pink',
+  'chuyển nghề nghiệp': 'indigo',
+  'truy kích': 'coral',
 };
 
 export function parseTags(tagStr: unknown): string[] {
