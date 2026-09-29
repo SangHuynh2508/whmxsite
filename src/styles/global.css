@@ -16,6 +16,17 @@
     margin: 0;
     padding: 0;
   }
+
+  /* DESIGN.md: one 2 px antique-gold focus outline everywhere (keyboard focus only). */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1;
+  }
 }
 
 html {

@@ -44,9 +44,6 @@ export function updateSmoothScrollContainer(container) {
     }
     activeLenis = null;
     currentContainer = null;
-    if (typeof window !== 'undefined') {
-      window.__lenis = null;
-    }
   }
 
   if (!container || !(container instanceof HTMLElement)) {
@@ -84,9 +81,7 @@ export function updateSmoothScrollContainer(container) {
         node.hasAttribute('data-lenis-prevent') ||
         node.closest('[data-lenis-prevent]') ||
         node.closest('.calc-picker-roster') ||
-        node.closest('.adv-filter-panel') ||
-        node.closest('.skin-lightbox-modal') ||
-        node.closest('#sidebar')
+        node.closest('.skin-lightbox-modal')
       );
     }
   });
@@ -112,22 +107,7 @@ export function updateSmoothScrollContainer(container) {
     }
   });
 
-  if (typeof window !== 'undefined') {
-    window.__lenis = activeLenis;
-  }
-
   return activeLenis;
-}
-
-/**
- * Returns the currently active Lenis instance (or null)
- */
-export function getActiveLenis() {
-  return activeLenis;
-}
-
-if (typeof window !== 'undefined') {
-  window.getActiveLenis = getActiveLenis;
 }
 
 /**
@@ -191,31 +171,4 @@ export function scrollActiveToTop() {
     currentContainer.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
   }
   window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-}
-
-/**
- * Destroys any active Lenis instance cleanly
- */
-export function destroySmoothScroll() {
-  if (activeResizeObserver) {
-    try {
-      activeResizeObserver.disconnect();
-    } catch (e) {
-      // ignore
-    }
-    activeResizeObserver = null;
-  }
-
-  if (activeLenis) {
-    try {
-      activeLenis.destroy();
-    } catch (e) {
-      // ignore
-    }
-    activeLenis = null;
-    currentContainer = null;
-    if (typeof window !== 'undefined') {
-      window.__lenis = null;
-    }
-  }
 }

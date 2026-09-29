@@ -4,6 +4,8 @@
 import { getGameData } from '../../../data/loader.js';
 import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from '../../../ui/utils/huanzhang.js';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
+import { fold } from '../../../lib/fold.mts';
+import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -16,18 +18,6 @@ let isFilterExpanded = false;
 export function renderCharacterCatalogView(container) {
   const gameData = getGameData();
   if (!gameData || !gameData.characters) return;
-
-  const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
-
-  function removeVietnameseTones(str) {
-    if (!str) return '';
-    return str
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/đ/g, 'd')
-      .replace(/Đ/g, 'D')
-      .toLowerCase();
-  }
 
   function getCharacterStatValue(char, statKey) {
     if (!char || !char.stats) return null;
@@ -53,7 +43,7 @@ export function renderCharacterCatalogView(container) {
 
       if (catalogSearchQuery) {
         const rawQ = catalogSearchQuery.trim().toLowerCase();
-        const normQ = removeVietnameseTones(rawQ);
+        const normQ = fold(rawQ);
 
         const targets = [
           char.name_vi,
@@ -69,7 +59,7 @@ export function renderCharacterCatalogView(container) {
         const match = targets.some(val => {
           if (!val) return false;
           const strVal = String(val).toLowerCase();
-          const normVal = removeVietnameseTones(strVal);
+          const normVal = fold(strVal);
           return strVal.includes(rawQ) || normVal.includes(normQ);
         });
 
@@ -128,9 +118,9 @@ export function renderCharacterCatalogView(container) {
     }
 
     return filtered.map((char) => {
-      const rarityClass = char.rare === 4 ? 'ssr' : char.rare === 3 ? 'sr' : 'r';
-      const rarityLabel = char.rare === 4 ? 'SSR' : char.rare === 3 ? 'SR' : 'R';
-      const jobLabel = jobNames[char.job] || 'Khác';
+      const rarityLabel = RARITY_LABELS[char.rare] || 'R';
+      const rarityClass = rarityLabel.toLowerCase();
+      const jobLabel = JOB_NAMES[char.job] || 'Khác';
       const hasHz = hasHuanZhang(char);
       
       const cards = char.cards || [];

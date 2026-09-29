@@ -6,7 +6,6 @@ import { setCharacter, state } from '../../data/state.js';
 import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
 import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
-import { renderCatalog } from '../layout/sidebar.js';
 import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
@@ -17,7 +16,6 @@ import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmed
 
 let previousRouteKey = null;
 let activeRouteTransition = null;
-let activeIncomingEl = null;
 let isPopStateNav = false;
 const routeScrollCache = new Map();
 
@@ -35,7 +33,6 @@ function cancelActiveTransition(allViewContainers) {
       gsap.set(el, { clearProps: 'transform,opacity' });
     });
   }
-  activeIncomingEl = null;
 }
 
 export function getCharBySlugOrId(slugOrId) {
@@ -167,179 +164,42 @@ export function parseHash() {
   };
 }
 
-function renderRouteView(route, refs) {
-  const {
-    mainContent,
-    sidebar,
-    emptyState,
-    charCatalogView,
-    charDetailView,
-    weaponsView,
-    skinGalleryView,
-    skinDetailView,
-    gameData
-  } = refs;
+// Route view -> its container; every other container is hidden and emptied. A view not listed is the calculator
+// (#main-content).
+const VIEW_CONTAINERS = {
+  catalog: 'character-catalog-view',
+  character: 'character-detail-view',
+  weapons: 'weapons-view',
+  gallery: 'skin-gallery-view',
+  'skin-detail': 'skin-detail-view',
+};
+const containerOf = (view) => (Object.hasOwn(VIEW_CONTAINERS, view) ? document.getElementById(VIEW_CONTAINERS[view]) : null);
 
-  if (route.view === 'catalog') {
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
+function renderRouteView(route, target, gameData) {
+  for (const id of Object.values(VIEW_CONTAINERS)) {
+    const el = document.getElementById(id);
+    if (el && el !== target) {
+      el.classList.add('hidden');
+      el.innerHTML = '';
     }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    if (charCatalogView) {
-      charCatalogView.classList.remove('hidden');
-      renderCharacterCatalogView(charCatalogView);
-    }
-  } else if (route.view === 'weapons' || route.view === 'data') {
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    if (weaponsView) {
-      weaponsView.classList.remove('hidden');
-      renderWeaponsView(weaponsView);
-    }
-  } else if (route.view === 'gallery') {
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    if (skinGalleryView) {
-      skinGalleryView.classList.remove('hidden');
-      renderSkinGalleryView(skinGalleryView);
-    }
-  } else if (route.view === 'skin-detail') {
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-
-    if (skinDetailView) {
-      skinDetailView.classList.remove('hidden');
-      renderSkinDetailView(skinDetailView, route.skinId);
-    }
-  } else if (route.view === 'character') {
-    if (mainContent) mainContent.classList.add('hidden');
-    if (emptyState) emptyState.classList.add('hidden');
-    if (sidebar) sidebar.classList.add('hidden');
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-
-    if (charDetailView) {
-      charDetailView.classList.remove('hidden');
-      renderCharacterDetail(route.slug, route.subtab);
-    }
+  }
+  const mainContent = document.getElementById('main-content');
+  if (target !== mainContent) {
+    mainContent.classList.add('hidden');
+    target.classList.remove('hidden');
+    if (route.view === 'catalog') renderCharacterCatalogView(target);
+    else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
+    else if (route.view === 'weapons') renderWeaponsView(target);
+    else if (route.view === 'gallery') renderSkinGalleryView(target);
+    else renderSkinDetailView(target, route.skinId);
+    return;
+  }
+  const targetCharId = route.characterId || state.character?.id;
+  if (targetCharId && gameData.characters[targetCharId]) {
+    selectCalculatorCharacter(targetCharId);
   } else {
-    if (charCatalogView) {
-      charCatalogView.classList.add('hidden');
-      charCatalogView.innerHTML = '';
-    }
-    if (charDetailView) {
-      charDetailView.classList.add('hidden');
-      charDetailView.innerHTML = '';
-    }
-    if (weaponsView) {
-      weaponsView.classList.add('hidden');
-      weaponsView.innerHTML = '';
-    }
-    if (skinGalleryView) {
-      skinGalleryView.classList.add('hidden');
-      skinGalleryView.innerHTML = '';
-    }
-    if (skinDetailView) {
-      skinDetailView.classList.add('hidden');
-      skinDetailView.innerHTML = '';
-    }
-    if (sidebar) sidebar.classList.add('hidden');
-
-    let targetCharId = route.characterId;
-    if (!targetCharId && state.character) {
-      targetCharId = state.character.id;
-    }
-
-    if (targetCharId && gameData.characters[targetCharId]) {
-      selectCalculatorCharacter(targetCharId);
-    } else {
-      if (mainContent) mainContent.classList.remove('hidden');
-      if (emptyState) emptyState.classList.add('hidden');
-      renderHeader();
-    }
+    mainContent.classList.remove('hidden');
+    renderHeader();
   }
 }
 
@@ -370,15 +230,6 @@ export function handleRoute() {
     history.replaceState(null, '', '#/characters');
   }
 
-  const mainContent = document.getElementById('main-content');
-  const sidebar = document.getElementById('sidebar');
-  const emptyState = document.getElementById('empty-state');
-  const charCatalogView = document.getElementById('character-catalog-view');
-  const charDetailView = document.getElementById('character-detail-view');
-  const weaponsView = document.getElementById('weapons-view') || document.getElementById('data-view');
-  const skinGalleryView = document.getElementById('skin-gallery-view');
-  const skinDetailView = document.getElementById('skin-detail-view');
-
   // The React admin shell owns #/admin; nav highlights live in src/app/layout/AppNav.tsx.
   if (route.view === 'admin') return;
 
@@ -392,16 +243,9 @@ export function handleRoute() {
     routeKey = `calculator:${route.characterId || ''}`;
   }
 
-  // Determine target incoming container
-  let incomingContainer = null;
-  if (route.view === 'catalog') incomingContainer = charCatalogView;
-  else if (route.view === 'weapons' || route.view === 'data') incomingContainer = weaponsView;
-  else if (route.view === 'gallery') incomingContainer = skinGalleryView;
-  else if (route.view === 'skin-detail') incomingContainer = skinDetailView;
-  else if (route.view === 'character') incomingContainer = charDetailView;
-  else incomingContainer = mainContent;
-
-  const allViewContainers = [charCatalogView, weaponsView, skinGalleryView, skinDetailView, charDetailView, mainContent].filter(Boolean);
+  const mainContent = document.getElementById('main-content');
+  const incomingContainer = containerOf(route.view) || mainContent;
+  const allViewContainers = [...Object.keys(VIEW_CONTAINERS).map(containerOf), mainContent].filter(Boolean);
   const outgoingContainer = allViewContainers.find(el => !el.classList.contains('hidden'));
 
   // Save outgoing container scroll position before route change
@@ -416,19 +260,7 @@ export function handleRoute() {
 
   const isRealRouteChange = previousRouteKey !== null && previousRouteKey !== routeKey;
 
-  const doRender = () => {
-    renderRouteView(route, {
-      mainContent,
-      sidebar,
-      emptyState,
-      charCatalogView,
-      charDetailView,
-      weaponsView,
-      skinGalleryView,
-      skinDetailView,
-      gameData
-    });
-  };
+  const doRender = () => renderRouteView(route, incomingContainer, gameData);
 
   // CASE 1: Same semantic route key (e.g. internal Character Detail subtab change) or initial mount
   if (!isRealRouteChange) {
@@ -478,7 +310,6 @@ export function handleRoute() {
         updateSmoothScrollContainer(incomingContainer);
         setScrollPositionImmediate(targetScroll);
 
-        activeIncomingEl = incomingContainer;
         gsap.to(incomingContainer, {
           opacity: 1,
           y: 0,
@@ -487,7 +318,6 @@ export function handleRoute() {
           clearProps: 'transform,opacity',
           onComplete: () => {
             activeRouteTransition = null;
-            activeIncomingEl = null;
           }
         });
       }
@@ -511,7 +341,6 @@ export function handleRoute() {
           updateSmoothScrollContainer(incomingContainer);
           setScrollPositionImmediate(targetScroll);
 
-          activeIncomingEl = incomingContainer;
           gsap.to(incomingContainer, {
             opacity: 1,
             y: 0,
@@ -520,7 +349,6 @@ export function handleRoute() {
             clearProps: 'transform,opacity',
             onComplete: () => {
               activeRouteTransition = null;
-              activeIncomingEl = null;
             }
           });
         } else {
@@ -539,7 +367,6 @@ export function handleRoute() {
     updateSmoothScrollContainer(incomingContainer);
     setScrollPositionImmediate(targetScroll);
     if (incomingContainer) {
-      activeIncomingEl = incomingContainer;
       gsap.to(incomingContainer, {
         opacity: 1,
         y: 0,
@@ -548,7 +375,6 @@ export function handleRoute() {
         clearProps: 'transform,opacity',
         onComplete: () => {
           activeRouteTransition = null;
-          activeIncomingEl = null;
         }
       });
     }

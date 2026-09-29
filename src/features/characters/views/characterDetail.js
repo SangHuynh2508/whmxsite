@@ -6,6 +6,7 @@ import { getGameData } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
+import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 
 import { renderOverviewTab } from './detail/overviewView.js';
 import { renderInfoTab } from './detail/infoView.js';
@@ -78,6 +79,8 @@ function updateNavTabs(container, tabName) {
     // missed new tabs: Tổng Quan and Hồ Sơ Lưu Trữ were both highlighted.)
     const linkTab = (link.getAttribute('href') || '').split('/')[3] || 'overview';
     link.classList.toggle('active', linkTab === tabName);
+    if (linkTab === tabName) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
   });
 
   const activeTabEl = container.querySelector('.cd-tab-item.active');
@@ -224,10 +227,9 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
   currentRenderedCharId = char.id;
   currentActiveTab = normTab;
 
-  const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
-  const rarityMap = { 4: { label: "SSR", class: "ssr" }, 3: { label: "SR", class: "sr" }, 2: { label: "R", class: "r" } };
-  const rarityInfo = rarityMap[char.rare] || { label: `★${char.rare}`, class: "sr" };
-  const jobName = jobNames[char.job] || "Chức nghiệp";
+  const rarityLabel = RARITY_LABELS[char.rare] || `★${char.rare}`;
+  const rarityInfo = { label: rarityLabel, class: RARITY_LABELS[char.rare] ? rarityLabel.toLowerCase() : "sr" };
+  const jobName = JOB_NAMES[char.job] || "Chức nghiệp";
   const slug = char.slug || char.id;
   const tagStr = char.tags_vi || char.tags_cn || "";
 
@@ -317,15 +319,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     </div>
   `;
 
-  // Auto-scroll active tab into view on mobile
-  const activeTabEl = container.querySelector('.cd-tab-item.active');
-  if (activeTabEl && typeof activeTabEl.scrollIntoView === 'function') {
-    activeTabEl.scrollIntoView({
-      behavior: isReducedMotion() ? 'auto' : 'smooth',
-      block: 'nearest',
-      inline: 'center'
-    });
-  }
+  updateNavTabs(container, normTab); // marks the active tab (aria-current) and scrolls it into view on phones
 
   // Render initial tab content directly (NO double animation with route entry)
   const tabContentContainer = document.getElementById('cd-tab-content');

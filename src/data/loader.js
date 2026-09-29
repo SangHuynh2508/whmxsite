@@ -15,20 +15,6 @@ export async function loadGameData() {
     const res = await fetch('/data.json');
     if (!res.ok) throw new Error(`data.json HTTP ${res.status}`);
     gameData = await res.json();
-    if (gameData && gameData.characters) {
-      Object.values(gameData.characters).forEach(char => {
-        if (char.icon) {
-          char.icon = char.icon.replace('assets/avatars/', 'assets/characters/avatars/');
-        }
-        if (Array.isArray(char.skins)) {
-          char.skins.forEach(skin => {
-            if (skin.image) {
-              skin.image = skin.image.replace('assets/drawings/', 'assets/characters/drawings/');
-            }
-          });
-        }
-      });
-    }
     // Do not hold the app for up to 5 s: merge when the overlay arrives. Views read
     // char.profile at render time, so the next render shows it.
     // Views that are all lore (the Hồ Sơ Lưu Trữ tab) wait on loreOverlayMerged() and re-render.

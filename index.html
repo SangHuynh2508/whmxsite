@@ -41,95 +41,10 @@
 <body>
   <!-- Global nav (desktop rail + mobile dock): React, src/app/layout/AppNav.tsx, mounted first in <body> -->
 
-  <div id="drawer-backdrop" class="drawer-backdrop"></div>
-
   <div id="app" class="app-layout">
-
-    <!-- Legacy catalog drawer + calculator empty state: hidden from the first paint (owner 2026-09-28: the old
-         calculator screen showed while data.json loaded); the router keeps them hidden on every route. -->
-    <aside class="sidebar hidden" id="sidebar" data-lenis-prevent>
-      <header class="sidebar-header">
-        <div class="sidebar-header-title">
-          <h1>Vật Hoa Di Tân</h1>
-          <p class="subtitle">CALCULATOR</p>
-        </div>
-        <button type="button" id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Đóng danh mục">×</button>
-      </header>
-
-      <div class="filter-section">
-        <div class="search-row">
-          <input type="text" id="search-input" placeholder="Tìm kiếm nhân vật..." autocomplete="off" />
-          <button type="button" id="adv-filter-btn" class="adv-filter-btn" title="Tìm kiếm nâng cao"
-            aria-label="Bộ lọc nâng cao">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-            </svg>
-            <span class="filter-badge hidden" id="filter-active-count">0</span>
-          </button>
-        </div>
-
-        <div class="adv-filter-panel hidden" id="adv-filter-panel" data-lenis-prevent>
-          <div class="filter-group">
-            <span class="filter-label">Chức nghiệp</span>
-            <div class="filter-chips" id="job-filter">
-              <button class="chip" data-job="1">Túc Vệ</button>
-              <button class="chip" data-job="2">Khinh Nhuệ</button>
-              <button class="chip" data-job="3">Viễn Kích</button>
-              <button class="chip" data-job="4">Cấu Thuật</button>
-              <button class="chip" data-job="5">Chiến Lược</button>
-            </div>
-          </div>
-
-          <div class="filter-group">
-            <span class="filter-label">Độ hiếm</span>
-            <div class="filter-chips" id="rarity-filter">
-              <button class="chip chip-ssr" data-rarity="4">SSR</button>
-              <button class="chip chip-sr" data-rarity="3">SR</button>
-              <button class="chip chip-r" data-rarity="2">R</button>
-            </div>
-          </div>
-
-          <div class="filter-group">
-            <span class="filter-label">Phân loại</span>
-            <div class="filter-chips" id="pool-filter">
-              <button class="chip chip-limited" data-pool="limited">Limited</button>
-              <button class="chip" data-pool="standard">Thường</button>
-            </div>
-          </div>
-
-          <div class="filter-group">
-            <span class="filter-label">Hoán Chương</span>
-            <div class="filter-chips" id="huanzhang-filter">
-              <button class="chip" id="sidebar-hz-btn" data-huanzhang="has">Có Hoán Chương</button>
-            </div>
-          </div>
-
-          <div class="filter-actions">
-            <button type="button" id="reset-filter-btn" class="reset-filter-btn">Xóa bộ lọc</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="character-catalog" id="char-catalog" data-lenis-prevent>
-        <!-- Populated via JS -->
-      </div>
-    </aside>
 
     <!-- Main View: Details & Calculation -->
     <main class="main-content hidden" id="main-content">
-      <div class="mobile-action-bar">
-        <button type="button" id="mobile-char-select-btn" class="mobile-char-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <span>Danh Mục Nhân Vật</span>
-        </button>
-      </div>
-
       <div class="content-body">
         <div class="calc-wrapper">
           <!-- Character Profile -->
@@ -248,31 +163,8 @@
       </footer>
     </main>
 
-    <div id="empty-state" class="empty-state hidden">
-      <div class="empty-state-content">
-        <div class="empty-state-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
-        </div>
-        <button type="button" id="empty-char-select-btn" class="mobile-char-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <span>Danh Mục Nhân Vật</span>
-        </button>
-        <h3 class="empty-state-title">Tra Cứu & Tính Toán</h3>
-        <p class="empty-state-text">Chọn một nhân vật từ danh mục bên trái để xem thông tin chi tiết và tính toán tài
-          nguyên.</p>
-      </div>
-    </div>
+    <!-- Filled by boot.js only when data.json fails to load -->
+    <div id="empty-state" class="empty-state hidden"></div>
 
     <!-- Standalone Character Catalog View Root -->
     <main id="character-catalog-view" class="character-catalog-view hidden">

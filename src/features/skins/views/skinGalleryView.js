@@ -9,6 +9,9 @@ import { resolveAssetUrl, getSkinAssetUrls } from '../../assets/assetPaths.js';
 import { createLoreReveal } from '../../../ui/loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smoothScroll.js';
 import '../styles/skinGallery.css';
+import { fold } from '../../../lib/fold.mts';
+
+const normalizeText = (str) => (str ? fold(str).trim() : '');
 
 /**
  * Formats curatorial lore quote for high skin hero spotlight
@@ -56,20 +59,6 @@ let sortOrder = 'default'; // 'default' | 'name-asc' | 'char-asc' | 'price-asc' 
 // Collapsible UI state (in-memory, default collapsed)
 let isAcqOpen = false;
 let isSeriesOpen = false;
-
-/**
- * Normalizes Vietnamese text for diacritic-insensitive search
- */
-function normalizeText(str) {
-  if (!str) return '';
-  return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .toLowerCase()
-    .trim();
-}
 
 /**
  * Resolves compact semantic acquisition metadata for skins.

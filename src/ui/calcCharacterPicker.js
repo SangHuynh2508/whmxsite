@@ -5,8 +5,8 @@ import { renderLevelProgress } from '../features/calculator/views/levelProgress.
 import { renderTalentGraph } from './talentGraph.js';
 import { renderResourceSummary } from './resourceSummary.js';
 import { calculateResources } from '../data/calculator.js';
-import { closeMobileDrawer } from '../app/layout/sidebar.js';
 
+import { RARITY_LABELS } from './utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from './utils/avatar.js';
 import { stopSmoothScroll, startSmoothScroll, resizeSmoothScroll } from '../app/runtime/smoothScroll.js';
 
@@ -82,9 +82,6 @@ export function selectCalculatorCharacter(characterOrId) {
 
   // 5. Close pickers
   closeCalcPicker();
-  try {
-    closeMobileDrawer();
-  } catch (e) {}
 
   // 6. Notify Lenis of changed content height
   resizeSmoothScroll();
@@ -143,24 +140,18 @@ export function initCalcPicker() {
     const avatarBtn = e.target.closest('#profile-avatar-container, .profile-avatar-button');
     const changeBtn = e.target.closest('#profile-change-char-btn, .change-char-btn');
     const namesBox = e.target.closest('.profile-names');
-    const emptyBtn = e.target.closest('#empty-char-select-btn');
 
-    if (avatarBtn || changeBtn || namesBox || emptyBtn) {
+    if (avatarBtn || changeBtn || namesBox) {
       const isCalcHeader = (avatarBtn && avatarBtn.closest('#calc-profile-header')) ||
                            (changeBtn && changeBtn.closest('#calc-profile-header')) ||
                            (namesBox && namesBox.closest('#calc-profile-header'));
-      if (isCalcHeader || emptyBtn) {
+      if (isCalcHeader) {
         e.preventDefault();
         e.stopPropagation();
         openCalcPicker();
       }
     }
   });
-}
-
-function getRarityText(rareNum) {
-  const map = { 5: 'EXTRA', 4: 'SSR', 3: 'SR', 2: 'R', 1: 'N' };
-  return map[rareNum] || `R${rareNum}`;
 }
 
 export function renderCalcPickerRoster() {
@@ -201,7 +192,7 @@ export function renderCalcPickerRoster() {
     div.setAttribute('role', 'button');
     div.setAttribute('tabindex', '0');
 
-    const rareText = getRarityText(char.rare);
+    const rareText = (RARITY_LABELS[char.rare] || `R${char.rare}`);
     const limitedBadge = char.is_limited ? `<span class="char-item-limited-tag">LIMITED</span>` : '';
 
     div.innerHTML = `

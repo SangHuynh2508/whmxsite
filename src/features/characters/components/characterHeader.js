@@ -1,5 +1,6 @@
 import { state } from '../../../data/state.js';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
+import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
@@ -25,7 +26,7 @@ export function renderHeader() {
     elNames.style.cursor = 'pointer';
   }
 
-  const getRarityText = (r) => ({ 5: 'EXTRA', 4: 'SSR', 3: 'SR', 2: 'R', 1: 'N' }[r] || `R${r}`);
+  const getRarityText = (r) => RARITY_LABELS[r] || `R${r}`;
 
   if (!char) {
     // Unselected State
@@ -78,12 +79,11 @@ export function renderHeader() {
 
   // Class / Job Badge & Label Mapping
   const prefixes = { 1: 'sw', 2: 'qr', 3: 'yj', 4: 'gs', 5: 'zl' };
-  const jobNames = { 1: 'Túc Vệ', 2: 'Khinh Nhuệ', 3: 'Viễn Kích', 4: 'Cấu Thuật', 5: 'Chiến Lược' };
   const colors   = { 2: 'blue', 3: 'yellow', 4: 'red', 5: 'red' };
   
   const prefix  = prefixes[char.job];
   const color   = colors[char.rare] || 'red';
-  const jName   = jobNames[char.job] || '';
+  const jName   = JOB_NAMES[char.job] || '';
 
   if (prefix && elJobBlock && elClassBadge && elClassLabel) {
     elClassBadge.src = `/assets/jobs/ui_yc_${prefix}_${color}.png`;

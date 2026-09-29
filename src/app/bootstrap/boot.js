@@ -1,13 +1,11 @@
 import { loadGameData } from '../../data/loader.js';
 import { state, subscribe, setCharacter } from '../../data/state.js';
 import { calculateResources } from '../../data/calculator.js';
-import { initSidebar, renderCatalog } from '../layout/sidebar.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { initLevelProgress, renderLevelProgress } from '../../features/calculator/views/levelProgress.js';
 import { renderTalentGraph } from '../../ui/talentGraph.js';
 import { renderResourceSummary } from '../../ui/resourceSummary.js';
 import { resizeSmoothScroll } from '../runtime/smoothScroll.js';
-import { initTheme } from '../settings/theme.js';
 import { initAppNav } from '../layout/AppNav.tsx';
 import { initRouter, handleRoute } from '../router/router.js';
 import { initCalcPicker } from '../../ui/calcCharacterPicker.js';
@@ -38,7 +36,6 @@ export async function boot() {
   initAdminShell();
   initSession();
   initAppNav();
-  initTheme();
   initFeedbackButton();
   initBackToTopButton();
   try {
@@ -52,7 +49,6 @@ export async function boot() {
   }
 
   initCalcPicker();
-  initSidebar('char-catalog', 'search-input');
   initLevelProgress('level-current', 'level-target');
   initRouter();
 
@@ -65,7 +61,6 @@ export async function boot() {
     const isCharRoute = hash.includes('/characters/');
 
     if (!isCharRoute && currentState.character) {
-      document.getElementById('empty-state').classList.add('hidden');
       document.getElementById('main-content').classList.remove('hidden');
 
       renderHeader();

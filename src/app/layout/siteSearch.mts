@@ -2,11 +2,12 @@
  *  characters and their non-base skins today. Accent-insensitive for Vietnamese ("thuong chu" → Thương Chu), plain
  *  substring for Chinese. Names that start with the query rank first, then characters before skins. */
 
+import { fold } from '../../lib/fold.mts';
+
 type Skin = { skinID: string; name_vi?: string; name_cn?: string; is_base?: boolean };
 type Character = { id: string; slug?: string; name_vi?: string; name_cn?: string; skins?: Skin[] };
 export type SearchResult = { kind: 'character' | 'skin'; title: string; sub: string; characterId: string; href: string };
 
-const fold = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
 
 export function searchSite(query: string, characters: Record<string, Character>, limit = 8): SearchResult[] {
   const q = fold(query.trim());

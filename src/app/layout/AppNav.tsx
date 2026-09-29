@@ -20,7 +20,7 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 const PUBLIC_LINKS = [
   { href: '#/characters', label: 'Khí Giả', icon: UsersRound, views: ['catalog', 'character'] },
   { href: '#/gallery', label: 'Trang Phục', icon: Shirt, views: ['gallery', 'skin-detail'] },
-  { href: '#/weapons', label: 'Vũ Khí', icon: Sword, views: ['weapons', 'data'] },
+  { href: '#/weapons', label: 'Vũ Khí', icon: Sword, views: ['weapons'] },
   { href: '#calc', label: 'Công cụ', icon: Calculator, views: ['calculator'] },
 ];
 

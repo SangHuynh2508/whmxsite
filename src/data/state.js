@@ -6,7 +6,6 @@ export const state = {
   levelTgt: 1,
   // nodes state: mapping of talent ID -> state ('neutral', 'completed', 'target', 'upgrade')
   talentNodes: {}, 
-  autoMaxMode: true, // Toggle for Smart Auto-Max
 };
 
 const listeners = [];
@@ -47,7 +46,7 @@ export function updateLevels(cur, tgt) {
   state.levelCur = cur;
   state.levelTgt = tgt;
   // Sync talent nodes to match the new level range (if auto-max is on)
-  if (state.autoMaxMode && state.character) {
+  if (state.character) {
     syncTalentsToLevel(state.character, tgt);
   }
   notify();
@@ -130,39 +129,6 @@ function autoMaxUnlock(nodeId, charData) {
   checkPrereq(nodeId);
 }
 
-
-function manualUnlock(nodeId, charData) {
-  const curStatus = state.talentNodes[nodeId];
-  if (curStatus === 'target' || curStatus === 'completed') {
-    // Toggle off — also uncheck any dependents
-    uncheckWithDependents(nodeId, charData);
-    return;
-  }
-
-  const node = charData.talents.find(t => t.id === nodeId);
-  if (!node) return;
-
-  // Enforce prerequisites
-  const prereqsMet = (node.req_talent || []).every(
-    req => state.talentNodes[req] === 'target' || state.talentNodes[req] === 'completed'
-  );
-
-  if (prereqsMet) {
-    state.talentNodes[nodeId] = 'target';
-    // Sync level cap
-    const targetCap = getUnlockedLevelCap(node.req_level || 0);
-    if (targetCap > state.levelTgt) {
-      state.levelTgt = targetCap;
-    }
-  } else {
-    // Show which prerequisites are missing instead of generic alert
-    const missing = (node.req_talent || [])
-      .filter(req => state.talentNodes[req] !== 'target' && state.talentNodes[req] !== 'completed')
-      .map(req => charData.talents.find(t => t.id === req)?.name_vi || req)
-      .join(', ');
-    alert(`Chưa mở khóa thiên phú yêu cầu phía trước: ${missing}`);
-  }
-}
 
 /**
  * Uncheck a node and recursively uncheck any nodes that depend on it

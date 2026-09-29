@@ -4,13 +4,13 @@
  */
 import { getCharacterCardUrl } from '../../../assets/assetPaths.js';
 import { escapeHtml } from '../../../../lib/escapeHtml.mts';
+import { JOB_NAMES, RARITY_LABELS } from '../../../../ui/utils/gameLabels.mts';
 
 export function renderOverviewTab(container, char) {
-  const jobNames = { 1: "Túc Vệ", 2: "Khinh Nhuệ", 3: "Viễn Kích", 4: "Cấu Thuật", 5: "Chiến Lược" };
-  const rarityMap = { 4: { label: "SSR", class: "ssr" }, 3: { label: "SR", class: "sr" }, 2: { label: "R", class: "r" } };
 
-  const rarityInfo = rarityMap[char.rare] || { label: `★${char.rare}`, class: "sr" };
-  const jobName = jobNames[char.job] || "Chưa xác định";
+  const rarityLabel = RARITY_LABELS[char.rare] || `★${char.rare}`;
+  const rarityInfo = { label: rarityLabel, class: RARITY_LABELS[char.rare] ? rarityLabel.toLowerCase() : "sr" };
+  const jobName = JOB_NAMES[char.job] || "Chưa xác định";
   const attackStyleMap = {
     1: "Cận chiến",
     2: "Tầm xa"
