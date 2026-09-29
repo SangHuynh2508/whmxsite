@@ -35,7 +35,6 @@ PRIMARY_KEYS = {
 IMPORTABLE_STATUS = {"TRANSLATED"}
 NEW_BATCH_STATUS = {"PENDING", "NEEDS_TRANSLATION", "REVIEW", "SOURCE_CHANGED"}
 CANONICAL_TERMS = {
-    "瞄准": ("Miêu Chuẩn", ("Nhắm Bắn", "Nhắm")),
     "脆弱": ("Thúy Nhược", ("Dễ Vỡ", "Tùy Nhược")),
     "蓄势": ("Súc Thế", ("Tích Thế",)),
 }

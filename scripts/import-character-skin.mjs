@@ -70,6 +70,7 @@ const CATEGORY_BY_OBTAIN_CN = Object.freeze({
   '通过预约奖励获得': 'event',
   '通过花朝昔时活动获得': 'event',
   '通过协韵行歌活动获得': 'event',
+  '通过累计签到活动获得': 'event',
   '通过衣装店限时销售': 'shop',
   '通过礼包限时销售': 'shop',
   '通过集训易市获得': 'training',
