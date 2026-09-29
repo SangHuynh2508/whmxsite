@@ -236,11 +236,7 @@ never a background wash on large areas and never decoration for its own sake.
 **The Token Rule.** Colours come from `src/styles/tokens.css` only. A new colour is a new token, not a hex in a
 feature file.
 
-**Drift (legacy CSS, clean up later):** a second gold `#c7a86b` (15 uses) and the character-tab underline
-`#c4a265` (= `rarity-sr`) instead of `antique-gold`; ~30 literal `rgba(212,183,99,x)` instead of the gold tokens;
-`#fff`/`#ffffff` (47 uses) and white-alpha tab borders; teal `#23867f` (10 uses); `--text-secondary` used 5 times but
-never defined; three scrims (60 %, 35 %, 70 % night-ink). The light-theme block in `tokens.css` is dead (the theme is
-forced dark) and is not part of the system.
+**Drift (legacy CSS, clean up later — list and proposals in `docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`):** ~54 literal `rgba(212,183,99,x)` instead of the gold tokens; the character-tab underline `#c4a265` (= `rarity-sr`) instead of `antique-gold`; `#fff`/white-alpha tab borders (37 uses); three scrims (60 %, 35 %, 70 % night-ink); teal `#23867f` on the "hồi phục" skill pill (the calculator's teal is intentional, owner 2026-09-29). **Cleaned 2026-09-29:** the second gold `#c7a86b`, the light-theme gold, the undefined `--text-secondary`/`--text-primary`, and the light-theme token block (merged into `:root`; the site is dark only).
 
 ## Typography
 

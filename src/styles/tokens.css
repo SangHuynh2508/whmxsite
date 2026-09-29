@@ -1,32 +1,33 @@
-/* Reset & Base Variables */
+/* Design tokens. The site is dark only (DESIGN.md): the light values and the [data-theme="dark"] override
+   block were merged into :root on 2026-09-29 — same values, one place. */
 
 :root {
-  color-scheme: light;
-  --bg-main: #FAFAFA;
-  --bg-surface: #FFFFFF;
-  --bg-surface-hover: #F2F2F2;
-  --bg-elevated: #FFFFFF;
-  --bg-input: #FAFAFA;
-  --border-color: #E2E2E2;
-  --border-strong: #D4D4D4;
-  --text-main: #1A1A1A;
-  --text-muted: #666666;
-  --text-subtle: #6E6E6E; /* ≥4.5:1 on every light surface (was #888, 3.2–3.5:1) */
-  --accent: #B89947; /* Muted gold/bronze inspired by antiques */
-  --accent-light: #F4F1E9;
-  --shadow-pop: rgba(0, 0, 0, 0.16);
-  --tg-line-inactive: #D1D5DB;
+  color-scheme: dark;
+  --bg-main: #111315;
+  --bg-surface: #17191C;
+  --bg-surface-hover: #22262B;
+  --bg-elevated: #1C2024;
+  --bg-input: #1C2024;
+  --border-color: #2B2F34;
+  --border-strong: #3D434A;
+  --text-main: #E3E5E8;
+  --text-muted: #9097A0;
+  --text-subtle: #8A9099; /* ≥4.5:1 on every surface incl. hover */
+  --accent: #D4B763;
+  --accent-light: #24221A;
+  --shadow-pop: rgba(0, 0, 0, 0.55);
+  --tg-line-inactive: #3A4048;
 
   /* Subtle Gold Border Tokens */
-  --border-gold-subtle: rgba(184, 153, 71, 0.30);
-  --border-gold-divider: rgba(184, 153, 71, 0.16);
+  --border-gold-subtle: rgba(212, 183, 99, 0.30);
+  --border-gold-divider: rgba(212, 183, 99, 0.16);
 
-  /* Form Control Tokens - Light Mode */
-  --input-bg: #FAFAFA;
-  --input-bg-hover: #F2F2F2;
-  --input-border: #E2E2E2;
-  --input-text: #1A1A1A;
-  --input-placeholder: #666666;
+  /* Form Control Tokens */
+  --input-bg: #1C2024;
+  --input-bg-hover: #202327;
+  --input-border: #34383D;
+  --input-text: #ECEDEE;
+  --input-placeholder: #9097A0; /* = --text-muted, 5.5:1 on inputs */
 
   /* Centralized Global Rarity Tokens (Game-like Muted Tones) */
   --rarity-ssr: #b93232; /* SSR - Refined Crimson/Red */
@@ -99,35 +100,6 @@
 
 [data-nav-expanded="true"] {
   --app-nav-width: var(--app-nav-expanded-width);
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-  --bg-main: #111315;
-  --bg-surface: #17191C;
-  --bg-surface-hover: #22262B;
-  --bg-elevated: #1C2024;
-  --bg-input: #1C2024;
-  --border-color: #2B2F34;
-  --border-strong: #3D434A;
-  --text-main: #E3E5E8;
-  --text-muted: #9097A0;
-  --text-subtle: #8A9099; /* ≥4.5:1 on every dark surface incl. hover (was #6B7280, 3.6:1) */
-  --accent: #D4B763;
-  --accent-light: #24221A;
-  --shadow-pop: rgba(0, 0, 0, 0.55);
-  --tg-line-inactive: #3A4048;
-
-  /* Subtle Gold Border Tokens - Dark Mode */
-  --border-gold-subtle: rgba(212, 183, 99, 0.30);
-  --border-gold-divider: rgba(212, 183, 99, 0.16);
-
-  /* Form Control Tokens - Dark Mode */
-  --input-bg: #1C2024;
-  --input-bg-hover: #202327;
-  --input-border: #34383D;
-  --input-text: #ECEDEE;
-  --input-placeholder: #9097A0; /* = --text-muted, 5.5:1 on inputs (was #737980, 3.6:1) */
 }
 
 /* Dark Mode Scrollbars */

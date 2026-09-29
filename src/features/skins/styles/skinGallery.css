@@ -300,7 +300,7 @@
   background: rgba(14, 16, 20, 0.65);
   border: 1px solid rgba(212, 183, 99, 0.24);
   border-radius: 4px;
-  color: #C7A86B;
+  color: var(--accent);
   cursor: pointer;
   transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
   padding: 0;
@@ -326,7 +326,7 @@
   opacity: 0.3;
   cursor: not-allowed;
   border-color: rgba(212, 183, 99, 0.12);
-  color: rgba(199, 168, 107, 0.4);
+  color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .museum-nav-progress-block {
@@ -374,7 +374,7 @@
 }
 
 .museum-nav-counter {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace, sans-serif);
+  font-family: var(--font-mono);
   font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -601,24 +601,24 @@
 }
 
 .whmx-dropdown-trigger:hover {
-  border-color: rgba(199, 168, 107, 0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   background: #1f2329;
   color: #f0ebe1;
 }
 
 .whmx-dropdown-trigger:focus-visible {
-  border-color: #c7a86b;
-  box-shadow: 0 0 0 2px rgba(199, 168, 107, 0.25);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 .whmx-dropdown.is-open .whmx-dropdown-trigger {
-  border-color: #c7a86b;
+  border-color: var(--accent);
   background: #1f2329;
   color: #f0ebe1;
 }
 
 .whmx-dropdown-icon {
-  color: #c7a86b;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -639,7 +639,7 @@
 
 .whmx-dropdown.is-open .whmx-dropdown-chevron {
   transform: rotate(180deg);
-  color: #c7a86b;
+  color: var(--accent);
 }
 
 .whmx-dropdown-menu {
@@ -651,7 +651,7 @@
   max-height: 280px;
   overflow-y: auto;
   background: #15181c;
-  border: 1px solid rgba(199, 168, 107, 0.3);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 6px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
   z-index: 100;
@@ -693,12 +693,12 @@
 
 .whmx-dropdown-item:hover,
 .whmx-dropdown-item:focus-visible {
-  background: rgba(199, 168, 107, 0.12);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: #f0ebe1;
 }
 
 .whmx-dropdown-item.active {
-  background: rgba(199, 168, 107, 0.22);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: #f5d796;
   font-weight: 600;
 }
@@ -716,11 +716,11 @@
 }
 
 .gallery-collapsible-section:hover {
-  border-color: rgba(199, 168, 107, 0.25);
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 .gallery-collapsible-section.has-active-filter {
-  border-color: rgba(199, 168, 107, 0.28);
+  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .gallery-collapsible-header {
@@ -748,7 +748,7 @@
 }
 
 .gallery-collapsible-header:focus-visible {
-  box-shadow: inset 0 0 0 1px #c7a86b;
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .gallery-collapsible-title-wrap {
@@ -759,7 +759,7 @@
 }
 
 .gallery-collapsible-icon {
-  color: #c7a86b;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -781,10 +781,10 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: #c7a86b;
+  background-color: var(--accent);
   flex-shrink: 0;
   display: inline-block;
-  box-shadow: 0 0 4px rgba(199, 168, 107, 0.4);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .gallery-filter-active-text {
@@ -797,7 +797,7 @@
 }
 
 .gallery-filter-active-num {
-  color: #c7a86b;
+  color: var(--accent);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -811,7 +811,7 @@
 
 .gallery-collapsible-header.is-open .gallery-collapsible-chevron {
   transform: rotate(90deg);
-  color: #c7a86b;
+  color: var(--accent);
 }
 
 /* Accordion CSS Grid Animation Drawer */
@@ -874,17 +874,17 @@
 .gallery-chip-btn:hover {
   background: #1b1e24;
   color: #ffffff;
-  border-color: rgba(199, 168, 107, 0.35);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .gallery-chip-btn:focus-visible {
-  border-color: #c7a86b;
-  box-shadow: 0 0 0 2px rgba(199, 168, 107, 0.2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .gallery-chip-btn.active {
-  background: rgba(199, 168, 107, 0.14);
-  border-color: #c7a86b;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent);
   color: #f5d796;
   font-weight: 600;
 }
@@ -922,18 +922,18 @@
 
 .series-cabinet-slot:hover {
   background: #1a1d22;
-  border-color: rgba(199, 168, 107, 0.35);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .series-cabinet-slot:focus-visible {
-  border-color: #c7a86b;
-  box-shadow: 0 0 0 2px rgba(199, 168, 107, 0.25);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 .series-cabinet-slot.active {
   background: #1d1b16;
-  border-color: #c7a86b;
-  box-shadow: inset 0 0 12px rgba(199, 168, 107, 0.08);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 12px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .cabinet-slot-visual {
@@ -960,7 +960,7 @@
 
 .series-cabinet-slot:hover .cabinet-all-icon,
 .series-cabinet-slot.active .cabinet-all-icon {
-  color: #c7a86b;
+  color: var(--accent);
 }
 
 .cabinet-slot-meta {
