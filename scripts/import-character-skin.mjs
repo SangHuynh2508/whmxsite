@@ -331,6 +331,12 @@ export function loadSourceBundle({
       cardPath: row.card_path,
       avatarPath: row.avatar_path,
       seriesId: workbookSeriesId,
+      // Commerce comes from charge.json via the workbook; without it a new sale window never reached the DB.
+      price: row.price ?? null,
+      currency: row.currency ?? null,
+      discountPrice: row.discount_price ?? null,
+      discountStart: row.discount_start ?? null,
+      discountEnd: row.discount_end ?? null,
     };
     skinCandidates.push({
       skinId: row.skin_id,
