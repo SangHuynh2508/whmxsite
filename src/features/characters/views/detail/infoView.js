@@ -401,7 +401,7 @@ function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", pare
   }
 
   // Final safety strip of any residual raw buff markers
-  formatted = formatted.replace(/\{Buff_[^}]+\}/g, '');
+  formatted = formatted.replace(/\{Buff_[A-Za-z0-9_]+\}?/g, '');
 
   // Wrap trailing punctuation attached to interactive terms to prevent orphan punctuation lines
   formatted = formatted.replace(/(<span class="mechanic-keyword[^"]*"[^>]*>[^<]*<\/span>(?:<\/[a-z0-9]+>)*)([。，、；：！？.,;:!?]+)/gi, '<span class="term-punct-group">$1$2</span>');

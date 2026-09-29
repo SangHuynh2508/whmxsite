@@ -1255,11 +1255,11 @@ def build():
                         
                 clean_desc = re.sub(pattern, multi_replacer, template)
                 clean_desc = replace_raw_hash_args(clean_desc, args_per_lvl[0])
-                clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+                clean_desc = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc).strip()
                 
                 clean_desc_vi = re.sub(pattern, multi_replacer, b_desc_vi_raw) if b_desc_vi_raw else ""
                 clean_desc_vi = replace_raw_hash_args(clean_desc_vi, args_per_lvl[0]) if clean_desc_vi else ""
-                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+                clean_desc_vi = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc_vi).strip()
                 
                 merged_list.append({
                     "key": key,
@@ -1277,11 +1277,11 @@ def build():
             elif len(entries) == 1:
                 clean_desc = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), template)
                 clean_desc = replace_raw_hash_args(clean_desc, args_per_lvl[0])
-                clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+                clean_desc = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc).strip()
                 
                 clean_desc_vi = re.sub(pattern, replacer_for_lvl(args_per_lvl[0]), b_desc_vi_raw) if b_desc_vi_raw else ""
                 clean_desc_vi = replace_raw_hash_args(clean_desc_vi, args_per_lvl[0]) if clean_desc_vi else ""
-                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+                clean_desc_vi = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc_vi).strip()
                 
                 merged_list.append({
                     "key": key,
@@ -1356,12 +1356,12 @@ def build():
             return f"{val}{unit}{closing_tags}"
 
         clean_desc = re.sub(pattern, single_replacer, raw_desc)
-        clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+        clean_desc = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc).strip()
         
         clean_desc_vi = ""
         if raw_desc_vi:
             clean_desc_vi = re.sub(pattern, single_replacer, raw_desc_vi)
-            clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+            clean_desc_vi = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc_vi).strip()
             
         return clean_desc, clean_desc_vi, mechanics
 
@@ -1463,12 +1463,12 @@ def build():
 
         if is_template_same:
             clean_desc = re.sub(pattern, multi_replacer, raw_descs[0])
-            clean_desc = re.sub(r'\{Buff_[^}]+\}', '', clean_desc).strip()
+            clean_desc = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc).strip()
 
             clean_desc_vi = ""
             if non_empty_vi:
                 clean_desc_vi = re.sub(pattern, multi_replacer, non_empty_vi[0])
-                clean_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', clean_desc_vi).strip()
+                clean_desc_vi = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', clean_desc_vi).strip()
 
             return clean_desc, clean_desc_vi, multi_mechs, True
         else:
@@ -1877,7 +1877,7 @@ def build():
                             if val is None: val = m.group(1)
                             return f"{val}{unit}{closing}"
                         ex_desc_vi = re.sub(pattern, ex_rep, raw_ex_desc_vi)
-                        ex_desc_vi = re.sub(r'\{Buff_[^}]+\}', '', ex_desc_vi).strip()
+                        ex_desc_vi = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', ex_desc_vi).strip()
 
                     ex_raw_icon = safe_str(ex_sk_val.get("SkillIcon")) if ex_sk_val else ""
                     ex_icon = resolve_skill_icon(ex_id, ex_raw_icon) or base_icon
@@ -2176,7 +2176,7 @@ def build():
                             if val is None: val = m.group(1)
                             return f"{val}{unit}{closing}"
                         lvl_item["desc_vi"] = re.sub(pattern, single_rep, lvl_item["desc_vi"])
-                        lvl_item["desc_vi"] = re.sub(r'\{Buff_[^}]+\}', '', lvl_item["desc_vi"]).strip()
+                        lvl_item["desc_vi"] = re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', lvl_item["desc_vi"]).strip()
                     lvl_item["mechanics"] = multi_mechs
 
                 raw_skills_dict[gid] = {
@@ -2198,7 +2198,7 @@ def build():
             """
             if not raw_desc or not source_cn or not source_vi:
                 return ""
-            raw_parts = [part.strip() for part in re.split(r"\n+", re.sub(r"\{Buff_[^}]+\}", "", raw_desc)) if part.strip()]
+            raw_parts = [part.strip() for part in re.split(r"\n+", re.sub(r"\{Buff_[A-Za-z0-9_]+\}?", "", raw_desc)) if part.strip()]
             source_cn_parts = [part.strip() for part in re.split(r"\n\s*\n", source_cn) if part.strip()]
             source_vi_parts = [part.strip() for part in re.split(r"\n\s*\n", source_vi) if part.strip()]
             if not raw_parts or len(source_cn_parts) < len(raw_parts) or len(source_vi_parts) < len(raw_parts):
@@ -2464,8 +2464,8 @@ def build():
         canonical_buff_registry[str(buff_id)] = {
             "name_cn": name_cn,
             "name_vi": usable_vi(buff_data.get("buff_name_vi") or buff_data.get("name_vi")),
-            "desc_cn": re.sub(r'\{Buff_[^}]+\}', '', desc_cn).strip(),
-            "desc_vi": re.sub(r'\{Buff_[^}]+\}', '', usable_vi(buff_data.get("buff_desc_vi") or buff_data.get("desc_vi"))).strip(),
+            "desc_cn": re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', desc_cn).strip(),
+            "desc_vi": re.sub(r'\{Buff_[A-Za-z0-9_]+\}?', '', usable_vi(buff_data.get("buff_desc_vi") or buff_data.get("desc_vi"))).strip(),
         }
 
     web_data = {
