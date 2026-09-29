@@ -19,7 +19,7 @@ CALC="$WHMX/WhmxCalc"
 ADB="/d/Program Files/Netease/MuMuPlayer/nx_device/15.0/shell/adb.exe"
 DEVICE="127.0.0.1:16384"          # lấy serial thật từ "$ADB" devices -l; KHÔNG dùng emulator-5554 cũ
 PACKAGE="com.cipaishe.wuhua.bilibili"
-SNAPSHOT="r3026-20260917T074908111475Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
+SNAPSHOT="r3057-20260929T130948564397Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
 ```
 
 ---
@@ -120,8 +120,11 @@ Kết quả phải là `COMPLETE` (xem `Assets/characters/NEW_ID/manifest.json`)
 
 ```bash
 cd "$CALC"
-python tools/sync_masterdata_incremental.py --character NEW_ID --dry-run    # xem các dòng sẽ thêm
-python tools/sync_masterdata_incremental.py --character NEW_ID --apply      # ⚠️ ghi workbook (có backup) — CHỈ nhân vật mới
+python tools/sync_masterdata_incremental.py --character NEW_ID --dry-run --cleanup-internal    # xem các dòng sẽ thêm (bỏ controller nội bộ như D0183)
+python tools/sync_masterdata_incremental.py --character NEW_ID --apply --cleanup-internal      # ⚠️ ghi workbook (có backup) — CHỈ nhân vật mới
+# trang phục mới (skinType 3) của nhân vật ĐÃ CÓ: chỉ sheet SKIN (không chạy các sheet khác cho nhân vật cũ)
+python tools/sync_masterdata_incremental.py --character OLD_ID --sheets SKIN --dry-run
+python tools/sync_masterdata_incremental.py --character OLD_ID --sheets SKIN --apply           # ⚠️
 ```
 
 Dịch các dòng mới theo batch (skill `whmx-localization` §6 + `game-translator`). Series mới: tên VI chỉ khi owner duyệt.

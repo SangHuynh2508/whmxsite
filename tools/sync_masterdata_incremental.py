@@ -39,6 +39,8 @@ VI_FIELDS = {
     "effect_summary_vi", "icon_name_vi", "icon_info_vi", "buff_show_vi",
     "title_vi", "text_vi", "skin_name_vi", "obtain_vi",
 }
+# SKIN.currency by charge Cost item id; ITEM 8 "Vé Trang Phục" is the only currency skins use.
+CURRENCY_NAMES = {"8": "Vé Trang Phục"}
 SYNC_METADATA_FIELDS = ("row_kind", "translation_required", "release_state", "source_hash", "source_version")
 
 # These are owner-approved identity migrations, not prose substitutions.  They
@@ -429,6 +431,41 @@ def copy_row_schema(ws, source_row: int, target_row: int, headers: list[str]) ->
                 dst.value = src.value
 
 
+def skin_row(skin: dict[str, Any], character_id: str, version: dict[str, Any],
+             charge: dict[str, Any], high_skins: dict[str, Any]) -> dict[str, Any]:
+    """One SKIN row with the same columns and derivations as the existing rows
+    (apply_skin_sheet_audit, apply_skin_series_mutation, apply_skin_commerce_fields).
+    series_name_cn/vi are filled in run() from rows of the same series."""
+    sid = first(skin, "skinID")
+    cid, low = character_id.lower(), sid.lower()
+    goods = charge.get(first(skin, "goodsID")) or {}
+    discount = charge.get(first(skin, "discountGoodsID")) or {}
+    cost = goods.get("Cost") or {}
+    return {
+        "skin_id": sid, "character_id": character_id,
+        "skin_name_cn": first(skin, "skinNamelanText", "skinName"), "skin_name_vi": "",
+        "desc_cn": first(skin, "skinFileLanText") or None, "desc_vi": "",
+        "obtain_cn": first(skin, "getdescriptionLanText") or None, "obtain_vi": "",
+        "is_base_skin": "TRUE" if skin.get("bIsBaseSkin") else "FALSE",
+        "confidence": "LOW", "status": "PENDING",
+        "notes": source_note(version, ["characterSkins.json", "charge.json"], "skinType=3"),
+        "skin_type": 3, "unlock_date": skin.get("UnlockDate") or None,
+        "price": cost.get("count") or None,
+        "currency": (CURRENCY_NAMES.get(scalar(cost.get("id")), scalar(cost.get("id"))) if cost.get("count") else None),
+        "is_high_skin": "TRUE" if skin.get("highskin") == 1 or sid in high_skins else "FALSE",
+        "skin_rare": skin.get("skinRare"), "cv_name": first(skin, "CvName") or None,
+        "drawing_path": f"characters/{cid}/drawings/{low}.webp",
+        "card_path": f"characters/{cid}/cards/{low}.webp",
+        "series_id": skin.get("skinLOGO") or None,
+        "avatar_path": f"characters/{cid}/avatars/{low}.png",
+        "item_id": first(skin, "mapItemsID") or None,
+        "goods_id": first(skin, "goodsID") or None,
+        "discount_goods_id": first(skin, "discountGoodsID") or None,
+        "discount_price": (discount.get("Cost") or {}).get("count"),
+        "discount_start": discount.get("StartTime"), "discount_end": discount.get("EndTime"),
+    }
+
+
 def current_source_version() -> dict[str, Any]:
     """Version of the MasterData actually on disk: the newest launch provenance written by
     `NeoArtifacts.py masterdata`. version.json is not refreshed by that command."""
@@ -446,6 +483,8 @@ def collect(character_id: str) -> tuple[dict[str, list[dict[str, Any]]], dict[st
     role_map = load_json("roleattrMap.json", {})
     buff_map = load_json("buffMap.json", {})
     skins_map = load_json("characterSkins.json", {})
+    charge_map = load_json("charge.json", {})
+    high_skin_map = load_json("CharacterHighSkinMap.json", {})
     files_map = load_json("characterFiles.json", {})
     file_text_map = load_json("characterFileTextMap.json", {})
     relic_map = load_json("historicalRelicsMap.json", {})
@@ -625,14 +664,9 @@ def collect(character_id: str) -> tuple[dict[str, list[dict[str, Any]]], dict[st
         linked_item = first(skin, "mapItemsID")
         if linked_item:
             item_ids.add(linked_item)
-        rows["SKIN"].append({
-            "skin_id": skin_id, "character_id": character_id,
-            "skin_name_cn": first(skin, "skinNamelanText", "skinName"), "skin_name_vi": "",
-            "desc_cn": first(skin, "tipsLanText", "tipsLan", "skinFileLanText"), "desc_vi": "",
-            "obtain_cn": first(skin, "getdescriptionLanText", "getdescriptionLan"), "obtain_vi": "",
-            "is_base_skin": bool(skin.get("bIsBaseSkin")), "confidence": "LOW", "status": "PENDING",
-            "notes": source_note(version, ["characterSkins.json"], f"skinType={skin.get('skinType')}")
-        })
+        # The SKIN sheet holds actual skins only (skinType 3, tools/validate_skin_roster.py).
+        if skin.get("skinType") == 3:
+            rows["SKIN"].append(skin_row(skin, character_id, version, charge_map, high_skin_map))
         trace["skins"].append(skin_id)
         for field in ("skinLOGO", "resLOGO", "skinFile"):
             value = skin.get(field)
@@ -789,8 +823,10 @@ def audit_against_backup(backup: Path, current: Path, added: dict[str, list[int]
 
 
 def run(character_id: str, apply: bool, cleanup_internal: bool = False,
-        migrate_owner_terms: bool = False) -> dict[str, Any]:
+        migrate_owner_terms: bool = False, sheets: set[str] | None = None) -> dict[str, Any]:
     proposed, trace = collect(character_id)
+    if sheets:
+        proposed = {sheet: rows for sheet, rows in proposed.items() if sheet in sheets}
     buff_map = load_json("buffMap.json", {})
     manifest = build_dependency_manifest(character_id, trace, buff_map)
     workbook = load_workbook(MASTER, data_only=False)
@@ -831,6 +867,14 @@ def run(character_id: str, apply: bool, cleanup_internal: bool = False,
             else:
                 missing[sheet].append(candidate)
         report["rows_to_add_by_sheet"][sheet] = len(missing[sheet])
+    if missing.get("SKIN"):
+        # Series names are owner-approved per series: reuse them from rows of the same series.
+        _, existing = workbook_index(workbook["SKIN"])
+        series = {scalar(r.get("series_id")): (r.get("series_name_cn"), r.get("series_name_vi"))
+                  for _, r in existing.values() if r.get("series_id")}
+        for candidate in missing["SKIN"]:
+            candidate["series_name_cn"], candidate["series_name_vi"] = series.get(scalar(candidate["series_id"]), (None, None))
+        report["skin_rows_to_add"] = missing["SKIN"]
 
     if not apply:
         if migrate_owner_terms:
@@ -941,8 +985,10 @@ def main() -> None:
                         help="For a PRELOAD dependency closure, manifest and remove only empty sync-owned controllers")
     parser.add_argument("--migrate-owner-terms", action="store_true",
                         help="Apply only exact CN-rich-text owner-approved named-term migrations")
+    parser.add_argument("--sheets", help="Only these sheets, comma-separated (e.g. SKIN for a new skin of an existing character)")
     args = parser.parse_args()
-    run(args.character, args.apply, args.cleanup_internal, args.migrate_owner_terms)
+    sheets = {s.strip().upper() for s in args.sheets.split(",")} if args.sheets else None
+    run(args.character, args.apply, args.cleanup_internal, args.migrate_owner_terms, sheets)
 
 
 if __name__ == "__main__":
