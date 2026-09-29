@@ -4920,8 +4920,8 @@
 }
 
 .skill-meta-pill.recover {
-  border-color: rgba(35, 134, 127, 0.4);
-  color: #23867f;
+  border-color: color-mix(in srgb, var(--energy-gain) 40%, transparent);
+  color: var(--energy-gain);
 }
 
 /* Range Section */

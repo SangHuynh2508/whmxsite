@@ -27,6 +27,7 @@ colors:
   rarity-sr-vivid: "#F2C14E"
   rarity-r-vivid: "#4FA3F7"
   on-vivid: "#111315"
+  energy-gain: "#23867f"
   tag-sky: "#8DB8F2"
   tag-coral: "#F2937F"
   tag-amber: "#F2B35E"
@@ -212,6 +213,9 @@ A near-neutral charcoal ramp with a faint cool cast, one antique gold, and the g
   Their `-text` variants are for text on the translucent rarity chips; the `-vivid` set is only for the catalogue
   filter chips (coloured text at rest, solid fill with `on-vivid` text when selected).
 
+- **Energy gain** (`energy-gain`, token `--energy-gain`): the teal of the "Hồi VP: N" skill pill, opposite the gold
+  "Tiêu hao: N VP" (energy spent). Owner 2026-09-29: keep it. The calculator's own teal (selected talent path, target
+  button) is also intentional and stays literal in the calculator CSS.
 - **Buff keyword orange** (`#ff6724`, `.mechanic-keyword.status-keyword` in `style.css`): the colour the game's own
   skill text gives a buff/status name. Like the rarity colours it is game data, not a second UI accent (owner
   2026-09-28); keep it, and make it a token when that CSS is next touched.
@@ -236,7 +240,7 @@ never a background wash on large areas and never decoration for its own sake.
 **The Token Rule.** Colours come from `src/styles/tokens.css` only. A new colour is a new token, not a hex in a
 feature file.
 
-**Drift (legacy CSS — open items and proposals in `docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`):** white-alpha frames on the character tabs (kept: they are the "brighter frame"); teal `#23867f` on the "Hồi VP" skill pill (the calculator's teal is intentional, owner 2026-09-29). **Cleaned 2026-09-29:** the second gold `#c7a86b`, the light-theme gold, ~54 literal gold `rgba()` (now `color-mix` of `--accent`), the tab underlines `#c4a265` → `--accent`, `#fff` text → `--text-main`, the calculator picker scrim → `--scrim`, the undefined `--text-secondary`/`--text-primary`, `--text-subtle` → `--text-muted`, and the light-theme token block (merged into `:root`; the site is dark only).
+**Drift (legacy CSS — open items and proposals in `docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`):** white-alpha frames on the character tabs (kept: they are the "brighter frame"); the calculator's literal teal (intentional, owner 2026-09-29). **Cleaned 2026-09-29:** the "Hồi VP" pill teal → `--energy-gain`, the second gold `#c7a86b`, the light-theme gold, ~54 literal gold `rgba()` (now `color-mix` of `--accent`), the tab underlines `#c4a265` → `--accent`, `#fff` text → `--text-main`, the calculator picker scrim → `--scrim`, the undefined `--text-secondary`/`--text-primary`, `--text-subtle` → `--text-muted`, and the light-theme token block (merged into `:root`; the site is dark only).
 
 ## Typography
 

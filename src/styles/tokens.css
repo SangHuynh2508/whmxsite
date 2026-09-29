@@ -69,6 +69,9 @@
   --tag-teal: #7FD4CF;
   --tag-neutral: #C9CDD2;
 
+  /* "Hồi VP" skill pill (energy gained), next to the gold "Tiêu hao VP" (energy spent) — owner 2026-09-29: keep teal. */
+  --energy-gain: #23867f;
+
   /* Backdrop behind every popover / dialog (DESIGN.md: one scrim). */
   --scrim: rgb(0 0 0 / .6);
 
