@@ -25,7 +25,7 @@ MASTER = ROOT / "localization" / "localization_master.xlsx"
 BATCH_DIR = ROOT / "localization" / "batches"
 REPORT_DIR = ROOT / "localization" / "batch_reports"
 CANONICAL = {
-    "万籁沉寂": "Vạn Âm Trầm Tịch", "瞄准": "Miêu Chuẩn", "脆弱": "Thúy Nhược",
+    "万籁沉寂": "Vạn Âm Trầm Tịch", "瞄准": "Nhắm Bắn", "脆弱": "Dễ Vỡ",
     "蓄势": "Súc Thế", "滞缓": "Trệ Hoãn", "萧瑟": "Tiêu Sắt", "截招": "Tiệt Chiêu",
 }
 QUEUE = {"PENDING", "NEEDS_TRANSLATION", "REVIEW", "SOURCE_CHANGED"}

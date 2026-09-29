@@ -47,7 +47,7 @@ SYNC_METADATA_FIELDS = ("row_kind", "translation_required", "release_state", "so
 # are applied only when the matching CN cell contains the exact named source in
 # the corresponding rich-text span (or exact name field).
 OWNER_NAMED_MIGRATIONS = (
-    {"cn": "脆弱", "vi": "Thúy Nhược", "old": {"Tùy Nhược", "Dễ Vỡ"}},
+    {"cn": "脆弱", "vi": "Dễ Vỡ", "old": {"Tùy Nhược", "Thúy Nhược"}},
 )
 
 

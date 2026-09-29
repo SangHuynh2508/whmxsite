@@ -24,8 +24,8 @@ OWNER_SHARED_GLOSSARY_TERMS = {
     "萧瑟": "Tiêu Sắt",
     "截招": "Tiệt Chiêu",
     "滞缓": "Trệ Hoãn",
-    "瞄准": "Miêu Chuẩn",
-    "脆弱": "Thúy Nhược",
+    "瞄准": "Nhắm Bắn",
+    "脆弱": "Dễ Vỡ",
     "降低命中率": "Giảm Tỷ Lệ Trúng",
 }
 OWNER_PRIVATE_BUFF_NAMES = {"铜锈", "隐蔽", "吉时", "避让", "临时干部"}
@@ -566,10 +566,10 @@ def validate():
         if attack_style_type != expected_style_type:
             errors.append(f"Char [{cid}]: attack_style_type {attack_style_type} does not match authoritative raw tags {raw_tags!r} (expected {expected_style_type})")
 
-        # CURRENT 133-roster regression invariant: only V0172 and W0178 (switch/form tags)
+        # CURRENT 135-roster regression invariant: only V0172, W0178 and A0184 (switch/form tags)
         # currently lack explicit 近战 / 远程 tokens; this is a current-catalog regression invariant,
         # not an immutable game-wide rule.
-        if attack_style_type == 0 and cid not in ("V0172", "W0178"):
+        if attack_style_type == 0 and cid not in ("V0172", "W0178", "A0184"):
             errors.append(f"Char [{cid}]: Unexpected unresolved attack_style_type (0) with tags {raw_tags!r}")
 
         # Check Icon image existence
