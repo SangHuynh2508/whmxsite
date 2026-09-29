@@ -52,9 +52,8 @@ export async function boot() {
   initLevelProgress('level-current', 'level-target');
   initRouter();
 
-  // Handle initial route
-  handleRoute();
-
+  // The calculator view renders on every state change — registered before the first route, which may select a
+  // character (#calc?char=…) and notify straight away.
   subscribe(async (currentState) => {
     // Only update calculator main content if we are in calculator view mode
     const hash = window.location.hash;
@@ -73,4 +72,6 @@ export async function boot() {
       resizeSmoothScroll();
     }
   });
+
+  handleRoute();
 }

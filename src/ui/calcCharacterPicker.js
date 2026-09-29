@@ -1,14 +1,9 @@
 import { state, setCharacter } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
-import { renderHeader } from '../features/characters/components/characterHeader.js';
-import { renderLevelProgress } from '../features/calculator/views/levelProgress.js';
-import { renderTalentGraph } from './talentGraph.js';
-import { renderResourceSummary } from './resourceSummary.js';
-import { calculateResources } from '../data/calculator.js';
 
 import { RARITY_LABELS } from './utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from './utils/avatar.js';
-import { stopSmoothScroll, startSmoothScroll, resizeSmoothScroll } from '../app/runtime/smoothScroll.js';
+import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
 
 let activeJob = 'all';
 let isInitialized = false;
@@ -65,26 +60,9 @@ export function selectCalculatorCharacter(characterOrId) {
     }
   }
 
-  // 3. Toggle main content vs empty state visibility
-  const emptyState = document.getElementById('empty-state');
-  const mainContent = document.getElementById('main-content');
-  if (emptyState) emptyState.classList.add('hidden');
-  if (mainContent) mainContent.classList.remove('hidden');
-
-  // 4. Re-render Calculator view components
-  renderHeader();
-  renderLevelProgress();
-  const graphContainer = document.getElementById('talent-graph-container');
-  if (graphContainer) renderTalentGraph(graphContainer);
-
-  const resources = calculateResources(gameData, state);
-  renderResourceSummary(resources);
-
-  // 5. Close pickers
+  // 3. setCharacter notified the calculator view (boot.js subscribe), which renders it once; this renders nothing
+  // itself (it rendered everything a second time — audit B9).
   closeCalcPicker();
-
-  // 6. Notify Lenis of changed content height
-  resizeSmoothScroll();
 }
 
 export function initCalcPicker() {

@@ -30,22 +30,6 @@ const asset = (path?: string) => (path ? (path.startsWith('/') ? path : `/${path
 const TAGS: Record<string, string> = { skill1: 'ATK', skill6: 'SKILL', skill2: 'ULT', skill3: 'P1', skill4: 'P2', skill5: 'P3' };
 const frameOf = (rare: number) => `/assets/frames/itemRare${[2, 3, 4, 5].includes(rare) ? rare : 'K'}.png`;
 
-// Spec C2: each 深造 label is a variant ("Chuẩn", "Lục Trí"); a weapon label naming one (exactly, or followed by a
-// separator) gets its chip, the rest stays as text. Longest variant first so "Lục Trí 2" beats "Lục Trí".
-const SEP = /^[\s,|–:(-]+/;
-export function variantOf(label: string, variants: string[]) {
-  const text = label.trim();
-  for (const v of [...variants].filter(Boolean).sort((a, b) => b.length - a.length)) {
-    if (text === v) return { variant: v, rest: '' };
-    const after = text.slice(v.length);
-    if (text.startsWith(v) && SEP.test(after)) {
-      const rest = after.replace(SEP, '').trim();
-      return { variant: v, rest: /^\s*\(/.test(after) && rest.endsWith(')') ? rest.slice(0, -1).trim() : rest }; // "Chuẩn (dự phòng)"
-    }
-  }
-  return { variant: '', rest: text };
-}
-
 export function buildViews(docs: Doc[], game: GameDocument, characters: Record<string, SiteCharacter>, characterId: string) {
   const ref = (kind: string, code: string) => game.refs[kind]?.[code];
   const text = (kind: string, code: string) => game.texts[kind]?.[code];
@@ -53,15 +37,13 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
 
   return docs.map((doc) => {
     const deepens: Deepen[] = doc.deepens ?? (doc.deepen ? [{ label: '', ...doc.deepen }] : []);
-    const variants = deepens.map((d) => d.label.trim()).filter(Boolean);
     return {
       name: doc.name ?? '', rating: doc.rating ?? '', summary: doc.summary ?? '',
       weapons: (doc.weapons ?? []).flatMap((w) => {
         const weapon = ref('weapon', w.weaponId);
         if (!weapon) return [];
         return [{
-          id: w.weaponId, label: w.label, rare: weapon.rare as number, frame: frameOf(weapon.rare as number),
-          ...(({ variant, rest }) => ({ variant, labelRest: rest }))(variantOf(w.label, variants)),
+          id: w.weaponId, label: (w.label ?? '').trim(), rare: weapon.rare as number, frame: frameOf(weapon.rare as number),
           // the importer's icon key = a file under public/assets/items (null when MasterData has no icon)
           icon: weapon.icon ? `/assets/items/${weapon.icon}.png` : '', name: unit(text('weapon', w.weaponId)),
           skills: (weapon.skillIds as string[]).map((id) => ({ name: unit(text('weapon_skill', id)), text: unit(text('weapon_skill', id), 'detail') }))

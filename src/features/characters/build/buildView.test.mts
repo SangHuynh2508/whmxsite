@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildViews, variantOf } from './buildView.mts';
+import { buildViews } from './buildView.mts';
 
 const game = {
   version: 1 as const,
@@ -39,7 +39,7 @@ const doc = {
 test('names: VI when published, else CN marked untranslated; unknown ids are left out', () => {
   const [v] = buildViews([doc], game, characters, 'D0017');
   assert.deepEqual(v.weapons, [{
-    id: '30111', label: 'Chịu đòn', rare: 3, frame: '/assets/frames/itemRare3.png', variant: '', labelRest: 'Chịu đòn', icon: '/assets/items/itemicon_30111.png', name: { text: 'Khiên Ven Đường', untranslated: false },
+    id: '30111', label: 'Chịu đòn', rare: 3, frame: '/assets/frames/itemRare3.png', icon: '/assets/items/itemicon_30111.png', name: { text: 'Khiên Ven Đường', untranslated: false },
     skills: [{ name: { text: '路障庇护', untranslated: true }, text: { text: '提高10%', untranslated: true } }],
   }]);
   // HP and HP% share the name 生命值: the % must show, like the admin picker
@@ -96,22 +96,13 @@ test('深造 emblem + serial; a style without an icon gets no image; empty tips 
   assert.deepEqual(v.tips, ['Mở khiên']);
 });
 
-test('variantOf: a weapon label names a 深造 variant exactly or as a prefix + separator; longest wins', () => {
-  const v = ['Chuẩn', 'Lục Trí', 'Lục Trí 2'];
-  assert.deepEqual(variantOf('Lục Trí, đơn mục tiêu', v), { variant: 'Lục Trí', rest: 'đơn mục tiêu' });
-  assert.deepEqual(variantOf('Chuẩn', v), { variant: 'Chuẩn', rest: '' });
-  assert.deepEqual(variantOf('Lục Trí 2 | hồi năng', v), { variant: 'Lục Trí 2', rest: 'hồi năng' });
-  assert.deepEqual(variantOf('Tốc độ | Sát thương', v), { variant: '', rest: 'Tốc độ | Sát thương' });
-  assert.deepEqual(variantOf('Chuẩnxác', v), { variant: '', rest: 'Chuẩnxác' }); // no separator → not a variant
-  assert.deepEqual(variantOf('Lục Trí', []), { variant: '', rest: 'Lục Trí' });
-  assert.deepEqual(variantOf('Chuẩn (dự phòng)', v), { variant: 'Chuẩn', rest: 'dự phòng' }); // no stray ")" (final review)
-});
-
-test('weapons carry their variant chip; 深造 are variants; empty weapon skills are dropped', () => {
+// Owner 2026-09-29: every weapon label is the same plain caption, even one that names a 深造 variant ("Đi ải nhanh" was a
+// chip while "Đề cử" was plain); only the 深造 keep their variant chip.
+test('a weapon label stays plain text even when it names a 深造 variant; 深造 are variants; empty weapon skills are dropped', () => {
   const w = { ...game.refs.weapon[30111], skillIds: ['ED2031', 'EMPTY'] };
   const g = { ...game, refs: { ...game.refs, weapon: { 30111: w } }, texts: { ...game.texts, weapon_skill: { ...game.texts.weapon_skill, EMPTY: { cn: '', vi: null, detail: '', detail_vi: null } } } };
   const [v] = buildViews([{ ...doc, weapons: [{ weaponId: '30111', label: 'Lục Trí, đơn mục tiêu' }] }], g, characters, 'D0017');
-  assert.deepEqual([v.weapons[0].variant, v.weapons[0].labelRest, v.weapons[0].skills.length], ['Lục Trí', 'đơn mục tiêu', 1]);
+  assert.deepEqual([v.weapons[0].label, 'variant' in v.weapons[0], v.weapons[0].skills.length], ['Lục Trí, đơn mục tiêu', false, 1]);
   assert.deepEqual(v.deepens.map((d) => d.variant), ['Chuẩn', 'Lục Trí']);
 });
 

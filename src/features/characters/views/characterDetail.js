@@ -4,6 +4,7 @@
 import { gsap } from 'gsap';
 import { getGameData } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
+import { escapeHtml } from '../../../lib/escapeHtml.mts';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
@@ -111,7 +112,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     container.innerHTML = `
       <div class="char-not-found">
         <h2>Không tìm thấy nhân vật</h2>
-        <p>Thẻ nhân vật "${slugOrId}" không tồn tại hoặc đã bị ẩn.</p>
+        <p>Thẻ nhân vật "${escapeHtml(slugOrId)}" không tồn tại hoặc đã bị ẩn.</p>
         <a href="#/characters" class="btn-primary">← Về danh sách nhân vật</a>
       </div>
     `;

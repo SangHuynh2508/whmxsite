@@ -342,7 +342,7 @@ Tactile and quiet.
   lifted-slate "ink" with a hairline border that slides between the buttons (see Motion).
 
 ### Chips
-- **Variant chip** (build variants, 深造 labels): 1 px strong-hairline outline, 600 12 px bone text, 6 px.
+- **Variant chip** (build variants, 深造 labels): 1 px strong-hairline outline, 600 12 px bone text, 6 px. Weapon labels ("Đề cử", "Đi ải nhanh"…) are never chips: always the 12 px ash caption above the name (owner 2026-09-29).
 - **Role chip:** outlined pill — the tag's own `--tag-*` colour on text and border (60 %), no fill (owner 2026-09-28, option C). Mapping in `src/ui/utils/tagColors.mts`; a test over `public/data.json` guarantees no two tags of one character share a colour; rare tags share `tag-neutral`.
 - **Rarity chip / badge:** translucent rarity background with its `-text` colour; on the solid SSR badge fill the text is `rarity-ssr-on-fill` (6.1:1; `rarity-ssr-text` was 3.9:1).
 
