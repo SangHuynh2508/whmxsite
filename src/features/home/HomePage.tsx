@@ -43,7 +43,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
         <section className="home-block home-banners" aria-label="Banner đang mở">
           <h2 className="home-h2">Banner đang mở <a href="#/banners">Tất cả banner ›</a></h2>
           {banners
-            ? <BannerGrid banners={[...banners.featured, ...banners.compact]} doc={doc!} now={now} characters={characters} />
+            ? <BannerGrid banners={banners} doc={doc!} now={now} characters={characters} />
             : <p className="bn-error">Chưa tải được dữ liệu banner</p>}
         </section>
         <div className="home-row">

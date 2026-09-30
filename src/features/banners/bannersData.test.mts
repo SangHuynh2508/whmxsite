@@ -9,22 +9,20 @@ const doc = (banners: Banner[]): BannersDoc =>
   ({ generated_at: 0, masterdata: '', asset_base_url: 'https://r2', version: null, hero: null, events: [], banners });
 const S = 1000;
 
-test('currentBanners: the latest batch; season and no-UP banners go compact', () => {
+test('currentBanners: the latest batch; season and no-UP banners go last', () => {
   const d = doc([b('old', 10, 100), b('2114', 100, 900, { type: 'limited' }), b('340001', 100, 2000, { type: 'season' }),
     b('5003', 100, 900, { up: [] })]);
-  const { featured, compact } = currentBanners(d, 150 * S);
-  assert.deepEqual(featured.map((x) => x.id), ['2114']);
-  assert.deepEqual(compact.map((x) => x.id), ['340001', '5003']);
+  assert.deepEqual(currentBanners(d, 150 * S).map((x) => x.id), ['2114', '340001', '5003']);
 });
 
 test('currentBanners keeps an ended batch and marks it ended (site data older than the game)', () => {
   const d = doc([b('old', 10, 100), b('2114', 100, 900, { type: 'limited' })]);
-  assert.deepEqual(currentBanners(d, 950 * S).featured.map((x) => x.id), ['2114']);
+  assert.deepEqual(currentBanners(d, 950 * S).map((x) => x.id), ['2114']);
 });
 
 test('currentBanners ignores banners that have not started', () => {
   const d = doc([b('now', 100, 900), b('later', 500, 900)]);
-  assert.deepEqual(currentBanners(d, 150 * S).featured.map((x) => x.id), ['now']);
+  assert.deepEqual(currentBanners(d, 150 * S).map((x) => x.id), ['now']);
 });
 
 test('currentEvents: only active events', () => {

@@ -17,7 +17,7 @@ export function BannersPage({ doc }: { doc: BannersDoc | null }) {
   const now = useNow();
   const page = useRef<HTMLDivElement>(null);
   const current = useMemo(() => (doc ? currentBanners(doc, now) : null), [doc, now]);
-  const currentIds = useMemo(() => new Set(current ? [...current.featured, ...current.compact].map((b) => b.id) : []), [current]);
+  const currentIds = useMemo(() => new Set(current?.map((b) => b.id)), [current]);
   const groups = useMemo(() => (doc ? archive(doc, { character, type, year: year || undefined }) : [])
     .map((g) => ({ ...g, banners: g.banners.filter((b) => !currentIds.has(b.id)) }))
     .filter((g) => g.banners.length), [doc, character, type, year, currentIds]);
@@ -31,7 +31,7 @@ export function BannersPage({ doc }: { doc: BannersDoc | null }) {
     <div className="bn-page" ref={page}>
       <h1 className="bn-title bn-block">Banner</h1>
       <section className="bn-block" aria-label="Banner đang mở">
-        <BannerGrid banners={[...current.featured, ...current.compact]} doc={doc} now={now} characters={characters} />
+        <BannerGrid banners={current} doc={doc} now={now} characters={characters} />
       </section>
       <section className="bn-archive bn-block" aria-label="Banner đã qua">
         <div className="bn-filters">
