@@ -7,6 +7,7 @@ test('hash routes become analytics pages: real path + grouped route, no query st
   assert.deepEqual(pageForHash(''), { path: '/', route: '/' });
   assert.deepEqual(pageForHash('#/'), { path: '/', route: '/' });
   assert.deepEqual(pageForHash('#/characters'), { path: '/characters', route: '/characters' });
+  assert.deepEqual(pageForHash('#/banners'), { path: '/banners', route: '/banners' });
   assert.deepEqual(pageForHash('#/characters/loc-giac-lap-hac'), { path: '/characters/loc-giac-lap-hac', route: '/characters/[slug]' });
   assert.deepEqual(pageForHash('#/characters/loc-giac-lap-hac/lore'), { path: '/characters/loc-giac-lap-hac/lore', route: '/characters/[slug]/lore' });
   assert.deepEqual(pageForHash('#/skins/A0001002'), { path: '/skins/A0001002', route: '/skins/[id]' });
