@@ -9,6 +9,9 @@ import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
 import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
+import { staticView } from './staticRoutes.mts';
+import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx';
+import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
@@ -51,14 +54,8 @@ export function getCharBySlugOrId(slugOrId) {
 export function parseHash() {
   const hash = window.location.hash.replace('#', '').trim();
 
-  // Default home route: / or empty -> Characters Catalog
-  if (!hash || hash === '/' || hash === '') {
-    return {
-      view: 'catalog',
-      slug: '',
-      subtab: ''
-    };
-  }
+  const pageView = staticView(window.location.hash);
+  if (pageView) return { view: pageView, slug: '', subtab: '' };
 
   // Admin routes are owned by the React shell (src/admin/layout/AdminApp.tsx).
   if (hash === '/login' || hash === '/admin' || hash.startsWith('/admin/') || hash.startsWith('/admin?')) {
@@ -167,6 +164,8 @@ export function parseHash() {
 // Route view -> its container; every other container is hidden and emptied. A view not listed is the calculator
 // (#main-content).
 const VIEW_CONTAINERS = {
+  home: 'home-view',
+  banners: 'banners-view',
   catalog: 'character-catalog-view',
   character: 'character-detail-view',
   weapons: 'weapons-view',
@@ -179,6 +178,8 @@ function renderRouteView(route, target, gameData) {
   for (const id of Object.values(VIEW_CONTAINERS)) {
     const el = document.getElementById(id);
     if (el && el !== target) {
+      if (id === 'home-view') unmountHomePage();
+      if (id === 'banners-view') unmountBannersPage();
       el.classList.add('hidden');
       el.innerHTML = '';
     }
@@ -187,7 +188,9 @@ function renderRouteView(route, target, gameData) {
   if (target !== mainContent) {
     mainContent.classList.add('hidden');
     target.classList.remove('hidden');
-    if (route.view === 'catalog') renderCharacterCatalogView(target);
+    if (route.view === 'home') mountHomePage(target);
+    else if (route.view === 'banners') mountBannersPage(target);
+    else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
     else if (route.view === 'weapons') renderWeaponsView(target);
     else if (route.view === 'gallery') renderSkinGalleryView(target);
@@ -222,12 +225,6 @@ export function handleRoute() {
       history.replaceState(null, '', canonical);
       route.slug = char.slug;
     }
-  }
-
-  // Redirect / or empty hash to canonical #/characters
-  const rawHash = window.location.hash;
-  if (!rawHash || rawHash === '#' || rawHash === '#/') {
-    history.replaceState(null, '', '#/characters');
   }
 
   // The React admin shell owns #/admin; nav highlights live in src/app/layout/AppNav.tsx.
