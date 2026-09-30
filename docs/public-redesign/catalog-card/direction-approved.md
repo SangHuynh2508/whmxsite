@@ -22,3 +22,12 @@ Implemented:
 - No "SSR" label and no Limited border; rarity, job and Limited are in the card's accessible name and tooltip.
 - Removed: the old card CSS (`.card-media`, `.rarity-label`, `.card-bottom-overlay`, `.card-identity`, `.is-limited`, …), the
   ticket stub CSS and `public/assets/frames/ui_ty_kp_{di1,di2,bian}.png` (no longer used).
+
+## Correction (2026-09-30)
+
+Owner: "ý là giống tab tổng quan là có cái thẻ răng cưa á" — "chốt hướng 3 và dùng cho tab tổng quan" meant option 3 for
+the catalogue and **the game ticket (scalloped stub) for the Tổng quan tab**, and the calculator panel the same as Tổng quan.
+Now: `ticketHtml` (catalogCard.mts) = `ui_ty_kp_di1_body.png` (di1 cropped to its 146 × 333 body) + the 1 : 2 art with
+`cardArtLayers` (rarity glow + job) + `ui_ty_kp_bian.png` + the VI name in the stub (800 serif, `--on-vivid` ink); `.tk` in
+style.css. Tổng quan at 256 px, calculator at 200 px (thumbnails still swap the art); the old name captions are gone
+(the name is in the stub). The catalogue keeps the frameless `.cc-card`.

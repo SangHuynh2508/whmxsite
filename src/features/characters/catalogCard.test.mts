@@ -28,3 +28,13 @@ test('optional layers: the breakthrough card on hover and the Hoán Chương mar
   assert.match(html, /class="cc-hz"/);
   assert.match(html, /has-alt/);
 });
+
+test('ticketHtml: the game ticket (stub, frame, glow, job) with the name in the stub; the image can carry an id', async () => {
+  const { ticketHtml } = await import('./catalogCard.mts');
+  const html = ticketHtml({ image: 'https://r2/a.webp', rare: 3, job: 2, name: 'Thiên Cầu Nghi', imageId: 'profile-card-img' });
+  assert.match(html, /^<div class="tk">/);
+  assert.match(html, /<img class="tk-img" id="profile-card-img" src="https:\/\/r2\/a\.webp" alt="Thiên Cầu Nghi"/);
+  assert.match(html, /ui_ty_kp_pz_3\.png/);
+  assert.match(html, /<span class="tk-frame"><\/span><span class="tk-name">Thiên Cầu Nghi<\/span><\/div>$/);
+  assert.doesNotMatch(ticketHtml({ image: 'x', rare: 4, job: 1, name: 'A' }), / id="/);
+});

@@ -1,7 +1,7 @@
 import { state } from '../../../data/state.js';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
-import { cardArtLayers } from '../catalogCard.mts';
+import { ticketHtml } from '../catalogCard.mts';
 import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
@@ -105,9 +105,9 @@ export function renderHeader() {
 
 function renderCardGallery(char) {
   const cardPanel  = document.getElementById('char-card-panel');
-  const cardImg    = document.getElementById('profile-card-img');
+  const cardBox    = document.getElementById('profile-card');
   const thumbsWrap = document.getElementById('card-thumbnails');
-  if (!cardPanel || !cardImg || !thumbsWrap) return;
+  if (!cardPanel || !cardBox || !thumbsWrap) return;
 
   const cards = char.cards && char.cards.length > 0 ? char.cards : [];
   
@@ -120,12 +120,8 @@ function renderCardGallery(char) {
 
   // Initial artwork: use variant 0's artworkSrc
   if (!variants.length) { cardPanel.style.display = 'none'; return; }
-  cardImg.src = variants[0].artworkSrc;
-  cardImg.alt = char.name_vi || char.name_cn || '';
-  const layers = document.getElementById('profile-card-layers');
-  if (layers) layers.innerHTML = cardArtLayers(char.rare, char.job);
-  const cardName = document.getElementById('profile-card-name'); // the same caption as the Tổng quan card
-  if (cardName) cardName.textContent = char.name_vi || char.name_cn || '';
+  cardBox.innerHTML = ticketHtml({ image: variants[0].artworkSrc, rare: char.rare, job: char.job, name: char.name_vi || char.name_cn || '', imageId: 'profile-card-img' });
+  const cardImg = document.getElementById('profile-card-img');
   cardPanel.style.display = '';
 
   // Render thumbnails

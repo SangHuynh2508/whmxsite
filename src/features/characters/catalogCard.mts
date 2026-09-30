@@ -24,3 +24,13 @@ export function catalogCardHtml(c: CatalogCard): string {
     + (c.huanzhangIcon ? `<img class="cc-hz" src="${c.huanzhangIcon}" alt="" title="Có Hoán Chương" onerror="this.remove()" />` : '')
     + `</span><span class="cc-name">${c.name}</span></a>`;
 }
+
+/** The game's character ticket (owner 2026-09-30: Tổng quan and the calculator panel) — ui_ty_kp_di1's body with the
+ *  scalloped cream stub, the 1 : 2 art with the rarity glow and job icon, the white ui_ty_kp_bian frame, the name in the
+ *  stub. Layout in % of the 146 × 333 body (styles: .tk in style.css). */
+export function ticketHtml(t: { image: string; rare: number; job: number; name: string; imageId?: string }): string {
+  return '<div class="tk"><span class="tk-art">'
+    + `<img class="tk-img"${t.imageId ? ` id="${t.imageId}"` : ''} src="${t.image}" alt="${t.name}" />`
+    + cardArtLayers(t.rare, t.job)
+    + `</span><span class="tk-frame"></span><span class="tk-name">${t.name}</span></div>`;
+}

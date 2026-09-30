@@ -2183,30 +2183,7 @@
 }
 
 
-.art-caption {
-  margin-top: 8px;
-  padding: 0 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  max-width: 256px;
-}
 
-.art-title {
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--text-muted, #94A3B8);
-  text-transform: uppercase;
-  line-height: 1.35;
-}
-
-.art-sub {
-  font-size: 11px;
-  color: var(--text-muted);
-}
 
 /* 4. Skills Sub-View Styles */
 .skills-page-wrapper {
@@ -3799,11 +3776,62 @@
   align-self: flex-start;
 }
 
-/* Tổng quan card: the catalogue's .cc-art (1 : 2, rarity glow, job; owner 2026-09-30 option 3) at up to 256 px */
+/* Tổng quan card: the game ticket (.tk) at up to 256 px */
 .art-frame {
   width: 100%;
   max-width: 256px;
 }
+
+/* The game's character ticket (owner 2026-09-30, Tổng quan + calculator panel; markup ticketHtml in
+   src/features/characters/catalogCard.mts). Layers in % of the 146 × 333 body of ui_ty_kp_di1: the 1 : 2 art fills the
+   146 × 292 window (87.69%), ui_ty_kp_bian frames it, the name sits in the scalloped cream stub. The white paper is the
+   game's own look; it stands alone on these pages (the catalogue grid uses the frameless .cc-card). */
+.tk {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 146 / 333;
+  background: url('/assets/frames/ui_ty_kp_di1_body.png') center / 100% 100% no-repeat;
+}
+
+.tk-art {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 87.69%;
+  overflow: hidden;
+}
+
+.tk-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tk-frame {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 87.69%;
+  background: url('/assets/frames/ui_ty_kp_bian.png') center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.tk-name {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 88.3%;
+  height: 9.4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: 800 15px/1.12 var(--font-serif);
+  color: var(--on-vivid);
+  text-wrap: balance;
+  overflow: hidden;
+}
+
+.character-card .tk-name { font-size: 13px; }
 
 .info-stats-section,
 .info-skills-section,
