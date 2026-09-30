@@ -1,12 +1,11 @@
 // Thông tin (#/info, owner 2026-09-30, direction B "Gian trưng bày" — docs/public-redesign/info/direction-approved.md):
 // one large art panel per lookup feature; the rail keeps only the hot pages, the rest live here.
-import { StrictMode, useRef } from 'react';
-import { flushSync } from 'react-dom';
-import { createRoot, type Root } from 'react-dom/client';
+import { useRef } from 'react';
 import { type SliceChar } from '../banners/BannerSlice.tsx';
-import { artUrl, cachedBanners, currentBanners, loadBannersCached, skinImage, type BannersDoc } from '../banners/bannersData.mts';
+import { artUrl, currentBanners, skinImage, type BannersDoc } from '../banners/bannersData.mts';
 import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
+import { bannerIsland } from '../banners/island.tsx';
 import './styles/info.css';
 
 // 绮木覆花 weapon series (item icons already in public/assets/items) in the game's 5-star frame
@@ -59,27 +58,4 @@ export function InfoPage({ doc }: { doc: BannersDoc | null }) {
   );
 }
 
-// ponytail: same island pattern as the Home and Banner pages (banners.json only feeds the Banner tile's art).
-let root: Root | null = null;
-let generation = 0;
-
-export function unmountInfoPage() {
-  generation += 1;
-  root?.unmount();
-  root = null;
-}
-
-function render(container: HTMLElement, doc: BannersDoc | null) {
-  container.innerHTML = '';
-  const mounted = createRoot(container);
-  root = mounted;
-  flushSync(() => mounted.render(<StrictMode><InfoPage doc={doc} /></StrictMode>));
-}
-
-export function mountInfoPage(container: HTMLElement): Promise<void> {
-  unmountInfoPage();
-  const hit = cachedBanners();
-  if (hit) { render(container, hit); return Promise.resolve(); }
-  const mine = generation;
-  return loadBannersCached().then((doc) => { if (mine === generation) render(container, doc); });
-}
+export const { mount: mountInfoPage, unmount: unmountInfoPage } = bannerIsland(InfoPage);

@@ -1,15 +1,14 @@
 // Home (spec 2026-09-30 §5, docs/public-redesign/home/direction-approved.md): the season KV as a hero fading into the
 // page, the banners that are open, the events running, what was just released.
-import { StrictMode, useRef } from 'react';
-import { flushSync } from 'react-dom';
-import { createRoot, type Root } from 'react-dom/client';
+import { useRef } from 'react';
 import { BannerGrid, Cn, type SliceChar } from '../banners/BannerSlice.tsx';
 import { remaining } from '../banners/bannerTime.mts';
-import { artUrl, cachedBanners, eventKind, currentBanners, currentEvents, formatRange, loadBannersCached, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
+import { artUrl, eventKind, currentBanners, currentEvents, formatRange, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
 import { useNow } from '../banners/useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { newReleases, type ReleaseChar } from './newReleases.mts';
 import { getGameData } from '../../data/loader.js';
+import { bannerIsland } from '../banners/island.tsx';
 import './styles/home.css';
 
 type HomeChar = SliceChar & ReleaseChar;
@@ -49,13 +48,13 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
           {events.length > 0 && (
             <section className="home-block home-events" aria-label="Sự kiện đang diễn ra">
               <h2 className="home-h2">Sự kiện đang diễn ra</h2>
-              <ul>{events.map((e) => (
+              <ul>{events.map((e) => { const kind = eventKind(e.kind_cn); return (
                 <li key={e.id}>
-                  <span className="home-event-kind">{eventKind(e.kind_cn).vi ? eventKind(e.kind_cn).text : <Cn text={e.kind_cn} />}</span>
+                  <span className="home-event-kind">{kind.vi ? kind.text : <Cn text={e.kind_cn} />}</span>
                   <span className="home-event-name"><Cn text={e.name_cn} /></span>
                   <span className="home-event-left">Còn <b>{remaining(now, e.end)}</b></span>
                 </li>
-              ))}</ul>
+              ); })}</ul>
             </section>
           )}
           {releases.length > 0 && (
@@ -82,27 +81,4 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
   );
 }
 
-// ponytail: same island pattern as BuildTab; `generation` drops a late banners.json after the route changed.
-let root: Root | null = null;
-let generation = 0;
-
-export function unmountHomePage() {
-  generation += 1;
-  root?.unmount();
-  root = null;
-}
-
-function render(container: HTMLElement, doc: BannersDoc | null) {
-  container.innerHTML = '';
-  const mounted = createRoot(container);
-  root = mounted;
-  flushSync(() => mounted.render(<StrictMode><HomePage doc={doc} /></StrictMode>));
-}
-
-export function mountHomePage(container: HTMLElement): Promise<void> {
-  unmountHomePage();
-  const hit = cachedBanners();
-  if (hit) { render(container, hit); return Promise.resolve(); } // synchronous: Back restores the scroll onto real content
-  const mine = generation;
-  return loadBannersCached().then((doc) => { if (mine === generation) render(container, doc); });
-}
+export const { mount: mountHomePage, unmount: unmountHomePage } = bannerIsland(HomePage);

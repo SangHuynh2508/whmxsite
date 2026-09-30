@@ -1,13 +1,12 @@
 // Banner page (#/banners, spec 2026-09-30 §5): the current batch, then every older banner by year with filters.
 // Filters live in the hash (#/banners?char=…&type=…&year=…) so Back from a character page and shared links keep them.
-import { StrictMode, useMemo, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
-import { createRoot, type Root } from 'react-dom/client';
+import { useMemo, useRef, useState } from 'react';
 import { BannerGrid, type SliceChar } from './BannerSlice.tsx';
-import { TYPE_VI, archive, cachedBanners, currentBanners, filtersHash, loadBannersCached, readFilters, type ArchiveFilters, type BannersDoc } from './bannersData.mts';
+import { TYPE_VI, archive, currentBanners, filtersHash, readFilters, type ArchiveFilters, type BannersDoc } from './bannersData.mts';
 import { useNow } from './useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
+import { bannerIsland } from './island.tsx';
 import './styles/banners.css';
 
 const NO_FILTERS: ArchiveFilters = { character: '', type: '', year: 0 };
@@ -88,27 +87,4 @@ export function BannersPage({ doc }: { doc: BannersDoc | null }) {
   );
 }
 
-// ponytail: same island pattern as BuildTab; `generation` drops a late banners.json after the route changed.
-let root: Root | null = null;
-let generation = 0;
-
-export function unmountBannersPage() {
-  generation += 1;
-  root?.unmount();
-  root = null;
-}
-
-function render(container: HTMLElement, doc: BannersDoc | null) {
-  container.innerHTML = '';
-  const mounted = createRoot(container);
-  root = mounted;
-  flushSync(() => mounted.render(<StrictMode><BannersPage doc={doc} /></StrictMode>));
-}
-
-export function mountBannersPage(container: HTMLElement): Promise<void> {
-  unmountBannersPage();
-  const hit = cachedBanners();
-  if (hit) { render(container, hit); return Promise.resolve(); } // synchronous: the router's Back scroll restore finds content
-  const mine = generation;
-  return loadBannersCached().then((doc) => { if (mine === generation) render(container, doc); });
-}
+export const { mount: mountBannersPage, unmount: unmountBannersPage } = bannerIsland(BannersPage);
