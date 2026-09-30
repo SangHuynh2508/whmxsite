@@ -3358,7 +3358,6 @@
   gap: 8px;
   color: var(--text-main);
   text-decoration: none;
-  transition: transform var(--motion-slow) var(--ease-standard);
 }
 
 .cc-card:focus-visible {
@@ -3426,9 +3425,8 @@
   text-wrap: balance;
 }
 
+/* hover only swaps to the breakthrough card, as the old card did (owner 2026-09-30: no lift, no underline) */
 @media (hover: hover) {
-  .cc-card:hover { transform: translateY(-4px); }
-  .cc-card:hover .cc-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .cc-card.has-alt:hover .cc-art-main { opacity: 0; }
   .cc-card.has-alt:hover .cc-art-alt { opacity: 1; }
 }

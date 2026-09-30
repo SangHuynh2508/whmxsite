@@ -18,7 +18,7 @@ Implemented:
   `characterHeader.js`).
 - `.cc-art`: 1 : 2 art, 6 px corners, `--bg-elevated` behind; `.cc-glow` = `/assets/frames/ui_ty_kp_pz_<rare>.png` over the
   last 19.86%; `.cc-job` 25% wide at 4.1% from the foot with `--art-icon-shadow`; `.cc-hz` (Hoán Chương) top-right; name
-  under the art in 700 14 px serif; hover lifts 4 px, crossfades to the breakthrough card, underlines the name.
+  under the art in 700 14 px serif; hover only crossfades to the breakthrough card (owner: no lift, no underline).
 - No "SSR" label and no Limited border; rarity, job and Limited are in the card's accessible name and tooltip.
 - Removed: the old card CSS (`.card-media`, `.rarity-label`, `.card-bottom-overlay`, `.card-identity`, `.is-limited`, …), the
   ticket stub CSS and `public/assets/frames/ui_ty_kp_{di1,di2,bian}.png` (no longer used).
