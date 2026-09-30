@@ -1,8 +1,9 @@
 // public/banners.json (tools/build_banner_data.py) → what the Home and Banner pages show. Spec 2026-09-30 §3, §5.
-import { status } from './bannerTime.mts';
+import { formatDate, remaining, status } from './bannerTime.mts';
 
 export type Banner = { id: string; name_cn: string; name_vi: string | null; type: string; kind_cn: string;
-  start: number; end: number; up: string[]; up_skin: string | null; art: string | null };
+  start: number; end: number; up: string[]; up_skin: string | null; art: string | null;
+  title: string | null; choice: number | null };
 export type BannerEvent = { id: number; name_cn: string; kind_cn: string; start: number; end: number };
 export type BannersDoc = { generated_at: number; masterdata: string; asset_base_url: string;
   version: { id: string; label: string; start: number; end: number } | null;
@@ -55,4 +56,22 @@ export function upCharacters<C>(b: Banner, characters: Record<string, C>): { id:
 
 export function artUrl(doc: BannersDoc, path: string | null): string | null {
   return path ? `${doc.asset_base_url.replace(/\/$/, '')}/${path}` : null;
+}
+
+export const TYPE_VI: Record<string, string> = { limited: 'Giới hạn', time: 'Có thời hạn', season: 'Theo mùa', oldtime: 'Thường trực' };
+
+type SkinOwner = { skins?: { skinID: string; image?: string }[] };
+
+/** The UP skin drawing (data.json) the slice layers over the pool background; null when data.json does not have it. */
+export function skinImage(b: Banner, characters: Record<string, SkinOwner>): string | null {
+  if (!b.up_skin || !b.up[0]) return null;
+  return characters[b.up[0]]?.skins?.find((s) => s.skinID === b.up_skin)?.image ?? null;
+}
+
+/** The slice's small line (direction-approved.md): label, plus the time left when the banner is open. */
+export function sliceMeta(b: Banner, nowMs: number, isArchive: boolean, timeZone?: string): { label: string; left: string | null } {
+  const type = TYPE_VI[b.type] ?? b.kind_cn;
+  if (isArchive) return { label: `${type} · ${formatDate(b.start, timeZone)} – ${formatDate(b.end, timeZone)}`, left: null };
+  if (status(nowMs, b.start, b.end) === 'ended') return { label: 'Đã kết thúc · chờ bản cập nhật', left: null };
+  return { label: b.choice ? `Tự chọn trong ${b.choice} Khí Giả` : type, left: remaining(nowMs, b.end) };
 }

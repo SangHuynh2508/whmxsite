@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archive, artUrl, currentBanners, currentEvents, loadBanners, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
+import { archive, artUrl, currentBanners, currentEvents, loadBanners, skinImage, sliceMeta, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
 
 const b = (id: string, start: number, end: number, extra: Partial<Banner> = {}): Banner =>
-  ({ id, name_cn: id, name_vi: null, type: 'time', kind_cn: '限时渠道', start, end, up: ['A0001'], up_skin: null, art: null, ...extra });
+  ({ id, name_cn: id, name_vi: null, type: 'time', kind_cn: '限时渠道', start, end, up: ['A0001'], up_skin: null, art: null, title: null, choice: null, ...extra });
 const doc = (banners: Banner[]): BannersDoc =>
   ({ generated_at: 0, masterdata: '', asset_base_url: 'https://r2', version: null, hero: null, events: [], banners });
 const S = 1000;
@@ -57,4 +57,23 @@ test('loadBanners returns null on 404 and on a bad shape', async () => {
   assert.equal(await loadBanners((async () => new Response('<html>', { status: 200 })) as typeof fetch), null);
   const ok = await loadBanners(res(200, doc([b('1', 0, 1)])) as typeof fetch);
   assert.equal(ok?.banners.length, 1);
+});
+
+test('skinImage: the UP skin drawing from data.json, else null', () => {
+  const chars = { A0001: { skins: [{ skinID: 'A0001001', image: 'https://r2/a.webp' }] } };
+  assert.equal(skinImage(b('x', 0, 1, { up_skin: 'A0001001' }), chars), 'https://r2/a.webp');
+  assert.equal(skinImage(b('x', 0, 1, { up_skin: 'A0001009' }), chars), null);
+  assert.equal(skinImage(b('x', 0, 1, { up: ['W0185'], up_skin: 'W0185001' }), chars), null);
+  assert.equal(skinImage(b('x', 0, 1), chars), null);
+});
+
+test('sliceMeta: type + time left, choice banners, ended current batch, archive dates', () => {
+  const end = 1000;
+  assert.deepEqual(sliceMeta(b('x', 0, end, { type: 'limited' }), (end - 3600 - 120) * S, false), { label: 'Giới hạn', left: '1 giờ 2 phút' });
+  assert.deepEqual(sliceMeta(b('x', 0, end, { type: 'time', up: [], choice: 59 }), 0, false), { label: 'Tự chọn trong 59 Khí Giả', left: '16 phút' });
+  assert.deepEqual(sliceMeta(b('x', 0, end), (end + 1) * S, false), { label: 'Đã kết thúc · chờ bản cập nhật', left: null });
+  const s = Date.UTC(2026, 8, 10) / 1000, e = Date.UTC(2026, 8, 30) / 1000;
+  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'season' }), 0, true, 'UTC'), { label: 'Theo mùa · 10/09/2026 – 30/09/2026', left: null });
+  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'oldtime' }), 0, true, 'UTC').label, 'Thường trực · 10/09/2026 – 30/09/2026');
+  assert.equal(sliceMeta(b('x', s, e, { type: 'new', kind_cn: '新渠道' }), 0, true, 'UTC').label, '新渠道 · 10/09/2026 – 30/09/2026');
 });

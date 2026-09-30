@@ -75,6 +75,12 @@
   /* Backdrop behind every popover / dialog (DESIGN.md: one scrim). */
   --scrim: rgb(0 0 0 / .6);
 
+  /* Text on game art (Home hero, banner slices; owner 2026-09-30): a dark fade under the text instead of a plate. */
+  --art-shade-strong: rgb(0 0 0 / .84);
+  --art-shade: rgb(0 0 0 / .74);
+  --art-shade-soft: rgb(0 0 0 / .2);
+  --art-text-shadow: 0 2px 8px rgb(0 0 0 / .85), 0 0 2px rgb(0 0 0 / .6);
+
   /* Legacy aliases mapping to authoritative global rarity tokens */
   --rare-5: #b93232;
   --rare-4: var(--rarity-ssr);
