@@ -115,3 +115,11 @@ Owner: "sửa hết 5 phần", hero "Tiếng Việt lên đầu".
 - `banners.json` is kept after the first load (`loadBannersCached`) so Back re-renders at once and the router's
   scroll restore lands on real content (checked: 1200 px restored with year=2025).
 - Home releases: 3 columns on phones.
+
+## Slice fade, owner revision (2026-09-30)
+
+Owner: "vùng tối hơi rõ quá, nên cho ít tối lại và làm nó fade nhiều hơn … vừa tối rõ và vừa phân chia rõ ranh giới sáng
+tối". Slices (Home + Banner page) now use `--art-slice-fade` / `--art-slice-fade-wide` (tokens.css): max .64 instead of
+.84, eased over nine stops to transparent, no visible edge; the text carries `--art-slice-text-shadow` (tight + 12 px +
+28 px halo). Trade-off accepted by the owner's request: impeccable detect reports the meta line at median 1.9–3.2:1 on the
+brightest art (刻名存念, 结伴同游); it does not model the halo. Hero and Info panels keep their own fades.

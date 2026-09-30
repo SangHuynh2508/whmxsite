@@ -41,10 +41,10 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 52%, var(--art-shade-soft) 74%, transparent 88%);
+  background: var(--art-slice-fade);
 }
 .bn-grid--odd .bn-slice:nth-last-child(-n+3)::before {
-  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 72%, var(--art-shade-soft) 90%, transparent 100%);
+  background: var(--art-slice-fade-wide);
 }
 .bn-slice-txt {
   position: absolute;
@@ -56,7 +56,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 4px;
-  text-shadow: var(--art-text-shadow);
+  text-shadow: var(--art-slice-text-shadow);
 }
 .bn-slice-logo { max-height: 40%; max-width: 60%; object-fit: contain; object-position: left; align-self: flex-start; }
 /* up to two lines, never an ellipsis on the name the reader scans for (critique 2026-09-30) */
@@ -87,7 +87,7 @@
 .bn-grid--compact .bn-slice-logo { display: none; }
 .bn-grid--compact .bn-slice-name { font-size: 17px; }
 .bn-grid--compact .bn-slice::before {
-  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 72%, var(--art-shade-soft) 90%, transparent 100%);
+  background: var(--art-slice-fade-wide);
 }
 
 
@@ -153,7 +153,7 @@
   .bn-slice::before,
   .bn-grid--odd .bn-slice:nth-last-child(-n+3)::before,
   .bn-grid--compact .bn-slice::before {
-    background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 70%, var(--art-shade-soft) 92%, transparent 100%);
+    background: var(--art-slice-fade-wide);
   }
   .bn-slice-txt { left: 14px; max-width: 80%; }
   .bn-grid--compact .bn-slice { grid-column: auto; aspect-ratio: 3 / .95; }
