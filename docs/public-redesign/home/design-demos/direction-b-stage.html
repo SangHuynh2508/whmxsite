@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home · B · Sân khấu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Direction B · "Sân khấu" (reference: the game's own gacha screen, where one banner fills the stage and tabs on the
+  side switch it; framed like a museum's single-exhibit room).
+  Form from content: there are always 2–4 banners open at once and players compare them → one large stage + a switcher,
+  instead of three small cards. The countdown is the number worth reading: large serif serial numerals in gold.
+  Hero: the KV runs full width behind the top of the page; the version plate sits on it bottom-left (solid plate, no gradient).
+  Side column: events with a thin elapsed-time rule (how far into the event we are).
+  Motion: the selection ink slides between banner tabs (useSlider); the stage art cross-fades + drifts 16 px from the
+  side of the tab pressed (useReveal); reduced motion = instant swap.
+-->
+<style>
+.kv{position:relative;margin:-24px -24px 0;height:420px;overflow:hidden;border-bottom:1px solid var(--line)}
+.kv img{width:100%;height:100%;object-fit:cover;object-position:50% 28%}
+.plate{position:absolute;left:24px;bottom:24px;background:var(--surface);border:1px solid var(--line2);border-radius:6px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+.plate .ver{font-size:13px;color:var(--gold);font-weight:600}
+.plate h1{font:700 26px/1.25 var(--serif)}
+.plate p{font-size:13px;color:var(--ash)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;max-width:1360px;margin:24px auto 0}
+h2{font:600 16px/1.3 var(--sans);margin-bottom:12px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr)}
+.stage .art{border-right:1px solid var(--line);border-radius:6px 0 0 6px}
+.info{padding:16px 24px 24px;display:flex;flex-direction:column;gap:12px}
+.tabs{position:relative;display:flex;gap:4px;padding:4px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.tabs button{position:relative;z-index:1;flex:1;min-width:0;height:36px;border:0;background:none;color:var(--ash);font:500 14px 'Noto Serif SC',serif;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs button[aria-selected=true]{color:var(--text)}
+.ink{position:absolute;top:4px;bottom:4px;background:var(--lifted);border:1px solid var(--line2);border-radius:6px;transition:left .3s cubic-bezier(.16,1,.3,1),width .3s}
+.kind{font-size:13px;color:var(--ash)}
+.kind b{color:var(--gold);font-weight:600}
+.bname{font:700 30px/1.2 var(--serif)}
+.serial{font:700 30px/1 var(--serif);letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--gold)}
+.serial small{font:500 14px var(--sans);letter-spacing:0;color:var(--ash);margin:0 8px 0 4px}
+.lbl{font-size:12px;font-weight:600;color:var(--ash)}
+.ups{display:flex;flex-direction:column;gap:8px}
+.ups a{display:flex;align-items:center;gap:12px;padding:8px;border:1px solid var(--line);border-radius:6px}
+.ups a:hover{background:var(--hover)}
+.ups img{width:44px;height:44px;border-radius:50%;border:2px solid var(--line2)}
+.ups span{display:flex;flex-direction:column;line-height:1.3}
+.ups small{font-size:12px;color:var(--ash)}
+.minis{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+.mini{display:grid;grid-template-columns:140px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.mini .t{padding:12px 16px;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ash)}
+.mini .t b{font:500 16px 'Noto Serif SC',serif;color:var(--text)}
+.mini .t em{font-style:normal;color:var(--text)}
+aside .ev{padding:12px 0;border-top:1px solid var(--line)}
+aside .ev:first-of-type{border-top:0}
+.ev .k{font-size:12px;color:var(--ash)} .ev .n{font-size:16px;margin:2px 0 8px}
+.bar{height:2px;background:var(--line)} .bar i{display:block;height:100%;background:var(--gold)}
+.ev .left{display:flex;justify-content:space-between;font-size:13px;color:var(--ash);margin-top:6px}
+.ev .left b{color:var(--text);font-weight:600}
+.shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.shelf a{position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.shelf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.shelf a.character img{object-position:50% 50%}
+.shelf .cap{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:8px 12px;font-size:14px;line-height:1.35}
+.shelf .cap small{display:block;font-size:12px;color:var(--ash)}
+.shelf .new{position:absolute;right:8px;top:8px;font:600 11px var(--sans);color:var(--bg);background:var(--gold);border-radius:6px;padding:0 6px}
+.short{display:grid;gap:8px}
+.short a{display:flex;justify-content:space-between;align-items:center;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:6px;font-size:14px}
+.short a:hover{background:var(--hover)} .short a::after{content:'›';color:var(--ash)}
+section{margin-top:40px}
+/* Banner page strip: a gallery wall by year */
+.wall{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.wall figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.wall figcaption{padding:8px 12px;font-size:13px;color:var(--ash);display:flex;justify-content:space-between;gap:8px}
+.wall figcaption b{font:500 15px 'Noto Serif SC',serif;color:var(--text)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chips button{height:32px;padding:0 12px;border:1px solid var(--line2);border-radius:6px;background:var(--surface);color:var(--ash);font:500 14px var(--sans)}
+.chips button.on{color:var(--text);border-color:var(--gold)}
+.year{font:700 17px var(--serif);padding-bottom:8px;margin:16px 0 12px;border-bottom:1px solid var(--line)}
+@media (max-width:1180px){.layout{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.stage .art{border-right:0;border-bottom:1px solid var(--line);border-radius:6px 6px 0 0}}
+@media (max-width:980px){.wall{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){
+ .kv{margin:-16px -16px 0;height:300px}.plate{left:16px;right:16px;bottom:16px}.plate h1{font-size:22px}
+ .info{padding:12px 16px 16px}.bname{font-size:24px}.serial{font-size:24px}
+ .minis{grid-template-columns:1fr}.mini{grid-template-columns:112px 1fr}
+ .shelf{grid-template-columns:repeat(2,1fr)}
+ .wall{grid-template-columns:1fr 1fr;gap:12px}.wall figcaption{flex-direction:column;gap:0}
+}
+</style>
+</head>
+<body>
+<nav class="rail" aria-hidden="true"><b>物</b><i class="on"></i><i></i><i></i><i></i><i></i></nav>
+<button class="fab" aria-label="Menu">☰</button>
+<main class="main" id="app"></main>
+<script src="home-data.js"></script>
+<script src="common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const H = HOME, v = H.version;
+const events = H.events.filter((e) => e.start * 1000 <= NOW && NOW < e.end * 1000);
+const left = (s) => { const t = remaining(s).match(/^(\d+) (ngày|giờ|phút) ?(\d+)? ?(giờ|phút)?/); return t ? `${t[1].padStart(2, '0')}<small>${t[2]}</small>${t[3] ? `${t[3].padStart(2, '0')}<small>${t[4]}</small>` : ''}` : remaining(s); };
+const info = (b) => `<p class="kind"><b>${TYPE_VI[b.type]}</b> · ${fmt(b.start)} – ${fmt(b.end)}</p>
+  <h2 class="bname" style="margin:0">${cn(b.name_cn)}</h2>
+  <div><p class="lbl">Còn lại</p><p class="serial">${left(b.end)}</p></div>
+  <p class="lbl">Khí Giả UP</p>
+  <div class="ups">${b.ups.map((u) => `<a href="#/characters/${u.slug}"><img src="${u.avatar}" alt=""><span>${u.name}<small>Xem Khí Giả ›</small></span></a>`).join('')}
+  ${b.drawing ? `<a href="#/skins"><img src="${b.drawing}" alt="" style="object-fit:cover;object-position:50% 12%"><span>${b.skin_name}<small>Trang phục trên banner ›</small></span></a>` : ''}</div>`;
+document.getElementById('app').innerHTML = `
+<header class="kv"><img src="${H.hero.art}" alt="Ảnh chủ đề phiên bản ${v.label}">
+  <div class="plate"><span class="ver">Phiên bản ${v.label}</span><h1>${cn(H.hero.name_cn)}</h1><p>${fmt(v.start)} – ${fmt(v.end)} · còn ${remaining(v.end)}</p></div></header>
+<div class="layout"><div>
+  <h2>Banner đang mở</h2>
+  <div class="stage blk"><div id="stage-art">${layered(featured[0])}</div>
+    <div class="info"><div class="tabs" role="tablist"><span class="ink"></span>${featured.map((b, i) => `<button role="tab" aria-selected="${i === 0}" data-i="${i}">${b.name_cn}</button>`).join('')}</div>
+    <div id="stage-info" style="display:flex;flex-direction:column;gap:12px">${info(featured[0])}</div></div></div>
+  <div class="minis">${compact.map((b) => `<article class="mini blk">${layered(b)}<div class="t"><span>${TYPE_VI[b.type]} · đến ${fmt(b.end)}</span><b>${b.name_cn}<span class="dot"></span></b>${b.ups.map((u) => u.name).join(', ')}<em>Còn ${remaining(b.end)}</em></div></article>`).join('')}</div>
+  <section class="blk"><h2>Mới ra mắt</h2><div class="shelf">${H.releases.slice(0, 8).map((r) => `<a class="${r.kind}" href="#"><img src="${r.image}" alt="">${r.isNew ? '<span class="new">Mới</span>' : ''}<span class="cap">${r.name}<small>${r.kind === 'skin' ? 'Trang phục · ' + r.char : 'Khí Giả'}</small></span></a>`).join('')}</div></section>
+</div>
+<aside>
+  <div class="blk"><h2>Sự kiện đang diễn ra</h2>${events.map((e) => `<div class="ev"><p class="k">${cn(e.kind_cn)}</p><p class="n">${cn(e.name_cn)}</p><div class="bar"><i style="width:${Math.round(progress(e) * 100)}%"></i></div><p class="left"><span>đến ${fmtShort(e.end)}</span><span>Còn <b>${remaining(e.end)}</b></span></p></div>`).join('')}</div>
+  <section class="blk"><h2>Lối tắt</h2><nav class="short">${SHORTCUTS.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}</nav></section>
+</aside></div>
+<div style="max-width:1360px;margin:0 auto">
+<p class="demo-label">Trang Banner (#/banners) — tường tranh theo năm, bấm một ô mở sân khấu của banner đó</p>
+<h1 style="font:700 26px var(--serif);margin-bottom:16px">Banner</h1>
+<div class="chips"><button class="on">Tất cả</button><button>Giới hạn</button><button>Có thời hạn</button><button>Theo mùa</button><button>Khí Giả ▾</button></div>
+${years(H.archive).map((y) => `<h2 class="year">${y}</h2><div class="wall">${H.archive.map((b) => `<figure>${layered(b)}<figcaption><b>${b.name_cn}<span class="dot"></span></b><span>${b.ups.map((u) => u.name).join(', ')} · ${fmtShort(b.start)}</span></figcaption></figure>`).join('')}</div>`).join('')}
+</div>`;
+const tabs = [...document.querySelectorAll('.tabs button')], ink = document.querySelector('.ink');
+const place = (btn) => { ink.style.left = btn.offsetLeft + 'px'; ink.style.width = btn.offsetWidth + 'px'; };
+let cur = 0;
+tabs.forEach((btn) => btn.addEventListener('click', () => {
+  const i = +btn.dataset.i, dir = i > cur ? 1 : -1; cur = i;
+  tabs.forEach((t) => t.setAttribute('aria-selected', t === btn)); place(btn);
+  document.getElementById('stage-art').innerHTML = layered(featured[i]);
+  document.getElementById('stage-info').innerHTML = info(featured[i]);
+  if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    gsap.fromTo('#stage-art .art-fig', { x: 16 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: .6, ease: 'expo.out' });
+    gsap.fromTo('#stage-info > *', { y: 6, opacity: 0, filter: 'blur(2px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: .6, ease: 'expo.out', stagger: .05 });
+  }
+}));
+requestAnimationFrame(() => place(tabs[0]));
+reveal('.blk');
+</script>
+</body>
+</html>

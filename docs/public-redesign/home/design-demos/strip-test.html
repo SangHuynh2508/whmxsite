@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home · wide banner strip test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Owner question 2026-09-30: can the banner be a wide strip with its name on the image and colour-matched, like s1n?
+  Game assets: PoolBg_<id> (1280×720 frame, no character) + the UP skin drawing + PoolIcon_<id> (the banner's own title
+  logo, transparent). Two variants:
+   1 · Dải ảnh: the layered art cropped wide, the title logo on the left of the art, a solid plate for the countdown.
+   2 · Dải ảnh + phối màu: the card takes the median colour of its PoolBg (darkened toward night-ink); the art fades into
+       it on the left (a mask — this breaks DESIGN.md "no gradients", owner decides), title + text sit on the colour.
+-->
+<style>
+.wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h2{font:600 16px var(--sans);margin:24px 0 0}
+.strip{position:relative;aspect-ratio:10/3;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.strip .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.strip .fig{position:absolute;right:8%;top:-6%;height:190%;width:auto}
+.strip .title{position:absolute;left:4%;top:50%;transform:translateY(-58%);max-width:34%;max-height:64%;object-fit:contain}
+.strip .plate{position:absolute;left:16px;bottom:16px;background:var(--surface);border:1px solid var(--line2);border-radius:6px;padding:4px 12px;font-size:14px;color:var(--ash)}
+.strip .plate b{color:var(--gold);font-weight:600}
+.strip .ups{position:absolute;right:16px;bottom:16px;display:flex;gap:8px}
+.strip .ups a{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line2);border-radius:6px;padding:4px 12px 4px 4px;font-size:14px}
+.strip .ups img{width:28px;height:28px;border-radius:50%}
+/* variant 2 */
+.tint{display:grid;grid-template-columns:minmax(0,38%) 1fr;aspect-ratio:10/3;border:1px solid var(--line);border-radius:6px;overflow:hidden;
+  background:color-mix(in oklab,var(--t) 38%,#111315)}
+.tint .side{position:relative;z-index:1;padding:24px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.tint .side img{max-width:100%;max-height:130px;object-fit:contain;align-self:flex-start}
+.tint .meta{font-size:13px;color:var(--text);opacity:.8}
+.tint .left{font-size:14px;color:var(--text)} .tint .left b{color:var(--gold)}
+.tint .ups{display:flex;flex-wrap:wrap;gap:8px}
+.tint .ups a{display:flex;align-items:center;gap:8px;font-size:14px}
+.tint .ups img{width:28px;height:28px;border-radius:50%;border:1px solid var(--line2)}
+.tint .pic{position:relative;overflow:hidden;margin-left:-18%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%);mask-image:linear-gradient(90deg,transparent,#000 22%)}
+.tint .pic .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tint .pic .fig{position:absolute;right:12%;top:-6%;height:190%;width:auto}
+/* variant 3 (owner 2026-09-30, refs s1n "Current events" + "Pull recs"): the art stays whole; title logo + big text sit
+   straight on it over a dark fade on the text side (a scrim, not a colour panel). 3a white text, 3b text in the drawing's hue. */
+.poster{position:relative;display:block;aspect-ratio:10/3;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.poster .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.poster .fig{position:absolute;right:8%;top:-6%;height:190%;width:auto}
+.poster::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgb(0 0 0/.78) 0%,rgb(0 0 0/.5) 38%,transparent 62%)}
+.poster .txt{position:absolute;z-index:1;left:32px;top:24px;bottom:24px;max-width:48%;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;text-shadow:0 1px 3px rgb(0 0 0/.7)}
+.poster .logo{max-width:70%;max-height:44%;object-fit:contain;object-position:left;margin-bottom:auto;align-self:flex-start}
+.poster .big{font:700 36px/1.15 var(--serif);color:var(--text)}
+.poster .meta{font:500 14px var(--sans);color:var(--text)}
+.poster .left{font:500 15px var(--sans);color:var(--text)}.poster .left b{font-weight:600}
+.poster.acc .big,.poster.acc .left b{color:var(--a)}
+@media (max-width:640px){
+ .poster{aspect-ratio:4/3}.poster .fig{height:130%;right:-8%;top:-2%}
+ .poster::after{background:linear-gradient(0deg,rgb(0 0 0/.82) 0%,rgb(0 0 0/.5) 42%,transparent 70%)}
+ .poster .txt{left:16px;right:16px;top:16px;bottom:16px;max-width:none}.poster .logo{max-height:34%;max-width:52%}
+ .poster .big{font-size:26px}
+}
+@media (max-width:640px){
+ .strip{aspect-ratio:16/9}.strip .fig{height:150%;right:0}.strip .title{max-width:52%;max-height:56%;top:44%}
+ .strip .ups{display:none}
+ .tint{grid-template-columns:1fr;aspect-ratio:auto}.tint .pic{order:-1;aspect-ratio:16/8;margin:0;-webkit-mask-image:linear-gradient(0deg,transparent,#000 30%);mask-image:linear-gradient(0deg,transparent,#000 30%)}
+ .tint .side{margin-top:-56px;padding:0 16px 16px}.tint .side img{max-height:88px}
+}
+</style>
+</head>
+<body>
+<nav class="rail" aria-hidden="true"><b>物</b><i class="on"></i><i></i><i></i><i></i></nav>
+<main class="main"><div class="wrap" id="app"></div></main>
+<script src="home-data.js"></script>
+<script src="home-titles.js"></script>
+<script src="common.js"></script>
+<script>
+const all = [...HOME.current];
+const t = (b) => TITLES[b.id] || {};
+const ups = (b) => b.ups.map((u) => `<a href="#/characters/${u.slug}"><img src="${u.avatar}" alt="">${u.name}</a>`).join('');
+const v1 = (b) => `<article class="strip">${b.art ? `<img class="bg" src="${b.art}" alt="">` : ''}${b.drawing ? `<img class="fig" src="${b.drawing}" alt="">` : ''}
+  ${t(b).title ? `<img class="title" src="${t(b).title}" alt="${b.name_cn}">` : ''}
+  <p class="plate">${TYPE_VI[b.type]} · còn <b>${remaining(b.end)}</b></p>${b.ups.length ? `<div class="ups">${ups(b)}</div>` : ''}</article>`;
+const v2 = (b) => `<article class="tint" style="--t:${t(b).tint}"><div class="side">
+  ${t(b).title ? `<img src="${t(b).title}" alt="${b.name_cn}">` : `<h3>${cn(b.name_cn)}</h3>`}
+  <p class="meta">${TYPE_VI[b.type]} · ${fmt(b.start)} – ${fmt(b.end)}</p>
+  ${b.ups.length ? `<div class="ups">${ups(b)}</div>` : ''}<p class="left">Còn <b>${remaining(b.end)}</b></p></div>
+  <div class="pic">${b.art ? `<img class="bg" src="${b.art}" alt="">` : ''}${b.drawing ? `<img class="fig" src="${b.drawing}" alt="">` : ''}</div></article>`;
+const v3 = (b, acc) => `<a class="poster ${acc ? 'acc' : ''}" href="#" style="--a:${t(b).accent}">${b.art ? `<img class="bg" src="${b.art}" alt="">` : ''}${b.drawing ? `<img class="fig" src="${b.drawing}" alt="">` : ''}
+  <div class="txt">${t(b).title ? `<img class="logo" src="${t(b).title}" alt="${b.name_cn}">` : ''}
+  <p class="big">${b.ups.length ? b.ups.map((u) => u.name).join(' · ') : cn(b.name_cn)}</p>
+  <p class="meta">${TYPE_VI[b.type]} · ${fmtShort(b.start)} – ${fmt(b.end)}</p>
+  <p class="left">Còn <b>${remaining(b.end)}</b></p></div></a>`;
+document.getElementById('app').innerHTML = `<h2>3a · Ảnh nguyên + logo tên + chữ trắng</h2>${all.map((b) => v3(b)).join('')}<h2>3b · Ảnh nguyên + logo tên + chữ màu theo tranh</h2>${all.map((b) => v3(b, true)).join('')}<h2>1 · (cũ) Dải ảnh + logo tên</h2>${all.map(v1).join('')}`;
+</script>
+</body>
+</html>

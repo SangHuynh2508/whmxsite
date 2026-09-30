@@ -1,0 +1,31 @@
+/* Values copied from src/styles/tokens.css (dark only). Shared by the three directions. */
+:root{--bg:#111315;--surface:#17191C;--lifted:#1C2024;--hover:#22262B;--line:#2B2F34;--line2:#3D434A;--text:#E3E5E8;--ash:#9097A0;
+--gold:#D4B763;--goldwash:#24221A;--goldline:rgba(212,183,99,.3);--golddiv:rgba(212,183,99,.16);
+--ssr-bg:rgba(145,55,45,.48);--ssr-text:#F0A08F;--sr-bg:rgba(128,98,30,.48);--sr-text:#E7C96D;
+--sans:'IBM Plex Sans',system-ui,sans-serif;--serif:'Literata','Noto Serif SC',serif;
+--grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.cn{font-family:'Noto Serif SC',serif;font-weight:500}
+.dot{display:inline-block;width:5px;height:5px;margin-left:5px;vertical-align:middle;border-radius:50%;background:var(--ash)}
+/* mock app shell: the real left rail (60 px) on desktop, the floating menu button on phones */
+.rail{position:fixed;inset:0 auto 0 0;width:60px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:16px;z-index:5}
+.rail b{font:700 22px var(--serif);color:var(--gold)}
+.rail i{display:block;width:22px;height:22px;border-radius:6px;background:var(--lifted);border:1px solid var(--line2)}
+.rail i.on{border-color:var(--gold)}
+.main{margin-left:72px;padding:24px 24px 64px}
+.fab{display:none}
+@media (max-width:768px){.rail{display:none}.main{margin-left:0;padding:16px 16px 88px}
+ .fab{display:grid;place-items:center;position:fixed;left:16px;bottom:20px;width:44px;height:44px;border-radius:6px;background:rgba(23,25,28,.92);border:1px solid var(--goldline);color:var(--text);font-size:20px;z-index:5}}
+/* layered banner art */
+.art{position:relative;aspect-ratio:16/9;overflow:hidden}
+.art-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art-fig{position:absolute;right:6%;bottom:-4%;height:112%;width:auto;max-width:none}
+.art-ups{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--lifted)}
+.art-ups img{width:72px;height:72px;border-radius:50%;border:2px solid var(--line2)}
+.demo-label{margin:56px 0 16px;padding-top:16px;border-top:1px dashed var(--line2);font-size:13px;color:var(--ash)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home · A · Bảng tin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<!--
+  Direction A · "Bảng tin" (by the book — the Night Archive as it is today, a catalogue page).
+  Form from content: the page answers "what is open now" as a catalogue: one row per kind of thing (banners, events,
+  releases), each item a card in the site's existing card grammar (archive-slate, hairline, 6 px, serif name).
+  Hero: the KV as a wide plate with NO text on the image; the version caption sits on a plate under it.
+  Banner card: the game's pool background + the UP skin drawing layered = the banner as the game shows it.
+  Motion: blocks arrive in reading order (useReveal); countdown text changes without animation.
+-->
+<style>
+.wrap{max-width:1280px;margin:0 auto}
+.hero{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.hero img{display:block;width:100%;aspect-ratio:21/8;object-fit:cover;object-position:50% 30%}
+.hero-cap{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;padding:16px 24px;border-top:1px solid var(--line)}
+.hero-cap h1{font:700 26px/1.25 var(--serif)}
+.hero-cap .ver{font:600 13px var(--sans);color:var(--gold);border:1px solid var(--goldline);border-radius:6px;padding:2px 8px}
+.hero-cap .when{margin-left:auto;font-size:14px;color:var(--ash)}
+.hero-cap .when b{color:var(--text);font-weight:600}
+section{margin-top:40px}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.head h2{font:600 16px/1.3 var(--sans)}
+.head a{font-size:14px;color:var(--ash)} .head a:hover{color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.card .art{border-bottom:1px solid var(--line)}
+.body{padding:12px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ash)}
+.chip{font:600 12px var(--sans);padding:1px 6px;border-radius:6px;border:1px solid var(--line2);color:var(--text)}
+.chip.limited{border-color:var(--goldline);color:var(--gold)}
+.name{font:600 20px/1.3 var(--serif)}
+.ups{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}
+.ups a{display:flex;align-items:center;gap:8px}
+.ups a:hover{color:var(--gold)}
+.ups img{width:32px;height:32px;border-radius:50%;border:1px solid var(--line2)}
+.ups .skin{color:var(--ash)}
+.count{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-size:14px;color:var(--ash)}
+.count b{color:var(--gold);font-weight:600}
+.compact{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+.row{display:grid;grid-template-columns:160px 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;padding-right:16px}
+.row .art{border-right:1px solid var(--line)}
+.row .name{font-size:17px}
+.row .count{border:0;padding:0;text-align:right}
+.events{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.ev{display:grid;grid-template-columns:120px 1fr 160px;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.ev:first-child{border-top:0}
+.ev .k{font-size:13px;color:var(--ash)} .ev .n{font-size:16px}
+.ev .left{text-align:right;font-size:14px;color:var(--ash)} .ev .left b{color:var(--text);font-weight:600}
+.rel{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.rel a{display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.35}
+.rel .pic{position:relative;aspect-ratio:1;background:var(--lifted);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.rel .pic img{width:100%;height:100%;object-fit:cover}
+.rel .pic.skin img{object-fit:cover;object-position:50% 12%;transform:scale(1.5);transform-origin:50% 10%}
+.rel .new{position:absolute;left:6px;top:6px;font:600 11px var(--sans);color:var(--bg);background:var(--gold);border-radius:6px;padding:0 5px}
+.rel small{color:var(--ash);font-size:12px}
+.short{display:flex;flex-wrap:wrap;gap:8px}
+.short a{height:36px;display:inline-flex;align-items:center;padding:0 16px;border:1px solid var(--line2);border-radius:6px;background:var(--surface);font-size:14px}
+.short a:hover{background:var(--hover)}
+/* Banner page strip */
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.filters label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ash)}
+.filters select{height:36px;min-width:180px;background:var(--lifted);color:var(--text);border:1px solid #34383D;border-radius:6px;padding:0 12px;font:14px var(--sans)}
+.year{font:700 17px var(--serif);padding-bottom:8px;margin:16px 0 12px;border-bottom:1px solid var(--line)}
+.arch{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width:980px){.grid{grid-template-columns:1fr 1fr}.rel{grid-template-columns:repeat(4,1fr)}.compact,.arch{grid-template-columns:1fr}}
+@media (max-width:640px){
+ .hero img{aspect-ratio:16/10}
+ .hero-cap{padding:12px 16px}.hero-cap h1{font-size:22px}.hero-cap .when{margin-left:0;width:100%}
+ section{margin-top:32px}
+ .grid{grid-template-columns:1fr}
+ .row{grid-template-columns:112px 1fr;padding-right:12px}
+ .row .count{grid-column:2;text-align:left;margin-top:-8px;padding-bottom:8px}
+ .ev{grid-template-columns:1fr;gap:2px}.ev .left{text-align:left}
+ .filters label{flex:1 1 140px}.filters select{min-width:0;width:100%}
+}
+</style>
+</head>
+<body>
+<nav class="rail" aria-hidden="true"><b>物</b><i class="on"></i><i></i><i></i><i></i><i></i></nav>
+<button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap" id="app"></div></main>
+<script src="home-data.js"></script>
+<script src="common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const H = HOME, v = H.version;
+const upLinks = (b) => b.ups.map((u) => `<a href="#/characters/${u.slug}"><img src="${u.avatar}" alt="">${u.name}</a>`).join('');
+const card = (b) => `<article class="card">${layered(b)}<div class="body">
+  <p class="meta"><span class="chip ${b.type}">${TYPE_VI[b.type] || b.type}</span>${fmt(b.start)} – ${fmt(b.end)}</p>
+  <h3 class="name">${cn(b.name_cn)}</h3>
+  <div class="ups">${upLinks(b)}${b.drawing ? `<a class="skin" href="#/skins">Trang phục ›</a>` : ''}</div>
+  <p class="count">Còn <b>${remaining(b.end)}</b></p></div></article>`;
+const row = (b) => `<article class="row">${layered(b)}<div class="body" style="padding:12px 0">
+  <p class="meta"><span class="chip">${TYPE_VI[b.type] || b.type}</span>${fmt(b.start)} – ${fmt(b.end)}</p>
+  <h3 class="name">${cn(b.name_cn)}</h3>${b.ups.length ? `<div class="ups">${upLinks(b)}</div>` : ''}</div>
+  <p class="count">Còn <b>${remaining(b.end)}</b></p></article>`;
+const events = H.events.filter((e) => e.start * 1000 <= NOW && NOW < e.end * 1000);
+document.getElementById('app').innerHTML = `
+<header class="hero blk"><img src="${H.hero.art}" alt="Ảnh chủ đề phiên bản ${v.label}">
+  <div class="hero-cap"><span class="ver">Phiên bản ${v.label}</span><h1>${cn(H.hero.name_cn)}</h1>
+  <p class="when">${fmt(v.start)} – ${fmt(v.end)} · còn <b>${remaining(v.end)}</b></p></div></header>
+<section class="blk"><div class="head"><h2>Banner đang mở</h2><a href="#/banners">Tất cả banner ›</a></div>
+  <div class="grid">${featured.map(card).join('')}</div>
+  <div class="compact">${compact.map(row).join('')}</div></section>
+<section class="blk"><div class="head"><h2>Sự kiện đang diễn ra</h2></div>
+  <div class="events">${events.map((e) => `<div class="ev"><span class="k">${cn(e.kind_cn)}</span><span class="n">${cn(e.name_cn)}</span><span class="left">Còn <b>${remaining(e.end)}</b></span></div>`).join('')}</div></section>
+<section class="blk"><div class="head"><h2>Mới ra mắt</h2></div>
+  <div class="rel">${H.releases.map((r) => `<a href="#"><span class="pic ${r.kind}"><img src="${r.image}" alt="">${r.isNew ? '<span class="new">Mới</span>' : ''}</span>${r.name}${r.kind === 'skin' ? `<small>Trang phục · ${r.char}</small>` : '<small>Khí Giả</small>'}</a>`).join('')}</div></section>
+<section class="blk"><div class="head"><h2>Lối tắt</h2></div>
+  <nav class="short">${SHORTCUTS.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}</nav></section>
+
+<p class="demo-label">Trang Banner (#/banners) — phần lưu trữ, cùng thẻ banner</p>
+<h1 style="font:700 26px var(--serif);margin-bottom:16px">Banner</h1>
+<div class="filters"><label>Khí Giả<select><option>Tất cả</option></select></label><label>Loại<select><option>Tất cả</option></select></label><label>Năm<select><option>Tất cả</option></select></label></div>
+${years(H.archive).map((y) => `<h2 class="year">${y}</h2><div class="arch">${H.archive.filter((b) => new Date(b.start * 1000).getFullYear() === y).map((b) => row({ ...b, end: b.end }).replace(/<p class="count">.*?<\/p>/, `<p class="count">Đã kết thúc</p>`)).join('')}</div>`).join('')}`;
+reveal('.blk');
+</script>
+</body>
+</html>
