@@ -11,7 +11,8 @@ POOLS = [
     {"id": "340001", "nameLanText": "孤岛螺旋", "type": "season", "kindNameLanText": "限时渠道", "hidden": False,
      "startTime": 200, "endTime": 2000, "characterShow": ["W0097"], "characterSkinShow": "009"},
     {"id": "5003", "nameLanText": "结伴同游", "type": "time", "kindNameLanText": "限时渠道", "hidden": False,
-     "startTime": 200, "endTime": 900, "characterShow": [], "characterSkinShow": ""},
+     "startTime": 200, "endTime": 900, "characterShow": [], "characterSkinShow": "", "kind": "choiceness",
+     "changeList": '["V0075", "V0078", "S0083"]'},
     {"id": "2017", "nameLanText": "歆铭长愿", "type": "time", "kindNameLanText": "限时渠道", "hidden": False,
      "startTime": 10, "endTime": 20, "characterShow": ["D0089"], "characterSkinShow": "002"},
     {"id": "1", "nameLanText": "", "type": "normal", "hidden": True, "startTime": 0, "endTime": 0},
@@ -27,7 +28,7 @@ class BuildBannerDataTest(unittest.TestCase):
         out = {x["id"]: x for x in b.build_banners(POOLS, {"A0184001"}, Path("/nonexistent"))}
         self.assertEqual(out["2114"], {"id": "2114", "name_cn": "万嶂烟峦", "name_vi": None, "type": "limited",
                                        "kind_cn": "限定渠道", "start": 200, "end": 900, "up": ["A0184"],
-                                       "up_skin": "A0184001", "art": None})
+                                       "up_skin": "A0184001", "art": None, "title": None, "choice": None})
         self.assertIsNone(out["340001"]["up_skin"])  # W0097009 is not in data.json
         self.assertEqual(out["5003"]["up"], [])
 
@@ -37,6 +38,18 @@ class BuildBannerDataTest(unittest.TestCase):
             out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path(tmp))}
         self.assertEqual(out["2114"]["art"], "banners/2114.webp")
         self.assertIsNone(out["5003"]["art"])
+
+    def test_title_logo_only_when_extracted_png_exists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "PoolIcon_2114.png").write_bytes(b"x")
+            out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path(tmp))}
+        self.assertEqual(out["2114"]["title"], "banners/title/2114.webp")
+        self.assertIsNone(out["5003"]["title"])
+
+    def test_choice_banner_counts_its_change_list(self):
+        out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path("/nonexistent"))}
+        self.assertEqual(out["5003"]["choice"], 3)  # kind "choiceness": changeList is a JSON string in MasterData
+        self.assertIsNone(out["2114"]["choice"])
 
     def test_version_events_and_hero_follow_now(self):
         versions = [{"Version": "2018", "NameLanText": "3.3下版本热点活动总览", "StartTime": 0, "EndTime": 100},

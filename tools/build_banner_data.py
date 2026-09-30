@@ -23,6 +23,10 @@ def _rows(path: Path) -> list[dict]:
     return data if isinstance(data, list) else list(data.values())
 
 
+def _list(value) -> list:
+    return json.loads(value) if isinstance(value, str) else list(value or [])
+
+
 def pick_version(rows: list[dict], now: int) -> dict | None:
     for r in rows:
         if int(r["StartTime"]) <= now < int(r["EndTime"]):
@@ -60,7 +64,9 @@ def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path) -> list[
                     "type": p.get("type") or "", "kind_cn": p.get("kindNameLanText") or "",
                     "start": int(p["startTime"]), "end": int(p["endTime"]), "up": up,
                     "up_skin": skin if skin in skin_ids else None,
-                    "art": f"banners/{p['id']}.webp" if (art_dir / f"PoolBg_{p['id']}.png").exists() else None})
+                    "art": f"banners/{p['id']}.webp" if (art_dir / f"PoolBg_{p['id']}.png").exists() else None,
+                    "title": f"banners/title/{p['id']}.webp" if (art_dir / f"PoolIcon_{p['id']}.png").exists() else None,
+                    "choice": len(_list(p.get("changeList"))) if p.get("kind") == "choiceness" else None})
     return sorted(out, key=lambda x: (-x["start"], x["id"]))
 
 

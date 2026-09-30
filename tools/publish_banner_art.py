@@ -1,4 +1,4 @@
-"""Banner key art (PoolBg_<id>) and the current hero KV → NeoArtifacts/Assets/banners → WebP → R2.
+"""Banner key art (PoolBg_<id>), title logos (PoolIcon_<id>) and the current hero KV → NeoArtifacts/Assets/banners → WebP → R2.
 
   python tools/publish_banner_art.py --extract-only   # bundles of the authoritative snapshot → raw PNGs (no network)
   python tools/publish_banner_art.py --dry-run        # + optimize, list the R2 objects that would be uploaded
@@ -30,6 +30,8 @@ ART_DIR = NEO / "Assets" / "banners"
 def object_key(png_name: str) -> str | None:
     if m := re.fullmatch(r"PoolBg_(\d+)\.png", png_name):
         return f"banners/{m.group(1)}.webp"
+    if m := re.fullmatch(r"PoolIcon_(\d+)\.png", png_name):
+        return f"banners/title/{m.group(1)}.webp"
     if m := re.fullmatch(r"(KV[0-9A-Za-z]+)\.png", png_name):
         return f"kv/{m.group(1)}.webp"
     return None
@@ -59,7 +61,7 @@ def extract() -> list[Path]:
     now = int(time.time())  # only the hero KV active now (older ui_kv bundles are usually not in the local cache)
     kvs = {r["KV"] for r in (logins if isinstance(logins, list) else logins.values())
            if r.get("KV") and int(r["StartTime"]) <= now < int(r["EndTime"])}
-    wanted = {"images_cardpool.ab": lambda n: n.startswith("PoolBg_")}
+    wanted = {"images_cardpool.ab": lambda n: n.startswith(("PoolBg_", "PoolIcon_"))}
     for kv in kvs:
         if f"ui_{kv.lower()}.ab" in idx:
             wanted[f"ui_{kv.lower()}.ab"] = lambda n, kv=kv: n == kv
