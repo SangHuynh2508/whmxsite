@@ -6,6 +6,7 @@ import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from '../../../ui/utils/huanzh
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 import { fold } from '../../../lib/fold.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
+import { catalogCardHtml } from '../catalogCard.mts';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -118,47 +119,13 @@ export function renderCharacterCatalogView(container) {
     }
 
     return filtered.map((char) => {
-      const rarityLabel = RARITY_LABELS[char.rare] || 'R';
-      const rarityClass = rarityLabel.toLowerCase();
-      const jobLabel = JOB_NAMES[char.job] || 'Khác';
-      const hasHz = hasHuanZhang(char);
-      
       const cards = char.cards || [];
-
-      let baseCardImg = (cards.length > 0 && cards[0]) ? getCharacterCardUrl(cards[0]) : null;
-      if (!baseCardImg) {
-        baseCardImg = char.icon ? (char.icon.startsWith('/') ? char.icon : `/${char.icon}`) : '';
-      }
-
-      let tinhCardImg = (cards.length > 1 && cards[1]) ? getCharacterCardUrl(cards[1]) : null;
-
-      const nameStr = char.name_vi || char.name_cn || '';
-      const nameLength = nameStr.length;
-      const nameTier = nameLength <= 11 ? 'name-short' : (nameLength <= 17 ? 'name-medium' : 'name-long');
-
-      return `
-        <a href="#/characters/${char.slug}" 
-           class="cc-card rare-${rarityClass} ${char.is_limited ? 'is-limited' : ''} ${hasHz ? 'has-huanzhang' : ''} ${tinhCardImg ? 'has-hover-card' : ''} card-result-reveal" 
-           ${hasHz ? 'data-huanzhang="true"' : ''}>
-          <div class="card-media">
-            <img src="${baseCardImg}" alt="${nameStr}" class="card-image-primary" loading="lazy" />
-            ${tinhCardImg ? `<img src="${tinhCardImg}" alt="${nameStr}" class="card-image-secondary" loading="lazy" onerror="this.style.display='none'" />` : ''}
-            ${hasHz ? `
-              <div class="character-huanzhang-indicator" title="Có Hoán Chương">
-                <img src="${HUANZHANG_INDICATOR_ICON}" alt="" class="hz-indicator-img" onerror="this.parentElement.style.display='none';" />
-              </div>
-            ` : ''}
-            <div class="card-bottom-overlay"></div>
-            <div class="rarity-label ${rarityClass}">${rarityLabel}</div>
-            <div class="card-identity">
-              <img src="/assets/jobs/job_${char.job}.png" alt="${jobLabel}" class="job-icon" title="${jobLabel}" />
-              <div class="character-name-box">
-                <span class="character-name ${nameTier}">${nameStr}</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      `;
+      const primary = cards[0] ? getCharacterCardUrl(cards[0]) : (char.icon ? (char.icon.startsWith('/') ? char.icon : `/${char.icon}`) : '');
+      return catalogCardHtml({
+        slug: char.slug, name: char.name_vi || char.name_cn || '', rare: char.rare, rarityLabel: RARITY_LABELS[char.rare] || 'R',
+        job: char.job, jobLabel: JOB_NAMES[char.job] || 'Khác', limited: Boolean(char.is_limited), primary,
+        secondary: cards[1] ? getCharacterCardUrl(cards[1]) : null, huanzhangIcon: hasHuanZhang(char) ? HUANZHANG_INDICATOR_ICON : null,
+      });
     }).join('');
   }
 

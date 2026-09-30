@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Khí Giả · thẻ vé (mẫu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700;7..72,800&family=Noto+Serif+SC:wght@500;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css">
+<!--
+  Mock (owner 2026-09-30): the catalogue with the game's own character ticket, composed from the game's sprites —
+  ui_ty_kp_di1 (base + cream stub with the scalloped edge; cropped to the 146 × 333 body), the card art (1 : 2, exactly the
+  146 × 292 window), ui_ty_kp_pz_<rare> (the rarity glow at the art's foot: 4 red, 3 gold, 2 teal), ui_ty_kp_bian (white
+  frame) and, where the game shows Trí Tri, the site's white job icon (owner: no Trí Tri box). The name sits in the stub.
+  Layer positions are percentages of the 146 × 333 body so the card scales with the grid.
+  Motion: hover lifts the ticket 4 px (off under reduced motion). Filters/search work on the real data.
+-->
+<style>
+.wrap{max-width:1360px;margin:0 auto}
+h1{font:700 32px/1.2 var(--serif);text-align:center;margin:8px 0 4px}
+.count{text-align:center;color:var(--ash);font-size:14px;margin-bottom:24px}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:24px}
+.search{flex:1 1 320px;display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;background:var(--lifted);border:1px solid #34383D;border-radius:6px;color:var(--ash)}
+.search input{flex:1;min-width:0;background:none;border:0;color:var(--text);font:15px var(--sans);outline:none}
+.search:focus-within{border-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:1px solid var(--line2);border-radius:6px;background:var(--surface);color:var(--ash);font:500 13px var(--sans);cursor:pointer}
+.chip img{width:16px;height:16px}
+.chip[aria-pressed=true]{color:var(--text);border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px 16px}
+/* the ticket: 146 x 333 body, every layer placed in % of it */
+.tk{position:relative;display:block;aspect-ratio:146/333;background:url(assets/ticket-base.png) center/100% 100% no-repeat;transition:transform .25s cubic-bezier(.16,1,.3,1),filter .25s}
+.tk:hover,.tk:focus-visible{transform:translateY(-4px);filter:drop-shadow(0 6px 10px rgb(0 0 0/.45))}
+.tk:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.tk-art{position:absolute;left:0;top:0;width:100%;height:87.69%;overflow:hidden}
+.tk-art img{width:100%;height:100%;object-fit:cover;display:block}
+.tk-glow{position:absolute;left:0;width:100%;top:70.27%;height:17.42%;background:center/100% 100% no-repeat}
+.tk[data-rare="4"] .tk-glow{background-image:url(assets/ui_ty_kp_pz_4.png)}
+.tk[data-rare="3"] .tk-glow{background-image:url(assets/ui_ty_kp_pz_3.png)}
+.tk[data-rare="2"] .tk-glow{background-image:url(assets/ui_ty_kp_pz_2.png)}
+.tk-frame{position:absolute;left:0;top:0;width:100%;height:87.69%;background:url(assets/ui_ty_kp_bian.png) center/100% 100% no-repeat}
+/* the site's own white job icon where the game shows Trí Tri (owner: no Trí Tri box), a soft shadow for bright art */
+.tk-job{position:absolute;left:37.5%;width:25%;top:73.5%;aspect-ratio:1;display:grid;place-items:center}
+.tk-job img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1px 2px rgb(0 0 0/.8)) drop-shadow(0 0 6px rgb(0 0 0/.5))}
+.tk-name{position:absolute;left:6%;right:6%;top:88.3%;height:9.4%;display:flex;align-items:center;justify-content:center;text-align:center;
+  font:800 13px/1.12 var(--serif);color:#232126;text-wrap:balance;overflow:hidden}
+.tk-name.long{font-size:11.5px}
+.empty{color:var(--ash);text-align:center;padding:48px 0}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}h1{font-size:26px}}
+@media (prefers-reduced-motion:reduce){.tk{transition:none}.tk:hover{transform:none}}
+</style>
+</head>
+<body>
+<nav class="rail" aria-hidden="true"><b>物</b><i class="on"></i><i></i><i></i><i></i></nav>
+<button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap">
+  <h1>Khí Giả</h1><p class="count" id="count"></p>
+  <div class="bar">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" placeholder="Tìm kiếm theo tên Khí Giả…" aria-label="Tìm kiếm theo tên Khí Giả"></label>
+    <div class="chips" id="jobs"></div>
+    <div class="chips" id="rares"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div></main>
+<script src="catalog-data.js"></script>
+<script>
+const JOBS = { 1: 'Túc Vệ', 2: 'Khinh Nhuệ', 3: 'Viễn Kích', 4: 'Cấu Thuật', 5: 'Chiến Lược' };
+const RARES = { 4: 'SSR', 3: 'SR', 2: 'R' };
+const state = { q: '', job: 0, rare: 0 };
+const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').toLowerCase();
+jobs.innerHTML = Object.entries(JOBS).map(([k, v]) => `<button class="chip" data-job="${k}" aria-pressed="false"><img src="../../../../public/assets/jobs/job_${k}.png" alt="">${v}</button>`).join('');
+rares.innerHTML = Object.entries(RARES).reverse().map(([k, v]) => `<button class="chip" data-rare="${k}" aria-pressed="false">${v}</button>`).join('');
+const ticket = (c) => `<a class="tk" data-rare="${c.rare}" href="#/characters/${c.slug}" title="${c.vi} · ${JOBS[c.job]} · ${RARES[c.rare]}">
+  <span class="tk-art"><img src="${c.card}" alt="" loading="lazy"></span><span class="tk-glow"></span><span class="tk-frame"></span>
+  <span class="tk-job"><img src="../../../../public/assets/jobs/job_${c.job}.png" alt="${JOBS[c.job]}"></span>
+  <span class="tk-name${c.vi.length > 16 ? ' long' : ''}">${c.vi}</span></a>`;
+function render() {
+  const q = fold(state.q.trim());
+  const list = CHARS.filter((c) => (!state.job || c.job === state.job) && (!state.rare || c.rare === state.rare) && (!q || fold(c.vi).includes(q) || c.cn.includes(state.q.trim())));
+  count.textContent = `${list.length} hồ sơ`;
+  grid.innerHTML = list.length ? list.map(ticket).join('') : '<p class="empty">Không có Khí Giả nào khớp.</p>';
+}
+q.addEventListener('input', (e) => { state.q = e.target.value; render(); });
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  const key = b.dataset.job ? 'job' : 'rare', v = Number(b.dataset.job || b.dataset.rare);
+  state[key] = state[key] === v ? 0 : v;
+  document.querySelectorAll(`.chip[data-${key}]`).forEach((c) => c.setAttribute('aria-pressed', String(Number(c.dataset[key]) === state[key])));
+  render();
+});
+render();
+</script>
+</body>
+</html>

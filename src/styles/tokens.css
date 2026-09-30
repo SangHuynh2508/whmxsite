@@ -86,6 +86,7 @@
     rgb(0 0 0 / .31) 50%, rgb(0 0 0 / .21) 61%, rgb(0 0 0 / .12) 72%, rgb(0 0 0 / .05) 84%, transparent 96%);
   --art-slice-fade-wide: linear-gradient(90deg, rgb(0 0 0 / .64) 0%, rgb(0 0 0 / .61) 20%, rgb(0 0 0 / .55) 36%, rgb(0 0 0 / .46) 50%,
     rgb(0 0 0 / .35) 62%, rgb(0 0 0 / .23) 74%, rgb(0 0 0 / .12) 85%, rgb(0 0 0 / .04) 94%, transparent 100%);
+  --art-icon-shadow: drop-shadow(0 1px 2px rgb(0 0 0 / .8)) drop-shadow(0 0 6px rgb(0 0 0 / .5)); /* white game icons on art */
   --art-slice-text-shadow: 0 0 2px rgb(0 0 0 / .95), 0 1px 4px rgb(0 0 0 / .9), 0 0 12px rgb(0 0 0 / .85), 0 0 28px rgb(0 0 0 / .6);
 
   /* Legacy aliases mapping to authoritative global rarity tokens */

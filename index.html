@@ -141,13 +141,12 @@
         <!-- Optional Character Card Panel for wide screens -->
         <aside class="char-card-panel" id="char-card-panel" style="display: none;">
           <div class="character-gallery">
-            <div class="character-card">
-              <img class="character-artwork" id="profile-card-img"
+            <!-- the same card as the catalogue (src/features/characters/catalogCard.mts): art + rarity glow + job -->
+            <div class="character-card cc-art">
+              <img class="cc-art-main" id="profile-card-img"
                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E"
-                alt="Character Artwork" />
-              <div class="ticket-base-wrapper">
-                <img class="ticket-base" src="/assets/frames/ui_ty_kp_di1.png" alt="Ticket Base" />
-              </div>
+                alt="" />
+              <span id="profile-card-layers"></span>
             </div>
             <div class="character-thumbnails" id="card-thumbnails">
               <!-- Populated via JS -->

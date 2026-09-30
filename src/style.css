@@ -559,45 +559,10 @@
   background: transparent;
 }
 
+/* calculator panel card: .cc-art (catalogCard.mts) at 200 px */
 .character-card {
   --card-width: 200px;
   width: var(--card-width);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  background: transparent;
-}
-
-.character-artwork {
-  display: block;
-  width: var(--card-width);
-  height: auto;
-  object-fit: contain;
-  object-position: center top;
-  position: relative;
-  z-index: 1;
-}
-
-.ticket-base-wrapper {
-  width: var(--card-width);
-  height: 48px;
-  overflow: visible;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: 1;
-}
-
-.ticket-base {
-  display: block;
-  width: 100%;
-  height: 48px;
-  object-fit: cover;
-  object-position: center bottom;
-  /* Derived from PNG alpha bounds: canvasCenterX (77) - visibleCenterX (80.5) = -3.5px / 154px = -2.2727% */
-  transform: translateX(calc((77 - 80.5) / 154 * 100%));
 }
 
 /* Card Thumbnail Gallery */
@@ -2217,9 +2182,6 @@
   text-align: center;
 }
 
-.art-frame {
-  max-height: 420px;
-}
 
 .art-caption {
   margin-top: 8px;
@@ -3404,183 +3366,94 @@
   color: #e2c070;
 }
 
-/* 3. Artwork-Dominant Roster Cards (S1N Continuous Layout) */
+/* 3. Khí Giả cards — option 3 "Không khung" (owner 2026-09-30, docs/public-redesign/catalog-card/direction-approved.md;
+   markup: src/features/characters/catalogCard.mts). The game's 1 : 2 card art with 6 px corners, the game's rarity glow
+   at its foot, the job icon where the game shows Trí Tri, the name under the art. Limited = the 限 seal in the art. */
 .catalog-grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-  gap: 16px;
+  gap: 24px 16px;
 }
 
 .cc-card {
-  display: block;
-  background: #090c12;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  overflow: hidden;
-  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   color: var(--text-main);
-  isolation: isolate;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  transition: transform var(--motion-slow) var(--ease-standard);
 }
 
-/* REQ 3: LIMITED = Thin Red Card Border (1px, at most 2px, muted red, no glow) */
-.cc-card.is-limited {
-  border: 1px solid #c83b3b;
+.cc-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* Restrained CardV2 hover crossfade (180-250ms, stationary, no lift) */
-@media (hover: hover) {
-  .cc-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-    background-color: #10141d;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  }
-
-  .cc-card.is-limited:hover {
-    border-color: #d94545;
-  }
-
-  .cc-card.has-hover-card:hover .card-image-primary {
-    opacity: 0;
-  }
-
-  .cc-card.has-hover-card:hover .card-image-secondary {
-    opacity: 1;
-  }
-}
-
-/* Slender in-game card silhouette (target width/height ~0.5625 -> 9 / 16) */
-.card-media {
+.cc-art {
   position: relative;
-  width: 100%;
-  aspect-ratio: 9 / 16;
+  display: block;
+  aspect-ratio: 1 / 2;
+  border-radius: 6px;
   overflow: hidden;
-  background: var(--bg-main);
+  background: var(--bg-elevated);
   isolation: isolate;
 }
 
-/* z-index 0: Artwork layers (Both primary & CardV2 occupy exact frame) */
-.card-image-primary,
-.card-image-secondary {
+.cc-art-main,
+.cc-art-alt {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 10%;
-  z-index: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
+  transition: opacity var(--motion-normal) var(--ease-standard);
 }
 
-.card-image-primary {
-  opacity: 1;
-}
+.cc-art-alt { opacity: 0; }
 
-.card-image-secondary {
-  opacity: 0;
-}
-
-/* z-index 1: Subtle dark readability overlay over lower 38% */
-.card-bottom-overlay {
+/* ui_ty_kp_pz_<rare>: the last 58 of the card's 292 px (19.86%) */
+.cc-glow {
   position: absolute;
-  bottom: -1px; /* 1px past the edge (clipped by .card-media): no sliver of artwork under the fade */
   left: 0;
   right: 0;
-  height: calc(38% + 1px);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
-  z-index: 1;
+  bottom: 0;
+  height: 19.86%;
+  background: center / 100% 100% no-repeat;
   pointer-events: none;
 }
 
-/* z-index 2: Rarity tag (Top-left, transparent bg, white text only) */
-.rarity-label {
+.cc-job {
+  position: absolute;
+  left: 37.5%;
+  width: 25%;
+  bottom: 4.1%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: var(--art-icon-shadow);
+}
+
+.cc-hz {
   position: absolute;
   top: 8px;
-  left: 8px;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-main);
-  background: transparent !important;
-  padding: 0;
-  border-radius: 0;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
-  z-index: 2;
-  pointer-events: none;
-  font-family: var(--font-sans);
-}
-
-.hz-indicator-img {
-  width: 22px;
-  height: 22px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.75));
+  filter: var(--art-icon-shadow);
 }
 
-/* z-index 2: Character identity inside lower card image (Job Icon centered above Name) */
-.card-identity {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0 6px 10px 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 2;
-  pointer-events: none;
+.cc-name {
+  font: 700 14px/1.3 var(--font-serif);
   text-align: center;
+  text-wrap: balance;
 }
 
-.job-icon {
-  width: 23px;
-  height: 23px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85));
-  flex-shrink: 0;
-}
-
-.character-name-box {
-  width: 100%;
-  min-height: 29px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.character-name {
-  font-family: var(--font-serif);
-  color: var(--text-main);
-  line-height: 1.14;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.88);
-  white-space: normal;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  max-width: 100%;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.character-name.name-short {
-  font-size: 13.8px;
-  font-weight: 500;
-}
-
-.character-name.name-medium {
-  font-size: 13.0px;
-  font-weight: 500;
-}
-
-.character-name.name-long {
-  font-size: 12.2px;
-  font-weight: 500;
+@media (hover: hover) {
+  .cc-card:hover { transform: translateY(-4px); }
+  .cc-card:hover .cc-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .cc-card.has-alt:hover .cc-art-main { opacity: 0; }
+  .cc-card.has-alt:hover .cc-art-alt { opacity: 1; }
 }
 
 /* Character Detail Centered Content Container (max-width 1360px) */
@@ -3926,25 +3799,10 @@
   align-self: flex-start;
 }
 
-/* The game's card art (256 × 512) shown as it is (owner 2026-09-30: no gold frame, not stretched): no border, shadow or
-   backdrop; the box is 256 : 420 and the art fills its width from the top, so the lower body is trimmed and the 限 mark
-   stays in view (a 1 : 2 box capped at 420 px squeezed the art into 210 px with dark bars). */
+/* Tổng quan card: the catalogue's .cc-art (1 : 2, rarity glow, job; owner 2026-09-30 option 3) at up to 256 px */
 .art-frame {
   width: 100%;
   max-width: 256px;
-  aspect-ratio: 256 / 420;
-  overflow: hidden;
-  border-radius: 6px;
-  padding: 0;
-  margin: 0;
-}
-
-.overview-art-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
 }
 
 .info-stats-section,
@@ -5685,31 +5543,6 @@
 .catalog-filter-toggle-btn.active .filter-chevron-icon,
 .filter-chevron-icon.open {
   transform: rotate(180deg);
-}
-
-/* Character Card Hoán Chương Indicator */
-.cc-card {
-  position: relative;
-}
-
-.character-huanzhang-indicator {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  z-index: 5;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.character-huanzhang-indicator .hz-indicator-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 
 .profile-avatar-button {

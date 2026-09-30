@@ -5,6 +5,7 @@
 import { getCharacterCardUrl } from '../../../assets/assetPaths.js';
 import { escapeHtml } from '../../../../lib/escapeHtml.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../../ui/utils/gameLabels.mts';
+import { cardArtLayers } from '../../catalogCard.mts';
 
 export function renderOverviewTab(container, char) {
 
@@ -121,8 +122,9 @@ export function renderOverviewTab(container, char) {
 
         <!-- Artwork Showcase Block -->
         <div class="overview-art-block">
-          <div class="art-frame">
-            <img src="${mainCardImg}" alt="${char.name_vi || char.name_cn}" class="overview-art-img" />
+          <div class="art-frame cc-art">
+            <img src="${mainCardImg}" alt="${char.name_vi || char.name_cn}" class="cc-art-main" />
+            ${cardArtLayers(char.rare, char.job)}
           </div>
           <div class="art-caption">
             <span class="art-title">${char.name_vi || char.name_cn}</span>
