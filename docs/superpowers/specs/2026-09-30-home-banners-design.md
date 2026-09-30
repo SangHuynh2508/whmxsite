@@ -1,6 +1,6 @@
 # Home page + Banner page (current banners with countdown, banner archive) — design
 
-> Date: 2026-09-30. Status: **design approved in chat** ("theo đề xuất hết", "duyệt"); spec awaiting owner review.
+> Date: 2026-09-30. Status: **implemented 2026-09-30** (plan `docs/superpowers/plans/2026-09-30-home-banners.md`); visual direction: `docs/public-redesign/home/direction-approved.md` (home-v2: season hero fading into the page, banner slices with the game's title logo). Not pushed yet.
 > Not committed (owner: "chưa commit"). References studied: s1n.gg (Home + `/banners`), gll-fun.com (`/limbus/en/`).
 > Visual direction: not chosen yet — huashu 3 directions, then taste skills + impeccable (§7).
 

@@ -35,7 +35,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
               <p className="home-hero-version">Phiên bản {doc.version.label} · {formatDate(doc.version.start)} – {formatDate(doc.version.end)}</p>
             )}
             {hero?.name_cn && <h1><Cn text={hero.name_cn} /></h1>}
-            {theme && <p className="home-hero-theme">Sự kiện chủ đề <Cn text={theme.name_cn} /> · còn <b>{remaining(now, theme.end)}</b></p>}
+            {theme && <p className="home-hero-theme">Còn <b>{remaining(now, theme.end)}</b> · Sự kiện chủ đề <Cn text={theme.name_cn} /></p>}
           </div>
         </header>
       )}

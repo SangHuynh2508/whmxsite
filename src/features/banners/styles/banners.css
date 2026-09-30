@@ -41,10 +41,10 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 46%, var(--art-shade-soft) 70%, transparent 84%);
+  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 52%, var(--art-shade-soft) 74%, transparent 88%);
 }
 .bn-grid--odd .bn-slice:nth-last-child(-n+3)::before {
-  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 62%, var(--art-shade-soft) 84%, transparent 96%);
+  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 72%, var(--art-shade-soft) 90%, transparent 100%);
 }
 .bn-slice-txt {
   position: absolute;

@@ -3,6 +3,13 @@
 
 .home-hero { position: relative; height: min(62vh, 560px); overflow: hidden; }
 .home-hero--plain { height: auto; padding-top: 48px; }
+/* a dark corner under the text: the KV can be bright exactly where the text sits (impeccable detect, 2.2:1) */
+.home-hero:not(.home-hero--plain)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 65% 70% at 0% 100%, var(--art-shade-strong) 0%, var(--art-shade) 35%, var(--art-shade-soft) 70%, transparent 100%);
+}
 .home-hero-art {
   position: absolute;
   inset: 0;
@@ -20,6 +27,7 @@
   bottom: 56px;
   display: flex;
   flex-direction: column;
+  z-index: 1;
   gap: 6px;
   color: var(--text-main);
   text-shadow: var(--art-text-shadow);
