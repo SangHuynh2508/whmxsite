@@ -1,0 +1,19 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="info.css"><title>Thông tin · A · Mục lục</title>
+<!-- A · Mục lục (closest to s1n /info): black page, serif title, a grid of compact tiles — a dim art thumbnail on the
+     left, name + one line on the right; the art brightens on hover. Dense: 3 per row on desktop, 1 on phones. -->
+<style>
+.wrap{max-width:1280px;margin:0 auto}
+h1{font:700 32px/1.2 var(--serif);text-align:center;margin:24px 0 32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.tile{display:grid;grid-template-columns:132px 1fr;align-items:center;gap:16px;min-height:88px;padding:8px 16px 8px 8px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.tile:hover{border-color:var(--goldline);background:var(--hover)}
+.thumb{position:relative;height:72px;border-radius:6px;overflow:hidden;opacity:.6;transition:opacity .18s}
+.tile:hover .thumb{opacity:1}
+.a-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.a-fig{position:absolute;right:-6%;top:-10%;height:260%}
+.thumb .wpn{gap:2px}.thumb .wpn span{width:34px;height:34px}
+.tile b{display:block;font:600 16px var(--sans)} .tile small{display:block;font-size:13px;color:var(--ash);line-height:1.45}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap"><h1>Thông tin</h1><div class="grid" id="g"></div></div></main><script src="info-data.js"></script><script src="common-info.js"></script>
+<script>g.innerHTML = INFO.map((t) => `<a class="tile" href="${t.href}"><span class="thumb">${art(t)}</span><span><b>${t.name}${t.soon ? `<span class="soon">${t.soon}</span>` : ''}</b><small>${t.desc}</small></span></a>`).join('');</script>
+</body></html>

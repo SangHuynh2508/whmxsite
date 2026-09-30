@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archive, artUrl, currentBanners, currentEvents, filtersHash, formatRange, loadBanners, readFilters, skinImage, sliceMeta, upCharacters, versionTitle, type Banner, type BannersDoc } from './bannersData.mts';
+import { archive, artUrl, currentBanners, currentEvents, eventKind, filtersHash, formatRange, loadBanners, readFilters, skinImage, sliceMeta, upCharacters, versionTitle, type Banner, type BannersDoc } from './bannersData.mts';
 
 const b = (id: string, start: number, end: number, extra: Partial<Banner> = {}): Banner =>
   ({ id, name_cn: id, name_vi: null, type: 'time', kind_cn: '限时渠道', start, end, up: ['A0001'], up_skin: null, art: null, title: null, choice: null, ...extra });
@@ -94,4 +94,11 @@ test('archive filters round-trip through the hash', () => {
   assert.deepEqual(readFilters('#/banners?year=abc'), { character: '', type: '', year: 0 });
   assert.equal(filtersHash({ character: 'A0184', type: '', year: 2024 }), '#/banners?char=A0184&year=2024');
   assert.equal(filtersHash({ character: '', type: '', year: 0 }), '#/banners');
+});
+
+test('eventKind: owner-approved Vietnamese for the event kinds, Chinese kept for anything new', () => {
+  assert.deepEqual(eventKind('主题活动'), { text: 'Sự kiện chủ đề', vi: true });
+  assert.deepEqual(eventKind('试炼场'), { text: 'Thí Luyện Trường', vi: true });
+  assert.deepEqual(eventKind('限时招集'), { text: 'Chiêu mộ có thời hạn', vi: true });
+  assert.deepEqual(eventKind('新活动'), { text: '新活动', vi: false });
 });

@@ -1,0 +1,20 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="info.css"><title>Thông tin · C · Ngăn lưu trữ</title>
+<!-- C · Ngăn lưu trữ (the site's Night Archive voice): a ledger of drawers — gold serial Nº, serif name, one line,
+     the game art as a strip on the right that fades into the drawer; gold hairline between drawers; the drawer slides 8 px
+     on hover. One column at every width. -->
+<style>
+.wrap{max-width:1040px;margin:0 auto}
+h1{font:700 32px/1.2 var(--serif);margin:16px 0 8px} .lead{color:var(--ash);font-size:14px;margin-bottom:24px}
+.tile{position:relative;display:grid;grid-template-columns:72px 1fr minmax(0,44%);align-items:center;min-height:132px;border-top:1px solid var(--golddiv);overflow:hidden;transition:padding-left .3s cubic-bezier(.16,1,.3,1)}
+.tile:last-child{border-bottom:1px solid var(--golddiv)} .tile:hover{padding-left:8px}
+.no{font:700 20px var(--serif);letter-spacing:.14em;color:var(--gold);font-variant-numeric:tabular-nums}
+.tile b{display:block;font:700 24px/1.25 var(--serif)} .tile small{display:block;color:var(--ash);font-size:14px;margin-top:4px}
+.strip{position:relative;height:132px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%)}
+.a-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12)}.a-fig{position:absolute;right:4%;top:-10%;height:300%}
+.strip .wpn{background:none}.strip .wpn span{width:60px;height:60px}
+@media (max-width:640px){.tile{grid-template-columns:52px 1fr;padding:16px 0}.strip{grid-column:1/-1;height:96px;margin-top:12px;-webkit-mask-image:none;mask-image:none;border-radius:6px}.tile b{font-size:20px}}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap"><h1>Thông tin</h1><p class="lead">Các trang tra cứu dữ liệu game.</p><div id="g"></div></div></main><script src="info-data.js"></script><script src="common-info.js"></script>
+<script>g.innerHTML = INFO.map((t, i) => `<a class="tile" href="${t.href}"><span class="no">Nº ${String(i + 1).padStart(2, '0')}</span><span><b>${t.name}${t.soon ? `<span class="soon">${t.soon}</span>` : ''}</b><small>${t.desc}</small></span><span class="strip">${art(t)}</span></a>`).join('');</script>
+</body></html>

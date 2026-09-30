@@ -12,6 +12,7 @@ import { canonicalCharacterHash } from './characterHash.mts';
 import { staticView } from './staticRoutes.mts';
 import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx';
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
+import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
@@ -166,6 +167,7 @@ export function parseHash() {
 const VIEW_CONTAINERS = {
   home: 'home-view',
   banners: 'banners-view',
+  info: 'info-view',
   catalog: 'character-catalog-view',
   character: 'character-detail-view',
   weapons: 'weapons-view',
@@ -180,6 +182,7 @@ function renderRouteView(route, target, gameData) {
     if (el && el !== target) {
       if (id === 'home-view') unmountHomePage();
       if (id === 'banners-view') unmountBannersPage();
+      if (id === 'info-view') unmountInfoPage();
       el.classList.add('hidden');
       el.innerHTML = '';
     }
@@ -190,6 +193,7 @@ function renderRouteView(route, target, gameData) {
     target.classList.remove('hidden');
     if (route.view === 'home') mountHomePage(target);
     else if (route.view === 'banners') mountBannersPage(target);
+    else if (route.view === 'info') mountInfoPage(target);
     else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
     else if (route.view === 'weapons') renderWeaponsView(target);

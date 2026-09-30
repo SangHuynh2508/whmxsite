@@ -1546,6 +1546,14 @@
     font-weight: 600;
   }
 
+  /* the brand row (Home): the rail's 物 mark in place of an icon */
+  .mobile-menu-mark {
+    width: 20px;
+    color: var(--accent);
+    font: 700 18px/1 var(--font-serif);
+    text-align: center;
+  }
+
   .mobile-menu-result img {
     flex: none;
     width: 36px;

@@ -1,0 +1,5 @@
+/* shared by the three Info directions (tokens from src/styles/tokens.css via ../../home/design-demos/common.css) */
+.wpn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--lifted)}
+.wpn span{position:relative;width:64px;height:64px;background:center/contain no-repeat}
+.wpn span img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain}
+.soon{display:inline-block;margin-left:8px;padding:0 6px;border:1px solid var(--line2);border-radius:6px;font:500 12px var(--sans);color:var(--ash);vertical-align:middle}

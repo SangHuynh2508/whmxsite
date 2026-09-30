@@ -1,0 +1,74 @@
+/* Thông tin hub (docs/public-redesign/info/direction-approved.md). Tokens only; the fade under the text is the
+   owner-approved text-on-art exception (same as the banner slices). */
+
+.info-view {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  background: var(--bg-main);
+}
+.info-view.hidden { display: none !important; }
+
+.info-page { max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; }
+.info-title { margin: 0 0 24px; font: 700 32px/1.2 var(--font-serif); color: var(--text-main); }
+.info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+
+.info-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 8;
+  border-radius: 6px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg-elevated);
+  color: var(--text-main);
+  text-decoration: none;
+}
+.info-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.info-art { position: absolute; inset: 0; z-index: -2; transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.info-tile:hover .info-art,
+.info-tile:focus-visible .info-art { transform: scale(1.03); }
+.info-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, var(--art-shade-strong) 0%, var(--art-shade) 30%, var(--art-shade-soft) 55%, transparent 70%);
+}
+.info-art-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
+.info-art-fig { position: absolute; right: 4%; top: -6%; height: 190%; width: auto; max-width: none; }
+.info-art-logo { position: absolute; left: 24px; top: 24px; max-height: 30%; max-width: 40%; object-fit: contain; }
+
+.info-weapons { position: absolute; inset: 0 0 25% 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.info-weapons > span { position: relative; width: 88px; height: 88px; background: url('/assets/frames/itemRare5.png') center / contain no-repeat; }
+.info-weapons img { position: absolute; inset: 8%; width: 84%; height: 84%; object-fit: contain; }
+
+.info-text { position: absolute; left: 24px; right: 24px; bottom: 20px; display: flex; flex-direction: column; gap: 4px; text-shadow: var(--art-text-shadow); }
+.info-name { font: 700 28px/1.2 var(--font-serif); }
+.info-desc { font: 500 14px/1.45 var(--font-sans); }
+.info-soon {
+  margin-left: 10px;
+  padding: 1px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font: 500 12px var(--font-sans);
+  color: var(--text-muted);
+  vertical-align: middle;
+  text-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) { .info-art { transition: none; } }
+@media (max-width: 768px) {
+  .info-page { padding: 16px 16px 88px; }
+  .info-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .info-title { font-size: 26px; }
+  .info-name { font-size: 22px; }
+  .info-text { left: 16px; right: 16px; bottom: 14px; }
+  .info-art-logo { left: 16px; top: 16px; }
+  .info-weapons { gap: 6px; }
+  .info-weapons > span { width: 52px; height: 52px; }
+}

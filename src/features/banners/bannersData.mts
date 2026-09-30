@@ -66,6 +66,14 @@ export function artUrl(doc: BannersDoc, path: string | null): string | null {
   return path ? `${doc.asset_base_url.replace(/\/$/, '')}/${path}` : null;
 }
 
+// Event kinds (ActivityOverAllMap DescLanText), owner-approved 2026-09-30.
+const EVENT_KIND_VI: Record<string, string> = { 主题活动: 'Sự kiện chủ đề', 试炼场: 'Thí Luyện Trường', 限时招集: 'Chiêu mộ có thời hạn' };
+
+/** A kind the table does not know yet stays Chinese (shown with the untranslated dot), never guessed. */
+export function eventKind(kindCn: string): { text: string; vi: boolean } {
+  return EVENT_KIND_VI[kindCn] ? { text: EVENT_KIND_VI[kindCn], vi: true } : { text: kindCn, vi: false };
+}
+
 export const TYPE_VI: Record<string, string> = { limited: 'Giới hạn', time: 'Có thời hạn', season: 'Theo mùa', oldtime: 'Thường trực' };
 
 type SkinOwner = { skins?: { skinID: string; image?: string }[] };

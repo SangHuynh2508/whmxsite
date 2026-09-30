@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Calculator, House, LogIn, LogOut, Search, ShieldCheck, Shirt, Sparkles, Sword, UsersRound } from 'lucide-react';
+import { Calculator, LayoutGrid, LogIn, LogOut, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
 import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
@@ -17,12 +17,11 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
  * the session state. Which one shows is pure CSS (src/style.css .app-nav*, .mobile-menu*).
  */
 
+// Only the hot pages sit in the rail; Home is the brand mark, Banner and Vũ Khí live in "Thông tin" (owner 2026-09-30).
 const PUBLIC_LINKS = [
-  { href: '#/', label: 'Trang chủ', icon: House, views: ['home'] },
   { href: '#/characters', label: 'Khí Giả', icon: UsersRound, views: ['catalog', 'character'] },
   { href: '#/gallery', label: 'Trang Phục', icon: Shirt, views: ['gallery', 'skin-detail'] },
-  { href: '#/banners', label: 'Banner', icon: Sparkles, views: ['banners'] },
-  { href: '#/weapons', label: 'Vũ Khí', icon: Sword, views: ['weapons'] },
+  { href: '#/info', label: 'Thông tin', icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
   { href: '#calc', label: 'Công cụ', icon: Calculator, views: ['calculator'] },
 ];
 
@@ -96,7 +95,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
         style={top === null ? { opacity: 0 } : { transform: `translateY(${top}px)` }}
       />
       <div className="app-nav-header">
-        <a href="#/" className="app-nav-brand" title="Vật Hoa Di Tân" onClick={linkClick('#/')}>
+        <a href="#/" className="app-nav-brand" title="Trang chủ · Vật Hoa Di Tân" onClick={linkClick('#/')}>
           <span className="app-nav-brand-mark">物</span>
           <span className="app-nav-brand-full">
             <span className="brand-title">物华弥新</span>
@@ -227,6 +226,12 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               <>
                 <p className="mobile-menu-heading">Trang</p>
                 <ul>
+                  {/* no rail logo on phones: the brand row is the way home */}
+                  <li>
+                    <a href="#/" className={view === 'home' ? 'active' : undefined} aria-current={view === 'home' ? 'page' : undefined} onClick={linkClick('#/')}>
+                      <span className="mobile-menu-mark" aria-hidden="true">物</span>Vật Hoa Di Tân
+                    </a>
+                  </li>
                   {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
                     <li key={href}>
                       <a href={href} className={views.includes(view) ? 'active' : undefined} aria-current={views.includes(view) ? 'page' : undefined} onClick={linkClick(href)}>

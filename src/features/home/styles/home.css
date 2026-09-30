@@ -68,6 +68,10 @@
 @media (max-width: 768px) { .home-body { padding: 0 16px 88px; } } /* room for the floating menu button */
 @media (max-width: 640px) {
   .home-hero { height: 440px; }
+  /* four text lines on a phone reach higher than the desktop corner (detect: 2.1:1 on the dates line) */
+  .home-hero:not(.home-hero--plain)::after {
+    background: linear-gradient(0deg, var(--art-shade-strong) 0%, var(--art-shade) 45%, var(--art-shade-soft) 70%, transparent 90%);
+  }
   .home-hero-text { left: 16px; right: 16px; bottom: 40px; }
   .home-hero--plain .home-hero-text { padding: 0 16px; }
   .home-hero-text h1 { font-size: 34px; }

@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { BannerGrid, Cn, type SliceChar } from '../banners/BannerSlice.tsx';
 import { remaining } from '../banners/bannerTime.mts';
-import { artUrl, cachedBanners, currentBanners, currentEvents, formatRange, loadBannersCached, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
+import { artUrl, cachedBanners, eventKind, currentBanners, currentEvents, formatRange, loadBannersCached, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
 import { useNow } from '../banners/useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { newReleases, type ReleaseChar } from './newReleases.mts';
@@ -51,7 +51,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
               <h2 className="home-h2">Sự kiện đang diễn ra</h2>
               <ul>{events.map((e) => (
                 <li key={e.id}>
-                  <span className="home-event-kind"><Cn text={e.kind_cn} /></span>
+                  <span className="home-event-kind">{eventKind(e.kind_cn).vi ? eventKind(e.kind_cn).text : <Cn text={e.kind_cn} />}</span>
                   <span className="home-event-name"><Cn text={e.name_cn} /></span>
                   <span className="home-event-left">Còn <b>{remaining(now, e.end)}</b></span>
                 </li>

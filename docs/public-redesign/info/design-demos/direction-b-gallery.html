@@ -1,0 +1,22 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="info.css"><title>Thông tin · B · Gian trưng bày</title>
+<!-- B · Gian trưng bày: each feature is a large art panel in the banner-slice language (whole game art, dark fade on the
+     text side, white serif name, one line). 2 per row on desktop; the art drifts 1.03 on hover. Few features = big panels. -->
+<style>
+.wrap{max-width:1280px;margin:0 auto}
+h1{font:700 32px/1.2 var(--serif);margin:16px 0 24px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.tile{position:relative;display:block;aspect-ratio:16/8;border-radius:6px;overflow:hidden;isolation:isolate}
+.tile>.art-wrap{position:absolute;inset:0;z-index:-2;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.tile:hover>.art-wrap{transform:scale(1.03)}
+.a-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.1)}.a-fig{position:absolute;right:4%;top:-6%;height:190%}
+.a-logo{position:absolute;left:24px;top:24px;max-height:30%;max-width:40%}
+.wpn span{width:88px;height:88px}
+.tile::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgb(0 0 0/.84) 0%,rgb(0 0 0/.5) 34%,transparent 60%)}
+.txt{position:absolute;left:24px;right:24px;bottom:20px;text-shadow:0 2px 8px rgb(0 0 0/.85)}
+.txt b{display:block;font:700 28px/1.2 var(--serif)} .txt small{font:500 14px var(--sans)}
+@media (max-width:768px){.grid{grid-template-columns:1fr}.txt b{font-size:22px}.wpn span{width:52px;height:52px}}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap"><h1>Thông tin</h1><div class="grid" id="g"></div></div></main><script src="info-data.js"></script><script src="common-info.js"></script>
+<script>g.innerHTML = INFO.map((t) => `<a class="tile" href="${t.href}"><span class="art-wrap">${art(t, true)}</span><span class="txt"><b>${t.name}${t.soon ? `<span class="soon">${t.soon}</span>` : ''}</b><small>${t.desc}</small></span></a>`).join('');</script>
+</body></html>
