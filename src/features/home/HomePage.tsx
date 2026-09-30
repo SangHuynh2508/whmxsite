@@ -4,8 +4,8 @@ import { StrictMode, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { BannerGrid, Cn, type SliceChar } from '../banners/BannerSlice.tsx';
-import { formatDate, remaining } from '../banners/bannerTime.mts';
-import { artUrl, currentBanners, currentEvents, loadBanners, type BannersDoc } from '../banners/bannersData.mts';
+import { remaining } from '../banners/bannerTime.mts';
+import { artUrl, cachedBanners, currentBanners, currentEvents, formatRange, loadBannersCached, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
 import { useNow } from '../banners/useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { newReleases, type ReleaseChar } from './newReleases.mts';
@@ -31,11 +31,10 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
         <header className={`home-hero${heroArt ? '' : ' home-hero--plain'}`}>
           {heroArt && <img className="home-hero-art" src={heroArt} alt="" />}
           <div className="home-hero-text home-block">
-            {doc?.version && (
-              <p className="home-hero-version">Phiên bản {doc.version.label} · {formatDate(doc.version.start)} – {formatDate(doc.version.end)}</p>
-            )}
-            {hero?.name_cn && <h1><Cn text={hero.name_cn} /></h1>}
-            {theme && <p className="home-hero-theme">Còn <b>{remaining(now, theme.end)}</b> · Sự kiện chủ đề <Cn text={theme.name_cn} /></p>}
+            {doc?.version && <p className="home-hero-version">{formatRange(doc.version.start, doc.version.end)}</p>}
+            <h1>{doc?.version ? versionTitle(doc.version.label) : 'Vật Hoa Di Tân'}</h1>
+            {hero?.name_cn && <p className="home-hero-cn"><Cn text={hero.name_cn} /></p>}
+            {theme && <p className="home-hero-theme">Sự kiện chủ đề <Cn text={theme.name_cn} /><span className="home-hero-left">còn <b>{remaining(now, theme.end)}</b></span></p>}
           </div>
         </header>
       )}
@@ -93,14 +92,17 @@ export function unmountHomePage() {
   root = null;
 }
 
+function render(container: HTMLElement, doc: BannersDoc | null) {
+  container.innerHTML = '';
+  const mounted = createRoot(container);
+  root = mounted;
+  flushSync(() => mounted.render(<StrictMode><HomePage doc={doc} /></StrictMode>));
+}
+
 export function mountHomePage(container: HTMLElement): Promise<void> {
   unmountHomePage();
+  const hit = cachedBanners();
+  if (hit) { render(container, hit); return Promise.resolve(); } // synchronous: Back restores the scroll onto real content
   const mine = generation;
-  return loadBanners().then((doc) => {
-    if (mine !== generation) return;
-    container.innerHTML = '';
-    const mounted = createRoot(container);
-    root = mounted;
-    flushSync(() => mounted.render(<StrictMode><HomePage doc={doc} /></StrictMode>));
-  });
+  return loadBannersCached().then((doc) => { if (mine === generation) render(container, doc); });
 }

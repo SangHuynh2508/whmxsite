@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archive, artUrl, currentBanners, currentEvents, loadBanners, skinImage, sliceMeta, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
+import { archive, artUrl, currentBanners, currentEvents, filtersHash, formatRange, loadBanners, readFilters, skinImage, sliceMeta, upCharacters, versionTitle, type Banner, type BannersDoc } from './bannersData.mts';
 
 const b = (id: string, start: number, end: number, extra: Partial<Banner> = {}): Banner =>
   ({ id, name_cn: id, name_vi: null, type: 'time', kind_cn: '限时渠道', start, end, up: ['A0001'], up_skin: null, art: null, title: null, choice: null, ...extra });
@@ -71,7 +71,27 @@ test('sliceMeta: type + time left, choice banners, ended current batch, archive 
   assert.deepEqual(sliceMeta(b('x', 0, end, { type: 'time', up: [], choice: 59 }), 0, false), { label: 'Tự chọn trong 59 Khí Giả', left: '16 phút' });
   assert.deepEqual(sliceMeta(b('x', 0, end), (end + 1) * S, false), { label: 'Đã kết thúc · chờ bản cập nhật', left: null });
   const s = Date.UTC(2026, 8, 10) / 1000, e = Date.UTC(2026, 8, 30) / 1000;
-  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'season' }), 0, true, 'UTC'), { label: 'Theo mùa · 10/09/2026 – 30/09/2026', left: null });
-  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'oldtime' }), 0, true, 'UTC').label, 'Thường trực · 10/09/2026 – 30/09/2026');
-  assert.equal(sliceMeta(b('x', s, e, { type: 'new', kind_cn: '新渠道' }), 0, true, 'UTC').label, '新渠道 · 10/09/2026 – 30/09/2026');
+  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'season' }), 0, true, 'UTC'), { label: 'Theo mùa · 10/09 – 30/09/2026', left: null });
+  assert.deepEqual(sliceMeta(b('x', s, e, { type: 'oldtime' }), 0, true, 'UTC').label, 'Thường trực · 10/09 – 30/09/2026');
+  assert.equal(sliceMeta(b('x', s, e, { type: 'new', kind_cn: '新渠道' }), 0, true, 'UTC').label, '新渠道 · 10/09 – 30/09/2026');
+});
+
+test('formatRange: the year once when both dates share it', () => {
+  const d = (y: number, m: number, day: number) => Date.UTC(y, m - 1, day) / 1000;
+  assert.equal(formatRange(d(2026, 8, 20), d(2026, 9, 10), 'UTC'), '20/08 – 10/09/2026');
+  assert.equal(formatRange(d(2025, 12, 25), d(2026, 1, 8), 'UTC'), '25/12/2025 – 08/01/2026');
+});
+
+test('versionTitle: Vietnamese first; 上/下 = Thượng/Hạ, anything else kept', () => {
+  assert.equal(versionTitle('3.4上'), 'Phiên bản 3.4 · Thượng');
+  assert.equal(versionTitle('3.3下'), 'Phiên bản 3.3 · Hạ');
+  assert.equal(versionTitle('4.0'), 'Phiên bản 4.0');
+});
+
+test('archive filters round-trip through the hash', () => {
+  assert.deepEqual(readFilters('#/banners?char=A0184&type=limited&year=2024'), { character: 'A0184', type: 'limited', year: 2024 });
+  assert.deepEqual(readFilters('#/banners'), { character: '', type: '', year: 0 });
+  assert.deepEqual(readFilters('#/banners?year=abc'), { character: '', type: '', year: 0 });
+  assert.equal(filtersHash({ character: 'A0184', type: '', year: 2024 }), '#/banners?char=A0184&year=2024');
+  assert.equal(filtersHash({ character: '', type: '', year: 0 }), '#/banners');
 });

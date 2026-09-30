@@ -59,7 +59,8 @@
   text-shadow: var(--art-text-shadow);
 }
 .bn-slice-logo { max-height: 40%; max-width: 60%; object-fit: contain; object-position: left; align-self: flex-start; }
-.bn-slice-name { font: 700 22px/1.25 var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* up to two lines, never an ellipsis on the name the reader scans for (critique 2026-09-30) */
+.bn-slice-name { font: 700 22px/1.25 var(--font-serif); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 .bn-grid--odd .bn-slice:nth-last-child(-n+3) .bn-slice-name { font-size: 19px; }
 .bn-slice-meta { font: 500 13px/1.4 var(--font-sans); }
 .bn-slice-meta b { font-weight: 600; }
@@ -67,6 +68,28 @@
 .bn-slice:focus-visible .bn-slice-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .bn-slice:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .bn-slice[data-ended] { filter: grayscale(.7); }
+.bn-slice-cue {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--art-shade);
+  font: 500 13px var(--font-sans);
+  opacity: 0;
+  transition: opacity var(--motion-normal) var(--ease-standard);
+}
+.bn-slice:hover .bn-slice-cue,
+.bn-slice:focus-visible .bn-slice-cue { opacity: 1; }
+
+/* archive: compact 3-up slices without the logo (name + dates is what a search needs) */
+.bn-grid--compact .bn-slice { grid-column: span 2; aspect-ratio: 3 / .9; }
+.bn-grid--compact .bn-slice-logo { display: none; }
+.bn-grid--compact .bn-slice-name { font-size: 17px; }
+.bn-grid--compact .bn-slice::before {
+  background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 72%, var(--art-shade-soft) 90%, transparent 100%);
+}
+
 
 /* ---------- Banner page ---------- */
 .bn-page { max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; }
@@ -85,7 +108,38 @@
   font: 14px var(--font-sans);
 }
 .bn-filters select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.bn-year h2 { margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); font: 700 17px/1.3 var(--font-serif); color: var(--text-main); }
+.bn-h2 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; font: 600 16px/1.3 var(--font-sans); color: var(--text-main); }
+.bn-count { font: 400 13px var(--font-sans); color: var(--text-muted); }
+.bn-clear {
+  align-self: flex-end;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font: 500 14px var(--font-sans);
+  cursor: pointer;
+}
+.bn-clear:hover { background: var(--bg-surface-hover); }
+.bn-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bn-empty .bn-clear { margin-left: 8px; }
+.bn-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 8px; font-size: 12px; color: var(--text-muted); }
+.bn-year > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 24px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  list-style: none;
+}
+.bn-year > summary::-webkit-details-marker { display: none; }
+.bn-year > summary::after { content: "›"; margin-left: auto; color: var(--text-muted); transition: transform var(--motion-normal) var(--ease-standard); }
+.bn-year[open] > summary::after { transform: rotate(90deg); }
+.bn-year > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bn-year h3 { margin: 0; font: 700 17px/1.3 var(--font-serif); color: var(--text-main); }
 .bn-error,
 .bn-empty { margin: 12px 0; font-size: 14px; color: var(--text-muted); }
 
@@ -97,10 +151,12 @@
   .bn-slice,
   .bn-grid--odd .bn-slice:nth-last-child(-n+3) { grid-column: auto; aspect-ratio: 3 / 1.15; }
   .bn-slice::before,
-  .bn-grid--odd .bn-slice:nth-last-child(-n+3)::before {
-    background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 58%, var(--art-shade-soft) 85%, transparent 100%);
+  .bn-grid--odd .bn-slice:nth-last-child(-n+3)::before,
+  .bn-grid--compact .bn-slice::before {
+    background: linear-gradient(90deg, var(--art-shade-strong) 0%, var(--art-shade) 70%, var(--art-shade-soft) 92%, transparent 100%);
   }
-  .bn-slice-txt { left: 14px; }
+  .bn-slice-txt { left: 14px; max-width: 80%; }
+  .bn-grid--compact .bn-slice { grid-column: auto; aspect-ratio: 3 / .95; }
   .bn-slice-name,
   .bn-grid--odd .bn-slice:nth-last-child(-n+3) .bn-slice-name { font-size: 18px; }
   .bn-slice-meta { font-size: 12px; }

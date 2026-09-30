@@ -36,7 +36,9 @@
 .home-hero-text h1 { margin: 0; font: 700 48px/1.1 var(--font-serif); }
 .home-hero-text h1 .bn-cn { font-weight: 700; }
 .home-hero-version { margin: 0; font: 600 15px var(--font-sans); }
+.home-hero-cn { margin: 0; font-size: 20px; }
 .home-hero-theme { margin: 0; font: 500 15px var(--font-sans); }
+.home-hero-left { margin-left: 12px; }
 .home-hero-theme b { font-weight: 600; }
 
 .home-body { position: relative; max-width: 1360px; margin: -8px auto 0; padding: 0 24px 64px; }
@@ -69,4 +71,5 @@
   .home-hero-text { left: 16px; right: 16px; bottom: 40px; }
   .home-hero--plain .home-hero-text { padding: 0 16px; }
   .home-hero-text h1 { font-size: 34px; }
+  .home-releases ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

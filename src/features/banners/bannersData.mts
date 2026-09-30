@@ -10,6 +10,14 @@ export type BannersDoc = { generated_at: number; masterdata: string; asset_base_
   hero: { kv: string; name_cn: string; art: string | null; start: number; end: number } | null;
   events: BannerEvent[]; banners: Banner[] };
 
+// ponytail: one copy per page load (the file only changes with a deploy); lets Back re-render at once, so the router's
+// scroll restore finds the content. A failed load is not kept, the next visit retries.
+let cached: BannersDoc | null = null;
+export const cachedBanners = () => cached;
+export async function loadBannersCached(): Promise<BannersDoc | null> {
+  return cached ?? (cached = await loadBanners());
+}
+
 export async function loadBanners(fetchImpl: typeof fetch = fetch): Promise<BannersDoc | null> {
   try {
     const res = await fetchImpl('/banners.json');
@@ -71,7 +79,36 @@ export function skinImage(b: Banner, characters: Record<string, SkinOwner>): str
 /** The slice's small line (direction-approved.md): label, plus the time left when the banner is open. */
 export function sliceMeta(b: Banner, nowMs: number, isArchive: boolean, timeZone?: string): { label: string; left: string | null } {
   const type = TYPE_VI[b.type] ?? b.kind_cn;
-  if (isArchive) return { label: `${type} · ${formatDate(b.start, timeZone)} – ${formatDate(b.end, timeZone)}`, left: null };
+  if (isArchive) return { label: `${type} · ${formatRange(b.start, b.end, timeZone)}`, left: null };
   if (status(nowMs, b.start, b.end) === 'ended') return { label: 'Đã kết thúc · chờ bản cập nhật', left: null };
   return { label: b.choice ? `Tự chọn trong ${b.choice} Khí Giả` : type, left: remaining(nowMs, b.end) };
+}
+
+/** "20/08 – 10/09/2026" when both dates fall in one year, else both full dates. */
+export function formatRange(startS: number, endS: number, timeZone?: string): string {
+  const a = formatDate(startS, timeZone), b = formatDate(endS, timeZone);
+  return a.slice(6) === b.slice(6) ? `${a.slice(0, 5)} – ${b}` : `${a} – ${b}`;
+}
+
+/** Hero title: the version in Vietnamese ("3.4上" → "Phiên bản 3.4 · Thượng"); an unknown suffix is kept as is. */
+export function versionTitle(label: string): string {
+  const m = label.match(/^(.*?)([上下])$/);
+  return m ? `Phiên bản ${m[1]} · ${m[2] === '上' ? 'Thượng' : 'Hạ'}` : `Phiên bản ${label}`;
+}
+
+export type ArchiveFilters = { character: string; type: string; year: number };
+
+/** Archive filters live in the hash (#/banners?char=A0184&type=limited&year=2024) so Back and shared links keep them. */
+export function readFilters(hash: string): ArchiveFilters {
+  const q = new URLSearchParams(hash.split('?')[1] ?? '');
+  return { character: q.get('char') ?? '', type: q.get('type') ?? '', year: Number(q.get('year')) || 0 };
+}
+
+export function filtersHash(f: ArchiveFilters): string {
+  const q = new URLSearchParams();
+  if (f.character) q.set('char', f.character);
+  if (f.type) q.set('type', f.type);
+  if (f.year) q.set('year', String(f.year));
+  const qs = q.toString();
+  return qs ? `#/banners?${qs}` : '#/banners';
 }

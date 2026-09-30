@@ -97,3 +97,21 @@ archive slices (newest first). "Chưa tải được dữ liệu banner" when `b
 - Taste pass (`.claude/skills/design-taste-frontend`): no empty grid cell (2 + 3 rule), one "·" per meta line, hero
   stack = 3 text lines, version line moved off gold for legibility on bright KV areas.
 - `/impeccable critique`: not run — the state doc (§6) runs critique only when the owner asks.
+
+## Changes after `/impeccable critique` (2026-09-30, 24/40; snapshot `.impeccable/critique/2026-09-30T10-11-27Z__src-features-home-homepage-tsx.md`)
+
+Owner: "sửa hết 5 phần", hero "Tiếng Việt lên đầu".
+- Hero: dates line (`formatRange`), `h1` = `versionTitle(label)` ("Phiên bản 3.4 · Thượng"; 上/下 = Thượng/Hạ), the KV
+  name 经以山海 as a 20 px Chinese line with the ash dot, then "Sự kiện chủ đề {name} · còn {time}" (subject first,
+  the time set apart by a 12 px gap instead of a "·" after the dot).
+- Slices: the name wraps to two lines (no ellipsis); on phones the text zone is 80% wide with a longer fade; a banner
+  without an UP character is a `<div>`, not a link; linked slices show "Xem Khí Giả ›" on hover/focus; the logo has
+  `alt=""` (the name is the accessible text).
+- Banner page: headings "Đang mở" and "Tất cả banner · N banner"; filters live in the hash
+  (`#/banners?char=&type=&year=`, `readFilters`/`filtersHash`, updated with `replaceState`); "Xoá bộ lọc"; a filtered
+  archive searches every banner including the current batch; a legend with the game's channel names; years are
+  `<details>` (newest open, others folded, unfolded years remembered for Back); archive slices are compact (3 per
+  row, 3 / .9, no logo, 17 px name) with short same-year ranges ("20/08 – 10/09/2026").
+- `banners.json` is kept after the first load (`loadBannersCached`) so Back re-renders at once and the router's
+  scroll restore lands on real content (checked: 1200 px restored with year=2025).
+- Home releases: 3 columns on phones.
