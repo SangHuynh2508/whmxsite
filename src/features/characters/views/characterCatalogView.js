@@ -7,6 +7,7 @@ import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 import { fold } from '../../../lib/fold.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { catalogCardHtml } from '../catalogCard.mts';
+import { newestFirst } from '../../../lib/newest.mts';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -89,17 +90,8 @@ export function renderCharacterCatalogView(container) {
         if (valB !== valA) return valB - valA;
         return b.id.localeCompare(a.id);
       } else {
-        // Default: 'latest' (newest release order based on UnlockDate timestamp)
-        const dateA = typeof a.unlock_date === 'number' && a.unlock_date > 0 ? a.unlock_date : 0;
-        const dateB = typeof b.unlock_date === 'number' && b.unlock_date > 0 ? b.unlock_date : 0;
-
-        if (dateA > 0 && dateB > 0) {
-          if (dateB !== dateA) return dateB - dateA;
-          return b.id.localeCompare(a.id);
-        }
-        if (dateA > 0 && dateB <= 0) return -1;
-        if (dateB > 0 && dateA <= 0) return 1;
-        return b.id.localeCompare(a.id);
+        // Default: 'latest' — newest release first (src/lib/newest.mts, shared with the calculator picker and skins)
+        return newestFirst(a.unlock_date, b.unlock_date, a.id, b.id);
       }
     });
   }

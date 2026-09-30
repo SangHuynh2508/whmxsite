@@ -10,6 +10,7 @@ import { createLoreReveal } from '../../../ui/loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smoothScroll.js';
 import '../styles/skinGallery.css';
 import { fold } from '../../../lib/fold.mts';
+import { newestFirst } from '../../../lib/newest.mts';
 
 const normalizeText = (str) => (str ? fold(str).trim() : '');
 
@@ -41,12 +42,13 @@ const ACQUISITION_TAXONOMY = [
   { id: 'free', label: 'Miễn Phí' }
 ];
 
+// Newest first is the default (owner 2026-09-30); the old default (skin id order) stays as "Theo mã trang phục".
 const SORT_OPTIONS = [
-  { value: 'default', label: 'Mặc định' },
+  { value: 'date-desc', label: 'Mới ra mắt gần đây' },
   { value: 'name-asc', label: 'Tên trang phục (A-Z)' },
   { value: 'char-asc', label: 'Tên Khí Giả (A-Z)' },
   { value: 'price-asc', label: 'Giá vé (Thấp đến Cao)' },
-  { value: 'date-desc', label: 'Mới ra mắt gần đây' }
+  { value: 'default', label: 'Theo mã trang phục' }
 ];
 
 // State
@@ -54,7 +56,7 @@ let searchQuery = '';
 let selectedAcquisition = 'all'; // 'all' | 'paid' | 'highskin' | 'travel' | 'event' | 'shop' | 'training' | 'story' | 'free'
 let selectedSeries = 'all'; // 'all' | '202' .. '220'
 let selectedCharacterId = 'all';
-let sortOrder = 'default'; // 'default' | 'name-asc' | 'char-asc' | 'price-asc' | 'date-desc'
+let sortOrder = 'date-desc'; // 'date-desc' | 'name-asc' | 'char-asc' | 'price-asc' | 'default' (skin id)
 
 // Collapsible UI state (in-memory, default collapsed)
 let isAcqOpen = false;
@@ -724,7 +726,7 @@ function getFilteredSkins(skins) {
   } else if (sortOrder === 'price-asc') {
     filtered.sort((a, b) => (a.price || 9999) - (b.price || 9999));
   } else if (sortOrder === 'date-desc') {
-    filtered.sort((a, b) => (b.unlockDate || 0) - (a.unlockDate || 0));
+    filtered.sort((a, b) => newestFirst(a.unlockDate, b.unlockDate, a.skinId, b.skinId));
   } else {
     filtered.sort((a, b) => a.skinId.localeCompare(b.skinId));
   }

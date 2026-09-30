@@ -4,6 +4,7 @@ import { getGameData } from '../data/loader.js';
 import { RARITY_LABELS } from './utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from './utils/avatar.js';
 import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
+import { newestFirst } from '../lib/newest.mts';
 
 let activeJob = 'all';
 let isInitialized = false;
@@ -144,10 +145,8 @@ export function renderCalcPickerRoster() {
 
   rosterEl.innerHTML = '';
 
-  const chars = Object.values(gameData.characters).sort((a, b) => {
-    if (b.rare !== a.rare) return b.rare - a.rare;
-    return a.id.localeCompare(b.id);
-  });
+  // newest release first, like the catalogue (owner 2026-09-30)
+  const chars = Object.values(gameData.characters).sort((a, b) => newestFirst(a.unlock_date, b.unlock_date, a.id, b.id));
 
   let count = 0;
   chars.forEach(char => {

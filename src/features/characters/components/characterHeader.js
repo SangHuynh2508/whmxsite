@@ -124,6 +124,8 @@ function renderCardGallery(char) {
   cardImg.alt = char.name_vi || char.name_cn || '';
   const layers = document.getElementById('profile-card-layers');
   if (layers) layers.innerHTML = cardArtLayers(char.rare, char.job);
+  const cardName = document.getElementById('profile-card-name'); // the same caption as the Tổng quan card
+  if (cardName) cardName.textContent = char.name_vi || char.name_cn || '';
   cardPanel.style.display = '';
 
   // Render thumbnails
