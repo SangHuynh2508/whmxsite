@@ -5985,6 +5985,11 @@
     left: calc(16px + env(safe-area-inset-left, 0px));
   }
 
+  /* the right side has no ☰ below it: "Về đầu trang" sits on the ☰ row, not on the report button's row (owner 2026-10-02) */
+  .whmx-top-btn {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
   .feedback-badge {
     width: 38px;
     height: 38px;
