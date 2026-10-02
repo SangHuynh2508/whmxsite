@@ -109,7 +109,7 @@ existing auto-publish (~30 s) on the client; the owner's "Xuất bản ngay" cov
 `server/game/game-document.mjs` gains `tierLists`: the `published` and `archived` rows, ordered by `position` then slug:
 
 ```
-tierLists: [{ slug, title, author, sourceUrl, status, updatedAt, doc }]
+tierLists: [{ slug, status, updatedAt, doc }]   // doc carries title, author, sourceUrl
 ```
 
 `lore-repository.mjs` `loadGameDocumentInput` adds one select. Drafts never leave the DB. No new file, pointer or

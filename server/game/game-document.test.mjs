@@ -25,7 +25,8 @@ const texts = [
 
 test('the whole catalogue, grouped by kind as in the DB; texts with the lore publish rule', () => {
   const doc = JSON.parse(buildGameDocument({ refs, texts, builds: [] }).body);
-  assert.deepEqual(Object.keys(doc), ['version', 'refs', 'texts', 'builds']);
+  assert.deepEqual(Object.keys(doc), ['version', 'refs', 'texts', 'builds', 'tierLists']);
+  assert.deepEqual(doc.tierLists, []);
   assert.deepEqual(doc.refs.weapon, { 30111: refs[0].data }); // the absent 30999 is left out (no build uses it)
   assert.deepEqual(doc.refs.character_style.D0017.recommendedStyleId, '102');
   assert.deepEqual(doc.texts.weapon['30111'], { cn: '路边物件盾', vi: 'Khiên Ven Đường', detail: '', detail_vi: null });
@@ -69,4 +70,12 @@ test('a build saved before 2026-09-28 is published with rotation steps', () => {
   const builds = [{ characterId: 'D0017', position: 0, doc: { name: 'Cũ', weapons: [], affixes: { groups: [] }, deepens: [], rotations: [{ label: '0 dupe', skillIds: ['D001701'] }] } }];
   const doc = JSON.parse(buildGameDocument({ refs, texts, builds }).body);
   assert.deepEqual(doc.builds.D0017[0].rotations, [{ label: '0 dupe', note: '', steps: [{ skillId: 'D001701', note: '' }] }]);
+});
+
+test('tier lists: drafts stay private, the rest by position then slug', () => {
+  const at = new Date('2026-10-02T10:00:00Z');
+  const list = (slug, status, position) => ({ slug, status, position, updatedAt: at, doc: { title: slug } });
+  const doc = JSON.parse(buildGameDocument({ refs, texts, builds: [], tierLists: [list('b', 'archived', 1), list('d', 'draft', 0), list('a', 'published', 1), list('c', 'published', 0)] }).body);
+  assert.deepEqual(doc.tierLists.map((l) => [l.slug, l.status]), [['c', 'published'], ['a', 'published'], ['b', 'archived']]);
+  assert.deepEqual(doc.tierLists[0], { slug: 'c', status: 'published', updatedAt: '2026-10-02T10:00:00.000Z', doc: { title: 'c' } });
 });

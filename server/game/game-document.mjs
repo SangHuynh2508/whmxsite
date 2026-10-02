@@ -4,7 +4,8 @@
 //   { version: 1,
 //     refs:  { <kind>: { <code>: data } },                      // game_references, the whole catalogue
 //     texts: { <kind>: { <code>: { cn, vi, detail, detail_vi } } }, // game_texts, VI only when published (lore rule)
-//     builds: { <characterId>: [doc, …] } }                     // character_builds in position order
+//     builds: { <characterId>: [doc, …] },                    // character_builds in position order
+//     tierLists: [{ slug, status, updatedAt, doc }] }         // published + archived tier lists (drafts stay in the DB)
 // Objects gone from MasterData (source_present = false) are published only while a build still uses them.
 import { createHash } from 'node:crypto';
 
@@ -24,7 +25,7 @@ function usedByBuilds(builds) {
   return used;
 }
 
-export function buildGameDocument({ refs, texts, builds }) {
+export function buildGameDocument({ refs, texts, builds, tierLists = [] }) {
   const used = usedByBuilds(builds);
   const published = (row) => row.sourcePresent || used.has(`${row.kind}|${row.code}`);
 
@@ -40,7 +41,11 @@ export function buildGameDocument({ refs, texts, builds }) {
     (outBuilds[characterId] ??= []).push(normalizeBuild(doc));
   }
 
-  const body = JSON.stringify({ version: 1, refs: outRefs, texts: outTexts, builds: outBuilds });
+  const outLists = tierLists.filter((l) => l.status !== 'draft')
+    .sort((a, b) => a.position - b.position || a.slug.localeCompare(b.slug))
+    .map((l) => ({ slug: l.slug, status: l.status, updatedAt: new Date(l.updatedAt).toISOString(), doc: l.doc }));
+
+  const body = JSON.stringify({ version: 1, refs: outRefs, texts: outTexts, builds: outBuilds, tierLists: outLists });
   const hash = createHash('sha256').update(body).digest('hex').slice(0, 12);
   return { body, hash, fileName: `game.${hash}.json` };
 }
