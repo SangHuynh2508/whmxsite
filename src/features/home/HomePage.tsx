@@ -1,17 +1,48 @@
 // Home (spec 2026-09-30 §5, docs/public-redesign/home/direction-approved.md): the season KV as a hero fading into the
-// page, the banners that are open, the events running, what was just released.
-import { useRef } from 'react';
+// page, the banners that are open, the events running, the lore translation, what was just released.
+import { useEffect, useRef, useState } from 'react';
 import { BannerGrid, Cn, type SliceChar } from '../banners/BannerSlice.tsx';
 import { remaining } from '../banners/bannerTime.mts';
 import { artUrl, eventKind, currentBanners, currentEvents, formatRange, versionTitle, type BannersDoc } from '../banners/bannersData.mts';
 import { useNow } from '../banners/useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { newReleases, type ReleaseChar } from './newReleases.mts';
-import { getGameData } from '../../data/loader.js';
+import { loreProgress } from './loreProgress.mts';
+import { getGameData, loreOverlayMerged } from '../../data/loader.js';
 import { bannerIsland } from '../banners/island.tsx';
 import './styles/home.css';
 
-type HomeChar = SliceChar & ReleaseChar;
+type HomeChar = SliceChar & ReleaseChar & { profile?: Record<string, any> };
+
+// Hidden until the lore overlay is merged and once everything is translated (loreProgress.visible).
+function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
+  const [, setMerged] = useState(false);
+  useEffect(() => {
+    let live = true;
+    loreOverlayMerged().then(() => { if (live) setMerged(true); });
+    return () => { live = false; };
+  }, []);
+  const p = loreProgress(characters);
+  if (!p.visible) return null;
+  const n = (v: number) => v.toLocaleString('vi-VN');
+  return (
+    <section className="home-block home-lore" aria-label="Bản dịch Hồ Sơ">
+      <h2 className="home-h2">Bản dịch Hồ Sơ</h2>
+      <p className="home-lore-count"><b>{p.done}</b>/{p.total} hồ sơ dịch xong · <b>{n(p.unitsDone)}</b>/{n(p.unitsTotal)} đoạn văn</p>
+      <span className="home-lore-bar" role="progressbar" aria-label="Đoạn văn đã dịch" aria-valuemin={0} aria-valuemax={p.unitsTotal} aria-valuenow={p.unitsDone}>
+        <span style={{ width: `${(p.unitsDone / p.unitsTotal) * 100}%` }} />
+      </span>
+      {p.recent.length > 0 && (
+        <>
+          <h3 className="home-lore-h3">Mới dịch</h3>
+          <ul className="home-lore-recent">{p.recent.map((id) => { const c = characters[id]; return (
+            <li key={id}><a href={`#/characters/${c.slug}/lore`}>{c.name_vi || c.name_cn}</a></li>
+          ); })}</ul>
+        </>
+      )}
+    </section>
+  );
+}
 
 export function HomePage({ doc }: { doc: BannersDoc | null }) {
   const characters = getGameData().characters as Record<string, HomeChar>;
@@ -45,18 +76,21 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
             : <p className="bn-error">Chưa tải được dữ liệu banner</p>}
         </section>
         <div className="home-row">
-          {events.length > 0 && (
-            <section className="home-block home-events" aria-label="Sự kiện đang diễn ra">
-              <h2 className="home-h2">Sự kiện đang diễn ra</h2>
-              <ul>{events.map((e) => { const kind = eventKind(e.kind_cn); return (
-                <li key={e.id}>
-                  <span className="home-event-kind">{kind.vi ? kind.text : <Cn text={e.kind_cn} />}</span>
-                  <span className="home-event-name"><Cn text={e.name_cn} /></span>
-                  <span className="home-event-left">Còn <b>{remaining(now, e.end)}</b></span>
-                </li>
-              ); })}</ul>
-            </section>
-          )}
+          <div className="home-col">
+            {events.length > 0 && (
+              <section className="home-block home-events" aria-label="Sự kiện đang diễn ra">
+                <h2 className="home-h2">Sự kiện đang diễn ra</h2>
+                <ul>{events.map((e) => { const kind = eventKind(e.kind_cn); return (
+                  <li key={e.id}>
+                    <span className="home-event-kind">{kind.vi ? kind.text : <Cn text={e.kind_cn} />}</span>
+                    <span className="home-event-name"><Cn text={e.name_cn} /></span>
+                    <span className="home-event-left">Còn <b>{remaining(now, e.end)}</b></span>
+                  </li>
+                ); })}</ul>
+              </section>
+            )}
+            <LoreBlock characters={characters} />
+          </div>
           {releases.length > 0 && (
             <section className="home-block home-releases" aria-label="Mới ra mắt">
               <h2 className="home-h2">Mới ra mắt</h2>

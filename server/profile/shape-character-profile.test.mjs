@@ -101,3 +101,19 @@ test('v2 exports the quote (published VI only)', () => {
   assert.deepEqual([v2.quote, v2.quote_vi], ['我是器者。', 'Ta là khí giả.']);
   assert.deepEqual([shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }).quote], ['']);
 });
+
+// Home "Bản dịch Hồ Sơ" (2026-10-02): the latest published VI of a main text orders "Mới dịch"; report titles and
+// timeline labels are short labels, not a translation milestone.
+test('v2 vi_updated_at is the latest published main-text VI, else null', () => {
+  const at = (iso) => new Date(iso);
+  const dated = new Map([
+    ['card_intro', { ...t('介绍', 'Giới thiệu', 'admin'), viUpdatedAt: at('2026-09-20T01:00:00Z') }],
+    ['report.V005301.content', { ...t('内容1', 'Nội dung 1', 'admin'), viUpdatedAt: at('2026-09-25T01:00:00Z') }],
+    ['report.V005301.title', { ...t('报告1', 'Báo cáo 1', 'admin'), viUpdatedAt: at('2026-09-30T01:00:00Z') }],
+    ['timeline.A.label', { ...t('战国', 'Chiến Quốc', 'admin'), viUpdatedAt: at('2026-09-30T01:00:00Z') }],
+    ['relic_intro', { ...t('本源', 'nháp', 'admin', 'source_changed'), viUpdatedAt: at('2026-09-29T01:00:00Z') }],
+  ]);
+  assert.equal(shapeCharacterProfile({ profile, texts: dated }, terms, { shape: 'v2' }).vi_updated_at, '2026-09-25T01:00:00.000Z');
+  assert.equal(shapeCharacterProfile({ profile, texts: new Map() }, terms, { shape: 'v2' }).vi_updated_at, null);
+  assert.equal('vi_updated_at' in shapeCharacterProfile({ profile, texts: dated }, terms, { shape: 'legacy' }), false);
+});

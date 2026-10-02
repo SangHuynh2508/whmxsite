@@ -8,6 +8,15 @@ export function publishableVi(row, field = 'vi') {
 
 const cnOf = (texts, key) => texts.get(key)?.sourceCn ?? '';
 const viOf = (texts, key) => publishableVi(texts.get(key));
+// Latest published VI of a main text (Home "Mới dịch" order); titles and timeline labels are short labels.
+function viUpdatedAt(texts) {
+  let latest = null;
+  for (const [key, row] of texts) {
+    if (/\.(title|label)$/.test(key) || !publishableVi(row) || !row.viUpdatedAt) continue;
+    if (!latest || row.viUpdatedAt > latest) latest = row.viUpdatedAt;
+  }
+  return latest ? new Date(latest).toISOString() : null;
+}
 const map = (table, cn) => (Object.hasOwn(table, cn) ? table[cn] : cn);
 
 function department(profile, terms, shape) {
@@ -49,6 +58,7 @@ export function shapeCharacterProfile({ profile, texts }, terms, { shape }) {
   const org = profile.organisationCode ? terms.get(`ORG_${profile.organisationCode}`) : null;
   return {
     ...base,
+    vi_updated_at: viUpdatedAt(texts),
     department_detail: { cn: org?.detailCn ?? '', vi: publishableVi(org, 'detailVi') },
     quote: cnOf(texts, 'quote'), quote_vi: viOf(texts, 'quote'),
     eval_intro: cnOf(texts, 'card_intro'),
