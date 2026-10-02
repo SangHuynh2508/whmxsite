@@ -19,7 +19,7 @@ CALC="$WHMX/WhmxCalc"
 ADB="/d/Program Files/Netease/MuMuPlayer/nx_device/15.0/shell/adb.exe"
 DEVICE="127.0.0.1:16384"          # lấy serial thật từ "$ADB" devices -l; KHÔNG dùng emulator-5554 cũ
 PACKAGE="com.cipaishe.wuhua.bilibili"
-SNAPSHOT="r3057-20260929T130948564397Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
+SNAPSHOT="r3075-20261002T063717851473Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
 ```
 
 ---
