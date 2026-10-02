@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Calculator, LayoutGrid, LogIn, LogOut, Search, ShieldCheck, Shirt, Trophy, UsersRound } from 'lucide-react';
+import { Calculator, LayoutGrid, LogIn, LogOut, Podium, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
 import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
@@ -20,7 +20,7 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 // Only the hot pages sit in the rail; Home is the brand mark, Banner and Vũ Khí live in "Thông tin" (owner 2026-09-30).
 const PUBLIC_LINKS = [
   { href: '#/characters', label: 'Khí Giả', icon: UsersRound, views: ['catalog', 'character'] },
-  { href: '#/tier-list', label: 'Tier List', icon: Trophy, views: ['tier-list'] },
+  { href: '#/tier-list', label: 'Tier List', icon: Podium, views: ['tier-list'] },
   { href: '#/gallery', label: 'Trang Phục', icon: Shirt, views: ['gallery', 'skin-detail'] },
   { href: '#/info', label: 'Thông tin', icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
   { href: '#calc', label: 'Công cụ', icon: Calculator, views: ['calculator'] },
