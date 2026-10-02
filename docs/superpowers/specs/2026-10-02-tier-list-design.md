@@ -128,9 +128,8 @@ backup path (the daily backup already dumps the DB payload — add `tier_lists` 
 - **Files:**
   - `TierListPage.tsx` — island: loads the game document (`loadedGameDocument()`), header (title, "Tham khảo tier list
     của …", "Cập nhật …"), tabs (real tablist, ←/→), the sticky search + filter bar (Nhân vật only), the active panel.
-  - `TierBoard.tsx` — Solo: tier groups (description line, then each tier label + its tiles). Props `{ list, filter,
-    renderTile? }` so the Admin can wrap tiles with drag handles.
-  - `TeamsPanel.tsx`, `InfoPanel.tsx` (plain-text paragraphs/bullets via one small pure function).
+  - The Nhân vật / Đội hình / Thông tin panels live inside `TierListPage.tsx` (`TierListView`, exported for the Admin
+    preview) — one small file per panel was not worth it (plan 2026-10-02).
   - `TierFilter.tsx` — the filter icon + popover/bottom sheet (non-modal ≥ 641 px, modal sheet below), chips updated in
     place, counts, legend, "Xoá lọc" / "Đóng".
   - `tierView.mts` (pure, tested): `groupTiers(tiers)` (joinAbove), `matchEntry(entry, character, { jobs, rarities, q })`
@@ -150,8 +149,9 @@ backup path (the daily backup already dumps the DB payload — add `tier_lists` 
 - `nav.ts` gains `{ id: 'tier-lists', href: '#/admin/tier-lists', label: 'Tier List' }`; `AdminApp.tsx` renders the view.
 - `TierListsView.tsx`: rows (title, slug, status select, position up/down), "Tạo mới" (slug + title), delete for the
   owner (native confirm).
-- `TierListEditor.tsx` at `#/admin/tier-lists/<slug>`: header fields (title, author, source URL), tabs Solo / Team / Info
-  mirroring the public page; Solo = public `TierBoard` with editable tiles + tier controls (label, description,
+- `TierListEditor.tsx` at `#/admin/tier-lists/<slug>`: header fields (title, author, source URL), tabs Nhân vật / Đội hình /
+  Thông tin / **Xem trước** (the real public `TierListView` with the draft — the shared-renderer rule); Nhân vật = the
+  public `CharacterTile`s in editable tier rows + tier controls (label, description,
   "Dùng chung mô tả với tier trên", add / remove / up / down); a side **pool** of all characters with search and
   job/rarity chips; drag from pool or tile onto a tier position (native HTML5 DnD); per-tile menu: chuyển tới tier…,
   Z (none/1–6), HC (only when the character has it), nhân bản, xoá. Team: groups with name/note, member slots (max 6),
