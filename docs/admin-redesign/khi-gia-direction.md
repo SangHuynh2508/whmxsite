@@ -1,6 +1,6 @@
 # Khí Giả (React) — approved visual direction (build spec)
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-09-29.md`](../WHMX_CURRENT_STATE_FINAL_2026-09-29.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../PRODUCT.md). Related: [`direction-approved.md`](khi-gia/direction-approved.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../WHMX_CURRENT_STATE_FINAL_2026-10-02.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../../PRODUCT.md). Related: [`direction-approved.md`](khi-gia/direction-approved.md), [`2026-09-25-admin-khi-gia-lore-design.md`](../superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 > Plan: `docs/superpowers/plans/2026-09-25-admin-khi-gia-phase1.md` Task 2 step 3. Gate file and owner's words:
 > `khi-gia/direction-approved.md`. Reference prototype: `khi-gia/design-demos/approved-mix.html`

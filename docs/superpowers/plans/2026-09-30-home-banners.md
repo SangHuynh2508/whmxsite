@@ -20,7 +20,7 @@ updates and data work. **The implementation runs in its own session.** State at 
   `ponytail:ponytail-review`. Task 6 stops for the owner's pick; Task 2 upload and Task 10 push/deploy/prune need an owner yes.
 - **Git:** branch `feat/postgres-admin-crud`, HEAD `d0f07d2` = `origin/main` (pushed 2026-09-30). **Uncommitted, written by
   the data session:** this plan, the spec `docs/superpowers/specs/2026-09-30-home-banners-design.md`,
-  `docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md` (r3071 row, roadmap 6c chibi + this feature), `docs/WHMX_COMMANDS.md`
+  `docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md` (r3071 row, roadmap 6c chibi + this feature), `docs/WHMX_COMMANDS.md`
   (`SNAPSHOT` → r3071). Commit the spec + plan with Task 1 (owner said "chưa commit" before the handoff — ask once if
   unsure); leave the state/commands docs to the data session unless the owner says otherwise. Owner files that are
   never staged: `localization/localization_master.xlsx` (modified) and all untracked owner/tool files.
@@ -37,7 +37,7 @@ updates and data work. **The implementation runs in its own session.** State at 
   game update lands mid-way, re-run `tools/build_banner_data.py` only.
 - **Gotchas:** `*.test.mts` are excluded from `tsc`; `lucide-react` 1.47 has `House`, not `Home`; UnityPy bundle lookup must
   match **FileMD5** (MD5Name is stable across versions); the hidden browser pane gives no animation frames — use the
-  Playwright MCP for route/motion checks (`docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md` §7).
+  Playwright MCP for route/motion checks (`docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md` §7).
 
 ## Global Constraints
 
@@ -80,7 +80,7 @@ updates and data work. **The implementation runs in its own session.** State at 
 | `src/features/banners/styles/banners.css`, `src/features/home/styles/home.css` (create) | styles from the approved direction |
 | `src/app/router/router.js`, `index.html`, `src/app/layout/AppNav.tsx` (modify) | routing, containers, nav items |
 | `docs/public-redesign/home/` (create) | design demos + `direction-approved.md` |
-| `docs/WHMX_COMMANDS.md`, `docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md` (modify) | release-day step, status |
+| `docs/WHMX_COMMANDS.md`, `docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md` (modify) | release-day step, status |
 
 ---
 
@@ -1305,7 +1305,7 @@ git commit -m "feat(nav): Home at #/ and Banner page at #/banners"
 ### Task 10: Browser verification, release-day docs, owner gates
 
 **Files:**
-- Modify: `docs/WHMX_COMMANDS.md` (§4 step C), `docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md` (§2 status row, §11 roadmap line), `docs/superpowers/specs/2026-09-30-home-banners-design.md` (status line)
+- Modify: `docs/WHMX_COMMANDS.md` (§4 step C), `docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md` (§2 status row, §11 roadmap line), `docs/superpowers/specs/2026-09-30-home-banners-design.md` (status line)
 
 - [ ] **Step 1: Browser checks (Playwright MCP, dev server `preview_start whmxcalc-dev`, port 5173):**
   - `#/` and `#/banners` at 1440×900 and 390×844: no horizontal scroll (`document.documentElement.scrollWidth <= innerWidth`), all blocks visible, countdown text present on active cards.
@@ -1330,6 +1330,6 @@ python tools/build_banner_data.py                # MasterData → public/banners
 - [ ] **Step 5: Commit docs**
 
 ```bash
-git add docs/WHMX_COMMANDS.md docs/WHMX_CURRENT_STATE_FINAL_2026-09-29.md docs/superpowers/specs/2026-09-30-home-banners-design.md docs/superpowers/plans/2026-09-30-home-banners.md
+git add docs/WHMX_COMMANDS.md docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md docs/superpowers/specs/2026-09-30-home-banners-design.md docs/superpowers/plans/2026-09-30-home-banners.md
 git commit -m "docs: Home + Banner release-day steps and status"
 ```
