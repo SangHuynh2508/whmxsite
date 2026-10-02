@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Button, Notice, SkeletonRows } from '../layout/ui';
+import { BackToTop, Button, Notice, SkeletonRows } from '../layout/ui';
 import { getGameTexts, getLoreTerms, patchGameText, patchLoreTerm } from './loreApi.js';
 import { lorePublisher, usePublishStatus } from './lorePublish';
 import { useEditor } from './useEditor';
@@ -63,8 +63,9 @@ export function DictionaryView() {
     addEventListener('hashchange', onHash);
     return () => removeEventListener('hashchange', onHash);
   }, []);
+  const scroller = useRef<HTMLDivElement>(null);
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto">
+    <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto max-w-[1100px] px-4 pb-24 pt-6 md:px-10 md:pt-10">
         <nav aria-label="Phần" className="mb-2 flex flex-wrap gap-x-7 gap-y-2 border-b border-(--border-color)">
           {DICTIONARY_TABS.map(([id, label]) => (
@@ -74,6 +75,7 @@ export function DictionaryView() {
         </nav>
         <TermsTab key={route.tab} tab={route.tab} code={route.code} />
       </div>
+      <BackToTop scroller={scroller} />
     </div>
   );
 }

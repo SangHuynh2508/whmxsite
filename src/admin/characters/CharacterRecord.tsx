@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState, type ComponentType } from 'react';
-import { ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button, Notice, SkeletonRows } from '../layout/ui';
+import { BackToTop, Button, Notice, SkeletonRows } from '../layout/ui';
 import { getCharacter } from './charactersApi.js';
 import { recordHref, type ModuleId } from './lib/route.mts';
 import { Avatar, characterAvatar } from './components/Avatar';
@@ -66,28 +65,7 @@ export function CharacterRecord({ id, module }: { id: string; module: ModuleId }
       {error && <Notice className="m-4">Không tải được hồ sơ {id}. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>}
       {!data && !error && <SkeletonRows />}
       {data && <active.Component key={active.id} data={data} reload={reload} />}
-      <BackToTop />
+      <BackToTop className="lg:hidden" />{/* phones: the page scrolls, the panes don't */}
     </div>
-  );
-}
-
-// Phones: the page scrolls (panes don't), so offer a way back up past long modules.
-function BackToTop() {
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setShown(scrollY > 480);
-    addEventListener('scroll', onScroll, { passive: true });
-    return () => removeEventListener('scroll', onScroll);
-  }, []);
-  if (!shown) return null;
-  return (
-    <button
-      type="button"
-      aria-label="Lên đầu trang"
-      onClick={() => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
-      className="fixed bottom-[calc(var(--admin-dock)+4rem)] right-4 z-20 grid size-10 place-items-center rounded-full border border-(--border-strong) bg-(--bg-elevated) text-(--text-muted) shadow-lg lg:hidden"
-    >
-      <ArrowUp size={16} aria-hidden />
-    </button>
   );
 }

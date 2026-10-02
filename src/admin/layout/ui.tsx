@@ -1,5 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode, type RefObject, type SelectHTMLAttributes } from 'react';
+import { ArrowUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /* ---------- Vietnamese labels for raw enum data (raw value stays visible next to them) ---------- */
@@ -170,5 +170,30 @@ export function ViewHeader({ title, meta, children }: { title: string; meta?: Re
       {meta && <span className="min-w-0 truncate text-[13px] text-(--text-muted)">{meta}</span>}
       <div className="ml-auto flex items-center gap-1.5">{children}</div>
     </header>
+  );
+}
+
+/* ---------- "Lên đầu trang" for long admin pages ---------- */
+// Phones scroll the window; wide screens scroll the view's own box (`scroller`). Shown past 480 px of either.
+export function BackToTop({ scroller, className }: { scroller?: RefObject<HTMLElement | null>; className?: string }) {
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const box = scroller?.current;
+    const onScroll = () => setShown(scrollY > 480 || (box?.scrollTop ?? 0) > 480);
+    addEventListener('scroll', onScroll, { passive: true });
+    box?.addEventListener('scroll', onScroll, { passive: true });
+    return () => { removeEventListener('scroll', onScroll); box?.removeEventListener('scroll', onScroll); };
+  }, [scroller]);
+  if (!shown) return null;
+  const top = () => {
+    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    scrollTo({ top: 0, behavior });
+    scroller?.current?.scrollTo({ top: 0, behavior });
+  };
+  return (
+    <button type="button" aria-label="Lên đầu trang" title="Lên đầu trang" onClick={top}
+      className={cn('fixed bottom-[calc(var(--admin-dock)+4rem)] right-4 z-20 grid size-10 place-items-center rounded-full border border-(--border-strong) bg-(--bg-elevated) text-(--text-muted) hover:text-(--text-main) focus-visible:outline-2 focus-visible:outline-(--accent)', className)}>
+      <ArrowUp size={16} aria-hidden />
+    </button>
   );
 }
