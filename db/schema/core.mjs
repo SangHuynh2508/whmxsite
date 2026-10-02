@@ -28,6 +28,7 @@ export const managedEntityType = pgEnum('managed_entity_type', [
   'lore_term',
   'character_build',
   'game_text',
+  'tier_list',
 ]);
 export const editEventType = pgEnum('edit_event_type', [
   'human_edit',
