@@ -1,5 +1,6 @@
 // Admin → Tier List: every list (title, slug, status, order) + "Tạo mới"; #/admin/tier-lists/<slug> opens the editor.
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { cn } from '@/lib/utils';
 import { Button, Field, Notice, Select, SkeletonRows, describeError, inputClass } from '../layout/ui';
 import { lorePublisher } from '../characters/lorePublish';
 import { createTierList, deleteTierList, listTierLists, saveTierList } from './tierListApi.js';
@@ -56,8 +57,8 @@ export default function TierListsView({ isOwner }: { isOwner: boolean }) {
         </tbody>
       </table>
       <form onSubmit={create} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-        <Field label="Tiêu đề"><input className={inputClass} required maxLength={80} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
-        <Field label="Slug (không đổi được)" hint="a-z, 0-9, dấu gạch; vd. tong-hop"><input className={inputClass} required maxLength={40} pattern="[a-z0-9]+(-[a-z0-9]+)*" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
+        <Field label="Tiêu đề"><input className={cn(inputClass, 'h-9')} required maxLength={80} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
+        <Field label="Slug · a-z, 0-9, dấu gạch · không đổi được"><input className={cn(inputClass, 'h-9')} required maxLength={40} pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="tong-hop" title="a-z, 0-9 và dấu gạch, vd. tong-hop" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
         <Button variant="primary" type="submit">Tạo mới</Button>
       </form>
     </div>

@@ -127,7 +127,7 @@ export function TierListEditor({ slug }: { slug: string }) {
   const poolPanel = (
     <aside className="grid content-start gap-2 xl:sticky xl:top-[60px]">
       <SectionTitle>Khí Giả</SectionTitle>
-      <input className={inputClass} placeholder="Tìm tên" value={pool.q} onChange={(e) => setPool({ ...pool, q: e.target.value })} aria-label="Tìm Khí Giả" />
+      <input className={cn(inputClass, 'h-9')} placeholder="Tìm tên" value={pool.q} onChange={(e) => setPool({ ...pool, q: e.target.value })} aria-label="Tìm Khí Giả" />
       <div className="flex gap-2">
         <Select aria-label="Nghề" value={pool.job} onChange={(e) => setPool({ ...pool, job: Number(e.target.value) })}><option value={0}>Mọi nghề</option>{Object.entries(JOB_NAMES).map(([n, l]) => <option key={n} value={n}>{l}</option>)}</Select>
         <Select aria-label="Độ hiếm" value={pool.rare} onChange={(e) => setPool({ ...pool, rare: Number(e.target.value) })}><option value={0}>Mọi độ hiếm</option>{[4, 3, 2].map((r) => <option key={r} value={r}>{RARITY_LABELS[r]}</option>)}</Select>
@@ -172,18 +172,18 @@ export function TierListEditor({ slug }: { slug: string }) {
         <div className="grid gap-8 px-4 py-6 lg:px-6 xl:grid-cols-[minmax(0,1fr)_340px]">
           <div className="grid content-start gap-6">
             <div className="grid gap-3 sm:grid-cols-3">
-              <Field label="Tiêu đề"><input className={inputClass} maxLength={80} value={draft.title} onChange={(e) => set({ ...draft, title: e.target.value })} /></Field>
-              <Field label="Tác giả (ghi công)"><input className={inputClass} maxLength={80} value={draft.author} onChange={(e) => set({ ...draft, author: e.target.value })} /></Field>
-              <Field label="Link nguồn"><input className={inputClass} maxLength={300} value={draft.sourceUrl} onChange={(e) => set({ ...draft, sourceUrl: e.target.value })} /></Field>
+              <Field label="Tiêu đề"><input className={cn(inputClass, 'h-9')} maxLength={80} value={draft.title} onChange={(e) => set({ ...draft, title: e.target.value })} /></Field>
+              <Field label="Tác giả (ghi công)"><input className={cn(inputClass, 'h-9')} maxLength={80} value={draft.author} onChange={(e) => set({ ...draft, author: e.target.value })} /></Field>
+              <Field label="Link nguồn"><input className={cn(inputClass, 'h-9')} maxLength={300} value={draft.sourceUrl} onChange={(e) => set({ ...draft, sourceUrl: e.target.value })} /></Field>
             </div>
             {view === 'characters' && (
               <>
-                <Field label="Ghi chú đầu tab Nhân vật"><textarea className={inputClass} rows={2} maxLength={1000} value={draft.solo.note} onChange={(e) => set({ ...draft, solo: { ...draft.solo, note: e.target.value } })} /></Field>
+                <Field label="Ghi chú đầu tab Nhân vật"><textarea className={cn(inputClass, 'py-2')} rows={2} maxLength={1000} value={draft.solo.note} onChange={(e) => set({ ...draft, solo: { ...draft.solo, note: e.target.value } })} /></Field>
                 {draft.solo.tiers.map((t, i) => (
                   <section key={i} className="grid gap-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <input className={cn(inputClass, 'w-20 font-serif text-lg')} maxLength={6} aria-label={`Nhãn tier ${i + 1}`} value={t.label} onChange={(e) => set(updateTier(draft, i, { label: e.target.value }))} />
-                      {!t.joinAbove && <input className={cn(inputClass, 'min-w-[240px] flex-1')} maxLength={200} placeholder="Mô tả (tuỳ chọn)" aria-label={`Mô tả tier ${t.label}`} value={t.description} onChange={(e) => set(updateTier(draft, i, { description: e.target.value }))} />}
+                      <input className={cn(inputClass, 'h-9 w-20 font-serif text-lg')} maxLength={6} aria-label={`Nhãn tier ${i + 1}`} value={t.label} onChange={(e) => set(updateTier(draft, i, { label: e.target.value }))} />
+                      {!t.joinAbove && <input className={cn(inputClass, 'h-9 min-w-[240px] flex-1')} maxLength={200} placeholder="Mô tả (tuỳ chọn)" aria-label={`Mô tả tier ${t.label}`} value={t.description} onChange={(e) => set(updateTier(draft, i, { description: e.target.value }))} />}
                       {i > 0 && <label className="flex items-center gap-1 text-xs text-(--text-muted)"><input type="checkbox" checked={t.joinAbove} onChange={(e) => set(updateTier(draft, i, { joinAbove: e.target.checked }))} /> Dùng chung mô tả với tier trên</label>}
                       <span className="ml-auto flex gap-1">
                         <Button variant="ghost" aria-label="Tier lên" disabled={i === 0} onClick={() => set(moveTier(draft, i, -1))}>↑</Button>
@@ -199,17 +199,17 @@ export function TierListEditor({ slug }: { slug: string }) {
             )}
             {view === 'teams' && (
               <>
-                <Field label="Ghi chú đầu tab Đội hình"><textarea className={inputClass} rows={2} maxLength={1000} value={draft.teams.note} onChange={(e) => set({ ...draft, teams: { ...draft.teams, note: e.target.value } })} /></Field>
+                <Field label="Ghi chú đầu tab Đội hình"><textarea className={cn(inputClass, 'py-2')} rows={2} maxLength={1000} value={draft.teams.note} onChange={(e) => set({ ...draft, teams: { ...draft.teams, note: e.target.value } })} /></Field>
                 {draft.teams.groups.map((g, i) => (
                   <section key={i} className="grid gap-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <input className={cn(inputClass, 'min-w-[200px] flex-1')} maxLength={60} placeholder="Tên đội" aria-label={`Tên đội ${i + 1}`} value={g.name} onChange={(e) => set(updateTeam(draft, i, { name: e.target.value }))} />
+                      <input className={cn(inputClass, 'h-9 min-w-[200px] flex-1')} maxLength={60} placeholder="Tên đội" aria-label={`Tên đội ${i + 1}`} value={g.name} onChange={(e) => set(updateTeam(draft, i, { name: e.target.value }))} />
                       <span className="text-xs text-(--text-muted)">{g.members.length}/6</span>
                       <Button variant="ghost" aria-label="Đội lên" disabled={i === 0} onClick={() => set(moveTeam(draft, i, -1))}>↑</Button>
                       <Button variant="ghost" aria-label="Đội xuống" disabled={i === draft.teams.groups.length - 1} onClick={() => set(moveTeam(draft, i, 1))}>↓</Button>
                       <Button variant="ghost" onClick={() => set(removeTeam(draft, i))}>Xoá đội</Button>
                     </div>
-                    <input className={inputClass} maxLength={300} placeholder="Ghi chú (tuỳ chọn)" aria-label={`Ghi chú đội ${i + 1}`} value={g.note} onChange={(e) => set(updateTeam(draft, i, { note: e.target.value }))} />
+                    <input className={cn(inputClass, 'h-9')} maxLength={300} placeholder="Ghi chú (tuỳ chọn)" aria-label={`Ghi chú đội ${i + 1}`} value={g.note} onChange={(e) => set(updateTeam(draft, i, { note: e.target.value }))} />
                     {zone('team', i, g.members)}
                   </section>
                 ))}
@@ -218,7 +218,7 @@ export function TierListEditor({ slug }: { slug: string }) {
             )}
             {view === 'info' && (
               <Field label="Thông tin" hint="Dòng trống = đoạn mới · dòng bắt đầu bằng “- ” = gạch đầu dòng · tab ẩn khi để trống">
-                <textarea className={inputClass} rows={14} maxLength={5000} value={draft.info} onChange={(e) => set({ ...draft, info: e.target.value })} />
+                <textarea className={cn(inputClass, 'py-2')} rows={14} maxLength={5000} value={draft.info} onChange={(e) => set({ ...draft, info: e.target.value })} />
               </Field>
             )}
           </div>
