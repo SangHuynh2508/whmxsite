@@ -1,7 +1,7 @@
 # Tier list — design (spec)
 
-> Status: **spec, waiting for owner review** (brainstorming 2026-09-29 → 2026-10-02). Next: huashu-design (3 directions
-> for the public page + character tile, owner picks) → `superpowers:writing-plans` → implementation.
+> Status: **spec approved 2026-10-02; design approved (D3, `public-redesign/tier-list/direction-approved.md`)**. Next:
+> `superpowers:writing-plans` → implementation.
 > Roadmap: state file §11 item 2. Reference model: s1n.gg (`/tierlist/comfy`: lists with an author, tiers with a
 > description line, variant badges such as "S1 000", tabs Info / Solo / Team comps).
 
@@ -23,20 +23,21 @@ worth it. Tapping a character opens that character's Build tab.
 |---|---|
 | Author | Free text + optional source URL, shown as "Tham khảo tier list của …"; not tied to an Admin account |
 | Status | `draft` (not published) / `published` / `archived` (still readable, "Cũ" label, listed last) |
-| Tabs | Info + Solo + Team; an empty tab is hidden. Solo is the default |
+| Tabs | **Nhân vật** (tiers; owner renamed "Solo") + **Đội hình** + **Thông tin**; Đội hình / Thông tin only exist when they have content, and with one tab left the tab bar disappears. Nhân vật is the default |
 | Updated | "Cập nhật dd/mm/yyyy" from the last save; game-version remarks go in Info |
 | Tiers | Per list, free label ≤ 6 chars; a new list starts with S+ / S / A / B / C / D / X ("Chưa thử"). No per-tier colour (One Lamp Rule; the look is settled in huashu) |
 | Description | Optional per tier and shown **only for that tier**. A tier may tick "Dùng chung mô tả với tier trên" (`joinAbove`) to sit under the description of the tier above (s1n's S+ and S share one line). Description only on S+ → only S+ shows one |
 | Order | The order inside a tier is meaningful and kept; filters hide tiles, never re-sort |
 | Badge | **Z1–Z6** = Trí Tri milestone (every character has 6), **HC** = Hoán Chương (on/off: one level; 49 of 135 characters have it). Inside the avatar, bottom-right, side by side when both ("Z3 HC"); as text "(Z3 · HC)" next to the name when the avatar is too small. The same character may appear several times in a tab with different badges |
 | Tile tap | Always the character's Build tab (`#/characters/<slug>/build`); a character without a build shows the existing empty Build state. No per-tile note, no specific-build link |
-| Filters | Job chips (5 jobs) and rarity chips (only rarities present in the list), multi-select, AND between the two rows; a tier left empty is hidden. Team tab: teams with no member matching are dimmed. Not kept in the URL |
+| Filters | **Nhân vật tab only** (owner: teams are not filtered). One small filter icon (count badge when active) opens a popover (bottom sheet ≤ 640 px) with job chips (5) and rarity chips (only rarities present), multi-select, AND between rows, each chip with its result count, zero-result chips disabled; plus a **name search** (accent-insensitive VI + CN). A tier left empty is hidden. Not kept in the URL |
 | Team | Teams with a name, 1–6 members (tile with badge), a short note; ordered by drag, no tiers |
 | Info / tab notes | Plain text: a blank line = new paragraph, a line starting "- " = bullet. Solo and Team each have an optional short note on top |
-| Route | `#/tier-list[/<slug>[/solo|team|info]]`; tab clicks replace the history entry. Nav label **"Tier List"**. URLs without `#` come in the next piece of work; every tier-list link goes through one helper so that switch is one edit |
+| Route | `#/tier-list[/<slug>[/characters|teams|info]]` (English segments like the character tabs; default `characters`); tab clicks replace the history entry. Nav label **"Tier List"**. URLs without `#` come in the next piece of work; every tier-list link goes through one helper so that switch is one edit |
 | Admin | Plain (Khí Giả admin look); the editor wraps the public renderer; native HTML5 drag-and-drop + a per-tile menu as the keyboard path; editors edit, only the owner deletes |
 | Slug | Typed once at creation, never editable (links never break) |
 | Motion | Public tabs: `useSlider` + `useReveal`; filtering: tiles move with GSAP Flip; reduced-motion path. Admin: none |
+| Look | Approved direction **D3** — [`../../public-redesign/tier-list/direction-approved.md`](../../public-redesign/tier-list/direction-approved.md) (huashu A/B/C → owner mix D → D2 → dual-agent `/impeccable critique` → D3). Sticky search + filter bar, legend drawn with the badges, rank `<h2>`, few frames |
 
 ## 3. Data (migration `0008`)
 
@@ -122,17 +123,19 @@ backup path (the daily backup already dumps the DB payload — add `tier_lists` 
   - `#/tier-list`: one visible list → render it directly (URL stays); ≥ 2 → index (published first by `position`,
     archived last with "Cũ"); none → "Chưa có tier list".
   - Unknown slug → the site's not-found state.
-- **Nav:** "Tier List" in the rail and the phone menu (lucide icon; picked in huashu). The rail holds only hot pages
-  (owner 2026-09-30); the tier list is one, so it goes in the rail, not the Thông tin hub. If the owner prefers the hub,
-  it is one panel there instead (decide at design review).
+- **Nav:** "Tier List" in the rail and the phone menu (lucide icon). The rail holds only hot pages (owner 2026-09-30);
+  the tier list is one, so it goes in the rail, not the Thông tin hub (owner approved the spec with this).
 - **Files:**
   - `TierListPage.tsx` — island: loads the game document (`loadedGameDocument()`), header (title, "Tham khảo tier list
-    của …", "Cập nhật …"), tabs, filter bar, the active panel.
+    của …", "Cập nhật …"), tabs (real tablist, ←/→), the sticky search + filter bar (Nhân vật only), the active panel.
   - `TierBoard.tsx` — Solo: tier groups (description line, then each tier label + its tiles). Props `{ list, filter,
     renderTile? }` so the Admin can wrap tiles with drag handles.
   - `TeamsPanel.tsx`, `InfoPanel.tsx` (plain-text paragraphs/bullets via one small pure function).
-  - `tierView.mts` (pure, tested): `groupTiers(tiers)` (joinAbove), `applyFilter(list, characters, { jobs, rarities })`,
-    `presentRarities(list, characters)`, `paragraphs(text)`.
+  - `TierFilter.tsx` — the filter icon + popover/bottom sheet (non-modal ≥ 641 px, modal sheet below), chips updated in
+    place, counts, legend, "Xoá lọc" / "Đóng".
+  - `tierView.mts` (pure, tested): `groupTiers(tiers)` (joinAbove), `matchEntry(entry, character, { jobs, rarities, q })`
+    (q folded with `src/lib/fold.mts`), `chipCounts(...)`, `presentRarities(list, characters)`, `visibleTabs(list)`,
+    `paragraphs(text)`.
   - `styles/tierList.css` — tokens only, dark only, 390 px without horizontal scroll.
 - **Character tile:** `src/features/characters/components/CharacterTile.tsx` + its CSS, props
   `{ character, zhizhi?, hc?, href, size? }`: avatar (`getCharacterAvatarUrl`), Vietnamese name (Chinese + dot when

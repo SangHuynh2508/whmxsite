@@ -1,0 +1,106 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Tier List · C · Kệ trưng bày</title>
+<!-- C · Kệ trưng bày (best designer: Abbott Miller / Pentagram, museum exhibition design). The page is a gallery wall:
+     an exhibition title and wall text, then one lit shelf per tier. Each shelf has a placard (the rank in large serif,
+     the description as its wall label, gold hairline + paper grain = an archival object) and the exhibits are the
+     approved frameless Khí Giả cards (1 : 2 art, the game's rarity glow, the job icon at the foot), standing on a
+     gold-divider shelf edge. Badges sit in the card's bottom-right corner. Form from the content: WHMX is "The Night
+     Archive" and the game shows characters as collectible cards — a tier list becomes a curated display of them. -->
+<style>
+:root{--icon-shadow:drop-shadow(0 1px 2px rgb(0 0 0/.8)) drop-shadow(0 0 6px rgb(0 0 0/.5))} /* tokens.css --art-icon-shadow */
+.wrap{max-width:1280px;margin:0 auto}
+.wall{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding:8px 0 24px}
+.wall h1{font:700 40px/1.1 var(--serif)}
+.credit{margin-top:8px;font-size:13px;color:var(--ash)} .credit b{color:var(--text);font-weight:500}
+.wall .text{font-size:14px;line-height:1.7;color:var(--ash);max-width:60ch}
+.wall .text p+p{margin-top:8px}
+.seg{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;border-radius:6px;font:500 13px var(--sans);color:var(--ash);border:1px solid transparent}
+.seg button[aria-selected=true]{background:var(--lifted);color:var(--text);border-color:var(--line2)}
+.seg button:focus-visible,.flt button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.ctl{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.flt{display:flex;flex-wrap:wrap;gap:4px}
+.flt button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line2);font:500 13px var(--sans);color:var(--ash)}
+.flt button img{width:18px;height:18px;margin-left:-4px}
+.flt button[aria-pressed=true]{color:var(--text);border-color:var(--gold);background:var(--goldwash)}
+.flt .clear{border-color:transparent;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
+.note{margin:24px 0 0;font-size:14px;color:var(--ash);max-width:66ch}
+.shelf{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;margin-top:24px}
+.placard{align-self:start;position:sticky;top:16px;padding:16px;border:1px solid var(--goldline);border-radius:0;background:var(--surface) var(--grain)}
+.placard h2{font:700 56px/.95 var(--serif)}
+.shelf.top .placard h2{color:var(--gold)}
+.placard p{margin-top:12px;padding-top:12px;border-top:1px dashed var(--goldline);font:500 14px/1.5 var(--serif);color:var(--text)}
+.placard small{display:block;margin-top:12px;font-size:12px;color:var(--ash)}
+.case{display:flex;flex-wrap:wrap;gap:20px 12px;padding-bottom:20px;border-bottom:1px solid var(--golddiv)}
+.t{display:flex;flex-direction:column;gap:8px;width:92px}
+.t .art{position:relative;aspect-ratio:1/2;border-radius:6px;overflow:hidden;background:var(--lifted);isolation:isolate}
+.t .art>img:first-child{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.t:hover .art>img:first-child{transform:scale(1.04)}
+.t .gl{position:absolute;inset:auto 0 0;height:19.86%;background-size:100% 100%}
+.t .job{position:absolute;left:37.5%;width:25%;bottom:4.1%;filter:var(--icon-shadow)}
+.t .bd{position:absolute;right:4px;bottom:4px;display:flex;gap:2px}
+.t .bd span{font:700 11px/1 var(--sans);padding:3px 4px;border-radius:6px;background:var(--bg);border:1px solid var(--line2);color:var(--text)}
+.t .bd .hc{color:var(--gold);border-color:var(--goldline)}
+.t b{font:700 13px/1.3 var(--serif);text-align:center;text-wrap:balance}
+.empty{padding:48px 0;color:var(--ash)}
+.vitrine{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;margin-top:24px}
+.vitrine.dim{opacity:.35}
+.vitrine .placard h2{font-size:22px;line-height:1.25}
+.info{max-width:66ch;padding-top:24px;line-height:1.75}
+.info p+p,.info ul,.info p+ul,.info ul+p{margin-top:16px} .info ul{padding-left:20px}
+[data-panel]{animation:in .5s cubic-bezier(.16,1,.3,1)} @keyframes in{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:900px){.wall{grid-template-columns:1fr}}
+@media (max-width:768px){
+ .wall h1{font-size:30px}
+ .shelf,.vitrine{grid-template-columns:1fr;gap:12px}
+ .placard{position:static;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:12px}
+ .placard h2{font-size:36px}
+ .placard p{margin:0;padding:0;border:0;flex:1 1 180px;font-size:13px}
+ .placard small{margin:0;width:100%}
+ .case{gap:16px 8px}
+ .t{width:calc((100% - 24px)/4)}
+ .t b{font-size:12px}
+}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap">
+  <header class="wall">
+    <div><h1>Tier List</h1><p class="credit" id="credit"></p><div style="margin-top:16px" class="seg" role="tablist"><button role="tab" data-tab="solo">Solo</button><button role="tab" data-tab="teams">Đội hình</button><button role="tab" data-tab="info">Thông tin</button></div></div>
+    <div class="text"><p>Khí Giả xếp theo độ hiệu quả ở nội dung cuối game. <b style="color:var(--text);font-weight:500">Z1–Z6</b> là mốc Trí Tri tối thiểu, <b style="color:var(--gold);font-weight:500">HC</b> là cần Hoán Chương; trong một kệ, bên trái mạnh hơn. Bấm vào Khí Giả để xem build.</p><p>Bản thiết kế — vị trí xếp hạng, đội hình và lời mô tả là minh hoạ.</p></div>
+  </header>
+  <div class="ctl" id="ctl"></div>
+  <section data-panel="solo"><p class="note" id="solo-note"></p><div id="solo"></div></section>
+  <section data-panel="teams" hidden><p class="note" id="team-note"></p><div id="teams"></div></section>
+  <section data-panel="info" hidden><div class="info" id="info"></div></section>
+</div></main>
+<script src="tier-data.js"></script><script src="tier-common.js"></script>
+<script>
+credit.innerHTML = `Tham khảo tier list của <b>${esc(TL.author)}</b> · Cập nhật ${updated()}`;
+document.getElementById('solo-note').textContent = TL.solo.note;
+document.getElementById('team-note').textContent = TL.teams.note;
+info.innerHTML = paragraphs(TL.info);
+
+const tile = (e) => { const c = C(e.characterId); const b = badges(e);
+  return `<a class="t" href="${href(e)}" title="${esc(tileLabel(e))}" aria-label="${esc(tileLabel(e))}"><span class="art"><img src="${c.card}" alt="" loading="lazy"><span class="gl" style="background-image:url(${glow(c.rare)})"></span><img class="job" src="${jobIcon(c.job)}" alt="">${b.length ? `<span class="bd">${b.map((x) => `<span class="${x === 'HC' ? 'hc' : ''}">${x}</span>`).join('')}</span>` : ''}</span><b>${esc(c.vi)}</b></a>`; };
+
+function renderCtl() {
+  ctl.innerHTML = `<div class="flt">${Object.entries(JOBS).map(([n, l]) => `<button type="button" aria-pressed="${filter.jobs.has(+n)}" onclick="toggle('jobs',${n})"><img src="${jobIcon(n)}" alt="">${l}</button>`).join('')}</div>`
+    + `<div class="flt">${presentRares().map((r) => `<button type="button" aria-pressed="${filter.rares.has(r)}" onclick="toggle('rares',${r})">${RARE[r]}</button>`).join('')}${filter.jobs.size || filter.rares.size ? '<button type="button" class="clear" onclick="clearFilter()">Xoá lọc</button>' : ''}</div>`;
+}
+function renderSolo() {
+  let first = true;
+  solo.innerHTML = groups(TL.solo.tiers).map((g) => {
+    let lead = true;
+    return g.tiers.map((t) => { const es = t.entries.filter(match); if (!es.length) return '';
+      const d = lead && g.description ? `<p>${esc(g.description)}</p>` : (!lead && g.description ? '<small>Cùng mô tả với kệ trên</small>' : '');
+      const html = `<div class="shelf${first ? ' top' : ''}"><div class="placard"><h2>${esc(t.label)}</h2>${d}</div><div class="case">${es.map(tile).join('')}</div></div>`;
+      lead = false; first = false; return html; }).join('');
+  }).join('') || '<p class="empty">Không có Khí Giả nào khớp bộ lọc.</p>';
+}
+function renderTeams() {
+  teams.innerHTML = TL.teams.groups.map((g) => `<div class="vitrine${g.members.some(match) ? '' : ' dim'}"><div class="placard"><h2>${esc(g.name)}</h2><p>${esc(g.note)}</p></div><div class="case">${g.members.map(tile).join('')}</div></div>`).join('');
+}
+const all = () => { renderCtl(); renderSolo(); renderTeams(); };
+onFilter(all); all(); wireTabs();
+</script></body></html>

@@ -1,0 +1,106 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Tier List · A · Bìa tạp chí</title>
+<!-- A · Bìa tạp chí (roulette #6 Bold Big-Type Editorial, read inside the Night Archive): the rank letter is the headline —
+     huge serif against negative space, the characters a quiet row of round portraits beside it. Filters are words, not
+     chips. Gold only on the top rank, the active tab rule and the focus ring. Form from the content: a tier list IS a
+     set of headlines ("S+") with a caption ("Không thay thế được…") and its subjects. -->
+<style>
+.wrap{max-width:1240px;margin:0 auto}
+.mast{padding:8px 0 24px;border-bottom:1px solid var(--line)}
+.mast h1{font:700 clamp(56px,10vw,128px)/.95 var(--serif);letter-spacing:-.02em}
+.by{margin-top:16px;font-size:14px;color:var(--ash)} .by b{color:var(--text);font-weight:500}
+.demo{margin-top:4px;font-size:12px;color:var(--ash)}
+.tabs{display:flex;gap:24px;margin-top:24px}
+.tabs button{all:unset;cursor:pointer;font:600 20px/1.4 var(--serif);color:var(--ash);padding-bottom:6px;border-bottom:2px solid transparent}
+.tabs button[aria-selected=true]{color:var(--text);border-color:var(--gold)}
+.tabs button:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.bar{position:sticky;top:0;z-index:3;background:var(--bg);display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px}
+.bar .grp{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.bar .k{color:var(--ash);font-size:12px}
+.bar button{all:unset;cursor:pointer;color:var(--ash);padding:2px 0;border-bottom:1px solid transparent}
+.bar button[aria-pressed=true]{color:var(--text);border-color:var(--gold)}
+.bar button:hover{color:var(--text)}
+.bar button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar .clear{margin-left:auto}
+.legend{width:100%;font-size:12px;color:var(--ash)}
+.note{max-width:66ch;margin:24px 0 8px;color:var(--ash);font-size:14px}
+.gdesc{margin-top:40px;padding-top:12px;border-top:1px solid var(--line2);font:500 18px/1.4 var(--serif);max-width:44ch}
+.row{display:grid;grid-template-columns:168px 1fr;gap:24px;align-items:start;padding:20px 0}
+.row+.row{border-top:1px solid var(--line)}
+.tl{font:700 104px/.86 var(--serif);letter-spacing:-.03em;color:var(--text)}
+.row.top .tl{color:var(--gold)}
+.tiles{display:flex;flex-wrap:wrap;gap:16px 12px;padding-top:8px}
+.t{display:flex;flex-direction:column;align-items:center;width:84px;text-align:center}
+.t .av{position:relative;width:72px;height:72px}
+.t img{width:72px;height:72px;border-radius:50%;border:2px solid var(--line2);background:var(--lifted);display:block;transition:border-color .2s}
+.t:hover img{border-color:var(--gold)}
+.t .bd{position:absolute;right:-6px;bottom:-2px;display:flex;gap:2px}
+.t .bd span{font:600 11px/1 var(--sans);padding:3px 4px;border-radius:6px;background:var(--bg);border:1px solid var(--line2);color:var(--text)}
+.t .bd .hc{color:var(--gold);border-color:var(--goldline)}
+.t b{margin-top:8px;font:500 13px/1.3 var(--sans);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{padding:48px 0;color:var(--ash)} .empty button{all:unset;cursor:pointer;color:var(--text);border-bottom:1px solid var(--gold)}
+.team{padding:32px 0;border-top:1px solid var(--line)} .team:first-of-type{border-top:0}
+.team h3{font:700 32px/1.15 var(--serif)} .team p{margin:8px 0 16px;color:var(--ash);font-size:14px;max-width:66ch}
+.team.dim{opacity:.35}
+.info{max-width:66ch;padding-top:24px;font-size:15px;line-height:1.75}
+.info p+p,.info ul,.info p+ul,.info ul+p{margin-top:16px} .info ul{padding-left:20px}
+[data-panel]{animation:in .45s cubic-bezier(.16,1,.3,1)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:768px){
+ .row{grid-template-columns:1fr;gap:8px;padding:16px 0}
+ .tl{font-size:56px}
+ .gdesc{font-size:16px;margin-top:24px}
+ .tiles{gap:12px 8px}
+ .t{width:64px}.t .av,.t img{width:56px;height:56px}
+ .t b{font-size:12px}
+ .tabs{gap:16px}.tabs button{font-size:17px}
+ .bar{position:static}.bar .clear{margin-left:0}
+ .team h3{font-size:24px}
+}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap">
+  <header class="mast">
+    <h1>Tier List</h1>
+    <p class="by" id="by"></p>
+    <p class="demo">Bản thiết kế — vị trí xếp hạng, đội hình và lời mô tả là minh hoạ.</p>
+    <div class="tabs" role="tablist"><button role="tab" data-tab="solo">Solo</button><button role="tab" data-tab="teams">Đội hình</button><button role="tab" data-tab="info">Thông tin</button></div>
+  </header>
+  <div class="bar" id="bar"></div>
+  <section data-panel="solo"><p class="note" id="solo-note"></p><div id="solo"></div></section>
+  <section data-panel="teams" hidden><p class="note" id="team-note"></p><div id="teams"></div></section>
+  <section data-panel="info" hidden><div class="info" id="info"></div></section>
+</div></main>
+<script src="tier-data.js"></script><script src="tier-common.js"></script>
+<script>
+by.innerHTML = `Tham khảo tier list của <b>${esc(TL.author)}</b> · Cập nhật ${updated()}`;
+document.getElementById('solo-note').textContent = TL.solo.note;
+document.getElementById('team-note').textContent = TL.teams.note;
+info.innerHTML = paragraphs(TL.info);
+
+const tile = (e) => { const c = C(e.characterId); const b = badges(e);
+  return `<a class="t" href="${href(e)}" title="${esc(tileLabel(e))}" aria-label="${esc(tileLabel(e))}"><span class="av"><img src="${c.avatar}" alt="" loading="lazy">${b.length ? `<span class="bd">${b.map((x) => `<span class="${x === 'HC' ? 'hc' : ''}">${x}</span>`).join('')}</span>` : ''}</span><b>${esc(c.vi)}</b></a>`; };
+
+function renderBar() {
+  const btn = (kind, v, label) => `<button type="button" aria-pressed="${filter[kind].has(v)}" onclick="toggle('${kind}',${v})">${label}</button>`;
+  bar.innerHTML = `<div class="grp"><span class="k">Nghề</span>${Object.entries(JOBS).map(([n, l]) => btn('jobs', +n, l)).join('')}</div>`
+    + `<div class="grp"><span class="k">Độ hiếm</span>${presentRares().map((r) => btn('rares', r, RARE[r])).join('')}</div>`
+    + (filter.jobs.size || filter.rares.size ? '<button type="button" class="clear" onclick="clearFilter()">Xoá lọc</button>' : '')
+    + '<span class="legend">Z1–Z6 = mốc Trí Tri tối thiểu · HC = cần Hoán Chương · bấm Khí Giả để xem build</span>';
+}
+function renderSolo() {
+  let first = true;
+  const html = groups(TL.solo.tiers).map((g) => {
+    const rows = g.tiers.map((t) => { const es = t.entries.filter(match); if (!es.length) return '';
+      const r = `<div class="row${first ? ' top' : ''}"><h2 class="tl">${esc(t.label)}</h2><div class="tiles">${es.map(tile).join('')}</div></div>`; first = false; return r; }).join('');
+    return rows && `${g.description ? `<p class="gdesc">${esc(g.description)}</p>` : ''}${rows}`;
+  }).join('');
+  solo.innerHTML = html || '<p class="empty">Không có Khí Giả nào khớp bộ lọc. <button type="button" onclick="clearFilter()">Xoá lọc</button></p>';
+}
+function renderTeams() {
+  teams.innerHTML = TL.teams.groups.map((g) => `<article class="team${g.members.some(match) ? '' : ' dim'}"><h3>${esc(g.name)}</h3><p>${esc(g.note)}</p><div class="tiles">${g.members.map(tile).join('')}</div></article>`).join('');
+}
+const all = () => { renderBar(); renderSolo(); renderTeams(); };
+onFilter(all); all(); wireTabs();
+</script></body></html>
