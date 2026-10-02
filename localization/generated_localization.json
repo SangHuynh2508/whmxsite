@@ -503,6 +503,14 @@
       "term_vi": "Giảm Tỷ Lệ Trúng",
       "han_viet": "",
       "status": "OWNER_APPROVED"
+    },
+    "回击": {
+      "term_id": "OWNER_GAMEPLAY_032",
+      "category": "gameplay_terminology",
+      "term_cn": "回击",
+      "term_vi": "Phản kích",
+      "han_viet": "Hồi Kích",
+      "status": "OWNER_APPROVED"
     }
   },
   "characters": {
@@ -3880,7 +3888,7 @@
       "skill_name_cn": "金蝉脱壳",
       "skill_name_vi": "Kim Thiền Thoát Xác",
       "desc_cn": "受到常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，无论是否被命中，均会进行回击，对自身<color=#158bdb>周围2格</color>内的所有敌方目标造成攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；受到直接攻击后，获得<color=#ff6724>脱壳</color>效果。{Buff_A0086_15}",
-      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
+      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
       "status": "TRANSLATED"
     },
     "A008603_2": {
@@ -3889,7 +3897,7 @@
       "skill_name_cn": "金蝉脱壳",
       "skill_name_vi": "Kim Thiền Thoát Xác",
       "desc_cn": "受到常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，无论是否被命中，均会进行回击，对自身<color=#158bdb>周围2格</color>内的所有敌方目标造成攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；受到直接攻击后，获得<color=#ff6724>脱壳</color>效果。{Buff_A0086_15}",
-      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
+      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
       "status": "TRANSLATED"
     },
     "A008603_3": {
@@ -3898,7 +3906,7 @@
       "skill_name_cn": "金蝉脱壳",
       "skill_name_vi": "Kim Thiền Thoát Xác",
       "desc_cn": "受到常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，无论是否被命中，均会进行回击，对自身<color=#158bdb>周围2格</color>内的所有敌方目标造成攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；受到直接攻击后，获得<color=#ff6724>脱壳</color>效果。{Buff_A0086_15}",
-      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
+      "desc_vi": "Khi bị Thường kích, nếu bên tấn công ở trong khoảng cách <color=#158bdb>xung quanh 2 ô</color> bản thân, bất kể có trúng hay không, đều sẽ Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công lên tất cả mục tiêu kẻ địch trong phạm vi <color=#158bdb>xung quanh 2 ô</color> bản thân; Sau khi bị tấn công trực tiếp, nhận hiệu ứng <color=#ff6724>Thoát Xác</color>.{Buff_A0086_15}",
       "status": "TRANSLATED"
     },
     "A008604_1": {
@@ -6634,7 +6642,7 @@
       "skill_name_cn": "仰韶艺潮",
       "skill_name_vi": "Ngưỡng Thiều Nghệ Triều",
       "desc_cn": "受到自身<color=#158bdb>周围1格</color>内的敌方单位常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。回击后自身获得<color=#158bdb>1</color>点能量。",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Hồi Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Phản Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
       "status": "PENDING"
     },
     "D000703_2": {
@@ -6643,7 +6651,7 @@
       "skill_name_cn": "仰韶艺潮",
       "skill_name_vi": "Ngưỡng Thiều Nghệ Triều",
       "desc_cn": "受到自身<color=#158bdb>周围1格</color>内的敌方单位常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。回击后自身获得<color=#158bdb>1</color>点能量。",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Hồi Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Phản Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
       "status": "PENDING"
     },
     "D000703_3": {
@@ -6652,7 +6660,7 @@
       "skill_name_cn": "仰韶艺潮",
       "skill_name_vi": "Ngưỡng Thiều Nghệ Triều",
       "desc_cn": "受到自身<color=#158bdb>周围1格</color>内的敌方单位常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。回击后自身获得<color=#158bdb>1</color>点能量。",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Hồi Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên kẻ tấn công. Sau khi Phản Kích, bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng.",
       "status": "PENDING"
     },
     "D000704_1": {
@@ -8119,7 +8127,7 @@
       "skill_name_cn": "盟会诸侯",
       "skill_name_vi": "Minh Hội Chư Hầu",
       "desc_cn": "格挡常击时，若攻击者在自身<color=#158bdb>周围1格</color>内，则进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
+      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
       "status": "PENDING"
     },
     "D006004_2": {
@@ -8128,7 +8136,7 @@
       "skill_name_cn": "盟会诸侯",
       "skill_name_vi": "Minh Hội Chư Hầu",
       "desc_cn": "格挡常击时，若攻击者在自身<color=#158bdb>周围1格</color>内，则进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
+      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
       "status": "PENDING"
     },
     "D006004_3": {
@@ -8137,7 +8145,7 @@
       "skill_name_cn": "盟会诸侯",
       "skill_name_vi": "Minh Hội Chư Hầu",
       "desc_cn": "格挡常击时，若攻击者在自身<color=#158bdb>周围1格</color>内，则进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
+      "desc_vi": "Khi đỡ Thường kích, nếu kẻ tấn công ở trong <color=#158bdb>1 ô xung quanh</color> bản thân, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.",
       "status": "PENDING"
     },
     "D006005_1": {
@@ -8254,7 +8262,7 @@
       "skill_name_cn": "奔防伺击",
       "skill_name_vi": "Bôn Phòng Tứ Kích",
       "desc_cn": "受到或是闪避常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，会进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
+      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
       "status": "PENDING"
     },
     "D008003_2": {
@@ -8263,7 +8271,7 @@
       "skill_name_cn": "奔防伺击",
       "skill_name_vi": "Bôn Phòng Tứ Kích",
       "desc_cn": "受到或是闪避常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，会进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
+      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
       "status": "PENDING"
     },
     "D008003_3": {
@@ -8272,7 +8280,7 @@
       "skill_name_cn": "奔防伺击",
       "skill_name_vi": "Bôn Phòng Tứ Kích",
       "desc_cn": "受到或是闪避常击时，若攻击方距离自身<color=#158bdb>周围2格</color>以内，会进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
-      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Hồi Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
+      "desc_vi": "Khi chịu hoặc né được Thường Kích, nếu kẻ tấn công ở trong phạm vi <color=#158bdb>2 ô xung quanh</color> bản thân, thực hiện Phản Kích, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên kẻ đó.",
       "status": "PENDING"
     },
     "D008004_1": {
@@ -8281,7 +8289,7 @@
       "skill_name_cn": "骐骥驰骋",
       "skill_name_vi": "Kỳ Ký Trì Sính",
       "desc_cn": "回击后，自身有<color=#158bdb>[Effect1Para,1]%</color>概率获得<color=#ff6724>附加移动力</color>状态，最多可叠加<color=#158bdb>4</color>层。{Buff_ExtraMove}",
-      "desc_vi": "Sau khi Hồi Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
+      "desc_vi": "Sau khi Phản Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
       "status": "PENDING"
     },
     "D008004_2": {
@@ -8290,7 +8298,7 @@
       "skill_name_cn": "骐骥驰骋",
       "skill_name_vi": "Kỳ Ký Trì Sính",
       "desc_cn": "回击后，自身有<color=#158bdb>[Effect1Para,1]%</color>概率获得<color=#ff6724>附加移动力</color>状态，最多可叠加<color=#158bdb>4</color>层。{Buff_ExtraMove}",
-      "desc_vi": "Sau khi Hồi Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
+      "desc_vi": "Sau khi Phản Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
       "status": "PENDING"
     },
     "D008004_3": {
@@ -8299,7 +8307,7 @@
       "skill_name_cn": "骐骥驰骋",
       "skill_name_vi": "Kỳ Ký Trì Sính",
       "desc_cn": "回击后，自身有<color=#158bdb>[Effect1Para,1]%</color>概率获得<color=#ff6724>附加移动力</color>状态，最多可叠加<color=#158bdb>4</color>层。{Buff_ExtraMove}",
-      "desc_vi": "Sau khi Hồi Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
+      "desc_vi": "Sau khi Phản Kích, bản thân có <color=#158bdb>[Effect1Para,1]%</color> xác suất nhận trạng thái <color=#ff6724>Phụ Gia Di Động Lực</color>, tối đa cộng dồn <color=#158bdb>4</color> tầng.{Buff_ExtraMove}",
       "status": "PENDING"
     },
     "D008005_1": {
@@ -8767,7 +8775,7 @@
       "skill_name_cn": "鎏金铸甲",
       "skill_name_vi": "Lưu Kim Chú Giáp",
       "desc_cn": "自身持有<color=#158bdb>2</color>层<color=#ff6724>犇牛</color>时，受到<color=#158bdb>周围1格</color>内敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，持有<color=#158bdb>3</color>层<color=#ff6724>犇牛</color>时增加<color=#158bdb>[Effect4Para,1]</color>格移动力并免疫移动力降低类效果；持有<color=#158bdb>4</color>层时受治疗增益增加<color=#158bdb>[Effect2Para,1]%</color>。",
-      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
+      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
       "status": "PENDING"
     },
     "D009504_2": {
@@ -8776,7 +8784,7 @@
       "skill_name_cn": "鎏金铸甲",
       "skill_name_vi": "Lưu Kim Chú Giáp",
       "desc_cn": "自身持有<color=#158bdb>2</color>层<color=#ff6724>犇牛</color>时，受到<color=#158bdb>周围1格</color>内敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，持有<color=#158bdb>3</color>层<color=#ff6724>犇牛</color>时增加<color=#158bdb>[Effect4Para,1]</color>格移动力并免疫移动力降低类效果；持有<color=#158bdb>4</color>层时受治疗增益增加<color=#158bdb>[Effect2Para,1]%</color>。",
-      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
+      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
       "status": "PENDING"
     },
     "D009504_3": {
@@ -8785,7 +8793,7 @@
       "skill_name_cn": "鎏金铸甲",
       "skill_name_vi": "Lưu Kim Chú Giáp",
       "desc_cn": "自身持有<color=#158bdb>2</color>层<color=#ff6724>犇牛</color>时，受到<color=#158bdb>周围1格</color>内敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，持有<color=#158bdb>3</color>层<color=#ff6724>犇牛</color>时增加<color=#158bdb>[Effect4Para,1]</color>格移动力并免疫移动力降低类效果；持有<color=#158bdb>4</color>层时受治疗增益增加<color=#158bdb>[Effect2Para,1]%</color>。",
-      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
+      "desc_vi": "Khi bản thân có <color=#158bdb>2</color> tầng <color=#ff6724>Bôn Ngưu</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân; khi có <color=#158bdb>3</color> tầng <color=#ff6724>Bôn Ngưu</color>, Di Động Lực tăng <color=#158bdb>[Effect4Para,1]</color> ô và miễn nhiễm hiệu ứng giảm Di Động Lực; khi có <color=#158bdb>4</color> tầng, hiệu quả trị liệu nhận được tăng <color=#158bdb>[Effect2Para,1]%</color>.",
       "status": "PENDING"
     },
     "D009505_1": {
@@ -8794,7 +8802,7 @@
       "skill_name_cn": "守护之誓",
       "skill_name_vi": "Thủ Hộ Chi Thệ",
       "desc_cn": "受到治疗时，将累计受到的治疗量，下一次回击时，将附加累计受到治疗量<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Hồi kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Phản kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "D009505_2": {
@@ -8803,7 +8811,7 @@
       "skill_name_cn": "守护之誓",
       "skill_name_vi": "Thủ Hộ Chi Thệ",
       "desc_cn": "受到治疗时，将累计受到的治疗量，下一次回击时，将附加累计受到治疗量<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Hồi kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Phản kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "D009505_3": {
@@ -8812,7 +8820,7 @@
       "skill_name_cn": "守护之誓",
       "skill_name_vi": "Thủ Hộ Chi Thệ",
       "desc_cn": "受到治疗时，将累计受到的治疗量，下一次回击时，将附加累计受到治疗量<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Hồi kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Khi được trị liệu, tích lũy lượng trị liệu đã nhận; ở lần Phản kích tiếp theo, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng trị liệu đã tích lũy dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "D009511_1": {
@@ -9550,7 +9558,7 @@
       "skill_name_cn": "神鹰遐顾",
       "skill_name_vi": "Thần Ưng Hà Cố",
       "desc_cn": "受到自身<color=#158bdb>周围2格</color>内的敌方单位常击时，无论是否命中，均进行回击，对自身<color=#158bdb>周围2格</color>内的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使自身获得<color=#158bdb>1</color>点能量；\n常击有<color=#158bdb>[Effect3Para,2]%</color>概率使受击单位获得持续<color=#158bdb>[Effect3Para,1]</color>回合的<color=#ff6724>震怒</color>状态。{Buff_Taunt}",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Hồi Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Phản Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
       "status": "PENDING"
     },
     "D015403_2": {
@@ -9559,7 +9567,7 @@
       "skill_name_cn": "神鹰遐顾",
       "skill_name_vi": "Thần Ưng Hà Cố",
       "desc_cn": "受到自身<color=#158bdb>周围2格</color>内的敌方单位常击时，无论是否命中，均进行回击，对自身<color=#158bdb>周围2格</color>内的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使自身获得<color=#158bdb>1</color>点能量；\n常击有<color=#158bdb>[Effect3Para,2]%</color>概率使受击单位获得持续<color=#158bdb>[Effect3Para,1]</color>回合的<color=#ff6724>震怒</color>状态。{Buff_Taunt}",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Hồi Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Phản Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
       "status": "PENDING"
     },
     "D015403_3": {
@@ -9568,7 +9576,7 @@
       "skill_name_cn": "神鹰遐顾",
       "skill_name_vi": "Thần Ưng Hà Cố",
       "desc_cn": "受到自身<color=#158bdb>周围2格</color>内的敌方单位常击时，无论是否命中，均进行回击，对自身<color=#158bdb>周围2格</color>内的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害，并使自身获得<color=#158bdb>1</color>点能量；\n常击有<color=#158bdb>[Effect3Para,2]%</color>概率使受击单位获得持续<color=#158bdb>[Effect3Para,1]</color>回合的<color=#ff6724>震怒</color>状态。{Buff_Taunt}",
-      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Hồi Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
+      "desc_vi": "Khi chịu Thường Kích từ đơn vị địch trong <color=#158bdb>2 ô xung quanh</color> bản thân, bất kể đòn đó có trúng hay không, đều thực hiện Phản Kích lên toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color>, gây Sát thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân, đồng thời bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nThường Kích có <color=#158bdb>[Effect3Para,2]%</color> xác suất khiến đơn vị trúng đòn trong <color=#158bdb>[Effect3Para,1]</color> lượt nhận trạng thái <color=#ff6724>Chấn Nộ</color>.{Buff_Taunt}",
       "status": "PENDING"
     },
     "D015404_1": {
@@ -12007,7 +12015,7 @@
       "skill_name_cn": "尊师重道",
       "skill_name_vi": "Tôn Sư Trọng Đạo",
       "desc_cn": "存在构素护盾的友方单位，其护盾吸收伤害时，商周十供回复最大生命值的<color=#158bdb>[Effect1Para,2]%</color>的生命值，并获得<color=#ff6724>教学相长</color>状态。\n处于<color=#ff6724>解惑</color>状态的友方单位进行回击时，获得<color=#158bdb>1</color>回合<color=#ff6724>了悟</color>状态。{Buff_S0103_4_1}{Buff_S0103_5_1}",
-      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Hồi Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
+      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Phản Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
       "status": "PENDING"
     },
     "S010304_2": {
@@ -12016,7 +12024,7 @@
       "skill_name_cn": "尊师重道",
       "skill_name_vi": "Tôn Sư Trọng Đạo",
       "desc_cn": "存在构素护盾的友方单位，其护盾吸收伤害时，商周十供回复最大生命值的<color=#158bdb>[Effect1Para,2]%</color>的生命值，并获得<color=#ff6724>教学相长</color>状态。\n处于<color=#ff6724>解惑</color>状态的友方单位进行回击时，获得<color=#158bdb>1</color>回合<color=#ff6724>了悟</color>状态。{Buff_S0103_4_1}{Buff_S0103_5_1}",
-      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Hồi Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
+      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Phản Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
       "status": "PENDING"
     },
     "S010304_3": {
@@ -12025,7 +12033,7 @@
       "skill_name_cn": "尊师重道",
       "skill_name_vi": "Tôn Sư Trọng Đạo",
       "desc_cn": "存在构素护盾的友方单位，其护盾吸收伤害时，商周十供回复最大生命值的<color=#158bdb>[Effect1Para,2]%</color>的生命值，并获得<color=#ff6724>教学相长</color>状态。\n处于<color=#ff6724>解惑</color>状态的友方单位进行回击时，获得<color=#158bdb>1</color>回合<color=#ff6724>了悟</color>状态。{Buff_S0103_4_1}{Buff_S0103_5_1}",
-      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Hồi Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
+      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Phản Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>.{Buff_S0103_4_1}{Buff_S0103_5_1}",
       "status": "PENDING"
     },
     "S010305_1": {
@@ -15247,7 +15255,7 @@
       "skill_name_cn": "秦法威严",
       "skill_name_vi": "Tần Pháp Uy Nghiêm",
       "desc_cn": "受到<color=#158bdb>周围1格</color>敌方单位的常击后，有<color=#158bdb>[Effect1Para,3]%</color>概率进行回击，对该单位造成其最大生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>回击真实伤害</color>。此技能每<color=#158bdb>1</color>轮次最多触发<color=#158bdb>[Effect1Para,2]</color>次。{Buff_RealDamge_Lan_Counter}",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Hồi Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Phản Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
       "status": "PENDING"
     },
     "V005204_2": {
@@ -15256,7 +15264,7 @@
       "skill_name_cn": "秦法威严",
       "skill_name_vi": "Tần Pháp Uy Nghiêm",
       "desc_cn": "受到<color=#158bdb>周围1格</color>敌方单位的常击后，有<color=#158bdb>[Effect1Para,3]%</color>概率进行回击，对该单位造成其最大生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>回击真实伤害</color>。此技能每<color=#158bdb>1</color>轮次最多触发<color=#158bdb>[Effect1Para,2]</color>次。{Buff_RealDamge_Lan_Counter}",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Hồi Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Phản Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
       "status": "PENDING"
     },
     "V005204_3": {
@@ -15265,7 +15273,7 @@
       "skill_name_cn": "秦法威严",
       "skill_name_vi": "Tần Pháp Uy Nghiêm",
       "desc_cn": "受到<color=#158bdb>周围1格</color>敌方单位的常击后，有<color=#158bdb>[Effect1Para,3]%</color>概率进行回击，对该单位造成其最大生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>回击真实伤害</color>。此技能每<color=#158bdb>1</color>轮次最多触发<color=#158bdb>[Effect1Para,2]</color>次。{Buff_RealDamge_Lan_Counter}",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Hồi Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, có <color=#158bdb>[Effect1Para,3]%</color> xác suất thực hiện phản kích, gây lên đơn vị đó sát thương bằng <color=#158bdb>[Effect1Para,1]%</color> Máu tối đa dưới dạng <color=#ff6724>Sát Thương Chuẩn Phản Kích</color>. Kỹ năng này mỗi <color=#158bdb>1</color> vòng tối đa kích hoạt <color=#158bdb>[Effect1Para,2]</color> lần.{Buff_RealDamge_Lan_Counter}",
       "status": "PENDING"
     },
     "V005205_1": {
@@ -16219,7 +16227,7 @@
       "skill_name_cn": "山河独醉",
       "skill_name_vi": "Sơn Hà Độc Túy",
       "desc_cn": "若常击或回击未命中，则自身获得<color=#158bdb>1</color>层<color=#ff6724>逍遥</color>状态；\n每层<color=#ff6724>逍遥</color>状态使自身暴击伤害增加<color=#158bdb>[Effect3Para,1]%</color>，最多可叠加<color=#158bdb>3</color>层。",
-      "desc_vi": "Nếu Thường kích hoặc Hồi kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
+      "desc_vi": "Nếu Thường kích hoặc Phản kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
       "status": "PENDING"
     },
     "V007504_2": {
@@ -16228,7 +16236,7 @@
       "skill_name_cn": "山河独醉",
       "skill_name_vi": "Sơn Hà Độc Túy",
       "desc_cn": "若常击或回击未命中，则自身获得<color=#158bdb>1</color>层<color=#ff6724>逍遥</color>状态；\n每层<color=#ff6724>逍遥</color>状态使自身暴击伤害增加<color=#158bdb>[Effect3Para,1]%</color>，最多可叠加<color=#158bdb>3</color>层。",
-      "desc_vi": "Nếu Thường kích hoặc Hồi kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
+      "desc_vi": "Nếu Thường kích hoặc Phản kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
       "status": "PENDING"
     },
     "V007504_3": {
@@ -16237,7 +16245,7 @@
       "skill_name_cn": "山河独醉",
       "skill_name_vi": "Sơn Hà Độc Túy",
       "desc_cn": "若常击或回击未命中，则自身获得<color=#158bdb>1</color>层<color=#ff6724>逍遥</color>状态；\n每层<color=#ff6724>逍遥</color>状态使自身暴击伤害增加<color=#158bdb>[Effect3Para,1]%</color>，最多可叠加<color=#158bdb>3</color>层。",
-      "desc_vi": "Nếu Thường kích hoặc Hồi kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
+      "desc_vi": "Nếu Thường kích hoặc Phản kích không trúng, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color>;\nMỗi tầng <color=#ff6724>Tiêu Dao</color> khiến Sát Thương Bạo Kích của bản thân tăng <color=#158bdb>[Effect3Para,1]%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng.",
       "status": "PENDING"
     },
     "V007505_1": {
@@ -16246,7 +16254,7 @@
       "skill_name_cn": "印鉴",
       "skill_name_vi": "Ấn Giám",
       "desc_cn": "受到<color=#158bdb>周围1格</color>的敌方单位常击或闪避其常击后，进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害，该次回击的命中率减少<color=#158bdb>[Effect1Para,2]%</color>，生命偷取率增加<color=#158bdb>[Effect3Para,1]%</color>；\n若自身存在不少于<color=#158bdb>2</color>层<color=#ff6724>逍遥</color>状态，则回击必定命中且必定暴击，此效果每回合最多可触发<color=#158bdb>[Effect4Para,2]</color>次。",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Hồi kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Hồi kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Phản kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Phản kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
       "status": "PENDING"
     },
     "V007505_2": {
@@ -16255,7 +16263,7 @@
       "skill_name_cn": "印鉴",
       "skill_name_vi": "Ấn Giám",
       "desc_cn": "受到<color=#158bdb>周围1格</color>的敌方单位常击或闪避其常击后，进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害，该次回击的命中率减少<color=#158bdb>[Effect1Para,2]%</color>，生命偷取率增加<color=#158bdb>[Effect3Para,1]%</color>；\n若自身存在不少于<color=#158bdb>2</color>层<color=#ff6724>逍遥</color>状态，则回击必定命中且必定暴击，此效果每回合最多可触发<color=#158bdb>[Effect4Para,2]</color>次。",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Hồi kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Hồi kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Phản kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Phản kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
       "status": "PENDING"
     },
     "V007505_3": {
@@ -16264,7 +16272,7 @@
       "skill_name_cn": "印鉴",
       "skill_name_vi": "Ấn Giám",
       "desc_cn": "受到<color=#158bdb>周围1格</color>的敌方单位常击或闪避其常击后，进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害，该次回击的命中率减少<color=#158bdb>[Effect1Para,2]%</color>，生命偷取率增加<color=#158bdb>[Effect3Para,1]%</color>；\n若自身存在不少于<color=#158bdb>2</color>层<color=#ff6724>逍遥</color>状态，则回击必定命中且必定暴击，此效果每回合最多可触发<color=#158bdb>[Effect4Para,2]</color>次。",
-      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Hồi kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Hồi kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
+      "desc_vi": "Sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color> hoặc né Thường kích của đơn vị đó, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân; Tỷ Lệ Chính Xác của Phản kích này giảm <color=#158bdb>[Effect1Para,2]%</color>, Tỷ Lệ Hút Máu tăng <color=#158bdb>[Effect3Para,1]%</color>;\nNếu bản thân có không dưới <color=#158bdb>2</color> tầng <color=#ff6724>Tiêu Dao</color>, Phản kích chắc chắn trúng và chắc chắn Bạo Kích; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>[Effect4Para,2]</color> lần.",
       "status": "PENDING"
     },
     "V007511_1": {
@@ -16516,7 +16524,7 @@
       "skill_name_cn": "中山遗尘",
       "skill_name_vi": "Trung Sơn Di Trần",
       "desc_cn": "常击前，消耗自身当前生命值的<color=#158bdb>[Effect2Para,1]%</color>；\n常击，连击，回击，绝技攻击造成伤害时，附加自身已损失生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Hồi kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Phản kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "V007803_2": {
@@ -16525,7 +16533,7 @@
       "skill_name_cn": "中山遗尘",
       "skill_name_vi": "Trung Sơn Di Trần",
       "desc_cn": "常击前，消耗自身当前生命值的<color=#158bdb>[Effect2Para,1]%</color>；\n常击，连击，回击，绝技攻击造成伤害时，附加自身已损失生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Hồi kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Phản kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "V007803_3": {
@@ -16534,7 +16542,7 @@
       "skill_name_cn": "中山遗尘",
       "skill_name_vi": "Trung Sơn Di Trần",
       "desc_cn": "常击前，消耗自身当前生命值的<color=#158bdb>[Effect2Para,1]%</color>；\n常击，连击，回击，绝技攻击造成伤害时，附加自身已损失生命值<color=#158bdb>[Effect1Para,1]%</color>的<color=#ff6724>额外物理伤害</color>。{Buff_SpecialDamgeP_Lan}",
-      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Hồi kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
+      "desc_vi": "Trước Thường kích, tiêu hao <color=#158bdb>[Effect2Para,1]%</color> Máu hiện tại của bản thân;\nKhi Thường kích, Liên kích, Phản kích hoặc Tuyệt kỹ gây sát thương, gây thêm <color=#158bdb>[Effect1Para,1]%</color> lượng Máu đã mất của bản thân dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.{Buff_SpecialDamgeP_Lan}",
       "status": "PENDING"
     },
     "V007804_1": {
@@ -16543,7 +16551,7 @@
       "skill_name_cn": "四鹿承龙",
       "skill_name_vi": "Tứ Lộc Thừa Long",
       "desc_cn": "最大生命值增加<color=#158bdb>[Effect3Para,1]%</color>；当受到的伤害累计超过自身最大生命值<color=#158bdb>30%</color>时，常击后触发连击，连击对目标造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；超过<color=#158bdb>60%</color>时，受到<color=#158bdb>周围1格</color>敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。{Buff_V0078_5}{Buff_V0078_6}",
-      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
+      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
       "status": "PENDING"
     },
     "V007804_2": {
@@ -16552,7 +16560,7 @@
       "skill_name_cn": "四鹿承龙",
       "skill_name_vi": "Tứ Lộc Thừa Long",
       "desc_cn": "最大生命值增加<color=#158bdb>[Effect3Para,1]%</color>；当受到的伤害累计超过自身最大生命值<color=#158bdb>30%</color>时，常击后触发连击，连击对目标造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；超过<color=#158bdb>60%</color>时，受到<color=#158bdb>周围1格</color>敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。{Buff_V0078_5}{Buff_V0078_6}",
-      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
+      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
       "status": "PENDING"
     },
     "V007804_3": {
@@ -16561,7 +16569,7 @@
       "skill_name_cn": "四鹿承龙",
       "skill_name_vi": "Tứ Lộc Thừa Long",
       "desc_cn": "最大生命值增加<color=#158bdb>[Effect3Para,1]%</color>；当受到的伤害累计超过自身最大生命值<color=#158bdb>30%</color>时，常击后触发连击，连击对目标造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；超过<color=#158bdb>60%</color>时，受到<color=#158bdb>周围1格</color>敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害。{Buff_V0078_5}{Buff_V0078_6}",
-      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
+      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó.{Buff_V0078_5}{Buff_V0078_6}",
       "status": "PENDING"
     },
     "V007805_1": {
@@ -23212,7 +23220,7 @@
       "skill_name_cn": "嵌宝项饰",
       "skill_name_vi": "Khảm Bảo Hạng Sức",
       "desc_cn": "<color=#ff6724>冥途领域</color>范围内的我方全体受到的伤害降低<color=#158bdb>[Effect2Para,1]%</color>；\n<color=#ff6724>冥途领域</color>范围内的敌方全体受到的额外伤害提高<color=#158bdb>[Effect3Para,1]%</color>；\n自身受到<color=#ff6724>冥途领域</color>范围内敌方单位的常击时，消耗当前生命值的<color=#158bdb>10%</color>，对其进行回击，造成自身攻击力<color=#158bdb>[Effect4Para,1]%</color>的构素伤害；\n自身每回合行动结束时，为<color=#ff6724>冥途领域</color>范围内的友方全体回复自身最大生命值<color=#158bdb>[Effect5Para,1]%</color>的生命值，且自身上轮次行动到该次行动之间，自身每消耗<color=#158bdb>1</color>层<color=#ff6724>阴身</color>状态，则回复的生命值增加<color=#158bdb>[Effect5Para,1]%</color>。",
-      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Hồi kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
+      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Phản kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
       "status": "TRANSLATED"
     },
     "W018205_2": {
@@ -23221,7 +23229,7 @@
       "skill_name_cn": "嵌宝项饰",
       "skill_name_vi": "Khảm Bảo Hạng Sức",
       "desc_cn": "<color=#ff6724>冥途领域</color>范围内的我方全体受到的伤害降低<color=#158bdb>[Effect2Para,1]%</color>；\n<color=#ff6724>冥途领域</color>范围内的敌方全体受到的额外伤害提高<color=#158bdb>[Effect3Para,1]%</color>；\n自身受到<color=#ff6724>冥途领域</color>范围内敌方单位的常击时，消耗当前生命值的<color=#158bdb>10%</color>，对其进行回击，造成自身攻击力<color=#158bdb>[Effect4Para,1]%</color>的构素伤害；\n自身每回合行动结束时，为<color=#ff6724>冥途领域</color>范围内的友方全体回复自身最大生命值<color=#158bdb>[Effect5Para,1]%</color>的生命值，且自身上轮次行动到该次行动之间，自身每消耗<color=#158bdb>1</color>层<color=#ff6724>阴身</color>状态，则回复的生命值增加<color=#158bdb>[Effect5Para,1]%</color>。",
-      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Hồi kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
+      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Phản kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
       "status": "TRANSLATED"
     },
     "W018205_3": {
@@ -23230,7 +23238,7 @@
       "skill_name_cn": "嵌宝项饰",
       "skill_name_vi": "Khảm Bảo Hạng Sức",
       "desc_cn": "<color=#ff6724>冥途领域</color>范围内的我方全体受到的伤害降低<color=#158bdb>[Effect2Para,1]%</color>；\n<color=#ff6724>冥途领域</color>范围内的敌方全体受到的额外伤害提高<color=#158bdb>[Effect3Para,1]%</color>；\n自身受到<color=#ff6724>冥途领域</color>范围内敌方单位的常击时，消耗当前生命值的<color=#158bdb>10%</color>，对其进行回击，造成自身攻击力<color=#158bdb>[Effect4Para,1]%</color>的构素伤害；\n自身每回合行动结束时，为<color=#ff6724>冥途领域</color>范围内的友方全体回复自身最大生命值<color=#158bdb>[Effect5Para,1]%</color>的生命值，且自身上轮次行动到该次行动之间，自身每消耗<color=#158bdb>1</color>层<color=#ff6724>阴身</color>状态，则回复的生命值增加<color=#158bdb>[Effect5Para,1]%</color>。",
-      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Hồi kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
+      "desc_vi": "Toàn bộ phe ta trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương giảm <color=#158bdb>[Effect2Para,1]%</color>;\nToàn bộ kẻ địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> chịu sát thương bổ sung tăng <color=#158bdb>[Effect3Para,1]%</color>;\nKhi bản thân chịu Thường kích từ đơn vị địch trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color>, tiêu hao <color=#158bdb>10%</color> Máu hiện tại để Phản kích mục tiêu, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect4Para,1]%</color> Tấn Công của bản thân;\nMỗi khi kết thúc hành động lượt của bản thân, hồi phục cho toàn bộ đồng minh trong phạm vi <color=#ff6724>Minh Đồ Lĩnh Vực</color> lượng Máu bằng <color=#158bdb>[Effect5Para,1]%</color> Máu tối đa của bản thân, đồng thời trong khoảng thời gian từ hành động vòng lượt trước đến hành động lần này của bản thân, mỗi khi tiêu hao <color=#158bdb>1</color> tầng trạng thái <color=#ff6724>Âm Thân</color>, lượng Máu hồi phục tăng thêm <color=#158bdb>[Effect5Para,1]%</color>.",
       "status": "TRANSLATED"
     },
     "W018211_1": {
@@ -23347,7 +23355,7 @@
       "skill_name_cn": "采访手记",
       "skill_name_vi": "Thái Phỏng Thủ Ký",
       "desc_cn": "自身受到的伤害降低<color=#158bdb>20%</color>；\n自身每存在<color=#158bdb>2%</color>的格挡率，则受到的伤害降低<color=#158bdb>1%</color>；\n友方宿卫职业单位进行直接攻击时，对受击单位造成自身生命值<color=#158bdb>200%</color>的额外真实伤害；\n自身受到敌方的直接攻击时，对该攻击单位造成自身生命值<color=#158bdb>300%</color>的额外真实伤害；\n我方单位进行常击或回击时，使该单位在<color=#158bdb>1</color>回合内造成的常击和回击伤害提高<color=#158bdb>50%</color>；\n绝技选定的敌方单体及其<color=#158bdb>周围2格</color>的敌方全体获得毛公鼎援护标记和<color=#ff6724>肃静</color>状态；\n进入战斗后，获得<color=#158bdb>1</color>点能量，自身造成额外真实伤害时，获得<color=#158bdb>1</color>点能量。",
-      "desc_vi": "Sát thương bản thân phải chịu giảm <color=#158bdb>20%</color>;\nCứ mỗi <color=#158bdb>2%</color> Tỷ Lệ Đỡ hiện có, sát thương bản thân phải chịu giảm <color=#158bdb>1%</color>;\nKhi đơn vị nghề Túc Vệ phe ta thực hiện tấn công trực tiếp, gây cho mục tiêu <color=#158bdb>200%</color> Máu của bản thân dưới dạng Sát Thương Chuẩn Bổ Sung;\nKhi bản thân chịu tấn công trực tiếp từ địch, gây cho kẻ tấn công <color=#158bdb>300%</color> Máu của bản thân dưới dạng Sát Thương Chuẩn Bổ Sung;\nKhi đơn vị phe ta thực hiện Thường kích hoặc Hồi kích, khiến sát thương Thường kích và Hồi kích của đơn vị đó tăng <color=#158bdb>50%</color> trong <color=#158bdb>1</color> lượt;\nĐơn vị địch được Tuyệt kỹ chọn và toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> nhận dấu ấn Hộ vệ của Mao Công Đỉnh và trạng thái <color=#ff6724>Túc Tĩnh</color>;\nSau khi vào trận, nhận <color=#158bdb>1</color> điểm năng lượng; mỗi khi bản thân gây Sát Thương Chuẩn Bổ Sung, nhận <color=#158bdb>1</color> điểm năng lượng.",
+      "desc_vi": "Sát thương bản thân phải chịu giảm <color=#158bdb>20%</color>;\nCứ mỗi <color=#158bdb>2%</color> Tỷ Lệ Đỡ hiện có, sát thương bản thân phải chịu giảm <color=#158bdb>1%</color>;\nKhi đơn vị nghề Túc Vệ phe ta thực hiện tấn công trực tiếp, gây cho mục tiêu <color=#158bdb>200%</color> Máu của bản thân dưới dạng Sát Thương Chuẩn Bổ Sung;\nKhi bản thân chịu tấn công trực tiếp từ địch, gây cho kẻ tấn công <color=#158bdb>300%</color> Máu của bản thân dưới dạng Sát Thương Chuẩn Bổ Sung;\nKhi đơn vị phe ta thực hiện Thường kích hoặc Phản kích, khiến sát thương Thường kích và Phản kích của đơn vị đó tăng <color=#158bdb>50%</color> trong <color=#158bdb>1</color> lượt;\nĐơn vị địch được Tuyệt kỹ chọn và toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> nhận dấu ấn Hộ vệ của Mao Công Đỉnh và trạng thái <color=#ff6724>Túc Tĩnh</color>;\nSau khi vào trận, nhận <color=#158bdb>1</color> điểm năng lượng; mỗi khi bản thân gây Sát Thương Chuẩn Bổ Sung, nhận <color=#158bdb>1</color> điểm năng lượng.",
       "status": "PENDING"
     },
     "D0127061": {
@@ -23365,7 +23373,7 @@
       "skill_name_cn": "“以步丈量”",
       "skill_name_vi": "“Dĩ Bộ Trượng Lượng”",
       "desc_cn": "进入战斗后，自身获得<color=#158bdb>2</color>层<color=#ff6724>附加移动力</color>状态；\n自身处于<color=#ff6724>云峰奇险</color>状态，友方单位对溪山行旅图<color=#158bdb>周围3格</color>内的敌方全体造成伤害时，无视其<color=#158bdb>30%</color>的物理防御力和构素防御力；\n自身每次进行常击或回击时，回复最大生命值<color=#158bdb>5%</color>的生命值，并随机获得<color=#158bdb>1</color>层<color=#ff6724>铁甲</color>或<color=#ff6724>裳衫</color>状态；\n自身处于<color=#ff6724>似夜奔行</color>状态并对敌方造成任意伤害时，物理伤害提高<color=#158bdb>80%</color>，物理防御力提高<color=#158bdb>200%</color>，攻击结束后此效果消除；\n自身处于<color=#ff6724>似夜奔行</color>状态时，若受到敌方单位攻击未触发回击，则自身下<color=#158bdb>1</color>次常击或回击后，对该敌方单位额外造成<color=#158bdb>1</color>次自身物理防御力<color=#158bdb>300%</color>的<color=#ff6724>额外物理伤害</color>。",
-      "desc_vi": "Sau khi vào trận, nhận <color=#158bdb>2</color> tầng <color=#ff6724>Phụ Gia Di Động Lực</color>;\nKhi bản thân ở trạng thái <color=#ff6724>Vân Phong Kỳ Hiểm</color>, đơn vị phe ta gây sát thương lên toàn bộ địch trong <color=#158bdb>xung quanh 3 ô</color> của Khê Sơn Hành Lữ Đồ sẽ bỏ qua <color=#158bdb>30%</color> phòng thủ vật lý và phòng thủ Cấu Tố của chúng;\nMỗi lần Thường kích hoặc Hồi kích, hồi <color=#158bdb>5%</color> máu tối đa và ngẫu nhiên nhận <color=#158bdb>1</color> tầng <color=#ff6724>Thiết Giáp</color> hoặc <color=#ff6724>Thường Sam</color>;\nKhi ở trạng thái <color=#ff6724>Tự Dạ Bôn Hành</color> và gây bất kỳ sát thương nào lên địch, sát thương vật lý tăng <color=#158bdb>80%</color>, phòng thủ vật lý tăng <color=#158bdb>200%</color>, sau khi tấn công hiệu ứng biến mất;\nKhi ở trạng thái <color=#ff6724>Tự Dạ Bôn Hành</color>, nếu chịu tấn công từ địch mà không kích hoạt Hồi kích, thì sau <color=#158bdb>1</color> lần Thường kích hoặc Hồi kích tiếp theo, gây thêm <color=#158bdb>1</color> lần sát thương bằng <color=#158bdb>300%</color> phòng thủ vật lý của bản thân lên địch đó dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.",
+      "desc_vi": "Sau khi vào trận, nhận <color=#158bdb>2</color> tầng <color=#ff6724>Phụ Gia Di Động Lực</color>;\nKhi bản thân ở trạng thái <color=#ff6724>Vân Phong Kỳ Hiểm</color>, đơn vị phe ta gây sát thương lên toàn bộ địch trong <color=#158bdb>xung quanh 3 ô</color> của Khê Sơn Hành Lữ Đồ sẽ bỏ qua <color=#158bdb>30%</color> phòng thủ vật lý và phòng thủ Cấu Tố của chúng;\nMỗi lần Thường kích hoặc Phản kích, hồi <color=#158bdb>5%</color> máu tối đa và ngẫu nhiên nhận <color=#158bdb>1</color> tầng <color=#ff6724>Thiết Giáp</color> hoặc <color=#ff6724>Thường Sam</color>;\nKhi ở trạng thái <color=#ff6724>Tự Dạ Bôn Hành</color> và gây bất kỳ sát thương nào lên địch, sát thương vật lý tăng <color=#158bdb>80%</color>, phòng thủ vật lý tăng <color=#158bdb>200%</color>, sau khi tấn công hiệu ứng biến mất;\nKhi ở trạng thái <color=#ff6724>Tự Dạ Bôn Hành</color>, nếu chịu tấn công từ địch mà không kích hoạt Phản kích, thì sau <color=#158bdb>1</color> lần Thường kích hoặc Phản kích tiếp theo, gây thêm <color=#158bdb>1</color> lần sát thương bằng <color=#158bdb>300%</color> phòng thủ vật lý của bản thân lên địch đó dưới dạng <color=#ff6724>Sát thương vật lý bổ sung</color>.",
       "status": "PENDING"
     },
     "D0154061": {
@@ -23374,7 +23382,7 @@
       "skill_name_cn": "摩托头盔",
       "skill_name_vi": "Mũ Bảo Hiểm Mô Tô",
       "desc_cn": "攻击力提高自身构素防御力的<color=#158bdb>120%</color>；\n任意攻击造成暴击时，自身回复攻击力<color=#158bdb>10%</color>的生命值；\n若触发格挡，则自身下<color=#158bdb>1</color>次造成暴击时，暴击伤害提高<color=#158bdb>60%</color>；\n使用职业技能传送后，自身<color=#158bdb>周围2格</color>的敌方全体获得<color=#158bdb>2</color>回合<color=#ff6724>附骨</color>状态；\n使用绝技后，自身<color=#158bdb>周围2格</color>的敌方全体获得<color=#158bdb>1</color>回合的<color=#ff6724>震怒</color>和<color=#ff6724>鲁莽</color>状态；\n自身回合结束时，若自身存在<color=#ff6724>皇威</color>状态，则偷取自身<color=#158bdb>周围2格</color>敌方全体当前防御力的<color=#158bdb>10%</color>，每次最多可偷取共计<color=#158bdb>200</color>点；\n回击处于<color=#ff6724>震怒</color>状态的敌方单位时，对其造成自身攻击力<color=#158bdb>120%</color>的额外物理伤害。",
-      "desc_vi": "Tấn Công tăng thêm một lượng bằng <color=#158bdb>120%</color> Phòng Thủ Cấu Tố của bản thân;\nMỗi khi bất kỳ đòn tấn công nào Bạo Kích, bản thân hồi Máu bằng <color=#158bdb>10%</color> Tấn Công;\nNếu kích hoạt Đỡ, <color=#158bdb>1</color> lần Bạo Kích tiếp theo của bản thân có Sát Thương Bạo Kích tăng <color=#158bdb>60%</color>;\nSau khi dùng Kỹ Năng Nghề để dịch chuyển, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân trong <color=#158bdb>2</color> lượt nhận trạng thái <color=#ff6724>Phụ Cốt</color>;\nSau khi dùng Tuyệt Kỹ, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân trong <color=#158bdb>1</color> lượt nhận <color=#ff6724>Chấn Nộ</color> và <color=#ff6724>Lỗ Mãng</color>;\nCuối lượt của bản thân, nếu đang có trạng thái <color=#ff6724>Hoàng Uy</color>, đánh cắp từ toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân <color=#158bdb>10%</color> Phòng Thủ hiện tại; mỗi lần tối đa đánh cắp tổng cộng <color=#158bdb>200</color> điểm;\nKhi Hồi Kích đơn vị địch đang ở trạng thái <color=#ff6724>Chấn Nộ</color>, gây thêm Sát thương vật lý bổ sung bằng <color=#158bdb>120%</color> Tấn Công của bản thân.",
+      "desc_vi": "Tấn Công tăng thêm một lượng bằng <color=#158bdb>120%</color> Phòng Thủ Cấu Tố của bản thân;\nMỗi khi bất kỳ đòn tấn công nào Bạo Kích, bản thân hồi Máu bằng <color=#158bdb>10%</color> Tấn Công;\nNếu kích hoạt Đỡ, <color=#158bdb>1</color> lần Bạo Kích tiếp theo của bản thân có Sát Thương Bạo Kích tăng <color=#158bdb>60%</color>;\nSau khi dùng Kỹ Năng Nghề để dịch chuyển, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân trong <color=#158bdb>2</color> lượt nhận trạng thái <color=#ff6724>Phụ Cốt</color>;\nSau khi dùng Tuyệt Kỹ, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân trong <color=#158bdb>1</color> lượt nhận <color=#ff6724>Chấn Nộ</color> và <color=#ff6724>Lỗ Mãng</color>;\nCuối lượt của bản thân, nếu đang có trạng thái <color=#ff6724>Hoàng Uy</color>, đánh cắp từ toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân <color=#158bdb>10%</color> Phòng Thủ hiện tại; mỗi lần tối đa đánh cắp tổng cộng <color=#158bdb>200</color> điểm;\nKhi Phản Kích đơn vị địch đang ở trạng thái <color=#ff6724>Chấn Nộ</color>, gây thêm Sát thương vật lý bổ sung bằng <color=#158bdb>120%</color> Tấn Công của bản thân.",
       "status": "PENDING"
     },
     "S0012061": {
@@ -23410,7 +23418,7 @@
       "skill_name_cn": "游学行囊",
       "skill_name_vi": "Du Học Hành Nang",
       "desc_cn": "绝技范围扩大<color=#158bdb>1</color>格；\n使用绝技时，绝技范围外友方全体获得<color=#158bdb>1</color>层<color=#ff6724>解惑</color>状态；\n使用绝技后，绝技范围内的我方全体<color=#158bdb>2</color>回合内受到的伤害降低<color=#158bdb>25%</color>，且免疫控制效果<color=#158bdb>1</color>次，自身获得<color=#158bdb>2</color>层<color=#ff6724>蓄势</color>状态；\n处于<color=#ff6724>解惑</color>状态的友方单位进行回击时，获得持续<color=#158bdb>1</color>回合<color=#ff6724>游学心得</color>和<color=#158bdb>2</color>层<color=#ff6724>蓄势</color>状态；\n自身每存在<color=#158bdb>1</color>枚<color=#ff6724>礼弹</color>，则自身防御穿透提高<color=#158bdb>10%</color>，造成的伤害提高<color=#158bdb>20%</color>。{Buff_S0103_HZ_3_3}",
-      "desc_vi": "Phạm vi Tuyệt Kỹ mở rộng thêm <color=#158bdb>1</color> ô;\nKhi dùng Tuyệt Kỹ, toàn bộ đồng minh ngoài phạm vi Tuyệt Kỹ nhận <color=#158bdb>1</color> tầng <color=#ff6724>Giải Hoặc</color>;\nSau khi dùng Tuyệt Kỹ, trong <color=#158bdb>2</color> lượt, toàn bộ phe ta trong phạm vi Tuyệt Kỹ giảm <color=#158bdb>25%</color> sát thương phải chịu và miễn nhiễm <color=#158bdb>1</color> lần hiệu ứng Khống Chế; bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Hồi Kích, trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Du Học Tâm Đắc</color> và <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nMỗi <color=#158bdb>1</color> viên <color=#ff6724>Lễ Đạn</color> hiện có khiến Xuyên Thủ của bản thân tăng <color=#158bdb>10%</color> và sát thương gây ra tăng <color=#158bdb>20%</color>.{Buff_S0103_HZ_3_3}",
+      "desc_vi": "Phạm vi Tuyệt Kỹ mở rộng thêm <color=#158bdb>1</color> ô;\nKhi dùng Tuyệt Kỹ, toàn bộ đồng minh ngoài phạm vi Tuyệt Kỹ nhận <color=#158bdb>1</color> tầng <color=#ff6724>Giải Hoặc</color>;\nSau khi dùng Tuyệt Kỹ, trong <color=#158bdb>2</color> lượt, toàn bộ phe ta trong phạm vi Tuyệt Kỹ giảm <color=#158bdb>25%</color> sát thương phải chịu và miễn nhiễm <color=#158bdb>1</color> lần hiệu ứng Khống Chế; bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Phản Kích, trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Du Học Tâm Đắc</color> và <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nMỗi <color=#158bdb>1</color> viên <color=#ff6724>Lễ Đạn</color> hiện có khiến Xuyên Thủ của bản thân tăng <color=#158bdb>10%</color> và sát thương gây ra tăng <color=#158bdb>20%</color>.{Buff_S0103_HZ_3_3}",
       "status": "PENDING"
     },
     "S0132061": {
@@ -23464,7 +23472,7 @@
       "skill_name_cn": "山水石",
       "skill_name_vi": "Sơn Thủy Thạch",
       "desc_cn": "绝技造成的伤害提高<color=#158bdb>140%</color>；\n使用绝技后，使自身<color=#158bdb>周围2格</color>的敌方全体获得<color=#158bdb>1</color>回合<color=#ff6724>震怒</color>状态；\n自身处于<color=#ff6724>逍遥</color>状态时，受到的伤害降低<color=#158bdb>20%</color>并免疫控制效果；\n攻击造成暴击后，使自身全部技能冷却时间减少<color=#158bdb>1</color>回合并获得<color=#158bdb>1</color>点能量；\n攻击当前生命值低于最大生命值的<color=#158bdb>75%</color>的敌方单位时，若攻击造成连击，则该次连击伤害倍率提高至<color=#158bdb>3</color>倍；\n自身每存在<color=#158bdb>1</color>层<color=#ff6724>逍遥</color>状态，则连击造成的伤害提高<color=#158bdb>60%</color>，回击造成的伤害提高<color=#158bdb>60%</color>；\n若自身行动期间击败敌方单位，则获得再行动<color=#158bdb>1</color>次，此效果每回合最多可触发<color=#158bdb>1</color>次。",
-      "desc_vi": "Sát thương do Tuyệt kỹ gây ra tăng <color=#158bdb>140%</color>;\nSau khi dùng Tuyệt kỹ, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân nhận <color=#158bdb>1</color> lượt <color=#ff6724>Chấn Nộ</color>;\nKhi bản thân ở trạng thái <color=#ff6724>Tiêu Dao</color>, sát thương phải chịu giảm <color=#158bdb>20%</color> và miễn nhiễm hiệu ứng khống chế;\nSau khi tấn công gây Bạo Kích, thời gian hồi của toàn bộ kỹ năng bản thân giảm <color=#158bdb>1</color> lượt và nhận <color=#158bdb>1</color> điểm năng lượng;\nKhi tấn công đơn vị địch có Máu hiện tại thấp hơn <color=#158bdb>75%</color> Máu tối đa, nếu đòn tấn công kích hoạt Liên kích, hệ số sát thương của Liên kích đó tăng lên <color=#158bdb>3</color> lần;\nVới mỗi <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color> hiện có, sát thương Liên kích tăng <color=#158bdb>60%</color>, sát thương Hồi kích tăng <color=#158bdb>60%</color>;\nNếu trong lượt hành động của bản thân hạ được đơn vị địch, nhận <color=#158bdb>1</color> lần tái hành động; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>1</color> lần.",
+      "desc_vi": "Sát thương do Tuyệt kỹ gây ra tăng <color=#158bdb>140%</color>;\nSau khi dùng Tuyệt kỹ, toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân nhận <color=#158bdb>1</color> lượt <color=#ff6724>Chấn Nộ</color>;\nKhi bản thân ở trạng thái <color=#ff6724>Tiêu Dao</color>, sát thương phải chịu giảm <color=#158bdb>20%</color> và miễn nhiễm hiệu ứng khống chế;\nSau khi tấn công gây Bạo Kích, thời gian hồi của toàn bộ kỹ năng bản thân giảm <color=#158bdb>1</color> lượt và nhận <color=#158bdb>1</color> điểm năng lượng;\nKhi tấn công đơn vị địch có Máu hiện tại thấp hơn <color=#158bdb>75%</color> Máu tối đa, nếu đòn tấn công kích hoạt Liên kích, hệ số sát thương của Liên kích đó tăng lên <color=#158bdb>3</color> lần;\nVới mỗi <color=#158bdb>1</color> tầng <color=#ff6724>Tiêu Dao</color> hiện có, sát thương Liên kích tăng <color=#158bdb>60%</color>, sát thương Phản kích tăng <color=#158bdb>60%</color>;\nNếu trong lượt hành động của bản thân hạ được đơn vị địch, nhận <color=#158bdb>1</color> lần tái hành động; hiệu ứng này mỗi lượt tối đa kích hoạt <color=#158bdb>1</color> lần.",
       "status": "PENDING"
     },
     "V0076061": {
@@ -24265,7 +24273,7 @@
       "skill_name_cn": "尊师重道",
       "skill_name_vi": "Tôn Sư Trọng Đạo",
       "desc_cn": "存在构素护盾的友方单位，其护盾吸收伤害时，商周十供回复最大生命值的<color=#158bdb>[Effect1Para,2]%</color>的生命值，并获得<color=#ff6724>教学相长</color>状态。\n处于<color=#ff6724>解惑</color>状态的友方单位进行回击时，获得<color=#158bdb>1</color>回合<color=#ff6724>了悟</color>状态。回击时，商周十供获得<color=#158bdb>1</color>层<color=#ff6724>教学相长</color>状态和<color=#158bdb>1</color>枚礼弹。{Buff_S0103_4_1}{Buff_S0103_5_1}",
-      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Hồi Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>. Khi Hồi Kích, Thương Chu Thập Cung nhận <color=#158bdb>1</color> tầng <color=#ff6724>Giáo Học Tương Trưởng</color> và <color=#158bdb>1</color> viên Lễ Đạn.{Buff_S0103_4_1}{Buff_S0103_5_1}",
+      "desc_vi": "Khi Hộ Thuẫn của đồng minh đang có Hộ Thuẫn Cấu Tố hấp thụ sát thương, Thương Chu Thập Cung hồi <color=#158bdb>[Effect1Para,2]%</color> Máu tối đa và nhận trạng thái <color=#ff6724>Giáo Học Tương Trưởng</color>.\nKhi đồng minh đang ở trạng thái <color=#ff6724>Giải Hoặc</color> thực hiện Phản Kích, đơn vị đó trong <color=#158bdb>1</color> lượt nhận trạng thái <color=#ff6724>Liễu Ngộ</color>. Khi Phản Kích, Thương Chu Thập Cung nhận <color=#158bdb>1</color> tầng <color=#ff6724>Giáo Học Tương Trưởng</color> và <color=#158bdb>1</color> viên Lễ Đạn.{Buff_S0103_4_1}{Buff_S0103_5_1}",
       "status": "PENDING"
     },
     "S012305ex": {
@@ -24553,7 +24561,7 @@
       "skill_name_cn": "四鹿承龙",
       "skill_name_vi": "Tứ Lộc Thừa Long",
       "desc_cn": "最大生命值增加<color=#158bdb>[Effect3Para,1]%</color>；当受到的伤害累计超过自身最大生命值<color=#158bdb>30%</color>时，常击后触发连击，连击对目标造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害；超过<color=#158bdb>60%</color>时，受到<color=#158bdb>周围1格</color>敌方单位的常击后进行回击，对其造成自身攻击力<color=#158bdb>[Effect2Para,1]%</color>的物理伤害；超过<color=#158bdb>100%</color>时，获得<color=#ff6724>鹿灵</color>状态。{Buff_V0078_5}{Buff_V0078_6}{Buff_V0078_10}",
-      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây sát thương vật lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Hồi kích, gây sát thương vật lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó; khi vượt quá <color=#158bdb>100%</color>, nhận trạng thái <color=#ff6724>Lộc Linh</color>.{Buff_V0078_5}{Buff_V0078_6}{Buff_V0078_10}",
+      "desc_vi": "Máu tối đa tăng <color=#158bdb>[Effect3Para,1]%</color>; khi tổng sát thương đã chịu vượt quá <color=#158bdb>30%</color> Máu tối đa của bản thân, sau Thường kích kích hoạt Liên kích, gây sát thương vật lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên mục tiêu; khi vượt quá <color=#158bdb>60%</color>, sau khi chịu Thường kích từ đơn vị địch trong <color=#158bdb>1 ô xung quanh</color>, thực hiện Phản kích, gây sát thương vật lý bằng <color=#158bdb>[Effect2Para,1]%</color> Tấn Công của bản thân lên đơn vị đó; khi vượt quá <color=#158bdb>100%</color>, nhận trạng thái <color=#ff6724>Lộc Linh</color>.{Buff_V0078_5}{Buff_V0078_6}{Buff_V0078_10}",
       "status": "PENDING"
     },
     "V009104ex": {
@@ -25102,7 +25110,7 @@
       "skill_name_cn": "骷髅相护",
       "skill_name_vi": "Khô Lâu Tương Hộ",
       "desc_cn": "友方全体回击造成的伤害提高<color=#158bdb>30%</color>；\n使用绝技后，可<color=#ff6724>援护</color>自身<color=#158bdb>周围3格</color>内的友方单位，此效果每轮次最多可触发<color=#158bdb>1</color>次；\n自身受到<color=#158bdb>2</color>名敌方直接攻击后，清除<color=#ff6724>援护</color>状态，并使自身<color=#158bdb>周围3格</color>内敌方全体获得<color=#ff6724>傀骨</color>状态",
-      "desc_vi": "Sát thương Hồi kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>30%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
+      "desc_vi": "Sát thương Phản kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>30%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
       "status": "PENDING"
     },
     "D018303_2": {
@@ -25111,7 +25119,7 @@
       "skill_name_cn": "骷髅相护",
       "skill_name_vi": "Khô Lâu Tương Hộ",
       "desc_cn": "友方全体回击造成的伤害提高<color=#158bdb>45%</color>；\n使用绝技后，可<color=#ff6724>援护</color>自身<color=#158bdb>周围3格</color>内的友方单位，此效果每轮次最多可触发<color=#158bdb>1</color>次；\n自身受到<color=#158bdb>2</color>名敌方直接攻击后，清除<color=#ff6724>援护</color>状态，并使自身<color=#158bdb>周围3格</color>内敌方全体获得<color=#ff6724>傀骨</color>状态",
-      "desc_vi": "Sát thương Hồi kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>45%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
+      "desc_vi": "Sát thương Phản kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>45%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
       "status": "PENDING"
     },
     "D018303_3": {
@@ -25120,7 +25128,7 @@
       "skill_name_cn": "骷髅相护",
       "skill_name_vi": "Khô Lâu Tương Hộ",
       "desc_cn": "友方全体回击造成的伤害提高<color=#158bdb>60%</color>；\n使用绝技后，可<color=#ff6724>援护</color>自身<color=#158bdb>周围3格</color>内的友方单位，此效果每轮次最多可触发<color=#158bdb>1</color>次；\n自身受到<color=#158bdb>2</color>名敌方直接攻击后，清除<color=#ff6724>援护</color>状态，并使自身<color=#158bdb>周围3格</color>内敌方全体获得<color=#ff6724>傀骨</color>状态",
-      "desc_vi": "Sát thương Hồi kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>60%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
+      "desc_vi": "Sát thương Phản kích do toàn bộ đồng minh gây ra tăng <color=#158bdb>60%</color>;\nSau khi dùng Tuyệt kỹ, có thể <color=#ff6724>Hộ vệ</color> đồng minh trong <color=#158bdb>3 ô xung quanh</color> bản thân; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi bản thân chịu tấn công trực tiếp từ <color=#158bdb>2</color> đơn vị địch, xóa trạng thái <color=#ff6724>Hộ vệ</color>, đồng thời khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Khôi Cốt</color>.",
       "status": "PENDING"
     },
     "D018304_1": {
@@ -25156,7 +25164,7 @@
       "skill_name_cn": "真幻难辨",
       "skill_name_vi": "Chân Huyễn Nan Biện",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>15%</color>，受到的额外伤害提高<color=#158bdb>15%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>30%</color>。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>15%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>15%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>30%</color>.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>15%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>15%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>30%</color>.",
       "status": "PENDING"
     },
     "D018305_2": {
@@ -25165,7 +25173,7 @@
       "skill_name_cn": "真幻难辨",
       "skill_name_vi": "Chân Huyễn Nan Biện",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>22%</color>，受到的额外伤害提高<color=#158bdb>22%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>45%</color>。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>22%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>22%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>45%</color>.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>22%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>22%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>45%</color>.",
       "status": "PENDING"
     },
     "D018305_3": {
@@ -25174,7 +25182,7 @@
       "skill_name_cn": "真幻难辨",
       "skill_name_vi": "Chân Huyễn Nan Biện",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>30%</color>，受到的额外伤害提高<color=#158bdb>30%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>60%</color>。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>60%</color>.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>60%</color>.",
       "status": "PENDING"
     },
     "D018305ex_1": {
@@ -25183,7 +25191,7 @@
       "skill_name_cn": "真幻难辨-超群",
       "skill_name_vi": "Chân Huyễn Nan Biện - Siêu Quần",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>30%</color>，受到的额外伤害提高<color=#158bdb>30%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>50%</color>；\n友方单位进行回击时，幻戏图获得<color=#158bdb>1</color>点能量且绝技冷却时间减少<color=#158bdb>1</color>回合，此效果每轮次最多可触发<color=#158bdb>1</color>次。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>50%</color>;\nKhi đồng minh thực hiện Hồi kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>50%</color>;\nKhi đồng minh thực hiện Phản kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
       "status": "PENDING"
     },
     "D018305ex_2": {
@@ -25192,7 +25200,7 @@
       "skill_name_cn": "真幻难辨-超群",
       "skill_name_vi": "Chân Huyễn Nan Biện - Siêu Quần",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>45%</color>，受到的额外伤害提高<color=#158bdb>45%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>75%</color>；\n友方单位进行回击时，幻戏图获得<color=#158bdb>1</color>点能量且绝技冷却时间减少<color=#158bdb>1</color>回合，此效果每轮次最多可触发<color=#158bdb>1</color>次。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>45%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>45%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>75%</color>;\nKhi đồng minh thực hiện Hồi kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>45%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>45%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>75%</color>;\nKhi đồng minh thực hiện Phản kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
       "status": "PENDING"
     },
     "D018305ex_3": {
@@ -25201,7 +25209,7 @@
       "skill_name_cn": "真幻难辨-超群",
       "skill_name_vi": "Chân Huyễn Nan Biện - Siêu Quần",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>60%</color>，受到的额外伤害提高<color=#158bdb>60%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>100%</color>；\n友方单位进行回击时，幻戏图获得<color=#158bdb>1</color>点能量且绝技冷却时间减少<color=#158bdb>1</color>回合，此效果每轮次最多可触发<color=#158bdb>1</color>次。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>60%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>60%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>100%</color>;\nKhi đồng minh thực hiện Hồi kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>60%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>60%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>100%</color>;\nKhi đồng minh thực hiện Phản kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
       "status": "PENDING"
     },
     "D018311_1": {
@@ -25228,7 +25236,7 @@
       "skill_name_cn": "学社迎新娃娃",
       "skill_name_vi": "Búp Bê Nghênh Tân Học Xã",
       "desc_cn": "进入战斗后，自身移动力增加至<color=#158bdb>10</color>，且立即获得<color=#158bdb>3</color>种<color=#ff6724>旋律</color>；\n我方任意器者进行常击或回击时，曾侯乙编钟获得随机<color=#158bdb>1</color>种<color=#ff6724>旋律</color>，优先获得自身不存在的<color=#ff6724>旋律</color>，此效果在曾侯乙编钟下<color=#158bdb>1</color>次行动前，最多可触发<color=#158bdb>3</color>次；\n自身获得任意<color=#ff6724>旋律</color>或刷新<color=#ff6724>旋律</color>状态时，额外获得<color=#158bdb>1</color>层<color=#ff6724>星空之声</color>状态；\n自身每回合开始时，获得<color=#158bdb>2</color>点能量；\n自身使用绝技进行攻击前，使自身<color=#158bdb>周围3格</color>内攻击力最高的<color=#158bdb>2</color>个友方单位获得<color=#158bdb>1</color>层<color=#ff6724>星间回响</color>状态，<color=#158bdb>2</color>层<color=#ff6724>啸剑</color>状态和<color=#158bdb>2</color>层<color=#ff6724>蓄势</color>状态；\n自身使用绝技后，使<color=#158bdb>周围2格</color>内友方全体获得<color=#158bdb>1</color>层<color=#ff6724>迎新仪式</color>状态，自身获得<color=#ff6724>玩偶化身</color>状态；\n<color=#ff6724>正音</color>状态效果变为：自身立即获得持续<color=#158bdb>1</color>回合的<color=#ff6724>肃静</color>状态；在<color=#158bdb>1</color>回合内，自身常击造成的伤害降低<color=#158bdb>70%</color>，且进行常击后，使自身受到自身攻击力<color=#158bdb>300%</color>的<color=#ff6724>额外真实伤害</color>。\n{Buff_D0092_Hz_Buff_1}{Buff_D0092_Hz_Buff_2}{Buff_D0092_Hz_Buff_3}{Buff_D0092_Hz_Buff_4}",
-      "desc_vi": "Sau khi vào trận, Điểm di chuyển của bản thân tăng lên <color=#158bdb>10</color>, đồng thời lập tức nhận <color=#158bdb>3</color> loại <color=#ff6724>Toàn Luật</color>;\nKhi bất kỳ Khí Giả phe ta thực hiện Thường kích hoặc Hồi Kích, Tăng Hầu Ất Biên Chung nhận ngẫu nhiên <color=#158bdb>1</color> loại <color=#ff6724>Toàn Luật</color>, ưu tiên loại <color=#ff6724>Toàn Luật</color> mà bản thân chưa có; trước <color=#158bdb>1</color> lần hành động tiếp theo của Tăng Hầu Ất Biên Chung, hiệu ứng này tối đa kích hoạt <color=#158bdb>3</color> lần;\nKhi bản thân nhận bất kỳ <color=#ff6724>Toàn Luật</color> nào hoặc làm mới trạng thái <color=#ff6724>Toàn Luật</color>, nhận thêm <color=#158bdb>1</color> tầng <color=#ff6724>Tinh Không Chi Thanh</color>;\nMỗi khi bắt đầu lượt của bản thân, nhận <color=#158bdb>2</color> điểm Năng Lượng;\nTrước khi bản thân dùng Tuyệt kỹ để tấn công, khiến <color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tinh Gian Hồi Hưởng</color>, <color=#158bdb>2</color> tầng <color=#ff6724>Khiếu Kiếm</color> và <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nSau khi bản thân dùng Tuyệt kỹ, khiến toàn bộ đơn vị phe ta trong <color=#158bdb>2 ô xung quanh</color> nhận <color=#158bdb>1</color> tầng <color=#ff6724>Nghênh Tân Nghi Thức</color>; bản thân nhận trạng thái <color=#ff6724>Ngoạn Ngẫu Hóa Thân</color>;\nHiệu ứng trạng thái <color=#ff6724>Chính Âm</color> đổi thành: bản thân lập tức nhận trạng thái <color=#ff6724>Túc Tĩnh</color> kéo dài <color=#158bdb>1</color> lượt; trong <color=#158bdb>1</color> lượt, sát thương Thường kích do bản thân gây ra giảm <color=#158bdb>70%</color>, đồng thời sau khi thực hiện Thường kích, khiến bản thân chịu <color=#ff6724>Sát Thương Chuẩn Bổ Sung</color> bằng <color=#158bdb>300%</color> Tấn Công của bản thân.\n{Buff_D0092_Hz_Buff_1}{Buff_D0092_Hz_Buff_2}{Buff_D0092_Hz_Buff_3}{Buff_D0092_Hz_Buff_4}",
+      "desc_vi": "Sau khi vào trận, Điểm di chuyển của bản thân tăng lên <color=#158bdb>10</color>, đồng thời lập tức nhận <color=#158bdb>3</color> loại <color=#ff6724>Toàn Luật</color>;\nKhi bất kỳ Khí Giả phe ta thực hiện Thường kích hoặc Phản Kích, Tăng Hầu Ất Biên Chung nhận ngẫu nhiên <color=#158bdb>1</color> loại <color=#ff6724>Toàn Luật</color>, ưu tiên loại <color=#ff6724>Toàn Luật</color> mà bản thân chưa có; trước <color=#158bdb>1</color> lần hành động tiếp theo của Tăng Hầu Ất Biên Chung, hiệu ứng này tối đa kích hoạt <color=#158bdb>3</color> lần;\nKhi bản thân nhận bất kỳ <color=#ff6724>Toàn Luật</color> nào hoặc làm mới trạng thái <color=#ff6724>Toàn Luật</color>, nhận thêm <color=#158bdb>1</color> tầng <color=#ff6724>Tinh Không Chi Thanh</color>;\nMỗi khi bắt đầu lượt của bản thân, nhận <color=#158bdb>2</color> điểm Năng Lượng;\nTrước khi bản thân dùng Tuyệt kỹ để tấn công, khiến <color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất trong <color=#158bdb>3 ô xung quanh</color> bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tinh Gian Hồi Hưởng</color>, <color=#158bdb>2</color> tầng <color=#ff6724>Khiếu Kiếm</color> và <color=#158bdb>2</color> tầng <color=#ff6724>Súc Thế</color>;\nSau khi bản thân dùng Tuyệt kỹ, khiến toàn bộ đơn vị phe ta trong <color=#158bdb>2 ô xung quanh</color> nhận <color=#158bdb>1</color> tầng <color=#ff6724>Nghênh Tân Nghi Thức</color>; bản thân nhận trạng thái <color=#ff6724>Ngoạn Ngẫu Hóa Thân</color>;\nHiệu ứng trạng thái <color=#ff6724>Chính Âm</color> đổi thành: bản thân lập tức nhận trạng thái <color=#ff6724>Túc Tĩnh</color> kéo dài <color=#158bdb>1</color> lượt; trong <color=#158bdb>1</color> lượt, sát thương Thường kích do bản thân gây ra giảm <color=#158bdb>70%</color>, đồng thời sau khi thực hiện Thường kích, khiến bản thân chịu <color=#ff6724>Sát Thương Chuẩn Bổ Sung</color> bằng <color=#158bdb>300%</color> Tấn Công của bản thân.\n{Buff_D0092_Hz_Buff_1}{Buff_D0092_Hz_Buff_2}{Buff_D0092_Hz_Buff_3}{Buff_D0092_Hz_Buff_4}",
       "status": "TRANSLATED"
     },
     "D018305ex": {
@@ -25237,7 +25245,7 @@
       "skill_name_cn": "真幻难辨-超群",
       "skill_name_vi": "Chân Huyễn Nan Biện - Siêu Quần",
       "desc_cn": "友方单位进行回击前，使自身<color=#158bdb>周围3格</color>内敌方全体受到的回击伤害提高<color=#158bdb>30%</color>，受到的额外伤害提高<color=#158bdb>30%</color>，持续至下<color=#158bdb>1</color>个单位的回合开始；\n我方攻击力最高的<color=#158bdb>2</color>个单位，其暴击伤害提高<color=#158bdb>50%</color>；\n友方单位进行回击时，幻戏图获得<color=#158bdb>1</color>点能量且绝技冷却时间减少<color=#158bdb>1</color>回合，此效果每轮次最多可触发<color=#158bdb>1</color>次。",
-      "desc_vi": "Trước khi đồng minh thực hiện Hồi kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Hồi kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>50%</color>;\nKhi đồng minh thực hiện Hồi kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
+      "desc_vi": "Trước khi đồng minh thực hiện Phản kích, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân chịu sát thương Phản kích tăng <color=#158bdb>30%</color> và sát thương bổ sung phải chịu tăng <color=#158bdb>30%</color>, kéo dài đến khi bắt đầu lượt của <color=#158bdb>1</color> đơn vị kế tiếp;\n<color=#158bdb>2</color> đơn vị phe ta có Tấn Công cao nhất được tăng Sát Thương Bạo Kích <color=#158bdb>50%</color>;\nKhi đồng minh thực hiện Phản kích, Huyễn Hý Đồ nhận <color=#158bdb>1</color> điểm năng lượng và thời gian hồi Tuyệt kỹ giảm <color=#158bdb>1</color> lượt; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.",
       "status": "PENDING"
     },
     "A018401_1": {
@@ -26102,7 +26110,7 @@
       "buff_name_cn": "金玉",
       "buff_name_vi": "Kim Ngọc",
       "buff_desc_cn": "回击的暴击率提高<color=#158bdb>[EffectParam,2]%</color>，持续<color=#158bdb>1</color>回合。",
-      "buff_desc_vi": "Tỷ Lệ Bạo Kích của Hồi Kích tăng <color=#158bdb>[EffectParam,2]%</color>, kéo dài <color=#158bdb>1</color> lượt.",
+      "buff_desc_vi": "Tỷ Lệ Bạo Kích của Phản Kích tăng <color=#158bdb>[EffectParam,2]%</color>, kéo dài <color=#158bdb>1</color> lượt.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29189,7 +29197,7 @@
       "buff_name_cn": "同赏",
       "buff_name_vi": "Đồng Thưởng",
       "buff_desc_cn": "当自身<color=#158bdb>周围1格</color>内的友方单位受到伤害时，代替其承受伤害。\n<color=#db2424>只可对除绝技、警戒攻击和回击外造成单体伤害的攻击生效。</color>",
-      "buff_desc_vi": "Khi đồng minh trong phạm vi <color=#158bdb>1 ô xung quanh</color> bản thân chịu sát thương, bản thân sẽ chịu sát thương thay cho họ.\n<color=#db2424>Chỉ có hiệu lực với các đòn gây sát thương đơn mục tiêu, ngoại trừ Tuyệt Kỹ, Tấn Công Cảnh Giới và Hồi Kích.</color>",
+      "buff_desc_vi": "Khi đồng minh trong phạm vi <color=#158bdb>1 ô xung quanh</color> bản thân chịu sát thương, bản thân sẽ chịu sát thương thay cho họ.\n<color=#db2424>Chỉ có hiệu lực với các đòn gây sát thương đơn mục tiêu, ngoại trừ Tuyệt Kỹ, Tấn Công Cảnh Giới và Phản Kích.</color>",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29315,7 +29323,7 @@
       "buff_name_cn": "旅行摄影",
       "buff_name_vi": "Lữ Hành Nhiếp Ảnh",
       "buff_desc_cn": "处于此状态下，对敌方单位造成回击伤害后，使该受击单位获得<color=#ff6724>截招</color>状态；\n若自身闪避敌方攻击，则使该攻击单位获得<color=#ff6724>震怒</color>状态，此状态持续<color=#158bdb>1</color>回合。",
-      "buff_desc_vi": "Khi ở trạng thái này, sau khi gây sát thương Hồi Kích lên đơn vị địch, khiến đơn vị trúng đòn nhận trạng thái <color=#ff6724>Tiệt Chiêu</color>;\nNếu bản thân né tấn công của địch, khiến đơn vị tấn công nhận trạng thái <color=#ff6724>Chấn Nộ</color>; trạng thái này kéo dài <color=#158bdb>1</color> lượt.",
+      "buff_desc_vi": "Khi ở trạng thái này, sau khi gây sát thương Phản Kích lên đơn vị địch, khiến đơn vị trúng đòn nhận trạng thái <color=#ff6724>Tiệt Chiêu</color>;\nNếu bản thân né tấn công của địch, khiến đơn vị tấn công nhận trạng thái <color=#ff6724>Chấn Nộ</color>; trạng thái này kéo dài <color=#158bdb>1</color> lượt.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29324,7 +29332,7 @@
       "buff_name_cn": "相机代言",
       "buff_name_vi": "Tướng Cơ Đại Ngôn",
       "buff_desc_cn": "每层此状态使自身回击造成的伤害提高<color=#158bdb>40%</color>，最多可叠加<color=#158bdb>3</color>层，持续<color=#158bdb>2</color>回合。",
-      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương Hồi Kích của bản thân tăng <color=#158bdb>40%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng, kéo dài <color=#158bdb>2</color> lượt.",
+      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương Phản Kích của bản thân tăng <color=#158bdb>40%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng, kéo dài <color=#158bdb>2</color> lượt.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29495,7 +29503,7 @@
       "buff_name_cn": "似夜奔行",
       "buff_name_vi": "Tự Dạ Bôn Hành",
       "buff_desc_cn": "处于此状态时，若常击和回击造成伤害，则对其造成自身物理防御的<color=#158bdb>[EffectParam,3]%</color>的<color=#ff6724>额外物理伤害</color>；\n持续时间内回击造成伤害时，自身回复最大生命值<color=#158bdb>5%</color>的生命值。",
-      "buff_desc_vi": "Khi ở trạng thái này, nếu Thường Kích hoặc Hồi Kích gây sát thương, gây thêm <color=#ff6724>Sát thương vật lý bổ sung</color> bằng <color=#158bdb>[EffectParam,3]%</color> Phòng Thủ Vật Lý của bản thân;\nTrong thời gian hiệu lực, khi Hồi Kích gây sát thương, bản thân hồi Máu bằng <color=#158bdb>5%</color> Máu tối đa.",
+      "buff_desc_vi": "Khi ở trạng thái này, nếu Thường Kích hoặc Phản Kích gây sát thương, gây thêm <color=#ff6724>Sát thương vật lý bổ sung</color> bằng <color=#158bdb>[EffectParam,3]%</color> Phòng Thủ Vật Lý của bản thân;\nTrong thời gian hiệu lực, khi Phản Kích gây sát thương, bản thân hồi Máu bằng <color=#158bdb>5%</color> Máu tối đa.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29540,7 +29548,7 @@
       "buff_name_cn": "奇石",
       "buff_name_vi": "Kỳ Thạch",
       "buff_desc_cn": "回击概率提高到<color=#158bdb>100%</color>，且自身受到的伤害降低<color=#158bdb>[EffectParam,2]%</color>。",
-      "buff_desc_vi": "Tỷ lệ Hồi Kích tăng lên <color=#158bdb>100%</color>, đồng thời sát thương bản thân phải chịu giảm <color=#158bdb>[EffectParam,2]%</color>.",
+      "buff_desc_vi": "Tỷ lệ Phản Kích tăng lên <color=#158bdb>100%</color>, đồng thời sát thương bản thân phải chịu giảm <color=#158bdb>[EffectParam,2]%</color>.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29549,7 +29557,7 @@
       "buff_name_cn": "皇威",
       "buff_name_vi": "Hoàng Uy",
       "buff_desc_cn": "回击造成伤害时，使自身防御穿透增加<color=#158bdb>[EffectParam,2]%</color>。",
-      "buff_desc_vi": "Khi Hồi Kích gây sát thương, Xuyên Thủ của bản thân tăng <color=#158bdb>[EffectParam,2]%</color>.",
+      "buff_desc_vi": "Khi Phản Kích gây sát thương, Xuyên Thủ của bản thân tăng <color=#158bdb>[EffectParam,2]%</color>.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -29585,7 +29593,7 @@
       "buff_name_cn": "莲花",
       "buff_name_vi": "Liên Hoa",
       "buff_desc_cn": "自身攻击力提高<color=#158bdb>[EffectParam,2]%</color>，回击造成的伤害提高<color=#158bdb>[EffectParam,3]%</color>；\n自身进行回击后，使我方全体单位获得<color=#158bdb>1</color>层<color=#ff6724>莲心</color>状态。",
-      "buff_desc_vi": "Tấn Công của bản thân tăng <color=#158bdb>[EffectParam,2]%</color>, sát thương Hồi Kích gây ra tăng <color=#158bdb>[EffectParam,3]%</color>;\nSau khi bản thân thực hiện Hồi Kích, toàn bộ đơn vị phe ta nhận <color=#158bdb>1</color> tầng <color=#ff6724>Liên Tâm</color>.",
+      "buff_desc_vi": "Tấn Công của bản thân tăng <color=#158bdb>[EffectParam,2]%</color>, sát thương Phản Kích gây ra tăng <color=#158bdb>[EffectParam,3]%</color>;\nSau khi bản thân thực hiện Phản Kích, toàn bộ đơn vị phe ta nhận <color=#158bdb>1</color> tầng <color=#ff6724>Liên Tâm</color>.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -34893,7 +34901,7 @@
     "Buff_RealDamge_Lan_Counter": {
       "group_root_id": "Buff_RealDamge_Lan_Counter",
       "buff_name_cn": "回击真实伤害",
-      "buff_name_vi": "Sát Thương Chuẩn Hồi Kích",
+      "buff_name_vi": "Sát Thương Chuẩn Phản Kích",
       "buff_desc_cn": "此伤害不触发暴击和贯穿效果，且无法被格挡，无视防御和减伤效果，同时也不受增伤效果影响。",
       "buff_desc_vi": "Loại sát thương này không kích hoạt Bạo Kích hoặc Quán Xuyên, không thể bị Đỡ, bỏ qua Phòng Thủ và hiệu ứng giảm sát thương, đồng thời không chịu ảnh hưởng bởi hiệu ứng tăng sát thương.",
       "classification_scope": "UNKNOWN",
@@ -34922,7 +34930,7 @@
       "buff_name_cn": "鲁莽",
       "buff_name_vi": "Lỗ Mãng",
       "buff_desc_cn": "受到的回击伤害提高<color=#158bdb>[EffectParam,3]%</color>，持续<color=#158bdb>[EffectParam,2]</color>回合，可叠加<color=#158bdb>1</color>层。",
-      "buff_desc_vi": "Sát thương Hồi Kích bản thân phải chịu tăng <color=#158bdb>[EffectParam,3]%</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, tối đa cộng dồn <color=#158bdb>1</color> tầng.",
+      "buff_desc_vi": "Sát thương Phản Kích bản thân phải chịu tăng <color=#158bdb>[EffectParam,3]%</color>, kéo dài <color=#158bdb>[EffectParam,2]</color> lượt, tối đa cộng dồn <color=#158bdb>1</color> tầng.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -36272,7 +36280,7 @@
       "buff_name_cn": "游学心得",
       "buff_name_vi": "Du Học Tâm Đắc",
       "buff_desc_cn": "自身回击造成的伤害提高<color=#158bdb>60%</color>，持续<color=#158bdb>1</color>回合。",
-      "buff_desc_vi": "Sát thương Hồi Kích của bản thân tăng <color=#158bdb>60%</color>, kéo dài <color=#158bdb>1</color> lượt.",
+      "buff_desc_vi": "Sát thương Phản Kích của bản thân tăng <color=#158bdb>60%</color>, kéo dài <color=#158bdb>1</color> lượt.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -36596,7 +36604,7 @@
       "buff_name_cn": "凛冬",
       "buff_name_vi": "Lẫm Đông",
       "buff_desc_cn": "我方宿卫职业数量不少于<color=#158bdb>1</color>时，我方宿卫职业器者回击造成的伤害提高<color=#158bdb>[EffectParam,2]%</color>；\n我方宿卫职业数量不少于<color=#158bdb>3</color>时，我方宿卫职业器者受到的伤害降低<color=#158bdb>[EffectParam,3]%</color>。",
-      "buff_desc_vi": "Khi phe ta có ít nhất <color=#158bdb>1</color> Khí Giả nghề Túc Vệ, sát thương Hồi Kích do Khí Giả Túc Vệ phe ta gây ra tăng <color=#158bdb>[EffectParam,2]%</color>;\nKhi phe ta có ít nhất <color=#158bdb>3</color> Khí Giả nghề Túc Vệ, sát thương Khí Giả Túc Vệ phe ta phải chịu giảm <color=#158bdb>[EffectParam,3]%</color>.",
+      "buff_desc_vi": "Khi phe ta có ít nhất <color=#158bdb>1</color> Khí Giả nghề Túc Vệ, sát thương Phản Kích do Khí Giả Túc Vệ phe ta gây ra tăng <color=#158bdb>[EffectParam,2]%</color>;\nKhi phe ta có ít nhất <color=#158bdb>3</color> Khí Giả nghề Túc Vệ, sát thương Khí Giả Túc Vệ phe ta phải chịu giảm <color=#158bdb>[EffectParam,3]%</color>.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -36605,7 +36613,7 @@
       "buff_name_cn": "凛冬-超群",
       "buff_name_vi": "Lẫm Đông - Siêu Quần",
       "buff_desc_cn": "我方宿卫职业数量不少于<color=#158bdb>1</color>时，我方器者全体回击造成的伤害提高<color=#158bdb>[EffectParam,2]%</color>；\n我方宿卫职业数量不少于<color=#158bdb>3</color>时，我方器者全体受到的伤害降低<color=#158bdb>[EffectParam,3]%</color>。",
-      "buff_desc_vi": "Khi phe ta có ít nhất <color=#158bdb>1</color> Khí Giả nghề Túc Vệ, sát thương Hồi Kích của toàn bộ Khí Giả phe ta tăng <color=#158bdb>[EffectParam,2]%</color>;\nKhi phe ta có ít nhất <color=#158bdb>3</color> Khí Giả nghề Túc Vệ, sát thương toàn bộ Khí Giả phe ta phải chịu giảm <color=#158bdb>[EffectParam,3]%</color>.",
+      "buff_desc_vi": "Khi phe ta có ít nhất <color=#158bdb>1</color> Khí Giả nghề Túc Vệ, sát thương Phản Kích của toàn bộ Khí Giả phe ta tăng <color=#158bdb>[EffectParam,2]%</color>;\nKhi phe ta có ít nhất <color=#158bdb>3</color> Khí Giả nghề Túc Vệ, sát thương toàn bộ Khí Giả phe ta phải chịu giảm <color=#158bdb>[EffectParam,3]%</color>.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -38711,7 +38719,7 @@
       "buff_name_cn": "活泼开朗",
       "buff_name_vi": "Hoạt Bát Khai Lãng",
       "buff_desc_cn": "每层此状态自身造成的回击伤害、追击伤害、额外伤害和警戒伤害提高<color=#158bdb>60%</color>；此状态最多可叠加<color=#158bdb>1</color>层，持续<color=#158bdb>2</color>轮次。",
-      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương Hồi Kích, Truy Kích, Sát Thương Bổ Sung và sát thương Tấn Công Cảnh Giới do bản thân gây ra tăng <color=#158bdb>60%</color>; trạng thái này tối đa cộng dồn <color=#158bdb>1</color> tầng, kéo dài <color=#158bdb>2</color> vòng.",
+      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương Phản Kích, Truy Kích, Sát Thương Bổ Sung và sát thương Tấn Công Cảnh Giới do bản thân gây ra tăng <color=#158bdb>60%</color>; trạng thái này tối đa cộng dồn <color=#158bdb>1</color> tầng, kéo dài <color=#158bdb>2</color> vòng.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -38846,7 +38854,7 @@
       "buff_name_cn": "金银错",
       "buff_name_vi": "Kim Ngân Thác",
       "buff_desc_cn": "受到范围内的常击后触发回击，对目标造成伤害。",
-      "buff_desc_vi": "Sau khi chịu Thường Kích trong phạm vi, kích hoạt Hồi Kích và gây sát thương lên mục tiêu.",
+      "buff_desc_vi": "Sau khi chịu Thường Kích trong phạm vi, kích hoạt Phản Kích và gây sát thương lên mục tiêu.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -40124,7 +40132,7 @@
       "buff_name_cn": "绽放·宿卫",
       "buff_name_vi": "Triện Phóng · Túc Vệ",
       "buff_desc_cn": "处于领域范围内的自身及友方单位回击造成的伤害提高<color=#158bdb>50%</color>，不可叠加。",
-      "buff_desc_vi": "Khi ở trong phạm vi Lĩnh Vực, sát thương Hồi Kích của bản thân và đồng minh tăng <color=#158bdb>50%</color>, không thể cộng dồn.",
+      "buff_desc_vi": "Khi ở trong phạm vi Lĩnh Vực, sát thương Phản Kích của bản thân và đồng minh tăng <color=#158bdb>50%</color>, không thể cộng dồn.",
       "classification_scope": "UNKNOWN",
       "status": "TRANSLATED"
     },
@@ -52235,7 +52243,7 @@
       "icon_info_cn": "没人知道，旅游大使代言的第一款运动相机，当初只出了三台实验品。因为这个商业计划没有排上日程，之后便不了了之。因此，只有三台留了下来。\n\n听说铜奔马自己留了一台。还有件顶小顶小的，挂在小鸟的脖子上。\n\n还有一台呢？好问题。小鸟也很关心。\n\n“你打算送给谁呢？”“送给天地！”挥臂叫嚷的铜奔马被啄得哎呦直叫。但他却真的履行了诺言，相机里积攒起天地风景。\n\n后来，代言计划再次提上日程。大量订单出炉，崭新的运动相机一批批奔赴各地。但最早的那件产品去往何处，却为人所不知了。\n\n究竟送给谁了呢？",
       "icon_info_vi": "Không ai biết rằng mẫu camera thể thao đầu tiên do đại sứ du lịch làm đại diện khi ấy chỉ có ba máy thử nghiệm. Vì kế hoạch kinh doanh này chưa được xếp lịch, sau đó cũng dần chìm vào im lặng. Thế nên cuối cùng chỉ còn lại ba chiếc.\n\nNghe nói Đồng Bôn Mã giữ lại một chiếc cho mình. Còn có một chiếc rất rất nhỏ, treo trên cổ chú chim nhỏ.\n\nChiếc còn lại đâu? Câu hỏi hay đấy. Chú chim nhỏ cũng rất quan tâm.\n\n“Cậu định tặng cho ai?”\n“Tặng cho trời đất!”\nĐồng Bôn Mã vừa vung tay vừa hét, rồi bị mổ đến kêu oai oái. Nhưng cậu quả thật đã thực hiện lời hứa, để trong chiếc camera ấy dần tích góp những phong cảnh của trời đất.\n\nSau này, kế hoạch đại diện lại được đưa lên lịch. Đơn đặt hàng đổ về, từng lô camera thể thao mới tinh lần lượt lên đường tới khắp nơi. Nhưng sản phẩm đầu tiên kia đã đi về đâu thì chẳng ai còn biết.\n\nRốt cuộc nó đã được tặng cho ai?",
       "buff_show_cn": "使用绝技后，自身获得<color=#ff6724>旅行摄影</color>状态和<color=#ff6724>小马精神</color>状态，并额外获得<color=#158bdb>1</color>层<color=#ff6724>敏捷</color>状态；\n每消耗<color=#158bdb>1</color>层<color=#ff6724>敏捷</color>状态后，自身获得<color=#158bdb>1</color>层<color=#ff6724>相机代言</color>状态。\n\n<color=#158bdb>旅行摄影</color>\n处于此状态下，对敌方单位造成回击伤害后，使该受击单位获得<color=#ff6724>截招</color>状态；\n若自身闪避敌方攻击，则使该攻击单位获得<color=#ff6724>震怒</color>状态，此状态持续<color=#158bdb>1</color>回合。\n\n<color=#158bdb>相机代言</color>\n每层此状态使自身回击造成的伤害提高<color=#158bdb>40%</color>，最多可叠加<color=#158bdb>3</color>层，持续<color=#158bdb>2</color>回合。\n\n<color=#158bdb>小马精神</color>\n自身<color=#158bdb>周围3格</color>内的敌方全体受到的物理和构素伤害提高<color=#158bdb>40%</color>，此状态持续<color=#158bdb>2</color>回合。",
-      "buff_show_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nhận trạng thái <color=#ff6724>Lữ Hành Nhiếp Ảnh</color> và <color=#ff6724>Tiểu Mã Tinh Thần</color>, đồng thời nhận thêm <color=#158bdb>1</color> tầng <color=#ff6724>Mẫn Tiệp</color>;\nMỗi khi tiêu hao <color=#158bdb>1</color> tầng <color=#ff6724>Mẫn Tiệp</color>, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tướng Cơ Đại Ngôn</color>.\n\n<color=#158bdb>Lữ Hành Nhiếp Ảnh</color>\nKhi ở trạng thái này, sau khi gây sát thương Hồi Kích lên đơn vị địch, khiến đơn vị trúng đòn nhận trạng thái <color=#ff6724>Tiệt Chiêu</color>;\nNếu bản thân né được đòn tấn công của địch, khiến đơn vị đã tấn công nhận trạng thái <color=#ff6724>Chấn Nộ</color>, kéo dài <color=#158bdb>1</color> lượt.\n\n<color=#158bdb>Tướng Cơ Đại Ngôn</color>\nMỗi tầng trạng thái này khiến sát thương Hồi Kích của bản thân tăng <color=#158bdb>40%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng, kéo dài <color=#158bdb>2</color> lượt.\n\n<color=#158bdb>Tiểu Mã Tinh Thần</color>\nSát thương Vật Lý và Cấu Tố mà toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân phải chịu tăng <color=#158bdb>40%</color>, kéo dài <color=#158bdb>2</color> lượt.",
+      "buff_show_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nhận trạng thái <color=#ff6724>Lữ Hành Nhiếp Ảnh</color> và <color=#ff6724>Tiểu Mã Tinh Thần</color>, đồng thời nhận thêm <color=#158bdb>1</color> tầng <color=#ff6724>Mẫn Tiệp</color>;\nMỗi khi tiêu hao <color=#158bdb>1</color> tầng <color=#ff6724>Mẫn Tiệp</color>, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tướng Cơ Đại Ngôn</color>.\n\n<color=#158bdb>Lữ Hành Nhiếp Ảnh</color>\nKhi ở trạng thái này, sau khi gây sát thương Phản Kích lên đơn vị địch, khiến đơn vị trúng đòn nhận trạng thái <color=#ff6724>Tiệt Chiêu</color>;\nNếu bản thân né được đòn tấn công của địch, khiến đơn vị đã tấn công nhận trạng thái <color=#ff6724>Chấn Nộ</color>, kéo dài <color=#158bdb>1</color> lượt.\n\n<color=#158bdb>Tướng Cơ Đại Ngôn</color>\nMỗi tầng trạng thái này khiến sát thương Phản Kích của bản thân tăng <color=#158bdb>40%</color>, tối đa cộng dồn <color=#158bdb>3</color> tầng, kéo dài <color=#158bdb>2</color> lượt.\n\n<color=#158bdb>Tiểu Mã Tinh Thần</color>\nSát thương Vật Lý và Cấu Tố mà toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> bản thân phải chịu tăng <color=#158bdb>40%</color>, kéo dài <color=#158bdb>2</color> lượt.",
       "status": "PENDING"
     },
     "D00894": {
