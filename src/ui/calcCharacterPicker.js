@@ -2,7 +2,7 @@ import { state, setCharacter } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
 
 import { RARITY_LABELS } from './utils/gameLabels.mts';
-import { getCharacterAvatarUrl } from './utils/avatar.js';
+import { getCharacterAvatarUrl } from './utils/avatar.mts';
 import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
 import { newestFirst } from '../lib/newest.mts';
 

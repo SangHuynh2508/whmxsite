@@ -36,7 +36,7 @@ export function loadLoreOverlay(pointerUrl?: string, fetchImpl: typeof fetch = f
 }
 
 // Game database + builds (server/game/game-document.mjs), published next to the lore pointer: no extra setting.
-export type GameDocument = { version: 1; refs: Record<string, Record<string, any>>; texts: Record<string, Record<string, GameText>>; builds: Record<string, any[]> };
+export type GameDocument = { version: 1; refs: Record<string, Record<string, any>>; texts: Record<string, Record<string, GameText>>; builds: Record<string, any[]>; tierLists?: import('../../tier-list/tierView.mts').PublishedList[] };
 export type GameText = { cn: string; vi: string | null; detail: string; detail_vi: string | null };
 export function loadGameDocument(lorePointerUrl?: string, fetchImpl: typeof fetch = fetch, timeoutMs = 20000): Promise<GameDocument | null> {
   const pointerUrl = lorePointerUrl ? new URL('game.pointer.json', lorePointerUrl).toString() : undefined;

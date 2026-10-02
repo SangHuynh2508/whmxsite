@@ -6,7 +6,7 @@ import { getGameData } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { escapeHtml } from '../../../lib/escapeHtml.mts';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
-import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
+import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 
 import { renderOverviewTab } from './detail/overviewView.js';

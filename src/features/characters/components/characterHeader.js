@@ -3,7 +3,7 @@ import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { ticketHtml } from '../catalogCard.mts';
 import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
-import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.js';
+import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 
 export function renderHeader() {

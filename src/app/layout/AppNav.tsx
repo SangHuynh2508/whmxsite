@@ -7,7 +7,7 @@ import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
 import { calculatorHash, parseHash } from '../router/router.js';
 import { gsap } from 'gsap';
 import { getGameData } from '../../data/loader.js';
-import { getCharacterAvatarUrl } from '../../ui/utils/avatar.js';
+import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
 import { searchSite } from './siteSearch.mts';
 import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
