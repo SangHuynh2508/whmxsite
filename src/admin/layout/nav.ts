@@ -1,6 +1,6 @@
-import { Archive, BookOpen, ScanEye, Users, type LucideIcon } from 'lucide-react';
+import { Archive, BookOpen, ListOrdered, ScanEye, Users, type LucideIcon } from 'lucide-react';
 
-export type Section = 'characters' | 'dictionary' | 'preview' | 'accounts';
+export type Section = 'characters' | 'dictionary' | 'tier-lists' | 'preview' | 'accounts';
 export type NavEntry = { id: Section; href: string; label: string; icon: LucideIcon; foot?: boolean; ownerOnly?: boolean };
 
 // One entry per admin area, shared by the Admin sidebar and the mobile dock.
@@ -8,6 +8,7 @@ export type NavEntry = { id: Section; href: string; label: string; icon: LucideI
 export const NAV: NavEntry[] = [
   { id: 'characters', href: '#/admin/characters', label: 'Khí Giả', icon: Archive },
   { id: 'dictionary', href: '#/admin/dictionary', label: 'Từ điển', icon: BookOpen },
+  { id: 'tier-lists', href: '#/admin/tier-lists', label: 'Tier List', icon: ListOrdered },
   { id: 'preview', href: '#/admin', label: 'Preview', icon: ScanEye },
   { id: 'accounts', href: '#/admin/accounts', label: 'Tài khoản', icon: Users, foot: true, ownerOnly: true },
 ];

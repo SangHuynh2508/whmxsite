@@ -8,6 +8,7 @@ import PreviewView from '../preview/PreviewView';
 import AccountsView from '../users/AccountsView';
 import CharactersView from '../characters/CharactersView';
 import { DictionaryView } from '../characters/DictionaryView';
+import TierListsView from '../tier-lists/TierListsView';
 import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav';
 import { LOGIN_HASH, authRedirect } from './lib/authRoute.mts';
 import { mustAskBeforeLeaving } from './lib/leaveGuard.mts';
@@ -172,6 +173,12 @@ export default function AdminApp() {
           <div className={shown(true)}>
             <ViewHeader title="Từ điển" meta="Bản dịch dùng chung · vũ khí, dòng thuộc tính, thâm tạo, lore" />
             <DictionaryView />
+          </div>
+        )}
+        {section === 'tier-lists' && (
+          <div className={shown(true)}>
+            <ViewHeader title="Tier List" meta="Xếp hạng Khí Giả · bản nháp chỉ admin thấy" />
+            <TierListsView isOwner={isOwner} />
           </div>
         )}
         {charactersMounted && (
