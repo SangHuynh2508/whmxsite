@@ -64,6 +64,12 @@ module.exports = async function adminApiDispatcher(request, response) {
         if (rest.length === 2) { request.query.kind = rest[0]; request.query.code = rest[1]; return builds.gameText(request, response); }
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
       }
+      case 'tier-lists': {
+        const lists = await import('../../server/admin-api-routes/tier-lists.mjs');
+        if (rest.length === 0) return lists.tierListIndex(request, response);
+        if (rest.length === 1) { request.query.slug = rest[0]; return lists.tierList(request, response); }
+        return response.status(404).json({ error: { code: 'NOT_FOUND' } });
+      }
       default:
         return response.status(404).json({ error: { code: 'NOT_FOUND' } });
     }
