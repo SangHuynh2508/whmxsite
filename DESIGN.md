@@ -86,6 +86,17 @@ typography:
   chinese:
     fontFamily: "'Noto Serif SC', serif"
     fontWeight: 500
+  rank:
+    fontFamily: "Literata, 'Noto Serif SC', serif"
+    fontSize: "72px"
+    fontWeight: 700
+    lineHeight: 0.9
+    letterSpacing: "-0.03em"
+  rank-phone:
+    fontFamily: "Literata, 'Noto Serif SC', serif"
+    fontSize: "44px"
+    fontWeight: 700
+    lineHeight: 0.9
 rounded:
   none: "0"
   sm: "6px"
@@ -389,6 +400,20 @@ chút, đừng làm quá"):
 - **深造 unit:** the game's `Speciality_<styleId>` emblem (60 px) with the style name under it and the serif serial
   beside it; the whole unit is one button that opens the Thâm tạo popover.
 - **Teams:** 44 px circular avatars with a 2 px strong-hairline ring, packed on a grid of ~72 px tracks.
+
+### Tier List (2026-10-02, `docs/public-redesign/tier-list/direction-approved.md`)
+- **Page:** serif title, "Tham khảo tier list của …" credit, page tabs Nhân vật / Đội hình / Thông tin (a tab exists only
+  with content; one tab → no tab bar). Few frames: tier groups are separated by space and one hairline, never boxed.
+- **Rank:** the tier label is an `<h2>` in serif 700 72 px (`rank`; 44 px on phones, `rank-phone`, inline with its count);
+  gold only on the list's first tier. A group description (serif 500 20 px / 16 px) sits above the tiers that share it.
+- **Tools (Nhân vật only):** a sticky bar with the name search, ONE 36 px filter icon (gold count badge when active) and
+  the result line. Filter = non-modal popover on wide screens (the list reflows in view), modal bottom sheet ≤ 640 px with
+  44 px chips; job chips carry the game job icon, rarity chips use the `-vivid` catalogue-filter style; each chip shows its
+  result count and a zero-result chip is disabled.
+- **CharacterTile:** square game portrait (96 px; 4 per row on phones), 6 px, strong-hairline border → gold on hover (no
+  zoom, no lift), the game's `ui_ty_kp_pz_<rare>` glow over the bottom 36 %, badges bottom-right (**Z1–Z6** Trí Tri,
+  **HC** Hoán Chương in gold), name 500 13 px (3 lines on phones). The legend is drawn with the same badges.
+- **Motion:** tab body arrives with `useReveal`; filter results reflow with GSAP Flip; popover settle / sheet slide.
 
 ### Lore ticket (signature)
 A museum admission ticket: square archive-slate card with gold-hairline border and grain; relic full name (500 15 px
