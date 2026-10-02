@@ -13,6 +13,8 @@ import { staticView } from './staticRoutes.mts';
 import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx';
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
+import { parseTierListHash } from '../../features/tier-list/tierRoute.mts';
+import { mountTierListPage, unmountTierListPage } from '../../features/tier-list/TierListPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
@@ -66,6 +68,9 @@ export function parseHash() {
       subtab: ''
     };
   }
+
+  const tierList = parseTierListHash(window.location.hash);
+  if (tierList) return { view: 'tier-list', slug: tierList.slug, subtab: tierList.tab };
 
   // Format: /characters (Standalone Catalog)
   if (hash === '/characters' || hash === 'characters') {
@@ -168,6 +173,7 @@ const VIEW_CONTAINERS = {
   home: 'home-view',
   banners: 'banners-view',
   info: 'info-view',
+  'tier-list': 'tier-list-view',
   catalog: 'character-catalog-view',
   character: 'character-detail-view',
   weapons: 'weapons-view',
@@ -183,6 +189,7 @@ function renderRouteView(route, target, gameData) {
       if (id === 'home-view') unmountHomePage();
       if (id === 'banners-view') unmountBannersPage();
       if (id === 'info-view') unmountInfoPage();
+      if (id === 'tier-list-view') unmountTierListPage();
       el.classList.add('hidden');
       el.innerHTML = '';
     }
@@ -194,6 +201,7 @@ function renderRouteView(route, target, gameData) {
     if (route.view === 'home') mountHomePage(target);
     else if (route.view === 'banners') mountBannersPage(target);
     else if (route.view === 'info') mountInfoPage(target);
+    else if (route.view === 'tier-list') mountTierListPage(target, { slug: route.slug, tab: route.subtab });
     else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
     else if (route.view === 'weapons') renderWeaponsView(target);
@@ -242,6 +250,8 @@ export function handleRoute() {
     routeKey = `skin-detail:${route.skinId}`;
   } else if (route.view === 'calculator') {
     routeKey = `calculator:${route.characterId || ''}`;
+  } else if (route.view === 'tier-list') {
+    routeKey = `tier-list:${route.slug}`; // tab changes use replaceState and never reach the router
   }
 
   const mainContent = document.getElementById('main-content');
