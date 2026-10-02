@@ -2,6 +2,7 @@
 // modal bottom sheet ≤ 640 px. Chips are plain React buttons, so a toggle re-renders them in place and focus stays.
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { reduced } from '../characters/motion.ts';
 import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
 import type { Filter } from './tierView.mts';
 
@@ -11,7 +12,6 @@ type Props = {
   toggle: (kind: 'jobs' | 'rarities', value: number) => void; clear: () => void;
 };
 const phone = () => matchMedia('(max-width: 640px)').matches;
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function TierFilter({ filter, rarities, left, count, toggle, clear }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);

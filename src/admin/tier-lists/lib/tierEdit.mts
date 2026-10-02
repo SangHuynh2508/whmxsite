@@ -5,15 +5,14 @@ import type { Entry, Team, Tier, TierListDoc } from '../../../features/tier-list
 export type Place = { area: 'tier' | 'team'; list: number; index: number };
 const MAX_MEMBERS = 6;
 const clone = (doc: TierListDoc): TierListDoc => structuredClone(doc);
-const at = (doc: TierListDoc, area: Place['area'], list: number): Entry[] => (area === 'tier' ? doc.solo.tiers[list].entries : doc.teams.groups[list].members);
+export const entriesOf = (doc: TierListDoc, area: Place['area'], list: number): Entry[] => (area === 'tier' ? doc.solo.tiers[list].entries : doc.teams.groups[list].members);
 
-export const entriesOf = (doc: TierListDoc, area: Place['area'], list: number) => at(doc, area, list);
-export const canInsert = (doc: TierListDoc, area: Place['area'], list: number) => area === 'tier' || at(doc, area, list).length < MAX_MEMBERS;
+export const canInsert = (doc: TierListDoc, area: Place['area'], list: number) => area === 'tier' || entriesOf(doc, area, list).length < MAX_MEMBERS;
 
 export function insertEntry(doc: TierListDoc, to: Place, entry: Entry) {
   if (!canInsert(doc, to.area, to.list)) return doc;
   const next = clone(doc);
-  at(next, to.area, to.list).splice(to.index, 0, { ...entry });
+  entriesOf(next, to.area, to.list).splice(to.index, 0, { ...entry });
   return next;
 }
 
@@ -21,28 +20,28 @@ export function moveEntry(doc: TierListDoc, from: Place, to: Place) {
   const same = from.area === to.area && from.list === to.list;
   if (!same && !canInsert(doc, to.area, to.list)) return doc;
   const next = clone(doc);
-  const [entry] = at(next, from.area, from.list).splice(from.index, 1);
+  const [entry] = entriesOf(next, from.area, from.list).splice(from.index, 1);
   const index = same && to.index > from.index ? to.index - 1 : to.index;
-  at(next, to.area, to.list).splice(index, 0, entry);
+  entriesOf(next, to.area, to.list).splice(index, 0, entry);
   return next;
 }
 
 export function removeEntry(doc: TierListDoc, place: Place) {
   const next = clone(doc);
-  at(next, place.area, place.list).splice(place.index, 1);
+  entriesOf(next, place.area, place.list).splice(place.index, 1);
   return next;
 }
 
 export function updateEntry(doc: TierListDoc, place: Place, patch: { zhizhi?: number | null; hc?: boolean }) {
   const next = clone(doc);
-  const e = at(next, place.area, place.list)[place.index];
+  const e = entriesOf(next, place.area, place.list)[place.index];
   if (patch.zhizhi !== undefined) { if (patch.zhizhi) e.zhizhi = patch.zhizhi; else delete e.zhizhi; }
   if (patch.hc !== undefined) { if (patch.hc) e.hc = true; else delete e.hc; }
   return next;
 }
 
 export const duplicateEntry = (doc: TierListDoc, place: Place) =>
-  insertEntry(doc, { ...place, index: place.index + 1 }, at(doc, place.area, place.list)[place.index]);
+  insertEntry(doc, { ...place, index: place.index + 1 }, entriesOf(doc, place.area, place.list)[place.index]);
 
 const fixFirst = (doc: TierListDoc) => { if (doc.solo.tiers[0]) doc.solo.tiers[0].joinAbove = false; return doc; };
 const swap = <T,>(items: T[], i: number, delta: number) => { const j = i + delta; if (j < 0 || j >= items.length) return false; [items[i], items[j]] = [items[j], items[i]]; return true; };

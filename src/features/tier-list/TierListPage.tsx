@@ -6,7 +6,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { getGameData, loadedGameDocument } from '../../data/loader.js';
-import { useReveal } from '../characters/motion.ts';
+import { reduced, useReveal } from '../characters/motion.ts';
 import { CharacterTile } from '../characters/components/CharacterTile.tsx';
 import { Legend, TierFilter } from './TierFilter.tsx';
 import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
@@ -16,7 +16,6 @@ import './styles/tierList.css';
 
 gsap.registerPlugin(Flip);
 const TAB_LABEL: Record<Tab, string> = { characters: 'Nhân vật', teams: 'Đội hình', info: 'Thông tin' };
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function TierListView({ list, characters, tab: initial, onTab }: { list: PublishedList; characters: Record<string, SiteChar>; tab: Tab; onTab?: (tab: Tab) => void }) {
   const { doc } = list;

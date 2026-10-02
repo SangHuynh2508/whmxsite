@@ -5,7 +5,7 @@ import './styles/motion.css';
 
 // Motion for the character-page islands (Build, Hồ Sơ Lưu Trữ), owner 2026-09-28: "trượt ấn tượng chút, đừng làm quá",
 // and text that arrives instead of popping in. Everything is visible by default; a failed script leaves a static page.
-const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+export const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
  * The selection "ink" of a segmented control / tab row (`.seg-ink`, first child of the list): on a change the leading
