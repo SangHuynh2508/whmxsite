@@ -50,7 +50,8 @@ function teaBlock(tea, texts, terms) {
     win: cnOf(texts, 'tea.win'), win_vi: viOf(texts, 'tea.win'),
     lose: cnOf(texts, 'tea.lose'), lose_vi: viOf(texts, 'tea.lose'),
     result: texts.has('tea.result') ? { cn: cnOf(texts, 'tea.result'), vi: viOf(texts, 'tea.result') }
-      : shared ? { cn: shared.nameCn, vi: publishableVi(shared, 'nameVi') } : null,
+      // the shared poem closes a tea that has endings (a character without a highteaCharacterMap row has none)
+      : shared && texts.has('tea.win') ? { cn: shared.nameCn, vi: publishableVi(shared, 'nameVi') } : null,
   };
 }
 

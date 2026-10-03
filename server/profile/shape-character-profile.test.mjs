@@ -162,3 +162,9 @@ test('v2 tea: a character\'s own poem wins; no tea structure → no tea key; tea
   const dated = new Map([['tea.win', { ...t('好茶', 'Trà ngon', 'admin'), viUpdatedAt: new Date('2026-10-03T00:00:00Z') }]]);
   assert.equal(shapeCharacterProfile({ profile: teaProfile, texts: dated }, teaTerms, { shape: 'v2' }).vi_updated_at, null);
 });
+
+test('v2 tea: a character without tea endings (no highteaCharacterMap row) gets no shared poem', () => {
+  const topicsOnly = new Map([['tea.X101.ask', t('夜市')], ['tea.X101.reply', t('来吧')]]);
+  const p = { ...profile, structure: { ...profile.structure, tea: { teas: [], topics: [{ id: 'X101', trend: 1 }], branches: [] } } };
+  assert.equal(shapeCharacterProfile({ profile: p, texts: topicsOnly }, teaTerms, { shape: 'v2' }).tea.result, null);
+});
