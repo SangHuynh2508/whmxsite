@@ -30,7 +30,7 @@ function unit(units, unitKey, sourceCn, sourceRef) {
 // tea name their own one, r3075), endings. The stage names are drawn into the game's UI sprites (ui_pm_qxjdt_d1-3), not
 // stored in any table, and the result-card poem (VictoryEnd2) is the same for every character.
 export const TEA_STAGES = [['TEA_STAGE_1', '缘起'], ['TEA_STAGE_2', '相知'], ['TEA_STAGE_3', '契合']];
-const poemText = (value) => text(value).replace(/\n/g, '\n'); // the game stores a literal "\n"
+const poemText = (value) => text(value).replace(/\\n/g, '\n'); // the game stores a literal backslash + "n"
 
 function sharedTeaResult(highteaMap) {
   const counts = new Map();

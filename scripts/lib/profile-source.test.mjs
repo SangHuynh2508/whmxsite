@@ -116,8 +116,9 @@ const teaRaw = {
     W0021101: { ID: 'W0021101', CharacterId: 'W0021', Trend: 1, TopicType: 1, TopicNext: [], TopicContentLanText: 'x', TopicRespLanText: 'y' },
   },
   highteaCharacterMap: {
-    V0053: { UPTea: ['81009'], Comments: ['highteaLan_hightea_comment1Lan_V0053'], VictoryEndLanText: '好茶', VictoryEnd2LanText: '瓦铫煮春雪\n淡香生古瓷', FailEnd: '下次' },
-    A0001: { UPTea: [], Comments: [], VictoryEndLanText: 'a', VictoryEnd2LanText: '瓦铫煮春雪\n淡香生古瓷', FailEnd: 'b' },
+    // the game stores the poem's line breaks as a literal backslash + "n"
+    V0053: { UPTea: ['81009'], Comments: ['highteaLan_hightea_comment1Lan_V0053'], VictoryEndLanText: '好茶', VictoryEnd2LanText: String.raw`瓦铫煮春雪\n淡香生古瓷`, FailEnd: '下次' },
+    A0001: { UPTea: [], Comments: [], VictoryEndLanText: 'a', VictoryEnd2LanText: String.raw`瓦铫煮春雪\n淡香生古瓷`, FailEnd: 'b' },
   },
   itemMap: { 81009: { nameLanText: '杏皮茶', DescriptionLanText: '西北特色饮品' } },
   teaLang: { highteaLan_hightea_comment1Lan_V0053: '冰的杏皮茶解腻' },

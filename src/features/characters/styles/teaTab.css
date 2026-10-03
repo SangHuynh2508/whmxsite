@@ -35,7 +35,7 @@
 .tea-opt-vi { font-weight: 500; }
 .tea-opt-cn { display: block; font-size: 13px; }
 .tea-box { position: relative; margin-top: 16px; padding: 20px 16px 12px; border: 1px solid var(--border-gold-subtle); border-radius: 6px; background: var(--tea-grain), var(--bg-surface); max-width: 94%; }
-.tea-box p { font-size: 15px; line-height: 1.75; }
+.tea-box p { font-size: 15px; line-height: 1.75; white-space: pre-line; }
 .tea-box--wide { grid-column: 1 / -1; max-width: none; margin-top: 20px; }
 .tea-box--narr { background: transparent; border-style: dashed; border-color: var(--border-strong); }
 .tea-box--narr p { color: var(--text-muted); font-style: italic; }
