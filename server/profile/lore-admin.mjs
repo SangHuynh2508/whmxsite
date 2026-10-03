@@ -87,7 +87,7 @@ export async function saveLoreTerm(db, code, { expectedRevision, nameVi, detailV
 }
 
 export async function getLoreProgress(db) {
-  const rows = await db.select({ characterId: characters.characterId, vi: profileTexts.vi, viOrigin: profileTexts.viOrigin, state: profileTexts.state })
+  const rows = await db.select({ characterId: characters.characterId, unitKey: profileTexts.unitKey, vi: profileTexts.vi, viOrigin: profileTexts.viOrigin, state: profileTexts.state })
     .from(profileTexts)
     .innerJoin(characterProfiles, eq(characterProfiles.entityId, profileTexts.profileEntityId))
     .innerJoin(characters, eq(characters.entityId, characterProfiles.characterEntityId))

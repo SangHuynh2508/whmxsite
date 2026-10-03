@@ -109,3 +109,23 @@ test('termUsage counts relic tags too', () => {
   const p = { characterId: 'S0132', structure: { reports: [], relicTags: [{ field: 'tag1', code: 'M4012' }, { field: 'tag3', code: 'H6002' }] } };
   assert.deepEqual(termUsage([p]), { M4012: ['S0132'], H6002: ['S0132'] });
 });
+
+test('loreProgress leaves tea units out (the Lore counter is about the archive)', () => {
+  const rows = [
+    { characterId: 'A1', unitKey: 'card_intro', vi: 'x', viOrigin: 'admin', state: 'ok' },
+    { characterId: 'A1', unitKey: 'tea.A1101.ask', vi: null, viOrigin: null, state: 'ok' },
+    { characterId: 'A1', unitKey: 'tea.comment.1', vi: 'y', viOrigin: 'admin', state: 'ok' },
+  ];
+  assert.deepEqual(loreProgress(rows), { A1: { total: 1, done: 1, legacy: 0, changed: 0 } });
+});
+
+test('termUsage counts favourite teas; the lore record names them', () => {
+  const p = { characterId: 'V1', structure: { reports: [], tea: { teas: ['81009'], topics: [], branches: [] } } };
+  assert.deepEqual(termUsage([p]), { 81009: ['V1'] });
+  const record = shapeLoreRecord({
+    characterId: 'V1', revision: 1, history: [], archiveImages: [], texts: [],
+    profile: { structure: p.structure, legacyRelicFields: { hasEntry: false } },
+    terms: new Map([['81009', { code: '81009', kind: 'tea', nameCn: '杏皮茶', nameVi: null, detailCn: '', viOrigin: null, state: 'ok' }]]),
+  });
+  assert.deepEqual(record.teaTerms, { 81009: { code: '81009', kind: 'tea', nameCn: '杏皮茶', nameVi: null, official: false, done: false } });
+});

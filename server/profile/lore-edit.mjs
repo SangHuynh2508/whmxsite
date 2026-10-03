@@ -46,6 +46,7 @@ export function planTermEdit(term, input) {
 export function loreProgress(rows) {
   const out = {};
   for (const r of rows) {
+    if (String(r.unitKey ?? '').startsWith('tea.')) continue; // tea units have their own counter in the Phòng trà module
     const p = (out[r.characterId] ??= { total: 0, done: 0, legacy: 0, changed: 0 });
     p.total += 1;
     if (r.state === 'source_changed') p.changed += 1;
@@ -63,6 +64,7 @@ export function termUsage(profiles) {
     for (const code of [p.relicTypeCode, p.eraCode, p.museumCode, p.eraRangeCode]) add(code, p.characterId);
     for (const r of p.structure?.reports ?? []) if (r.kind === 'basic' && r.unlock?.type === 2) add(`AFFINITY_${r.unlock.elementId}`, p.characterId);
     for (const t of p.structure?.relicTags ?? []) add(t.code, p.characterId);
+    for (const code of p.structure?.tea?.teas ?? []) add(code, p.characterId);
   }
   return Object.fromEntries([...usage].map(([code, ids]) => [code, [...ids].sort()]));
 }
@@ -108,6 +110,7 @@ export function shapeLoreRecord({ characterId, revision, profile, texts, terms, 
     } : null,
     relicTags: (profile.structure.relicTags ?? []).map((tag) => ({ field: tag.field, term: termView(terms, tag.code) })),
     affinity: Object.fromEntries(basicUnlocks.map((r) => [r.unlock.elementId, termView(terms, `AFFINITY_${r.unlock.elementId}`)])),
+    teaTerms: Object.fromEntries((profile.structure.tea?.teas ?? []).map((code) => [code, termView(terms, code)])),
     archiveImages,
     history,
   };
