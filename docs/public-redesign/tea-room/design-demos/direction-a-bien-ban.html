@@ -1,0 +1,109 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Phòng Trà · A · Biên bản</title>
+<!-- A · Biên bản (roulette 18 → web #19 Swiss Monochrome, read inside the Night Archive). The conversation is a record:
+     a precise grid, hairlines only between groups, every exchange one row (what you say | what they answer | how they
+     took it). The stage column is a sticky left rail carrying the game's calligraphy. 契合 is drawn as what it is, a
+     fork: the opener spans the row, its two follow-ups split into two columns. Form from the content: a tea-room talk
+     is a fixed 4-question protocol, so it reads as a protocol sheet. -->
+<style>
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1200px;margin:0 auto}
+.head{display:flex;gap:16px;align-items:center;padding:8px 0 16px}
+.head img{width:56px;height:56px;border-radius:50%;border:2px solid var(--line2)}
+.head h1{font:700 21px/1.3 var(--serif)} .head p{color:var(--ash);font-size:14px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:32px}
+.tabs a{padding:8px 14px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{font-size:12px;color:var(--ash);margin:-16px 0 24px}
+/* sheet */
+.sec{display:grid;grid-template-columns:200px 1fr;gap:0 32px;padding:24px 0;border-top:1px solid var(--line2)}
+.srail{position:sticky;top:16px;align-self:start}
+.srail img{height:56px;width:auto;display:block}
+.srail h2{font:600 16px/1.3 var(--sans);margin-top:8px}
+.srail p{font-size:13px;color:var(--ash);margin-top:4px;max-width:24ch}
+.hd{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr) 56px;gap:24px;font-size:12px;color:var(--ash);padding-bottom:8px}
+.row{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr) 56px;gap:24px;padding:12px 0;align-items:start}
+.row+.row{border-top:1px solid var(--line)}
+.ask b{display:block;font:500 15px/1.5 var(--sans)}
+.ask .cn{display:block;font-size:14px;color:var(--ash);margin-top:2px}
+.say{display:grid;grid-template-columns:28px 1fr;gap:12px;font-size:15px;line-height:1.7}
+.say img{width:28px;height:28px;border-radius:50%;border:1px solid var(--line2);margin-top:2px}
+.say.narr{grid-template-columns:1fr;color:var(--ash);font-style:italic}
+.rx{justify-self:end;display:grid;place-items:center;width:44px;height:36px;border-radius:6px;background:#d8cfbd}
+.rx img{height:26px;width:auto}
+/* teas */
+.teas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.tea{display:grid;grid-template-columns:52px 1fr;gap:12px}
+.tea img{width:52px;height:auto;border-radius:6px}
+.tea b{font:600 15px/1.4 var(--serif)} .tea .cn{font-size:13px;color:var(--ash);margin-left:6px}
+.tea p{font-size:14px;line-height:1.65;margin-top:4px}
+/* fork */
+.fork{padding:12px 0}
+.fork+.fork{border-top:1px solid var(--line)}
+.fork .row{padding-top:0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:8px;border-left:1px solid var(--goldline)}
+.split .opt{padding:4px 0 4px 16px}
+.split .opt+.opt{border-left:1px solid var(--line)}
+.split .ask{margin-bottom:8px}
+.split .say{font-size:14px}
+.split .foot{display:flex;justify-content:flex-start;margin-top:8px}
+.split .foot .rx{justify-self:start}
+.end{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.end h3{font:600 13px/1.3 var(--sans);color:var(--ash);margin-bottom:6px}
+.end p{font-size:15px;line-height:1.7}
+.poem{grid-column:1/-1;padding:16px 0 0;border-top:1px solid var(--line);font:500 17px/1.8 var(--serif);white-space:pre-line}
+.poem .cn{display:block;font-size:14px;color:var(--ash);margin-top:8px}
+@media (max-width:768px){
+ .sec{grid-template-columns:1fr;gap:12px}
+ .srail{position:static;display:flex;gap:12px;align-items:center}
+ .srail img{height:44px}.srail h2{margin:0}.srail p{display:none}
+ .hd{display:none}
+ .row{grid-template-columns:1fr 40px;gap:8px 12px}
+ .row .say{grid-column:1/-1;grid-row:2}
+ .row .rx{grid-column:2;grid-row:1;width:40px;height:32px}
+ .teas{grid-template-columns:1fr;gap:16px}
+ .split{grid-template-columns:1fr;border-left:0}
+ .split .opt{padding:12px 0 12px 12px;border-left:1px solid var(--goldline)}
+ .split .opt+.opt{border-left:1px solid var(--goldline);border-top:1px solid var(--line)}
+ .end{grid-template-columns:1fr}
+}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav>
+<main class="main"><div class="wrap">
+ <header class="head"><img id="av" src="../../../../public/assets/characters/avatars/V0112.png" alt=""><div><h1 id="nm"></h1><p class="cn" id="nc"></p></div></header>
+ <nav class="tabs" aria-label="Điều hướng nhân vật"><a>Tổng Quan</a><a>Thông Tin</a><a>Thiên Phú</a><a>Build</a><a>Hồ Sơ Lưu Trữ</a><a class="on" aria-current="page">Phòng Trà</a><a>Thư Viện</a></nav>
+ <p class="demo">Demo: chữ Việt chỉ minh họa bố cục, không phải bản dịch. Câu có chấm nhỏ là chưa dịch.</p>
+ <div id="body"></div>
+</div></main>
+<script src="tea-data.js"></script>
+<script>
+const T = TEA, c = T.char;
+av.src = c.avatar; nm.textContent = c.vi; nc.textContent = c.cn;
+const rx = (r) => r ? `<span class="rx"><img src="${REACT[r].img}" alt="${REACT[r].label}"></span>` : '<span></span>';
+const say = (cn, vi) => isNarration(cn)
+  ? `<div class="say narr">${txt(vi, cn)}</div>`
+  : `<div class="say"><img src="${c.avatar}" alt=""><p>${txt(vi, cn)}</p></div>`;
+const ask = (t) => `<div class="ask"><b>${esc(t.vi)}</b><span class="cn" lang="zh">${esc(t.cn)}</span></div>`;
+const rail = (img, h, p) => `<div class="srail">${img}<h2>${h}</h2>${p ? `<p>${p}</p>` : ''}</div>`;
+const stage = (s) => `<img src="${s.img}" alt="${s.cn}">`;
+body.innerHTML = `
+<section class="sec">${rail('', 'Trà yêu thích', 'Lời khí giả nói khi được mời đúng loại trà mình thích.')}
+ <div class="teas">${T.teas.map((t) => `<div class="tea"><img src="${t.img}" alt=""><div><b>${esc(t.vi)}</b><span class="cn" lang="zh">${esc(t.cn)}</span><p>${txt(t.comment_vi, t.comment)}</p></div></div>`).join('')}</div>
+</section>
+<section class="sec">${rail(stage(T.stages[0]) + stage(T.stages[1]).replace('<img', '<img style="margin-top:4px"'), `${T.stages[0].vi} · ${T.stages[1].vi}`, 'Câu 1 và câu 2. Mỗi câu, game hiện 3 trong 8 chủ đề dưới đây.')}
+ <div><div class="hd"><span>Người chơi chọn</span><span>Khí giả đáp</span><span></span></div>
+ ${T.topics.map((t) => `<div class="row">${ask(t)}${say(t.reply, t.reply_vi)}${rx(t.r)}</div>`).join('')}</div>
+</section>
+<section class="sec">${rail(stage(T.stages[2]), T.stages[2].vi, 'Câu 3 và câu 4. Game hiện 2 chủ đề; chủ đề đã chọn mở ra 2 câu tiếp.')}
+ <div>${T.branches.map((b) => `<div class="fork">
+  <div class="row">${ask(b)}${say(b.reply, b.reply_vi)}<span></span></div>
+  <div class="split">${b.next.map((n) => `<div class="opt">${ask(n)}${say(n.reply, n.reply_vi)}<div class="foot">${rx(n.r)}</div></div>`).join('')}</div>
+ </div>`).join('')}</div>
+</section>
+<section class="sec">${rail('', 'Kết thúc tiệc trà', '')}
+ <div class="end"><div><h3>Khi thành công</h3><p>${txt(T.win_vi, T.win)}</p></div><div><h3>Khi thất bại</h3><p>${txt(T.lose_vi, T.lose)}</p></div>
+ <p class="poem">${esc(T.result.vi)}<span class="cn" lang="zh">${esc(T.result.cn.replace(/\n/g, ' / '))}</span></p></div>
+</section>`;
+</script>
+</body></html>

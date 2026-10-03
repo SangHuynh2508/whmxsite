@@ -1,6 +1,6 @@
 # Tea room (Phòng trà) — design (spec)
 
-> Status: **draft for owner review, 2026-10-03.** Next after approval: `huashu-design` (3 directions → owner picks →
+> Status: **approved 2026-10-03 (owner: "giữ đọc .bin, làm huashu đi"); look approved: D2 ([`../../public-redesign/tea-room/direction-approved.md`](../../public-redesign/tea-room/direction-approved.md)).** Next after approval: `huashu-design` (3 directions → owner picks →
 > `docs/public-redesign/tea-room/direction-approved.md`, impeccable `detect`) → `superpowers:writing-plans` →
 > `superpowers:executing-plans`. Entry point: [`../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md).
 > Builds on the lore pipeline ([`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md)) and the public
@@ -32,8 +32,8 @@ reader reads the conversations as part of the character.
 
 Sprites (pulled from MuMu 2026-10-03, MD5 = r3075; extracted to `_claude_scratch/tea_icons/`):
 `uiatlas_uiteatastsip.ab` → `ui_pm_hgxz` (hearts, 52×40), `ui_pm_bqk_ty` (tangled thread, 59×48),
-`ui_pm_qxjdt_d1/d2/d3` (calligraphy 缘起 / 相知 / 契合); `Packet61_AllSprites/935c71fb…/ui_pm_tea_<81001–81015>.png`
-(tea-room tea art, 86×141).
+`ui_pm_qxjdt_d1/d2/d3` (calligraphy 缘起 / 相知 / 契合). Tea pictures = the item icons `public/assets/items/itemicon_<81001–81015>.png`
+(128×128, already on the site). `Packet61_AllSprites/…/ui_pm_tea_<id>` is only a silhouette card, not the tea (owner 2026-10-03).
 
 ## 3. Owner decisions (2026-10-03)
 
@@ -43,10 +43,11 @@ Sprites (pulled from MuMu 2026-10-03, MD5 = r3075; extracted to `_claude_scratch
 | D2 | A tab on the character page (Khí Giả) |
 | D3 | The player's option always shows the Chinese next to the Vietnamese, to match the game screen |
 | D4 | Text lives in the DB; translated by the owner in Admin; Claude does not translate |
-| D5 | Teas shown with the game's tea art and name |
+| D5 | Teas shown with the game's tea item icon and name (`itemicon_<id>`; the `ui_pm_tea` silhouette cards were wrong, owner 2026-10-03) |
 | D6 | Characters on the site only (W0021 and the 5 codes missing from `characterTable` are skipped) |
 | D7 | Section names = the game's calligraphy sprite + the Vietnamese name (translated in Từ điển) |
 | D8 | The shared result poem is kept, translated once |
+| D9 | Each favourite tea also shows the tea's own description (`itemMap`), translated once in Từ điển; non-favourite teas have no per-character data (`InterestTea` = `UPTea`, `ForbidTea` empty for all 136), so only the 3 favourites appear. A reverse "which characters like tea X" list is left for the Info/database section (roadmap §11 item 3) |
 
 ## 4. Data model (extends the profile; one small migration)
 
@@ -76,7 +77,8 @@ revisions/409, history, publish (~30 s auto + "Xuất bản ngay"), daily backup
 
 Order = the game's ID order. `trend` is stored raw; only the public shaper maps it (§6).
 
-**`lore_terms`:** kind `tea`, code = item id (`81001`…), `name_cn` = `itemMap.nameLanText`, `detail_cn` = `''`;
+**`lore_terms`:** kind `tea`, code = item id (`81001`…), `name_cn` = `itemMap.nameLanText`, `detail_cn` =
+`itemMap.DescriptionLanText` (the tea's own description, shared by every character; owner 2026-10-03);
 kind `tea_text`: `TEA_STAGE_1/2/3` (`name_cn` 缘起 / 相知 / 契合 — from the game's sprites, `source` noted as the sprite
 name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the shared `VictoryEnd2LanText`).
 
@@ -101,7 +103,7 @@ name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the 
 
 ```json
 "tea": {
-  "teas":     [{ "code": "81008", "name": "大吉岭茶", "name_vi": null, "comment": "CN", "comment_vi": null }],
+  "teas":     [{ "code": "81008", "name": "大吉岭茶", "name_vi": null, "desc": "CN", "desc_vi": null, "comment": "CN", "comment_vi": null }],
   "topics":   [{ "ask": "CN", "ask_vi": null, "reply": "CN", "reply_vi": null, "reaction": "like" }],
   "branches": [{ "ask": "…", "ask_vi": null, "reply": "…", "reply_vi": null,
                  "next": [{ "ask": "…", "ask_vi": null, "reply": "…", "reply_vi": null, "reaction": "puzzled" }] }],
@@ -135,7 +137,8 @@ name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the 
   `src/features/characters/tea/TeaTab.tsx` (mounted/unmounted from `characterDetail.js` like the lore tab), pure
   `teaView.mts` (tested), CSS `styles/teaTab.css` (tokens only).
 - Content, in order:
-  1. **Trà yêu thích** — 3 × (tea art, VI name + CN, the character's comment on it).
+  1. **Trà yêu thích** — a band: the character's drawing in the moon window | the 3 teas as a tab list (icon, VI + CN) |
+     the chosen tea: large icon, name, its description, and the character's comment in a paper box (look D2).
   2. **缘起 · 相知** (calligraphy sprites + VI names) — a line "Trong game, mỗi câu hiện 3 trong 8 chủ đề", then the 8
      exchanges in game order: player option (VI, CN small beside it) → character reply (avatar, VI) → reaction sprite.
   3. **契合** — "Mỗi lượt hiện 2 chủ đề; chủ đề đã chọn mở ra 2 câu tiếp": 2 openers, each with its 2 follow-ups
@@ -152,9 +155,9 @@ name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the 
 
 ## 9. Assets
 
-Copied into `public/assets/tea/` (lowercase names, committed like the other game sprites): `tea_<81001–81015>.png`,
-`react_like.png` (`ui_pm_hgxz`), `react_puzzled.png` (`ui_pm_bqk_ty`), `stage_1-3.png` (`ui_pm_qxjdt_d1–d3`). Source and
-bundle names recorded in a short README in that folder. A release-day note in `WHMX_COMMANDS.md` (new tea → copy its art).
+Tea icons: the existing `public/assets/items/itemicon_<id>.png` (nothing to copy). Copied into `public/assets/tea/`
+(lowercase names, committed like the other game sprites): `react_like.png` (`ui_pm_hgxz`), `react_puzzled.png` (`ui_pm_bqk_ty`), `stage_1-3.png` (`ui_pm_qxjdt_d1–d3`). Source and
+bundle names recorded in a short README in that folder. A release-day note in `WHMX_COMMANDS.md` (a new tea needs its item icon, which the item-icon step already copies).
 
 ## 10. Errors and verification
 

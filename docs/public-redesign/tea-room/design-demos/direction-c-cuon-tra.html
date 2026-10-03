@@ -1,0 +1,97 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Phòng Trà · C · Cuộn trà</title>
+<!-- C · Cuộn trà (best designer: Kenya Hara 原研哉 — emptiness as the vessel, "ma"; paper and restraint, Muji). One narrow
+     column read top to bottom like a hand-scroll. No boxes, no cards: the night is the paper. The game's calligraphy
+     (缘起 / 相知 / 契合) is the only ornament and opens each part. The player speaks in a short serif line, the character
+     answers in prose; the reaction is a small seal on a paper chip at the end of the answer, like a stamp on a scroll.
+     契合 shows its fork as two paths joined by "hoặc". The scroll closes on the result poem. Form from the content: a tea
+     ceremony is slow and ordered; the page is slow and ordered. -->
+<style>
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.head{max-width:1200px;margin:0 auto;display:flex;gap:16px;align-items:center;padding:8px 0 16px}
+.head img{width:56px;height:56px;border-radius:50%;border:2px solid var(--line2)}
+.head h1{font:700 21px/1.3 var(--serif)} .head p{color:var(--ash);font-size:14px}
+.tabs{max-width:1200px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.tabs a{padding:8px 14px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{max-width:1200px;margin:12px auto 0;font-size:12px;color:var(--ash)}
+.scroll{max-width:620px;margin:0 auto;padding:48px 0 24px}
+.part{padding:72px 0 0;text-align:center}
+.part img.cal{height:72px;width:auto}
+.part img.cal+img.cal{margin-left:24px}
+.part h2{font:500 15px/1.4 var(--sans);color:var(--ash);margin-top:12px;letter-spacing:.02em}
+.part .rule{font-size:13px;color:var(--ash);margin:4px auto 0;max-width:44ch}
+/* teas */
+.teas{display:flex;justify-content:center;gap:48px;margin-top:8px}
+.teas figure{margin:0;text-align:center}
+.teas img{height:110px;width:auto}
+.teas figcaption{font:500 14px/1.4 var(--serif);margin-top:8px}
+.teas .cn{display:block;font-size:12px;color:var(--ash)}
+.words{margin:32px auto 0;text-align:left}
+.words p{font-size:15px;line-height:1.85}
+.words p+p{margin-top:16px}
+.words em{font-style:normal;font:600 13px/1 var(--serif);color:var(--gold);margin-right:8px}
+/* exchanges */
+.ex{text-align:left;margin-top:48px}
+.you{font:400 italic 17px/1.5 var(--serif);color:var(--text)}
+.you .cn{font-style:normal;font-size:14px;color:var(--ash);margin-left:10px}
+.ans{margin-top:12px;font-size:15px;line-height:1.85;text-wrap:pretty}
+.ans.narr{color:var(--ash);font-style:italic}
+.seal{display:inline-grid;place-items:center;width:30px;height:26px;margin-left:8px;vertical-align:-6px;border-radius:6px;background:#d8cfbd}
+.seal img{height:18px;width:auto}
+.paths{margin-top:24px;padding-left:24px;border-left:1px solid var(--goldline)}
+.paths .ex{margin-top:24px}
+.or{display:block;margin:24px 0 0;font:italic 400 14px/1 var(--serif);color:var(--ash)}
+.mark{display:block;width:24px;height:1px;background:var(--line2);margin:72px auto 0}
+/* end */
+.end{text-align:center}
+.end .lines{margin:32px auto 0;text-align:left}
+.end h3{font:600 13px/1.3 var(--sans);color:var(--ash);margin-top:24px}
+.end p{font-size:15px;line-height:1.85;margin-top:6px}
+.poem{margin:72px 0 0;font:500 24px/2 var(--serif);white-space:pre-line}
+.poem .cn{display:block;font-size:14px;color:var(--ash);line-height:1.8;margin-top:12px;white-space:pre-line}
+@media (max-width:640px){
+ .scroll{padding-top:24px}.part{padding-top:56px}.part img.cal{height:56px}
+ .teas{gap:20px}.teas img{height:84px}
+ .ex{margin-top:36px}.you{font-size:16px}.you .cn{display:block;margin:2px 0 0}
+ .paths{padding-left:16px}
+ .poem{font-size:20px}}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav>
+<main class="main">
+ <header class="head"><img src="../../../../public/assets/characters/avatars/V0112.png" alt=""><div><h1 id="nm"></h1><p class="cn" id="nc"></p></div></header>
+ <nav class="tabs" aria-label="Điều hướng nhân vật"><a>Tổng Quan</a><a>Thông Tin</a><a>Thiên Phú</a><a>Build</a><a>Hồ Sơ Lưu Trữ</a><a class="on" aria-current="page">Phòng Trà</a><a>Thư Viện</a></nav>
+ <p class="demo">Demo: chữ Việt chỉ minh họa bố cục, không phải bản dịch. Câu có chấm nhỏ là chưa dịch.</p>
+ <article class="scroll" id="paper"></article>
+</main>
+<script src="tea-data.js"></script>
+<script>
+const T = TEA, c = T.char;
+nm.textContent = c.vi; nc.textContent = c.cn;
+const seal = (r) => r ? `<span class="seal"><img src="${REACT[r].img}" alt="${REACT[r].label}"></span>` : '';
+const ex = (t) => `<div class="ex"><p class="you">${esc(t.vi)}<span class="cn" lang="zh">${esc(t.cn)}</span></p>
+ <p class="ans${isNarration(t.reply) ? ' narr' : ''}">${txt(t.reply_vi, t.reply)}${seal(t.r)}</p></div>`;
+const cal = (s) => `<img class="cal" src="${s.img}" alt="${s.cn}">`;
+paper.innerHTML = `
+<section class="part" style="padding-top:0"><h2 style="margin:0 0 24px">Trà yêu thích</h2>
+ <div class="teas">${T.teas.map((t) => `<figure><img src="${t.img}" alt=""><figcaption>${esc(t.vi)}<span class="cn" lang="zh">${esc(t.cn)}</span></figcaption></figure>`).join('')}</div>
+ <div class="words">${T.teas.map((t) => `<p><em>${esc(t.vi)}</em>${txt(t.comment_vi, t.comment)}</p>`).join('')}</div>
+</section>
+<span class="mark"></span>
+<section class="part">${cal(T.stages[0])}${cal(T.stages[1])}<h2>${T.stages[0].vi} và ${T.stages[1].vi}</h2>
+ <p class="rule">Câu 1 và câu 2. Mỗi câu, game hiện 3 trong 8 chủ đề.</p>
+ ${T.topics.map(ex).join('')}
+</section>
+<span class="mark"></span>
+<section class="part">${cal(T.stages[2])}<h2>${T.stages[2].vi}</h2>
+ <p class="rule">Câu 3 và câu 4. Game hiện 2 chủ đề, chủ đề đã chọn mở ra 2 câu tiếp.</p>
+ ${T.branches.map((b) => `${ex(b)}<div class="paths">${ex(b.next[0])}<span class="or">hoặc</span>${ex(b.next[1])}</div>`).join('')}
+</section>
+<span class="mark"></span>
+<section class="part end"><h2>Kết thúc tiệc trà</h2>
+ <div class="lines"><h3>Khi thành công</h3><p>${txt(T.win_vi, T.win)}</p><h3>Khi thất bại</h3><p>${txt(T.lose_vi, T.lose)}</p></div>
+ <p class="poem">${esc(T.result.vi)}<span class="cn" lang="zh">${esc(T.result.cn)}</span></p>
+</section>`;
+</script>
+</body></html>
