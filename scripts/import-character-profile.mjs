@@ -2,7 +2,7 @@
 // Profile/lore importer. Default: read-only plan. --apply writes (owner approval required).
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { eq, inArray, sql } from 'drizzle-orm';
@@ -14,6 +14,7 @@ import { characterProfiles, lorePublishState, loreTerms, profileTexts } from '..
 import { matchLegacyCells } from './lib/profile-legacy.mjs';
 import { needsPublish, planProfileImport } from './lib/profile-import-plan.mjs';
 import { hashValue, normalizeProfileSources, sha256 } from './lib/profile-source.mjs';
+import { teaLangFile, teaLangKeys } from './lib/tea-lang.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const MASTER = resolve(ROOT, '..', 'NeoArtifacts', 'MasterData', 'json');
@@ -22,6 +23,7 @@ const SOURCES = {
   historicalRelicsMap: 'historicalRelicsMap.json', historicalTextMap: 'HistoricalTextMap.json',
   friendshipDescription: 'friendshipDescription.json', characterTable: 'characterTable.json', typeJJHMap: 'TypeJJHMap.json',
   characterSkins: 'characterSkins.json', characterLines: 'characterLines.json',
+  playerAskMap: 'playerAskMap.json', highteaCharacterMap: 'highteaCharacterMap.json', itemMap: 'itemMap.json',
 };
 
 function loadRaw(masterRoot) {
@@ -32,7 +34,12 @@ function loadRaw(masterRoot) {
     raw[key] = JSON.parse(buffer.toString('utf8'));
     files.push({ path: `NeoArtifacts/MasterData/json/${name}`, sha256: sha256(buffer) });
   }
-  return { raw, receipt: { sourceKind: 'masterdata', sourceVersion: 'character-profile-masterdata-v1', contentHash: hashValue(files), sourcePath: 'NeoArtifacts/MasterData/json', manifest: { files } } };
+  const masterData = dirname(masterRoot);
+  const langPath = teaLangFile(masterData);
+  const langBuffer = readFileSync(langPath);
+  raw.teaLang = teaLangKeys(JSON.parse(langBuffer.toString('utf8')));
+  files.push({ path: `NeoArtifacts/MasterData/${relative(masterData, langPath).replace(/\\/g, '/')}`, sha256: sha256(langBuffer) });
+  return { raw, receipt: { sourceKind: 'masterdata', sourceVersion: 'character-profile-masterdata-v2', contentHash: hashValue(files), sourcePath: 'NeoArtifacts/MasterData/json', manifest: { files } } };
 }
 
 function readLegacyRows(workbook) {
@@ -58,6 +65,8 @@ function summarize(plan, normalized, seeds) {
     counts: plan.counts,
     skippedRawCharacters: normalized.skipped,
     missingFromRaw: normalized.missingFromRaw,
+    teaOdd: normalized.teaOdd,
+    teaOwnResult: normalized.teaOwnResult,
     profiles: plan.profiles.filter((p) => p.action !== 'unchanged').map((p) => `${p.action} ${p.characterId}`),
     textInserts: plan.textInserts.length,
     textUpdates: plan.textUpdates.map((u) => `${u.characterId} ${u.unitKey} ${JSON.stringify(u.patch.state ?? (u.patch.sourcePresent === false ? 'absent' : 'source'))}`),
@@ -158,7 +167,7 @@ if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
       const ids = Object.keys(JSON.parse(readFileSync(args.dataJson, 'utf8')).characters);
       const normalized = normalizeProfileSources(raw, ids);
       const legacy = args.seedLegacy ? matchLegacyCells(readLegacyRows(args.workbook), normalized.profiles) : null;
-      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, missingFromRaw: normalized.missingFromRaw, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
+      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, missingFromRaw: normalized.missingFromRaw, teaOdd: normalized.teaOdd, teaOwnResult: normalized.teaOwnResult, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
     } else {
       const db = getDb();
       const ids = (await db.select({ id: characters.characterId }).from(characters)).map((r) => r.id);

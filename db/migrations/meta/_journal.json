@@ -64,6 +64,13 @@
       "when": 1790938328320,
       "tag": "0008_sour_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791019434308,
+      "tag": "0009_wonderful_kat_farrell",
+      "breakpoints": true
     }
   ]
 }
