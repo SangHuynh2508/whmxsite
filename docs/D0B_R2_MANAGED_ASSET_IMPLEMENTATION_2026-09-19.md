@@ -1,6 +1,6 @@
 # D0B — R2 managed image upload pipeline
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](WHMX_CURRENT_STATE_FINAL_2026-10-02.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md`](PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](WHMX_CURRENT_STATE_FINAL_2026-10-04.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md`](PREVIEW_CHARACTER_ASSET_ARCHITECTURE_PROPOSAL_2026-09-19.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 ## Runtime boundary
 

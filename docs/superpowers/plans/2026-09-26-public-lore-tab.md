@@ -1,6 +1,6 @@
 # Public Lore Tab ("Hồ Sơ Lưu Trữ") Implementation Plan
 
-> **Status: done — live 2026-09-26** (see `docs/WHMX_CURRENT_STATE_FINAL_2026-10-02.md` §8 "Public lore tab"). Steps below are the record as executed; the state file they mention was renamed `…_2026-09-28.md` on 2026-09-28.
+> **Status: done — live 2026-09-26** (see `docs/WHMX_CURRENT_STATE_FINAL_2026-10-04.md` §8 "Public lore tab"). Steps below are the record as executed; the state file they mention was renamed `…_2026-09-28.md` on 2026-09-28.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

@@ -1,6 +1,6 @@
 # Tea room (Phòng trà) — design (spec)
 
-> Status: **approved 2026-10-03 (owner: "giữ đọc .bin, làm huashu đi"); look approved: D2 ([`../../public-redesign/tea-room/direction-approved.md`](../../public-redesign/tea-room/direction-approved.md)).** Plan: [`../plans/2026-10-03-tea-room.md`](../plans/2026-10-03-tea-room.md). Entry point: [`../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md).
+> Status: **approved 2026-10-03 (owner: "giữ đọc .bin, làm huashu đi"); look approved: D2 ([`../../public-redesign/tea-room/direction-approved.md`](../../public-redesign/tea-room/direction-approved.md)).** Plan: [`../plans/2026-10-03-tea-room.md`](../plans/2026-10-03-tea-room.md). Entry point: [`../../WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](../../WHMX_CURRENT_STATE_FINAL_2026-10-04.md).
 > Builds on the lore pipeline ([`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md)) and the public
 > lore tab ([`2026-09-26-public-lore-tab-design.md`](2026-09-26-public-lore-tab-design.md)). Story lore was surveyed and
 > parked the same day: [`../../plans/WHMX_STORY_LORE_NOTES_2026-10-03.md`](../../plans/WHMX_STORY_LORE_NOTES_2026-10-03.md).

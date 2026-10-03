@@ -2,7 +2,7 @@
 
 > **Status sections §11–§25 are superseded** by the entry point below; §1–§10 and §26–§29 remain valid background.
 >
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](WHMX_CURRENT_STATE_FINAL_2026-10-02.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md), [`WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](WHMX_MASTERDATA_ID_CONVENTIONS(5).md), [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](WHMX_CURRENT_STATE_FINAL_2026-10-04.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md), [`WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](WHMX_MASTERDATA_ID_CONVENTIONS(5).md), [`POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md`](POSTGRES_CRUD_ARCHITECTURE_PROPOSAL_2026-09-19.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
 
 **Checkpoint:** 2026-09-20  
 **Audience:** A fresh ChatGPT/Codex/Antigravity instance with no access to the original conversation  

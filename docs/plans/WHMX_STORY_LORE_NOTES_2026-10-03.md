@@ -2,7 +2,7 @@
 
 > Survey of 2026-10-02/03 (read-only, runtime r3075). The owner parked story lore to build the tea room (phòng trà)
 > first. Pick this up when lore restarts; the design questions are not asked yet. Entry point:
-> [`../WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../WHMX_CURRENT_STATE_FINAL_2026-10-02.md).
+> [`../WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](../WHMX_CURRENT_STATE_FINAL_2026-10-04.md).
 
 ## 1. Text (already gathered)
 
