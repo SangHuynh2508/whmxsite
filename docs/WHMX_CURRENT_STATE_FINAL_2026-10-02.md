@@ -26,6 +26,7 @@
 | `../scripts/fixtures/masterdata/` (+ `manifest.json`) | Trimmed MasterData for the Build feature — refresh locally: `node scripts/export-masterdata-fixtures.mjs` |
 | **Tier list** — [`superpowers/specs/2026-10-02-tier-list-design.md`](./superpowers/specs/2026-10-02-tier-list-design.md) + [`superpowers/plans/2026-10-02-tier-list.md`](./superpowers/plans/2026-10-02-tier-list.md) (11 tasks + execution log) + [`public-redesign/tier-list/direction-approved.md`](./public-redesign/tier-list/direction-approved.md) (huashu A/B/C → owner mix D → D2 → `/impeccable critique` → D3; demos in `design-demos/`) | Tier list: data model, admin, publish, public page (live 2026-10-02) |
 | [`plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md`](./plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md) | **Everything left from the 2026-09-28 site audit**: design drift (with "changes the look?"), a11y/structure, code, React migration order, operations — pick from here |
+| [`plans/WHMX_STORY_LORE_NOTES_2026-10-03.md`](./plans/WHMX_STORY_LORE_NOTES_2026-10-03.md) | **Story lore survey** (2026-10-03, notes not a spec): text in `WHMX_Lore_By_Chapter`, 1 184 scene backgrounds/CG tied to the scripts, speaker icons (avatars + 193 NPC heads), what a reader needs |
 | [`plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md`](./plans/WHMX_DATA_PIPELINE_PLAN_2026-09-24.md) | **Release-day runbook N2** (§4), P5 next domains, dated log of 24–26/9 |
 | [`superpowers/specs/2026-09-24-lore-pipeline-design.md`](./superpowers/specs/2026-09-24-lore-pipeline-design.md) | Lore data model, importer, parity gates, R2 publish/backup design |
 | [`superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md`](./superpowers/specs/2026-09-25-admin-khi-gia-lore-design.md) | Admin Khí Giả + Lore spec (owner decisions Q1–Q15) |
@@ -180,7 +181,7 @@
 | Localization quality | Re-checked clean 2026-09-26 (populated cells); untranslated coverage is a separate question; batch #3 not started |
 | **SEO** | Not started: hash URLs are one page to search engines; needs path URLs, per-page meta/OG, sitemap; decision round |
 | Voice lines (通讯记录) — separate route, `characterLines` | Not started (later) |
-| Story lore (`WHMX_Lore_*`) | Not planned |
+| Story lore (`WHMX_Lore_*`) | Surveyed 2026-10-03, **parked by the owner** (tea room first): [`plans/WHMX_STORY_LORE_NOTES_2026-10-03.md`](./plans/WHMX_STORY_LORE_NOTES_2026-10-03.md) |
 | Future admin areas: Skill/Buff DB + translation, Guide, audit/operations | Not started |
 | Tier list content (owner) | Create and publish the real list in Admin → Tier List on production (development has the test list `tong-hop`) |
 | Stale tool test | `tools/test_character_metadata_regression.py` expects 133 characters / 81 ranged; update to the r3057 roster (135 / 82) when touched |
