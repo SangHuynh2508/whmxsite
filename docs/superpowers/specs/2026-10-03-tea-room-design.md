@@ -1,8 +1,6 @@
 # Tea room (Phòng trà) — design (spec)
 
-> Status: **approved 2026-10-03 (owner: "giữ đọc .bin, làm huashu đi"); look approved: D2 ([`../../public-redesign/tea-room/direction-approved.md`](../../public-redesign/tea-room/direction-approved.md)).** Next after approval: `huashu-design` (3 directions → owner picks →
-> `docs/public-redesign/tea-room/direction-approved.md`, impeccable `detect`) → `superpowers:writing-plans` →
-> `superpowers:executing-plans`. Entry point: [`../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md).
+> Status: **approved 2026-10-03 (owner: "giữ đọc .bin, làm huashu đi"); look approved: D2 ([`../../public-redesign/tea-room/direction-approved.md`](../../public-redesign/tea-room/direction-approved.md)).** Plan: [`../plans/2026-10-03-tea-room.md`](../plans/2026-10-03-tea-room.md). Entry point: [`../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md`](../../WHMX_CURRENT_STATE_FINAL_2026-10-02.md).
 > Builds on the lore pipeline ([`2026-09-24-lore-pipeline-design.md`](2026-09-24-lore-pipeline-design.md)) and the public
 > lore tab ([`2026-09-26-public-lore-tab-design.md`](2026-09-26-public-lore-tab-design.md)). Story lore was surveyed and
 > parked the same day: [`../../plans/WHMX_STORY_LORE_NOTES_2026-10-03.md`](../../plans/WHMX_STORY_LORE_NOTES_2026-10-03.md).
@@ -86,10 +84,11 @@ name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the 
 
 `scripts/import-character-profile.mjs` (same `--check` / plan / `--apply` rules; owner yes for every DB write):
 
-- Reads `playerAskMap.json`, `highteaCharacterMap.json`, `itemMap.json` (teas only). Comments are lang keys: a small
-  Python reader `scripts/read_tea_lang.py` (pattern of `read_profile_legacy_vi.py`) decodes the **current** lang file
-  (`MasterData/lang/<v>_cn.bin`, `<v>` from the newest `provenance/launch_*.json`) with NeoArtifacts' `lang_from_cipher`
-  and prints only the requested keys. The receipt hash covers the three JSON files and the lang version.
+- Reads `playerAskMap.json`, `highteaCharacterMap.json`, `itemMap.json` (teas only). Comments are lang keys: the
+  language table is already decoded next to each capture by `refresh_masterdata.py` — the newest
+  `MasterData/provenance/launch_*.json` names it (`language_decoded_path`, e.g. `captures/<run>/lang/5696_cn.json`, decoded
+  from that run's `5696_cn.bin`). The importer reads that JSON (no extra decoder) and keeps only the
+  `highteaLan_hightea_comment*` keys. The receipt hash covers the three JSON files and the language file.
 - Pure part in `scripts/lib/profile-source.mjs` (`normalizeProfileSources` gains the tea units, `structure.tea` and terms).
 - Rules: a `TopicNext` ID that does not exist, or a comment key missing from lang → abort, naming it. A character with
   topics but no `highteaCharacterMap` row → topics only. `--check` lists characters whose topic shape is not 8 / 2 / 4
@@ -113,8 +112,10 @@ name, the one CN value not read from a table) and `TEA_RESULT` (`name_cn` = the 
 
 - `reaction`: `trend 1 → "like"`, `trend 2 → "puzzled"`, anything else → `null` (openers). No raw IDs or trend numbers in
   the output. `result` is non-null only for a character with its own `tea.result`.
-- The document gains one shared block: `{ "version": 1, "characters": {…}, "tea": { "stages": [{cn, vi}×3], "result": {cn, vi} } }`
-  (`buildLoreDocument` takes it; the loader keeps working with documents that lack it).
+- Shared texts travel inside each `profile.tea` (no document-level block, so the loader and `data.json` need no
+  change): `stages: [{cn, vi}×3]` from the `TEA_STAGE_1-3` terms and `result: {cn, vi}` — the character's own `tea.result`
+  when it has one, else the `TEA_RESULT` term (~150 bytes per character). The poem's literal `
+` becomes a line break.
 - `_vi` follows `publishableVi` (admin + ok). **[spec choice]** Tea units do not move `vi_updated_at` (Home "Mới dịch"
   stays about the archive texts).
 
@@ -165,12 +166,11 @@ bundle names recorded in a short README in that folder. A release-day note in `W
 |---|---|---|
 | Importer | broken `TopicNext`, missing lang key, lang file not found | abort before writing, name the ID/key/file |
 | Importer | odd topic shape / differing result poem | listed by `--check`, imported as data says |
-| Overlay | R2 overlay fails to load | `data.json` already carries `profile.tea` in CN (the release-day `export-profile-overlay --shape v2` step uses the same shaper, ~+1 MB); stage names fall back to the CN on the sprites, the shared poem is left out |
-| Publish | document without the shared `tea` block (published before this feature) | stage names in CN, no poem, until the next publish |
+| Overlay | R2 overlay fails to load | `data.json` carries `profile.tea` in CN once the release-day `export-profile-overlay --shape v2` step runs (same shaper, ~+1 MB); before that the tab shows "Chưa có dữ liệu phòng trà." |
 | Public | sprite missing | text still renders; image `alt` empty (decorative) |
 
 Tests (node:test, one check per piece): tea normalization on fixture rows (A0024 shape, broken `TopicNext`), v2 shaper
-(reaction mapping, `publishableVi`, no IDs), document shared block, `loreProgress` split, `teaUnitGroups`, `teaView`
+(reaction mapping, `publishableVi`, stages + poem inside `profile.tea`), `loreProgress` split, `teaUnitGroups`, `teaView`
 (order, stage-direction detection, CN fallback). Browser: dev 3003 with a test translation on development, 1440 / 390 px.
 DB steps needing the owner: migration 0009 (development, then production), importer `--apply` (development, then
 production), first production publish.
