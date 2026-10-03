@@ -62,3 +62,42 @@ mark every change as `〔背景 <name>〕`.
 `D:\BaiTapCode\WHMX\_claude_scratch\`: `lore_bg_names.txt` (1 184 names), `lore_bg_map.json` (name → bundle),
 `novel_survey.py` (mapping script), `npchead_sample.png`; raw nodes of e051/e052/t001 in
 `r3057_explore/scripts/_raw_new_scripts.json` (+ `_raw_novel_misc.json`: character sprite tables, `NovelFace`).
+
+## 7. Characters seen in the data but not on the site (survey 2026-10-04, r3075)
+
+Read-only survey; images pulled from MuMu (MD5 = r3075) and extracted to `D:\BaiTapCode\WHMX\_claude_scratch\hidden_chars\`
+(not in git). Nothing below is inferred from ID shape; names come from game tables only. **None of these is in the site;
+whether any becomes playable is not stated by any table.**
+
+### 7.1 W0021 鸳鸯炉 — a complete playable character, hidden by date
+
+- `characterTable`: full name 高丽青釉鸳鸯钮三足带盖瓷熏炉 (Goryeo celadon censer with a mandarin-duck knob, three feet,
+  lid), job 4 (Viễn Kích), rare 3, tags 远程;输出;爆发, organisation `typeJJh` 2, **`UnlockDate` 2129075940 (year 2037)**
+  — a placeholder date, so the site build and the importers skip it.
+- Data as complete as a released character (compared with W0182): `characterSkillMap` 9 / `skillMap` 21 with names and
+  descriptions (熏染, ult 鸳鸯鸣, 栖止, 旅徙, 翡色, 捻香; status 凝烟), passives 12, talents 31, base skin `W0021001` 肖形
+  (CV 沈玥), lines, profile (card intro: a Korean exchange student who loves Chinese culture and fashion design; 4
+  reports), relic, preferences, tea room, roleattr, avatar frames.
+- Images in the game: archive relic art + head, 4 skill icons, a `images_skinactivity` banner **showing the character**
+  (green hair, hat), battle sfx. **No** standing drawing, card, chibi or Spine bundle.
+
+### 7.2 Tea room only, or tea room + story (not in `characterTable`)
+
+| ID | Name (source) | Other references |
+|---|---|---|
+| D0067 | **商周木耜** (speaker table `N446`, `N447 ？？？`) | 5 scripts: e020 (金穗长野望), e039, e041, p007, c001 (Sơn Thủy Nhân Vật Kính's story, the farmer); full standing drawing `character_drawing_d0067001`, novel body/hair + 12 faces, Spine `d0067001` (+ novel), silhouette |
+| S0022 | **九九乘法砖** (speaker table `N96`) | Lead of side story 《算数这件小事》 (b003); `NovelFaceMap` faces; 2 Spine sets (`s0022002` with a classroom background), **battle model** `character_s0022001`, silhouettes ×2. No static drawing (assembled novel sprite: `S0022_novel_assembled.png`, face placement approximate) |
+| A0027 | none | Tea room only (34 lang keys), no bundles. Content: woke in **Pazyryk (巴泽雷克)**, a fawn companion, antlers, winged beasts, the steppe |
+| V0019 | none | Tea room only, no bundles. Content: **Miao batik (苗族蜡染)**, 折耳根, mountain songs |
+| W0015 | none | Tea room only (32 keys: no win/lose ending), no bundles. Content: **court robe (朝服)** in vermilion and blue, 礼 |
+
+Every released character has a tea room, and these six (W0021 + the five above) have one too — consistent with
+characters prepared as playable, but **no table says they will be released** (no `characterTable` row except W0021, no
+banner, no unlock date).
+
+### 7.3 Silhouettes (`character_silhouette.ab`, 330 images) of IDs not on the site
+
+Character-like IDs, names from the speaker table: A0082 石博茕 (×2), A0142 星形石, D0067 商周木耜, D0135 熊饰踏跺, S0022 九九乘法砖 (×2),
+S0066 经穴漆人 (×2), V0044 象牙算筹, W0133 金丝猫, W0158 大羊驼彩陶 (×2, one with a camel). All speak in the story; none is in
+`characterTable`. Also story figures JQ001–005 (熊饰踏跺, a giant rabbit, 时溪, a sea monster…), unnamed monsters/bosses
+BD008/009, ED027/028, EV053–055, and the player avatar's outfits SCJ203/204. Sheet: `silhouette_unknown_sheet.png`.
