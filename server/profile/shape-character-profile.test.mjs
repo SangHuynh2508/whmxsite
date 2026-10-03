@@ -117,3 +117,48 @@ test('v2 vi_updated_at is the latest published main-text VI, else null', () => {
   assert.equal(shapeCharacterProfile({ profile, texts: new Map() }, terms, { shape: 'v2' }).vi_updated_at, null);
   assert.equal('vi_updated_at' in shapeCharacterProfile({ profile, texts: dated }, terms, { shape: 'legacy' }), false);
 });
+
+const teaProfile = { ...profile, structure: { ...profile.structure, tea: {
+  teas: ['81009'],
+  topics: [{ id: 'X101', trend: 1 }, { id: 'X201', trend: 2 }],
+  branches: [{ id: 'X301', next: [{ id: 'X303', trend: 1 }, { id: 'X304', trend: 2 }] }],
+} } };
+const teaTexts = new Map([...texts,
+  ['tea.X101.ask', t('夜市', 'Chợ đêm', 'admin')], ['tea.X101.reply', t('来吧')],
+  ['tea.X201.ask', t('演唱会')], ['tea.X201.reply', t('（无人回应。）')],
+  ['tea.X301.ask', t('酒馆')], ['tea.X301.reply', t('你猜？')],
+  ['tea.X303.ask', t('随心')], ['tea.X303.reply', t('不错')], ['tea.X304.ask', t('真样')], ['tea.X304.reply', t('虚妄')],
+  ['tea.comment.1', t('冰的', 'Uống lạnh', 'admin')], ['tea.win', t('好茶')], ['tea.lose', t('下次')],
+]);
+const teaTerms = new Map([...terms,
+  ['81009', { ...term('杏皮茶', 'Trà vỏ mơ', 'admin'), detailCn: '西北饮品', detailVi: null }],
+  ['TEA_STAGE_1', term('缘起')], ['TEA_STAGE_2', term('相知', 'Tương tri', 'admin')], ['TEA_STAGE_3', term('契合')],
+  ['TEA_RESULT', term('瓦铫煮春雪\n淡香生古瓷')],
+]);
+
+test('v2 tea: teas with description and comment, stages, reactions, endings, shared poem', () => {
+  const out = shapeCharacterProfile({ profile: teaProfile, texts: teaTexts }, teaTerms, { shape: 'v2' });
+  assert.deepEqual(out.tea, {
+    teas: [{ code: '81009', name: '杏皮茶', name_vi: 'Trà vỏ mơ', desc: '西北饮品', desc_vi: null, comment: '冰的', comment_vi: 'Uống lạnh' }],
+    stages: [{ cn: '缘起', vi: null }, { cn: '相知', vi: 'Tương tri' }, { cn: '契合', vi: null }],
+    topics: [
+      { ask: '夜市', ask_vi: 'Chợ đêm', reply: '来吧', reply_vi: null, reaction: 'like' },
+      { ask: '演唱会', ask_vi: null, reply: '（无人回应。）', reply_vi: null, reaction: 'puzzled' },
+    ],
+    branches: [{ ask: '酒馆', ask_vi: null, reply: '你猜？', reply_vi: null, next: [
+      { ask: '随心', ask_vi: null, reply: '不错', reply_vi: null, reaction: 'like' },
+      { ask: '真样', ask_vi: null, reply: '虚妄', reply_vi: null, reaction: 'puzzled' },
+    ] }],
+    win: '好茶', win_vi: null, lose: '下次', lose_vi: null,
+    result: { cn: '瓦铫煮春雪\n淡香生古瓷', vi: null },
+  });
+  assert.equal(JSON.stringify(out.tea).includes('X101'), false); // no topic IDs in public output
+});
+
+test('v2 tea: a character\'s own poem wins; no tea structure → no tea key; tea VI never moves vi_updated_at', () => {
+  const own = new Map([...teaTexts, ['tea.result', t('别的诗')]]);
+  assert.deepEqual(shapeCharacterProfile({ profile: teaProfile, texts: own }, teaTerms, { shape: 'v2' }).tea.result, { cn: '别的诗', vi: null });
+  assert.equal('tea' in shapeCharacterProfile({ profile, texts }, terms, { shape: 'v2' }), false);
+  const dated = new Map([['tea.win', { ...t('好茶', 'Trà ngon', 'admin'), viUpdatedAt: new Date('2026-10-03T00:00:00Z') }]]);
+  assert.equal(shapeCharacterProfile({ profile: teaProfile, texts: dated }, teaTerms, { shape: 'v2' }).vi_updated_at, null);
+});
