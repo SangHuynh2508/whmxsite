@@ -24,6 +24,64 @@ function unit(units, unitKey, sourceCn, sourceRef) {
   if (sourceCn) units.push({ unitKey, sourceCn, sourceRef, sourceHash: sha256(sourceCn) });
 }
 
+// Tea room (品茗). playerAskMap: TopicType 1 = the pool of the first two questions (缘起, 相知), TopicType 2 = the 契合
+// openers whose TopicNext are the two follow-ups (TopicType 0). highteaCharacterMap: favourite teas (UPTea; InterestTea
+// always equals it, ForbidTea is always empty), one comment per tea at the same position (80/80 comments that name a
+// tea name their own one, r3075), endings. The stage names are drawn into the game's UI sprites (ui_pm_qxjdt_d1-3), not
+// stored in any table, and the result-card poem (VictoryEnd2) is the same for every character.
+export const TEA_STAGES = [['TEA_STAGE_1', '缘起'], ['TEA_STAGE_2', '相知'], ['TEA_STAGE_3', '契合']];
+const poemText = (value) => text(value).replace(/\n/g, '\n'); // the game stores a literal "\n"
+
+function sharedTeaResult(highteaMap) {
+  const counts = new Map();
+  for (const row of Object.values(highteaMap ?? {})) {
+    const poem = poemText(row?.VictoryEnd2LanText);
+    if (poem) counts.set(poem, (counts.get(poem) ?? 0) + 1);
+  }
+  return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? '';
+}
+
+function teaFor(characterId, raw, units, terms, sharedResult) {
+  const asks = Object.values(raw.playerAskMap ?? {}).filter((r) => text(r?.CharacterId) === characterId)
+    .sort((a, b) => text(a.ID).localeCompare(text(b.ID)));
+  const hightea = raw.highteaCharacterMap?.[characterId];
+  if (!asks.length && !hightea) return null;
+  const byId = new Map(asks.map((r) => [text(r.ID), r]));
+  const add = (r) => {
+    const id = text(r.ID);
+    unit(units, `tea.${id}.ask`, text(r.TopicContentLanText), `playerAskMap:${id}.TopicContentLanText`);
+    unit(units, `tea.${id}.reply`, text(r.TopicRespLanText), `playerAskMap:${id}.TopicRespLanText`);
+    return { id, trend: Number(r.Trend ?? 0) };
+  };
+  const topics = asks.filter((r) => Number(r.TopicType) === 1).map(add);
+  const branches = asks.filter((r) => Number(r.TopicType) === 2).map((r) => {
+    const { id } = add(r);
+    const next = (Array.isArray(r.TopicNext) ? r.TopicNext : []).map((childId) => {
+      const child = byId.get(text(childId));
+      if (!child) throw new Error(`playerAskMap has no topic ${childId} (TopicNext of ${id})`);
+      return add(child);
+    });
+    return { id, next };
+  });
+  const teas = (hightea?.UPTea ?? []).map(text).filter(Boolean);
+  teas.forEach((code, i) => {
+    const item = raw.itemMap?.[code];
+    if (!item) throw new Error(`itemMap has no tea ${code} (${characterId}.UPTea)`);
+    addTerm(terms, code, 'tea', text(item.nameLanText), text(item.DescriptionLanText));
+    const key = text(hightea.Comments?.[i]);
+    if (!key) return;
+    if (!Object.hasOwn(raw.teaLang ?? {}, key)) throw new Error(`language table has no ${key} (${characterId}.Comments)`);
+    unit(units, `tea.comment.${i + 1}`, text(raw.teaLang[key]), `lang:${key}`);
+  });
+  if (hightea) {
+    unit(units, 'tea.win', text(hightea.VictoryEndLanText), `highteaCharacterMap:${characterId}.VictoryEndLanText`);
+    unit(units, 'tea.lose', text(hightea.FailEnd), `highteaCharacterMap:${characterId}.FailEnd`);
+    const poem = poemText(hightea.VictoryEnd2LanText);
+    if (poem && poem !== sharedResult) unit(units, 'tea.result', poem, `highteaCharacterMap:${characterId}.VictoryEnd2LanText`);
+  }
+  return { teas, topics, branches };
+}
+
 export function normalizeProfileSources(raw, characterIds) {
   const wanted = new Set(characterIds);
   const skipped = Object.keys(raw.characterFiles).filter((id) => !wanted.has(id)).sort();
@@ -33,6 +91,9 @@ export function normalizeProfileSources(raw, characterIds) {
   // Recruit line (招集, shown by the wiki as the character quote): line bank id = the base skin's skinID.
   const baseSkin = new Map(Object.values(raw.characterSkins ?? {}).flat().filter((sk) => sk?.bIsBaseSkin).map((sk) => [text(sk.characterId), text(sk.skinID)]));
   const linesById = new Map(Object.values(raw.characterLines ?? {}).map((l) => [text(l?.id), l]));
+  const sharedResult = sharedTeaResult(raw.highteaCharacterMap);
+  const teaOdd = [];
+  const teaOwnResult = [];
 
   for (const characterId of [...wanted].sort()) {
     if (!raw.characterFiles[characterId]) continue;
@@ -92,6 +153,10 @@ export function normalizeProfileSources(raw, characterIds) {
       }
     }
 
+    const tea = teaFor(characterId, raw, units, terms, sharedResult);
+    if (tea && (tea.topics.length !== 8 || tea.branches.length !== 2 || tea.branches.some((br) => br.next.length !== 2))) teaOdd.push(characterId);
+    if (units.some((u) => u.unitKey === 'tea.result')) teaOwnResult.push(characterId);
+
     const organisationCode = text((raw.characterTable[characterId] || {}).typeJJh) || null;
     if (organisationCode) {
       const org = raw.typeJJHMap[organisationCode];
@@ -116,7 +181,7 @@ export function normalizeProfileSources(raw, characterIds) {
         museum: text(relic?.museumlanText),
       },
       // relicTags only when present, so profiles without tags keep their source hash
-      structure: { reports, timeline, ...(relicTags.length ? { relicTags } : {}) },
+      structure: { reports, timeline, ...(relicTags.length ? { relicTags } : {}), ...(tea ? { tea } : {}) },
       units,
     };
     const { units: _u, ...structural } = profile;
@@ -128,7 +193,12 @@ export function normalizeProfileSources(raw, characterIds) {
     addTerm(terms, `AFFINITY_${level}`, 'affinity_level', text(friend.iconDescriptionLanText), text(friend.descriptionLanText));
   }
 
-  return { profiles, terms: [...terms.values()].sort((a, b) => a.code.localeCompare(b.code)), skipped, missingFromRaw };
+  if (raw.highteaCharacterMap && Object.keys(raw.highteaCharacterMap).length) {
+    for (const [code, cn] of TEA_STAGES) addTerm(terms, code, 'tea_text', cn, '');
+    if (sharedResult) addTerm(terms, 'TEA_RESULT', 'tea_text', sharedResult, '');
+  }
+
+  return { profiles, terms: [...terms.values()].sort((a, b) => a.code.localeCompare(b.code)), skipped, missingFromRaw, teaOdd, teaOwnResult };
 }
 
 function addTerm(terms, code, kind, nameCn, detailCn) {

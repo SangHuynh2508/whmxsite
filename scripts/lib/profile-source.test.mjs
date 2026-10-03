@@ -104,3 +104,82 @@ test('quote = recruit line (dropLineLanText) of the base skin, as a translatable
   assert.deepEqual([quote.sourceCn, quote.sourceRef], ['我是器者。', 'characterLines:V0053001.dropLineLanText']);
   assert.equal(normalizeProfileSources(raw, ['V0053']).profiles[0].units.some((u) => u.unitKey === 'quote'), false);
 });
+
+const teaRaw = {
+  ...raw,
+  playerAskMap: {
+    V0053101: { ID: 'V0053101', CharacterId: 'V0053', Trend: 1, TopicType: 1, TopicNext: [], TopicContentLanText: ' 夜市 ', TopicRespLanText: 'player，来吧' },
+    V0053201: { ID: 'V0053201', CharacterId: 'V0053', Trend: 2, TopicType: 1, TopicNext: [], TopicContentLanText: '演唱会', TopicRespLanText: '（茶室里一时无人回应。）' },
+    V0053301: { ID: 'V0053301', CharacterId: 'V0053', Trend: 0, TopicType: 2, TopicNext: ['V0053303', 'V0053304'], TopicContentLanText: '酒馆', TopicRespLanText: '你猜？' },
+    V0053303: { ID: 'V0053303', CharacterId: 'V0053', Trend: 1, TopicType: 0, TopicNext: [], TopicContentLanText: '随心', TopicRespLanText: '不错' },
+    V0053304: { ID: 'V0053304', CharacterId: 'V0053', Trend: 2, TopicType: 0, TopicNext: [], TopicContentLanText: '真样', TopicRespLanText: '虚妄' },
+    W0021101: { ID: 'W0021101', CharacterId: 'W0021', Trend: 1, TopicType: 1, TopicNext: [], TopicContentLanText: 'x', TopicRespLanText: 'y' },
+  },
+  highteaCharacterMap: {
+    V0053: { UPTea: ['81009'], Comments: ['highteaLan_hightea_comment1Lan_V0053'], VictoryEndLanText: '好茶', VictoryEnd2LanText: '瓦铫煮春雪\n淡香生古瓷', FailEnd: '下次' },
+    A0001: { UPTea: [], Comments: [], VictoryEndLanText: 'a', VictoryEnd2LanText: '瓦铫煮春雪\n淡香生古瓷', FailEnd: 'b' },
+  },
+  itemMap: { 81009: { nameLanText: '杏皮茶', DescriptionLanText: '西北特色饮品' } },
+  teaLang: { highteaLan_hightea_comment1Lan_V0053: '冰的杏皮茶解腻' },
+};
+
+test('tea: topics, openers with their follow-ups, favourite teas with comments, endings, shared terms', () => {
+  const out = normalizeProfileSources(teaRaw, ['V0053']);
+  const [p] = out.profiles;
+  assert.deepEqual(p.structure.tea, {
+    teas: ['81009'],
+    topics: [{ id: 'V0053101', trend: 1 }, { id: 'V0053201', trend: 2 }],
+    branches: [{ id: 'V0053301', next: [{ id: 'V0053303', trend: 1 }, { id: 'V0053304', trend: 2 }] }],
+  });
+  const tea = Object.fromEntries(p.units.filter((u) => u.unitKey.startsWith('tea.')).map((u) => [u.unitKey, u.sourceCn]));
+  assert.deepEqual(tea, {
+    'tea.V0053101.ask': '夜市', 'tea.V0053101.reply': 'player，来吧',
+    'tea.V0053201.ask': '演唱会', 'tea.V0053201.reply': '（茶室里一时无人回应。）',
+    'tea.V0053301.ask': '酒馆', 'tea.V0053301.reply': '你猜？',
+    'tea.V0053303.ask': '随心', 'tea.V0053303.reply': '不错',
+    'tea.V0053304.ask': '真样', 'tea.V0053304.reply': '虚妄',
+    'tea.comment.1': '冰的杏皮茶解腻', 'tea.win': '好茶', 'tea.lose': '下次',
+  });
+  assert.equal(p.units.find((u) => u.unitKey === 'tea.comment.1').sourceRef, 'lang:highteaLan_hightea_comment1Lan_V0053');
+  const term = (code) => out.terms.find((t) => t.code === code);
+  assert.deepEqual([term('81009').kind, term('81009').nameCn, term('81009').detailCn], ['tea', '杏皮茶', '西北特色饮品']);
+  assert.deepEqual(['TEA_STAGE_1', 'TEA_STAGE_2', 'TEA_STAGE_3'].map((c) => [term(c).kind, term(c).nameCn]), [['tea_text', '缘起'], ['tea_text', '相知'], ['tea_text', '契合']]);
+  assert.equal(term('TEA_RESULT').nameCn, '瓦铫煮春雪\n淡香生古瓷'); // the game's literal "\n" becomes a line break
+  assert.deepEqual(out.teaOdd, ['V0053']); // 2 topics, 1 opener: not the usual 8 / 2 / 2
+  assert.deepEqual(out.teaOwnResult, []);
+});
+
+test('tea: topics without a highteaCharacterMap row import alone; a different result poem becomes tea.result', () => {
+  const r = structuredClone(teaRaw);
+  delete r.highteaCharacterMap.V0053;
+  let [p] = normalizeProfileSources(r, ['V0053']).profiles;
+  assert.deepEqual(p.structure.tea.teas, []);
+  assert.equal(p.units.some((u) => ['tea.win', 'tea.lose', 'tea.comment.1'].includes(u.unitKey)), false);
+
+  const own = structuredClone(teaRaw);
+  own.highteaCharacterMap.V0053.VictoryEnd2LanText = '别的诗';
+  own.highteaCharacterMap.B0001 = { ...own.highteaCharacterMap.A0001 }; // the shared poem stays the most common one
+  const out = normalizeProfileSources(own, ['V0053']);
+  [p] = out.profiles;
+  assert.equal(p.units.find((u) => u.unitKey === 'tea.result').sourceCn, '别的诗');
+  assert.deepEqual(out.teaOwnResult, ['V0053']);
+});
+
+test('tea: no tea data keeps the profile structure (and its hash) unchanged', () => {
+  const plain = normalizeProfileSources(raw, ['V0053']).profiles[0];
+  const withEmptyTea = normalizeProfileSources({ ...raw, playerAskMap: {}, highteaCharacterMap: {}, itemMap: {}, teaLang: {} }, ['V0053']).profiles[0];
+  assert.equal(withEmptyTea.structure.tea, undefined);
+  assert.equal(withEmptyTea.sourceHash, plain.sourceHash);
+});
+
+test('tea: a broken TopicNext, a missing tea item or a missing comment text aborts with the culprit named', () => {
+  const broken = structuredClone(teaRaw);
+  broken.playerAskMap.V0053301.TopicNext = ['V0053399'];
+  assert.throws(() => normalizeProfileSources(broken, ['V0053']), /V0053399.*V0053301/);
+  const noItem = structuredClone(teaRaw);
+  noItem.itemMap = {};
+  assert.throws(() => normalizeProfileSources(noItem, ['V0053']), /81009.*V0053/);
+  const noLang = structuredClone(teaRaw);
+  noLang.teaLang = {};
+  assert.throws(() => normalizeProfileSources(noLang, ['V0053']), /comment1Lan_V0053/);
+});
