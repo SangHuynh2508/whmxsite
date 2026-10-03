@@ -16,6 +16,7 @@ import { renderBuildTab } from './detail/buildView.js';
 import { renderGalleryTab } from './detail/galleryView.js';
 import { mountLoreQuote, mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
 import { unmountBuildTab } from '../build/BuildTab.tsx';
+import { mountTeaTab, unmountTeaTab } from '../tea/TeaTab.tsx';
 
 // A tab switch replaces the history entry, so Back leaves the character page instead of stepping back through
 // every tab opened (owner 2026-09-28, like s1n.gg). Modified clicks (new tab/window) keep the browser default.
@@ -47,6 +48,7 @@ function renderTabContent(container, char, tabName) {
   tabSwitchToken += 1;
   unmountLoreTab(); // every tab swap and character change goes through here
   unmountBuildTab();
+  unmountTeaTab();
   switch (tabName) {
     case 'info':
       renderInfoTab(container, char);
@@ -61,6 +63,9 @@ function renderTabContent(container, char, tabName) {
       break;
     case 'lore':
       mountLoreTab(container, char);
+      break;
+    case 'tea':
+      mountTeaTab(container, char);
       break;
     case 'overview':
     default:
@@ -285,7 +290,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         </div>
       </header>
 
-      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Hồ Sơ Lưu Trữ | Thư Viện (gallery stays last) -->
+      <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Hồ Sơ Lưu Trữ | Phòng Trà | Thư Viện (gallery stays last) -->
       <nav class="cd-sub-nav" aria-label="Điều hướng chi tiết nhân vật">
         <div class="cd-nav-scroll-wrapper">
           <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
@@ -306,6 +311,10 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
           <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
             <span class="tab-label">Hồ Sơ Lưu Trữ</span>
+          </a>
+
+          <a href="#/characters/${slug}/tea" class="cd-tab-item ${normTab === 'tea' ? 'active' : ''}">
+            <span class="tab-label">Phòng Trà</span>
           </a>
 
           <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">

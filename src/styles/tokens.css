@@ -71,6 +71,7 @@
 
   /* "Hồi VP" skill pill (energy gained), next to the gold "Tiêu hao VP" (energy spent) — owner 2026-09-29: keep teal. */
   --energy-gain: #23867f;
+  --paper-chip: #d8cfbd; /* light paper behind the tea-room reaction sprites (the thread sprite is dark grey) */
 
   /* Backdrop behind every popover / dialog (DESIGN.md: one scrim). */
   --scrim: rgb(0 0 0 / .6);

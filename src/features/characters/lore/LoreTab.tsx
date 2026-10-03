@@ -9,7 +9,7 @@ import { recordHref } from '../../../admin/characters/lib/route.mts';
 import { buildLoreView, factSize, factSpans, keepTogether, type FactSize, type LoreFact, type LoreUnit } from './loreView.mts';
 import { useHeightTween, useReveal, useSlider } from '../motion';
 
-function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
+export function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
   return (
     <Tag className={[className, unit.untranslated ? 'lore-cn' : ''].filter(Boolean).join(' ') || undefined} lang={unit.untranslated ? 'zh' : undefined}>
@@ -79,7 +79,7 @@ function useFactSizes(row: RefObject<HTMLDivElement | null>, facts: LoreFact[]):
 const shown = (unit: LoreUnit): LoreUnit => (unit.untranslated ? unit : { ...unit, text: keepTogether(unit.text) });
 
 // A cold deep link renders before the R2 overlay is merged into char.profile; re-render once it is.
-function useOverlayRerender() {
+export function useOverlayRerender() {
   const [, setTick] = useState(0);
   useEffect(() => {
     let live = true;
