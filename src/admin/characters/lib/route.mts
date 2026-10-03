@@ -1,4 +1,4 @@
-export const MODULE_IDS = ['overview', 'lore', 'build', 'skins', 'source', 'history'] as const;
+export const MODULE_IDS = ['overview', 'lore', 'tea', 'build', 'skins', 'source', 'history'] as const;
 export type ModuleId = (typeof MODULE_IDS)[number];
 export type CharactersRoute = { view: 'list' } | { view: 'terms'; code?: string } | { view: 'gameTerms'; code?: string } | { view: 'record'; id: string; module: ModuleId };
 import { dictionaryHref, tabOfGameKind } from './dictionary.mts';
