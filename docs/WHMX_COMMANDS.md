@@ -156,6 +156,8 @@ node --env-file=.env.production.local scripts/import-game-references.mjs --apply
 
 Phải chạy **trước** bước E, nếu không nhân vật mới giữ profile cũ (mã K/T/S/P thô) và thiếu trong lore R2.
 
+`import-character-profile.mjs` nhập luôn **phòng trà** (chủ đề, trà yêu thích, lời bình, lời kết): xem §11. Nó đọc bảng ngôn ngữ đã giải mã của lần `refresh_masterdata.py` mới nhất, nên phải chạy **sau** bước A.
+
 **E. Ghép lore, kiểm, build**
 
 ```bash
@@ -264,6 +266,48 @@ python tools\capture_runtime_update.py analyze --write-reports $capture
 ```
 
 Chỉ chia sẻ `reports/analysis.json` và `reports/summary.md` (PCAP/PlayerPrefs có thể chứa định danh).
+
+---
+
+## 11. Quy trình: Phòng trà (品茗) khi game cập nhật
+
+Phòng trà đi chung luồng lore hồ sơ (spec `docs/superpowers/specs/2026-10-03-tea-room-design.md`). Không có bước riêng:
+mỗi lần chạy importer profile ở §4-D là phòng trà được nhập lại. Phần này nói **cái gì tự chạy, cái gì phải nhìn**.
+
+**Nguồn** (đọc tự động, chỉ đọc): `MasterData/json/playerAskMap.json` (chủ đề + câu đáp), `highteaCharacterMap.json`
+(trà yêu thích, khóa lời bình, lời kết), `itemMap.json` (tên + mô tả trà) và bảng ngôn ngữ đã giải mã mà provenance
+mới nhất trỏ tới (`MasterData/provenance/launch_*.json` → `language_decoded_path`, vd. `captures/<lần tải>/lang/5696_cn.json`;
+`refresh_masterdata.py` tạo file này từ `.bin`).
+
+```bash
+cd "$CALC"
+node scripts/import-character-profile.mjs --check                                           # không DB: đếm + teaOdd + teaOwnResult
+node --env-file=.env.production.local scripts/import-character-profile.mjs                 # plan (chỉ đọc)
+node --env-file=.env.production.local scripts/import-character-profile.mjs --apply         # ⚠️ owner đồng ý
+LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.production.local scripts/publish-lore.mjs   # ⚠️
+```
+
+Đọc kết quả `--check` / plan:
+
+| Thấy gì | Nghĩa là | Làm gì |
+|---|---|---|
+| `teaOdd: []` | mọi nhân vật đúng khuôn 8 chủ đề / 2 câu mở / 2 câu tiếp | bình thường |
+| `teaOdd: ["X0123"]` | game đổi khuôn phòng trà của nhân vật đó | vẫn nhập được (theo đúng dữ liệu); mở tab Phòng Trà của nhân vật đó kiểm bố cục |
+| `teaOwnResult: ["X0123"]` | bài thơ kết của nhân vật đó khác bài chung | đã nhập thành `tea.result` riêng; dịch trong Admin → Phòng trà |
+| `PROFILE_IMPORT_FAILED: playerAskMap has no topic …` | `TopicNext` trỏ tới chủ đề không tồn tại | dữ liệu game lỗi/thiếu: kiểm MasterData đúng bản đang chạy (§3), không sửa tay |
+| `… itemMap has no tea 81016 …` | game thêm loại trà mới mà `itemMap` chưa có | MasterData chưa đủ: chạy lại `refresh_masterdata.py` |
+| `… language table has no highteaLan_hightea_comment…` | file ngôn ngữ cũ hơn MasterData | chạy `refresh_masterdata.py` (§4-A) rồi chạy lại importer |
+| `textUpdates` có `source_changed` | game sửa chữ Trung của câu đã dịch | bản dịch cũ bị giữ lại, không lên site cho tới khi lưu lại trong Admin → Phòng trà |
+
+**Nhân vật mới:** không cần làm gì thêm. Importer tạo 33 đoạn (14 chủ đề hỏi/đáp, 3 lời bình, 2 lời kết) và tab Phòng Trà
+hiện chữ Trung cho tới khi dịch. **Loại trà mới:** importer thêm thuật ngữ `tea` (tên + mô tả) để dịch ở Admin → Từ điển → Lore
+→ "Trà"; icon là `public/assets/items/itemicon_<id>.png` do `tools/copy_assets.py` chép cùng các icon vật phẩm (thiếu icon →
+tab vẫn hiện, chỉ mất hình). **Sprite phòng trà** (`public/assets/tea/`: tim, cuộn chỉ, chữ 缘起/相知/契合) lấy từ
+`uiatlas_uiteatastsip.ab` (README trong thư mục): chỉ cần lấy lại nếu game đổi giao diện phòng trà.
+
+**Dịch:** Admin → Khí Giả → (nhân vật) → **Phòng trà** (câu hỏi/đáp, lời bình, lời kết; có ghi "Phản ứng: thích / bối rối"),
+Admin → Từ điển → Lore → **Trà** (15 loại trà: tên + mô tả) và **Phòng trà** (3 tên chặng + bài thơ kết dùng chung). Lưu xong
+tự xuất bản ~30 giây, như lore.
 
 ---
 
