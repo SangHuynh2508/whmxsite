@@ -26,8 +26,8 @@ mark every change as `〔背景 <name>〕`.
 | Distinct images | 1 184: ~635 backgrounds `bg_*`, **549 CG** `cg_*`/`CG_*`; 338 scripts show at least one CG |
 | Name → game bundle | 1 152 / 1 184 match `images_novel_background_<name>.ab` exactly (`ABList.PathList` of the r3075 `data.dat`). The 32 misses all end in `_sex` — meaning unverified (guess: player-gender variant) |
 | Size / format | 1680 × 720 (21:9) PNG ~1.7 MB; WebP q80 ~138 KB (≈160 MB for all), at 1120 px wide ~66 KB (≈75 MB) — R2, not `public/assets` |
-| On disk | 74 extracted (`_claude_scratch/r3057_explore/img/images_novel_background_*`, contact sheet `sheet_2_story_backgrounds.jpg`); 132 / 1 151 bundles in `NeoArtifacts/Assets/runtime_bundle_cache` |
-| Missing | ~1 019 bundles → **ADB pull from MuMu (owner yes first)**, then decrypt (`N.decrypt_unityfs_ab`) → PNG → WebP → R2 |
+| On disk | 74 extracted (`_claude_scratch/r3057_explore/img/images_novel_background_*`, contact sheet `sheet_2_story_backgrounds.jpg`). **Corrected 2026-10-04:** `NeoArtifacts/Assets/bundles/` (8.9 GB, file name = `MD5Name`) already holds **1 005 of the 1 152** bundles, stored **decrypted** (game version of 04–09/9). Their FileMD5 therefore never matches `data.dat` (the earlier count looked only in `runtime_bundle_cache`); on a sample of 40 bundles, 28 decrypt to the same bytes as the current copy |
+| Missing | **147** bundles → ADB pull from MuMu (owner yes first), then decrypt (`N.decrypt_unityfs_ab`) → PNG → WebP → R2. Before publishing, re-check the 1 005 local ones against r3075 (pull or compare a sample: a bundle may have changed since 09/9) |
 
 ## 3. Speaker icons (chat-log layout like the owner's Arknights screenshot is possible)
 
@@ -52,7 +52,7 @@ mark every change as `〔背景 <name>〕`.
 ## 5. What a lore reader needs (to decide later)
 
 1. Translation of ~68 000 lines (game-translator skill; where VI lives: DB + Admin like profile lore, or another path).
-2. Asset step: ADB pull, extraction, WebP, R2 upload, name → URL manifest; a release-day step for new scripts.
+2. Asset step: extraction from `Assets/bundles` (1 005 bundles) + ADB pull of the 147 missing ones, WebP, R2 upload, name → URL manifest; a release-day step for new scripts.
 3. Reader UI: chapter list (Main / Events / Side / Character stories), scene background behind the text, CG inline,
    speaker icon per line, choices (`▸ 选项`) shown as options.
 4. Recommendation given 2026-10-02: text + scene background/CG + one fixed icon per speaker; expressions/stage sprites later.
