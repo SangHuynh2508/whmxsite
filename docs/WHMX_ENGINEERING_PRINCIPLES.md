@@ -1,6 +1,6 @@
 # WHMX Engineering Principles
 
-> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](WHMX_CURRENT_STATE_FINAL_2026-10-04.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there.
+> **Entry point:** [`WHMX_CURRENT_STATE_FINAL_2026-10-04.md`](WHMX_CURRENT_STATE_FINAL_2026-10-04.md) (status, infrastructure, rules, backlog) · product truth [`PRODUCT.md`](../PRODUCT.md). Related: [`WHMX_APP_ARCHITECTURE.md`](WHMX_APP_ARCHITECTURE.md). Older state files (up to `WHMX_CURRENT_STATE_FINAL_2026-09-26.md`), `WHMX_NEXT_STEPS.md` and finished plans are in git history only; links to them below resolve there. `WHMX_ARCHITECTURE_MIGRATION_PLAN.md` and `WHMX_ADMIN_ARCHITECTURE_ANALYSIS_S1N_GLLIMBUS.md`, cited below, were removed in the 2026-09-26 docs cleanup (`1519a4d`; read them with `git show 1519a4d^:docs/<file>`).
 
 ## 1. Purpose
 

@@ -80,6 +80,10 @@ whether any becomes playable is not stated by any table.**
   reports), relic, preferences, tea room, roleattr, avatar frames.
 - Images in the game: archive relic art + head, 4 skill icons, a `images_skinactivity` banner **showing the character**
   (green hair, hat), battle sfx. **No** standing drawing, card, chibi or Spine bundle.
+- The banner (`images_skinactivity/w0021.png`) is the whole texture, **429 × 213**: the sprite rect is the full texture,
+  and 136 of the 137 textures in that bundle are 429 × 213 crops by design (re-checked 2026-10-04). No larger
+  W0021 art exists in the r3075 bundle list (only `audio_battlesfx`, `images_archives`, `images_skills`, `images_skinactivity`
+  mention it).
 
 ### 7.2 Tea room only, or tea room + story (not in `characterTable`)
 
