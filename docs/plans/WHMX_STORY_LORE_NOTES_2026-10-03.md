@@ -72,7 +72,7 @@ whether any becomes playable is not stated by any table.**
 ### 7.1 W0021 鸳鸯炉 — a complete playable character, hidden by date
 
 - `characterTable`: full name 高丽青釉鸳鸯钮三足带盖瓷熏炉 (Goryeo celadon censer with a mandarin-duck knob, three feet,
-  lid), job 4 (Viễn Kích), rare 3, tags 远程;输出;爆发, organisation `typeJJh` 2, **`UnlockDate` 2129075940 (year 2037)**
+  lid), job 4 (Cấu Thuật — `JOB_NAMES` in `src/ui/utils/gameLabels.mts`; its damage is 构素伤害), rare 3 (SR), tags 远程;输出;爆发, organisation `typeJJh` 2, **`UnlockDate` 2129075940 (year 2037)**
   — a placeholder date, so the site build and the importers skip it.
 - Data as complete as a released character (compared with W0182): `characterSkillMap` 9 / `skillMap` 21 with names and
   descriptions (熏染, ult 鸳鸯鸣, 栖止, 旅徙, 翡色, 捻香; status 凝烟), passives 12, talents 31, base skin `W0021001` 肖形
@@ -84,6 +84,9 @@ whether any becomes playable is not stated by any table.**
   and 136 of the 137 textures in that bundle are 429 × 213 crops by design (re-checked 2026-10-04). No larger
   W0021 art exists in the r3075 bundle list (only `audio_battlesfx`, `images_archives`, `images_skills`, `images_skinactivity`
   mention it).
+- Full dossier (CN, 2026-10-04): `_claude_scratch/hidden_chars/W0021/W0021_tong_hop/` — skills + stats, archive profile,
+  everything else. Regenerate: `python _claude_scratch/w0021_info/run_build.py` (the site builder with W0021 un-excluded,
+  output only in that folder), `node profile_dump.mjs`, `python make_files.py`.
 
 ### 7.2 Tea room only, or tea room + story (not in `characterTable`)
 
