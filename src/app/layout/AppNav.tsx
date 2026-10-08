@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Calculator, LayoutGrid, LogIn, LogOut, Podium, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
+import { Calculator, House, LayoutGrid, LogIn, LogOut, Podium, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
 import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
@@ -170,7 +170,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
     if (!open || !sheet || reducedMotion()) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(sheet, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' });
-      gsap.fromTo(sheet.querySelectorAll('.mobile-menu-search, .mobile-menu-list > *'), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out', stagger: 0.035, clearProps: 'opacity,transform' });
+      gsap.fromTo(sheet.querySelectorAll('.mobile-menu-title, .mobile-menu-search, .mobile-menu-list > *'), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out', stagger: 0.035, clearProps: 'opacity,transform' });
     }, sheet);
     return () => ctx.revert();
   }, [open]);
@@ -201,6 +201,8 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
 
       <dialog ref={sheetRef} className="mobile-menu-sheet" aria-label="Menu" onClose={() => setOpen(false)}>
         <div className="mobile-menu-body" onClick={closeOnLink}>
+          {/* the site title heads the sheet (owner 2026-10-08: a title, not a menu row) */}
+          <h2 className="mobile-menu-title"><span className="mobile-menu-mark" aria-hidden="true">物</span>Vật Hoa Di Tân</h2>
           <label className="mobile-menu-search">
             <Search size={18} aria-hidden />
             <input
@@ -227,10 +229,10 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               <>
                 <p className="mobile-menu-heading">Trang</p>
                 <ul>
-                  {/* no rail logo on phones: the brand row is the way home */}
+                  {/* no rail logo on phones: this row is the way home */}
                   <li>
                     <a href="#/" className={view === 'home' ? 'active' : undefined} aria-current={view === 'home' ? 'page' : undefined} onClick={linkClick('#/')}>
-                      <span className="mobile-menu-mark" aria-hidden="true">物</span>Vật Hoa Di Tân
+                      <House size={20} />Trang chủ
                     </a>
                   </li>
                   {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
