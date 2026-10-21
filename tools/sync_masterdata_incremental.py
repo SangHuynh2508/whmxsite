@@ -768,13 +768,19 @@ def collect(character_id: str) -> tuple[dict[str, list[dict[str, Any]]], dict[st
     return dict(rows), trace
 
 
+def _source_text(value: Any) -> str:
+    # The workbook stores CN names without the game's <color> wrapper; the wrapper is not a source change.
+    return re.sub(r"</?color[^>]*>", "", scalar(value)).strip()
+
+
 def compare_existing(sheet: str, current: dict[str, Any], proposed: dict[str, Any], row_number: int) -> dict[str, Any] | None:
+    """Report only real Chinese source changes; classification metadata is not source text."""
     differences = {}
     for field, proposed_value in proposed.items():
-        if field in VI_FIELDS or field in {"confidence", "status", "notes"}:
+        if not field.endswith("_cn"):
             continue
         current_value = current.get(field)
-        if proposed_value not in (None, "") and scalar(current_value) != scalar(proposed_value):
+        if proposed_value not in (None, "") and _source_text(current_value) != _source_text(proposed_value):
             differences[field] = {"workbook": current_value, "source": proposed_value}
     if differences:
         return {"sheet": sheet, "row": row_number, "primary_key": primary_key(sheet, proposed), "differences": differences}
@@ -913,6 +919,8 @@ def run(character_id: str, apply: bool, cleanup_internal: bool = False,
         headers, _ = workbook_index(ws)
         header_index = {header: index + 1 for index, header in enumerate(headers)}
         for row_number, candidate, source_changed in updates:
+            if not source_changed:
+                continue  # unchanged source: leave the reviewed row (and its status) exactly as it is
             for field, value in candidate.items():
                 if field in VI_FIELDS or field in {"confidence", "status", "notes"} or field not in header_index:
                     continue
