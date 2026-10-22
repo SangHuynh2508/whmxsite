@@ -19,7 +19,7 @@ CALC="$WHMX/WhmxCalc"
 ADB="/d/Program Files/Netease/MuMuPlayer/nx_device/15.0/shell/adb.exe"
 DEVICE="127.0.0.1:16384"          # lấy serial thật từ "$ADB" devices -l; KHÔNG dùng emulator-5554 cũ
 PACKAGE="com.cipaishe.wuhua.bilibili"
-SNAPSHOT="r3075-20261002T063717851473Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
+SNAPSHOT="r3130-20261022T032356583723Z"   # snapshot hiện hành: xem Assets/runtime_snapshots/current_authoritative_snapshot.json
 ```
 
 ---
@@ -155,6 +155,9 @@ node --env-file=.env.production.local scripts/import-game-references.mjs --apply
 ```
 
 Phải chạy **trước** bước E, nếu không nhân vật mới giữ profile cũ (mã K/T/S/P thô) và thiếu trong lore R2.
+
+`import-character-skin` **không có chế độ plan** (`--check` chỉ kiểm nguồn); plan profile chỉ thấy nhân vật mới **sau** khi import skin
+(nhân vật chưa có trong DB → `skippedRawCharacters`). Nên: skin → plan profile → apply profile → plan/apply game references.
 
 `import-character-profile.mjs` nhập luôn **phòng trà** (chủ đề, trà yêu thích, lời bình, lời kết): xem §11. Nó đọc bảng ngôn ngữ đã giải mã của lần `refresh_masterdata.py` mới nhất, nên phải chạy **sau** bước A.
 
