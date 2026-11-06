@@ -20,6 +20,17 @@ const vi = {
   ovStaff: 'Tình trạng nhân sự:', ovRecord: 'Mã hồ sơ:', ovNickname: 'Tên thường gọi:', ovCnName: 'Tên gốc (CN):',
   ovAttack: 'Kiểu tấn công:', ovDept: 'Trực thuộc:', ovEntity: 'Tình trạng bản thể:', ovUnknown: 'Chưa xác định',
   ovMelee: 'Cận chiến', ovRanged: 'Tầm xa',
+  skill: 'Kỹ Năng', huanzhang: 'Hoán Chương', zhizhi: 'Trí Tri', noDesc: 'Chưa có mô tả.',
+  stTitle: 'Chỉ Số Chiến Đấu', stEmpty: 'Chưa có dữ liệu chỉ số chiến đấu cho nhân vật này.', stHp: 'Sinh Mệnh (HP)',
+  stAtk: 'Tấn Công (ATK)', stPdef: 'Phòng Ngự Vật Lý', stMdef: 'Phòng Ngự Cấu Thuật', stSpd: 'Tốc Độ (SPD)',
+  stMov: 'Di Chuyển (MOV)', stCrit: 'Tỷ Lệ Bạo Kích', stCritDmg: 'Sát Thương Bạo Kích', stMax: 'Tối đa', cells: 'ô',
+  skCooldown: 'Hồi chiêu', skTurns: 'lượt', skCost: 'Tiêu hao', skRecover: 'Hồi VP', skSummon: 'Triệu hồi',
+  skRange: 'PHẠM VI', skCastRange: 'Tầm thi triển:', skEffect: 'Hiệu ứng:', skRangeAlt: 'Phạm vi kỹ năng',
+  skEmpty: 'Chưa có thông tin kỹ năng cho nhân vật này.', zzEmpty: 'Nhân vật này chưa có dữ liệu Trí Tri.',
+  zzUpgrade: 'CƯỜNG HÓA KỸ NĂNG', hzEmpty: 'Nhân vật này chưa có dữ liệu Hoán Chương.', hzProps: 'TĂNG CƯỜNG THUỘC TÍNH',
+  hzMaterial: 'Vật liệu', hzMats: 'NGUYÊN LIỆU HOÁN CHƯƠNG', hzNoSkill: 'Không có chi tiết kỹ năng Hoán Chương.',
+  hzEffects: 'HIỆU ỨNG / KỸ NĂNG HOÁN CHƯƠNG', hzStory: 'Xem điển cố / cốt truyện Hoán Chương',
+  infoModes: 'Nội dung thông tin nhân vật',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -44,6 +55,17 @@ const cn: Record<StringKey, string> = {
   ovStaff: '人事状态：', ovRecord: '档案编号：', ovNickname: '常用称呼：', ovCnName: '原名：', // draft
   ovAttack: '攻击方式：', ovDept: '所属：', ovEntity: '本体状态：', ovUnknown: '未知', // draft
   ovMelee: '近战', ovRanged: '远程', // draft
+  skill: '技能', huanzhang: '焕章', zhizhi: '知致', noDesc: '暂无描述。', // draft
+  stTitle: '战斗属性', stEmpty: '该器者暂无战斗属性数据。', stHp: '生命', // draft
+  stAtk: '攻击', stPdef: '物理防御', stMdef: '构术防御', stSpd: '速度', // draft
+  stMov: '移动', stCrit: '暴击率', stCritDmg: '暴击伤害', stMax: '最高', cells: '格', // draft
+  skCooldown: '冷却', skTurns: '回合', skCost: '消耗', skRecover: '回复', skSummon: '召唤', // draft
+  skRange: '范围', skCastRange: '施放距离：', skEffect: '效果：', skRangeAlt: '技能范围', // draft
+  skEmpty: '该器者暂无技能信息。', zzEmpty: '该器者暂无知致数据。', // draft
+  zzUpgrade: '技能强化', hzEmpty: '该器者暂无焕章数据。', hzProps: '属性提升', // draft
+  hzMaterial: '材料', hzMats: '焕章材料', hzNoSkill: '暂无焕章技能详情。', // draft
+  hzEffects: '焕章效果 / 技能', hzStory: '查看焕章典故', // draft
+  infoModes: '器者资料内容', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];

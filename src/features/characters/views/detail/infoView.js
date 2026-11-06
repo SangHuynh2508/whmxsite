@@ -1,5 +1,7 @@
 import { resolveCharacterStats } from '../../../../data/statResolver.js';
 import { getGameData } from '../../../../data/loader.js';
+import { getLang, pickText, txt } from '../../../../i18n/lang.mts';
+import { s } from '../../../../i18n/strings.mts';
 
 const KNOWN_RANGE_ASSETS = new Set([
   "Cross_2_7.png", "Overlap_1.png", "Overlap_2.png", "Overlap_3.png",
@@ -153,7 +155,8 @@ function openTooltip(keywordEl, depth) {
   }
   
   const unresolvedParamRe = /\[(?:EffectParam|EffectPara|BuffParam|Effect[1-5]Para|Condition[1-5]Para)(?:,[^\]]*)?\]|(?<![A-Za-z0-9_])#\d+\b/;
-  const mechName = (mech.name_vi || keywordEl.dataset.popupAlias || mech.name_cn || "").replace(/<[^>]*>/g, '').trim();
+  const cnMode = getLang() === 'cn';
+  const mechName = (cnMode ? (mech.name_cn || mech.name_vi || '') : (mech.name_vi || keywordEl.dataset.popupAlias || mech.name_cn || "")).replace(/<[^>]*>/g, '').trim();
   const bindingHasPlaceholder = !isMultiVariant && unresolvedParamRe.test(`${binding.desc_vi || ''}${binding.desc_cn || ''}`);
   const runtimeVerdict = bindingHasPlaceholder
     ? 'BINDING_FOUND_BUT_UNRESOLVED'
@@ -162,10 +165,10 @@ function openTooltip(keywordEl, depth) {
       : binding.canonical_vi_missing
         ? 'CANONICAL_VI_TEMPLATE_MISSING'
         : 'BINDING_FOUND_RESOLVED_CN_ONLY';
-  if (runtimeVerdict === 'BINDING_FOUND_RESOLVED_CN_ONLY') {
+  if (!cnMode && runtimeVerdict === 'BINDING_FOUND_RESOLVED_CN_ONLY') {
     throw new Error(`BINDING_FOUND_RESOLVED_CN_ONLY: ${JSON.stringify({ scopeId, buffId, bindingKey })}`);
   }
-  const mechDesc = binding.desc_vi || (binding.canonical_vi_missing ? binding.desc_cn : "");
+  const mechDesc = cnMode ? binding.desc_cn : binding.desc_vi || (binding.canonical_vi_missing ? binding.desc_cn : "");
   const finalBodySource = binding.desc_vi ? 'binding.desc_vi' : 'binding.desc_cn:canonical_vi_missing';
   if (!isMultiVariant && unresolvedParamRe.test(mechDesc)) {
     throw new Error(`UNRESOLVED_EFFECT_PARAM: ${JSON.stringify({ scopeId, buffId, bindingKey, finalBodySource, mechDesc })}`);
@@ -178,11 +181,11 @@ function openTooltip(keywordEl, depth) {
     }
     descHtml = variants.map(variant => {
       const child = scope.bindings?.[variant.binding_key];
-      const childBody = child?.desc_vi || (child?.canonical_vi_missing ? child?.desc_cn : "");
+      const childBody = cnMode ? child?.desc_cn : child?.desc_vi || (child?.canonical_vi_missing ? child?.desc_cn : "");
       if (!child || !childBody || unresolvedParamRe.test(childBody)) {
         throw new Error(`UNRESOLVED_MULTI_VARIANT_CHILD: ${JSON.stringify({ scopeId, bindingKey, variant })}`);
       }
-      const childName = (variant.name_vi || variant.name_cn || child.name_vi || child.name_cn || "").replace(/<[^>]*>/g, "");
+      const childName = (txt(variant, 'name') || txt(child, 'name')).replace(/<[^>]*>/g, "");
       return `<div class="mech-tt-variant"><div class="mech-tt-variant-title">${childName}</div><div class="mech-tt-variant-desc">${renderRichGameText(childBody, scope, depth + 1, scopeId, variant.buff_id)}</div></div>`;
     }).join("");
   } else {
@@ -324,7 +327,7 @@ function deriveCardLocalAlias(mech, term) {
 }
 
 function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", parentBuffId = null) {
-  if (!text) return "Chưa có mô tả.";
+  if (!text) return s('noDesc');
 
   const cleanRichTerm = value => String(value || '').replace(/<[^>]*>/g, '').trim();
   // A source may colour a longer gameplay phrase while only a shorter child
@@ -429,9 +432,9 @@ export function renderInfoTab(container, char) {
     if (!resolved) {
       return `
         <div class="info-section-header">
-          <h2>Chỉ Số Chiến Đấu</h2>
+          <h2>${s('stTitle')}</h2>
         </div>
-        <p class="empty-sub-state-text">Chưa có dữ liệu chỉ số chiến đấu cho nhân vật này.</p>
+        <p class="empty-sub-state-text">${s('stEmpty')}</p>
       `;
     }
 
@@ -452,41 +455,41 @@ export function renderInfoTab(container, char) {
       `;
     };
 
-    const hpCard = formatStatCard('Sinh Mệnh (HP)', resolved.hp, '', 'highlight-hp');
-    const atkCard = formatStatCard('Tấn Công (ATK)', resolved.atk, '', 'highlight-atk');
-    const pdefCard = formatStatCard('Phòng Ngự Vật Lý', resolved.defPhysic, '');
-    const mdefCard = formatStatCard('Phòng Ngự Cấu Thuật', resolved.defMagic, '');
+    const hpCard = formatStatCard(s('stHp'), resolved.hp, '', 'highlight-hp');
+    const atkCard = formatStatCard(s('stAtk'), resolved.atk, '', 'highlight-atk');
+    const pdefCard = formatStatCard(s('stPdef'), resolved.defPhysic, '');
+    const mdefCard = formatStatCard(s('stMdef'), resolved.defMagic, '');
     
     const spdCard = resolved.speed !== null && resolved.speed !== undefined ? `
       <div class="stat-card">
-        <span class="stat-lbl">Tốc Độ (SPD)</span>
+        <span class="stat-lbl">${s('stSpd')}</span>
         <span class="stat-val">${formatNum(resolved.speed)}</span>
       </div>
     ` : '';
     const movCard = resolved.mov !== null && resolved.mov !== undefined ? `
       <div class="stat-card">
-        <span class="stat-lbl">Di Chuyển (MOV)</span>
-        <span class="stat-val">${formatNum(resolved.mov)} ô</span>
+        <span class="stat-lbl">${s('stMov')}</span>
+        <span class="stat-val">${formatNum(resolved.mov)} ${s('cells')}</span>
       </div>
     ` : '';
     const critCard = resolved.crit !== null && resolved.crit !== undefined ? `
       <div class="stat-card">
-        <span class="stat-lbl">Tỷ Lệ Bạo Kích</span>
+        <span class="stat-lbl">${s('stCrit')}</span>
         <span class="stat-val">${resolved.crit}%</span>
       </div>
     ` : '';
     const critDmgCard = resolved.critDmg !== null && resolved.critDmg !== undefined ? `
       <div class="stat-card">
-        <span class="stat-lbl">Sát Thương Bạo Kích</span>
+        <span class="stat-lbl">${s('stCritDmg')}</span>
         <span class="stat-val">${resolved.critDmg}%</span>
       </div>
     ` : '';
 
-    const levelBadgeText = currentStatsLevel === 120 ? 'Lv.1 → Lv.120 (Tối đa)' : 'Lv.1 → Lv.100';
+    const levelBadgeText = currentStatsLevel === 120 ? `Lv.1 → Lv.120 (${s('stMax')})` : 'Lv.1 → Lv.100';
 
     return `
       <div class="info-section-header">
-        <h2>Chỉ Số Chiến Đấu</h2>
+        <h2>${s('stTitle')}</h2>
         <div class="stats-header-actions">
           <span class="stats-level-badge">${levelBadgeText}</span>
           <div class="stats-lvl-toggle">
@@ -509,13 +512,8 @@ export function renderInfoTab(container, char) {
     popupScopes.set(popupScope, createPopupScope(mechs));
 
     const iconPath = curLevelData.icon ? `/${curLevelData.icon}` : "";
-    const nameVi = String(curLevelData.name_vi ?? "").trim();
-    const nameCn = String(curLevelData.name_cn ?? "").trim();
-    
-    const primaryName = nameVi || nameCn || "Kỹ Năng";
-    const secondaryName = nameVi ? nameCn : "";
-    const descPrimary = curLevelData.desc_vi || curLevelData.desc_cn || curLevelData.desc_raw || "";
-    const descCn = curLevelData.desc_cn || curLevelData.desc_raw || "";
+    const primaryName = pickText(String(curLevelData.name_vi ?? "").trim(), String(curLevelData.name_cn ?? "").trim()).text || s('skill');
+    const descPrimary = pickText(curLevelData.desc_vi, curLevelData.desc_cn || curLevelData.desc_raw).text;
     const typeId = curLevelData.type_id || 1;
     const showTypeBadge = true;
     const typeLabel = curLevelData.type || "";
@@ -530,9 +528,9 @@ export function renderInfoTab(container, char) {
     const recoverEnergy = curLevelData.recover_energy || 0;
 
     let metaItemsHtml = "";
-    if (cooldown > 0) metaItemsHtml += `<span class="skill-meta-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Hồi chiêu: <strong>${cooldown} lượt</strong></span>`;
-    if (costEnergy > 0) metaItemsHtml += `<span class="skill-meta-pill cost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Tiêu hao: <strong>${costEnergy} VP</strong></span>`;
-    if (recoverEnergy > 0) metaItemsHtml += `<span class="skill-meta-pill recover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg> Hồi VP: <strong>${recoverEnergy}</strong></span>`;
+    if (cooldown > 0) metaItemsHtml += `<span class="skill-meta-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${s('skCooldown')}: <strong>${cooldown} ${s('skTurns')}</strong></span>`;
+    if (costEnergy > 0) metaItemsHtml += `<span class="skill-meta-pill cost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> ${s('skCost')}: <strong>${costEnergy} VP</strong></span>`;
+    if (recoverEnergy > 0) metaItemsHtml += `<span class="skill-meta-pill recover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg> ${s('skRecover')}: <strong>${recoverEnergy}</strong></span>`;
 
     const rangeImgUrl = resolveSkillRangeAsset(effType, effRange, selRange);
     const castRangeText = resolveCastRangeText(selRange, selType, selRangeType, isPassive);
@@ -542,7 +540,7 @@ export function renderInfoTab(container, char) {
     let subFormsHtml = "";
     if (!isSubEntry) {
       if (skill.summon_skills && skill.summon_skills.length > 0) {
-        subFormsHtml += '<div class="sub-skills-container summon">' + skill.summon_skills.map(s => renderSkillEntry(s, true, "Triệu hồi")).join('') + '</div>';
+        subFormsHtml += '<div class="sub-skills-container summon">' + skill.summon_skills.map(sk => renderSkillEntry(sk, true, s('skSummon'))).join('') + '</div>';
       }
     }
 
@@ -558,27 +556,22 @@ export function renderInfoTab(container, char) {
               <h3 class="skill-name-vi">${primaryName}</h3>
               ${showTypeBadge ? `<span class="skill-type-badge type-${typeId}">${typeLabel}</span>` : ''}
             </div>
-            ${secondaryName ? `<div class="skill-name-cn cn-font">${secondaryName}</div>` : ''}
           </div>
         </div>
         <div class="skill-entry-body">
           <div class="skill-desc-block">
             <p class="skill-desc-primary">${renderRichGameText(descPrimary, popupScopes.get(popupScope), 0, popupScope)}</p>
-            <details class="skill-cn-details">
-              <summary class="cn-summary">Xem văn bản gốc (Chinese)</summary>
-              <p class="skill-desc-secondary cn-font">${descCn}</p>
-            </details>
           </div>
           ${metaItemsHtml ? `<div class="skill-meta-bar">${metaItemsHtml}</div>` : ''}
           ${showRangeSection ? `
           <div class="skill-range-section">
-            <div class="range-header-lbl">PHẠM VI</div>
+            <div class="range-header-lbl">${s('skRange')}</div>
             <div class="range-body">
               <div class="range-info-col">
-                ${castRangeText ? `<div class="range-metric"><span class="range-metric-lbl">Tầm thi triển:</span><span class="range-metric-val">${castRangeText}</span></div>` : ''}
-                ${effectText ? `<div class="range-metric"><span class="range-metric-lbl">Hiệu ứng:</span><span class="range-metric-val">${effectText}</span></div>` : ''}
+                ${castRangeText ? `<div class="range-metric"><span class="range-metric-lbl">${s('skCastRange')}</span><span class="range-metric-val">${castRangeText}</span></div>` : ''}
+                ${effectText ? `<div class="range-metric"><span class="range-metric-lbl">${s('skEffect')}</span><span class="range-metric-val">${effectText}</span></div>` : ''}
               </div>
-              ${rangeImgUrl ? `<div class="range-preview-col"><img src="${rangeImgUrl}" alt="Phạm vi kỹ năng" class="range-preview-img" loading="lazy" /></div>` : ''}
+              ${rangeImgUrl ? `<div class="range-preview-col"><img src="${rangeImgUrl}" alt="${s('skRangeAlt')}" class="range-preview-img" loading="lazy" /></div>` : ''}
             </div>
           </div>
           ` : ''}
@@ -594,7 +587,7 @@ export function renderInfoTab(container, char) {
     popupScopeSequence = 0;
     
     if (skills.length === 0) {
-      return `<p class="empty-sub-state-text">Chưa có thông tin kỹ năng cho nhân vật này.</p>`;
+      return `<p class="empty-sub-state-text">${s('skEmpty')}</p>`;
     }
 
     return skills.map(skill => renderSkillEntry(skill)).join('');
@@ -603,7 +596,7 @@ export function renderInfoTab(container, char) {
   function buildZhizhiHtml() {
     const zhizhi = char.zhizhi || [];
     if (zhizhi.length === 0) {
-      return `<p class="empty-sub-state-text">Nhân vật này chưa có dữ liệu Trí Tri.</p>`;
+      return `<p class="empty-sub-state-text">${s('zzEmpty')}</p>`;
     }
 
     const rowsHtml = zhizhi.map(row => {
@@ -616,12 +609,11 @@ export function renderInfoTab(container, char) {
       if (isSkillUp) {
         const baseSkill = row.skill_upgrade.base_skill || {};
         const enhancedSkill = row.skill_upgrade.enhanced_skill || {};
-        const badgeText = row.skill_upgrade.upgrade_badge_vi || 'CƯỜNG HÓA KỸ NÂNG';
+        const badgeText = (getLang() === 'cn' ? '' : row.skill_upgrade.upgrade_badge_vi) || s('zzUpgrade');
         
-        const nameVi = enhancedSkill.name_vi || baseSkill.name_vi || enhancedSkill.name_cn || baseSkill.name_cn || 'Kỹ Năng';
-        const nameCn = (enhancedSkill.name_vi || baseSkill.name_vi) ? (enhancedSkill.name_cn || baseSkill.name_cn || '') : '';
+        const nameVi = pickText(enhancedSkill.name_vi || baseSkill.name_vi, enhancedSkill.name_cn || baseSkill.name_cn).text || s('skill');
         const iconPath = enhancedSkill.icon ? `/${enhancedSkill.icon}` : (baseSkill.icon ? `/${baseSkill.icon}` : '');
-        const descPrimary = enhancedSkill.desc_vi || enhancedSkill.desc_cn || '';
+        const descPrimary = txt(enhancedSkill, 'desc');
         const mechs = enhancedSkill.mechanics || [];
         const popupScope = `card-${++popupScopeSequence}`;
     popupScopes.set(popupScope, createPopupScope(mechs));
@@ -637,7 +629,6 @@ export function renderInfoTab(container, char) {
                   <span class="zhizhi-skill-name-vi">${nameVi}</span>
                   <span class="zhizhi-skill-tag">[${badgeText}]</span>
                 </div>
-                ${nameCn ? `<div class="zhizhi-skill-name-cn cn-font">${nameCn}</div>` : ''}
               </div>
             </div>
             <div class="zhizhi-skill-desc">
@@ -662,7 +653,7 @@ export function renderInfoTab(container, char) {
       return `
         <div class="zhizhi-row ${isSkillUp ? 'skill-up-row' : ''}">
           <div class="zhizhi-num-col">
-            <img src="${numImgUrl}" alt="Trí Tri ${star}" class="zhizhi-num-img" />
+            <img src="${numImgUrl}" alt="${s('zhizhi')} ${star}" class="zhizhi-num-img" />
           </div>
           <div class="zhizhi-content-col">
             ${contentHtml}
@@ -687,14 +678,14 @@ export function renderInfoTab(container, char) {
     const bSkills = char.brilliant_skills || [];
 
     if (!bInfo && bSkills.length === 0) {
-      return `<p class="empty-sub-state-text">Nhân vật này chưa có dữ liệu Hoán Chương.</p>`;
+      return `<p class="empty-sub-state-text">${s('hzEmpty')}</p>`;
     }
 
-    const hzTitle = (bInfo && (bInfo.name_vi || bInfo.name_cn)) || (bSkills[0]?.levels[0]?.name_vi) || (bSkills[0]?.levels[0]?.name_cn) || "Hoán Chương";
+    const hzTitle = txt(bInfo, 'name') || txt(bSkills[0]?.levels[0], 'name') || s('huanzhang');
     const iconUrl = bInfo?.icon ? `/${bInfo.icon}` : null;
     const propRows = bInfo?.property_up || [];
-    const buffShowPrimary = bInfo?.buff_show_vi || bInfo?.buff_show_cn || "";
-    const infoStoryPrimary = bInfo?.info_vi || bInfo?.info_cn || "";
+    const buffShowPrimary = txt(bInfo, 'buff_show');
+    const infoStoryPrimary = txt(bInfo, 'info');
 
     // Build property table HTML
     let propTableHtml = "";
@@ -710,7 +701,7 @@ export function renderInfoTab(container, char) {
 
       propTableHtml = `
         <div class="hz-prop-block">
-          <div class="hz-block-sub-title">TĂNG CƯỜNG THUỘC TÍNH</div>
+          <div class="hz-block-sub-title">${s('hzProps')}</div>
           <table class="hz-prop-table">
             <tbody>
               ${rowsHtml}
@@ -729,7 +720,7 @@ export function renderInfoTab(container, char) {
     if (matIds.length > 0) {
       const itemChips = matIds.map(mId => {
         const itemObj = itemsDb[mId] || {};
-        const itemName = itemObj.name_vi || itemObj.name_cn || `Vật liệu ${mId}`;
+        const itemName = txt(itemObj, 'name') || `${s('hzMaterial')} ${mId}`;
         const itemIcon = itemObj.icon ? `/${itemObj.icon}` : `/assets/items/itemicon_${mId}.png`;
         return `
           <div class="hz-mat-chip" title="${itemName}">
@@ -741,7 +732,7 @@ export function renderInfoTab(container, char) {
 
       matsHtml = `
         <div class="hz-mats-block">
-          <div class="hz-mats-title">NGUYÊN LIỆU HOÁN CHƯƠNG</div>
+          <div class="hz-mats-title">${s('hzMats')}</div>
           <div class="hz-mats-list">
             ${itemChips}
           </div>
@@ -769,7 +760,7 @@ export function renderInfoTab(container, char) {
       : "";
     const skillsContentHtml = bSkills.length > 0
       ? bSkills.map(skill => renderSkillEntry(skill)).join('')
-      : (!buffShowHtml ? `<p class="empty-sub-state-text">Không có chi tiết kỹ năng Hoán Chương.</p>` : "");
+      : (!buffShowHtml ? `<p class="empty-sub-state-text">${s('hzNoSkill')}</p>` : "");
 
     // Top Area: 35% Property Table + 65% Effect / Skill Section
     const infoGridHtml = `
@@ -779,7 +770,7 @@ export function renderInfoTab(container, char) {
         </div>
         <div class="hz-effects-col">
           <div class="hz-sub-header">
-            <h4>HIỆU ỨNG / KỸ NĂNG HOÁN CHƯƠNG</h4>
+            <h4>${s('hzEffects')}</h4>
           </div>
           <div class="hz-effects-body">
             ${buffShowHtml}
@@ -795,7 +786,7 @@ export function renderInfoTab(container, char) {
       storyHtml = `
         <details class="hz-story-details">
           <summary class="hz-story-summary">
-            <span class="hz-story-title">Xem điển cố / cốt truyện Hoán Chương</span>
+            <span class="hz-story-title">${s('hzStory')}</span>
             <svg class="hz-story-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
           <div class="hz-story-content">
@@ -838,7 +829,7 @@ export function renderInfoTab(container, char) {
 
       <div class="info-sub-section zhizhi-sub-section">
         <div class="info-section-header">
-          <h2>Trí Tri</h2>
+          <h2>${s('zhizhi')}</h2>
         </div>
         ${zhizhiHtml}
       </div>
@@ -848,8 +839,8 @@ export function renderInfoTab(container, char) {
   let currentInfoMode = 'skills'; // 'skills' | 'huanzhang'
 
   const sectionTitles = {
-    skills: 'Thông Tin Kỹ Năng',
-    huanzhang: 'Thông Tin Hoán Chương'
+    skills: `${s('tabInfo')} ${s('skill')}`,
+    huanzhang: `${s('tabInfo')} ${s('huanzhang')}`
   };
 
   function renderModeContent() {
@@ -866,12 +857,12 @@ export function renderInfoTab(container, char) {
         
         <!-- Local Sub-Mode Switch (Kỹ Năng / Hoán Chương) - Text Only, No Icons -->
         <div class="info-mode-switch-wrapper">
-          <div class="info-mode-switch" role="tablist" aria-label="Nội dung thông tin nhân vật">
+          <div class="info-mode-switch" role="tablist" aria-label="${s('infoModes')}">
             <button type="button" class="info-mode-btn ${currentInfoMode === 'skills' ? 'active' : ''}" data-mode="skills">
-              <span>Kỹ Năng</span>
+              <span>${s('skill')}</span>
             </button>
             <button type="button" class="info-mode-btn ${currentInfoMode === 'huanzhang' ? 'active' : ''}" data-mode="huanzhang">
-              <span>Hoán Chương</span>
+              <span>${s('huanzhang')}</span>
             </button>
           </div>
         </div>
