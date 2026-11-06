@@ -2,7 +2,7 @@
  * SPA Hash Router for WhmxCalc
  */
 import { getGameData } from '../../data/loader.js';
-import { setCharacter, state } from '../../data/state.js';
+import { notify, setCharacter, state } from '../../data/state.js';
 import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
 import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
@@ -402,5 +402,7 @@ export function initRouter() {
     isPopStateNav = true;
   });
   window.addEventListener('hashchange', handleRoute);
-  window.addEventListener('whmx:lang', handleRoute);
+  // Calculator: a language switch re-renders in place (notify) instead of re-selecting the character, which reset
+  // its levels and talents.
+  window.addEventListener('whmx:lang', () => (parseHash().view === 'calculator' && state.character ? notify() : handleRoute()));
 }
