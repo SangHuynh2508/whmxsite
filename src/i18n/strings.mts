@@ -214,7 +214,7 @@ const cn: Record<StringKey, string> = {
   tabTea: '茶室', // game: interfaceLan_interface_nameLan_1300
   tabGallery: '图库', // draft
   ovTitle: '器者档案', // game: HeroManagePanel_UI_8
-  ovName: '名称：', ovFullname: '全名：', ovJob: '器者：', ovBanner: '卡池类型：', // draft
+  ovName: '名称：', ovFullname: '全名：', ovJob: '器者：', ovBanner: '招集类型：', // draft
   ovStaff: '人事状态：', ovRecord: '档案编号：', ovNickname: '常用称呼：', ovCnName: '原名：', // draft
   ovAttack: '攻击方式：', ovDept: '所属：', ovEntity: '本体状态：', ovUnknown: '未知', // draft
   ovMelee: '近战', ovRanged: '远程', // draft
@@ -272,13 +272,13 @@ const cn: Record<StringKey, string> = {
   teaRound34: '第3、4问。游戏显示 {n} 个话题，所选话题会展开后续2问。', // draft
   teaEnd: '茶会结束', teaWin: '成功时', teaLose: '失败时', // draft
   teaLike: '器者喜欢这个话题', teaPuzzled: '器者感到困惑', // draft
-  homeTitle: '物华弥新', homeOpen: '当前卡池', homeAllBanners: '全部卡池 ›', homeEvents: '进行中的活动', // draft
+  homeTitle: '物华弥新', homeOpen: '当前招集', homeAllBanners: '全部招集 ›', homeEvents: '进行中的活动', // draft
   homeSkin: '衣装', // game: interfaceLan_interface_gotoLan_1011
   homeChar: '器者', // game: interfaceLan_interface_nameLan_1003
   homeLeft: '剩余', homeLeftLc: '剩余', homeReleases: '新上线', homeNew: '新', // draft
   homeTheme: '主题活动', // draft
-  bnTitle: '卡池', bnLoadErr: '卡池数据加载失败', bnOpen: '进行中', bnAll: '全部卡池', bnUnit: '个卡池', // draft
-  bnType: '类型', bnYear: '年份', bnNoMatch: '没有符合筛选的卡池。', bnEnded: '已结束 · 等待更新', // draft
+  bnTitle: '招集', bnLoadErr: '招集数据加载失败', bnOpen: '进行中', bnAll: '全部招集', bnUnit: '个招集', // draft
+  bnType: '类型', bnYear: '年份', bnNoMatch: '没有符合筛选的招集。', bnEnded: '已结束 · 等待更新', // draft
   bnChoice: '{n}位器者自选', bnCue: '查看器者 ›', bnVersion: '版本 {n}', // draft
   tmDH: '{d}天{h}小时', tmHM: '{h}小时{m}分', tmM: '{m}分钟', tmLt: '不到1分钟', // draft
   skAllSrc: '全部来源', // draft
@@ -385,7 +385,7 @@ const cn: Record<StringKey, string> = {
   trTabTeams: '阵容', trTabInfo: '说明', trSearch: '搜索器者', trSearchAria: '按名称搜索器者', // draft
   trCount: '{n} 位器者', trLeft: '剩余 {n} 位器者', trNoMatch: '没有符合的器者。', trMissing: '未找到该强度榜。', // draft
   trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低致知阶段', trLegHc: '需要焕彰', // draft
-  ifBannerDesc: '当前卡池、倒计时与全部往期卡池。', ifWeapons: '武器', // draft
+  ifBannerDesc: '当前招集、倒计时与全部往期招集。', ifWeapons: '武器', // draft
   ifWeaponsDesc: '武器、技能与属性词条。', ifSoon: '开发中', wpPlaceholder: '内容仍在构思中，敬请期待。', // draft
   cChangeChar: '更换器者', cAvatarTitle: '点击选择器者', cAvatarAria: '选择器者', // draft
   cLevel: '等级', // game: HeroPackagePanel_UI_4
