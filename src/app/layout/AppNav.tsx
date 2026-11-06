@@ -9,9 +9,9 @@ import { gsap } from 'gsap';
 import { getGameData } from '../../data/loader.js';
 import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
 import { searchSite } from './siteSearch.mts';
-import { setLang } from '../../i18n/lang.mts';
+import { setLang, type Lang } from '../../i18n/lang.mts';
 import { s, type StringKey } from '../../i18n/strings.mts';
-import { useLang } from '../../i18n/useLang';
+import { useLang } from '../../i18n/useLang.ts';
 import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
 /*
@@ -22,17 +22,17 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
 // Only the hot pages sit in the rail; Home is the brand mark, Banner and Vũ Khí live in "Thông tin" (owner 2026-09-30).
 const PUBLIC_LINKS = [
-  { href: '#/characters', label: 'navCharacters' as StringKey, icon: UsersRound, views: ['catalog', 'character'] },
-  { href: '#/tier-list', label: 'navTier' as StringKey, icon: Podium, views: ['tier-list'] },
-  { href: '#/gallery', label: 'navSkins' as StringKey, icon: Shirt, views: ['gallery', 'skin-detail'] },
-  { href: '#/info', label: 'navInfo' as StringKey, icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
-  { href: '#calc', label: 'navTools' as StringKey, icon: Calculator, views: ['calculator'] },
-];
+  { href: '#/characters', label: 'navCharacters', icon: UsersRound, views: ['catalog', 'character'] },
+  { href: '#/tier-list', label: 'navTier', icon: Podium, views: ['tier-list'] },
+  { href: '#/gallery', label: 'navSkins', icon: Shirt, views: ['gallery', 'skin-detail'] },
+  { href: '#/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
+  { href: '#calc', label: 'navTools', icon: Calculator, views: ['calculator'] },
+] satisfies { href: string; label: StringKey; icon: unknown; views: string[] }[];
 
-const LangToggle = ({ lang }: { lang: 'vi' | 'cn' }) => (
-  <div className="app-nav-lang" role="group" aria-label={s('navLang', lang)} data-tooltip={lang === 'vi' ? 'VI' : '中'}>
+const LangToggle = ({ lang }: { lang: Lang }) => (
+  <div className="app-nav-lang" role="group" aria-label={s('navLang', lang)}>
     {(['vi', 'cn'] as const).map((l) => (
-      <button key={l} type="button" aria-pressed={lang === l} className={lang === l ? 'is-active' : undefined} onClick={() => setLang(l)}>
+      <button key={l} type="button" aria-pressed={lang === l} className={lang === l ? 'is-active' : undefined} onClick={(e) => { setLang(l); e.currentTarget.blur(); }}>
         {l === 'vi' ? 'VI' : '中'}
       </button>
     ))}
@@ -103,7 +103,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
   const AdminIcon = authorized ? ShieldCheck : LogIn;
   const adminHref = authorized ? '#/admin' : '#/login';
   return (
-    <aside ref={railRef} className="app-nav" id="app-nav" aria-label="Thanh điều hướng ứng dụng">
+    <aside ref={railRef} className="app-nav" id="app-nav" aria-label={s('navRail', lang)}>
       <span
         aria-hidden
         className={`app-nav-indicator${animated ? ' is-animated' : ''}`}
@@ -226,7 +226,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => { if (event.key === 'Enter' && results[0]) { location.hash = results[0].href; setOpen(false); } }}
-              placeholder="Tìm Khí Giả hoặc trang phục"
+              placeholder={s('searchPlaceholder', lang)}
               aria-label="Tìm Khí Giả hoặc trang phục"
               autoComplete="off"
               enterKeyHint="search"
@@ -272,13 +272,13 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                         </li>
                       ))}
                       <li>
-                        <button type="button" onClick={() => { setOpen(false); void signOut(); }}><LogOut size={20} />Đăng xuất</button>
+                        <button type="button" onClick={() => { setOpen(false); void signOut(); }}><LogOut size={20} />{s('navLogout', lang)}</button>
                       </li>
                     </ul>
                   </>
                 ) : (
                   <>
-                    <p className="mobile-menu-heading">Tài khoản</p>
+                    <p className="mobile-menu-heading">{s('navAccount', lang)}</p>
                     <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />{s('navLogin', lang)}</a>
                   </>
                 )}
@@ -287,7 +287,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
           </div>
           {/* Exactly where ☰ is, morphing with the same `open ? X : Menu`; focused on open so the phone keyboard stays
               down until the search box is tapped. */}
-          <button ref={closeRef} type="button" className="mobile-menu-fab" aria-label="Đóng menu" onClick={() => setOpen(false)}>
+          <button ref={closeRef} type="button" className="mobile-menu-fab" aria-label={s('menuClose', lang)} onClick={() => setOpen(false)}>
             <MorphIcon icon={open ? X : Menu} size={20} strokeWidth={BAR_STROKE} reducedMotion="user" />
           </button>
         </div>

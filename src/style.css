@@ -283,8 +283,10 @@
   color: var(--bg-main);
 }
 
-[data-nav-expanded="false"] .app-nav-lang button:not(.is-active) {
-  display: none;
+@media (min-width: 769px) {
+  .app-nav:not(:hover):not(:focus-within) .app-nav-lang button:not(.is-active) {
+    display: none;
+  }
 }
 
 .mobile-menu-sheet .app-nav-lang {
