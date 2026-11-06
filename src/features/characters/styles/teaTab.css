@@ -15,12 +15,9 @@
 .tea-jar[aria-selected="true"] { background: var(--bg-elevated); border-color: var(--border-strong); color: var(--text-main); }
 .tea-jar img { width: 48px; height: 48px; }
 .tea-jar-name { display: block; font: 500 14px/1.3 var(--font-sans); }
-.tea-jar-cn, .tea-detail-cn, .tea-opt-cn { font-family: var(--font-serif); color: var(--text-muted); }
-.tea-jar-cn { display: block; font-size: 12px; }
 .tea-detail { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px 20px; align-content: start; }
 .tea-detail > img { width: 96px; height: 96px; grid-row: span 2; }
 .tea-detail h3 { font: 600 20px/1.3 var(--font-serif); align-self: end; }
-.tea-detail-cn { font-size: 14px; font-weight: 500; margin-left: 8px; }
 .tea-desc { font-size: 14px; line-height: 1.7; color: var(--text-muted); max-width: 66ch; }
 .tea-sec { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 0 32px; padding-top: 32px; border-top: 1px solid var(--border-strong); }
 .tea-rail { position: sticky; top: 16px; align-self: start; }
@@ -33,7 +30,6 @@
 .tea-opt { display: flex; justify-content: flex-end; }
 .tea-opt > span { max-width: 85%; padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg-elevated); font-size: 14px; text-align: right; }
 .tea-opt-vi { font-weight: 500; }
-.tea-opt-cn { display: block; font-size: 13px; }
 .tea-box { position: relative; margin-top: 16px; padding: 20px 16px 12px; border: 1px solid var(--border-gold-subtle); border-radius: 6px; background: var(--tea-grain), var(--bg-surface); max-width: 94%; }
 .tea-box p { font-size: 15px; line-height: 1.75; white-space: pre-line; }
 .tea-box--wide { grid-column: 1 / -1; max-width: none; margin-top: 20px; }

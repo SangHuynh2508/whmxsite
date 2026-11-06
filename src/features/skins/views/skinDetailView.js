@@ -13,7 +13,7 @@ import { s } from '../../../i18n/strings.mts';
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();
   if (!gameData || !gameData.characters) {
-    container.innerHTML = `<div class="whmx-skin-gallery"><p>Đang tải dữ liệu trang phục...</p></div>`;
+    container.innerHTML = `<div class="whmx-skin-gallery"><p>${s('sdLoading')}</p></div>`;
     return;
   }
 
@@ -38,9 +38,9 @@ export function renderSkinDetailView(container, skinId) {
     container.innerHTML = `
       <div class="whmx-skin-gallery">
         <div class="gallery-grid-empty">
-          <h2>Không tìm thấy trang phục</h2>
-          <p>Mã trang phục "${skinId}" không tồn tại hoặc chưa được phát hành.</p>
-          <a href="#/gallery" class="skin-back-btn">← Quay lại Thư Viện Trang Phục</a>
+          <h2>${s('sdNotFound')}</h2>
+          <p>${s('sdNotFoundText').replace('{id}', skinId)}</p>
+          <a href="#/gallery" class="skin-back-btn">${s('sdBack')}</a>
         </div>
       </div>
     `;
@@ -57,12 +57,12 @@ export function renderSkinDetailView(container, skinId) {
 
   // Proven Metadata
   const price = targetSkin.price;
-  const currency = targetSkin.currency || 'Vé Trang Phục';
+  const currency = targetSkin.currency || s('skTicket');
   const ticketIconUrl = getItemIconUrl(8);
   const priceDisplay = price 
     ? `<span class="price-with-icon"><img src="${ticketIconUrl}" alt="${currency}" class="currency-ticket-icon" /> ${price} ${currency}</span>` 
-    : (txt(targetSkin, 'obtain') || 'Sự kiện / Miễn phí');
-  const obtainDisplay = txt(targetSkin, 'obtain') || targetSkin.description_cn || 'Chưa có thông tin';
+    : (txt(targetSkin, 'obtain') || s('sdEventFree'));
+  const obtainDisplay = txt(targetSkin, 'obtain') || targetSkin.description_cn || s('sdNoInfo');
   const isHighSkin = targetSkin.is_high_skin === true;
   const cvName = targetSkin.cv_name || '';
 
@@ -80,7 +80,7 @@ export function renderSkinDetailView(container, skinId) {
   const loreQuoteHtml = loreText ? `<blockquote class="hero-lore-quote" id="skin-detail-lore-quote"></blockquote>` : '';
 
   // Release Date
-  let releaseDateStr = 'Chưa xác định';
+  let releaseDateStr = s('ovUnknown');
   if (targetSkin.unlock_date) {
     const d = new Date(targetSkin.unlock_date * 1000);
     releaseDateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
@@ -89,25 +89,25 @@ export function renderSkinDetailView(container, skinId) {
   container.innerHTML = `
     <div class="whmx-skin-gallery skin-detail-page">
       <!-- Breadcrumb Bar -->
-      <nav class="skin-detail-nav" aria-label="Điều hướng trang phục">
+      <nav class="skin-detail-nav" aria-label="${s('sdNav')}">
         <a href="#/gallery" class="skin-back-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          <span>Thư Viện Trang Phục</span>
+          <span>${s('sdLibrary')}</span>
         </a>
         <span class="nav-sep">/</span>
         <span class="nav-current">${skinNameVi}</span>
       </nav>
 
       <!-- VARIANT 3: FEATURED SPOTLIGHT HERO SECTION (ONE UNIFIED CANVAS) -->
-      <section class="skin-spotlight-hero" aria-label="Hình ảnh tiêu điểm trang phục">
+      <section class="skin-spotlight-hero" aria-label="${s('sdHeroAria')}">
         <!-- Left: Text directly laid onto the shared dark-gold canvas -->
         <div class="spotlight-unified-info">
           ${seriesId ? `
             <div class="spotlight-badge-row">
-              <span class="spotlight-badge-series" title="Dòng y phục: ${seriesHeroName}">
+              <span class="spotlight-badge-series" title="${s('skSeriesOf').replace('{n}', seriesHeroName)}">
                 <img src="${seriesBadgeUrl}" class="badge-series-icon" alt="${seriesHeroName}" />
                 <span>${seriesHeroName}</span>
               </span>
@@ -121,7 +121,7 @@ export function renderSkinDetailView(container, skinId) {
         </div>
 
         <!-- Right: Large Artwork Stage on the same shared canvas (Click opens Lightbox, Zero hover movement) -->
-        <div class="spotlight-artwork-stage" id="spotlight-artwork-stage" title="Nhấn để xem ảnh phóng to">
+        <div class="spotlight-artwork-stage" id="spotlight-artwork-stage" title="${s('sdZoomHint')}">
           <img 
             class="spotlight-stage-img" 
             src="${drawingUrl}" 
@@ -144,7 +144,7 @@ export function renderSkinDetailView(container, skinId) {
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            <span>Hồ Sơ Giám Định Trang Phục</span>
+            <span>${s('sdDossier')}</span>
           </div>
 
           <div class="spec-rows-list">
@@ -153,30 +153,30 @@ export function renderSkinDetailView(container, skinId) {
               <span class="spec-value highlight-gold">${skinNameVi}</span>
             </div>
             <div class="spec-row">
-              <span class="spec-label">Khí Giả sở hữu:</span>
+              <span class="spec-label">${s('sdOwner')}</span>
               <span class="spec-value">
                 <a href="#/characters/${charSlug}" class="spec-char-link">${charNameVi}</a>
               </span>
             </div>
             <div class="spec-row">
-              <span class="spec-label">Phương thức sở hữu:</span>
+              <span class="spec-label">${s('skAcqTitle')}:</span>
               <span class="spec-value">${obtainDisplay}</span>
             </div>
             <div class="spec-row">
-              <span class="spec-label">Chi phí / Tiền tệ:</span>
+              <span class="spec-label">${s('sdCost')}</span>
               <span class="spec-value highlight-gold">${priceDisplay}</span>
             </div>
             <div class="spec-row">
-              <span class="spec-label">Thời điểm phát hành:</span>
+              <span class="spec-label">${s('sdRelease')}</span>
               <span class="spec-value">${releaseDateStr}</span>
             </div>
             <div class="spec-row">
-              <span class="spec-label">Phân loại y phục:</span>
-              <span class="spec-value">${isHighSkin ? 'Trang Phục Tương Tác Cao Cấp' : 'Trang Phục Thường'}</span>
+              <span class="spec-label">${s('sdClass')}</span>
+              <span class="spec-value">${isHighSkin ? s('sdHighType') : s('sdNormalType')}</span>
             </div>
             ${seriesId ? `
             <div class="spec-row">
-              <span class="spec-label">Dòng y phục (Series):</span>
+              <span class="spec-label">${s('sdSeries')}</span>
               <span class="spec-value series-spec-value">
                 <img src="${seriesBadgeUrl}" alt="${seriesDossierName}" class="spec-series-logo" />
                 <span class="series-vi-name">${seriesDossierName}</span>
@@ -184,7 +184,7 @@ export function renderSkinDetailView(container, skinId) {
             </div>` : ''}
             ${cvName ? `
             <div class="spec-row">
-              <span class="spec-label">Diễn viên lồng tiếng (CV):</span>
+              <span class="spec-label">${s('sdCv')}</span>
               <span class="spec-value">${cvName}</span>
             </div>` : ''}
           </div>
@@ -198,34 +198,34 @@ export function renderSkinDetailView(container, skinId) {
               <circle cx="8.5" cy="8.5" r="1.5"></circle>
               <polyline points="21 15 16 10 5 21"></polyline>
             </svg>
-            <span>Bộ Tài Nguyên Hình Ảnh</span>
+            <span>${s('sdAssets')}</span>
           </div>
 
           <div class="asset-cards-layout">
             <!-- Full Drawing Item -->
-            <button type="button" class="asset-preview-item" data-asset-url="${drawingUrl}" aria-label="Xem ảnh phóng to Toàn Cảnh">
+            <button type="button" class="asset-preview-item" data-asset-url="${drawingUrl}" aria-label="${s('sdDrawingAria')}">
               <div class="asset-thumb-wrap drawing-wrap">
                 <img src="${drawingUrl}" alt="${skinNameVi} Drawing" loading="lazy" onerror="this.onerror=null; this.src='${cardUrl}';" />
               </div>
               <div class="asset-info">
-                <span class="asset-title">Toàn Cảnh (Drawing)</span>
-                <span class="asset-sub">Đồ họa toàn thân độ phân giải cao • Nhấn để xem toàn màn hình</span>
+                <span class="asset-title">${s('sdDrawing')}</span>
+                <span class="asset-sub">${s('sdDrawingSub')}</span>
               </div>
             </button>
 
             <!-- Card Crop Item -->
-            <button type="button" class="asset-preview-item" data-asset-url="${cardUrl}" aria-label="Xem ảnh phóng to Thẻ Bài">
+            <button type="button" class="asset-preview-item" data-asset-url="${cardUrl}" aria-label="${s('sdCardAria')}">
               <div class="asset-thumb-wrap card-wrap">
                 <img src="${cardUrl}" alt="${skinNameVi} Card" loading="lazy" onerror="this.onerror=null; this.src='${drawingUrl}';" />
               </div>
               <div class="asset-info">
-                <span class="asset-title">Thẻ Bài (Card)</span>
-                <span class="asset-sub">Hình dạng thẻ bài trong giao diện tra cứu • Nhấn để xem</span>
+                <span class="asset-title">${s('sdCard')}</span>
+                <span class="asset-sub">${s('sdCardSub')}</span>
               </div>
             </button>
 
             <!-- Avatar Crop Item -->
-            <button type="button" class="asset-preview-item" data-asset-url="${avatarUrl}" aria-label="Xem ảnh phóng to Chân Dung">
+            <button type="button" class="asset-preview-item" data-asset-url="${avatarUrl}" aria-label="${s('sdAvatarAria')}">
               <div class="asset-thumb-wrap avatar-wrap">
                 <img src="${avatarUrl}" 
                      alt="${skinNameVi} Avatar" 
@@ -233,8 +233,8 @@ export function renderSkinDetailView(container, skinId) {
                      onerror="this.onerror=null; if ('${fallbackAvatarUrl}' && this.src !== '${fallbackAvatarUrl}') { this.src='${fallbackAvatarUrl}'; const p=this.closest('.asset-preview-item'); if(p) p.dataset.assetUrl='${fallbackAvatarUrl}'; } else { this.style.opacity='0'; }" />
               </div>
               <div class="asset-info">
-                <span class="asset-title">Chân Dung (Avatar)</span>
-                <span class="asset-sub">Ảnh đại diện khí giả khi khoác y phục • Nhấn để xem</span>
+                <span class="asset-title">${s('sdAvatar')}</span>
+                <span class="asset-sub">${s('sdAvatarSub')}</span>
               </div>
             </button>
           </div>
@@ -242,16 +242,16 @@ export function renderSkinDetailView(container, skinId) {
       </div>
 
       <!-- IN-APP IMAGE LIGHTBOX MODAL (IMAGE-ONLY FLOATING VIEW) -->
-      <div id="skin-lightbox-modal" class="skin-lightbox-modal hidden" role="dialog" aria-modal="true" aria-label="Xem ảnh phóng to">
+      <div id="skin-lightbox-modal" class="skin-lightbox-modal hidden" role="dialog" aria-modal="true" aria-label="${s('skZoomAria')}">
         <div class="skin-lightbox-backdrop" id="skin-lightbox-backdrop"></div>
-        <button type="button" class="skin-lightbox-close-floating" id="skin-lightbox-close" aria-label="Đóng (Escape)">
+        <button type="button" class="skin-lightbox-close-floating" id="skin-lightbox-close" aria-label="${s('skCloseEsc')}">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
         <div class="skin-lightbox-stage" id="skin-lightbox-stage">
-          <img id="skin-lightbox-img" class="skin-lightbox-floating-img" src="" alt="Trang phục phóng to" />
+          <img id="skin-lightbox-img" class="skin-lightbox-floating-img" src="" alt="${s('skZoomAlt')}" />
         </div>
       </div>
     </div>

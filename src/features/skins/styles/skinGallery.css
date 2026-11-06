@@ -1137,14 +1137,6 @@
   color: var(--text-muted);
 }
 
-.gallery-card-cn {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
-}
-
 .gallery-card-price {
   display: inline-flex;
   align-items: center;

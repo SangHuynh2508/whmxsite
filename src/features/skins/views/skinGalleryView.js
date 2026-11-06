@@ -12,6 +12,7 @@ import '../styles/skinGallery.css';
 import { fold } from '../../../lib/fold.mts';
 import { newestFirst } from '../../../lib/newest.mts';
 import { getLang, pickText, txt } from '../../../i18n/lang.mts';
+import { s as tr } from '../../../i18n/strings.mts';
 
 const locale = () => (getLang() === 'cn' ? 'zh' : 'vi');
 
@@ -23,7 +24,7 @@ const normalizeText = (str) => (str ? fold(str).trim() : '');
 function formatHeroLore(skin) {
   if (skin.storyVi && skin.storyVi !== skin.obtainVi) return skin.storyVi;
   if (skin.storyCn) return skin.storyCn;
-  return 'Chế tác mô phỏng dáng hình kiệt tác. Nét vẽ thanh thoát, thần thái tôn nghiêm, toát lên phong vận hội họa cổ truyền đỉnh cao.';
+  return tr('skLoreDefault');
 }
 
 // Canonical order for actual-skin series IDs (202 to 220)
@@ -34,24 +35,24 @@ const CANONICAL_SERIES_IDS = [
 
 // Acquisition taxonomy definition (Batch 2.5 proven taxonomy)
 const ACQUISITION_TAXONOMY = [
-  { id: 'all', label: 'Tất Cả Nguồn' },
-  { id: 'paid', label: 'Vé Trang Phục' },
-  { id: 'highskin', label: 'Cao Cấp' },
-  { id: 'travel', label: 'Du Lịch' },
-  { id: 'event', label: 'Sự Kiện' },
-  { id: 'shop', label: 'Cửa Hàng' },
-  { id: 'training', label: 'Tập Huấn' },
-  { id: 'story', label: 'Cốt Truyện' },
-  { id: 'free', label: 'Miễn Phí' }
+  { id: 'all', key: 'skAllSrc' },
+  { id: 'paid', key: 'skTicket' },
+  { id: 'highskin', key: 'skHigh' },
+  { id: 'travel', key: 'skTravel' },
+  { id: 'event', key: 'skEvent' },
+  { id: 'shop', key: 'skShop' },
+  { id: 'training', key: 'skTraining' },
+  { id: 'story', key: 'skStory' },
+  { id: 'free', key: 'skFree' }
 ];
 
 // Newest first is the default (owner 2026-09-30); the old default (skin id order) stays as "Theo mã trang phục".
 const SORT_OPTIONS = [
-  { value: 'date-desc', label: 'Mới ra mắt gần đây' },
-  { value: 'name-asc', label: 'Tên trang phục (A-Z)' },
-  { value: 'char-asc', label: 'Tên Khí Giả (A-Z)' },
-  { value: 'price-asc', label: 'Giá vé (Thấp đến Cao)' },
-  { value: 'default', label: 'Theo mã trang phục' }
+  { value: 'date-desc', key: 'sortDate' },
+  { value: 'name-asc', key: 'sortName' },
+  { value: 'char-asc', key: 'sortChar' },
+  { value: 'price-asc', key: 'sortPrice' },
+  { value: 'default', key: 'sortId' }
 ];
 
 // State
@@ -74,7 +75,7 @@ function resolveAcquisitionLabel(skin) {
     return {
       type: 'paid',
       shortLabel: String(skin.price),
-      fullTitle: `Giá: ${skin.price} ${skin.currency || 'Vé Trang Phục'}`,
+      fullTitle: `${tr('skPrice').replace('{p}', skin.price).replace('{c}', skin.currency || tr('skTicket'))}`,
       typeClass: 'gallery-card-paid'
     };
   }
@@ -83,13 +84,13 @@ function resolveAcquisitionLabel(skin) {
   if (skin.isHighSkin || skin.is_high_skin === true) {
     return {
       type: 'highskin',
-      shortLabel: 'Cao Cấp',
-      fullTitle: skin.obtainVi || skin.obtain_vi || 'Trang phục cao cấp (Bán giới hạn qua gói quà)',
+      shortLabel: tr('skHigh'),
+      fullTitle: txt(skin, 'obtain') || tr('skHighFull'),
       typeClass: 'gallery-card-highskin'
     };
   }
 
-  const rawVi = (skin.obtainVi || skin.obtain_vi || '').trim();
+  const rawVi = ((getLang() === 'cn' ? skin.obtain_cn : skin.obtainVi || skin.obtain_vi) || '').trim();
   const rawCn = (skin.obtainCn || skin.obtain_cn || '').trim();
   const combined = `${rawVi} ${rawCn}`.toLowerCase();
 
@@ -97,8 +98,8 @@ function resolveAcquisitionLabel(skin) {
   if (/chương|cốt truyện|通关|第七章/.test(combined)) {
     return {
       type: 'story',
-      shortLabel: 'Cốt Truyện',
-      fullTitle: rawVi || 'Mở khóa sau khi hoàn thành cốt truyện',
+      shortLabel: tr('skStory'),
+      fullTitle: rawVi || tr('skFullStory'),
       typeClass: 'gallery-card-story'
     };
   }
@@ -107,8 +108,8 @@ function resolveAcquisitionLabel(skin) {
   if (/tập huấn|集训/.test(combined)) {
     return {
       type: 'training',
-      shortLabel: 'Tập Huấn',
-      fullTitle: rawVi || 'Nhận được thông qua Chợ Tập Huấn',
+      shortLabel: tr('skTraining'),
+      fullTitle: rawVi || tr('skFullTraining'),
       typeClass: 'gallery-card-training'
     };
   }
@@ -117,8 +118,8 @@ function resolveAcquisitionLabel(skin) {
   if (/du lịch|游历/.test(combined)) {
     return {
       type: 'travel',
-      shortLabel: 'Du Lịch',
-      fullTitle: rawVi || 'Nhận được thông qua Du Lịch',
+      shortLabel: tr('skTravel'),
+      fullTitle: rawVi || tr('skFullTravel'),
       typeClass: 'gallery-card-travel'
     };
   }
@@ -127,8 +128,8 @@ function resolveAcquisitionLabel(skin) {
   if (/cửa hàng|衣装店|珍集易市/.test(combined)) {
     return {
       type: 'shop',
-      shortLabel: 'Cửa Hàng',
-      fullTitle: rawVi || (rawCn.includes('珍集易市') ? 'Nhận được qua Trân Tập Dịch Thị' : 'Bán giới hạn tại Cửa Hàng Trang Phục'),
+      shortLabel: tr('skShop'),
+      fullTitle: rawVi || (rawCn.includes('珍集易市') ? tr('skFullZhenji') : tr('skFullShop')),
       typeClass: 'gallery-card-shop'
     };
   }
@@ -137,14 +138,14 @@ function resolveAcquisitionLabel(skin) {
   if (/hoạt động|活动|花朝昔时|协韵行歌|预约|hẹn trước/.test(combined)) {
     let full = rawVi;
     if (!full) {
-      if (rawCn.includes('预约')) full = 'Nhận được qua phần thưởng hẹn trước';
-      else if (rawCn.includes('花朝昔时')) full = 'Nhận được qua hoạt động Hoa Triêu Tích Thời';
-      else if (rawCn.includes('协韵行歌')) full = 'Nhận được qua hoạt động Hiệp Vận Hành Ca';
-      else full = 'Nhận được thông qua hoạt động';
+      if (rawCn.includes('预约')) full = tr('skFullBook');
+      else if (rawCn.includes('花朝昔时')) full = tr('skFullHuaChao');
+      else if (rawCn.includes('协韵行歌')) full = tr('skFullXieYun');
+      else full = tr('skFullEvent');
     }
     return {
       type: 'event',
-      shortLabel: 'Sự Kiện',
+      shortLabel: tr('skEvent'),
       fullTitle: full,
       typeClass: 'gallery-card-event'
     };
@@ -154,8 +155,8 @@ function resolveAcquisitionLabel(skin) {
   if (/彩蛋|trứng phục sinh|赠送|tặng/.test(combined)) {
     return {
       type: 'free',
-      shortLabel: 'Miễn Phí',
-      fullTitle: rawVi || 'Quà tặng trứng phục sinh (彩蛋赠送)',
+      shortLabel: tr('skFree'),
+      fullTitle: rawVi || tr('skFullFree'),
       typeClass: 'gallery-card-gift'
     };
   }
@@ -163,8 +164,8 @@ function resolveAcquisitionLabel(skin) {
   // Truthful fallback
   return {
     type: 'event',
-    shortLabel: rawVi ? (rawVi.length > 12 ? rawVi.slice(0, 10) + '...' : rawVi) : 'Sự Kiện',
-    fullTitle: rawVi || rawCn || 'Cách thức sở hữu đặc biệt',
+    shortLabel: rawVi ? (rawVi.length > 12 ? rawVi.slice(0, 10) + '...' : rawVi) : tr('skEvent'),
+    fullTitle: rawVi || rawCn || tr('skFullOther'),
     typeClass: 'gallery-card-event'
   };
 }
@@ -191,12 +192,12 @@ function getActualSkins(gameData) {
 
       skinList.push({
         skinId: sid,
-        nameVi: txt(skin, 'name') || `Trang Phục ${sid}`,
+        nameVi: txt(skin, 'name') || `${tr('navSkins')} ${sid}`,
         nameCn: skin.name_cn || '',
         storyCn: skin.story_cn || skin.skinFileLanText || '',
-        storyVi: getLang() === 'cn' ? '' : (skin.story_vi || ''),
+        storyVi: txt(skin, 'story'),
         obtainCn: skin.obtain_cn || skin.description_cn || '',
-        obtainVi: pickText(skin.obtain_vi, skin.obtain_cn).text || 'Bán tại Cửa Hàng / Sự Kiện',
+        obtainVi: pickText(skin.obtain_vi, skin.obtain_cn).text || tr('skObtainDefault'),
         price: skin.price || null,
         currency: skin.currency || '',
         unlockDate: skin.unlock_date || null,
@@ -226,7 +227,7 @@ function getActualSkins(gameData) {
 export function renderSkinGalleryView(container) {
   const gameData = getGameData();
   if (!gameData || !gameData.characters) {
-    container.innerHTML = `<div class="whmx-skin-gallery"><p>Đang tải dữ liệu thư viện trang phục...</p></div>`;
+    container.innerHTML = `<div class="whmx-skin-gallery"><p>${tr('skLoading')}</p></div>`;
     return;
   }
 
@@ -258,7 +259,7 @@ export function renderSkinGalleryView(container) {
       seriesCounts[s.seriesId] = (seriesCounts[s.seriesId] || 0) + 1;
       if (!seriesMetaMap[s.seriesId]) {
         seriesMetaMap[s.seriesId] = {
-          nameVi: s.seriesNameVi || s.seriesNameCn || 'Chưa xác định',
+          nameVi: s.seriesNameVi || s.seriesNameCn || tr('ovUnknown'),
           nameCn: s.seriesNameCn || '',
           badge: s.seriesBadge || `/assets/series/skinlogo_${s.seriesId}.png`
         };
@@ -270,7 +271,7 @@ export function renderSkinGalleryView(container) {
     const meta = seriesMetaMap[id] || {};
     return {
       id,
-      nameVi: meta.nameVi || meta.nameCn || 'Chưa xác định',
+      nameVi: meta.nameVi || meta.nameCn || tr('ovUnknown'),
       nameCn: meta.nameCn || '',
       badge: meta.badge || `/assets/series/skinlogo_${id}.png`,
       count: seriesCounts[id] || 0
@@ -284,13 +285,13 @@ export function renderSkinGalleryView(container) {
     .sort((a, b) => txt(a, 'name').localeCompare(txt(b, 'name'), locale()));
 
   const currentChar = charsWithSkins.find(c => c.id === selectedCharacterId);
-  const currentCharLabel = currentChar ? txt(currentChar, 'name') : 'Tất cả Khí Giả';
+  const currentCharLabel = currentChar ? txt(currentChar, 'name') : tr('skAllChars');
   const currentSortOpt = SORT_OPTIONS.find(o => o.value === sortOrder) || SORT_OPTIONS[0];
 
   const isAcqActive = selectedAcquisition !== 'all';
   const currentAcqOpt = ACQUISITION_TAXONOMY.find(t => t.id === selectedAcquisition);
   const acqSummaryHtml = isAcqActive && currentAcqOpt
-    ? `<span class="gallery-filter-active-dot" aria-hidden="true"></span><span class="gallery-filter-active-text"> ${currentAcqOpt.label}</span>`
+    ? `<span class="gallery-filter-active-dot" aria-hidden="true"></span><span class="gallery-filter-active-text"> ${tr(currentAcqOpt.key)}</span>`
     : '';
 
   const isSeriesActive = selectedSeries !== 'all';
@@ -306,27 +307,27 @@ export function renderSkinGalleryView(container) {
       <header class="skin-gallery-header">
         <div class="skin-gallery-eyebrow">
           <span class="dot"></span>
-          <span>BẢO TÀNG VẬT HOA DI TÂN • THƯ VIỆN TRANG PHỤC</span>
+          <span>${tr('skMuseum')}</span>
         </div>
-        <h1 class="skin-gallery-title">Bộ Sưu Tập Y Phục Khí Giả</h1>
+        <h1 class="skin-gallery-title">${tr('skTitle')}</h1>
         <p class="skin-gallery-subtitle">
-          Khám phá 145 trang phục đặc biệt ghi dấu điển cố lịch sử, phong vị bốn mùa và nghệ thuật cổ vật ngàn năm.
+          ${tr('skIntro')}
         </p>
       </header>
 
       <!-- VARIANT 2: MUSEUM / CURATORIAL COLLAGE HERO (HIGH SKIN SPOTLIGHT) -->
-      <section class="gallery-hero-container" id="gallery-hero-stage" aria-label="Triển lãm tiêu điểm trang phục cao cấp">
+      <section class="gallery-hero-container" id="gallery-hero-stage" aria-label="${tr('skHeroAria')}">
         <div class="hero-variant-museum">
           <!-- Left Curatorial Plaque -->
           <div class="museum-curatorial-col" id="hero-curatorial-col">
             <div class="museum-exhibit-seal">
               <div class="museum-seal-info">
-                <span>HỒ SƠ GIÁM ĐỊNH</span>
+                <span>${tr('skAppraisal')}</span>
                 <span class="museum-seal-dot" aria-hidden="true">•</span>
-                <span class="museum-seal-badge-text">TIÊU ĐIỂM CAO CẤP</span>
+                <span class="museum-seal-badge-text">${tr('skSpotBadge')}</span>
               </div>
-              <div class="museum-seal-logo-wrap" title="Dòng y phục: ${initialSkin.seriesNameVi || initialSkin.seriesNameCn || 'Vân Tưởng Tân Thường'}">
-                <img id="hero-series-badge" class="museum-seal-logo" src="${initialSkin.seriesBadge || '/assets/series/skinlogo_220.png'}" alt="Logo dòng y phục" />
+              <div class="museum-seal-logo-wrap" title="${tr('skSeriesOf').replace('{n}', initialSkin.seriesNameVi || initialSkin.seriesNameCn || 'Vân Tưởng Tân Thường')}">
+                <img id="hero-series-badge" class="museum-seal-logo" src="${initialSkin.seriesBadge || '/assets/series/skinlogo_220.png'}" alt="${tr('skSeriesLogo')}" />
               </div>
             </div>
 
@@ -339,39 +340,39 @@ export function renderSkinGalleryView(container) {
               <div class="museum-notes" id="hero-skin-notes"></div>
               <div class="museum-data-table" id="hero-data-table">
                 <div class="museum-data-row">
-                  <span>Cách thức sở hữu</span>
-                  <span class="val" id="hero-val-obtain">${initialSkin.obtainVi || 'Bán qua gói quà'}</span>
+                  <span>${tr('skObtain')}</span>
+                  <span class="val" id="hero-val-obtain">${initialSkin.obtainVi || tr('skObtainGift')}</span>
                 </div>
                 <div class="museum-data-row">
-                  <span>Giá xuất xưởng</span>
-                  <span class="val highlight-price" id="hero-val-price">${initialSkin.price ? `${initialSkin.price} ${initialSkin.currency}` : 'Giới hạn'}</span>
+                  <span>${tr('skFactoryPrice')}</span>
+                  <span class="val highlight-price" id="hero-val-price">${initialSkin.price ? `${initialSkin.price} ${initialSkin.currency}` : tr('skLimitedPrice')}</span>
                 </div>
               </div>
             </div>
 
             <!-- Plaque Footer: Detail Action + Spotlight Nav -->
             <div class="museum-footer-row">
-              <a href="#/skins/${initialSkin.skinId}" class="museum-explore-btn" id="hero-detail-cta" title="Xem chi tiết trang phục ${initialSkin.nameVi}">
-                <span>Xem chi tiết trang phục</span>
+              <a href="#/skins/${initialSkin.skinId}" class="museum-explore-btn" id="hero-detail-cta" title="${tr('skViewDetailN').replace('{n}', initialSkin.nameVi)}">
+                <span>${tr('skViewDetail')}</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </a>
 
-              <div class="museum-spotlight-nav" aria-label="Điều hướng tiêu điểm cao cấp">
-                <button type="button" class="museum-nav-btn" id="hero-prev-btn" aria-label="Trang phục tiêu điểm trước">
+              <div class="museum-spotlight-nav" aria-label="${tr('skSpotNav')}">
+                <button type="button" class="museum-nav-btn" id="hero-prev-btn" aria-label="${tr('skSpotPrev')}">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                   </svg>
                 </button>
                 <div class="museum-nav-progress-block">
-                  <div class="museum-nav-segments" id="hero-nav-segments" role="progressbar" aria-label="Tiến trình tiêu điểm" aria-valuemin="1" aria-valuemax="${highSkins.length}" aria-valuenow="1">
-                    ${highSkins.map((_, i) => `<span class="hero-progress-segment ${i === 0 ? 'is-active' : (Math.abs(i - 0) === 1 ? 'is-nearby' : 'is-distant')}" data-index="${i}" title="Chuyển đến tiêu điểm ${i + 1}"></span>`).join('')}
+                  <div class="museum-nav-segments" id="hero-nav-segments" role="progressbar" aria-label="${tr('skSpotProgress')}" aria-valuemin="1" aria-valuemax="${highSkins.length}" aria-valuenow="1">
+                    ${highSkins.map((_, i) => `<span class="hero-progress-segment ${i === 0 ? 'is-active' : (Math.abs(i - 0) === 1 ? 'is-nearby' : 'is-distant')}" data-index="${i}" title="${tr('skSpotGo').replace('{n}', i + 1)}"></span>`).join('')}
                   </div>
                   <span class="museum-nav-counter" id="hero-nav-counter" aria-live="off">01 / ${String(highSkins.length).padStart(2, '0')}</span>
                 </div>
-                <button type="button" class="museum-nav-btn" id="hero-next-btn" aria-label="Trang phục tiêu điểm kế tiếp">
+                <button type="button" class="museum-nav-btn" id="hero-next-btn" aria-label="${tr('skSpotNext')}">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
@@ -381,7 +382,7 @@ export function renderSkinGalleryView(container) {
           </div>
 
           <!-- Center-Right Large Framed Masterpiece (Dominant Focus, Click opens Lightbox) -->
-          <div class="museum-center-frame" id="hero-artwork-frame" role="button" tabindex="0" title="Nhấn để xem ảnh phóng to (Drawing)" aria-label="Xem ảnh phóng to trang phục tiêu điểm">
+          <div class="museum-center-frame" id="hero-artwork-frame" role="button" tabindex="0" title="${tr('skZoomDrawing')}" aria-label="${tr('skZoomHero')}">
             <span class="museum-frame-corner top-left"></span>
             <span class="museum-frame-corner top-right"></span>
             <span class="museum-frame-corner bottom-left"></span>
@@ -407,14 +408,14 @@ export function renderSkinGalleryView(container) {
 
             <div class="museum-center-tag">
               <span class="museum-tag-dot" aria-hidden="true"></span>
-              <span>TIÊU ĐIỂM TRIỂN LÃM</span>
+              <span>${tr('skSpotExhibit')}</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- FILTER & SEARCH TOOLBAR (COMPACT GALLERY FILTER SYSTEM + SERIES CABINET) -->
-      <section class="gallery-toolbar" aria-label="Bộ lọc và tìm kiếm trang phục">
+      <section class="gallery-toolbar" aria-label="${tr('skToolbar')}">
         <div class="gallery-toolbar-row-top">
           <!-- Text Search -->
           <div class="gallery-search-wrap">
@@ -426,7 +427,7 @@ export function renderSkinGalleryView(container) {
               type="text" 
               class="gallery-search-input" 
               id="gallery-search-input" 
-              placeholder="Tìm theo tên trang phục, Khí Giả..." 
+              placeholder="${tr('skSearch')}" 
               value="${searchQuery}"
               autocomplete="off"
             />
@@ -444,7 +445,7 @@ export function renderSkinGalleryView(container) {
                 aria-haspopup="listbox" 
                 aria-expanded="false" 
                 aria-controls="gallery-char-menu"
-                aria-label="Lọc theo Khí Giả"
+                aria-label="${tr('skFilterChar')}"
               >
                 <svg class="whmx-dropdown-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -455,7 +456,7 @@ export function renderSkinGalleryView(container) {
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
-              <div class="whmx-dropdown-menu" id="gallery-char-menu" role="listbox" aria-label="Lọc theo Khí Giả" tabindex="-1">
+              <div class="whmx-dropdown-menu" id="gallery-char-menu" role="listbox" aria-label="${tr('skFilterChar')}" tabindex="-1">
                 <div 
                   class="whmx-dropdown-item ${selectedCharacterId === 'all' ? 'active' : ''}" 
                   role="option" 
@@ -463,7 +464,7 @@ export function renderSkinGalleryView(container) {
                   data-value="all" 
                   tabindex="-1"
                 >
-                  Tất cả Khí Giả
+                  ${tr('skAllChars')}
                 </div>
                 ${charsWithSkins.map(c => `
                   <div 
@@ -489,17 +490,17 @@ export function renderSkinGalleryView(container) {
                 aria-haspopup="listbox" 
                 aria-expanded="false" 
                 aria-controls="gallery-sort-menu"
-                aria-label="Sắp xếp trang phục"
+                aria-label="${tr('skSortAria')}"
               >
                 <svg class="whmx-dropdown-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="m3 16 4 4 4-4"></path><path d="M7 20V4"></path><path d="m21 8-4-4-4 4"></path><path d="M17 4v16"></path>
                 </svg>
-                <span class="whmx-dropdown-label" id="gallery-sort-label">${currentSortOpt.label}</span>
+                <span class="whmx-dropdown-label" id="gallery-sort-label">${tr(currentSortOpt.key)}</span>
                 <svg class="whmx-dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
-              <div class="whmx-dropdown-menu menu-align-right" id="gallery-sort-menu" role="listbox" aria-label="Sắp xếp trang phục" tabindex="-1">
+              <div class="whmx-dropdown-menu menu-align-right" id="gallery-sort-menu" role="listbox" aria-label="${tr('skSortAria')}" tabindex="-1">
                 ${SORT_OPTIONS.map(opt => `
                   <div 
                     class="whmx-dropdown-item ${sortOrder === opt.value ? 'active' : ''}" 
@@ -508,7 +509,7 @@ export function renderSkinGalleryView(container) {
                     data-value="${opt.value}" 
                     tabindex="-1"
                   >
-                    ${opt.label}
+                    ${tr(opt.key)}
                   </div>
                 `).join('')}
               </div>
@@ -530,7 +531,7 @@ export function renderSkinGalleryView(container) {
                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                 <line x1="7" y1="7" x2="7.01" y2="7"></line>
               </svg>
-              <span class="gallery-collapsible-title" id="gallery-acq-title-label">Phương thức sở hữu</span>
+              <span class="gallery-collapsible-title" id="gallery-acq-title-label">${tr('skAcqTitle')}</span>
               <span class="gallery-filter-active-summary" id="gallery-acq-active-summary">
                 ${acqSummaryHtml}
               </span>
@@ -551,7 +552,7 @@ export function renderSkinGalleryView(container) {
                         class="gallery-chip-btn ${selectedAcquisition === tax.id ? 'active' : ''}" 
                         data-acq="${tax.id}"
                       >
-                        <span>${tax.label}</span>
+                        <span>${tr(tax.key)}</span>
                         <span class="gallery-chip-count">(${count})</span>
                       </button>
                     `;
@@ -577,7 +578,7 @@ export function renderSkinGalleryView(container) {
                 <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path>
                 <path d="M10 12h4"></path>
               </svg>
-              <span class="gallery-collapsible-title" id="gallery-series-title-label">Dòng Y Phục</span>
+              <span class="gallery-collapsible-title" id="gallery-series-title-label">${tr('skSeriesTitle')}</span>
               <span class="gallery-filter-active-summary" id="gallery-series-active-summary">
                 ${seriesSummaryHtml}
               </span>
@@ -589,13 +590,13 @@ export function renderSkinGalleryView(container) {
           <div class="gallery-collapsible-drawer ${isSeriesOpen ? 'is-open' : ''}" id="gallery-series-drawer" ${isSeriesOpen ? '' : 'inert'} aria-hidden="${isSeriesOpen ? 'false' : 'true'}">
             <div class="gallery-collapsible-drawer-inner">
               <div class="gallery-collapsible-content" id="gallery-series-content">
-                <div class="series-cabinet-grid" id="series-cabinet-grid" role="group" aria-label="Tủ dòng y phục" data-lenis-prevent>
+                <div class="series-cabinet-grid" id="series-cabinet-grid" role="group" aria-label="${tr('skCabinet')}" data-lenis-prevent>
                   <!-- Tất Cả Slot -->
                   <button 
                     type="button" 
                     class="series-cabinet-slot ${selectedSeries === 'all' ? 'active' : ''}" 
                     data-series="all" 
-                    aria-label="Tất Cả Series (${skins.length})"
+                    aria-label="${tr('skAllSeries').replace('{n}', skins.length)}"
                   >
                     <div class="cabinet-slot-visual">
                       <svg class="cabinet-all-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -605,7 +606,7 @@ export function renderSkinGalleryView(container) {
                       </svg>
                     </div>
                     <div class="cabinet-slot-meta">
-                      <span class="cabinet-slot-name">Tất Cả</span>
+                      <span class="cabinet-slot-name">${tr('pickAll')}</span>
                       <span class="cabinet-slot-count">${skins.length}</span>
                     </div>
                   </button>
@@ -640,21 +641,21 @@ export function renderSkinGalleryView(container) {
       </section>
 
       <!-- SKIN-ONLY GALLERY GRID (Skin Name Primary > Character Name Secondary) -->
-      <section class="gallery-cards-grid" id="gallery-cards-grid" aria-label="Danh sách trang phục">
+      <section class="gallery-cards-grid" id="gallery-cards-grid" aria-label="${tr('skGridLabel')}">
         <!-- Rendered via renderGridCards() -->
       </section>
 
       <!-- IN-APP IMAGE LIGHTBOX MODAL (IMAGE-ONLY FLOATING VIEW) -->
-      <div id="skin-lightbox-modal" class="skin-lightbox-modal hidden" role="dialog" aria-modal="true" aria-label="Xem ảnh phóng to">
+      <div id="skin-lightbox-modal" class="skin-lightbox-modal hidden" role="dialog" aria-modal="true" aria-label="${tr('skZoomAria')}">
         <div class="skin-lightbox-backdrop" id="skin-lightbox-backdrop"></div>
-        <button type="button" class="skin-lightbox-close-floating" id="skin-lightbox-close" aria-label="Đóng (Escape)">
+        <button type="button" class="skin-lightbox-close-floating" id="skin-lightbox-close" aria-label="${tr('skCloseEsc')}">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
         <div class="skin-lightbox-stage" id="skin-lightbox-stage">
-          <img id="skin-lightbox-img" class="skin-lightbox-floating-img" src="" alt="Trang phục phóng to" />
+          <img id="skin-lightbox-img" class="skin-lightbox-floating-img" src="" alt="${tr('skZoomAlt')}" />
         </div>
       </div>
     </div>
@@ -741,13 +742,13 @@ function renderGridCards(skins) {
   const filtered = getFilteredSkins(skins);
 
   if (countEl) {
-    countEl.textContent = `Hiển thị ${filtered.length} / ${skins.length} trang phục`;
+    countEl.textContent = tr('skCount').replace('{n}', filtered.length).replace('{m}', skins.length);
   }
 
   if (filtered.length === 0) {
     gridEl.innerHTML = `
       <div class="gallery-grid-empty">
-        <p>Không tìm thấy trang phục nào phù hợp với bộ lọc.</p>
+        <p>${tr('skNoMatch')}</p>
       </div>
     `;
     return;
@@ -761,8 +762,8 @@ function renderGridCards(skins) {
     let priceHtml = '';
     if (skin.price) {
       priceHtml = `
-        <span class="gallery-card-price tabular-nums" title="Giá: ${skin.price} ${skin.currency || 'Vé Trang Phục'}">
-          <img src="/assets/items/itemicon_8.png" alt="Vé" class="gallery-card-price-icon" />
+        <span class="gallery-card-price tabular-nums" title="${tr('skPrice').replace('{p}', skin.price).replace('{c}', skin.currency || tr('skTicket'))}">
+          <img src="/assets/items/itemicon_8.png" alt="${tr('skTicketAlt')}" class="gallery-card-price-icon" />
           <span class="gallery-price-val">${skin.price}</span>
         </span>
       `;
@@ -782,7 +783,7 @@ function renderGridCards(skins) {
             onerror="this.src='${skin.drawingUrl}'"
           />
           ${skin.seriesBadge ? `
-            <div class="gallery-card-series-badge ${isHighSkin ? 'is-highskin' : ''}" title="${isHighSkin ? 'Trang phục cao cấp - ' : ''}Dòng y phục: ${seriesTitle}">
+            <div class="gallery-card-series-badge ${isHighSkin ? 'is-highskin' : ''}" title="${isHighSkin ? tr('skHighDash') : ''}${tr('skSeriesOf').replace('{n}', seriesTitle)}">
               <img 
                 src="${skin.seriesBadge}" 
                 alt="${seriesTitle}" 
@@ -1039,15 +1040,15 @@ function setupHeroSpotlight(container, highSkins, gameData) {
       charLinkEl.href = `#/characters/${char.slug || char.id || skin.charId}`;
     }
     // Lore text is updated via the lore reveal system, not raw textContent
-    if (valObtainEl) valObtainEl.textContent = skin.obtainVi || 'Bán qua gói quà';
-    if (valPriceEl) valPriceEl.textContent = skin.price ? `${skin.price} ${skin.currency}` : 'Giới hạn';
+    if (valObtainEl) valObtainEl.textContent = skin.obtainVi || tr('skObtainGift');
+    if (valPriceEl) valPriceEl.textContent = skin.price ? `${skin.price} ${skin.currency}` : tr('skLimitedPrice');
     if (ctaBtn) {
       ctaBtn.href = `#/skins/${skin.skinId}`;
-      ctaBtn.setAttribute('title', `Xem chi tiết trang phục ${skin.nameVi}`);
+      ctaBtn.setAttribute('title', tr('skViewDetailN').replace('{n}', skin.nameVi));
     }
     if (seriesBadgeEl) {
       seriesBadgeEl.src = skin.seriesBadge || `/assets/series/skinlogo_${skin.seriesId || 220}.png`;
-      seriesBadgeEl.alt = skin.seriesNameVi || skin.seriesNameCn || 'Trang Phục Cao Cấp';
+      seriesBadgeEl.alt = skin.seriesNameVi || skin.seriesNameCn || tr('skHighAlt');
     }
     if (counterEl) {
       counterEl.textContent = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
@@ -1439,7 +1440,7 @@ function setupEventListeners(container, skins, seriesMetaMap, highSkins, gameDat
         summaryEl.innerHTML = '';
       } else {
         const item = ACQUISITION_TAXONOMY.find(t => t.id === selectedAcquisition);
-        const label = item ? item.label : selectedAcquisition;
+        const label = item ? tr(item.key) : selectedAcquisition;
         summaryEl.innerHTML = `<span class="gallery-filter-active-dot" aria-hidden="true"></span><span class="gallery-filter-active-text"> ${label}</span>`;
       }
     }

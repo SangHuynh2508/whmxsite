@@ -61,6 +61,105 @@ const vi = {
   bnType: 'Loại', bnYear: 'Năm', bnNoMatch: 'Không có banner nào khớp bộ lọc.', bnEnded: 'Đã kết thúc · chờ bản cập nhật',
   bnChoice: 'Tự chọn trong {n} Khí Giả', bnCue: 'Xem Khí Giả ›', bnVersion: 'Phiên bản {n}',
   tmDH: '{d} ngày {h} giờ', tmHM: '{h} giờ {m} phút', tmM: '{m} phút', tmLt: '< 1 phút',
+  skAllSrc: 'Tất Cả Nguồn',
+  skTicket: 'Vé Trang Phục',
+  skHigh: 'Cao Cấp',
+  skTravel: 'Du Lịch',
+  skEvent: 'Sự Kiện',
+  skShop: 'Cửa Hàng',
+  skTraining: 'Tập Huấn',
+  skStory: 'Cốt Truyện',
+  skFree: 'Miễn Phí',
+  sortDate: 'Mới ra mắt gần đây',
+  sortName: 'Tên trang phục (A-Z)',
+  sortChar: 'Tên Khí Giả (A-Z)',
+  sortPrice: 'Giá vé (Thấp đến Cao)',
+  sortId: 'Theo mã trang phục',
+  skPrice: 'Giá: {p} {c}',
+  skHighFull: 'Trang phục cao cấp (Bán giới hạn qua gói quà)',
+  skFullStory: 'Mở khóa sau khi hoàn thành cốt truyện',
+  skFullTraining: 'Nhận được thông qua Chợ Tập Huấn',
+  skFullTravel: 'Nhận được thông qua Du Lịch',
+  skFullZhenji: 'Nhận được qua Trân Tập Dịch Thị',
+  skFullShop: 'Bán giới hạn tại Cửa Hàng Trang Phục',
+  skFullBook: 'Nhận được qua phần thưởng hẹn trước',
+  skFullHuaChao: 'Nhận được qua hoạt động Hoa Triêu Tích Thời',
+  skFullXieYun: 'Nhận được qua hoạt động Hiệp Vận Hành Ca',
+  skFullEvent: 'Nhận được thông qua hoạt động',
+  skFullFree: 'Quà tặng trứng phục sinh (彩蛋赠送)',
+  skFullOther: 'Cách thức sở hữu đặc biệt',
+  skObtainDefault: 'Bán tại Cửa Hàng / Sự Kiện',
+  skObtainGift: 'Bán qua gói quà',
+  skLimitedPrice: 'Giới hạn',
+  skLoading: 'Đang tải dữ liệu thư viện trang phục...',
+  skAllChars: 'Tất cả Khí Giả',
+  skMuseum: 'BẢO TÀNG VẬT HOA DI TÂN • THƯ VIỆN TRANG PHỤC',
+  skTitle: 'Bộ Sưu Tập Y Phục Khí Giả',
+  skIntro: 'Khám phá 145 trang phục đặc biệt ghi dấu điển cố lịch sử, phong vị bốn mùa và nghệ thuật cổ vật ngàn năm.',
+  skHeroAria: 'Triển lãm tiêu điểm trang phục cao cấp',
+  skAppraisal: 'HỒ SƠ GIÁM ĐỊNH',
+  skSpotBadge: 'TIÊU ĐIỂM CAO CẤP',
+  skSeriesOf: 'Dòng y phục: {n}',
+  skSeriesLogo: 'Logo dòng y phục',
+  skObtain: 'Cách thức sở hữu',
+  skFactoryPrice: 'Giá xuất xưởng',
+  skViewDetail: 'Xem chi tiết trang phục',
+  skViewDetailN: 'Xem chi tiết trang phục {n}',
+  skSpotNav: 'Điều hướng tiêu điểm cao cấp',
+  skSpotPrev: 'Trang phục tiêu điểm trước',
+  skSpotNext: 'Trang phục tiêu điểm kế tiếp',
+  skSpotProgress: 'Tiến trình tiêu điểm',
+  skSpotGo: 'Chuyển đến tiêu điểm {n}',
+  skZoomDrawing: 'Nhấn để xem ảnh phóng to (Drawing)',
+  skZoomHero: 'Xem ảnh phóng to trang phục tiêu điểm',
+  skSpotExhibit: 'TIÊU ĐIỂM TRIỂN LÃM',
+  skToolbar: 'Bộ lọc và tìm kiếm trang phục',
+  skSearch: 'Tìm theo tên trang phục, Khí Giả...',
+  skFilterChar: 'Lọc theo Khí Giả',
+  skSortAria: 'Sắp xếp trang phục',
+  skAcqTitle: 'Phương thức sở hữu',
+  skSeriesTitle: 'Dòng Y Phục',
+  skCabinet: 'Tủ dòng y phục',
+  skAllSeries: 'Tất Cả Series ({n})',
+  skGridLabel: 'Danh sách trang phục',
+  skZoomAria: 'Xem ảnh phóng to',
+  skCloseEsc: 'Đóng (Escape)',
+  skZoomAlt: 'Trang phục phóng to',
+  skCount: 'Hiển thị {n} / {m} trang phục',
+  skNoMatch: 'Không tìm thấy trang phục nào phù hợp với bộ lọc.',
+  skTicketAlt: 'Vé',
+  skHighDash: 'Trang phục cao cấp - ',
+  skHighAlt: 'Trang Phục Cao Cấp',
+  skLoreDefault: 'Chế tác mô phỏng dáng hình kiệt tác. Nét vẽ thanh thoát, thần thái tôn nghiêm, toát lên phong vận hội họa cổ truyền đỉnh cao.',
+  sdLoading: 'Đang tải dữ liệu trang phục...',
+  sdNotFound: 'Không tìm thấy trang phục',
+  sdNotFoundText: 'Mã trang phục "{id}" không tồn tại hoặc chưa được phát hành.',
+  sdBack: '← Quay lại Thư Viện Trang Phục',
+  sdLibrary: 'Thư Viện Trang Phục',
+  sdEventFree: 'Sự kiện / Miễn phí',
+  sdNoInfo: 'Chưa có thông tin',
+  sdNav: 'Điều hướng trang phục',
+  sdHeroAria: 'Hình ảnh tiêu điểm trang phục',
+  sdZoomHint: 'Nhấn để xem ảnh phóng to',
+  sdDossier: 'Hồ Sơ Giám Định Trang Phục',
+  sdOwner: 'Khí Giả sở hữu:',
+  sdCost: 'Chi phí / Tiền tệ:',
+  sdRelease: 'Thời điểm phát hành:',
+  sdClass: 'Phân loại y phục:',
+  sdHighType: 'Trang Phục Tương Tác Cao Cấp',
+  sdNormalType: 'Trang Phục Thường',
+  sdSeries: 'Dòng y phục (Series):',
+  sdCv: 'Diễn viên lồng tiếng (CV):',
+  sdAssets: 'Bộ Tài Nguyên Hình Ảnh',
+  sdDrawing: 'Toàn Cảnh (Drawing)',
+  sdDrawingSub: 'Đồ họa toàn thân độ phân giải cao • Nhấn để xem toàn màn hình',
+  sdDrawingAria: 'Xem ảnh phóng to Toàn Cảnh',
+  sdCard: 'Thẻ Bài (Card)',
+  sdCardSub: 'Hình dạng thẻ bài trong giao diện tra cứu • Nhấn để xem',
+  sdCardAria: 'Xem ảnh phóng to Thẻ Bài',
+  sdAvatar: 'Chân Dung (Avatar)',
+  sdAvatarSub: 'Ảnh đại diện khí giả khi khoác y phục • Nhấn để xem',
+  sdAvatarAria: 'Xem ảnh phóng to Chân Dung',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -126,6 +225,105 @@ const cn: Record<StringKey, string> = {
   bnType: '类型', bnYear: '年份', bnNoMatch: '没有符合筛选的卡池。', bnEnded: '已结束 · 等待更新', // draft
   bnChoice: '{n}位器者自选', bnCue: '查看器者 ›', bnVersion: '版本 {n}', // draft
   tmDH: '{d}天{h}小时', tmHM: '{h}小时{m}分', tmM: '{m}分钟', tmLt: '不到1分钟', // draft
+  skAllSrc: '全部来源', // draft
+  skTicket: '装束券', // draft
+  skHigh: '高级', // draft
+  skTravel: '游历', // draft
+  skEvent: '活动', // draft
+  skShop: '商店', // draft
+  skTraining: '集训', // draft
+  skStory: '剧情', // draft
+  skFree: '免费', // draft
+  sortDate: '最近上线', // draft
+  sortName: '装束名称 (A-Z)', // draft
+  sortChar: '器者名称 (A-Z)', // draft
+  sortPrice: '券价 (低到高)', // draft
+  sortId: '按装束编号', // draft
+  skPrice: '价格：{p} {c}', // draft
+  skHighFull: '高级装束（礼包限量发售）', // draft
+  skFullStory: '通关剧情后解锁', // draft
+  skFullTraining: '通过集训集市获得', // draft
+  skFullTravel: '通过游历获得', // draft
+  skFullZhenji: '通过珍集易市获得', // draft
+  skFullShop: '装束商店限量发售', // draft
+  skFullBook: '通过预约奖励获得', // draft
+  skFullHuaChao: '通过活动“花朝昔时”获得', // draft
+  skFullXieYun: '通过活动“协韵行歌”获得', // draft
+  skFullEvent: '通过活动获得', // draft
+  skFullFree: '彩蛋赠送', // draft
+  skFullOther: '特殊获取方式', // draft
+  skObtainDefault: '商店 / 活动发售', // draft
+  skObtainGift: '礼包发售', // draft
+  skLimitedPrice: '限定', // draft
+  skLoading: '正在加载装束图库数据...', // draft
+  skAllChars: '全部器者', // draft
+  skMuseum: '物华弥新博物馆 • 装束图库', // draft
+  skTitle: '器者装束收藏', // draft
+  skIntro: '探索145款特别装束，记录历史典故、四时风物与千年古物之美。', // draft
+  skHeroAria: '高级装束焦点展览', // draft
+  skAppraisal: '鉴定档案', // draft
+  skSpotBadge: '高级焦点', // draft
+  skSeriesOf: '装束系列：{n}', // draft
+  skSeriesLogo: '装束系列标志', // draft
+  skObtain: '获取方式', // draft
+  skFactoryPrice: '出厂价', // draft
+  skViewDetail: '查看装束详情', // draft
+  skViewDetailN: '查看装束详情 {n}', // draft
+  skSpotNav: '高级焦点导航', // draft
+  skSpotPrev: '上一个焦点装束', // draft
+  skSpotNext: '下一个焦点装束', // draft
+  skSpotProgress: '焦点进度', // draft
+  skSpotGo: '跳转到焦点 {n}', // draft
+  skZoomDrawing: '点击查看大图（立绘）', // draft
+  skZoomHero: '查看焦点装束大图', // draft
+  skSpotExhibit: '展览焦点', // draft
+  skToolbar: '装束筛选与搜索', // draft
+  skSearch: '按装束、器者名称搜索...', // draft
+  skFilterChar: '按器者筛选', // draft
+  skSortAria: '装束排序', // draft
+  skAcqTitle: '获取方式', // draft
+  skSeriesTitle: '装束系列', // draft
+  skCabinet: '装束系列柜', // draft
+  skAllSeries: '全部系列 ({n})', // draft
+  skGridLabel: '装束列表', // draft
+  skZoomAria: '查看大图', // draft
+  skCloseEsc: '关闭 (Escape)', // draft
+  skZoomAlt: '装束大图', // draft
+  skCount: '显示 {n} / {m} 款装束', // draft
+  skNoMatch: '没有符合筛选的装束。', // draft
+  skTicketAlt: '券', // draft
+  skHighDash: '高级装束 - ', // draft
+  skHighAlt: '高级装束', // draft
+  skLoreDefault: '仿照杰作神韵而制，笔意清逸，神态庄严，尽显传统绘画的巅峰风韵。', // draft
+  sdLoading: '正在加载装束数据...', // draft
+  sdNotFound: '未找到装束', // draft
+  sdNotFoundText: '装束编号“{id}”不存在或尚未上线。', // draft
+  sdBack: '← 返回装束图库', // draft
+  sdLibrary: '装束图库', // draft
+  sdEventFree: '活动 / 免费', // draft
+  sdNoInfo: '暂无信息', // draft
+  sdNav: '装束导航', // draft
+  sdHeroAria: '装束焦点图', // draft
+  sdZoomHint: '点击查看大图', // draft
+  sdDossier: '装束鉴定档案', // draft
+  sdOwner: '所属器者：', // draft
+  sdCost: '费用 / 货币：', // draft
+  sdRelease: '发布时间：', // draft
+  sdClass: '装束分类：', // draft
+  sdHighType: '高级互动装束', // draft
+  sdNormalType: '普通装束', // draft
+  sdSeries: '装束系列：', // draft
+  sdCv: '配音演员 (CV)：', // draft
+  sdAssets: '图像资源', // draft
+  sdDrawing: '全身立绘 (Drawing)', // draft
+  sdDrawingSub: '高清全身图 • 点击全屏查看', // draft
+  sdDrawingAria: '查看全身立绘大图', // draft
+  sdCard: '卡面 (Card)', // draft
+  sdCardSub: '查阅界面中的卡面样式 • 点击查看', // draft
+  sdCardAria: '查看卡面大图', // draft
+  sdAvatar: '头像 (Avatar)', // draft
+  sdAvatarSub: '器者穿上装束后的头像 • 点击查看', // draft
+  sdAvatarAria: '查看头像大图', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];
