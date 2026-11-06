@@ -2,7 +2,7 @@ import json
 import openpyxl
 from pathlib import Path
 
-from asset_publish_manifest import load_manifest, manifest_path, require_asset_url
+from asset_publish_manifest import load_manifest, manifest_path, object_key, public_url, require_asset_url
 
 from export_localization_json import export as export_master_localization
 
@@ -56,16 +56,27 @@ def build_exact_filename_index(asset_dir, asset_label):
         casefold[folded] = name
     return exact, casefold
 
+def _published(manifest, cid, category, name):
+    return object_key(cid, category, name) in manifest["assets"]
+
 def archive_urls(assets_root, cid, manifest):
-    """Archive (hiện vật) image URLs on R2, or None when the character has no archive folder / pair."""
+    """Archive (hiện vật) image URLs on R2, or None when the pair is neither local nor published.
+    The R2 manifest is the authority (local NeoArtifacts images get pruned); a local pair must be published."""
     folder = Path(assets_root) / "characters" / cid / "archive"
-    image, head = folder / f"{cid.lower()}.png", folder / f"head_{cid.lower()}.png"
-    if not (image.exists() and head.exists()):
+    names = (f"{cid.lower()}.png", f"head_{cid.lower()}.png")
+    local = all((folder / n).exists() for n in names)
+    if not local and not all(_published(manifest, cid, "archive", n) for n in names):
         return None
-    return {
-        "image": require_asset_url(manifest, cid, "archive", image.name),
-        "head": require_asset_url(manifest, cid, "archive", head.name),
-    }
+    image, head = (require_asset_url(manifest, cid, "archive", n) for n in names)
+    return {"image": image, "head": head}
+
+def card_urls(assets_root, cid, manifest):
+    """Card URLs: every published card of the character, plus a loud failure for an unpublished local card."""
+    card_dir = Path(assets_root) / "characters" / cid / "card"
+    for card in card_dir.glob("*.png"):
+        require_asset_url(manifest, cid, "card", card.name)
+    prefix = object_key(cid, "card", "x.png").rsplit("/", 1)[0] + "/"
+    return [public_url(manifest["public_base_url"], k) for k in sorted(manifest["assets"]) if k.startswith(prefix)]
 
 def load_json(name):
     return json.loads((MASTER / name).read_text(encoding="utf-8"))
@@ -436,6 +447,19 @@ def build():
                         all_skills[key] = v
                     elif v.get("Attr") and not all_skills[key].get("Attr"):
                         all_skills[key] = v
+
+    # Owner-approved fixes for typos in raw skill params (raw MasterData stays untouched).
+    # A014204 Lv2 ships "1.4,30" (two values); Lv1 "1,5,20" / Lv3 "1,3,40" → "1,4,30" (owner 2026-11-06).
+    RAW_PARAM_FIXES = {("A014204", 2): {"Effect1Para": "1,4,30"}}
+    for (gid, lvl), fields in RAW_PARAM_FIXES.items():
+        rec = all_skills.get((gid, lvl))
+        if rec and isinstance(rec.get("Attr"), list):
+            attr = [list(item) if isinstance(item, list) else item for item in rec["Attr"]]
+            for item in attr:
+                if isinstance(item, list) and item and item[0].split(",")[0] in fields:
+                    name, typ = item[0].split(",")[:2]
+                    item[0] = f"{name},{typ},{fields[name]}"
+            all_skills[(gid, lvl)] = {**rec, "Attr": attr}
 
     def parse_attr(attr_list):
         attr_dict = {}
@@ -1581,12 +1605,8 @@ def build():
     print("Resolving published character cards...")
     char_cards = {}
     for cid in sorted(char_table_raw):
-        card_dir = MASTER.parent.parent / "Assets" / "characters" / cid / "card"
-        if card_dir.exists():
-            char_cards[cid] = [
-                require_asset_url(remote_asset_manifest, cid, "card", card.name)
-                for card in sorted(card_dir.glob("*.png"), key=lambda item: item.name)
-            ]
+        if cards := card_urls(MASTER.parent.parent / "Assets", cid, remote_asset_manifest):
+            char_cards[cid] = cards
 
     SERIES_MAP_CN = {
         202: "新春",

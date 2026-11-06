@@ -301,7 +301,8 @@ def main() -> int:
         if args.dry_run:
             return 0
 
-        entries: dict[str, dict[str, Any]] = {}
+        # Keep published entries whose local source is gone (NeoArtifacts images are pruned between releases).
+        entries: dict[str, dict[str, Any]] = dict(existing_assets)
         uploaded = skipped = 0
         optimized_by_key = {asset["key"]: asset for asset in optimized}
         for asset in discovered:

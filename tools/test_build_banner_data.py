@@ -39,6 +39,16 @@ class BuildBannerDataTest(unittest.TestCase):
         self.assertEqual(out["2114"]["art"], "banners/2114.webp")
         self.assertIsNone(out["5003"]["art"])
 
+    def test_art_already_published_is_kept_without_local_png(self):
+        published = {"banners/2114.webp", "banners/title/2114.webp"}
+        out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path("/nonexistent"), published)}
+        self.assertEqual((out["2114"]["art"], out["2114"]["title"]), ("banners/2114.webp", "banners/title/2114.webp"))
+        self.assertIsNone(out["5003"]["art"])
+
+    def test_published_art_read_from_previous_document(self):
+        doc = {"hero": {"art": "kv/KV1.webp"}, "banners": [{"art": "banners/1.webp", "title": None}]}
+        self.assertEqual(b.published_art(doc), {"kv/KV1.webp", "banners/1.webp"})
+
     def test_title_logo_only_when_extracted_png_exists(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "PoolIcon_2114.png").write_bytes(b"x")

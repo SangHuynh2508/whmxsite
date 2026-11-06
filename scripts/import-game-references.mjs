@@ -22,7 +22,8 @@ import { hashValue, sha256 } from './lib/profile-source.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const MASTER = resolve(ROOT, '..', 'NeoArtifacts', 'MasterData', 'json');
-const ICONS = resolve(ROOT, '..', 'NeoArtifacts', 'Assets', 'ItemIcons');
+// The icons the site actually serves (NeoArtifacts image folders are pruned between releases).
+const ICONS = join(ROOT, 'public', 'assets', 'items');
 const FIXTURES = join(ROOT, 'scripts', 'fixtures', 'masterdata');
 
 function loadTables({ fixtures, masterRoot, iconRoot }) {

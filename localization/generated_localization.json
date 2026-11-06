@@ -1873,6 +1873,26 @@
       "tags_cn": "远程;追击;增益;控制",
       "tags_vi": "Viễn Chiến; Truy Kích; Buff; Khống Chế",
       "status": "APPROVED"
+    },
+    "A0142": {
+      "name_cn": "星形石",
+      "name_vi": "Tinh Hình Thạch",
+      "fullname_cn": "星形石",
+      "fullname_vi": "Tinh Hình Thạch",
+      "nickname_vi": "",
+      "tags_cn": "远程;输出;爆发",
+      "tags_vi": "Viễn Chiến; Sát Thương; Bạo Phát",
+      "status": "APPROVED"
+    },
+    "S0186": {
+      "name_cn": "金翅鸟",
+      "name_vi": "Kim Sí Điểu",
+      "fullname_cn": "银鎏金嵌珠金翅鸟立像",
+      "fullname_vi": "Ngân Lưu Kim Khảm Châu Kim Sí Điểu Lập Tượng",
+      "nickname_vi": "",
+      "tags_cn": "远程;输出;爆发",
+      "tags_vi": "Viễn Chiến; Sát Thương; Bạo Phát",
+      "status": "APPROVED"
     }
   },
   "skills": {
@@ -26130,6 +26150,402 @@
       "desc_cn": "进入战斗后，自身获得<color=#158bdb>1</color>层<color=#ff6724>和鸣</color>状态；\n我方全体对处于控制状态的敌方单位造成的伤害提高<color=#158bdb>40%</color>；\n自身每次行动开始前，刷新自身属性增益类状态的持续时间；\n自身使用绝技后，获得<color=#ff6724>即兴秀</color>状态，此效果每轮次最多可触发<color=#158bdb>2</color>次；\n自身使用职业技能前，获得<color=#158bdb>1</color>层<color=#ff6724>拟具</color>状态；\n职业技能蓄力结束后，立即获得额外行动<color=#158bdb>1</color>次，此效果每轮次最多可触发<color=#158bdb>1</color>次；\n职业技能对敌方单位造成伤害后，使其获得持续<color=#158bdb>1</color>回合的<color=#ff6724>眩晕</color>状态；\n使用职业技能后，自身获得<color=#158bdb>2</color>层被动技能<color=#ff6724>排练</color>中的速度增加<color=#158bdb>30</color>的效果，此效果每轮次最多可触发<color=#158bdb>2</color>次；\n使用职业技能后，使自身<color=#158bdb>十字方向3格</color>内的敌方全体获得<color=#ff6724>震怒</color>状态，且自身获得<color=#158bdb>2</color>层<color=#ff6724>小把戏</color>状态，此效果每轮次最多可触发<color=#158bdb>2</color>次。\n{Buff_W0079_HzPublic_Buff1_Effect1}{Buff_W0079_HzPublic_Buff2}{Buff_W0079_HzPublic_Buff3}",
       "desc_vi": "Sau khi vào trận, bản thân nhận <color=#158bdb>1</color> tầng <color=#ff6724>Hòa Minh</color>;\nSát thương toàn bộ phe ta gây lên đơn vị địch đang bị khống chế tăng <color=#158bdb>40%</color>;\nTrước mỗi lần bản thân bắt đầu hành động, làm mới thời gian hiệu lực của các trạng thái có lợi thuộc loại tăng thuộc tính của bản thân;\nSau khi bản thân dùng Tuyệt Kỹ, nhận <color=#ff6724>Tức Hứng Tú</color>; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>2</color> lần;\nTrước khi bản thân dùng Kỹ Năng Nghề, nhận <color=#158bdb>1</color> tầng <color=#ff6724>Nghĩ Cụ</color>;\nSau khi Kỹ Năng Nghề kết thúc Súc Lực, lập tức nhận <color=#158bdb>1</color> lần hành động bổ sung; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần;\nSau khi Kỹ Năng Nghề gây sát thương lên đơn vị địch, khiến mục tiêu nhận trạng thái <color=#ff6724>Choáng</color> kéo dài <color=#158bdb>1</color> lượt;\nSau khi dùng Kỹ Năng Nghề, bản thân nhận <color=#158bdb>2</color> tầng hiệu ứng tăng <color=#158bdb>30</color> Tốc Độ của nội tại <color=#ff6724>Bài Luyện</color>; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>2</color> lần;\nSau khi dùng Kỹ Năng Nghề, khiến toàn bộ địch trong <color=#158bdb>3 ô theo hướng chữ thập</color> quanh bản thân nhận trạng thái <color=#ff6724>Chấn Nộ</color>, đồng thời bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tiểu Bả Hí</color>; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>2</color> lần.\n{Buff_W0079_HzPublic_Buff1_Effect1}{Buff_W0079_HzPublic_Buff2}{Buff_W0079_HzPublic_Buff3}",
       "status": "APPROVED"
+    },
+    "A014201_1": {
+      "character_id": "A0142",
+      "group_id": "A014201",
+      "skill_name_cn": "琢胚",
+      "skill_name_vi": "Trác Phôi",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "A014201_2": {
+      "character_id": "A0142",
+      "group_id": "A014201",
+      "skill_name_cn": "琢胚",
+      "skill_name_vi": "Trác Phôi",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "A014201_3": {
+      "character_id": "A0142",
+      "group_id": "A014201",
+      "skill_name_cn": "琢胚",
+      "skill_name_vi": "Trác Phôi",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "A014201_4": {
+      "character_id": "A0142",
+      "group_id": "A014201",
+      "skill_name_cn": "琢胚",
+      "skill_name_vi": "Trác Phôi",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "A014201_5": {
+      "character_id": "A0142",
+      "group_id": "A014201",
+      "skill_name_cn": "琢胚",
+      "skill_name_vi": "Trác Phôi",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "A014202_1": {
+      "character_id": "A0142",
+      "group_id": "A014202",
+      "skill_name_cn": "黑星流坠",
+      "skill_name_vi": "Hắc Tinh Lưu Trụy",
+      "desc_cn": "对选定的敌方单体及其<color=#158bdb>周围2格</color>的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害并使其获得<color=#ff6724>禁足</color>状态；\n使用绝技后，自身立即获得再行动<color=#158bdb>1</color>次。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị địch được chọn và toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> mục tiêu, đồng thời khiến chúng nhận trạng thái <color=#ff6724>Cấm Túc</color>;\nSau khi dùng Tuyệt Kỹ, bản thân lập tức nhận <color=#158bdb>1</color> lần Tái Hành Động.",
+      "status": "APPROVED"
+    },
+    "A014202_2": {
+      "character_id": "A0142",
+      "group_id": "A014202",
+      "skill_name_cn": "黑星流坠",
+      "skill_name_vi": "Hắc Tinh Lưu Trụy",
+      "desc_cn": "对选定的敌方单体及其<color=#158bdb>周围2格</color>的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害并使其获得<color=#ff6724>禁足</color>状态；\n使用绝技后，自身立即获得再行动<color=#158bdb>1</color>次。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị địch được chọn và toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> mục tiêu, đồng thời khiến chúng nhận trạng thái <color=#ff6724>Cấm Túc</color>;\nSau khi dùng Tuyệt Kỹ, bản thân lập tức nhận <color=#158bdb>1</color> lần Tái Hành Động.",
+      "status": "APPROVED"
+    },
+    "A014202_3": {
+      "character_id": "A0142",
+      "group_id": "A014202",
+      "skill_name_cn": "黑星流坠",
+      "skill_name_vi": "Hắc Tinh Lưu Trụy",
+      "desc_cn": "对选定的敌方单体及其<color=#158bdb>周围2格</color>的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害并使其获得<color=#ff6724>禁足</color>状态；\n使用绝技后，自身立即获得再行动<color=#158bdb>1</color>次。",
+      "desc_vi": "Gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên đơn vị địch được chọn và toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> mục tiêu, đồng thời khiến chúng nhận trạng thái <color=#ff6724>Cấm Túc</color>;\nSau khi dùng Tuyệt Kỹ, bản thân lập tức nhận <color=#158bdb>1</color> lần Tái Hành Động.",
+      "status": "APPROVED"
+    },
+    "A014203_1": {
+      "character_id": "A0142",
+      "group_id": "A014203",
+      "skill_name_cn": "锋锐星石",
+      "skill_name_vi": "Phong Duệ Tinh Thạch",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>1</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>1</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2}",
+      "status": "APPROVED"
+    },
+    "A014203_2": {
+      "character_id": "A0142",
+      "group_id": "A014203",
+      "skill_name_cn": "锋锐星石",
+      "skill_name_vi": "Phong Duệ Tinh Thạch",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2}",
+      "status": "APPROVED"
+    },
+    "A014203_3": {
+      "character_id": "A0142",
+      "group_id": "A014203",
+      "skill_name_cn": "锋锐星石",
+      "skill_name_vi": "Phong Duệ Tinh Thạch",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>3</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>3</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2}",
+      "status": "APPROVED"
+    },
+    "A014203ex_1": {
+      "character_id": "A0142",
+      "group_id": "A014203ex",
+      "skill_name_cn": "锋锐星石-超群",
+      "skill_name_vi": "Phong Duệ Tinh Thạch - Siêu Quần",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2ex}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2ex}",
+      "status": "APPROVED"
+    },
+    "A014203ex_2": {
+      "character_id": "A0142",
+      "group_id": "A014203ex",
+      "skill_name_cn": "锋锐星石-超群",
+      "skill_name_vi": "Phong Duệ Tinh Thạch - Siêu Quần",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>4</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2ex}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>4</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2ex}",
+      "status": "APPROVED"
+    },
+    "A014203ex_3": {
+      "character_id": "A0142",
+      "group_id": "A014203ex",
+      "skill_name_cn": "锋锐星石-超群",
+      "skill_name_vi": "Phong Duệ Tinh Thạch - Siêu Quần",
+      "desc_cn": "进入战斗后，自身暴击率提升至<color=#158bdb>2</color>倍；\n自身每回合开始时，若自身暴击率超过<color=#158bdb>100%</color>，则暴击率每超出<color=#158bdb>1%</color>，使自身造成的物理伤害提高<color=#158bdb>1%</color>，此效果持续至该回合结束；\n自身对受击敌方单位造成技能伤害前，使其获得<color=#158bdb>6</color>层<color=#ff6724>细磨</color>状态。{Buff_A0142_M_2ex}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng lên <color=#158bdb>2</color> lần;\nMỗi đầu lượt của bản thân, nếu Tỷ Lệ Bạo Kích vượt quá <color=#158bdb>100%</color>, cứ mỗi <color=#158bdb>1%</color> Tỷ Lệ Bạo Kích vượt quá, Sát Thương Vật Lý do bản thân gây ra tăng <color=#158bdb>1%</color>, hiệu ứng kéo dài đến hết lượt đó;\nTrước khi bản thân gây sát thương kỹ năng lên đơn vị địch trúng đòn, khiến mục tiêu nhận <color=#158bdb>6</color> tầng <color=#ff6724>Tế Ma</color>.{Buff_A0142_M_2ex}",
+      "status": "APPROVED"
+    },
+    "A014204_1": {
+      "character_id": "A0142",
+      "group_id": "A014204",
+      "skill_name_cn": "精研细磨",
+      "skill_name_vi": "Tinh Nghiên Tế Ma",
+      "desc_cn": "自身使用职业技能进入蓄力时，使技能范围内的敌方全体获得<color=#ff6724>磨石</color>状态，并使自身在<color=#158bdb>2</color>回合内暴击率增加<color=#158bdb>[Effect1Para,3]%</color>；\n自身职业技能的<color=#158bdb>1</color>次蓄力时间内，若敌方全体<color=#ff6724>细磨</color>状态累计消耗至<color=#158bdb>[Effect1Para,2]</color>层，则自身立即获得额外回合<color=#158bdb>1</color>次。{Buff_A0142_M_1}",
+      "desc_vi": "Khi bản thân dùng Kỹ Năng Nghề và bắt đầu Súc Lực, khiến toàn bộ địch trong phạm vi kỹ năng nhận trạng thái <color=#ff6724>Ma Thạch</color>, đồng thời Tỷ Lệ Bạo Kích của bản thân tăng <color=#158bdb>[Effect1Para,3]%</color> trong <color=#158bdb>2</color> lượt;\nTrong <color=#158bdb>1</color> lần Súc Lực của Kỹ Năng Nghề, nếu tổng số tầng <color=#ff6724>Tế Ma</color> mà toàn bộ địch đã tiêu hao đạt <color=#158bdb>[Effect1Para,2]</color> tầng, bản thân lập tức nhận <color=#158bdb>1</color> lượt bổ sung.{Buff_A0142_M_1}",
+      "status": "APPROVED"
+    },
+    "A014204_2": {
+      "character_id": "A0142",
+      "group_id": "A014204",
+      "skill_name_cn": "精研细磨",
+      "skill_name_vi": "Tinh Nghiên Tế Ma",
+      "desc_cn": "自身使用职业技能进入蓄力时，使技能范围内的敌方全体获得<color=#ff6724>磨石</color>状态，并使自身在<color=#158bdb>2</color>回合内暴击率增加<color=#158bdb>[Effect1Para,3]%</color>；\n自身职业技能的<color=#158bdb>1</color>次蓄力时间内，若敌方全体<color=#ff6724>细磨</color>状态累计消耗至<color=#158bdb>[Effect1Para,2]</color>层，则自身立即获得额外回合<color=#158bdb>1</color>次。{Buff_A0142_M_1}",
+      "desc_vi": "Khi bản thân dùng Kỹ Năng Nghề và bắt đầu Súc Lực, khiến toàn bộ địch trong phạm vi kỹ năng nhận trạng thái <color=#ff6724>Ma Thạch</color>, đồng thời Tỷ Lệ Bạo Kích của bản thân tăng <color=#158bdb>[Effect1Para,3]%</color> trong <color=#158bdb>2</color> lượt;\nTrong <color=#158bdb>1</color> lần Súc Lực của Kỹ Năng Nghề, nếu tổng số tầng <color=#ff6724>Tế Ma</color> mà toàn bộ địch đã tiêu hao đạt <color=#158bdb>[Effect1Para,2]</color> tầng, bản thân lập tức nhận <color=#158bdb>1</color> lượt bổ sung.{Buff_A0142_M_1}",
+      "status": "APPROVED"
+    },
+    "A014204_3": {
+      "character_id": "A0142",
+      "group_id": "A014204",
+      "skill_name_cn": "精研细磨",
+      "skill_name_vi": "Tinh Nghiên Tế Ma",
+      "desc_cn": "自身使用职业技能进入蓄力时，使技能范围内的敌方全体获得<color=#ff6724>磨石</color>状态，并使自身在<color=#158bdb>2</color>回合内暴击率增加<color=#158bdb>[Effect1Para,3]%</color>；\n自身职业技能的<color=#158bdb>1</color>次蓄力时间内，若敌方全体<color=#ff6724>细磨</color>状态累计消耗至<color=#158bdb>[Effect1Para,2]</color>层，则自身立即获得额外回合<color=#158bdb>1</color>次。{Buff_A0142_M_1}",
+      "desc_vi": "Khi bản thân dùng Kỹ Năng Nghề và bắt đầu Súc Lực, khiến toàn bộ địch trong phạm vi kỹ năng nhận trạng thái <color=#ff6724>Ma Thạch</color>, đồng thời Tỷ Lệ Bạo Kích của bản thân tăng <color=#158bdb>[Effect1Para,3]%</color> trong <color=#158bdb>2</color> lượt;\nTrong <color=#158bdb>1</color> lần Súc Lực của Kỹ Năng Nghề, nếu tổng số tầng <color=#ff6724>Tế Ma</color> mà toàn bộ địch đã tiêu hao đạt <color=#158bdb>[Effect1Para,2]</color> tầng, bản thân lập tức nhận <color=#158bdb>1</color> lượt bổ sung.{Buff_A0142_M_1}",
+      "status": "APPROVED"
+    },
+    "A014205_1": {
+      "character_id": "A0142",
+      "group_id": "A014205",
+      "skill_name_cn": "澜沧遗洞",
+      "skill_name_vi": "Lan Thương Di Động",
+      "desc_cn": "自身防御穿透提高<color=#158bdb>[Effect1Para,1]%</color>；\n自身使用职业技能后，获得<color=#158bdb>1</color>点能量；\n自身每回合开始时，若自身<color=#158bdb>周围2格</color>之外的地块存在敌方单位，则自身造成的暴击伤害提高<color=#158bdb>[Effect1Para,2]%</color>，职业技能造成的伤害提升<color=#158bdb>0.5</color>倍，此效果持续至该回合结束。",
+      "desc_vi": "Xuyên phòng ngự của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nSau khi bản thân dùng Kỹ Năng Nghề, nhận <color=#158bdb>1</color> điểm Năng Lượng;\nMỗi đầu lượt của bản thân, nếu trên các ô nằm ngoài <color=#158bdb>2 ô xung quanh</color> bản thân có đơn vị địch, Sát Thương Bạo Kích do bản thân gây ra tăng <color=#158bdb>[Effect1Para,2]%</color>, sát thương Kỹ Năng Nghề tăng thêm <color=#158bdb>0.5</color> lần, hiệu ứng kéo dài đến hết lượt đó.",
+      "status": "APPROVED"
+    },
+    "A014205_2": {
+      "character_id": "A0142",
+      "group_id": "A014205",
+      "skill_name_cn": "澜沧遗洞",
+      "skill_name_vi": "Lan Thương Di Động",
+      "desc_cn": "自身防御穿透提高<color=#158bdb>[Effect1Para,1]%</color>；\n自身使用职业技能后，获得<color=#158bdb>1</color>点能量；\n自身每回合开始时，若自身<color=#158bdb>周围2格</color>之外的地块存在敌方单位，则自身造成的暴击伤害提高<color=#158bdb>[Effect1Para,2]%</color>，职业技能造成的伤害提升<color=#158bdb>0.5</color>倍，此效果持续至该回合结束。",
+      "desc_vi": "Xuyên phòng ngự của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nSau khi bản thân dùng Kỹ Năng Nghề, nhận <color=#158bdb>1</color> điểm Năng Lượng;\nMỗi đầu lượt của bản thân, nếu trên các ô nằm ngoài <color=#158bdb>2 ô xung quanh</color> bản thân có đơn vị địch, Sát Thương Bạo Kích do bản thân gây ra tăng <color=#158bdb>[Effect1Para,2]%</color>, sát thương Kỹ Năng Nghề tăng thêm <color=#158bdb>0.5</color> lần, hiệu ứng kéo dài đến hết lượt đó.",
+      "status": "APPROVED"
+    },
+    "A014205_3": {
+      "character_id": "A0142",
+      "group_id": "A014205",
+      "skill_name_cn": "澜沧遗洞",
+      "skill_name_vi": "Lan Thương Di Động",
+      "desc_cn": "自身防御穿透提高<color=#158bdb>[Effect1Para,1]%</color>；\n自身使用职业技能后，获得<color=#158bdb>1</color>点能量；\n自身每回合开始时，若自身<color=#158bdb>周围2格</color>之外的地块存在敌方单位，则自身造成的暴击伤害提高<color=#158bdb>[Effect1Para,2]%</color>，职业技能造成的伤害提升<color=#158bdb>0.5</color>倍，此效果持续至该回合结束。",
+      "desc_vi": "Xuyên phòng ngự của bản thân tăng <color=#158bdb>[Effect1Para,1]%</color>;\nSau khi bản thân dùng Kỹ Năng Nghề, nhận <color=#158bdb>1</color> điểm Năng Lượng;\nMỗi đầu lượt của bản thân, nếu trên các ô nằm ngoài <color=#158bdb>2 ô xung quanh</color> bản thân có đơn vị địch, Sát Thương Bạo Kích do bản thân gây ra tăng <color=#158bdb>[Effect1Para,2]%</color>, sát thương Kỹ Năng Nghề tăng thêm <color=#158bdb>0.5</color> lần, hiệu ứng kéo dài đến hết lượt đó.",
+      "status": "APPROVED"
+    },
+    "A014211_1": {
+      "character_id": "A0142",
+      "group_id": "A014211",
+      "skill_name_cn": "土石之息",
+      "skill_name_vi": "Thổ Thạch Chi Tức",
+      "desc_cn": "选定自身<color=#158bdb>十字方向</color>内任意<color=#158bdb>1</color>个方向，蓄力<color=#158bdb>1</color>回合后，对该方向<color=#158bdb>前7排的3格</color>范围内的敌方全体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的物理伤害。",
+      "desc_vi": "Chọn <color=#158bdb>1</color> hướng bất kỳ trong <color=#158bdb>hướng chữ thập</color> quanh bản thân, sau <color=#158bdb>1</color> lượt Súc Lực, gây Sát Thương Vật Lý bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên toàn bộ địch trong <color=#158bdb>vùng 3 ô thuộc 7 hàng đầu</color> theo hướng đó.",
+      "status": "APPROVED"
+    },
+    "S018601_1": {
+      "character_id": "S0186",
+      "group_id": "S018601",
+      "skill_name_cn": "抟风",
+      "skill_name_vi": "Đoàn Phong",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的构素伤害。",
+      "desc_vi": "Gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "S018601_2": {
+      "character_id": "S0186",
+      "group_id": "S018601",
+      "skill_name_cn": "抟风",
+      "skill_name_vi": "Đoàn Phong",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的构素伤害。",
+      "desc_vi": "Gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "S018601_3": {
+      "character_id": "S0186",
+      "group_id": "S018601",
+      "skill_name_cn": "抟风",
+      "skill_name_vi": "Đoàn Phong",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的构素伤害。",
+      "desc_vi": "Gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "S018601_4": {
+      "character_id": "S0186",
+      "group_id": "S018601",
+      "skill_name_cn": "抟风",
+      "skill_name_vi": "Đoàn Phong",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的构素伤害。",
+      "desc_vi": "Gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "S018601_5": {
+      "character_id": "S0186",
+      "group_id": "S018601",
+      "skill_name_cn": "抟风",
+      "skill_name_vi": "Đoàn Phong",
+      "desc_cn": "对选定的敌方单体造成自身攻击力<color=#158bdb>[Effect1Para,1]%</color>的构素伤害。",
+      "desc_vi": "Gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,1]%</color> Tấn Công của bản thân lên một đơn vị địch được chọn.",
+      "status": "APPROVED"
+    },
+    "S018602_1": {
+      "character_id": "S0186",
+      "group_id": "S018602",
+      "skill_name_cn": "镇水金翼",
+      "skill_name_vi": "Trấn Thủy Kim Dực",
+      "desc_cn": "选定<color=#158bdb>1</color>个友方战略单位，使其获得<color=#ff6724>龙泽</color>状态；\n使用绝技后，自身获得<color=#ff6724>崇圣</color>和<color=#ff6724>佑众生</color>状态。{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "desc_vi": "Chọn <color=#158bdb>1</color> đơn vị Chiến Lược phe ta, khiến mục tiêu nhận trạng thái <color=#ff6724>Long Trạch</color>;\nSau khi dùng Tuyệt Kỹ, bản thân nhận trạng thái <color=#ff6724>Sùng Thánh</color> và <color=#ff6724>Hữu Chúng Sinh</color>.{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "status": "APPROVED"
+    },
+    "S018602_2": {
+      "character_id": "S0186",
+      "group_id": "S018602",
+      "skill_name_cn": "镇水金翼",
+      "skill_name_vi": "Trấn Thủy Kim Dực",
+      "desc_cn": "选定<color=#158bdb>1</color>个友方战略单位，使其获得<color=#ff6724>龙泽</color>状态；\n使用绝技后，自身获得<color=#ff6724>崇圣</color>和<color=#ff6724>佑众生</color>状态。{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "desc_vi": "Chọn <color=#158bdb>1</color> đơn vị Chiến Lược phe ta, khiến mục tiêu nhận trạng thái <color=#ff6724>Long Trạch</color>;\nSau khi dùng Tuyệt Kỹ, bản thân nhận trạng thái <color=#ff6724>Sùng Thánh</color> và <color=#ff6724>Hữu Chúng Sinh</color>.{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "status": "APPROVED"
+    },
+    "S018602_3": {
+      "character_id": "S0186",
+      "group_id": "S018602",
+      "skill_name_cn": "镇水金翼",
+      "skill_name_vi": "Trấn Thủy Kim Dực",
+      "desc_cn": "选定<color=#158bdb>1</color>个友方战略单位，使其获得<color=#ff6724>龙泽</color>状态；\n使用绝技后，自身获得<color=#ff6724>崇圣</color>和<color=#ff6724>佑众生</color>状态。{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "desc_vi": "Chọn <color=#158bdb>1</color> đơn vị Chiến Lược phe ta, khiến mục tiêu nhận trạng thái <color=#ff6724>Long Trạch</color>;\nSau khi dùng Tuyệt Kỹ, bản thân nhận trạng thái <color=#ff6724>Sùng Thánh</color> và <color=#ff6724>Hữu Chúng Sinh</color>.{Buff_S0186_2_A}{Buff_S0186_2_B}{Buff_S0186_2_Z}",
+      "status": "APPROVED"
+    },
+    "S018603_1": {
+      "character_id": "S0186",
+      "group_id": "S018603",
+      "skill_name_cn": "羽焰腾燃",
+      "skill_name_vi": "Vũ Diễm Đằng Nhiên",
+      "desc_cn": "友方任意单位填充<color=#ff6724>礼弹</color>时，金翅鸟获得<color=#158bdb>1</color>层<color=#ff6724>焰羽</color>状态；\n自身进行警戒攻击时，若<color=#ff6724>礼弹</color>数量不低于<color=#158bdb>4</color>枚，则攻击后自身获得<color=#158bdb>1</color>点能量；\n自身使用绝技后，职业技能冷却时间减少<color=#158bdb>1</color>回合。{Buff_S0186_3_C}",
+      "desc_vi": "Khi bất kỳ đơn vị phe ta nào nạp <color=#ff6724>Lễ Đạn</color>, Kim Sí Điểu nhận <color=#158bdb>1</color> tầng <color=#ff6724>Diễm Vũ</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, nếu số <color=#ff6724>Lễ Đạn</color> không ít hơn <color=#158bdb>4</color> viên, sau đòn tấn công bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nSau khi bản thân dùng Tuyệt Kỹ, thời gian hồi Kỹ Năng Nghề giảm <color=#158bdb>1</color> lượt.{Buff_S0186_3_C}",
+      "status": "APPROVED"
+    },
+    "S018603_2": {
+      "character_id": "S0186",
+      "group_id": "S018603",
+      "skill_name_cn": "羽焰腾燃",
+      "skill_name_vi": "Vũ Diễm Đằng Nhiên",
+      "desc_cn": "友方任意单位填充<color=#ff6724>礼弹</color>时，金翅鸟获得<color=#158bdb>1</color>层<color=#ff6724>焰羽</color>状态；\n自身进行警戒攻击时，若<color=#ff6724>礼弹</color>数量不低于<color=#158bdb>4</color>枚，则攻击后自身获得<color=#158bdb>1</color>点能量；\n自身使用绝技后，职业技能冷却时间减少<color=#158bdb>1</color>回合。{Buff_S0186_3_C}",
+      "desc_vi": "Khi bất kỳ đơn vị phe ta nào nạp <color=#ff6724>Lễ Đạn</color>, Kim Sí Điểu nhận <color=#158bdb>1</color> tầng <color=#ff6724>Diễm Vũ</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, nếu số <color=#ff6724>Lễ Đạn</color> không ít hơn <color=#158bdb>4</color> viên, sau đòn tấn công bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nSau khi bản thân dùng Tuyệt Kỹ, thời gian hồi Kỹ Năng Nghề giảm <color=#158bdb>1</color> lượt.{Buff_S0186_3_C}",
+      "status": "APPROVED"
+    },
+    "S018603_3": {
+      "character_id": "S0186",
+      "group_id": "S018603",
+      "skill_name_cn": "羽焰腾燃",
+      "skill_name_vi": "Vũ Diễm Đằng Nhiên",
+      "desc_cn": "友方任意单位填充<color=#ff6724>礼弹</color>时，金翅鸟获得<color=#158bdb>1</color>层<color=#ff6724>焰羽</color>状态；\n自身进行警戒攻击时，若<color=#ff6724>礼弹</color>数量不低于<color=#158bdb>4</color>枚，则攻击后自身获得<color=#158bdb>1</color>点能量；\n自身使用绝技后，职业技能冷却时间减少<color=#158bdb>1</color>回合。{Buff_S0186_3_C}",
+      "desc_vi": "Khi bất kỳ đơn vị phe ta nào nạp <color=#ff6724>Lễ Đạn</color>, Kim Sí Điểu nhận <color=#158bdb>1</color> tầng <color=#ff6724>Diễm Vũ</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, nếu số <color=#ff6724>Lễ Đạn</color> không ít hơn <color=#158bdb>4</color> viên, sau đòn tấn công bản thân nhận <color=#158bdb>1</color> điểm Năng Lượng;\nSau khi bản thân dùng Tuyệt Kỹ, thời gian hồi Kỹ Năng Nghề giảm <color=#158bdb>1</color> lượt.{Buff_S0186_3_C}",
+      "status": "APPROVED"
+    },
+    "S018604_1": {
+      "character_id": "S0186",
+      "group_id": "S018604",
+      "skill_name_cn": "剔透水玉",
+      "skill_name_vi": "Dịch Thấu Thủy Ngọc",
+      "desc_cn": "进入战斗后，自身<color=#ff6724>礼弹</color>最大容量增加<color=#158bdb>1</color>枚，自身防御穿透提高<color=#158bdb>30%</color>。",
+      "desc_vi": "Sau khi vào trận, sức chứa tối đa <color=#ff6724>Lễ Đạn</color> của bản thân tăng <color=#158bdb>1</color> viên, Xuyên phòng ngự của bản thân tăng <color=#158bdb>30%</color>.",
+      "status": "APPROVED"
+    },
+    "S018604_2": {
+      "character_id": "S0186",
+      "group_id": "S018604",
+      "skill_name_cn": "剔透水玉",
+      "skill_name_vi": "Dịch Thấu Thủy Ngọc",
+      "desc_cn": "进入战斗后，自身<color=#ff6724>礼弹</color>最大容量增加<color=#158bdb>2</color>枚，自身防御穿透提高<color=#158bdb>40%</color>。",
+      "desc_vi": "Sau khi vào trận, sức chứa tối đa <color=#ff6724>Lễ Đạn</color> của bản thân tăng <color=#158bdb>2</color> viên, Xuyên phòng ngự của bản thân tăng <color=#158bdb>40%</color>.",
+      "status": "APPROVED"
+    },
+    "S018604_3": {
+      "character_id": "S0186",
+      "group_id": "S018604",
+      "skill_name_cn": "剔透水玉",
+      "skill_name_vi": "Dịch Thấu Thủy Ngọc",
+      "desc_cn": "进入战斗后，自身<color=#ff6724>礼弹</color>最大容量增加<color=#158bdb>3</color>枚，自身防御穿透提高<color=#158bdb>50%</color>。",
+      "desc_vi": "Sau khi vào trận, sức chứa tối đa <color=#ff6724>Lễ Đạn</color> của bản thân tăng <color=#158bdb>3</color> viên, Xuyên phòng ngự của bản thân tăng <color=#158bdb>50%</color>.",
+      "status": "APPROVED"
+    },
+    "S018605_1": {
+      "character_id": "S0186",
+      "group_id": "S018605",
+      "skill_name_cn": "永栖云岭",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>2</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>3</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>2</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>3</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018605_2": {
+      "character_id": "S0186",
+      "group_id": "S018605",
+      "skill_name_cn": "永栖云岭",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>3</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>4.5</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>3</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>4.5</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018605_3": {
+      "character_id": "S0186",
+      "group_id": "S018605",
+      "skill_name_cn": "永栖云岭",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>6</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>6</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018605ex_1": {
+      "character_id": "S0186",
+      "group_id": "S018605ex",
+      "skill_name_cn": "永栖云岭-超群",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh - Siêu Quần",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>5</color>枚<color=#ff6724>礼弹</color>；\n使用职业技能后，额外填充<color=#158bdb>3</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>4</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>5</color> viên <color=#ff6724>Lễ Đạn</color>;\nSau khi dùng Kỹ Năng Nghề, nạp thêm <color=#158bdb>3</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>4</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018605ex_2": {
+      "character_id": "S0186",
+      "group_id": "S018605ex",
+      "skill_name_cn": "永栖云岭-超群",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh - Siêu Quần",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>6</color>枚<color=#ff6724>礼弹</color>；\n使用职业技能后，额外填充<color=#158bdb>3</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>6</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>6</color> viên <color=#ff6724>Lễ Đạn</color>;\nSau khi dùng Kỹ Năng Nghề, nạp thêm <color=#158bdb>3</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>6</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018605ex_3": {
+      "character_id": "S0186",
+      "group_id": "S018605ex",
+      "skill_name_cn": "永栖云岭-超群",
+      "skill_name_vi": "Vĩnh Thê Vân Lĩnh - Siêu Quần",
+      "desc_cn": "使用绝技后，自身填充<color=#158bdb>7</color>枚<color=#ff6724>礼弹</color>；\n使用职业技能后，额外填充<color=#158bdb>3</color>枚<color=#ff6724>礼弹</color>；\n自身进行警戒攻击时，单次攻击可消耗<color=#158bdb>4</color>枚<color=#ff6724>礼弹</color>，使该次攻击造成的伤害提升至<color=#158bdb>8</color>倍。",
+      "desc_vi": "Sau khi dùng Tuyệt Kỹ, bản thân nạp <color=#158bdb>7</color> viên <color=#ff6724>Lễ Đạn</color>;\nSau khi dùng Kỹ Năng Nghề, nạp thêm <color=#158bdb>3</color> viên <color=#ff6724>Lễ Đạn</color>;\nKhi bản thân thực hiện tấn công Cảnh Giới, mỗi đòn có thể tiêu hao <color=#158bdb>4</color> viên <color=#ff6724>Lễ Đạn</color>, khiến sát thương của đòn đó tăng lên <color=#158bdb>8</color> lần.",
+      "status": "APPROVED"
+    },
+    "S018611_1": {
+      "character_id": "S0186",
+      "group_id": "S018611",
+      "skill_name_cn": "慑服诸龙",
+      "skill_name_vi": "Nhiếp Phục Chư Long",
+      "desc_cn": "使用后为自身填充<color=#158bdb>3</color>枚<color=#ff6724>礼弹</color>并进入警戒状态：以自身<color=#158bdb>周围3格</color>为警戒范围，对停留在该范围中的敌方单位进行警戒攻击，对其造成自身攻击力<color=#158bdb>[Effect1Para,3]%</color>的构素伤害。{Buff_lidan}",
+      "desc_vi": "Sau khi dùng, nạp cho bản thân <color=#158bdb>3</color> viên <color=#ff6724>Lễ Đạn</color> và tiến vào trạng thái Cảnh Giới: lấy <color=#158bdb>3 ô xung quanh</color> bản thân làm phạm vi Cảnh Giới, thực hiện tấn công Cảnh Giới lên đơn vị địch dừng trong phạm vi này, gây Sát Thương Cấu Tố bằng <color=#158bdb>[Effect1Para,3]%</color> Tấn Công của bản thân.{Buff_lidan}",
+      "status": "APPROVED"
+    },
+    "S0087061": {
+      "character_id": "S0087",
+      "group_id": "S008706",
+      "skill_name_cn": "竹贝贝",
+      "skill_name_vi": "Trúc Bối Bối",
+      "desc_cn": "自身为<color=#ff6724>孙子兵法</color>状态时：\n常击每消耗<color=#158bdb>1</color>枚<color=#ff6724>礼弹</color>，则友方全体战略单位获得<color=#158bdb>1</color>层<color=#ff6724>童趣回忆</color>状态；\n受到银雀山汉简常击的敌方单位若在该回合内被击败或累计受到<color=#158bdb>2</color>次警戒攻击，则使银雀山汉简<color=#158bdb>周围3格</color>的敌方全体获得<color=#ff6724>将义</color>状态。\n\n自身为<color=#ff6724>孙膑兵法</color>状态时：\n自身对处于<color=#ff6724>将义</color>状态的敌方单位进行警戒攻击时，对其造成的伤害提高<color=#158bdb>50%</color>，该次攻击后，自身获得持续<color=#158bdb>1</color>回合<color=#ff6724>虚实</color>状态；\n处于<color=#ff6724>将义</color>状态的敌方单位被击败或累计受到<color=#158bdb>2</color>次警戒攻击时，银雀山汉简获得额外行动<color=#158bdb>1</color>次，此效果每轮次最多可触发<color=#158bdb>1</color>次。{Buff_S0087_HZ_6_1}",
+      "desc_vi": "Khi bản thân ở trạng thái <color=#ff6724>Tôn Tử Binh Pháp</color>:\nMỗi <color=#158bdb>1</color> viên <color=#ff6724>Lễ Đạn</color> mà Đánh thường tiêu hao khiến toàn bộ đơn vị Chiến Lược phe ta nhận <color=#158bdb>1</color> tầng <color=#ff6724>Đồng Thú Hồi Ức</color>;\nNếu đơn vị địch trúng Đánh thường của Ngân Tước Sơn Hán Giản bị đánh bại hoặc tích lũy chịu <color=#158bdb>2</color> lần tấn công Cảnh Giới trong lượt đó, khiến toàn bộ địch trong <color=#158bdb>3 ô xung quanh</color> Ngân Tước Sơn Hán Giản nhận trạng thái <color=#ff6724>Tướng Nghĩa</color>.\n\nKhi bản thân ở trạng thái <color=#ff6724>Tôn Tẫn Binh Pháp</color>:\nKhi bản thân tấn công Cảnh Giới lên đơn vị địch đang có trạng thái <color=#ff6724>Tướng Nghĩa</color>, sát thương gây ra lên mục tiêu tăng <color=#158bdb>50%</color>; sau đòn tấn công đó, bản thân nhận trạng thái <color=#ff6724>Hư Thực</color> kéo dài <color=#158bdb>1</color> lượt;\nKhi đơn vị địch đang có trạng thái <color=#ff6724>Tướng Nghĩa</color> bị đánh bại hoặc tích lũy chịu <color=#158bdb>2</color> lần tấn công Cảnh Giới, Ngân Tước Sơn Hán Giản nhận <color=#158bdb>1</color> lần hành động bổ sung; hiệu ứng này mỗi vòng tối đa kích hoạt <color=#158bdb>1</color> lần.{Buff_S0087_HZ_6_1}",
+      "status": "TRANSLATED"
+    },
+    "V0064061": {
+      "character_id": "V0064",
+      "group_id": "V006406",
+      "skill_name_cn": "盐雕麻将",
+      "skill_name_vi": "Diêm Điêu Ma Tước",
+      "desc_cn": "进入战斗后，自身暴击率增加<color=#158bdb>40%</color>，贯穿率增加<color=#158bdb>40%</color>，暴击伤害提高<color=#158bdb>40%</color>；\n自身造成的常击伤害、连击伤害提升至<color=#158bdb>4</color>倍，技能伤害提升至<color=#158bdb>2</color>倍；\n敌方全体单位每累计消耗<color=#158bdb>4</color>层<color=#ff6724>脆弱</color>状态，使制盐砖获得<color=#158bdb>1</color>点能量；\n敌方任意单位每累计获得<color=#158bdb>2</color>层<color=#ff6724>脆弱</color>状态，使该单位获得<color=#ff6724>点炮</color>状态；\n使用绝技前，使自身<color=#158bdb>周围2格</color>的敌方全体获得<color=#ff6724>点炮</color>状态和<color=#158bdb>1</color>层<color=#ff6724>脆弱</color>状态；\n使用绝技后，自身获得再行动<color=#158bdb>1</color>次；\n使用职业技能后，自身移动力增加<color=#158bdb>2</color>且可以穿过阻挡自身的敌方单位，此效果持续至自身该次行动结束；\n被动技能<color=#ff6724>云蒸雾蔚</color>的冷却时间减少效果触发概率额外提高<color=#158bdb>20%</color>。{Buff_V0064_hz_5}",
+      "desc_vi": "Sau khi vào trận, Tỷ Lệ Bạo Kích của bản thân tăng <color=#158bdb>40%</color>, Tỷ Lệ Quán Xuyên tăng <color=#158bdb>40%</color>, Sát Thương Bạo Kích tăng <color=#158bdb>40%</color>;\nSát thương Đánh thường và sát thương Liên kích do bản thân gây ra tăng lên <color=#158bdb>4</color> lần, sát thương kỹ năng tăng lên <color=#158bdb>2</color> lần;\nCứ mỗi <color=#158bdb>4</color> tầng <color=#ff6724>Dễ Vỡ</color> mà toàn bộ đơn vị địch tích lũy tiêu hao, Chế Diêm Chuyên nhận <color=#158bdb>1</color> điểm Năng Lượng;\nCứ mỗi <color=#158bdb>2</color> tầng <color=#ff6724>Dễ Vỡ</color> mà bất kỳ đơn vị địch nào tích lũy nhận, khiến đơn vị đó nhận trạng thái <color=#ff6724>Điểm Pháo</color>;\nTrước khi dùng Tuyệt Kỹ, khiến toàn bộ địch trong <color=#158bdb>2 ô xung quanh</color> bản thân nhận trạng thái <color=#ff6724>Điểm Pháo</color> và <color=#158bdb>1</color> tầng <color=#ff6724>Dễ Vỡ</color>;\nSau khi dùng Tuyệt Kỹ, bản thân nhận <color=#158bdb>1</color> lần Tái Hành Động;\nSau khi dùng Kỹ Năng Nghề, Lực di chuyển của bản thân tăng <color=#158bdb>2</color> và có thể đi xuyên qua đơn vị địch cản đường, hiệu ứng kéo dài đến hết lần hành động đó của bản thân;\nXác suất kích hoạt hiệu ứng giảm thời gian hồi của nội tại <color=#ff6724>Vân Chưng Vụ Uất</color> tăng thêm <color=#158bdb>20%</color>.{Buff_V0064_hz_5}",
+      "status": "TRANSLATED"
     }
   },
   "buffs": {
@@ -44429,6 +44845,96 @@
       "buff_desc_vi": "Khi có <color=#158bdb>1</color> tầng trạng thái này: Tấn Công của bản thân tăng <color=#158bdb>150%</color>, sát thương kỹ năng gây ra tăng <color=#158bdb>30%</color>, Tỷ Lệ Bạo Kích tăng <color=#158bdb>20%</color>;\nKhi có <color=#158bdb>2</color> tầng trạng thái này: sát thương Kỹ Năng Nghề của bản thân tăng thêm <color=#158bdb>6</color> lần, và cứ mỗi <color=#158bdb>1</color> đơn vị địch bị bản thân khiến nhận trạng thái <color=#ff6724>Chấn Nộ</color>, sát thương của lần Kỹ Năng Nghề đó tăng thêm <color=#158bdb>0.8</color> lần, tối đa cộng dồn <color=#158bdb>5</color> tầng;\nCác hiệu ứng có lợi trên có thể cộng dồn;\nKhi trạng thái này cộng dồn đến <color=#158bdb>2</color> tầng, sau khi bản thân dùng Kỹ Năng Nghề và gây sát thương, xóa toàn bộ trạng thái này.",
       "classification_scope": "PLAYER_FACING",
       "status": "APPROVED"
+    },
+    "Buff_A0142_M_1": {
+      "group_root_id": "Buff_A0142_M_1",
+      "buff_name_cn": "<color=#ff6724>磨石</color>",
+      "buff_name_vi": "<color=#ff6724>Ma Thạch</color>",
+      "buff_desc_cn": "处于此状态时，\n若自身存在免疫控制类状态，则使自身获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态；\n自身受到控制类效果时，若自身不存在<color=#ff6724>眩晕</color>状态且不免疫控制类状态，则使自身获得<color=#158bdb>1</color>回合<color=#ff6724>眩晕</color>状态，此效果不会再次触发<color=#ff6724>磨石</color>状态；\n自身受到控制类效果时，若自身已存在<color=#ff6724>眩晕</color>状态，则使自身获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态；\n触发上述效果后，<color=#ff6724>磨石</color>状态消除。",
+      "buff_desc_vi": "Khi ở trạng thái này,\nNếu bản thân đang miễn nhiễm trạng thái khống chế, bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>;\nKhi bản thân chịu hiệu ứng khống chế, nếu bản thân không có trạng thái <color=#ff6724>Choáng</color> và không miễn nhiễm trạng thái khống chế, bản thân nhận <color=#ff6724>Choáng</color> trong <color=#158bdb>1</color> lượt; hiệu ứng này sẽ không kích hoạt lại <color=#ff6724>Ma Thạch</color>;\nKhi bản thân chịu hiệu ứng khống chế, nếu đã có trạng thái <color=#ff6724>Choáng</color>, bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>;\nSau khi kích hoạt các hiệu ứng trên, trạng thái <color=#ff6724>Ma Thạch</color> biến mất.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_A0142_M_2": {
+      "group_root_id": "Buff_A0142_M_2",
+      "buff_name_cn": "<color=#ff6724>细磨</color>",
+      "buff_name_vi": "<color=#ff6724>Tế Ma</color>",
+      "buff_desc_cn": "处于此状态时，自身每次受到物理伤害前，使自身受到的技能伤害提升<color=#158bdb>0.2</color>倍，效果持续至该回合结束；\n此状态最多可叠加<color=#158bdb>6</color>层，每次触发上述效果后，消耗<color=#158bdb>1</color>层此状态。",
+      "buff_desc_vi": "Khi ở trạng thái này, mỗi lần trước khi bản thân chịu Sát Thương Vật Lý, sát thương kỹ năng bản thân phải chịu tăng thêm <color=#158bdb>0.2</color> lần, hiệu ứng kéo dài đến hết lượt đó;\nTrạng thái này tối đa cộng dồn <color=#158bdb>6</color> tầng; mỗi lần kích hoạt hiệu ứng trên, tiêu hao <color=#158bdb>1</color> tầng trạng thái này.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_A0142_M_2ex": {
+      "group_root_id": "Buff_A0142_M_2ex",
+      "buff_name_cn": "<color=#ff6724>细磨</color>",
+      "buff_name_vi": "<color=#ff6724>Tế Ma</color>",
+      "buff_desc_cn": "处于此状态时，自身每次受到物理伤害前，使自身受到的技能伤害提升<color=#158bdb>0.3</color>倍，效果持续至该回合结束；\n此状态最多可叠加<color=#158bdb>6</color>层，每次触发上述效果后，消耗<color=#158bdb>1</color>层此状态。",
+      "buff_desc_vi": "Khi ở trạng thái này, mỗi lần trước khi bản thân chịu Sát Thương Vật Lý, sát thương kỹ năng bản thân phải chịu tăng thêm <color=#158bdb>0.3</color> lần, hiệu ứng kéo dài đến hết lượt đó;\nTrạng thái này tối đa cộng dồn <color=#158bdb>6</color> tầng; mỗi lần kích hoạt hiệu ứng trên, tiêu hao <color=#158bdb>1</color> tầng trạng thái này.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_A0142_M_1ex": {
+      "group_root_id": "Buff_A0142_M_1ex",
+      "buff_name_cn": "<color=#ff6724>磨石</color>",
+      "buff_name_vi": "<color=#ff6724>Ma Thạch</color>",
+      "buff_desc_cn": "处于此状态时，\n若自身存在免疫控制类状态，则使自身获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态；\n自身受到控制类效果时，若自身不存在<color=#ff6724>眩晕</color>状态且不免疫控制类状态，则使自身获得<color=#158bdb>1</color>回合<color=#ff6724>眩晕</color>状态，此效果不会再次触发<color=#ff6724>磨石</color>状态；\n自身受到控制类效果时，若自身已存在<color=#ff6724>眩晕</color>状态，则使自身获得<color=#158bdb>2</color>层<color=#ff6724>细磨</color>状态；\n触发上述效果后，<color=#ff6724>磨石</color>状态消除。",
+      "buff_desc_vi": "Khi ở trạng thái này,\nNếu bản thân đang miễn nhiễm trạng thái khống chế, bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>;\nKhi bản thân chịu hiệu ứng khống chế, nếu bản thân không có trạng thái <color=#ff6724>Choáng</color> và không miễn nhiễm trạng thái khống chế, bản thân nhận <color=#ff6724>Choáng</color> trong <color=#158bdb>1</color> lượt; hiệu ứng này sẽ không kích hoạt lại <color=#ff6724>Ma Thạch</color>;\nKhi bản thân chịu hiệu ứng khống chế, nếu đã có trạng thái <color=#ff6724>Choáng</color>, bản thân nhận <color=#158bdb>2</color> tầng <color=#ff6724>Tế Ma</color>;\nSau khi kích hoạt các hiệu ứng trên, trạng thái <color=#ff6724>Ma Thạch</color> biến mất.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_S0186_2_A": {
+      "group_root_id": "Buff_S0186_2_A",
+      "buff_name_cn": "<color=#ff6724>崇圣</color>",
+      "buff_name_vi": "<color=#ff6724>Sùng Thánh</color>",
+      "buff_desc_cn": "处于此状态时，自身警戒攻击造成的伤害提高<color=#158bdb>[Effect2Para,2]%</color>，暴击率增加<color=#158bdb>[Effect2Para,3]%</color>，暴击伤害增加<color=#158bdb>[Effect2Para,4]%</color>；\n自身消耗<color=#ff6724>礼弹</color>时，为处于<color=#ff6724>龙泽</color>状态的友方单位填充等量<color=#ff6724>礼弹</color>。此状态持续<color=#158bdb>2</color>回合，此状态结束时，清除友方单位存在的<color=#ff6724>龙泽</color>状态。",
+      "buff_desc_vi": "Khi ở trạng thái này, sát thương tấn công Cảnh Giới của bản thân tăng <color=#158bdb>[Effect2Para,2]%</color>, Tỷ Lệ Bạo Kích tăng <color=#158bdb>[Effect2Para,3]%</color>, Sát Thương Bạo Kích tăng <color=#158bdb>[Effect2Para,4]%</color>;\nKhi bản thân tiêu hao <color=#ff6724>Lễ Đạn</color>, nạp lượng <color=#ff6724>Lễ Đạn</color> tương đương cho đồng minh đang có trạng thái <color=#ff6724>Long Trạch</color>. Trạng thái này kéo dài <color=#158bdb>2</color> lượt; khi trạng thái này kết thúc, xóa trạng thái <color=#ff6724>Long Trạch</color> trên đồng minh.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_S0186_2_B": {
+      "group_root_id": "Buff_S0186_2_B",
+      "buff_name_cn": "<color=#ff6724>龙泽</color>",
+      "buff_name_vi": "<color=#ff6724>Long Trạch</color>",
+      "buff_desc_cn": "处于此状态时，无法进行警戒攻击，只能进行警戒治疗；\n自身处于此状态被击败时，清除友方金翅鸟存在的<color=#ff6724>佑众生</color>状态；\n我方最多同时存在<color=#158bdb>1</color>个处于此状态的单位。",
+      "buff_desc_vi": "Khi ở trạng thái này, không thể tấn công Cảnh Giới, chỉ có thể Cảnh Giới Trị Liệu;\nKhi bản thân bị đánh bại trong lúc có trạng thái này, xóa trạng thái <color=#ff6724>Hữu Chúng Sinh</color> của Kim Sí Điểu phe ta;\nPhe ta cùng lúc tối đa chỉ có <color=#158bdb>1</color> đơn vị mang trạng thái này.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_S0186_2_Z": {
+      "group_root_id": "Buff_S0186_2_Z",
+      "buff_name_cn": "<color=#ff6724>佑众生</color>",
+      "buff_name_vi": "<color=#ff6724>Hữu Chúng Sinh</color>",
+      "buff_desc_cn": "处于此状态时，自身每次进行警戒攻击后，填充<color=#158bdb>2</color>枚<color=#ff6724>礼弹</color>；\n若友方单位处于<color=#ff6724>龙泽</color>状态时被击败，则清除自身存在的<color=#ff6724>佑众生</color>状态。",
+      "buff_desc_vi": "Khi ở trạng thái này, mỗi lần bản thân tấn công Cảnh Giới xong, nạp <color=#158bdb>2</color> viên <color=#ff6724>Lễ Đạn</color>;\nNếu đồng minh bị đánh bại khi đang có trạng thái <color=#ff6724>Long Trạch</color>, xóa trạng thái <color=#ff6724>Hữu Chúng Sinh</color> của bản thân.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_S0186_3_C": {
+      "group_root_id": "Buff_S0186_3_C",
+      "buff_name_cn": "<color=#ff6724>焰羽</color>",
+      "buff_name_vi": "<color=#ff6724>Diễm Vũ</color>",
+      "buff_desc_cn": "每层此状态使自身造成的伤害提高<color=#158bdb>[Effect2Para,2]%</color>，最多可叠加<color=#158bdb>5</color>层，持续<color=#158bdb>2</color>回合。",
+      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương do bản thân gây ra tăng <color=#158bdb>[Effect2Para,2]%</color>, tối đa cộng dồn <color=#158bdb>5</color> tầng, kéo dài <color=#158bdb>2</color> lượt.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "APPROVED"
+    },
+    "Buff_S0087_HZ_6_1": {
+      "group_root_id": "Buff_S0087_HZ_6_1",
+      "buff_name_cn": "<color=#ff6724>童趣回忆</color>",
+      "buff_name_vi": "<color=#ff6724>Đồng Thú Hồi Ức</color>",
+      "buff_desc_cn": "每层此状态使自身造成的伤害提高<color=#158bdb>10%</color>；\n此状态最多可叠加<color=#158bdb>5</color>层，持续<color=#158bdb>1</color>回合。",
+      "buff_desc_vi": "Mỗi tầng trạng thái này khiến sát thương do bản thân gây ra tăng <color=#158bdb>10%</color>;\nTrạng thái này tối đa cộng dồn <color=#158bdb>5</color> tầng, kéo dài <color=#158bdb>1</color> lượt.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "TRANSLATED"
+    },
+    "Buff_V0064_hz_5": {
+      "group_root_id": "Buff_V0064_hz_5",
+      "buff_name_cn": "<color=#ff6724>点炮</color>",
+      "buff_name_vi": "<color=#ff6724>Điểm Pháo</color>",
+      "buff_desc_cn": "使自身下<color=#158bdb>1</color>此受到的技能伤害提高<color=#158bdb>40%</color>；\n此效果持续整场战斗，触发上述效果后清除。",
+      "buff_desc_vi": "Khiến sát thương kỹ năng bản thân phải chịu ở <color=#158bdb>1</color> lần kế tiếp tăng <color=#158bdb>40%</color>;\nHiệu ứng này kéo dài suốt trận, bị xóa sau khi kích hoạt.",
+      "classification_scope": "PLAYER_FACING",
+      "status": "TRANSLATED"
     }
   },
   "talents": {
@@ -52425,6 +52931,114 @@
       "effect_summary_cn": "Mov_FIX,1",
       "effect_summary_vi": "",
       "status": "APPROVED"
+    },
+    "A0142_1": {
+      "star": 1,
+      "rank_numeral_cn": "致知一",
+      "rank_numeral_vi": "Trí Tri I",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Atk_PERCENT,14",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "A0142_2": {
+      "star": 2,
+      "rank_numeral_cn": "致知二",
+      "rank_numeral_vi": "Trí Tri II",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "PhysicDef_PERCENT,20",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "A0142_3": {
+      "star": 3,
+      "rank_numeral_cn": "致知三",
+      "rank_numeral_vi": "Trí Tri III",
+      "effect_type": "skill_upgrade",
+      "effect_summary_cn": "SkillUP,A014203",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "A0142_4": {
+      "star": 4,
+      "rank_numeral_cn": "致知四",
+      "rank_numeral_vi": "Trí Tri IV",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Hp_PERCENT,14",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "A0142_5": {
+      "star": 5,
+      "rank_numeral_cn": "致知五",
+      "rank_numeral_vi": "Trí Tri V",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "MagicDef_PERCENT,20",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "A0142_6": {
+      "star": 6,
+      "rank_numeral_cn": "致知六",
+      "rank_numeral_vi": "Trí Tri VI",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Critical_FIX,20",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_1": {
+      "star": 1,
+      "rank_numeral_cn": "致知一",
+      "rank_numeral_vi": "Trí Tri I",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Atk_PERCENT,14",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_2": {
+      "star": 2,
+      "rank_numeral_cn": "致知二",
+      "rank_numeral_vi": "Trí Tri II",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "PhysicDef_PERCENT,20",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_3": {
+      "star": 3,
+      "rank_numeral_cn": "致知三",
+      "rank_numeral_vi": "Trí Tri III",
+      "effect_type": "skill_upgrade",
+      "effect_summary_cn": "SkillUP,S018605",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_4": {
+      "star": 4,
+      "rank_numeral_cn": "致知四",
+      "rank_numeral_vi": "Trí Tri IV",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Hp_PERCENT,14",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_5": {
+      "star": 5,
+      "rank_numeral_cn": "致知五",
+      "rank_numeral_vi": "Trí Tri V",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "MagicDef_PERCENT,20",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
+    },
+    "S0186_6": {
+      "star": 6,
+      "rank_numeral_cn": "致知六",
+      "rank_numeral_vi": "Trí Tri VI",
+      "effect_type": "stat_bonus",
+      "effect_summary_cn": "Atk_PERCENT,30",
+      "effect_summary_vi": "",
+      "status": "APPROVED"
     }
   },
   "huanzhang": {
@@ -53047,6 +53661,26 @@
       "buff_show_cn": "",
       "buff_show_vi": "",
       "status": "APPROVED"
+    },
+    "S00874": {
+      "character_id": "S0087",
+      "icon_name_cn": "“竹贝贝”",
+      "icon_name_vi": "“Trúc Bối Bối”",
+      "icon_info_cn": "人类总爱珍藏那些陪伴自己度过孩童时期的物件，会把玩偶紧紧拥入怀中，会在弄丢小火车时放声大哭，第一次懵懵懂懂地尝到失去是什么滋味。银雀山汉简没有童年，他们天生就被思想武装，无需后天塑造和经验获取，那些浩瀚博大又慷慨的思想篆刻在他们的骨血里。可他们与人类的孩子也有相似之处，那份懵懂更多体现在彼此相处上。\n在深邃幽暗如宇宙的地下，在繁花似锦的喧闹学宫，他们最先看见的“人”是彼此，何为兄弟、何为骨血、何为与生俱来。生活一点点铺开的时候，他们才知道，这就是人类的孩子在度过的生活。\n孙子兵法逃课去山脚下游玩了一天，回来时将装睡的孙膑兵法摇醒，笑嘻嘻地从怀里掏出东西：“那些人类的孩子都有玩具呢，你不羡慕吗？”他回忆着人类兄长将做好的玩具递给弟弟的样子，“我们的竹马更少见……会开花呢。”\n无数个相伴的雨夜与晴日接连过去，那两只被珍藏在暗红箱底的竹马，竟真的长出了一丛丛的竹子。他们长大了，刻着“终朝梦魂迷晚潮”的文字机关锁少有开启。他们会在外面认识很多人，纵横、交际、拯救他人，也被人拯救，可一旦打开这个箱子，时光又会飞回那一丛丛银雀花下。\n“哈？模仿？”孙子兵法说。\n“说我是在模仿人类的孩子送你礼物什么的，这也太冤枉人了……”他承认，一开始确实是在观察那对兄弟如何相处，“但我只看见哥哥送了弟弟礼物，却没看见他奋不顾身去救落水的弟弟啊。”\n所以，不用模仿，我也会去救你。\n人类声嘶力竭的呼喊和后怕的神情，让他第一次触碰到兵书之外的死亡，在月夜下，他若有所思地赶路，忽然有了做一件玩具给弟弟的念头。\n“现在你珍爱的竹马再也不会弄丢了。”孙膑兵法听到他哥笑着说。",
+      "icon_info_vi": "Con người luôn thích giữ gìn những món đồ đã cùng mình đi qua thời thơ ấu: ôm chặt con búp bê vào lòng, khóc òa lên khi làm mất chiếc tàu hỏa nhỏ, lần đầu ngơ ngác nếm trải mùi vị của mất mát. Ngân Tước Sơn Hán Giản không có tuổi thơ; họ sinh ra đã được vũ trang bằng tư tưởng, chẳng cần rèn giũa hay tích lũy kinh nghiệm, những tư tưởng mênh mông, sâu rộng mà hào phóng ấy đã khắc sẵn vào xương cốt họ. Thế nhưng họ vẫn có chỗ giống những đứa trẻ loài người, và sự ngây ngô ấy hiện rõ nhất trong cách họ ở bên nhau.\nDưới lòng đất sâu thẳm u tối như vũ trụ, trong học cung huyên náo muôn hoa rực rỡ, “người” đầu tiên họ nhìn thấy chính là nhau — thế nào là huynh đệ, thế nào là cốt nhục, thế nào là thứ sinh ra đã có. Đến khi cuộc sống dần trải ra trước mắt, họ mới biết, đó chính là cuộc sống mà những đứa trẻ loài người đang trải qua.\nTôn Tử Binh Pháp trốn học xuống chân núi chơi suốt một ngày, lúc về thì lay Tôn Tẫn Binh Pháp đang giả vờ ngủ dậy, cười hì hì lấy từ trong ngực áo ra một món đồ: “Bọn trẻ con loài người đều có đồ chơi đấy, đệ không thấy ghen tị à?” Cậu nhớ lại dáng vẻ người anh trai loài người đưa món đồ chơi vừa làm xong cho em mình, “Ngựa tre của chúng ta còn hiếm hơn nữa… nó biết nở hoa đấy.”\nVô số đêm mưa và ngày nắng bên nhau lần lượt trôi qua, hai con ngựa tre được cất kỹ dưới đáy chiếc rương đỏ thẫm, vậy mà thật sự mọc lên từng khóm trúc. Họ đã lớn, chiếc khóa cơ quan khắc dòng chữ “Chung triêu mộng hồn mê vãn triều” hiếm khi được mở ra. Ở bên ngoài, họ sẽ quen biết rất nhiều người, tung hoành, giao du, cứu người, rồi cũng được người cứu; nhưng hễ mở chiếc rương này ra, thời gian lại bay ngược về dưới những khóm ngân tước hoa ấy.\n“Hả? Bắt chước á?” Tôn Tử Binh Pháp nói.\n“Bảo ta bắt chước trẻ con loài người tặng quà cho đệ gì đó, oan cho ta quá rồi…” Cậu thừa nhận, ban đầu đúng là có quan sát xem hai anh em kia đối xử với nhau thế nào, “nhưng ta chỉ thấy anh tặng quà cho em, chứ đâu có thấy anh liều mình nhảy xuống cứu đứa em bị rơi xuống nước.”\nCho nên, chẳng cần bắt chước, ta cũng sẽ đi cứu đệ.\nTiếng gào thét khản cổ và vẻ mặt còn chưa hết sợ hãi của con người khiến lần đầu tiên cậu chạm tới cái chết nằm ngoài binh thư. Dưới đêm trăng, cậu vừa đi đường vừa trầm ngâm, bỗng nảy ra ý định làm một món đồ chơi cho em mình.\n“Giờ thì con ngựa tre đệ quý nhất sẽ không bao giờ bị mất nữa.” Tôn Tẫn Binh Pháp nghe anh mình cười nói.",
+      "buff_show_cn": "",
+      "buff_show_vi": "",
+      "status": "TRANSLATED"
+    },
+    "V00644": {
+      "character_id": "V0064",
+      "icon_name_cn": "盐雕麻将",
+      "icon_name_vi": "Diêm Điêu Ma Tước",
+      "icon_info_cn": "作为基金会的麻将一姐，制盐砖小姐对这项娱乐活动的喜爱简直深入骨髓。除了喜欢打川麻之外，她最近还爱上了收集各种各样的麻将，其中就包括了时下在另一个群体中非常流行的——流沙麻将。\n“哎呀你们小朋友喜欢的东西也确实是黑有点乖哦。”制盐砖小姐爱不释手地把流沙麻将拿起又放下，观察着里面的流沙亮片，“这么乖，哪个搓得下去手！”\n不过，虽然对流沙麻将评价颇高，但制盐砖小姐还是没有忘记她的专业精神：“但是作为麻将来说，流沙的就不太实用了，只能收藏。”\n但流沙麻将无疑给制盐砖小姐带来了灵感。如果只是收藏的话，那世界上就有很多东西都可以用来做麻将了，比如石头、比如盐。想到这里，她立刻有了兴趣：“对了，盐！听说玻利维亚有盐做的家具和旅馆，那么盐肯定也可以用来制作麻将。”\n一旦想到，她就立刻付诸了实践，很快，一套特制的盐雕麻将就问世了，制盐砖小姐的很多牌友闻讯赶来参观，她也自豪地宣称：“这是我迄今为止最满意的作品。”",
+      "icon_info_vi": "Là “chị đại mạt chược” của Quỹ, tiểu thư Chế Diêm Chuyên mê trò giải trí này đến tận xương tủy. Ngoài đánh mạt chược kiểu Tứ Xuyên, gần đây nàng còn mê sưu tầm đủ loại quân mạt chược, trong đó có cả loại đang rất thịnh hành ở một nhóm người khác — mạt chược cát lún.\n“Ái chà, mấy thứ các bạn nhỏ thích đúng là xinh thật đấy.” Tiểu thư Chế Diêm Chuyên mân mê bộ mạt chược cát lún, cầm lên rồi lại đặt xuống, ngắm những hạt kim tuyến trôi lững lờ bên trong, “Xinh thế này, ai mà nỡ xoa cho được!”\nTuy đánh giá mạt chược cát lún khá cao, tiểu thư Chế Diêm Chuyên vẫn không quên tinh thần chuyên nghiệp của mình: “Nhưng nói về làm quân mạt chược thì loại cát lún không thực dụng lắm, chỉ để sưu tầm thôi.”\nDẫu vậy, mạt chược cát lún chắc chắn đã mang lại cảm hứng cho nàng. Nếu chỉ để sưu tầm, thì trên đời có biết bao thứ có thể dùng làm mạt chược, chẳng hạn như đá, chẳng hạn như muối. Nghĩ tới đây, nàng lập tức hứng thú: “Đúng rồi, muối! Nghe nói ở Bolivia có đồ đạc và khách sạn làm bằng muối, vậy chắc chắn muối cũng làm được mạt chược.”\nNghĩ là làm, chẳng bao lâu sau, một bộ mạt chược điêu khắc từ muối đặc chế đã ra đời. Rất nhiều bạn mạt chược của tiểu thư Chế Diêm Chuyên nghe tin liền kéo đến xem, nàng cũng tự hào tuyên bố: “Đây là tác phẩm ưng ý nhất của ta từ trước đến nay.”",
+      "buff_show_cn": "",
+      "buff_show_vi": "",
+      "status": "TRANSLATED"
     }
   },
   "items": {
@@ -53709,6 +54343,54 @@
     "9185002": {
       "category": "talent_material_specialty",
       "name_cn": "刻本山海经突破皮肤",
+      "name_vi": "",
+      "desc_cn": "",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "10145": {
+      "category": "rank_up_fragment",
+      "name_cn": "星形石徽章",
+      "name_vi": "",
+      "desc_cn": "用于实现器者致知提升。\n这是从基金会及博物馆拿到的资料徽章，相关的徽章还会有多少呢？\n当致知等级大于等于陆时，再次获得该道具将转化为机密分析报告*10",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "20145": {
+      "category": "specialty",
+      "name_cn": "星形石合同",
+      "name_vi": "",
+      "desc_cn": "可以直接招集器者。\n这是从基金会档案里找到的紧急征调星形石的合同。",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "9142002": {
+      "category": "talent_material_specialty",
+      "name_cn": "星形石突破皮肤",
+      "name_vi": "",
+      "desc_cn": "",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "10144": {
+      "category": "rank_up_fragment",
+      "name_cn": "金翅鸟徽章",
+      "name_vi": "",
+      "desc_cn": "用于实现器者致知提升。\n这是从基金会及博物馆拿到的资料徽章，相关的徽章还会有多少呢？\n当致知等级大于等于陆时，再次获得该道具将转化为机密分析报告*10",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "20144": {
+      "category": "specialty",
+      "name_cn": "金翅鸟合同",
+      "name_vi": "",
+      "desc_cn": "可以直接招集器者。\n这是从基金会档案里找到的紧急征调金翅鸟的合同。",
+      "desc_vi": "",
+      "status": "PENDING"
+    },
+    "9186002": {
+      "category": "talent_material_specialty",
+      "name_cn": "金翅鸟突破皮肤",
       "name_vi": "",
       "desc_cn": "",
       "desc_vi": "",
@@ -67988,6 +68670,216 @@
       "text_cn": "穿过国家图书馆层层叠叠的典籍，在故纸萦绕不去的书香中，我来到了刻本《山海经》面前。\n　　但眼前一道光闪过，回神时，周遭不再是肃穆的典籍库，我感到了风的流动，闻到了草木的馨香，回头一看，不知何时，我已身处山林峭壁之间，眼前，附身便见云雾在深不见底的溪谷中飘荡。空气里，有湿润的雨的味道。\n　　我深深吸气吐气，感觉一整天的疲惫都被呼出去。\n　　“怎么样？现代人们研究，认为空气中合适的负离子浓度，能够沉降悬浮颗粒，净化身心，山林是最好的自然氧吧。”刻本山海经小姐从一棵参天巨树后走出。她的异兽身型，似乎天生就易于在山林中隐藏、行走。\n　　“我怎么突然到了这里，刚刚不是还在您的本体面前么？传送？还是说这就是《山海经》中所言“上下于天”的能力？难道说，这里……就是《山海经》中的世界？”\n　　我震惊地去触摸身旁草木，有叶如葵而赤茎，似乎是传说中食之不忧的鬼草，我抬起头，望向直接云霄的参天巨木，珠树、文玉树、玕琪树、不死树、木禾……那些山海经中光怪陆离的奇花异草组成了这片恍若真实的空间，光影晃动，甘木繁茂的枝叶似乎能覆盖住死亡的阴影……我不受控制地伸出手，仿佛如此，便能真正通达远古神异的世界。\n　　“小心，这里什么都没有。”刻本山海经小姐拦住了我，在光线闪动的一瞬，我才发现，我似乎正在攀爬书架……差一点就要从书架上掉下，冷汗瞬间浸透了的衣衫。\n　　“这只是投影……我和它们都没有任何神力。”刻本山海经小姐抚上建木紫色的树干，仰头似乎要越过蔽日的枝叶，直视天穹之上的日月。\n　　“远古的人们在恐惧和未知中，探索天地四方，记录下所见、所闻，山岭、河流、物产、神怪、奇闻轶事、山神祭祀、万物创生，成《山海经》之奇诡，于那时的人们而言，那是‘真实’的存在。”\n　　“但渐渐的，那些难以解释的天象、物种，在人们生产力和认知的发展中，有了更切实、科学的解释，人们发现，泥石流是雨水侵蚀山体，并非山神之怒，春华秋实是节气规律，并非句芒执规、蓐收持钺……神话时代早已远去，人们踏入现实，已经不需要想象神力的伟大……”\n　　“那我又为何会诞生呢？”刻本山海经小姐轻轻笑着，但她立在这片虚构的远古神话山林间，我却感到了一丝悲伤和落寞。\n　　“我其实并不属于那个奇幻莫测的时代，我是后世勘校付梓的刻本书页，我也只能如人们一般借文字，窥见一眼那文明伊始的神人气象，山海秩序。看着人们是如何自蛮荒中，一步一步构建神话、组成族群，认知世界、创造文明，又走出神话……”\n　　“我在现代苏醒……人们早不再向《五藏山经》中那星罗棋布的山神祈祷，我并非因人们的祈愿而诞生，我亦非山神，不诉愿望，难护山川，我本该随着那个时代的离去，而成为大地的山石、远古吹来的清风……但……”刻本山海经小姐回头注视着自己异兽形态的身躯。\n　　“但人们在前行的路上并未舍弃我们，无论是‘海外山表，无所不至’，或者‘古今语怪之祖’，又或者人们真的发现了与其中所载旋龟相似的平胸龟……跨越千万年的时间，人们总能在这本奇书中，寻到自己感兴趣的故事。”刻本山海经小姐向我看过来，在那双荧亮非人的异兽瞳中，我似乎真的看见了那《山海经》中人面异兽身避凶禳灾的山神，看到了由蒙昧走向文明的天地初辟时。\n　　“那如今的你，又在刻本《山海经》中，看到了怎样的故事呢？”",
       "text_vi": "",
       "status": "PENDING"
+    },
+    "A0142_card_intro": {
+      "character_id": "A0142",
+      "category": "card_intro",
+      "text_cn": "器者外现形象为炭黑色皮肤的高挑女性。拥有惊人的力气和战斗技巧，在战场上有不俗的表现。身体和装备皆有未解的星形元素，人们对于这些象征的猜想层出不穷，从未停止，这也让该器者更显得神秘。星形石质地坚硬，形状规整，器者会时常注意寻找相似的材质，考察其提升作战效果的可能性，实用主义至上的作风促成了星形石独树一帜的行事风格。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_staff_status": {
+      "character_id": "A0142",
+      "category": "staff_status",
+      "text_cn": "已登记",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_entity_status": {
+      "character_id": "A0142",
+      "category": "entity_status",
+      "text_cn": "安全",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_relic_name": {
+      "character_id": "A0142",
+      "category": "relic_name",
+      "text_cn": "K1002",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_relic_dynasty": {
+      "character_id": "A0142",
+      "category": "relic_dynasty",
+      "text_cn": "T2002",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_relic_museum": {
+      "character_id": "A0142",
+      "category": "relic_museum",
+      "text_cn": "S3040",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_relic_intro": {
+      "character_id": "A0142",
+      "category": "relic_intro",
+      "text_cn": "星形石，出土于云南临沧耿马石佛洞遗址，距今约三千余年，星形石是该遗址中发现的多个同类器型石器的统称。该石器又被称作多菱六角星形石器，围绕中心贯通圆孔分为三层，每层分别有六个尖芒，中间一层尖芒较长，上中下三层尖芒交错排列，造型奇特，极具美感，但具体作用尚未明确。现藏于云南省博物馆。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_title_1": {
+      "character_id": "A0142",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_content_1": {
+      "character_id": "A0142",
+      "category": "report_content",
+      "text_cn": "该观察目标日常行为如下：\n1.目标起居简单，衣食随意，在生活环境和条件上毫无想法，而对武器打造，训练计划及作战技巧有一针见血的见解和精益求精的态度，令人心生敬意。\n2.目标对现代社会的认知尚在起步阶段，基础设施和电子产品的使用较为生疏，而器者本身对现代出行和交流需求不大，对于该名器者的社会化问题还有待商讨。\n3.目标对自然的物质如土壤、石料有准确而原始的理解，即使不知道这些物质准确的现代化学命名，对其质地、成因和原始加工方法有纯熟的认识。\n　　总结：器者诞生于遥远的年代，认知方法和行事风格透露出未经雕琢、甚至是大刀阔斧的风格，这样直接而自我的处世原则未尝不能使她开辟出自己的道路，随着实力的快速成长，该名器者也需要更多密切的关注。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_title_2": {
+      "character_id": "A0142",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_content_2": {
+      "character_id": "A0142",
+      "category": "report_content",
+      "text_cn": "星形石的首次作战表现在基金会引起了轩然大波，其作战记录随着数次转发在器者间广为流传。没有过多的诱敌策略，甚至连停顿和闪避都罕见，只是在力量、速度和体能都是压倒性的状态下直接将敌人碾压，这种拳拳到肉、压迫感极强的战斗风格引发了大家的议论，也引起了总是独来独往的鎏金骑士的注意。\n　　也许同样是低调行事的风格，也许是神秘的气质必将吸引同类，星形石在战场上的身姿深深印刻在鎏金骑士的心中，此等实力，必定植根于无人能及的决心和信念，她究竟背负了怎样的使命，她一定可以理解……\n　　同道中人毋须多言，唯一能回应这殊途同归的使命，当然是早日能和星形石前辈比肩的力量……！\n　　一段时间后，资料部。\n　　“最近的作战数据……变化惊人啊。”\n　　“你是指鎏金骑士吗？他真是要翻天覆地了。”\n　　“不单单只有他啊！你看这位，这位，还有这位，全部有显著进步……与上次记录对比，找出节点……”\n　　“是星形石！难道星形石指点了她们？但是她的作战风格太特殊了，也没有见她指导过其他人，究竟是什么原因？”\n　　资料部陷入了苦战。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_title_3": {
+      "character_id": "A0142",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_content_3": {
+      "character_id": "A0142",
+      "category": "report_content",
+      "text_cn": "除了一枝独秀的战力，星形石的身上还有许多深不可测的地方。探索调查来到陌生的地方，她可以辨识出烧焦的碳木或是枯木，岩石的质地，甚至是随时随地半跪下去，捻一点土放进嘴里，以此判断该地情况。你不知道个中原理，但这是星形石自己的一套行事方法，她是如此原始，神秘，准确而又……不太在意他人的目光。\n　　这样的星形石注定不会和任何人走得太近，除去几位同样内敛的前辈，绝大部分人都难以揣测她内心的想法，只是对她偶尔异于常人的行为和浴血作战的身影感到敬畏，直到某一次作战结束大家闲聊之时，星形石突然出现在女孩子中间，她眼神炯炯地抬手去抚摸她们衣服上那些装饰的宝石，好像对其闪耀的光芒产生了好奇和困惑。\n　　女孩子们惊讶得说不出话，星形石挨个摸摸她们的服饰，用心地感受着质地，柔软的情绪又顷刻将女孩子们淹没了——这是星形石前辈第一次主动靠近，也许她没有想象中那么难以接近！\n　　星形石熟知许多自然的事物，但人造的产物对她来说还是个新领域……她可能只想知道那些人工宝石是否适用于武器制造，比起外表，坚硬的质地才是她关注的重点。\n　　不过能和其他人说说话也不错？星形石被好心又热情的女孩子围住了，我心满意足地打开报告，记录下这一幕。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_title_4": {
+      "character_id": "A0142",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "A0142_report_content_4": {
+      "character_id": "A0142",
+      "category": "report_content",
+      "text_cn": "星星是什么？仰望天空时，星形石从未有类似的思索，当人们赞颂星星闪耀，怜惜自己的渺小时，除非星星真的落入星形石的手中，她才会花心思瞧上一眼，看看这星星有什么用处。\n　　还有海星呢！软趴趴地逐浪漂流，星形石在海洋馆里的时候，离那装着海星的水族箱远远的，这种来自海底的软体动物显然离星形石的认知还很有一段距离。\n　　在恒星自转的同时，卫星遥遥而过，短暂遮蔽了来自太阳系中心的光芒，而这一切星体运作的自然规律，都与被赋予了名字的星形石没有太过特殊的关系。她只本能地亲近和自己更相似的东西：石头、骨头、贝壳、金属……经历时间和地壳运动的洗礼后，坚硬的质地使人们尚有机会窥得他们悠久的过去：为了生活，或是为了祈祷。\n　　星形石，与星星相反的是沉默而沉重的石头，它的“光芒”是漫长打磨后的具象，埋藏进坚实的土地里，所感知的是地壳振动，房屋被推倒，尔后四处大厦又隆隆升起，晴明的星空之下，高楼之上的人们对星形石有些许浪漫的猜想。\n　　那又如何？不管如何，星形石都是石头。\n　　是与现存的任何一种星星都要不同的石头。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_card_intro": {
+      "character_id": "S0186",
+      "category": "card_intro",
+      "text_cn": "器者大理国金翅鸟，本体外形脱胎于传说故事中的迦楼罗，进入大理后又结合了本土传说中金鸡的意蕴。因此器者具有与迦楼罗传说相符的某些特性，比如常常吓唬有龙特质的器者们自己会将他们吃掉，不过器者并没有真的吃过龙。器者拥有通识考试证书，但据查询已经过期三十五年，也许是因为他从未离开过云南分部，因此没有被发现。由此也可见，器者对家乡有着尤为深厚的感情。器者本体为云南省博物馆的镇馆之宝，其形象的雕像在馆前闪闪发亮，云南省博亦保留了“大理国”之名作为他的来源介绍，如今大理国已经不复存在，而他作为大理的旧物，仍在苍山之巅日复一日地守望。器者通识考试分数虽然不高，但对人类社会友好，其对部门并无特殊意愿，考虑到其目前的生活环境，推荐进入商业部。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_staff_status": {
+      "character_id": "S0186",
+      "category": "staff_status",
+      "text_cn": "已登记",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_entity_status": {
+      "character_id": "S0186",
+      "category": "entity_status",
+      "text_cn": "安全",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_relic_name": {
+      "character_id": "S0186",
+      "category": "relic_name",
+      "text_cn": "K1006",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_relic_dynasty": {
+      "character_id": "S0186",
+      "category": "relic_dynasty",
+      "text_cn": "T2010",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_relic_museum": {
+      "character_id": "S0186",
+      "category": "relic_museum",
+      "text_cn": "S3040",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_relic_intro": {
+      "character_id": "S0186",
+      "category": "relic_intro",
+      "text_cn": "银鎏金嵌珠金翅鸟立像，1978年出土于大理崇圣寺主塔千寻塔。该像以银制成，通体鎏金。金翅鸟展翅伫立于莲座之上，鹰喙微张，双目圆睁，身体上錾刻的羽毛状纹饰纤毫毕现。他头戴羽冠，身后的背光如同熊熊燃烧的火焰，其上镶嵌有五粒透明的水晶珠。金翅鸟梵名“迦楼罗”，传说以龙为食。大理“旧为龙泽”多水患，当地人将其置于塔顶，以期其能制龙镇水。现藏于云南省博物馆。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_title_1": {
+      "character_id": "S0186",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_content_1": {
+      "character_id": "S0186",
+      "category": "report_content",
+      "text_cn": "传说中的“迦楼罗”金翅鸟先生，是青琉璃咖啡店的有名店员。\n　　青琉璃咖啡店在当地小有名气，总在游客们的推荐榜单上。但正如一些景区推荐般，这家店的咖啡冲泡手艺实在还有待改进，咖啡与点心的样貌却又十分养眼，适合端到能看到苍山的窗边与时令鲜花来几张合照，打扮得花里胡哨却不会说汉语的少数民族店员更是一大特色，在社交媒体上被标红推荐。\n　　严格来说，器者并没有像人类这样的民族划分，但在无法回答客人关于原材料、烘焙工艺的问题时，用露出白牙的微笑和客人听不懂的语言礼貌应付一定没错，再从围裙上摘下一个白族风格别针送给客人就完美地完成了一次敷衍。点心上得太慢，客人打卡都打累了仍未吃上一口点心正要发怒时，该店员就会端上一盘危如累卵的蛋糕与诸多彩色奶油现场妆点。虽然蛋糕胚是冷冻预制的，但奶油花是现打的就不算预制了，店员还会在蛋糕上落上自己为数不多会写的汉字：“开心”。客人们确实会因此感到开心。再加上店里偶尔会出现店员的神奇朋友，善口技，会随机发出猫、狗、鸟、马、猴等动物的叫声，惟妙惟肖，虽然客人们描述的这位口技演员朋友的相貌总是不甚具体，但店里会随机刷新动物口技表演总是不错的。这样的传说在城市里会被认为是压力过大的社畜悲惨再就业，但在苍山之下、洱海边上的这座城市，却会被理解为是浪漫的山林传说，符合大家的想象。因此，难喝的咖啡和预制蛋糕也就被这样遗忘了。\n　　不过，据了解，这位迦楼罗胡乱回答客人的话每次都不一样，也并非少数民族语言，没有少数民族愿意接收这位大字不识的器者。\n　　店里还额外出售毛发保养洗发水与民族手工首饰。雄性鸟类总是更加在意自己的外貌，金翅鸟先生作为鸟的特质在此亦有所体现……蛋糕虽然是预制的，洗发水却是他自己提供的配方，原材料来自他的山中秘密基地，去过的只有云南分部的器者同伴，大家都因此拥有一头蓬松的秀发。据悉，此款洗发水也在基金会线上商店出售。店里售卖的首饰款式由金翅鸟先生亲自试款挑选，供货源头是那位敦煌分部的酒帐先生，据说二位对闪闪发亮的耳环颇有共同爱好，也因此敦煌分部拿到的洗发水总是最优惠的价格。\n　　——《基金会小报·器者们的生活二三事》节选\n　　书评1：那干嘛不直接开首饰店算了。\n　　回复：在景区单独售卖首饰需要强大的推销能力，金翅鸟先生既看不懂汉字（不知道是不是装的）又不会说汉语（这个绝对是装的），无法胜任。\n　　书评2：开咖啡店只是副业……我们的主业是看住金翅鸟先生！\n　　书评3：他绝对看得懂汉字啊，账本跟他开视频会议的时候从来没见他用过翻译器！虽然他也不说话就是了，只会对选品举打钩打叉牌。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_title_2": {
+      "character_id": "S0186",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_content_2": {
+      "character_id": "S0186",
+      "category": "report_content",
+      "text_cn": "经商周十供老师指导，我们发现让金翅鸟先生完成工作需要一定的技巧。\n　　他是非常容易被激怒的器者。只要对他表示轻微的质疑，他的工作效率便会得到提高。\n　　比如“你到底会不会干活？”这一简单的问句，会让他抄起抹布将桌椅擦得干干净净，蛋糕和咖啡更是上得飞快，但他往往不会那么在意订单和客人的对应关系，被客人提出送错了以后会维持着微笑再白送一份，结果往往是店铺评价提高了，但当月盈利惨不忍睹，因此与他共事的工作人员们会熟练使用范围更小的沟通语句。\n　　“你根本不敢把提拉米苏切为每块一模一样大、边长10厘米的正方形。”\n　　“在店门口站够四个小时发传单你根本做不到吧？用异常能力叫动物来帮忙就是输了。”\n　　“认识中国字，才是大理人。大理人么应该是能把今日推荐菜单写好的吧！”\n　　因举出的例子极小，金翅鸟先生生气的概率极高，大概是因为格外地感到被看不起。听说他在动物中尤其讨厌金丝猴，就是因为当年曾有一只金丝猴挑衅他，以一串红玛瑙珠为赌注比较谁敢从苍山上跳下，而在他一跃而下时猴子捧着红玛瑙珠转身逃往山中。他没有去找金丝猴复仇吗？毕竟以他飞行的速度，找到金丝猴应该轻轻松松……\n　　“可能以为红玛瑙珠是葡萄吧！傻猴子，追了也白追。”他如此回答，“而且，那也是三百多年前的事了。”\n　　另外，只要找准方法，称赞云南大地、称赞广袤的云海与山神，他也会为了不辱山的威名而赐下帮助。\n　　“被金翅鸟供奉的山啊，一定会乐于看到我们这间山下的小咖啡店在今早十点之前挂上春节装饰吧！这是春回大地的祝福。”\n　　“能让迦楼罗高飞的云啊，会不会喜欢把屋顶翻新成绿色的小咖啡店？绿色的小屋顶，就像松树的顶一样！”\n　　“如果能有山神襄助，在客人走到我们门口时刚好烈日高照，该多好啊！”\n　　最后一点被他置之不理。大理的风本来就很大，云朵也走得很快，不消一会儿太阳就会交替地从云层中露出来，他认为山神已经安排过轮换的次序。与金翅鸟沟通的技巧，还需要多多学习！\n　　不过，既然已经有了如此微妙的区别，足以说明他是听得懂汉语的吧？\n　　“那些知识一直在他的脑海里，我们都知道。”与他共事的咖啡店员兼基金会工作人员说道，“只是他总是能把自己的精神马上调整到山里去……在那种情况下，他听不懂也是真的。毕竟你也知道，他本体的水晶珠有三颗确实是失去了。这对器者有没有影响？也不能说完全没有吧。”\n　　结束观察时，金翅鸟先生又要怒气冲冲地去穿咖啡豆手链了。对于制作漂亮的东西，他好像也并不排斥。这也与他身上的水晶珠有关吗？",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_title_3": {
+      "character_id": "S0186",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_content_3": {
+      "character_id": "S0186",
+      "category": "report_content",
+      "text_cn": "鎏金骑士先生饱读诗书，措辞高深；宝石冠先生妙语连珠，言谈风趣；星形石小姐勤恳努力，亦能及格。基金会的扫盲工作在云南分部本来是颇有成效的，直到遇到了金翅鸟先生。\n　　迦楼罗出自佛教传说，很难相信这样的金翅鸟先生别说佛经，连三字经都读不明白。\n　　“迦楼罗只要为佛祖战无不胜就可以。”他如此宣布。\n　　咖啡店的工作人员熟练地抱进来一箩带着新鲜露水的花，并稀松平常地指正道：“相关研究表明，大理的人们是将您作为治理水患的神灵供奉的，并非作为战斗神。”\n　　“治水不用识字。而且你还好意思提这一茬？现在他们根本忘了我会治水这一茬，每天躲在房间里、打着伞！龙嘛，轻轻松松就吃掉了……”\n　　“恐龙也是吗？”\n　　“是啊。恐龙橡皮糖嘛，店里也有卖。”他摘下花放进嘴里随意的嚼着，咕哝道，“而且这片土地，本来就为山神所护佑。山会出手的。”\n　　“你的信仰体系有点混杂了。”\n　　他置之不理。对他不喜欢的问题，他总是可以立刻切换到“听不懂”状态。\n　　大理白族有“本主神”信仰的习俗，只要人们有需要，便会将任何值得纪念的人物、生灵供奉为神。金翅鸟先生虽然曾经坐落在三塔顶端俯瞰大理国，但归根结底，他并没有其它自我认知为地区神的器者（比如某位金灿灿的太阳神先生）那样覆盖面广的权能和极高的责任感。神灵在云南的大山里，像人类一样随处可见，金翅鸟先生在大理城中时常对话的动物们便是那些数不胜数的本主神中的几位化身。当然，比起人类他也更愿意与普通动物对话，毕竟他们都不需要用汉语交流，而是使用一种可以直接在沟通对象脑中反映的“印象”。据说动物远不像我们这样要求繁多——这是自然。\n　　本主神这一独特的现象似乎说明人类随时都能走上神坛，自己扮演神，又在不需要时，走下来。从这个角度看，金翅鸟先生并非人类，但也是一位独属于云南土地的典型的神。\n　　写到这段话时，我看到他正从咖啡厅后门溜走。好吧，喜欢开小差，其实也是生物的本能。",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_title_4": {
+      "character_id": "S0186",
+      "category": "report_title",
+      "text_cn": "",
+      "text_vi": "",
+      "status": "PENDING"
+    },
+    "S0186_report_content_4": {
+      "character_id": "S0186",
+      "category": "report_content",
+      "text_cn": "但是，一个通识考试久久不合格的器者，为什么会拥有一间咖啡厅呢？要知道，在基金会里能够这样生活的都是社会化程度非常高的器者。\n　　“因为这间咖啡厅是补习班啊！”店长阿云（化名）说，“我决定全职加入基金会是因为厌倦了在咖啡店上班，谁知道基金会看到我有咖啡店的工作经验就立刻派我去开咖啡店……唉不过在大理开咖啡店还是很舒适的。金翅鸟先生是很想融入人群的哦……”\n　　“不会说话就别说！”名义上的店员金翅鸟正在怒视店长，“是你们非要给我开的店。”\n　　“但咖啡店是你自己告诉星形石小姐的诶。被问到想在哪里实习的时候，你说‘最近看到很多人类在种一种棕色的豆子，可以磨成豆子饮料’。”\n　　“……！”\n　　“那为了咖啡店，起码要学一下现代知识吧。”\n　　“我才不喜欢现代社会，你们规矩太多了！”\n　　“你的山神大人，也不喜欢人吗？山神大人也会愿意看到你愿意积极学习吧？”\n　　百试百灵，金翅鸟被激发了反应，就像在湖泊中投入了一座无法绕过的山。\n　　“要说学习汉语，你们所说的汉语也只是这个年代的官方语言吧？宋朝时大理国的官话，后来明清变迁的官话，都有不同。我在塔顶睡上两觉，人间就变了，跳过一两个朝代的语言不学又有什么要紧？”\n　　“但你现在说得很好诶。”\n　　“我很尊重读书人啊。”他的这句嘀咕快如一阵风略过，后面的话更清晰地盖过了它，“你怎么知道，这是我在遵循你们的习惯说汉语，还是只是投射到你脑里的你能理解的语言？”他突然看定过来的时候，眼睛会出现似银似金的金属光泽，像有些羽毛光滑的鸟类，在不同的光影下有难以分清的折射色彩。\n　　“你明明很关心人类的动向，宋朝人可不种咖啡豆。”\n　　他置之不理。\n　　“无论人如何变迁，山总是在这里。这片土地上的人会死去的。唯有自然给予的生灵，这山、这万物，在天地间绵延不尽。山中生长出了人，与长出菌子、芭蕉有什么不同？山不会讨厌人，也不会喜欢人。但人、鸟、狗、马……需要的一切，山都不会吝啬。泥沙成为屋舍，水流进入梯田。人如果不再耕耘，白鹤和麻雀会吃掉稻谷，鲫鱼就游进河里，麂子和马鹿可以睡在干草堆度过一个冬天，什么都不会白费。”\n　　听说鸟有动态视觉——大概也在他身上体现吧？千年如一瞬，一瞬印千年。\n　　但你终究是由人的手中诞生的。\n　　他仿佛真的能听见心里的声音，对这个不出口的问题，金翅鸟也全盘回答。\n　　“你有没有去过‘绕三灵’？人穿得花红柳绿，为了山而载歌载舞，因为他们认为山给了他们一切——包括我。他们向山祈祷，向我祈祷！可是在雨停之后，他们就忘记了我们。即便如此……四季有轮转，山顶会开花也会积雪，冻死花木鸟雀更是常见，山难道恨它们吗？\n　　“我不是神，也不是山。我只是一只碰巧醒来的金翅鸟。我不喜欢你们，你们也不用在意。毕竟下次再眨眼，你们就都消失了。”他扭开头。\n　　“那如果人又向你提出了愿望，你会拒绝吗？”\n　　“你在说什么？那肯定要去啊。”他很不高兴地又皱起了眉毛，“靠你们自己能干什么？”",
+      "text_vi": "",
+      "status": "PENDING"
     }
   },
   "skins": {
@@ -72520,6 +73412,66 @@
       "discount_price": 36,
       "discount_start": 1792634400,
       "discount_end": 1794448799
+    },
+    "W0054003": {
+      "character_id": "W0054",
+      "skin_name_cn": "处暑",
+      "skin_name_vi": "Xử Thử",
+      "desc_cn": "太阳在空中撒泼，花木着急地显摆，鸟儿带来雨水旋转砸碎的消息——嗯，是夏。怎么，我说的不对吗？",
+      "desc_vi": "Mặt trời ngang ngược giữa không trung, cỏ cây vội vã khoe sắc, chim chóc mang về tin những hạt mưa xoay tròn rồi vỡ tan — ừm, là mùa hạ. Sao nào, tôi nói không đúng à?",
+      "obtain_cn": "通过衣装店限时销售",
+      "obtain_vi": "Bán giới hạn tại Cửa Hàng Trang Phục",
+      "is_base_skin": false,
+      "status": "APPROVED",
+      "skin_type": 3,
+      "unlock_date": 1794016740,
+      "price": 160,
+      "currency": "Vé Trang Phục",
+      "is_high_skin": false,
+      "skin_rare": 3,
+      "cv_name": "黄进泽",
+      "drawing_path": "characters/w0054/drawings/w0054003.webp",
+      "card_path": "characters/w0054/cards/w0054003.webp",
+      "series_id": 204,
+      "series_name_cn": "节气",
+      "series_name_vi": "Tiết Khí",
+      "avatar_path": "characters/w0054/avatars/w0054003.png",
+      "item_id": "9054003",
+      "goods_id": "530520005",
+      "discount_goods_id": "520520005",
+      "discount_price": 144,
+      "discount_start": 1794016800,
+      "discount_end": 1796263199
+    },
+    "A0100005": {
+      "character_id": "A0100",
+      "skin_name_cn": "幻夜巡游",
+      "skin_name_vi": "Huyễn Dạ Tuần Du",
+      "desc_cn": "瓷砖画、纸莎草、贝壳杯垫每样都要？！快、快去告诉所有朋友，开张了，今天市场来了一位不砍价的贵客——一位女王！",
+      "desc_vi": "Tranh gạch men, giấy cói, lót ly vỏ sò — món nào cũng muốn sao?! Mau, mau đi báo cho hết bạn bè đi, khai trương rồi, hôm nay chợ có một vị khách sộp không mặc cả — một nữ vương!",
+      "obtain_cn": "通过游历获得",
+      "obtain_vi": "Nhận được thông qua Du Lịch",
+      "is_base_skin": false,
+      "status": "APPROVED",
+      "skin_type": 3,
+      "unlock_date": 1794448740,
+      "price": null,
+      "currency": "",
+      "is_high_skin": false,
+      "skin_rare": 4,
+      "cv_name": "",
+      "drawing_path": "characters/a0100/drawings/a0100005.webp",
+      "card_path": "characters/a0100/cards/a0100005.webp",
+      "series_id": 208,
+      "series_name_cn": "绮梦",
+      "series_name_vi": "Ỷ Mộng",
+      "avatar_path": "characters/a0100/avatars/a0100005.png",
+      "item_id": "9100005",
+      "goods_id": null,
+      "discount_goods_id": null,
+      "discount_price": null,
+      "discount_start": null,
+      "discount_end": null
     }
   },
   "ui_system": {

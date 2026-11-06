@@ -43,17 +43,26 @@ def pick_events(rows: list[dict], version: dict | None) -> list[dict]:
     return sorted(out, key=lambda e: (e["start"], e["id"]))
 
 
-def pick_hero(rows: list[dict], now: int, art_dir: Path) -> dict | None:
+def _art(path: str, png: Path, published: set[str]) -> str | None:
+    """Art path when extracted locally or already published (NeoArtifacts images get pruned between releases)."""
+    return path if png.exists() or path in published else None
+
+
+def published_art(doc: dict) -> set[str]:
+    return {x for x in [(doc.get("hero") or {}).get("art")] + [v for bn in doc.get("banners") or [] for v in (bn.get("art"), bn.get("title"))] if x}
+
+
+def pick_hero(rows: list[dict], now: int, art_dir: Path, published: set[str] = frozenset()) -> dict | None:
     for r in rows:
         if r.get("KV") and int(r["StartTime"]) <= now < int(r["EndTime"]):
             kv = r["KV"]
             return {"kv": kv, "name_cn": r.get("NameLanText") or "",
-                    "art": f"kv/{kv}.webp" if (art_dir / f"{kv}.png").exists() else None,
+                    "art": _art(f"kv/{kv}.webp", art_dir / f"{kv}.png", published),
                     "start": int(r["StartTime"]), "end": int(r["EndTime"])}
     return None
 
 
-def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path) -> list[dict]:
+def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path, published: set[str] = frozenset()) -> list[dict]:
     out = []
     for p in pools:
         if not p.get("startTime") or p.get("hidden"):
@@ -64,20 +73,21 @@ def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path) -> list[
                     "type": p.get("type") or "", "kind_cn": p.get("kindNameLanText") or "",
                     "start": int(p["startTime"]), "end": int(p["endTime"]), "up": up,
                     "up_skin": skin if skin in skin_ids else None,
-                    "art": f"banners/{p['id']}.webp" if (art_dir / f"PoolBg_{p['id']}.png").exists() else None,
-                    "title": f"banners/title/{p['id']}.webp" if (art_dir / f"PoolIcon_{p['id']}.png").exists() else None,
+                    "art": _art(f"banners/{p['id']}.webp", art_dir / f"PoolBg_{p['id']}.png", published),
+                    "title": _art(f"banners/title/{p['id']}.webp", art_dir / f"PoolIcon_{p['id']}.png", published),
                     "choice": len(_list(p.get("changeList"))) if p.get("kind") == "choiceness" else None})
     return sorted(out, key=lambda x: (-x["start"], x["id"]))
 
 
-def build_document(master_dir: Path, data_json: Path, art_dir: Path, now: int, masterdata: str) -> dict:
+def build_document(master_dir: Path, data_json: Path, art_dir: Path, now: int, masterdata: str,
+                   published: set[str] = frozenset()) -> dict:
     data = json.loads(data_json.read_text(encoding="utf-8"))
     skin_ids = {s["skinID"] for c in data["characters"].values() for s in c.get("skins") or []}
     version = pick_version(_rows(master_dir / "ActivityVersionMap.json"), now)
     return {"generated_at": now, "masterdata": masterdata, "asset_base_url": data.get("asset_base_url", ""),
-            "version": version, "hero": pick_hero(_rows(master_dir / "LoginBackgroundMap.json"), now, art_dir),
+            "version": version, "hero": pick_hero(_rows(master_dir / "LoginBackgroundMap.json"), now, art_dir, published),
             "events": pick_events(_rows(master_dir / "ActivityOverAllMap.json"), version),
-            "banners": build_banners(_rows(master_dir / "cardPools.json"), skin_ids, art_dir)}
+            "banners": build_banners(_rows(master_dir / "cardPools.json"), skin_ids, art_dir, published)}
 
 
 def dumps(doc: dict) -> str:
@@ -96,7 +106,8 @@ def main() -> int:
     parser.add_argument("--now", type=int, default=int(time.time()), help="unix seconds (tests / reproducing a build)")
     args = parser.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # CJK labels; a piped Windows stdout is cp1252
-    doc = build_document(MASTER, ROOT / "public" / "data.json", ART_DIR, args.now, masterdata_version(MASTER))
+    published = published_art(json.loads(OUT.read_text(encoding="utf-8"))) if OUT.exists() else set()
+    doc = build_document(MASTER, ROOT / "public" / "data.json", ART_DIR, args.now, masterdata_version(MASTER), published)
     OUT.write_text(dumps(doc), encoding="utf-8")
     print(f"banners.json: {len(doc['banners'])} banners, {len(doc['events'])} events, "
           f"version {doc['version'] and doc['version']['label']}, hero {doc['hero'] and doc['hero']['kv']}, "

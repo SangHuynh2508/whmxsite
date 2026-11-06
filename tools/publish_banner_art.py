@@ -83,9 +83,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--extract-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--skip-extract", action="store_true", help="PNGs already placed in ART_DIR (e.g. exported by WHMX_Tool)")
     args = parser.parse_args()
-    new = extract()
-    print(f"extracted {len(new)} new PNGs into {ART_DIR}")
+    if not args.skip_extract:
+        new = extract()
+        print(f"extracted {len(new)} new PNGs into {ART_DIR}")
     if args.extract_only:
         return 0
     load_dotenv_without_logging(ROOT / ".env")
