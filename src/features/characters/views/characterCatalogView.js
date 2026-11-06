@@ -226,10 +226,10 @@ export function renderCharacterCatalogView(container) {
                   <button class="seg-btn ${catalogSortOption === 'latest' ? 'active' : ''}" data-sort="latest">${s('catSortLatest')}</button>
                   <button class="seg-btn ${catalogSortOption === 'name' ? 'active' : ''}" data-sort="name">${s('catSortName')}</button>
                   <button class="seg-btn ${catalogSortOption === 'rarity' ? 'active' : ''}" data-sort="rarity">${s('catSortRarity')}</button>
-                  <button class="seg-btn ${catalogSortOption === 'hp' ? 'active' : ''}" data-sort="hp">HP</button>
-                  <button class="seg-btn ${catalogSortOption === 'atk' ? 'active' : ''}" data-sort="atk">ATK</button>
-                  <button class="seg-btn ${catalogSortOption === 'def' ? 'active' : ''}" data-sort="def">DEF</button>
-                  <button class="seg-btn ${catalogSortOption === 'res' ? 'active' : ''}" data-sort="res">RES</button>
+                  <button class="seg-btn ${catalogSortOption === 'hp' ? 'active' : ''}" data-sort="hp">${s('catSortHp')}</button>
+                  <button class="seg-btn ${catalogSortOption === 'atk' ? 'active' : ''}" data-sort="atk">${s('catSortAtk')}</button>
+                  <button class="seg-btn ${catalogSortOption === 'def' ? 'active' : ''}" data-sort="def">${s('catSortDef')}</button>
+                  <button class="seg-btn ${catalogSortOption === 'res' ? 'active' : ''}" data-sort="res">${s('catSortRes')}</button>
                 </div>
               </div>
 

@@ -8,7 +8,7 @@ const vi = {
   catEmpty: 'Không tìm thấy nhân vật nào phù hợp.', catRecords: 'hồ sơ', catSearch: 'Tìm kiếm theo tên nhân vật...',
   catSearchClear: 'Xóa nội dung tìm kiếm', catFilter: 'Bộ Lọc', catJob: 'Chức nghiệp', catRarity: 'Độ hiếm',
   catPool: 'Phân loại', catStandard: 'Thường', catHuanZhang: 'HOÁN CHƯƠNG', catHasHz: 'Có Hoán Chương',
-  catSort: 'SẮP XẾP', catSortLatest: 'Mới Nhất', catSortName: 'Tên', catSortRarity: 'Độ Hiếm', catClear: 'Xóa bộ lọc',
+  catSort: 'SẮP XẾP', catSortLatest: 'Mới Nhất', catSortName: 'Tên', catSortRarity: 'Độ Hiếm', catSortHp: 'HP', catSortAtk: 'ATK', catSortDef: 'DEF', catSortRes: 'RES', catClear: 'Xóa bộ lọc',
   job1: 'Túc Vệ', job2: 'Khinh Nhuệ', job3: 'Viễn Kích', job4: 'Cấu Thuật', job5: 'Chiến Lược', jobOther: 'Khác',
   pickTitle: 'Chọn Nhân Vật', pickClose: 'Đóng', pickAll: 'Tất cả', untranslatedTag: 'chưa dịch',
   limited: 'Limited', hdrPickHint: 'Bấm vào hình đại diện để chọn nhân vật', hdrChange: 'Đổi nhân vật', hdrVariant: 'Biến thể',
@@ -177,47 +177,87 @@ const vi = {
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
-  navCharacters: '器者', navTier: '强度榜', // draft
-  navSkins: '装束', navInfo: '资料', // draft
+  navCharacters: '器者', // game: interfaceLan_interface_nameLan_1003
+  navTier: '强度榜', // draft
+  navSkins: '衣装', // game: interfaceLan_interface_gotoLan_1011
+  navInfo: '资料', // draft
   navTools: '工具', // draft
   navAdmin: '管理', navLogin: '登录', navLang: '语言', // draft
   navPages: '页面', navHome: '首页', navMenu: '菜单', navAccount: '账号', navLogout: '退出登录', menuClose: '关闭菜单', // draft
-  searchPlaceholder: '搜索器者或装束', navRail: '应用导航栏', // draft
+  searchPlaceholder: '搜索器者或衣装', navRail: '应用导航栏', // draft
   catEmpty: '没有找到符合条件的器者。', catRecords: '份档案', catSearch: '按器者名称搜索...', // draft
-  catSearchClear: '清除搜索内容', catFilter: '筛选', catJob: '职业', catRarity: '稀有度', // draft
-  catPool: '分类', catStandard: '常驻', catHuanZhang: '焕章', catHasHz: '有焕章', // draft
-  catSort: '排序', catSortLatest: '最新', catSortName: '名称', catSortRarity: '稀有度', catClear: '清除筛选', // draft
-  job1: '足卫', job2: '轻锐', job3: '远击', job4: '构术', job5: '战略', jobOther: '其他', // draft
-  pickTitle: '选择器者', pickClose: '关闭', pickAll: '全部', untranslatedTag: '未翻译', // draft
-  limited: '限定', hdrPickHint: '点击头像选择器者', hdrChange: '更换器者', hdrVariant: '变体', // draft
+  catFilter: '筛选', // game: CollectionScreenPanel_UI_24
+  catJob: '职业', // game: CollectionScreenPanel_UI_2
+  catRarity: '稀有度', // game: HeroPackagePanel_UI_2
+  catSearchClear: '清除搜索内容', // draft
+  catStandard: '常驻', // game: LangGlobalLan_LangGlobal_name_2482
+  catHuanZhang: '焕彰', // game: LangGlobalLan_LangGlobal_name_17320 一键焕彰
+  catPool: '分类', catHasHz: '有焕彰', // draft
+  catSort: '排序', // game: CollectionScreenPanel_UI_1
+  catSortRarity: '稀有度', // game: HeroPackagePanel_UI_2
+  catSortLatest: '最新', catSortName: '名称', catClear: '清除筛选', // draft
+  job1: '宿卫', // game: characterlan_job_namelan_1
+  job2: '轻锐', // game: characterlan_job_namelan_2
+  job3: '远击', // game: characterlan_job_namelan_3
+  job4: '构术', // game: characterlan_job_namelan_4
+  job5: '战略', // game: characterlan_job_namelan_5
+  jobOther: '其他', // game: CollectionScreenPanel_UI_22
+  pickAll: '全部', // game: LangGlobalLan_LangGlobal_name_2400
+  pickTitle: '选择器者', pickClose: '关闭', untranslatedTag: '未翻译', // draft
+  limited: '限定', // game: LangGlobalLan_LangGlobal_name_2497
+  hdrPickHint: '点击头像选择器者', hdrChange: '更换器者', hdrVariant: '变体', // draft
   cdNotFound: '未找到器者', cdNotFoundText: '器者“{id}”不存在或已隐藏。', // draft
-  cdBackList: '← 返回器者列表', cdBreadcrumb: '器者列表', cdClass: '职业', cdSubNav: '器者详情导航', // draft
-  tabOverview: '概览', tabInfo: '资料', tabTalents: '天赋', tabBuild: '配装', tabLore: '档案', // draft
-  tabTea: '茶室', tabGallery: '图库', // draft
-  ovTitle: '器者档案', ovName: '名称：', ovFullname: '全名：', ovJob: '器者：', ovBanner: '卡池类型：', // draft
+  cdBreadcrumb: '器者列表', // game: interfaceLan_interface_nameLan_1002
+  cdBackList: '← 返回器者列表', cdClass: '职业', cdSubNav: '器者详情导航', // draft
+  tabTalents: '深造', // game: interfaceLan_interface_nameLan_1110 (HeroTalentPanel = 深造点数)
+  tabOverview: '概览', tabInfo: '资料', tabBuild: '配装', tabLore: '档案', // draft
+  tabTea: '茶室', // game: interfaceLan_interface_nameLan_1300
+  tabGallery: '图库', // draft
+  ovTitle: '器者档案', // game: HeroManagePanel_UI_8
+  ovName: '名称：', ovFullname: '全名：', ovJob: '器者：', ovBanner: '卡池类型：', // draft
   ovStaff: '人事状态：', ovRecord: '档案编号：', ovNickname: '常用称呼：', ovCnName: '原名：', // draft
   ovAttack: '攻击方式：', ovDept: '所属：', ovEntity: '本体状态：', ovUnknown: '未知', // draft
   ovMelee: '近战', ovRanged: '远程', // draft
-  skill: '技能', huanzhang: '焕章', zhizhi: '知致', noDesc: '暂无描述。', // draft
-  stTitle: '战斗属性', stEmpty: '该器者暂无战斗属性数据。', stHp: '生命', // draft
-  stAtk: '攻击', stPdef: '物理防御', stMdef: '构术防御', stSpd: '速度', // draft
-  stMov: '移动', stCrit: '暴击率', stCritDmg: '暴击伤害', stMax: '最高', cells: '格', // draft
-  skCooldown: '冷却', skTurns: '回合', skCost: '消耗', skRecover: '回复', skSummon: '召唤', // draft
-  skRange: '范围', skCastRange: '施放距离：', skEffect: '效果：', skRangeAlt: '技能范围', // draft
-  skEmpty: '该器者暂无技能信息。', zzEmpty: '该器者暂无知致数据。', // draft
-  zzUpgrade: '技能强化', hzEmpty: '该器者暂无焕章数据。', hzProps: '属性提升', // draft
-  hzMaterial: '材料', hzMats: '焕章材料', hzNoSkill: '暂无焕章技能详情。', // draft
-  hzEffects: '焕章效果 / 技能', hzStory: '查看焕章典故', // draft
-  infoModes: '器者资料内容', infoSkills: '技能资料', infoHz: '焕章资料', // draft
-  tlEmpty: '该器者暂无天赋数据。', tlReqLv: '需要 Lv.', close: '关闭', tlNeutral: '未解锁', // draft
-  tlDone: '已提升', tlTarget: '目标', tlProgress: '技能 / 天赋进阶', tlTier: '等级', tlCoin: '冬谷币', // draft
-  tlReqCharLv: '器者等级达到', tlReqTalent: '解锁天赋：', tlConditions: '解锁条件', tlUpgrade: '提升天赋', // draft
+  huanzhang: '焕彰', // game: LangGlobalLan_LangGlobal_name_17320
+  zhizhi: '致知', // game: HeroManagePanel_UI_5
+  skill: '技能', noDesc: '暂无描述。', // draft
+  stHp: '生命值', // game: characterlan_AttrDes_namelan_Hp_FIX
+  stTitle: '战斗属性', stEmpty: '该器者暂无战斗属性数据。', // draft
+  stAtk: '攻击力', // game: characterlan_AttrDes_namelan_Atk
+  stPdef: '物理防御', // game: characterlan_AttrDes_namelan_PhysicDef
+  stMdef: '构素防御', // game: characterlan_AttrDes_namelan_MagicDef
+  stSpd: '速度', // game: characterlan_AttrDes_namelan_Speed
+  stMov: '移动力', // game: characterlan_AttrDes_namelan_Mov
+  stCrit: '暴击率', // game: characterlan_AttrDes_namelan_Critical_FIX
+  stCritDmg: '暴击伤害', // game: characterlan_AttrDes_namelan_CritDmg_FIX
+  stMax: '最高', cells: '格', // draft
+  skCooldown: '冷却', // game: UISkillDetailsItem_2 冷却:
+  skCost: '消耗', // game: UISkillDetailsItem_0 消耗:
+  skTurns: '回合', skRecover: '回复', skSummon: '召唤', // draft
+  skCastRange: '射程：', // game: UIPopupSkillDetails_UI_1
+  skRange: '范围', skEffect: '效果：', skRangeAlt: '技能范围', // draft
+  skEmpty: '该器者暂无技能信息。', zzEmpty: '该器者暂无致知数据。', // draft
+  zzUpgrade: '技能强化', hzEmpty: '该器者暂无焕彰数据。', hzProps: '属性提升', // draft
+  hzMaterial: '材料', hzMats: '焕彰材料', hzNoSkill: '暂无焕彰技能详情。', // draft
+  hzEffects: '焕彰效果 / 技能', hzStory: '查看焕彰典故', // draft
+  infoModes: '器者资料内容', infoSkills: '技能资料', infoHz: '焕彰资料', // draft
+  tlNeutral: '未解锁', // game: SkillTipsPanel_UI_0
+  tlEmpty: '该器者暂无深造数据。', tlReqLv: '需要 Lv.', close: '关闭', // draft
+  tlCoin: '冬谷币', // game: RhythmGameShopPanel_UI_0
+  tlDone: '已提升', tlTarget: '目标', tlProgress: '技能 / 深造进阶', tlTier: '等级', // draft
+  tlConditions: '解锁条件', // game: HeroTalentPanel_UI_7
+  tlReqCharLv: '器者等级达到', tlReqTalent: '解锁深造：', tlUpgrade: '提升深造', // draft
   tlUndo: '已提升（点击取消）', tlCost: '提升消耗', // draft
-  glPortrait: '写照', glModel: '造形', glSkin: '装束', glBase: '原图', // draft
+  glPortrait: '写照', // game: characterlan_characterSkin_skinNamelan_*002
+  glModel: '肖形', // game: characterlan_characterSkin_skinNamelan_*001
+  glSkin: '衣装', // game: interfaceLan_interface_gotoLan_1011
+  glBase: '原图', // draft
   glZoom1: '放大图片 {x}（1.4x）', glZoom2: '继续放大图片 {x}（1.8x）', // draft
   glZoom0: '将图片 {x} 恢复原始大小（1.0x）', // draft
   bdEmpty: '暂无配装指南', bdEmptyText: '{x} 的装备、深造与阵容推荐尚未完成。', // draft
-  rgPassive: '被动', rgSelf: '自身', rgFull: '全图', rgAuto: '自动', rgCells: '{n}格', // draft
+  rgSelf: '自身', // game: SkillLan_SkillSelectRange_Cross_0_0
+  rgFull: '全地图', // game: SkillLan_SkillSelectRange_FullMap_0_0
+  rgPassive: '被动', rgAuto: '自动', rgCells: '{n}格', // draft
   rgSingle: '单体', rgSquare: '{n}×{n}范围', rgOverlap: '周围{n}格', // draft
   rgRect1: '直线1×{n}格', rgRect3: '横排3×{n}格', rgRect5: '横排5×{n}格', // draft
   rgDash: '冲刺{n}格', rgPierce: '贯穿直线{n}格', rgCross: '十字', // draft
@@ -233,100 +273,102 @@ const cn: Record<StringKey, string> = {
   teaEnd: '茶会结束', teaWin: '成功时', teaLose: '失败时', // draft
   teaLike: '器者喜欢这个话题', teaPuzzled: '器者感到困惑', // draft
   homeTitle: '物华弥新', homeOpen: '当前卡池', homeAllBanners: '全部卡池 ›', homeEvents: '进行中的活动', // draft
-  homeLeft: '剩余', homeLeftLc: '剩余', homeReleases: '新上线', homeNew: '新', homeSkin: '装束', homeChar: '器者', // draft
+  homeSkin: '衣装', // game: interfaceLan_interface_gotoLan_1011
+  homeChar: '器者', // game: interfaceLan_interface_nameLan_1003
+  homeLeft: '剩余', homeLeftLc: '剩余', homeReleases: '新上线', homeNew: '新', // draft
   homeTheme: '主题活动', // draft
   bnTitle: '卡池', bnLoadErr: '卡池数据加载失败', bnOpen: '进行中', bnAll: '全部卡池', bnUnit: '个卡池', // draft
   bnType: '类型', bnYear: '年份', bnNoMatch: '没有符合筛选的卡池。', bnEnded: '已结束 · 等待更新', // draft
   bnChoice: '{n}位器者自选', bnCue: '查看器者 ›', bnVersion: '版本 {n}', // draft
   tmDH: '{d}天{h}小时', tmHM: '{h}小时{m}分', tmM: '{m}分钟', tmLt: '不到1分钟', // draft
   skAllSrc: '全部来源', // draft
-  skTicket: '装束券', // draft
+  skTicket: '衣装券', // game: itemsLan_items_nameLan_8
   skHigh: '高级', // draft
-  skTravel: '游历', // draft
-  skEvent: '活动', // draft
-  skShop: '商店', // draft
-  skTraining: '集训', // draft
-  skStory: '剧情', // draft
-  skFree: '免费', // draft
+  skTravel: '游历', // game: interfaceLan_interface_nameLan_9001
+  skEvent: '活动', // game: LangGlobalLan_LangGlobal_name_2481
+  skShop: '衣装店', // game: characterlan_characterSkin_getdescriptionLan_* 通过衣装店限时销售
+  skTraining: '集训易市', // game: characterlan_characterSkin_getdescriptionLan_S0155003
+  skStory: '剧情', // game: LangGlobalLan_LangGlobal_name_7198
+  skFree: '免费', // game: UIShopSkinItem_UI_0
   sortDate: '最近上线', // draft
-  sortName: '装束名称 (A-Z)', // draft
+  sortName: '衣装名称 (A-Z)', // draft
   sortChar: '器者名称 (A-Z)', // draft
   sortPrice: '券价 (低到高)', // draft
-  sortId: '按装束编号', // draft
+  sortId: '按衣装编号', // draft
   skPrice: '价格：{p} {c}', // draft
-  skHighFull: '高级装束（礼包限量发售）', // draft
+  skHighFull: '高级衣装（礼包限量发售）', // draft
   skFullStory: '通关剧情后解锁', // draft
-  skFullTraining: '通过集训集市获得', // draft
-  skFullTravel: '通过游历获得', // draft
-  skFullZhenji: '通过珍集易市获得', // draft
-  skFullShop: '装束商店限量发售', // draft
-  skFullBook: '通过预约奖励获得', // draft
-  skFullHuaChao: '通过活动“花朝昔时”获得', // draft
-  skFullXieYun: '通过活动“协韵行歌”获得', // draft
-  skFullEvent: '通过活动获得', // draft
-  skFullFree: '彩蛋赠送', // draft
+  skFullTraining: '通过集训易市获得', // game: characterlan_characterSkin_getdescriptionLan_S0155003
+  skFullTravel: '通过游历获得', // game: characterlan_characterSkin_getdescriptionLan_S0149003
+  skFullZhenji: '通过珍集易市获得', // game: characterlan_characterSkin_getdescriptionLan_V0075004
+  skFullShop: '通过衣装店限时销售', // game: characterlan_characterSkin_getdescriptionLan_V0034101
+  skFullBook: '通过预约奖励获得', // game: characterlan_characterSkin_getdescriptionLan_A0003003
+  skFullHuaChao: '通过花朝昔时活动获得', // game: characterlan_characterSkin_getdescriptionLan_V0049003
+  skFullXieYun: '通过协韵行歌活动获得', // game: characterlan_characterSkin_getdescriptionLan_V0065071
+  skFullEvent: '通过活动获得', // game: characterlan_characterSkin_getdescriptionLan_D0045003
+  skFullFree: '彩蛋赠送', // game: characterlan_characterSkin_getdescriptionLan_V0008003
   skFullOther: '特殊获取方式', // draft
   skObtainDefault: '商店 / 活动发售', // draft
   skObtainGift: '礼包发售', // draft
-  skLimitedPrice: '限定', // draft
-  skLoading: '正在加载装束图库数据...', // draft
+  skLimitedPrice: '限定', // game: LangGlobalLan_LangGlobal_name_2497
+  skLoading: '正在加载衣装图库数据...', // draft
   skAllChars: '全部器者', // draft
-  skMuseum: '物华弥新博物馆 • 装束图库', // draft
-  skTitle: '器者装束收藏', // draft
-  skIntro: '探索145款特别装束，记录历史典故、四时风物与千年古物之美。', // draft
-  skHeroAria: '高级装束焦点展览', // draft
+  skMuseum: '物华弥新博物馆 • 衣装图库', // draft
+  skTitle: '器者衣装收藏', // draft
+  skIntro: '探索145款特别衣装，记录历史典故、四时风物与千年古物之美。', // draft
+  skHeroAria: '高级衣装焦点展览', // draft
   skAppraisal: '鉴定档案', // draft
   skSpotBadge: '高级焦点', // draft
-  skSeriesOf: '装束系列：{n}', // draft
-  skSeriesLogo: '装束系列标志', // draft
-  skObtain: '获取方式', // draft
+  skSeriesOf: '衣装系列：{n}', // draft
+  skSeriesLogo: '衣装系列标志', // draft
+  skObtain: '获取途径', // game: HeroSkinPanel_UI_6
   skFactoryPrice: '出厂价', // draft
-  skViewDetail: '查看装束详情', // draft
-  skViewDetailN: '查看装束详情 {n}', // draft
+  skViewDetail: '查看衣装详情', // draft
+  skViewDetailN: '查看衣装详情 {n}', // draft
   skSpotNav: '高级焦点导航', // draft
-  skSpotPrev: '上一个焦点装束', // draft
-  skSpotNext: '下一个焦点装束', // draft
+  skSpotPrev: '上一个焦点衣装', // draft
+  skSpotNext: '下一个焦点衣装', // draft
   skSpotProgress: '焦点进度', // draft
   skSpotGo: '跳转到焦点 {n}', // draft
   skZoomDrawing: '点击查看大图（立绘）', // draft
-  skZoomHero: '查看焦点装束大图', // draft
+  skZoomHero: '查看焦点衣装大图', // draft
   skSpotExhibit: '展览焦点', // draft
-  skToolbar: '装束筛选与搜索', // draft
-  skSearch: '按装束、器者名称搜索...', // draft
+  skToolbar: '衣装筛选与搜索', // draft
+  skSearch: '按衣装、器者名称搜索...', // draft
   skFilterChar: '按器者筛选', // draft
-  skSortAria: '装束排序', // draft
-  skAcqTitle: '获取方式', // draft
-  skSeriesTitle: '装束系列', // draft
-  skCabinet: '装束系列柜', // draft
+  skSortAria: '衣装排序', // draft
+  skAcqTitle: '获取途径', // game: HeroSkinPanel_UI_6
+  skSeriesTitle: '衣装系列', // draft
+  skCabinet: '衣装系列柜', // draft
   skAllSeries: '全部系列 ({n})', // draft
-  skGridLabel: '装束列表', // draft
+  skGridLabel: '衣装列表', // draft
   skZoomAria: '查看大图', // draft
   skCloseEsc: '关闭 (Escape)', // draft
-  skZoomAlt: '装束大图', // draft
-  skCount: '显示 {n} / {m} 款装束', // draft
-  skNoMatch: '没有符合筛选的装束。', // draft
+  skZoomAlt: '衣装大图', // draft
+  skCount: '显示 {n} / {m} 款衣装', // draft
+  skNoMatch: '没有符合筛选的衣装。', // draft
   skTicketAlt: '券', // draft
-  skHighDash: '高级装束 - ', // draft
-  skHighAlt: '高级装束', // draft
+  skHighDash: '高级衣装 - ', // draft
+  skHighAlt: '高级衣装', // draft
   skLoreDefault: '仿照杰作神韵而制，笔意清逸，神态庄严，尽显传统绘画的巅峰风韵。', // draft
-  sdLoading: '正在加载装束数据...', // draft
-  sdNotFound: '未找到装束', // draft
-  sdNotFoundText: '装束编号“{id}”不存在或尚未上线。', // draft
-  sdBack: '← 返回装束图库', // draft
-  sdLibrary: '装束图库', // draft
+  sdLoading: '正在加载衣装数据...', // draft
+  sdNotFound: '未找到衣装', // draft
+  sdNotFoundText: '衣装编号“{id}”不存在或尚未上线。', // draft
+  sdBack: '← 返回衣装图库', // draft
+  sdLibrary: '衣装图库', // draft
   sdEventFree: '活动 / 免费', // draft
   sdNoInfo: '暂无信息', // draft
-  sdNav: '装束导航', // draft
-  sdHeroAria: '装束焦点图', // draft
+  sdNav: '衣装导航', // draft
+  sdHeroAria: '衣装焦点图', // draft
   sdZoomHint: '点击查看大图', // draft
-  sdDossier: '装束鉴定档案', // draft
+  sdDossier: '衣装鉴定档案', // draft
   sdOwner: '所属器者：', // draft
   sdCost: '费用 / 货币：', // draft
   sdRelease: '发布时间：', // draft
-  sdClass: '装束分类：', // draft
-  sdHighType: '高级互动装束', // draft
-  sdNormalType: '普通装束', // draft
-  sdSeries: '装束系列：', // draft
+  sdClass: '衣装分类：', // draft
+  sdHighType: '高级互动衣装', // draft
+  sdNormalType: '普通衣装', // draft
+  sdSeries: '衣装系列：', // draft
   sdCv: '配音演员 (CV)：', // draft
   sdAssets: '图像资源', // draft
   sdDrawing: '全身立绘 (Drawing)', // draft
@@ -336,22 +378,29 @@ const cn: Record<StringKey, string> = {
   sdCardSub: '查阅界面中的卡面样式 • 点击查看', // draft
   sdCardAria: '查看卡面大图', // draft
   sdAvatar: '头像 (Avatar)', // draft
-  sdAvatarSub: '器者穿上装束后的头像 • 点击查看', // draft
+  sdAvatarSub: '器者穿上衣装后的头像 • 点击查看', // draft
   sdAvatarAria: '查看头像大图', // draft
   trTitle: '强度榜汇总', trRef: '参考强度榜：', trUpdated: '更新于', trOld: '旧版', trTabs: '强度榜内容', // draft
-  trTabChars: '器者', trTabTeams: '阵容', trTabInfo: '说明', trSearch: '搜索器者', trSearchAria: '按名称搜索器者', // draft
+  trTabChars: '器者', // game: interfaceLan_interface_nameLan_1003
+  trTabTeams: '阵容', trTabInfo: '说明', trSearch: '搜索器者', trSearchAria: '按名称搜索器者', // draft
   trCount: '{n} 位器者', trLeft: '剩余 {n} 位器者', trNoMatch: '没有符合的器者。', trMissing: '未找到该强度榜。', // draft
-  trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低知致阶段', trLegHc: '需要焕章', // draft
+  trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低致知阶段', trLegHc: '需要焕彰', // draft
   ifBannerDesc: '当前卡池、倒计时与全部往期卡池。', ifWeapons: '武器', // draft
   ifWeaponsDesc: '武器、技能与属性词条。', ifSoon: '开发中', wpPlaceholder: '内容仍在构思中，敬请期待。', // draft
   cChangeChar: '更换器者', cAvatarTitle: '点击选择器者', cAvatarAria: '选择器者', // draft
-  cLevel: '等级', cLevelMax: '最高 120', cCur: '当前', cReport: '资源报告', cExp: '经验', // draft
+  cLevel: '等级', // game: HeroPackagePanel_UI_4
+  cLevelMax: '最高 120', cCur: '当前', cReport: '资源报告', cExp: '经验', // draft
   cMats: '所需材料', cNoMats: '该区间无需资源。', cVan: '万', // draft
   cFooter: '物华弥新计算器为非商业性质的粉丝自制项目，与官方发行商无关。与物华弥新相关的图像、名称及游戏资产归各自所有者所有。', // draft
-  bdAffixes: '属性词条', bdNoReroll: '无需洗炼武器。', bdDeepens: '深造', bdSeeTalents: '查看天赋 ›', // draft
+  bdDeepens: '深造', // game: interfaceLan_interface_nameLan_1110
+  bdAffixes: '属性词条', bdNoReroll: '无需洗炼武器。', bdSeeTalents: '查看深造 ›', // draft
   bdPoints: '{n}/11 点', bdRotation: '输出循环', bdTips: '技巧', bdSeeSkills: '查看技能 ›', // draft
   mnEmpty: '未找到。试试中文名或去掉声调。', ldErr: '数据加载失败', ldErrText: '请检查网络连接后刷新页面。', // draft
   trLegRest: '无标签 = 无需阶段 · 同一档内越靠左越强 · 点击查看配装', // draft
+  catSortHp: '生命值', // game: characterlan_AttrDes_namelan_Hp_FIX
+  catSortAtk: '攻击力', // game: characterlan_AttrDes_namelan_Atk
+  catSortDef: '物理防御', // game: characterlan_AttrDes_namelan_PhysicDef
+  catSortRes: '构素防御', // game: characterlan_AttrDes_namelan_MagicDef
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];
