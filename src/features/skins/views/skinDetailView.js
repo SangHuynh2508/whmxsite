@@ -7,6 +7,8 @@ import { getGameData } from '../../../data/loader.js';
 import { resolveAssetUrl, getSkinAvatarUrl, getItemIconUrl, getSkinAssetUrls } from '../../assets/assetPaths.js';
 import { createLoreReveal } from '../../../ui/loreReveal.js';
 import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smoothScroll.js';
+import { getLang, txt } from '../../../i18n/lang.mts';
+import { s } from '../../../i18n/strings.mts';
 
 export function renderSkinDetailView(container, skinId) {
   const gameData = getGameData();
@@ -45,9 +47,8 @@ export function renderSkinDetailView(container, skinId) {
     return;
   }
 
-  const skinNameVi = targetSkin.name_vi || targetSkin.name_cn || targetSkin.skinID;
-  const skinNameCn = targetSkin.name_cn || '';
-  const charNameVi = targetChar.name_vi || targetChar.name_cn || targetChar.id;
+  const skinNameVi = txt(targetSkin, 'name') || targetSkin.skinID;
+  const charNameVi = txt(targetChar, 'name') || targetChar.id;
   const charId = targetChar.id;
   const charSlug = targetChar.slug || targetChar.id;
 
@@ -60,25 +61,22 @@ export function renderSkinDetailView(container, skinId) {
   const ticketIconUrl = getItemIconUrl(8);
   const priceDisplay = price 
     ? `<span class="price-with-icon"><img src="${ticketIconUrl}" alt="${currency}" class="currency-ticket-icon" /> ${price} ${currency}</span>` 
-    : (targetSkin.obtain_vi || 'Sự kiện / Miễn phí');
-  const obtainDisplay = targetSkin.obtain_vi || targetSkin.obtain_cn || targetSkin.description_cn || 'Chưa có thông tin';
+    : (txt(targetSkin, 'obtain') || 'Sự kiện / Miễn phí');
+  const obtainDisplay = txt(targetSkin, 'obtain') || targetSkin.description_cn || 'Chưa có thông tin';
   const isHighSkin = targetSkin.is_high_skin === true;
   const cvName = targetSkin.cv_name || '';
 
   // Series metadata
   const seriesId = targetSkin.series_id || null;
-  const seriesNameVi = targetSkin.series_name_vi || '';
-  const seriesNameCn = targetSkin.series_name_cn || '';
+  const seriesName = txt(targetSkin, 'series_name');
   const seriesBadgeUrl = seriesId ? `/assets/series/skinlogo_${seriesId}.png` : '';
-  const seriesHeroName = seriesNameVi || seriesNameCn;
-  const seriesDossierName = (seriesId === 205)
+  const seriesHeroName = seriesName;
+  const seriesDossierName = (seriesId === 205 && getLang() === 'vi')
     ? 'Phi Di (Di sản phi vật thể)'
-    : (seriesNameVi || seriesNameCn);
+    : seriesName;
 
   // Lore / Flavor text: presented as quotation in Hero only
-  const loreVi = (targetSkin.story_vi || '').trim();
-  const loreCn = (targetSkin.story_cn || targetSkin.description_cn || '').trim();
-  const loreText = loreVi || loreCn || '';
+  const loreText = (txt(targetSkin, 'story') || targetSkin.description_cn || '').trim();
   const loreQuoteHtml = loreText ? `<blockquote class="hero-lore-quote" id="skin-detail-lore-quote"></blockquote>` : '';
 
   // Release Date
@@ -151,12 +149,8 @@ export function renderSkinDetailView(container, skinId) {
 
           <div class="spec-rows-list">
             <div class="spec-row">
-              <span class="spec-label">Tên Tiếng Việt:</span>
+              <span class="spec-label">${s('ovName')}</span>
               <span class="spec-value highlight-gold">${skinNameVi}</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-label">Tên gốc tiếng Trung:</span>
-              <span class="spec-value">${skinNameCn || '—'}</span>
             </div>
             <div class="spec-row">
               <span class="spec-label">Khí Giả sở hữu:</span>

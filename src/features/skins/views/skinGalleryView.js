@@ -11,6 +11,9 @@ import { stopSmoothScroll, startSmoothScroll } from '../../../app/runtime/smooth
 import '../styles/skinGallery.css';
 import { fold } from '../../../lib/fold.mts';
 import { newestFirst } from '../../../lib/newest.mts';
+import { getLang, pickText, txt } from '../../../i18n/lang.mts';
+
+const locale = () => (getLang() === 'cn' ? 'zh' : 'vi');
 
 const normalizeText = (str) => (str ? fold(str).trim() : '');
 
@@ -188,12 +191,12 @@ function getActualSkins(gameData) {
 
       skinList.push({
         skinId: sid,
-        nameVi: skin.name_vi || skin.name_cn || `Trang Phục ${sid}`,
+        nameVi: txt(skin, 'name') || `Trang Phục ${sid}`,
         nameCn: skin.name_cn || '',
         storyCn: skin.story_cn || skin.skinFileLanText || '',
-        storyVi: skin.story_vi || '',
+        storyVi: getLang() === 'cn' ? '' : (skin.story_vi || ''),
         obtainCn: skin.obtain_cn || skin.description_cn || '',
-        obtainVi: skin.obtain_vi || skin.obtain_cn || 'Bán tại Cửa Hàng / Sự Kiện',
+        obtainVi: pickText(skin.obtain_vi, skin.obtain_cn).text || 'Bán tại Cửa Hàng / Sự Kiện',
         price: skin.price || null,
         currency: skin.currency || '',
         unlockDate: skin.unlock_date || null,
@@ -205,12 +208,12 @@ function getActualSkins(gameData) {
         sourceCategory: acqInfo.type,
         seriesId: skin.series_id || null,
         seriesNameCn: skin.series_name_cn || '',
-        seriesNameVi: skin.series_name_vi || '',
+        seriesNameVi: txt(skin, 'series_name'),
         seriesBadge: skin.series_badge || (skin.series_id ? `/assets/series/skinlogo_${skin.series_id}.png` : null),
         drawingUrl,
         cardUrl,
         charId: char.id,
-        charNameVi: char.name_vi || char.name_cn || char.id,
+        charNameVi: txt(char, 'name') || char.id,
         charNameCn: char.name_cn || '',
         charSlug: char.slug || char.id
       });
@@ -278,10 +281,10 @@ export function renderSkinGalleryView(container) {
   const charsWithSkins = Array.from(new Set(skins.map(s => s.charId)))
     .map(cid => gameData.characters[cid])
     .filter(Boolean)
-    .sort((a, b) => (a.name_vi || '').localeCompare(b.name_vi || '', 'vi'));
+    .sort((a, b) => txt(a, 'name').localeCompare(txt(b, 'name'), locale()));
 
   const currentChar = charsWithSkins.find(c => c.id === selectedCharacterId);
-  const currentCharLabel = currentChar ? currentChar.name_vi : 'Tất cả Khí Giả';
+  const currentCharLabel = currentChar ? txt(currentChar, 'name') : 'Tất cả Khí Giả';
   const currentSortOpt = SORT_OPTIONS.find(o => o.value === sortOrder) || SORT_OPTIONS[0];
 
   const isAcqActive = selectedAcquisition !== 'all';
@@ -331,14 +334,10 @@ export function renderSkinGalleryView(container) {
             <div class="museum-text-stage" id="hero-text-stage">
               <h2 class="museum-title" id="hero-skin-title">${initialSkin.nameVi}</h2>
               <div class="museum-char-meta" id="hero-char-meta">
-                <a href="#/characters/${initialChar.slug || initialChar.id || initialSkin.charId}" class="char-link-gold" id="hero-char-link">${initialChar.name_vi || initialChar.name_cn || initialSkin.charId}</a>
+                <a href="#/characters/${initialChar.slug || initialChar.id || initialSkin.charId}" class="char-link-gold" id="hero-char-link">${txt(initialChar, 'name') || initialSkin.charId}</a>
               </div>
               <div class="museum-notes" id="hero-skin-notes"></div>
               <div class="museum-data-table" id="hero-data-table">
-                <div class="museum-data-row">
-                  <span>Tên nguyên bản</span>
-                  <span class="val" id="hero-val-cn">${initialSkin.nameCn || '—'}</span>
-                </div>
                 <div class="museum-data-row">
                   <span>Cách thức sở hữu</span>
                   <span class="val" id="hero-val-obtain">${initialSkin.obtainVi || 'Bán qua gói quà'}</span>
@@ -474,7 +473,7 @@ export function renderSkinGalleryView(container) {
                     data-value="${c.id}" 
                     tabindex="-1"
                   >
-                    ${c.name_vi}
+                    ${txt(c, 'name')}
                   </div>
                 `).join('')}
               </div>
@@ -720,9 +719,9 @@ function getFilteredSkins(skins) {
 
   // Sort
   if (sortOrder === 'name-asc') {
-    filtered.sort((a, b) => a.nameVi.localeCompare(b.nameVi, 'vi'));
+    filtered.sort((a, b) => a.nameVi.localeCompare(b.nameVi, locale()));
   } else if (sortOrder === 'char-asc') {
-    filtered.sort((a, b) => a.charNameVi.localeCompare(b.charNameVi, 'vi') || a.skinId.localeCompare(b.skinId));
+    filtered.sort((a, b) => a.charNameVi.localeCompare(b.charNameVi, locale()) || a.skinId.localeCompare(b.skinId));
   } else if (sortOrder === 'price-asc') {
     filtered.sort((a, b) => (a.price || 9999) - (b.price || 9999));
   } else if (sortOrder === 'date-desc') {
@@ -799,7 +798,6 @@ function renderGridCards(skins) {
           <!-- Character Name: Secondary -->
           <div class="gallery-char-name" title="${skin.charNameVi}">${skin.charNameVi}</div>
           <div class="gallery-card-subinfo">
-            <span class="gallery-card-cn" title="${skin.nameCn}">${skin.nameCn}</span>
             ${priceHtml}
           </div>
         </div>
@@ -942,7 +940,6 @@ function setupHeroSpotlight(container, highSkins, gameData) {
   const charLinkEl = container.querySelector('#hero-char-link');
   const notesEl = container.querySelector('#hero-skin-notes');
   const dataTableEl = container.querySelector('#hero-data-table');
-  const valCnEl = container.querySelector('#hero-val-cn');
   const valObtainEl = container.querySelector('#hero-val-obtain');
   const valPriceEl = container.querySelector('#hero-val-price');
   const ctaBtn = container.querySelector('#hero-detail-cta');
@@ -1038,11 +1035,10 @@ function setupHeroSpotlight(container, highSkins, gameData) {
   function updateDomData(skin, char, index) {
     if (titleEl) titleEl.textContent = skin.nameVi;
     if (charLinkEl) {
-      charLinkEl.textContent = char.name_vi || char.name_cn || skin.charId;
+      charLinkEl.textContent = txt(char, 'name') || skin.charId;
       charLinkEl.href = `#/characters/${char.slug || char.id || skin.charId}`;
     }
     // Lore text is updated via the lore reveal system, not raw textContent
-    if (valCnEl) valCnEl.textContent = skin.nameCn || '—';
     if (valObtainEl) valObtainEl.textContent = skin.obtainVi || 'Bán qua gói quà';
     if (valPriceEl) valPriceEl.textContent = skin.price ? `${skin.price} ${skin.currency}` : 'Giới hạn';
     if (ctaBtn) {
