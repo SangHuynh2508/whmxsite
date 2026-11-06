@@ -169,6 +169,9 @@ const vi = {
   cLevel: 'Cấp độ (Level)', cLevelMax: 'Tối đa 120', cCur: 'Hiện tại', cReport: 'Báo Cáo Tài Nguyên', cExp: 'Kinh Nghiệm',
   cMats: 'Vật liệu cần', cNoMats: 'Không cần tài nguyên cho khoảng này.', cVan: 'vạn',
   cFooter: 'Vật Hoa Di Tân Calculator là dự án fan-made, phi thương mại và không liên kết với nhà phát hành chính thức. Các hình ảnh, tên gọi và tài sản trò chơi liên quan đến 物华弥新 thuộc quyền sở hữu của các chủ sở hữu tương ứng.',
+  bdAffixes: 'Dòng thuộc tính', bdNoReroll: 'Không cần tẩy luyện vũ khí.', bdDeepens: 'Thâm tạo', bdSeeTalents: 'Xem thiên phú ›',
+  bdPoints: '{n}/11 điểm', bdRotation: 'Xoay vòng', bdTips: 'Mẹo', bdSeeSkills: 'Xem kỹ năng ›',
+  mnEmpty: 'Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.', ldErr: 'Không tải được dữ liệu', ldErrText: 'Kiểm tra kết nối mạng rồi tải lại trang.',
   trLegRest: 'không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build',
 };
 export type StringKey = keyof typeof vi;
@@ -343,6 +346,9 @@ const cn: Record<StringKey, string> = {
   cLevel: '等级', cLevelMax: '最高 120', cCur: '当前', cReport: '资源报告', cExp: '经验', // draft
   cMats: '所需材料', cNoMats: '该区间无需资源。', cVan: '万', // draft
   cFooter: '物华弥新计算器为非商业性质的粉丝自制项目，与官方发行商无关。与物华弥新相关的图像、名称及游戏资产归各自所有者所有。', // draft
+  bdAffixes: '属性词条', bdNoReroll: '无需洗炼武器。', bdDeepens: '深造', bdSeeTalents: '查看天赋 ›', // draft
+  bdPoints: '{n}/11 点', bdRotation: '输出循环', bdTips: '技巧', bdSeeSkills: '查看技能 ›', // draft
+  mnEmpty: '未找到。试试中文名或去掉声调。', ldErr: '数据加载失败', ldErrText: '请检查网络连接后刷新页面。', // draft
   trLegRest: '无标签 = 无需阶段 · 同一档内越靠左越强 · 点击查看配装', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };

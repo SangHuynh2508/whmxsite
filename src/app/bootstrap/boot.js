@@ -1,3 +1,4 @@
+import { s } from '../../i18n/strings.mts';
 import { loadGameData } from '../../data/loader.js';
 import { state, subscribe, setCharacter } from '../../data/state.js';
 import { calculateResources } from '../../data/calculator.js';
@@ -43,7 +44,7 @@ export async function boot() {
   } catch {
     // Without data.json no page can render: say so instead of leaving the page blank.
     const box = document.getElementById('empty-state');
-    box.innerHTML = '<div class="empty-state-content"><h2 class="empty-state-title">Không tải được dữ liệu</h2><p class="empty-state-text">Kiểm tra kết nối mạng rồi tải lại trang.</p></div>';
+    box.innerHTML = `<div class="empty-state-content"><h2 class="empty-state-title">${s('ldErr')}</h2><p class="empty-state-text">${s('ldErrText')}</p></div>`;
     box.classList.remove('hidden');
     return;
   }

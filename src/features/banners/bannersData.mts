@@ -73,6 +73,7 @@ const EVENT_KIND_VI: Record<string, string> = { 主题活动: 'Sự kiện chủ
 
 /** A kind the table does not know yet stays Chinese (shown with the untranslated dot), never guessed. */
 export function eventKind(kindCn: string): { text: string; vi: boolean } {
+  if (getLang() === 'cn') return { text: kindCn, vi: true };
   return EVENT_KIND_VI[kindCn] ? { text: EVENT_KIND_VI[kindCn], vi: true } : { text: kindCn, vi: false };
 }
 

@@ -1,5 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import { Block } from '../Block';
+import { s } from '../../../../i18n/strings.mts';
+import { useLang } from '../../../../i18n/useLang.ts';
 import { Text } from '../Text';
 import type { BuildView } from '../buildView.mts';
 import type { Span } from '../sheetLayout.mts';
@@ -9,19 +11,20 @@ type Deepen = BuildView['deepens'][number];
 // Emblem + style name under it, the serial (7202) + variant chip beside; the whole unit opens the detail popover.
 // The accessible name spells the serial ("7-2-0-2") so it is not read as one number (critique, Sam).
 function DeepenUnit({ d }: { d: Deepen }) {
+  useLang();
   const id = useId();
   const points = d.columns.map((c) => c.points).join('-');
   return (
     <>
-      <button type="button" className="bs-deep" popoverTarget={id} aria-label={`Thâm tạo ${d.style.text}: ${points}${d.label ? `, ${d.label}` : ''}`}>
+      <button type="button" className="bs-deep" popoverTarget={id} aria-label={`${s('bdDeepens')} ${d.style.text}: ${points}${d.label ? `, ${d.label}` : ''}`}>
         <figure>{d.icon && <img src={d.icon} alt="" />}<figcaption><Text unit={d.style} /></figcaption></figure>
-        <span className="bs-serial">{d.serial}{d.variant && <span className="bs-chip">{d.variant}</span>}<small>Xem thiên phú ›</small></span>
+        <span className="bs-serial">{d.serial}{d.variant && <span className="bs-chip">{d.variant}</span>}<small>{s('bdSeeTalents')}</small></span>
       </button>
       <div popover="auto" id={id} className="bs-pop bs-pop-wide">
         <div className="bs-pop-head">
           {d.icon && <img src={d.icon} alt="" />}
-          <div><h4><Text unit={d.style} /> · {d.serial}</h4><small>{d.label && `${d.label} · `}{d.total}/11 điểm</small></div>
-          <button type="button" className="bs-close" popoverTarget={id} popoverTargetAction="hide">Đóng</button>
+          <div><h4><Text unit={d.style} /> · {d.serial}</h4><small>{d.label && `${d.label} · `}{s('bdPoints').replace('{n}', String(d.total))}</small></div>
+          <button type="button" className="bs-close" popoverTarget={id} popoverTargetAction="hide">{s('close')}</button>
         </div>
         {/* 2 × 2, not one tall stack (owner 2026-09-28: "gọn lại, không chiếm hết màn") */}
         <div className="bs-cols">
@@ -42,5 +45,6 @@ function DeepenUnit({ d }: { d: Deepen }) {
 }
 
 export function DeepensBlock({ deepens, span, action }: { deepens: Deepen[]; span: Span; action?: ReactNode }) {
-  return <Block id="deepens" title="Thâm tạo" span={span} action={action}><div className="bs-deeps">{deepens.map((d, i) => <DeepenUnit key={i} d={d} />)}</div></Block>;
+  useLang();
+  return <Block id="deepens" title={s('bdDeepens')} span={span} action={action}><div className="bs-deeps">{deepens.map((d, i) => <DeepenUnit key={i} d={d} />)}</div></Block>;
 }

@@ -110,7 +110,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
         style={top === null ? { opacity: 0 } : { transform: `translateY(${top}px)` }}
       />
       <div className="app-nav-header">
-        <a href="#/" className="app-nav-brand" title="Trang chủ · Vật Hoa Di Tân" onClick={linkClick('#/')}>
+        <a href="#/" className="app-nav-brand" title={`${s('navHome', lang)} · ${s('homeTitle', lang)}`} onClick={linkClick('#/')}>
           <span className="app-nav-brand-mark">物</span>
           <span className="app-nav-brand-full">
             <span className="brand-title">物华弥新</span>
@@ -220,7 +220,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
       <dialog ref={sheetRef} className="mobile-menu-sheet" aria-label={s('navMenu', lang)} onClose={() => setOpen(false)}>
         <div className="mobile-menu-body" onClick={closeOnLink}>
           {/* the site title heads the sheet (owner 2026-10-08: a title, not a menu row) */}
-          <h2 className="mobile-menu-title"><span className="mobile-menu-mark" aria-hidden="true">物</span>Vật Hoa Di Tân</h2>
+          <h2 className="mobile-menu-title"><span className="mobile-menu-mark" aria-hidden="true">物</span>{s('homeTitle', lang)}</h2>
           <label className="mobile-menu-search">
             <Search size={18} aria-hidden />
             <input
@@ -240,9 +240,9 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                 <a key={r.href} href={r.href} className="mobile-menu-result">
                   <img src={getCharacterAvatarUrl(characters[r.characterId])} alt="" loading="lazy" />
                   <span><b>{r.title}</b><small>{r.sub}</small></span>
-                  <em>{r.kind === 'character' ? 'Khí Giả' : 'Trang phục'}</em>
+                  <em>{s(r.kind === 'character' ? 'homeChar' : 'homeSkin', lang)}</em>
                 </a>
-              )) : <p className="mobile-menu-empty">Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.</p>
+              )) : <p className="mobile-menu-empty">{s('mnEmpty', lang)}</p>
             ) : (
               <>
                 <p className="mobile-menu-heading">{s('navPages', lang)}</p>

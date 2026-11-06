@@ -1,5 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import { Block } from '../Block';
+import { s as t } from '../../../../i18n/strings.mts';
+import { useLang } from '../../../../i18n/useLang.ts';
 import { Text } from '../Text';
 import type { BuildView } from '../buildView.mts';
 import type { Span } from '../sheetLayout.mts';
@@ -24,13 +26,13 @@ function WeaponTile({ weapon: w }: { weapon: Weapon }) {
       <figcaption>
         {w.label && <span className="bs-wlabel">{w.label}</span>}
         <Text unit={w.name} id={nameId} />
-        {w.skills.length > 0 && <button type="button" className="bs-cue" popoverTarget={id}>Xem kỹ năng ›</button>}
+        {w.skills.length > 0 && <button type="button" className="bs-cue" popoverTarget={id}>{t('bdSeeSkills')}</button>}
       </figcaption>
       {w.skills.length > 0 && <div popover="auto" id={id} className="bs-pop">
         <div className="bs-pop-head">
           <span className="bs-tile bs-tile-sm" style={{ backgroundImage: `url(${w.frame})` }}>{w.icon && <img src={w.icon} alt="" />}</span>
           <div><h4><Text unit={w.name} /></h4><small>★{w.rare}{w.label && ` · ${w.label}`}</small></div>
-          <button type="button" className="bs-close" popoverTarget={id} popoverTargetAction="hide">Đóng</button>
+          <button type="button" className="bs-close" popoverTarget={id} popoverTargetAction="hide">{t('close')}</button>
         </div>
         {w.skills.map((s, i) => <div key={i} className="bs-skill"><h5><Text unit={s.name} /></h5><p><Text unit={s.text} /></p></div>)}
       </div>}
@@ -39,5 +41,6 @@ function WeaponTile({ weapon: w }: { weapon: Weapon }) {
 }
 
 export function WeaponsBlock({ weapons, span, action }: { weapons: Weapon[]; span: Span; action?: ReactNode }) {
-  return <Block id="weapons" title="Vũ khí" span={span} action={action}><div className="bs-weapons">{weapons.map((w, i) => <WeaponTile key={i} weapon={w} />)}</div></Block>;
+  useLang();
+  return <Block id="weapons" title={t('ifWeapons')} span={span} action={action}><div className="bs-weapons">{weapons.map((w, i) => <WeaponTile key={i} weapon={w} />)}</div></Block>;
 }

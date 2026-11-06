@@ -536,7 +536,7 @@ export function renderInfoTab(container, char) {
     const rangeImgUrl = resolveSkillRangeAsset(effType, effRange, selRange);
     const castRangeText = resolveCastRangeText(selRange, selType, selRangeType, isPassive);
     const effectText = resolveEffectAreaText(effType, effRange);
-    const showRangeSection = rangeImgUrl || effectText || (castRangeText && castRangeText !== "Nội tại");
+    const showRangeSection = rangeImgUrl || effectText || (castRangeText && castRangeText !== s('rgPassive'));
 
     let subFormsHtml = "";
     if (!isSubEntry) {

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Block } from '../Block';
+import { s } from '../../../../i18n/strings.mts';
+import { useLang } from '../../../../i18n/useLang.ts';
 import type { BuildView } from '../buildView.mts';
 import { teamSpan, type Span } from '../sheetLayout.mts';
 import { useHeightTween } from '../../motion';
@@ -21,13 +23,14 @@ function usePhone() {
 // Packed grid: a track ≈ one avatar, each group spans what it needs, `dense` backfills the gaps. On phones only the
 // first 4 groups show until "Xem thêm" (critique P2: the team list took ~1000 px at 390).
 export function TeamsBlock({ teams, teamOther, span, action }: { teams: BuildView['teams']; teamOther: string; span: Span; action?: ReactNode }) {
+  useLang();
   const phone = usePhone();
   const [all, setAll] = useState(false);
   const packRef = useRef<HTMLDivElement>(null);
   const capturePack = useHeightTween(packRef, all);
   const shown = phone && !all ? teams.slice(0, SHOWN_ON_PHONE) : teams;
   return (
-    <Block id="teams" title="Đội hình" span={span} action={action}>
+    <Block id="teams" title={s('trTabTeams')} span={span} action={action}>
       {shown.length > 0 && (
         <div className="bs-pack" ref={packRef}>
           {shown.map((t, i) => (

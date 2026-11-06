@@ -1,12 +1,15 @@
 import type { ReactNode } from 'react';
 import { Block } from '../Block';
+import { s } from '../../../../i18n/strings.mts';
+import { useLang } from '../../../../i18n/useLang.ts';
 import { Text } from '../Text';
 import type { BuildView } from '../buildView.mts';
 import type { Span } from '../sheetLayout.mts';
 
 export function AffixesBlock({ affixes, span, action }: { affixes: BuildView['affixes']; span: Span; action?: ReactNode }) {
+  useLang();
   return (
-    <Block id="affixes" title="Dòng thuộc tính" span={span} action={action}>
+    <Block id="affixes" title={s('bdAffixes')} span={span} action={action}>
       {affixes.groups.length > 0 && (
         <div className="bs-cells">
           {affixes.groups.map((g, i) => (
@@ -14,7 +17,7 @@ export function AffixesBlock({ affixes, span, action }: { affixes: BuildView['af
           ))}
         </div>
       )}
-      {affixes.noReroll && <p className="bs-note">Không cần tẩy luyện vũ khí.</p>}
+      {affixes.noReroll && <p className="bs-note">{s('bdNoReroll')}</p>}
     </Block>
   );
 }
