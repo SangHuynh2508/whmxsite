@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 import { getDb } from '../../../db/client.mjs';
 import { accounts, users } from '../../../db/schema/auth.mjs';
-import { createPasswordRecoveryAuth, internalAuthHeaders } from '../../auth.mjs';
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, createPasswordRecoveryAuth, internalAuthHeaders } from '../../auth.mjs';
 
 const resetInput = z.object({
   email: z.string().trim().email().max(320).transform((value) => value.toLowerCase()),
-  newPassword: z.string().min(12).max(128),
+  newPassword: z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
 });
 
 export class AdminPasswordResetError extends Error {

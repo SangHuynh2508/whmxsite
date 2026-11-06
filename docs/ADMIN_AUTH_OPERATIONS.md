@@ -26,7 +26,7 @@ environment or secure process environment, then run:
 
 ```text
 ADMIN_PASSWORD_RESET_EMAIL=<existing-admin-email>
-ADMIN_PASSWORD_RESET_NEW_PASSWORD=<12-to-128-character-password>
+ADMIN_PASSWORD_RESET_NEW_PASSWORD=<9-to-128-character-password>
 npm run admin:reset-password
 ```
 

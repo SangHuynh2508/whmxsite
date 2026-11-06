@@ -3,13 +3,13 @@ import { z } from 'zod';
 
 import { getDb } from '../../../db/client.mjs';
 import { adminAccountAudits, sessions, users } from '../../../db/schema/auth.mjs';
-import { internalAuthHeaders, provisioningAuth } from '../../auth.mjs';
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, internalAuthHeaders, provisioningAuth } from '../../auth.mjs';
 
 const roleSchema = z.enum(['owner', 'editor']);
 const accountInput = z.object({
   name: z.string().trim().min(1).max(200),
   email: z.string().trim().email().max(320).transform((value) => value.toLowerCase()),
-  password: z.string().min(12).max(128),
+  password: z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
   role: roleSchema.default('editor'),
   requestId: z.string().uuid().nullable().optional(),
 });

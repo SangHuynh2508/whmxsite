@@ -132,8 +132,8 @@ function ProvisionForm({ onCancel, onDone }: { onCancel: () => void; onDone: (na
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Tên hiển thị"><input required name="name" maxLength={200} className={`${inputClass} h-9`} /></Field>
         <Field label="Email"><input required name="email" type="email" maxLength={320} autoComplete="off" className={`${inputClass} h-9`} /></Field>
-        <Field label="Mật khẩu tạm thời" hint="Tối thiểu 12 ký tự. Gửi riêng cho người nhận." className="sm:col-span-2">
-          <input required name="password" type="password" minLength={12} maxLength={128} autoComplete="new-password" className={`${inputClass} h-9`} />
+        <Field label="Mật khẩu tạm thời" hint="Tối thiểu 9 ký tự. Gửi riêng cho người nhận." className="sm:col-span-2">
+          <input required name="password" type="password" minLength={9} maxLength={128} autoComplete="new-password" className={`${inputClass} h-9`} />
         </Field>
       </div>
       <fieldset className="grid gap-2 border-0 p-0">

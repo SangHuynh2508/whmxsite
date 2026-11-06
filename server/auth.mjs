@@ -4,6 +4,9 @@ import { betterAuth } from 'better-auth';
 import { getDb } from '../db/client.mjs';
 import { accounts, sessions, users, verifications } from '../db/schema/auth.mjs';
 
+export const MIN_PASSWORD_LENGTH = 9;
+export const MAX_PASSWORD_LENGTH = 128;
+
 function requiredEnvironment(name) {
   const value = process.env[name];
   if (!value) {
@@ -66,8 +69,8 @@ function authConfiguration({ allowProvisioning, sendResetPassword, revokeSession
       // Server-side provisioning must never mint a session for the operator or
       // the account recipient.
       autoSignIn: false,
-      minPasswordLength: 12,
-      maxPasswordLength: 128,
+      minPasswordLength: MIN_PASSWORD_LENGTH,
+      maxPasswordLength: MAX_PASSWORD_LENGTH,
       ...(sendResetPassword ? { sendResetPassword, revokeSessionsOnPasswordReset } : {}),
     },
     user: {
