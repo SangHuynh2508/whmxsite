@@ -10,6 +10,20 @@ import { s } from '../../../i18n/strings.mts';
 
 export function renderHeader() {
   const char = state.character;
+  // index.html holds the calculator's static (Vietnamese) text; set it in the current language on each render.
+  const set = (sel, v, attr) => { const el = document.querySelector(sel); if (el) attr ? el.setAttribute(attr, v) : (el.textContent = v); };
+  set('#profile-avatar-container', s('hdrPickHint'), 'title');
+  set('#profile-change-char-btn', s('hdrChange'));
+  set('.config-label h3', s('cLevel'));
+  set('.config-label .meta-text', s('cLevelMax'));
+  set('.control-group:has(#level-current) label', s('cCur'));
+  set('.control-group:has(#level-target) label', s('tlTarget'));
+  set('.calc-section .section-header h2', s('tabTalents'));
+  set('.report-header h3', s('cReport'));
+  set('.stat-item:has(#total-coin) .stat-label', s('tlCoin'));
+  set('.stat-item:has(#total-exp) .stat-label', s('cExp'));
+  set('.materials-report h4', s('cMats'));
+  set('#main-content .app-footer p', s('cFooter'));
 
   const elAvatarBox  = document.getElementById('profile-avatar-container');
   const elAvatar     = document.getElementById('profile-avatar');

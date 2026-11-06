@@ -1,5 +1,7 @@
 import { getGameData } from '../data/loader.js';
 import { resizeSmoothScroll } from '../app/runtime/smoothScroll.js';
+import { txt } from '../i18n/lang.mts';
+import { s } from '../i18n/strings.mts';
 
 const EXP_BOOK_ID = '2105';   // Thâm Độ Xã Hội Học — 8000 EXP each
 const EXP_PER_BOOK = 8000;
@@ -20,7 +22,7 @@ export function formatVanHtml(num, suffix = '') {
   const vanVal = (n / 10000).toLocaleString('vi-VN', { maximumFractionDigits: 2 });
   const detailStr = suffix ? `${fmtRaw} ${suffix}`.trim() : fmtRaw;
 
-  return `${vanVal} vạn <span class="stat-detail">(${detailStr})</span>`;
+  return `${vanVal} ${s('cVan')} <span class="stat-detail">(${detailStr})</span>`;
 }
 
 export function formatVan(num, suffix = '') {
@@ -34,7 +36,7 @@ export function formatVan(num, suffix = '') {
   const vanVal = (n / 10000).toLocaleString('vi-VN', { maximumFractionDigits: 2 });
   const detailStr = suffix ? `${fmtRaw} ${suffix}`.trim() : fmtRaw;
 
-  return `${vanVal} vạn (${detailStr})`;
+  return `${vanVal} ${s('cVan')} (${detailStr})`;
 }
 
 export function renderResourceSummary(resources) {
@@ -67,7 +69,7 @@ export function renderResourceSummary(resources) {
   });
 
   if (sorted.length === 0) {
-    elMatGrid.innerHTML = '<div class="mat-empty">Không cần tài nguyên cho khoảng này.</div>';
+    elMatGrid.innerHTML = `<div class="mat-empty">${s('cNoMats')}</div>`;
     resizeSmoothScroll();
     return;
   }
@@ -82,13 +84,14 @@ export function renderResourceSummary(resources) {
 
     const div = document.createElement('div');
     div.className = 'mat-item';
-    div.title = item.name_vi;
+    const name = txt(item, 'name');
+    div.title = name;
     div.innerHTML = `
-      <img class="mat-icon" src="/${item.icon}" alt="${item.name_vi}" loading="lazy"
+      <img class="mat-icon" src="/${item.icon}" alt="${name}" loading="lazy"
            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E'"/>
       <div class="mat-info">
         <span class="mat-count">×${countText}</span>
-        <span class="mat-name">${item.name_vi}</span>
+        <span class="mat-name">${name}</span>
       </div>
     `;
     elMatGrid.appendChild(div);
