@@ -164,6 +164,8 @@ const vi = {
   trTabChars: 'Nhân vật', trTabTeams: 'Đội hình', trTabInfo: 'Thông tin', trSearch: 'Tìm Khí Giả', trSearchAria: 'Tìm Khí Giả theo tên',
   trCount: '{n} Khí Giả', trLeft: 'Còn {n} Khí Giả', trNoMatch: 'Không có Khí Giả nào khớp.', trMissing: 'Không tìm thấy tier list này.',
   trSeeAll: 'Xem các tier list', trNone: 'Chưa có tier list.', trLegZ: 'mốc Trí Tri tối thiểu', trLegHc: 'cần Hoán Chương',
+  ifBannerDesc: 'Banner đang mở, đếm ngược và toàn bộ banner đã qua.', ifWeapons: 'Vũ Khí',
+  ifWeaponsDesc: 'Vũ khí, kỹ năng và dòng thuộc tính.', ifSoon: 'Đang phát triển', wpPlaceholder: 'Nội dung đang được demo trong tưởng tượng, vui lòng đợi.',
   trLegRest: 'không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build',
 };
 export type StringKey = keyof typeof vi;
@@ -333,6 +335,8 @@ const cn: Record<StringKey, string> = {
   trTabChars: '器者', trTabTeams: '阵容', trTabInfo: '说明', trSearch: '搜索器者', trSearchAria: '按名称搜索器者', // draft
   trCount: '{n} 位器者', trLeft: '剩余 {n} 位器者', trNoMatch: '没有符合的器者。', trMissing: '未找到该强度榜。', // draft
   trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低知致阶段', trLegHc: '需要焕章', // draft
+  ifBannerDesc: '当前卡池、倒计时与全部往期卡池。', ifWeapons: '武器', // draft
+  ifWeaponsDesc: '武器、技能与属性词条。', ifSoon: '开发中', wpPlaceholder: '内容仍在构思中，敬请期待。', // draft
   trLegRest: '无标签 = 无需阶段 · 同一档内越靠左越强 · 点击查看配装', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };

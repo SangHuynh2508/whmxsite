@@ -6,6 +6,8 @@ import { artUrl, currentBanners, skinImage, type BannersDoc } from '../banners/b
 import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
 import { bannerIsland } from '../banners/island.tsx';
+import { s } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang.ts';
 import './styles/info.css';
 
 // 绮木覆花 weapon series (item icons already in public/assets/items) in the game's 5-star frame
@@ -34,15 +36,16 @@ function WeaponArt() {
 }
 
 export function InfoPage({ doc }: { doc: BannersDoc | null }) {
+  useLang();
   const page = useRef<HTMLDivElement>(null);
   useReveal(page, '.info-tile', 'info');
   const tiles = [
-    { href: '#/banners', name: 'Banner', desc: 'Banner đang mở, đếm ngược và toàn bộ banner đã qua.', art: <BannerArt doc={doc} /> },
-    { href: '#/weapons', name: 'Vũ Khí', desc: 'Vũ khí, kỹ năng và dòng thuộc tính.', soon: 'Đang phát triển', art: <WeaponArt /> },
+    { href: '#/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
+    { href: '#/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
   ];
   return (
     <div className="info-page" ref={page}>
-      <h1 className="info-title">Thông tin</h1>
+      <h1 className="info-title">{s('navInfo')}</h1>
       <div className="info-grid">
         {tiles.map((t) => (
           <a key={t.href} className="info-tile" href={t.href}>
