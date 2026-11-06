@@ -30,7 +30,7 @@ const PUBLIC_LINKS = [
 ] satisfies { href: string; label: StringKey; icon: unknown; views: string[] }[];
 
 const LangToggle = ({ lang }: { lang: Lang }) => (
-  <div className="app-nav-lang" role="group" aria-label={s('navLang', lang)}>
+  <div className="app-nav-lang" data-lang={lang} role="group" aria-label={s('navLang', lang)}>
     {(['vi', 'cn'] as const).map((l) => (
       <button key={l} type="button" aria-pressed={lang === l} className={lang === l ? 'is-active' : undefined} onClick={(e) => { setLang(l); e.currentTarget.blur(); }}>
         {l === 'vi' ? 'VI' : '中'}
