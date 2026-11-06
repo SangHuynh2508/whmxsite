@@ -1,6 +1,8 @@
 import { state, toggleTalentNode } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
 import { formatVan } from './resourceSummary.js';
+import { getLang, pickText, txt } from '../i18n/lang.mts';
+import { s } from '../i18n/strings.mts';
 
 /**
  * Shared helper to resolve verified talent icon URL for a talent node.
@@ -67,7 +69,7 @@ function computeColumns(nodes) {
 export function renderTalentGraph(container, charData) {
   const char = charData || state.character;
   if (!char || !char.talents || char.talents.length === 0) {
-    container.innerHTML = '<div class="tg-empty">Nhân vật này chưa có dữ liệu thiên phú.</div>';
+    container.innerHTML = `<div class="tg-empty">${s('tlEmpty')}</div>`;
     return;
   }
 
@@ -111,13 +113,13 @@ export function renderTalentGraph(container, charData) {
     inner.className = 'tg-node-inner';
     const img = document.createElement('img');
     img.src = `/${node.icon}`;
-    img.alt = node.name_vi || node.name_cn;
+    img.alt = txt(node, 'name');
     inner.appendChild(img);
     div.appendChild(inner);
 
     div.setAttribute('tabindex', '0');
     div.setAttribute('role', 'button');
-    div.setAttribute('aria-label', node.name_vi || node.name_cn);
+    div.setAttribute('aria-label', txt(node, 'name'));
 
     let pointerStartX = 0;
     let pointerStartY = 0;
@@ -394,19 +396,18 @@ function showDetailPanel(nodeEl, node, char) {
   const primaryIconSrc = getTalentIconUrl(node);
 
   // Names
-  const displayName = node.name_vi || (node.skill_meta && node.skill_meta.skill_name_cn) || node.name_cn;
-  const cnName = (node.name_cn && node.name_cn !== displayName) ? node.name_cn : '';
+  const displayName = getLang() === 'cn' ? txt(node, 'name') : node.name_vi || (node.skill_meta && node.skill_meta.skill_name_cn) || node.name_cn;
 
   // Status label
   const statusMap = {
-    'neutral': 'Chưa mở',
-    'completed': 'Đã nâng',
-    'target': 'Mục tiêu'
+    'neutral': s('tlNeutral'),
+    'completed': s('tlDone'),
+    'target': s('tlTarget')
   };
-  const statusLabel = statusMap[status] || 'Chưa mở';
+  const statusLabel = statusMap[status] || s('tlNeutral');
 
   // Description
-  let rawDesc = node.desc_vi || node.desc_cn || (node.skill_meta ? node.skill_meta.desc_cn : '');
+  let rawDesc = pickText(node.desc_vi, node.desc_cn || (node.skill_meta ? node.skill_meta.desc_cn : '')).text;
   const descHtml = formatDesc(rawDesc);
 
   // Before -> After Skill Progression Box
@@ -419,22 +420,22 @@ function showDetailPanel(nodeEl, node, char) {
 
     progressionHtml = `
       <div class="tg-pop-progression">
-        <div class="tg-pop-section-title">TIẾN CẤP KỸ NĂNG / THIÊN PHÚ</div>
+        <div class="tg-pop-section-title">${s('tlProgress')}</div>
         <div class="tg-pop-prog-row">
           <div class="tg-pop-prog-card">
-            <img src="${primaryIconSrc}" class="tg-pop-prog-icon" alt="Bậc ${prevLvl}" onerror="this.src='/${node.icon}'" />
-            <span class="tg-pop-prog-lvl">Bậc ${prevLvl}</span>
+            <img src="${primaryIconSrc}" class="tg-pop-prog-icon" alt="${s('tlTier')} ${prevLvl}" onerror="this.src='/${node.icon}'" />
+            <span class="tg-pop-prog-lvl">${s('tlTier')} ${prevLvl}</span>
           </div>
           <div class="tg-pop-prog-arrow">→</div>
           <div class="tg-pop-prog-card active">
-            <img src="${primaryIconSrc}" class="tg-pop-prog-icon" alt="Bậc ${nextLvl}" onerror="this.src='/${node.icon}'" />
-            <span class="tg-pop-prog-lvl">Bậc ${nextLvl}</span>
+            <img src="${primaryIconSrc}" class="tg-pop-prog-icon" alt="${s('tlTier')} ${nextLvl}" onerror="this.src='/${node.icon}'" />
+            <span class="tg-pop-prog-lvl">${s('tlTier')} ${nextLvl}</span>
           </div>
         </div>
         ${(prevDescHtml && nextDescHtml && prevDescHtml !== nextDescHtml) ? `
           <div class="tg-pop-prog-diff">
-            <div class="tg-pop-prog-desc-prev"><strong>Bậc ${prevLvl}:</strong> ${prevDescHtml}</div>
-            <div class="tg-pop-prog-desc-next"><strong>Bậc ${nextLvl}:</strong> ${nextDescHtml}</div>
+            <div class="tg-pop-prog-desc-prev"><strong>${s('tlTier')} ${prevLvl}:</strong> ${prevDescHtml}</div>
+            <div class="tg-pop-prog-desc-next"><strong>${s('tlTier')} ${nextLvl}:</strong> ${nextDescHtml}</div>
           </div>
         ` : ''}
       </div>
@@ -447,7 +448,7 @@ function showDetailPanel(nodeEl, node, char) {
     node.cost.forEach(c => {
       if (c.id === '3') {
         const coinItem = gameData ? gameData.items['3'] : null;
-        const coinName = coinItem ? (coinItem.name_vi || coinItem.name_cn) : 'Đông Cốc Tệ';
+        const coinName = coinItem ? txt(coinItem, 'name') : s('tlCoin');
         costRows += `
           <div class="tg-pop-cost-row">
             <img src="/assets/items/itemicon_3.png" class="tg-pop-item-icon" alt="${coinName}" />
@@ -456,7 +457,7 @@ function showDetailPanel(nodeEl, node, char) {
           </div>`;
       } else {
         const item = gameData ? gameData.items[c.id] : null;
-        const name = item ? (item.name_vi || item.name_cn) : `Vật liệu ID ${c.id}`;
+        const name = item ? txt(item, 'name') : `${s('hzMaterial')} ID ${c.id}`;
         const icon = item ? item.icon : `assets/items/itemicon_${c.id}.png`;
         costRows += `
           <div class="tg-pop-cost-row">
@@ -471,21 +472,21 @@ function showDetailPanel(nodeEl, node, char) {
   // Unlock Prerequisites
   let prereqItems = [];
   if (node.req_level && node.req_level > 1) {
-    prereqItems.push(`Đạt cấp độ nhân vật <strong>Lv.${node.req_level}</strong>`);
+    prereqItems.push(`${s('tlReqCharLv')} <strong>Lv.${node.req_level}</strong>`);
   }
   if (node.req_talent && node.req_talent.length > 0 && char.talents) {
     const names = node.req_talent.map(reqId => {
       const parentNode = char.talents.find(n => n.id === reqId);
-      return parentNode ? (parentNode.name_vi || parentNode.name_cn || reqId) : reqId;
+      return parentNode ? (txt(parentNode, 'name') || reqId) : reqId;
     });
-    prereqItems.push(`Mở thiên phú: <strong>${names.join(', ')}</strong>`);
+    prereqItems.push(`${s('tlReqTalent')} <strong>${names.join(', ')}</strong>`);
   }
 
   let conditionsHtml = '';
   if (prereqItems.length > 0) {
     conditionsHtml = `
       <div class="tg-pop-section">
-        <div class="tg-pop-section-title">ĐIỀU KIỆN MỞ</div>
+        <div class="tg-pop-section-title">${s('tlConditions')}</div>
         <ul class="tg-pop-cond-list">
           ${prereqItems.map(it => `<li>${it}</li>`).join('')}
         </ul>
@@ -494,18 +495,17 @@ function showDetailPanel(nodeEl, node, char) {
   }
 
   // Action Button Text
-  let actionText = 'Nâng Thiên Phú';
+  let actionText = s('tlUpgrade');
   if (status === 'completed') {
-    actionText = 'Đã Nâng (Bấm để Hủy)';
+    actionText = s('tlUndo');
   }
 
   detailPanel.innerHTML = `
-    <button class="tg-pop-close" id="tg-pop-close-btn" title="Đóng (Esc)">×</button>
+    <button class="tg-pop-close" id="tg-pop-close-btn" title="${s('close')} (Esc)">×</button>
     <div class="tg-pop-header">
       <img src="${primaryIconSrc}" class="tg-pop-icon" alt="${displayName}" onerror="this.src='/${node.icon}'" />
       <div class="tg-pop-title-group">
         <div class="tg-pop-title">${displayName}</div>
-        ${cnName ? `<div class="tg-pop-cn">${cnName}</div>` : ''}
         <div class="tg-pop-badges">
           ${node.req_level ? `<span class="tg-pop-badge req">Lv.${node.req_level}</span>` : ''}
           <span class="tg-pop-badge status-${status}">${statusLabel}</span>
@@ -519,7 +519,7 @@ function showDetailPanel(nodeEl, node, char) {
 
     ${costRows ? `
       <div class="tg-pop-section">
-        <div class="tg-pop-section-title">CHI PHÍ NÂNG CẤP</div>
+        <div class="tg-pop-section-title">${s('tlCost')}</div>
         <div class="tg-pop-costs">${costRows}</div>
       </div>
     ` : ''}

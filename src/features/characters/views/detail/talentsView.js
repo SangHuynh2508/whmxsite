@@ -2,6 +2,8 @@
  * Standalone Read-Only Character Talent Tree Sub-View (/characters/:slug/talents)
  */
 import { getTalentIconUrl } from '../../../../ui/talentGraph.js';
+import { txt } from '../../../../i18n/lang.mts';
+import { s } from '../../../../i18n/strings.mts';
 
 let popupHideTimeout = null;
 
@@ -11,7 +13,7 @@ export function renderTalentsTab(container, char) {
   if (talents.length === 0) {
     container.innerHTML = `
       <div class="empty-sub-state">
-        <p>Nhân vật này chưa có dữ liệu cây thiên phú.</p>
+        <p>${s('tlEmpty')}</p>
       </div>
     `;
     return;
@@ -151,13 +153,13 @@ function renderReadOnlyTalentTree(container, char) {
     inner.className = 'tg-node-inner';
     const img = document.createElement('img');
     img.src = `/${node.icon}`;
-    img.alt = node.name_vi || node.name_cn;
+    img.alt = txt(node, 'name');
     inner.appendChild(img);
     div.appendChild(inner);
 
     div.setAttribute('tabindex', '0');
     div.setAttribute('role', 'button');
-    div.setAttribute('aria-label', node.name_vi || node.name_cn);
+    div.setAttribute('aria-label', txt(node, 'name'));
 
     // Setup Hover + Pointer + Tap events
     setupNodeEvents(div, popup, node, char);
@@ -264,9 +266,8 @@ function hideReadOnlyTalentPopup() {
 
 function showReadOnlyTalentPopup(nodeEl, node, char) {
   const popup = getOrCreatePopup();
-  const nameVi = node.name_vi || node.name_cn;
-  const nameCn = node.name_cn !== nameVi ? node.name_cn : '';
-  const descVi = node.desc_vi || node.desc_cn || 'Chưa có mô tả.';
+  const nameVi = txt(node, 'name');
+  const descVi = txt(node, 'desc') || s('noDesc');
   const iconUrl = getTalentIconUrl(node);
 
   const iconHtml = iconUrl 
@@ -278,10 +279,9 @@ function showReadOnlyTalentPopup(nodeEl, node, char) {
       ${iconHtml}
       <div class="rot-pop-title-box">
         <h4 class="rot-pop-name">${nameVi}</h4>
-        ${nameCn ? `<span class="rot-pop-cn cn-font">${nameCn}</span>` : ''}
-        ${node.req_level ? `<span class="rot-pop-badge">Yêu cầu Lv. ${node.req_level}</span>` : ''}
+        ${node.req_level ? `<span class="rot-pop-badge">${s('tlReqLv')} ${node.req_level}</span>` : ''}
       </div>
-      <button type="button" class="rot-pop-close" id="rot-pop-close" aria-label="Đóng">×</button>
+      <button type="button" class="rot-pop-close" id="rot-pop-close" aria-label="${s('close')}">×</button>
     </div>
 
     <div class="rot-pop-body">

@@ -3,6 +3,8 @@
  * Showcase full character drawing (.webp) on canvas with 3-step interactive zoom & pan
  */
 import { resolveAssetUrl } from '../../../assets/assetPaths.js';
+import { getLang, txt } from '../../../../i18n/lang.mts';
+import { s } from '../../../../i18n/strings.mts';
 
 export function renderGalleryTab(container, char) {
   const skins = char.skins || [];
@@ -11,29 +13,28 @@ export function renderGalleryTab(container, char) {
   let displayItems = [];
 
   if (skins.length > 0) {
-    displayItems = skins.map((s, idx) => {
-      const skinId = s.skinID || `${char.id}00${idx + 1}`;
-      const imagePath = resolveAssetUrl(s.image);
+    displayItems = skins.map((sk, idx) => {
+      const skinId = sk.skinID || `${char.id}00${idx + 1}`;
+      const imagePath = resolveAssetUrl(sk.image);
 
-      let label = s.name_vi;
+      let label = getLang() === 'cn' ? sk.name_cn : sk.name_vi;
       if (!label || label === '写照' || label === '肖形' || label === '造形') {
-        if (s.name_cn === '写照' || label === '写照') label = 'Chân Dung';
-        else if (s.name_cn === '肖形' || s.name_cn === '造形' || label === '肖形' || label === '造形') label = 'Tạo Hình';
-        else label = s.name_vi || s.name_cn || (s.is_base ? 'Tạo Hình' : `Trang Phục ${idx + 1}`);
+        if (sk.name_cn === '写照' || label === '写照') label = s('glPortrait');
+        else if (sk.name_cn === '肖形' || sk.name_cn === '造形' || label === '肖形' || label === '造形') label = s('glModel');
+        else label = txt(sk, 'name') || (sk.is_base ? s('glModel') : `${s('glSkin')} ${idx + 1}`);
       }
 
       return {
         id: idx,
         skinID: skinId,
         label,
-        nameCn: s.name_cn || '',
         src: imagePath,
-        desc: s.description_cn || ''
+        desc: sk.description_cn || ''
       };
     });
   } else {
     // The builder validates drawing mappings, so do not invent a remote path here.
-    displayItems = [{ id: 0, skinID: char.id, label: 'Ảnh Gốc', nameCn: '', src: resolveAssetUrl(char.icon), desc: '' }];
+    displayItems = [{ id: 0, skinID: char.id, label: s('glBase'), src: resolveAssetUrl(char.icon), desc: '' }];
   }
 
   let activeIndex = 0;
@@ -96,7 +97,7 @@ export function renderGalleryTab(container, char) {
     imgEl.style.transform = `translate3d(${panX}px, ${panY}px, 0px) scale(${scale})`;
 
     const currentSkin = displayItems[activeIndex] || displayItems[0];
-    const charName = char.name_vi || char.name_cn;
+    const charName = txt(char, 'name');
     const labelPrefix = `${charName} - ${currentSkin.label}`;
 
     // Manage zoom level classes & dynamic cursor states
@@ -114,11 +115,11 @@ export function renderGalleryTab(container, char) {
     // Accessible labels reflecting the 3-step state without boolean aria-expanded
     stageEl.removeAttribute('aria-expanded');
     if (zoomIndex === 0) {
-      stageEl.setAttribute('aria-label', `Phóng to hình ảnh ${labelPrefix} (1.4x)`);
+      stageEl.setAttribute('aria-label', s('glZoom1').replace('{x}', labelPrefix));
     } else if (zoomIndex === 1) {
-      stageEl.setAttribute('aria-label', `Phóng to thêm hình ảnh ${labelPrefix} (1.8x)`);
+      stageEl.setAttribute('aria-label', s('glZoom2').replace('{x}', labelPrefix));
     } else {
-      stageEl.setAttribute('aria-label', `Thu hình ảnh ${labelPrefix} về kích thước ban đầu (1.0x)`);
+      stageEl.setAttribute('aria-label', s('glZoom0').replace('{x}', labelPrefix));
     }
 
     if (isDragging) {
@@ -235,7 +236,7 @@ export function renderGalleryTab(container, char) {
 
   function renderGallery() {
     const currentSkin = displayItems[activeIndex] || displayItems[0];
-    const charName = char.name_vi || char.name_cn;
+    const charName = txt(char, 'name');
 
     container.innerHTML = `
       <div class="gallery-canvas-wrapper">
@@ -258,7 +259,7 @@ export function renderGalleryTab(container, char) {
         <div class="gallery-canvas-stage" 
              tabindex="0" 
              role="button" 
-             aria-label="Phóng to hình ảnh ${charName} - ${currentSkin.label} (1.4x)">
+             aria-label="${s('glZoom1').replace('{x}', `${charName} - ${currentSkin.label}`)}">
           <img src="${currentSkin.src}" 
                alt="${charName} - ${currentSkin.label}" 
                class="gallery-canvas-drawing" />
@@ -269,7 +270,6 @@ export function renderGalleryTab(container, char) {
           <span class="caption-char-name">${charName}</span>
           <span class="caption-separator">•</span>
           <span class="caption-skin-name">${currentSkin.label}</span>
-          ${currentSkin.nameCn ? `<span class="caption-skin-cn cn-font">(${currentSkin.nameCn})</span>` : ''}
         </div>
       </div>
     `;

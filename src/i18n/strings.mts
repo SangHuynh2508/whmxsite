@@ -31,6 +31,14 @@ const vi = {
   hzMaterial: 'Vật liệu', hzMats: 'NGUYÊN LIỆU HOÁN CHƯƠNG', hzNoSkill: 'Không có chi tiết kỹ năng Hoán Chương.',
   hzEffects: 'HIỆU ỨNG / KỸ NĂNG HOÁN CHƯƠNG', hzStory: 'Xem điển cố / cốt truyện Hoán Chương',
   infoModes: 'Nội dung thông tin nhân vật',
+  tlEmpty: 'Nhân vật này chưa có dữ liệu thiên phú.', tlReqLv: 'Yêu cầu Lv.', close: 'Đóng', tlNeutral: 'Chưa mở',
+  tlDone: 'Đã nâng', tlTarget: 'Mục tiêu', tlProgress: 'TIẾN CẤP KỸ NĂNG / THIÊN PHÚ', tlTier: 'Bậc', tlCoin: 'Đông Cốc Tệ',
+  tlReqCharLv: 'Đạt cấp độ nhân vật', tlReqTalent: 'Mở thiên phú:', tlConditions: 'ĐIỀU KIỆN MỞ', tlUpgrade: 'Nâng Thiên Phú',
+  tlUndo: 'Đã Nâng (Bấm để Hủy)', tlCost: 'CHI PHÍ NÂNG CẤP',
+  glPortrait: 'Chân Dung', glModel: 'Tạo Hình', glSkin: 'Trang Phục', glBase: 'Ảnh Gốc',
+  glZoom1: 'Phóng to hình ảnh {x} (1.4x)', glZoom2: 'Phóng to thêm hình ảnh {x} (1.8x)',
+  glZoom0: 'Thu hình ảnh {x} về kích thước ban đầu (1.0x)',
+  bdEmpty: 'Chưa có hướng dẫn build', bdEmptyText: 'Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho {x} đang chưa được làm.',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -66,6 +74,14 @@ const cn: Record<StringKey, string> = {
   hzMaterial: '材料', hzMats: '焕章材料', hzNoSkill: '暂无焕章技能详情。', // draft
   hzEffects: '焕章效果 / 技能', hzStory: '查看焕章典故', // draft
   infoModes: '器者资料内容', // draft
+  tlEmpty: '该器者暂无天赋数据。', tlReqLv: '需要 Lv.', close: '关闭', tlNeutral: '未解锁', // draft
+  tlDone: '已提升', tlTarget: '目标', tlProgress: '技能 / 天赋进阶', tlTier: '等级', tlCoin: '冬谷币', // draft
+  tlReqCharLv: '器者等级达到', tlReqTalent: '解锁天赋：', tlConditions: '解锁条件', tlUpgrade: '提升天赋', // draft
+  tlUndo: '已提升（点击取消）', tlCost: '提升消耗', // draft
+  glPortrait: '写照', glModel: '造形', glSkin: '装束', glBase: '原图', // draft
+  glZoom1: '放大图片 {x}（1.4x）', glZoom2: '继续放大图片 {x}（1.8x）', // draft
+  glZoom0: '将图片 {x} 恢复原始大小（1.0x）', // draft
+  bdEmpty: '暂无配装指南', bdEmptyText: '{x} 的装备、深造与阵容推荐尚未完成。', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];
