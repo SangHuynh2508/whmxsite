@@ -211,11 +211,11 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
 
   return (
     <>
-      <button type="button" className="mobile-menu-fab" aria-label="Menu" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
+      <button type="button" className="mobile-menu-fab" aria-label={s('navMenu', lang)} aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
         <MorphIcon icon={Menu} size={20} strokeWidth={BAR_STROKE} reducedMotion="user" />
       </button>
 
-      <dialog ref={sheetRef} className="mobile-menu-sheet" aria-label="Menu" onClose={() => setOpen(false)}>
+      <dialog ref={sheetRef} className="mobile-menu-sheet" aria-label={s('navMenu', lang)} onClose={() => setOpen(false)}>
         <div className="mobile-menu-body" onClick={closeOnLink}>
           {/* the site title heads the sheet (owner 2026-10-08: a title, not a menu row) */}
           <h2 className="mobile-menu-title"><span className="mobile-menu-mark" aria-hidden="true">物</span>Vật Hoa Di Tân</h2>
@@ -227,7 +227,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => { if (event.key === 'Enter' && results[0]) { location.hash = results[0].href; setOpen(false); } }}
               placeholder={s('searchPlaceholder', lang)}
-              aria-label="Tìm Khí Giả hoặc trang phục"
+              aria-label={s('searchPlaceholder', lang)}
               autoComplete="off"
               enterKeyHint="search"
             />

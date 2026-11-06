@@ -5,6 +5,8 @@ import { RARITY_LABELS } from './utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from './utils/avatar.mts';
 import { stopSmoothScroll, startSmoothScroll } from '../app/runtime/smoothScroll.js';
 import { newestFirst } from '../lib/newest.mts';
+import { txt } from '../i18n/lang.mts';
+import { s } from '../i18n/strings.mts';
 
 let activeJob = 'all';
 let isInitialized = false;
@@ -20,6 +22,14 @@ export function openCalcPicker() {
   if (!backdrop) return;
 
   stopSmoothScroll();
+  // index.html holds the modal's static (Vietnamese) text; set it in the current language on each open.
+  const set = (sel, v, attr) => { const el = document.querySelector(sel); if (el) attr ? el.setAttribute(attr, v) : (el.textContent = v); };
+  set('#calc-char-picker-dialog', s('pickTitle'), 'aria-label');
+  set('.calc-picker-header-title h3', s('pickTitle').toUpperCase());
+  set('#calc-picker-close-btn', s('pickClose'), 'aria-label');
+  set('#calc-picker-search-input', s('catSearch'), 'placeholder');
+  set('#calc-picker-job-filter [data-job="all"]', s('pickAll'));
+  for (let j = 1; j <= 5; j++) set(`#calc-picker-job-filter [data-job="${j}"]`, s(`job${j}`));
   backdrop.classList.remove('hidden');
   renderCalcPickerRoster();
 
@@ -173,10 +183,10 @@ export function renderCalcPickerRoster() {
     const limitedBadge = char.is_limited ? `<span class="char-item-limited-tag">LIMITED</span>` : '';
 
     div.innerHTML = `
-      <img class="calc-picker-item-icon" src="${getCharacterAvatarUrl(char)}" alt="${char.name_vi}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 1 1\\'/%3E'"/>
+      <img class="calc-picker-item-icon" src="${getCharacterAvatarUrl(char)}" alt="${txt(char, 'name')}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 1 1\\'/%3E'"/>
       <div class="calc-picker-item-info">
         <div class="calc-picker-item-name-row">
-          <span class="calc-picker-item-name">${char.name_vi || char.name_cn}</span>
+          <span class="calc-picker-item-name">${txt(char, 'name')}</span>
         </div>
         <div class="calc-picker-item-meta-row">
           <span class="calc-picker-item-rare rare-${char.rare}">${rareText}</span>
@@ -197,6 +207,6 @@ export function renderCalcPickerRoster() {
   });
 
   if (count === 0) {
-    rosterEl.innerHTML = '<div style="padding:24px;color:var(--text-muted);font-size:13px;text-align:center;">Không tìm thấy nhân vật phù hợp.</div>';
+    rosterEl.innerHTML = `<div style="padding:24px;color:var(--text-muted);font-size:13px;text-align:center;">${s('catEmpty')}</div>`;
   }
 }

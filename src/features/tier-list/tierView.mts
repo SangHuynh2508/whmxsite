@@ -2,6 +2,8 @@
 import { fold } from '../../lib/fold.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
+import { pick } from '../../i18n/lang.mts';
+import { s } from '../../i18n/strings.mts';
 import type { CharacterTileProps } from '../characters/components/CharacterTile.tsx';
 import type { Tab } from './tierRoute.mts';
 
@@ -60,10 +62,9 @@ export const badges = (e: Entry) => [e.zhizhi ? `Z${e.zhizhi}` : '', e.hc ? 'HC'
 export const badgeTitle = (e: Entry) => [e.zhizhi ? `Trí Tri ${e.zhizhi}` : '', e.hc ? 'cần Hoán Chương' : ''].filter(Boolean).join(' · ');
 
 export function tileProps(e: Entry, c: SiteChar, href = `#/characters/${c.slug}/build`): CharacterTileProps {
-  const untranslated = !c.name_vi;
-  const name = c.name_vi || c.name_cn;
+  const { text: name, untranslated } = pick(c, 'name');
   const b = badges(e);
-  const label = [`${name}${untranslated ? ' (chưa dịch)' : ''}${b.length ? ` (${b.join(' · ')})` : ''}`, JOB_NAMES[c.job], RARITY_LABELS[c.rare]].filter(Boolean).join(' · ');
+  const label = [`${name}${untranslated ? ` (${s('untranslatedTag')})` : ''}${b.length ? ` (${b.join(' · ')})` : ''}`, JOB_NAMES[c.job], RARITY_LABELS[c.rare]].filter(Boolean).join(' · ');
   return { name, untranslated, avatar: getCharacterAvatarUrl(c), rare: c.rare, href, label, badges: b, badgeTitle: badgeTitle(e) };
 }
 

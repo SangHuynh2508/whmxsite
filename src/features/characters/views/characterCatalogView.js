@@ -8,6 +8,8 @@ import { fold } from '../../../lib/fold.mts';
 import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { catalogCardHtml } from '../catalogCard.mts';
 import { newestFirst } from '../../../lib/newest.mts';
+import { getLang, txt } from '../../../i18n/lang.mts';
+import { s } from '../../../i18n/strings.mts';
 
 let catalogSearchQuery = '';
 let catalogJobFilters = new Set(); // Set of '1' | '2' | '3' | '4' | '5'
@@ -23,11 +25,11 @@ export function renderCharacterCatalogView(container) {
 
   function getCharacterStatValue(char, statKey) {
     if (!char || !char.stats) return null;
-    const s = char.stats;
-    if (statKey === 'hp') return s.hp_max ?? s.hp_base ?? null;
-    if (statKey === 'atk') return s.atk_max ?? s.atk_base ?? null;
-    if (statKey === 'def') return s.def_physic_max ?? s.def_physic_base ?? null;
-    if (statKey === 'res') return s.def_magic_max ?? s.def_magic_base ?? null;
+    const st = char.stats;
+    if (statKey === 'hp') return st.hp_max ?? st.hp_base ?? null;
+    if (statKey === 'atk') return st.atk_max ?? st.atk_base ?? null;
+    if (statKey === 'def') return st.def_physic_max ?? st.def_physic_base ?? null;
+    if (statKey === 'res') return st.def_magic_max ?? st.def_magic_base ?? null;
     return null;
   }
 
@@ -73,9 +75,7 @@ export function renderCharacterCatalogView(container) {
 
     return filtered.sort((a, b) => {
       if (catalogSortOption === 'name') {
-        const nameA = a.name_vi || a.name_cn || '';
-        const nameB = b.name_vi || b.name_cn || '';
-        const comp = nameA.localeCompare(nameB, 'vi', { numeric: true, sensitivity: 'base' });
+        const comp = txt(a, 'name').localeCompare(txt(b, 'name'), getLang() === 'cn' ? 'zh' : 'vi', { numeric: true, sensitivity: 'base' });
         if (comp !== 0) return comp;
         return b.id.localeCompare(a.id);
       } else if (catalogSortOption === 'rarity') {
@@ -105,7 +105,7 @@ export function renderCharacterCatalogView(container) {
     if (filtered.length === 0) {
       return `
         <div class="catalog-empty-msg">
-          <p>Không tìm thấy nhân vật nào phù hợp với bộ lọc hiện tại.</p>
+          <p>${s('catEmpty')}</p>
         </div>
       `;
     }
@@ -114,8 +114,8 @@ export function renderCharacterCatalogView(container) {
       const cards = char.cards || [];
       const primary = cards[0] ? getCharacterCardUrl(cards[0]) : (char.icon ? (char.icon.startsWith('/') ? char.icon : `/${char.icon}`) : '');
       return catalogCardHtml({
-        slug: char.slug, name: char.name_vi || char.name_cn || '', rare: char.rare, rarityLabel: RARITY_LABELS[char.rare] || 'R',
-        job: char.job, jobLabel: JOB_NAMES[char.job] || 'Khác', limited: Boolean(char.is_limited), primary,
+        slug: char.slug, name: txt(char, 'name'), rare: char.rare, rarityLabel: RARITY_LABELS[char.rare] || 'R',
+        job: char.job, jobLabel: JOB_NAMES[char.job] ? s(`job${char.job}`) : s('jobOther'), limited: Boolean(char.is_limited), primary,
         secondary: cards[1] ? getCharacterCardUrl(cards[1]) : null, huanzhangIcon: hasHuanZhang(char) ? HUANZHANG_INDICATOR_ICON : null,
       });
     }).join('');
@@ -131,8 +131,8 @@ export function renderCharacterCatalogView(container) {
         <!-- Full-Width Visual Hero Header -->
         <section class="catalog-hero">
           <div class="catalog-hero-content">
-            <h1 class="catalog-hero-title">Khí Giả</h1>
-            <span class="catalog-hero-count">${Object.keys(gameData.characters).length} hồ sơ</span>
+            <h1 class="catalog-hero-title">${s('navCharacters')}</h1>
+            <span class="catalog-hero-count">${Object.keys(gameData.characters).length} ${s('catRecords')}</span>
           </div>
         </section>
 
@@ -143,10 +143,10 @@ export function renderCharacterCatalogView(container) {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               <input type="text" 
                      id="catalog-search-input" 
-                     placeholder="Tìm kiếm theo tên nhân vật..." 
+                     placeholder="${s('catSearch')}" 
                      value="${catalogSearchQuery}" 
                      autocomplete="off" />
-              <button type="button" id="catalog-search-clear" class="catalog-search-clear" aria-label="Xóa nội dung tìm kiếm" ${catalogSearchQuery ? '' : 'hidden'}>
+              <button type="button" id="catalog-search-clear" class="catalog-search-clear" aria-label="${s('catSearchClear')}" ${catalogSearchQuery ? '' : 'hidden'}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
@@ -155,7 +155,7 @@ export function renderCharacterCatalogView(container) {
                     id="catalog-filter-toggle" 
                     class="catalog-filter-toggle-btn ${isFilterExpanded ? 'active' : ''}">
               <svg class="filter-chevron-icon ${isFilterExpanded ? 'open' : ''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              <span>Bộ Lọc</span>
+              <span>${s('catFilter')}</span>
               ${activeCount > 0 ? `<span class="filter-count-badge">${activeCount}</span>` : ''}
             </button>
           </div>
@@ -167,34 +167,34 @@ export function renderCharacterCatalogView(container) {
             <div class="compact-filter-grid">
               <!-- Job Segmented Control -->
               <div class="compact-filter-group group-job">
-                <span class="cfg-label">Chức nghiệp</span>
+                <span class="cfg-label">${s('catJob')}</span>
                 <div class="segmented-control" id="job-segmented-control">
                   <button class="seg-btn ${catalogJobFilters.has('1') ? 'active' : ''}" data-val="1">
-                    <img src="/assets/jobs/job_1.png" alt="Túc Vệ" class="seg-btn-job-icon" />
-                    <span>Túc Vệ</span>
+                    <img src="/assets/jobs/job_1.png" alt="${s('job1')}" class="seg-btn-job-icon" />
+                    <span>${s('job1')}</span>
                   </button>
                   <button class="seg-btn ${catalogJobFilters.has('2') ? 'active' : ''}" data-val="2">
-                    <img src="/assets/jobs/job_2.png" alt="Khinh Nhuệ" class="seg-btn-job-icon" />
-                    <span>Khinh Nhuệ</span>
+                    <img src="/assets/jobs/job_2.png" alt="${s('job2')}" class="seg-btn-job-icon" />
+                    <span>${s('job2')}</span>
                   </button>
                   <button class="seg-btn ${catalogJobFilters.has('3') ? 'active' : ''}" data-val="3">
-                    <img src="/assets/jobs/job_3.png" alt="Viễn Kích" class="seg-btn-job-icon" />
-                    <span>Viễn Kích</span>
+                    <img src="/assets/jobs/job_3.png" alt="${s('job3')}" class="seg-btn-job-icon" />
+                    <span>${s('job3')}</span>
                   </button>
                   <button class="seg-btn ${catalogJobFilters.has('4') ? 'active' : ''}" data-val="4">
-                    <img src="/assets/jobs/job_4.png" alt="Cấu Thuật" class="seg-btn-job-icon" />
-                    <span>Cấu Thuật</span>
+                    <img src="/assets/jobs/job_4.png" alt="${s('job4')}" class="seg-btn-job-icon" />
+                    <span>${s('job4')}</span>
                   </button>
                   <button class="seg-btn ${catalogJobFilters.has('5') ? 'active' : ''}" data-val="5">
-                    <img src="/assets/jobs/job_5.png" alt="Chiến Lược" class="seg-btn-job-icon" />
-                    <span>Chiến Lược</span>
+                    <img src="/assets/jobs/job_5.png" alt="${s('job5')}" class="seg-btn-job-icon" />
+                    <span>${s('job5')}</span>
                   </button>
                 </div>
               </div>
 
               <!-- Rarity Segmented Control -->
               <div class="compact-filter-group group-rarity">
-                <span class="cfg-label">Độ hiếm</span>
+                <span class="cfg-label">${s('catRarity')}</span>
                 <div class="segmented-control" id="rarity-segmented-control">
                   <button class="seg-btn seg-ssr ${catalogRarityFilters.has('4') ? 'active' : ''}" data-val="4">SSR</button>
                   <button class="seg-btn seg-sr ${catalogRarityFilters.has('3') ? 'active' : ''}" data-val="3">SR</button>
@@ -204,28 +204,28 @@ export function renderCharacterCatalogView(container) {
 
               <!-- Pool Segmented Control -->
               <div class="compact-filter-group group-pool">
-                <span class="cfg-label">Phân loại</span>
+                <span class="cfg-label">${s('catPool')}</span>
                 <div class="segmented-control" id="pool-segmented-control">
                   <button class="seg-btn ${catalogPoolFilters.has('limited') ? 'active' : ''}" data-val="limited">Limited</button>
-                  <button class="seg-btn ${catalogPoolFilters.has('standard') ? 'active' : ''}" data-val="standard">Thường</button>
+                  <button class="seg-btn ${catalogPoolFilters.has('standard') ? 'active' : ''}" data-val="standard">${s('catStandard')}</button>
                 </div>
               </div>
 
               <!-- Hoán Chương Segmented Control -->
               <div class="compact-filter-group group-huanzhang">
-                <span class="cfg-label">HOÁN CHƯƠNG</span>
+                <span class="cfg-label">${s('catHuanZhang')}</span>
                 <div class="segmented-control" id="huanzhang-segmented-control">
-                  <button class="seg-btn ${catalogHuanZhangFilter ? 'active' : ''}" id="hz-toggle-btn">Có Hoán Chương</button>
+                  <button class="seg-btn ${catalogHuanZhangFilter ? 'active' : ''}" id="hz-toggle-btn">${s('catHasHz')}</button>
                 </div>
               </div>
 
               <!-- SẮP XẾP Group -->
               <div class="compact-filter-group group-sort">
-                <span class="cfg-label">SẮP XẾP</span>
+                <span class="cfg-label">${s('catSort')}</span>
                 <div class="segmented-control" id="sort-segmented-control">
-                  <button class="seg-btn ${catalogSortOption === 'latest' ? 'active' : ''}" data-sort="latest">Mới Nhất</button>
-                  <button class="seg-btn ${catalogSortOption === 'name' ? 'active' : ''}" data-sort="name">Tên</button>
-                  <button class="seg-btn ${catalogSortOption === 'rarity' ? 'active' : ''}" data-sort="rarity">Độ Hiếm</button>
+                  <button class="seg-btn ${catalogSortOption === 'latest' ? 'active' : ''}" data-sort="latest">${s('catSortLatest')}</button>
+                  <button class="seg-btn ${catalogSortOption === 'name' ? 'active' : ''}" data-sort="name">${s('catSortName')}</button>
+                  <button class="seg-btn ${catalogSortOption === 'rarity' ? 'active' : ''}" data-sort="rarity">${s('catSortRarity')}</button>
                   <button class="seg-btn ${catalogSortOption === 'hp' ? 'active' : ''}" data-sort="hp">HP</button>
                   <button class="seg-btn ${catalogSortOption === 'atk' ? 'active' : ''}" data-sort="atk">ATK</button>
                   <button class="seg-btn ${catalogSortOption === 'def' ? 'active' : ''}" data-sort="def">DEF</button>
@@ -235,7 +235,7 @@ export function renderCharacterCatalogView(container) {
 
               <!-- Always in place (hidden while idle) so a first filter never makes the panel taller -->
               <div class="compact-filter-clear ${activeCount > 0 ? '' : 'is-idle'}">
-                <button type="button" class="catalog-clear-filters-btn" id="catalog-clear-filters-btn">Xóa bộ lọc</button>
+                <button type="button" class="catalog-clear-filters-btn" id="catalog-clear-filters-btn">${s('catClear')}</button>
               </div>
             </div>
             </div>
