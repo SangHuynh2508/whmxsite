@@ -3,6 +3,7 @@
  *  substring for Chinese. Names that start with the query rank first, then characters before skins. */
 
 import { fold } from '../../lib/fold.mts';
+import { txt } from '../../i18n/lang.mts';
 
 type Skin = { skinID: string; name_vi?: string; name_cn?: string; is_base?: boolean };
 type Character = { id: string; slug?: string; name_vi?: string; name_cn?: string; skins?: Skin[] };
@@ -18,11 +19,11 @@ export function searchSite(query: string, characters: Record<string, Character>,
     if (Number.isFinite(at)) scored.push({ r, rank: (at === 0 ? 0 : 2) + (r.kind === 'skin' ? 1 : 0) });
   };
   for (const c of Object.values(characters)) {
-    const name = c.name_vi || c.name_cn || c.id;
+    const name = txt(c, 'name') || c.id;
     consider({ kind: 'character', title: name, sub: c.name_cn ?? '', characterId: c.id, href: `#/characters/${c.slug || c.id}` }, [c.name_vi ?? '', c.name_cn ?? '']);
     for (const s of c.skins ?? []) {
       if (s.is_base) continue;
-      consider({ kind: 'skin', title: s.name_vi || s.name_cn || s.skinID, sub: name, characterId: c.id, href: `#/skins/${s.skinID}` }, [s.name_vi ?? '', s.name_cn ?? '']);
+      consider({ kind: 'skin', title: txt(s, 'name') || s.skinID, sub: name, characterId: c.id, href: `#/skins/${s.skinID}` }, [s.name_vi ?? '', s.name_cn ?? '']);
     }
   }
   return scored.sort((a, b) => a.rank - b.rank).slice(0, limit).map((x) => x.r);

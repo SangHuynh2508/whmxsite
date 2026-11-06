@@ -296,6 +296,7 @@ function initTooltipEvents() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeAllTooltips();
   });
+  window.addEventListener('whmx:lang', closeAllTooltips); // popups live in body; the re-render keeps them
   
   document.addEventListener('scroll', () => {
     closeAllTooltips();

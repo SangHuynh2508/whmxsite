@@ -35,7 +35,7 @@ export function setCharacter(char, syncHash = true) {
   if (syncHash && !window.location.hash.includes('/characters/')) {
     const targetHash = char ? `#${char.id}` : '';
     if (window.location.hash !== targetHash) {
-      history.replaceState(null, '', targetHash || window.location.pathname);
+      history.replaceState(null, '', targetHash || window.location.pathname + window.location.search);
     }
   }
 

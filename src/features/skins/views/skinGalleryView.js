@@ -90,7 +90,7 @@ function resolveAcquisitionLabel(skin) {
     };
   }
 
-  const rawVi = ((getLang() === 'cn' ? skin.obtain_cn : skin.obtainVi || skin.obtain_vi) || '').trim();
+  const rawVi = ((getLang() === 'cn' ? txt(skin, 'obtain') : skin.obtainVi || skin.obtain_vi) || '').trim();
   const rawCn = (skin.obtainCn || skin.obtain_cn || '').trim();
   const combined = `${rawVi} ${rawCn}`.toLowerCase();
 

@@ -2,7 +2,7 @@
 // Game names: VI when published, else CN flagged untranslated (like the lore tab). Ids missing from the game
 // document or data.json are left out rather than shown raw.
 import type { GameDocument, GameText } from '../../profile/api/loreOverlay.mts';
-import { pickText } from '../../../i18n/lang.mts';
+import { pickText, txt } from '../../../i18n/lang.mts';
 
 export type Unit = { text: string; untranslated: boolean };
 type Deepen = { label: string; styleId: string; points: number[] };
@@ -82,7 +82,7 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
         label: r.label, note: r.note ?? '',
         steps: (r.steps ?? (r.skillIds ?? []).map((skillId) => ({ skillId, note: '' }))).filter((s) => skills.has(s.skillId)).map((s) => {
           const k = skills.get(s.skillId)!;
-          return { id: s.skillId, name: k.name_vi || k.name_cn || s.skillId, type: k.type ?? '', tag: TAGS[k.slot ?? ''] ?? k.type ?? '', icon: asset(k.icon), note: s.note ?? '' };
+          return { id: s.skillId, name: txt(k, 'name') || s.skillId, type: k.type ?? '', tag: TAGS[k.slot ?? ''] ?? k.type ?? '', icon: asset(k.icon), note: s.note ?? '' };
         }),
       })).filter((r) => r.label || r.note || r.steps.length), // nothing left to show → no blank row
       tips: (doc.tips ?? []).filter((t) => t.trim()),
@@ -90,7 +90,7 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
         label: t.label, note: t.note,
         members: t.characterIds.filter((id) => characters[id]).map((id) => {
           const c = characters[id];
-          return { id, name: c.name_vi || c.name_cn || id, icon: asset(c.icon), href: `#/characters/${c.slug ?? id}` };
+          return { id, name: txt(c, 'name') || id, icon: asset(c.icon), href: `#/characters/${c.slug ?? id}` };
         }),
       })),
       teamOther: doc.teamOther ?? '',
