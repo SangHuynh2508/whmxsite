@@ -517,7 +517,7 @@ export function renderInfoTab(container, char) {
     const descPrimary = pickText(curLevelData.desc_vi, curLevelData.desc_cn || curLevelData.desc_raw).text;
     const typeId = curLevelData.type_id || 1;
     const showTypeBadge = true;
-    const typeLabel = curLevelData.type || "";
+    const typeLabel = getLang() === 'cn' ? ([, '常击', '职业', '绝技', '被动1', '被动2', '被动3'][typeId] ?? curLevelData.type ?? "") : (curLevelData.type || ""); // CN: build_web_data SUFFIX_CATEGORY_MAP
     const selRange = curLevelData.select_range || "";
     const selType = curLevelData.select_type || "";
     const selRangeType = curLevelData.select_range_type || "";
@@ -840,8 +840,8 @@ export function renderInfoTab(container, char) {
   let currentInfoMode = 'skills'; // 'skills' | 'huanzhang'
 
   const sectionTitles = {
-    skills: `${s('tabInfo')} ${s('skill')}`,
-    huanzhang: `${s('tabInfo')} ${s('huanzhang')}`
+    skills: s('infoSkills'),
+    huanzhang: s('infoHz')
   };
 
   function renderModeContent() {

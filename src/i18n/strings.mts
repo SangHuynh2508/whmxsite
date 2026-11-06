@@ -30,7 +30,7 @@ const vi = {
   zzUpgrade: 'CƯỜNG HÓA KỸ NĂNG', hzEmpty: 'Nhân vật này chưa có dữ liệu Hoán Chương.', hzProps: 'TĂNG CƯỜNG THUỘC TÍNH',
   hzMaterial: 'Vật liệu', hzMats: 'NGUYÊN LIỆU HOÁN CHƯƠNG', hzNoSkill: 'Không có chi tiết kỹ năng Hoán Chương.',
   hzEffects: 'HIỆU ỨNG / KỸ NĂNG HOÁN CHƯƠNG', hzStory: 'Xem điển cố / cốt truyện Hoán Chương',
-  infoModes: 'Nội dung thông tin nhân vật',
+  infoModes: 'Nội dung thông tin nhân vật', infoSkills: 'Thông Tin Kỹ Năng', infoHz: 'Thông Tin Hoán Chương',
   tlEmpty: 'Nhân vật này chưa có dữ liệu thiên phú.', tlReqLv: 'Yêu cầu Lv.', close: 'Đóng', tlNeutral: 'Chưa mở',
   tlDone: 'Đã nâng', tlTarget: 'Mục tiêu', tlProgress: 'TIẾN CẤP KỸ NĂNG / THIÊN PHÚ', tlTier: 'Bậc', tlCoin: 'Đông Cốc Tệ',
   tlReqCharLv: 'Đạt cấp độ nhân vật', tlReqTalent: 'Mở thiên phú:', tlConditions: 'ĐIỀU KIỆN MỞ', tlUpgrade: 'Nâng Thiên Phú',
@@ -194,7 +194,7 @@ const cn: Record<StringKey, string> = {
   zzUpgrade: '技能强化', hzEmpty: '该器者暂无焕章数据。', hzProps: '属性提升', // draft
   hzMaterial: '材料', hzMats: '焕章材料', hzNoSkill: '暂无焕章技能详情。', // draft
   hzEffects: '焕章效果 / 技能', hzStory: '查看焕章典故', // draft
-  infoModes: '器者资料内容', // draft
+  infoModes: '器者资料内容', infoSkills: '技能资料', infoHz: '焕章资料', // draft
   tlEmpty: '该器者暂无天赋数据。', tlReqLv: '需要 Lv.', close: '关闭', tlNeutral: '未解锁', // draft
   tlDone: '已提升', tlTarget: '目标', tlProgress: '技能 / 天赋进阶', tlTier: '等级', tlCoin: '冬谷币', // draft
   tlReqCharLv: '器者等级达到', tlReqTalent: '解锁天赋：', tlConditions: '解锁条件', tlUpgrade: '提升天赋', // draft
