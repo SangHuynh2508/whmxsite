@@ -166,6 +166,7 @@ const vi = {
   trSeeAll: 'Xem các tier list', trNone: 'Chưa có tier list.', trLegZ: 'mốc Trí Tri tối thiểu', trLegHc: 'cần Hoán Chương',
   ifBannerDesc: 'Banner đang mở, đếm ngược và toàn bộ banner đã qua.', ifWeapons: 'Vũ Khí',
   ifWeaponsDesc: 'Vũ khí, kỹ năng và dòng thuộc tính.', ifSoon: 'Đang phát triển', wpPlaceholder: 'Nội dung đang được demo trong tưởng tượng, vui lòng đợi.',
+  cChangeChar: 'Đổi Khí Giả', cAvatarTitle: 'Bấm để chọn nhân vật', cAvatarAria: 'Chọn nhân vật',
   cLevel: 'Cấp độ (Level)', cLevelMax: 'Tối đa 120', cCur: 'Hiện tại', cReport: 'Báo Cáo Tài Nguyên', cExp: 'Kinh Nghiệm',
   cMats: 'Vật liệu cần', cNoMats: 'Không cần tài nguyên cho khoảng này.', cVan: 'vạn',
   cFooter: 'Vật Hoa Di Tân Calculator là dự án fan-made, phi thương mại và không liên kết với nhà phát hành chính thức. Các hình ảnh, tên gọi và tài sản trò chơi liên quan đến 物华弥新 thuộc quyền sở hữu của các chủ sở hữu tương ứng.',
@@ -343,6 +344,7 @@ const cn: Record<StringKey, string> = {
   trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低知致阶段', trLegHc: '需要焕章', // draft
   ifBannerDesc: '当前卡池、倒计时与全部往期卡池。', ifWeapons: '武器', // draft
   ifWeaponsDesc: '武器、技能与属性词条。', ifSoon: '开发中', wpPlaceholder: '内容仍在构思中，敬请期待。', // draft
+  cChangeChar: '更换器者', cAvatarTitle: '点击选择器者', cAvatarAria: '选择器者', // draft
   cLevel: '等级', cLevelMax: '最高 120', cCur: '当前', cReport: '资源报告', cExp: '经验', // draft
   cMats: '所需材料', cNoMats: '该区间无需资源。', cVan: '万', // draft
   cFooter: '物华弥新计算器为非商业性质的粉丝自制项目，与官方发行商无关。与物华弥新相关的图像、名称及游戏资产归各自所有者所有。', // draft

@@ -64,6 +64,6 @@ const TAG_CN: Record<string, string> = {
 
 export function renderTagChipsHtml(tagStr: unknown) {
   return parseTags(tagStr)
-    .map((t) => `<span class="cd-tag-chip" style="--tag: var(--tag-${tagHue(t)})">${getLang() === 'cn' ? TAG_CN[t] ?? t : t}</span>`)
+    .map((t) => `<span class="cd-tag-chip" style="--tag: var(--tag-${tagHue(t)})">${getLang() === 'cn' ? TAG_CN[t.trim()] ?? t : t}</span>`)
     .join('');
 }

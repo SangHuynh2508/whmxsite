@@ -12,7 +12,6 @@ import { Legend, TierFilter } from './TierFilter.tsx';
 import { jobName, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
 import { chipCount, countMatches, emptyFilter, filterTiers, fmtDate, paragraphs, pickList, presentRarities, tileProps, visibleTabs, type Filter, type PublishedList, type SiteChar } from './tierView.mts';
 import { tierListHref, type Tab } from './tierRoute.mts';
-import { pickText } from '../../i18n/lang.mts';
 import { s as t$ } from '../../i18n/strings.mts';
 import { useLang } from '../../i18n/useLang.ts';
 import './styles/tierList.css';
@@ -65,7 +64,7 @@ export function TierListView({ list, characters, tab: initial, onTab }: { list: 
   return (
     <div className="tl-page">
       <header className="tl-mast">
-        <h1>{pickText(doc.title, t$('trTitle', 'cn')).text}</h1>
+        <h1>{doc.title || t$('trTitle')}</h1>
         <p className="tl-by">
           {doc.author && <>{t$('trRef')} {doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.author}</a> : <b>{doc.author}</b>} · </>}
           {t$('trUpdated')} {fmtDate(list.updatedAt)}{list.status === 'archived' && ` · ${t$('trOld')}`}
@@ -156,7 +155,7 @@ function Page({ lists, slug, tab }: { lists: PublishedList[] | undefined; slug: 
         <header className="tl-mast"><h1>{t$('navTier')}</h1></header>
         <ul className="tl-index">
           {pick.lists.map((l) => (
-            <li key={l.slug}><a href={tierListHref(l.slug)}><b>{pickText(l.doc.title, t$('trTitle', 'cn')).text}</b><small>{l.doc.author && `${l.doc.author} · `}{t$('trUpdated')} {fmtDate(l.updatedAt)}{l.status === 'archived' && ` · ${t$('trOld')}`}</small></a></li>
+            <li key={l.slug}><a href={tierListHref(l.slug)}><b>{l.doc.title || t$('trTitle')}</b><small>{l.doc.author && `${l.doc.author} · `}{t$('trUpdated')} {fmtDate(l.updatedAt)}{l.status === 'archived' && ` · ${t$('trOld')}`}</small></a></li>
           ))}
         </ul>
       </div>

@@ -12,8 +12,8 @@ export function renderHeader() {
   const char = state.character;
   // index.html holds the calculator's static (Vietnamese) text; set it in the current language on each render.
   const set = (sel, v, attr) => { const el = document.querySelector(sel); if (el) attr ? el.setAttribute(attr, v) : (el.textContent = v); };
-  set('#profile-avatar-container', s('hdrPickHint'), 'title');
-  set('#profile-change-char-btn', s('hdrChange'));
+  set('#profile-avatar-container', s('cAvatarTitle'), 'title');
+  set('#profile-change-char-btn', s('cChangeChar'));
   set('.config-label h3', s('cLevel'));
   set('.config-label .meta-text', s('cLevelMax'));
   set('.control-group:has(#level-current) label', s('cCur'));
@@ -47,7 +47,7 @@ export function renderHeader() {
 
   if (!char) {
     // Unselected State
-    if (elAvatarBox) elAvatarBox.setAttribute('aria-label', s('pickTitle'));
+    if (elAvatarBox) elAvatarBox.setAttribute('aria-label', s('cAvatarAria'));
     if (elAvatar) {
       elAvatar.classList.add('hidden');
       elAvatar.style.display = 'none';
