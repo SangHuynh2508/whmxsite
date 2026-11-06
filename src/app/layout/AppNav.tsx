@@ -9,6 +9,9 @@ import { gsap } from 'gsap';
 import { getGameData } from '../../data/loader.js';
 import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
 import { searchSite } from './siteSearch.mts';
+import { setLang } from '../../i18n/lang.mts';
+import { s, type StringKey } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang';
 import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
 /*
@@ -19,12 +22,22 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 
 // Only the hot pages sit in the rail; Home is the brand mark, Banner and Vũ Khí live in "Thông tin" (owner 2026-09-30).
 const PUBLIC_LINKS = [
-  { href: '#/characters', label: 'Khí Giả', icon: UsersRound, views: ['catalog', 'character'] },
-  { href: '#/tier-list', label: 'Tier List', icon: Podium, views: ['tier-list'] },
-  { href: '#/gallery', label: 'Trang Phục', icon: Shirt, views: ['gallery', 'skin-detail'] },
-  { href: '#/info', label: 'Thông tin', icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
-  { href: '#calc', label: 'Công cụ', icon: Calculator, views: ['calculator'] },
+  { href: '#/characters', label: 'navCharacters' as StringKey, icon: UsersRound, views: ['catalog', 'character'] },
+  { href: '#/tier-list', label: 'navTier' as StringKey, icon: Podium, views: ['tier-list'] },
+  { href: '#/gallery', label: 'navSkins' as StringKey, icon: Shirt, views: ['gallery', 'skin-detail'] },
+  { href: '#/info', label: 'navInfo' as StringKey, icon: LayoutGrid, views: ['info', 'banners', 'weapons'] },
+  { href: '#calc', label: 'navTools' as StringKey, icon: Calculator, views: ['calculator'] },
 ];
+
+const LangToggle = ({ lang }: { lang: 'vi' | 'cn' }) => (
+  <div className="app-nav-lang" role="group" aria-label={s('navLang', lang)} data-tooltip={lang === 'vi' ? 'VI' : '中'}>
+    {(['vi', 'cn'] as const).map((l) => (
+      <button key={l} type="button" aria-pressed={lang === l} className={lang === l ? 'is-active' : undefined} onClick={() => setLang(l)}>
+        {l === 'vi' ? 'VI' : '中'}
+      </button>
+    ))}
+  </div>
+);
 
 // The calculator link keeps the currently selected character.
 const linkClick = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -85,7 +98,8 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
     return () => cancelAnimationFrame(frame);
   }, [top, animated]);
 
-  const adminLabel = authorized ? 'Quản trị' : 'Đăng nhập';
+  const lang = useLang();
+  const adminLabel = s(authorized ? 'navAdmin' : 'navLogin', lang);
   const AdminIcon = authorized ? ShieldCheck : LogIn;
   const adminHref = authorized ? '#/admin' : '#/login';
   return (
@@ -111,16 +125,17 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
               href={href}
               className={`app-nav-item${views.includes(view) ? ' active' : ''}`}
               aria-current={views.includes(view) ? 'page' : undefined}
-              data-tooltip={label}
+              data-tooltip={s(label, lang)}
               onClick={linkClick(href)}
             >
               <span className="app-nav-icon"><Icon size={20} /></span>
-              <span className="app-nav-label">{label}</span>
+              <span className="app-nav-label">{s(label, lang)}</span>
             </a>
           </li>
         ))}
       </ul>
       <div className="app-nav-footer">
+        <LangToggle lang={lang} />
         <a
           href={adminHref}
           id="app-nav-admin-link"
@@ -146,6 +161,7 @@ const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').match
 
 function MobileMenu({ view, authorized }: { view: string; authorized: boolean }) {
   const [open, setOpen] = useState(false);
+  const lang = useLang();
   const [query, setQuery] = useState('');
   const sheetRef = useRef<HTMLDialogElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -238,14 +254,15 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                   {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
                     <li key={href}>
                       <a href={href} className={views.includes(view) ? 'active' : undefined} aria-current={views.includes(view) ? 'page' : undefined} onClick={linkClick(href)}>
-                        <Icon size={20} />{label}
+                        <Icon size={20} />{s(label, lang)}
                       </a>
                     </li>
                   ))}
                 </ul>
+                <LangToggle lang={lang} />
                 {authorized ? (
                   <>
-                    <p className="mobile-menu-heading">Quản trị</p>
+                    <p className="mobile-menu-heading">{s('navAdmin', lang)}</p>
                     <ul>
                       {NAV.map(({ id, href, label, icon: Icon }) => (
                         <li key={id}>
@@ -262,7 +279,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                 ) : (
                   <>
                     <p className="mobile-menu-heading">Tài khoản</p>
-                    <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />Đăng nhập</a>
+                    <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />{s('navLogin', lang)}</a>
                   </>
                 )}
               </>

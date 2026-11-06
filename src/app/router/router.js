@@ -402,4 +402,5 @@ export function initRouter() {
     isPopStateNav = true;
   });
   window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('whmx:lang', handleRoute);
 }
