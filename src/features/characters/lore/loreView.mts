@@ -1,4 +1,6 @@
 // Turns a public `char` (v2 lore overlay shape, or the legacy CN shape when the overlay failed) into what the lore tab shows.
+import { getLang, pickText } from '../../../i18n/lang.mts';
+import { s } from '../../../i18n/strings.mts';
 export type LoreUnit = { text: string; untranslated: boolean };
 export type LoreFact = { label: string; value: LoreUnit; detail: LoreUnit | null };
 export type LorePeople = { department: string; departmentDetail: LoreUnit | null; status: string; recordId: string };
@@ -24,14 +26,14 @@ const list = (value: unknown): Obj[] => (Array.isArray(value) ? value.map(obj) :
 const str = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 
 export function pick(vi: unknown, cn: unknown): LoreUnit | null {
-  if (str(vi)) return { text: str(vi), untranslated: false };
-  if (str(cn)) return { text: str(cn), untranslated: true };
-  return null;
+  const u = pickText(str(vi), str(cn));
+  return u.text ? u : null;
 }
 
 // Relic-tag labels confirmed by the owner (2026-09-26): in-game S0132 tag1 工艺 / tag3 产地, A0061 tag2 出土地;
 // tag4 其他 from the wiki (外销文物).
 export const TAG_LABELS: Record<string, string> = { tag1: 'Kỹ thuật', tag2: 'Nơi khai quật', tag3: 'Nơi sản xuất', tag4: 'Khác' };
+const TAG_LABELS_CN: Record<string, string> = { tag1: '工艺', tag2: '出土地', tag3: '产地', tag4: '其他' };
 
 // Ticket layout (owner 2026-09-27, demo "Phiếu Hồ Sơ Lưu Trữ"): Vietnamese values are 3-4x longer than the CN ones,
 // so 3 fixed columns wrapped most of them. Each value is sized by its measured width: S fits one line in a third of
@@ -99,10 +101,10 @@ export function buildLoreView(char: unknown): LoreView {
 
   const legacy = 'relic_name' in relic || 'dynasty' in relic;
   const factRows: [string, LoreUnit | null, LoreUnit | null][] = legacy
-    ? [['Hiện vật', pick(null, relic.relic_name), null], ['Niên đại', pick(null, relic.dynasty), null], ['Nơi lưu giữ', pick(null, relic.museum), null]]
-    : [['Loại', pair(relic.type), detailOf(relic.type)], ['Niên đại', pair(relic.era), detailOf(relic.era)], ['Nơi lưu giữ', pair(relic.museum), detailOf(relic.museum)]];
+    ? [[s('loreRelic'), pick(null, relic.relic_name), null], [s('loreEra'), pick(null, relic.dynasty), null], [s('loreMuseum'), pick(null, relic.museum), null]]
+    : [[s('loreType'), pair(relic.type), detailOf(relic.type)], [s('loreEra'), pair(relic.era), detailOf(relic.era)], [s('loreMuseum'), pair(relic.museum), detailOf(relic.museum)]];
   for (const tag of list(relic.tags)) {
-    const label = TAG_LABELS[str(tag.field)];
+    const label = (getLang() === 'cn' ? TAG_LABELS_CN : TAG_LABELS)[str(tag.field)];
     if (label) factRows.push([label, pair(tag), detailOf(tag)]);
   }
   const facts = factRows.filter((f): f is [string, LoreUnit, LoreUnit | null] => f[1] !== null).map(([label, value, detail]) => ({ label, value, detail }));

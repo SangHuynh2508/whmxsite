@@ -39,6 +39,28 @@ const vi = {
   glZoom1: 'Phóng to hình ảnh {x} (1.4x)', glZoom2: 'Phóng to thêm hình ảnh {x} (1.8x)',
   glZoom0: 'Thu hình ảnh {x} về kích thước ban đầu (1.0x)',
   bdEmpty: 'Chưa có hướng dẫn build', bdEmptyText: 'Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho {x} đang chưa được làm.',
+  rgPassive: 'Nội tại', rgSelf: 'Bản thân', rgFull: 'Toàn bản đồ', rgAuto: 'Tự động', rgCells: '{n} ô',
+  rgSingle: '1 mục tiêu (Đơn thể)', rgSquare: 'Diện rộng {n} × {n} ô', rgOverlap: 'Xung quanh {n} ô',
+  rgRect1: 'Hàng thẳng 1 × {n} ô', rgRect3: 'Hàng ngang 3 × {n} ô', rgRect5: 'Hàng ngang 5 × {n} ô',
+  rgDash: 'Đường lướt {n} ô', rgPierce: 'Hàng thẳng xuyên thấu {n} ô', rgCross: 'Chữ thập',
+  rgSpecial: 'Đặc biệt ({n})', rgArea: 'Phạm vi', rgSpecialN: 'Đặc biệt {n}',
+  loreRelic: 'Hiện vật', loreType: 'Loại', loreEra: 'Niên đại', loreMuseum: 'Nơi lưu giữ', loreDept: 'Trực thuộc',
+  loreEntity: 'Bản thể', loreRecord: 'Mã hồ sơ', loreFootnote: '* Bấm vào từng mục trong phiếu để xem ghi chú.',
+  loreEmpty: 'Chưa có hồ sơ lưu trữ.', loreMore: 'Đọc tiếp', loreLess: 'Thu gọn', loreOrigin: 'Nguồn gốc',
+  loreTimeline: 'Dòng thời gian', loreReports: 'Báo cáo đánh giá', loreSecret: 'Báo cáo mật', loreReportN: 'Báo cáo {n}',
+  loreUnlock: 'Mở khoá ở cảm ứng', loreLv: 'cấp {n} · ',
+  teaEmpty: 'Chưa có dữ liệu phòng trà.', teaFav: 'Trà yêu thích', teaHint: 'Mời đúng loại trà, khí giả sẽ bình về nó.',
+  teaRound12: 'Câu 1 và câu 2. Mỗi câu, game hiện 3 trong {n} chủ đề.',
+  teaRound34: 'Câu 3 và câu 4. Game hiện {n} chủ đề, chủ đề đã chọn mở ra 2 câu tiếp.',
+  teaEnd: 'Kết thúc tiệc trà', teaWin: 'Khi thành công', teaLose: 'Khi thất bại',
+  teaLike: 'Khí giả thích chủ đề này', teaPuzzled: 'Khí giả bối rối',
+  homeTitle: 'Vật Hoa Di Tân', homeOpen: 'Banner đang mở', homeAllBanners: 'Tất cả banner ›', homeEvents: 'Sự kiện đang diễn ra',
+  homeLeft: 'Còn', homeLeftLc: 'còn', homeReleases: 'Mới ra mắt', homeNew: 'Mới', homeSkin: 'Trang phục', homeChar: 'Khí Giả',
+  homeTheme: 'Sự kiện chủ đề',
+  bnTitle: 'Banner', bnLoadErr: 'Chưa tải được dữ liệu banner', bnOpen: 'Đang mở', bnAll: 'Tất cả banner', bnUnit: 'banner',
+  bnType: 'Loại', bnYear: 'Năm', bnNoMatch: 'Không có banner nào khớp bộ lọc.', bnEnded: 'Đã kết thúc · chờ bản cập nhật',
+  bnChoice: 'Tự chọn trong {n} Khí Giả', bnCue: 'Xem Khí Giả ›', bnVersion: 'Phiên bản {n}',
+  tmDH: '{d} ngày {h} giờ', tmHM: '{h} giờ {m} phút', tmM: '{m} phút', tmLt: '< 1 phút',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -82,6 +104,28 @@ const cn: Record<StringKey, string> = {
   glZoom1: '放大图片 {x}（1.4x）', glZoom2: '继续放大图片 {x}（1.8x）', // draft
   glZoom0: '将图片 {x} 恢复原始大小（1.0x）', // draft
   bdEmpty: '暂无配装指南', bdEmptyText: '{x} 的装备、深造与阵容推荐尚未完成。', // draft
+  rgPassive: '被动', rgSelf: '自身', rgFull: '全图', rgAuto: '自动', rgCells: '{n}格', // draft
+  rgSingle: '单体', rgSquare: '{n}×{n}范围', rgOverlap: '周围{n}格', // draft
+  rgRect1: '直线1×{n}格', rgRect3: '横排3×{n}格', rgRect5: '横排5×{n}格', // draft
+  rgDash: '冲刺{n}格', rgPierce: '贯穿直线{n}格', rgCross: '十字', // draft
+  rgSpecial: '特殊（{n}）', rgArea: '范围', rgSpecialN: '特殊 {n}', // draft
+  loreRelic: '文物', loreType: '类型', loreEra: '年代', loreMuseum: '收藏地', loreDept: '所属', // draft
+  loreEntity: '本体', loreRecord: '档案编号', loreFootnote: '* 点击档案中的条目查看注释。', // draft
+  loreEmpty: '暂无档案。', loreMore: '展开', loreLess: '收起', loreOrigin: '来源', // draft
+  loreTimeline: '时间线', loreReports: '评估报告', loreSecret: '机密报告', loreReportN: '报告 {n}', // draft
+  loreUnlock: '感应解锁', loreLv: '{n}级 · ', // draft
+  teaEmpty: '暂无茶室数据。', teaFav: '喜爱的茶', teaHint: '奉上合适的茶，器者会品评一番。', // draft
+  teaRound12: '第1、2问。每问游戏从 {n} 个话题中显示3个。', // draft
+  teaRound34: '第3、4问。游戏显示 {n} 个话题，所选话题会展开后续2问。', // draft
+  teaEnd: '茶会结束', teaWin: '成功时', teaLose: '失败时', // draft
+  teaLike: '器者喜欢这个话题', teaPuzzled: '器者感到困惑', // draft
+  homeTitle: '物华弥新', homeOpen: '当前卡池', homeAllBanners: '全部卡池 ›', homeEvents: '进行中的活动', // draft
+  homeLeft: '剩余', homeLeftLc: '剩余', homeReleases: '新上线', homeNew: '新', homeSkin: '装束', homeChar: '器者', // draft
+  homeTheme: '主题活动', // draft
+  bnTitle: '卡池', bnLoadErr: '卡池数据加载失败', bnOpen: '进行中', bnAll: '全部卡池', bnUnit: '个卡池', // draft
+  bnType: '类型', bnYear: '年份', bnNoMatch: '没有符合筛选的卡池。', bnEnded: '已结束 · 等待更新', // draft
+  bnChoice: '{n}位器者自选', bnCue: '查看器者 ›', bnVersion: '版本 {n}', // draft
+  tmDH: '{d}天{h}小时', tmHM: '{h}小时{m}分', tmM: '{m}分钟', tmLt: '不到1分钟', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];

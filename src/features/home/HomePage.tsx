@@ -11,6 +11,9 @@ import { loreProgress } from './loreProgress.mts';
 import { getGameData, loreOverlayMerged } from '../../data/loader.js';
 import { bannerIsland } from '../banners/island.tsx';
 import './styles/home.css';
+import { txt } from '../../i18n/lang.mts';
+import { s } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang.ts';
 
 type HomeChar = SliceChar & ReleaseChar & { profile?: Record<string, any> };
 
@@ -22,8 +25,9 @@ function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
     loreOverlayMerged().then(() => { if (live) setMerged(true); });
     return () => { live = false; };
   }, []);
+  const lang = useLang();
   const p = loreProgress(characters);
-  if (!p.visible) return null;
+  if (!p.visible || lang === 'cn') return null; // VI translation progress: nothing to report in CN
   const n = (v: number) => v.toLocaleString('vi-VN');
   return (
     <section className="home-block home-lore" aria-label="Bản dịch Hồ Sơ">
@@ -36,7 +40,7 @@ function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
         <>
           <h3 className="home-lore-h3">Mới dịch</h3>
           <ul className="home-lore-recent">{p.recent.map((id) => { const c = characters[id]; return (
-            <li key={id}><a href={`#/characters/${c.slug}/lore`}>{c.name_vi || c.name_cn}</a></li>
+            <li key={id}><a href={`#/characters/${c.slug}/lore`}>{txt(c, 'name')}</a></li>
           ); })}</ul>
         </>
       )}
@@ -45,6 +49,7 @@ function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
 }
 
 export function HomePage({ doc }: { doc: BannersDoc | null }) {
+  const lang = useLang();
   const characters = getGameData().characters as Record<string, HomeChar>;
   const now = useNow();
   const page = useRef<HTMLDivElement>(null);
@@ -62,29 +67,29 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
           {heroArt && <img className="home-hero-art" src={heroArt} alt="" />}
           <div className="home-hero-text home-block">
             {doc?.version && <p className="home-hero-version">{formatRange(doc.version.start, doc.version.end)}</p>}
-            <h1>{doc?.version ? versionTitle(doc.version.label) : 'Vật Hoa Di Tân'}</h1>
+            <h1>{doc?.version ? versionTitle(doc.version.label) : s('homeTitle')}</h1>
             {hero?.name_cn && <p className="home-hero-cn"><Cn text={hero.name_cn} /></p>}
-            {theme && <p className="home-hero-theme">Sự kiện chủ đề <Cn text={theme.name_cn} /><span className="home-hero-left">còn <b>{remaining(now, theme.end)}</b></span></p>}
+            {theme && <p className="home-hero-theme">{s('homeTheme')} <Cn text={theme.name_cn} /><span className="home-hero-left">{s('homeLeftLc')} <b>{remaining(now, theme.end)}</b></span></p>}
           </div>
         </header>
       )}
       <div className="home-body">
-        <section className="home-block home-banners" aria-label="Banner đang mở">
-          <h2 className="home-h2">Banner đang mở <a href="#/banners">Tất cả banner ›</a></h2>
+        <section className="home-block home-banners" aria-label={s('homeOpen')}>
+          <h2 className="home-h2">{s('homeOpen')} <a href="#/banners">{s('homeAllBanners')}</a></h2>
           {banners
             ? <BannerGrid banners={banners} doc={doc!} now={now} characters={characters} />
-            : <p className="bn-error">Chưa tải được dữ liệu banner</p>}
+            : <p className="bn-error">{s('bnLoadErr')}</p>}
         </section>
         <div className="home-row">
           <div className="home-col">
             {events.length > 0 && (
-              <section className="home-block home-events" aria-label="Sự kiện đang diễn ra">
-                <h2 className="home-h2">Sự kiện đang diễn ra</h2>
+              <section className="home-block home-events" aria-label={s('homeEvents')}>
+                <h2 className="home-h2">{s('homeEvents')}</h2>
                 <ul>{events.map((e) => { const kind = eventKind(e.kind_cn); return (
                   <li key={e.id}>
-                    <span className="home-event-kind">{kind.vi ? kind.text : <Cn text={e.kind_cn} />}</span>
+                    <span className="home-event-kind">{kind.vi && lang === 'vi' ? kind.text : <Cn text={e.kind_cn} />}</span>
                     <span className="home-event-name"><Cn text={e.name_cn} /></span>
-                    <span className="home-event-left">Còn <b>{remaining(now, e.end)}</b></span>
+                    <span className="home-event-left">{s('homeLeft')} <b>{remaining(now, e.end)}</b></span>
                   </li>
                 ); })}</ul>
               </section>
@@ -92,18 +97,18 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
             <LoreBlock characters={characters} />
           </div>
           {releases.length > 0 && (
-            <section className="home-block home-releases" aria-label="Mới ra mắt">
-              <h2 className="home-h2">Mới ra mắt</h2>
+            <section className="home-block home-releases" aria-label={s('homeReleases')}>
+              <h2 className="home-h2">{s('homeReleases')}</h2>
               <ul>{releases.map((r) => {
                 const href = r.kind === 'skin' ? `#/skins/${r.id}` : `#/characters/${characters[r.charId].slug}`;
                 return (
                   <li key={r.id}><a href={href}>
                     <span className="home-release-pic">
                       {r.image && <img src={r.image} alt="" loading="lazy" />}
-                      {r.isNew && <span className="home-new">Mới</span>}
+                      {r.isNew && <span className="home-new">{s('homeNew')}</span>}
                     </span>
                     <span className="home-release-name">{r.name}</span>
-                    <span className="home-release-kind">{r.kind === 'skin' ? 'Trang phục' : 'Khí Giả'}</span>
+                    <span className="home-release-kind">{r.kind === 'skin' ? s('homeSkin') : s('homeChar')}</span>
                   </a></li>
                 );
               })}</ul>

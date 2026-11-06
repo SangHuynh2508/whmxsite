@@ -23,36 +23,36 @@ function resolveSkillRangeAsset(effType, effRange, selRange) {
   return null;
 }
 
+const rg = (key, n) => s(key).replaceAll('{n}', () => n);
+
 function resolveCastRangeText(selRange, selType, selRangeType, isPassive) {
-  if (isPassive && (!selRange || selRange === "0" || selRange === "0,0")) return "Nội tại";
-  if (selRange === "0" || selRange === "0,0") return "Bản thân";
-  if (selRange === "0,99" || selRangeType === "FullMap") return "Toàn bản đồ";
+  if (isPassive && (!selRange || selRange === "0" || selRange === "0,0")) return s('rgPassive');
+  if (selRange === "0" || selRange === "0,0") return s('rgSelf');
+  if (selRange === "0,99" || selRangeType === "FullMap") return s('rgFull');
   if (selRange) {
     if (selRange.includes(",")) {
       const parts = selRange.split(",").map(p => p.trim());
       if (parts.length === 2) {
-        if (parts[0] === parts[1]) return `${parts[0]} ô`;
-        return `${parts[0]}–${parts[1]} ô`;
+        if (parts[0] === parts[1]) return rg('rgCells', parts[0]);
+        return rg('rgCells', `${parts[0]}–${parts[1]}`);
       }
-    } else if (!isNaN(selRange)) {
-      return `${selRange} ô`;
     }
-    return `${selRange} ô`;
+    return rg('rgCells', selRange);
   }
-  return isPassive ? "Nội tại" : "Tự động";
+  return isPassive ? s('rgPassive') : s('rgAuto');
 }
 
 function resolveEffectAreaText(effType, effRange) {
   if (!effType && (!effRange || effRange === 0)) return "";
-  if (effType === "Square") return effRange === 1 ? "1 mục tiêu (Đơn thể)" : `Diện rộng ${effRange} × ${effRange} ô`;
-  if (effType === "Overlap") return `Xung quanh ${effRange} ô`;
-  if (effType === "Rect1") return `Hàng thẳng 1 × ${effRange} ô`;
-  if (effType === "Rect3") return `Hàng ngang 3 × ${effRange} ô`;
-  if (effType === "Rect5") return `Hàng ngang 5 × ${effRange} ô`;
-  if (effType === "FullMap" || effRange === 99) return "Toàn bản đồ";
-  if (effType === "DashLine") return `Đường lướt ${effRange} ô`;
-  if (effType === "PierceLine") return `Hàng thẳng xuyên thấu ${effRange} ô`;
-  if (effType === "Cross") return `Chữ thập`;
+  if (effType === "Square") return effRange === 1 ? s('rgSingle') : rg('rgSquare', effRange);
+  if (effType === "Overlap") return rg('rgOverlap', effRange);
+  if (effType === "Rect1") return rg('rgRect1', effRange);
+  if (effType === "Rect3") return rg('rgRect3', effRange);
+  if (effType === "Rect5") return rg('rgRect5', effRange);
+  if (effType === "FullMap" || effRange === 99) return s('rgFull');
+  if (effType === "DashLine") return rg('rgDash', effRange);
+  if (effType === "PierceLine") return rg('rgPierce', effRange);
+  if (effType === "Cross") return s('rgCross');
 
   const knownInternalTypes = [
     "BossDitu1", "BossDitu2", "BossDituEx1", "BossDituEx2", "BossDituEx3",
@@ -61,8 +61,8 @@ function resolveEffectAreaText(effType, effRange) {
     "RandomCellEmpty", "RandomCellEnemy", "SelectAllMarkCells", "SpecialSquare", "TileGroup",
     "SpecialSquareNxN", "RandomType_Overlap_3", "Special1"
   ];
-  if (knownInternalTypes.includes(effType)) return `Đặc biệt (${effRange > 0 ? effRange + ' ô' : 'Phạm vi'})`;
-  if (effType && effRange) return `Đặc biệt ${effRange}`;
+  if (knownInternalTypes.includes(effType)) return rg('rgSpecial', effRange > 0 ? rg('rgCells', effRange) : s('rgArea'));
+  if (effType && effRange) return rg('rgSpecialN', effRange);
   return "";
 }
 

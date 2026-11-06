@@ -1,5 +1,7 @@
 // public/banners.json (tools/build_banner_data.py) → what the Home and Banner pages show. Spec 2026-09-30 §3, §5.
 import { formatDate, remaining, status } from './bannerTime.mts';
+import { getLang } from '../../i18n/lang.mts';
+import { s } from '../../i18n/strings.mts';
 
 export type Banner = { id: string; name_cn: string; name_vi: string | null; type: string; kind_cn: string;
   start: number; end: number; up: string[]; up_skin: string | null; art: string | null;
@@ -75,6 +77,8 @@ export function eventKind(kindCn: string): { text: string; vi: boolean } {
 }
 
 export const TYPE_VI: Record<string, string> = { limited: 'Giới hạn', time: 'Có thời hạn', season: 'Theo mùa', oldtime: 'Thường trực' };
+/** VI label of a banner type; CN mode (or an unknown type) shows the game's own channel name. */
+export const typeLabel = (type: string, kindCn: string) => (getLang() === 'vi' && TYPE_VI[type]) || kindCn;
 
 type SkinOwner = { skins?: { skinID: string; image?: string }[] };
 
@@ -86,10 +90,10 @@ export function skinImage(b: Banner, characters: Record<string, SkinOwner>): str
 
 /** The slice's small line (direction-approved.md): label, plus the time left when the banner is open. */
 export function sliceMeta(b: Banner, nowMs: number, isArchive: boolean, timeZone?: string): { label: string; left: string | null } {
-  const type = TYPE_VI[b.type] ?? b.kind_cn;
+  const type = typeLabel(b.type, b.kind_cn);
   if (isArchive) return { label: `${type} · ${formatRange(b.start, b.end, timeZone)}`, left: null };
-  if (status(nowMs, b.start, b.end) === 'ended') return { label: 'Đã kết thúc · chờ bản cập nhật', left: null };
-  return { label: b.choice ? `Tự chọn trong ${b.choice} Khí Giả` : type, left: remaining(nowMs, b.end) };
+  if (status(nowMs, b.start, b.end) === 'ended') return { label: s('bnEnded'), left: null };
+  return { label: b.choice ? s('bnChoice').replace('{n}', () => String(b.choice)) : type, left: remaining(nowMs, b.end) };
 }
 
 /** "20/08 – 10/09/2026" when both dates fall in one year, else both full dates. */
@@ -101,7 +105,8 @@ export function formatRange(startS: number, endS: number, timeZone?: string): st
 /** Hero title: the version in Vietnamese ("3.4上" → "Phiên bản 3.4 · Thượng"); an unknown suffix is kept as is. */
 export function versionTitle(label: string): string {
   const m = label.match(/^(.*?)([上下])$/);
-  return m ? `Phiên bản ${m[1]} · ${m[2] === '上' ? 'Thượng' : 'Hạ'}` : `Phiên bản ${label}`;
+  const n = m && getLang() === 'vi' ? `${m[1]} · ${m[2] === '上' ? 'Thượng' : 'Hạ'}` : label;
+  return s('bnVersion').replace('{n}', () => n);
 }
 
 export type ArchiveFilters = { character: string; type: string; year: number };

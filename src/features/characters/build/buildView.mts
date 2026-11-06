@@ -2,6 +2,7 @@
 // Game names: VI when published, else CN flagged untranslated (like the lore tab). Ids missing from the game
 // document or data.json are left out rather than shown raw.
 import type { GameDocument, GameText } from '../../profile/api/loreOverlay.mts';
+import { pickText } from '../../../i18n/lang.mts';
 
 export type Unit = { text: string; untranslated: boolean };
 type Deepen = { label: string; styleId: string; points: number[] };
@@ -23,7 +24,7 @@ type SiteCharacter = { id: string; slug?: string; name_vi?: string; name_cn?: st
 const unit = (t: GameText | undefined, field: 'name' | 'detail' = 'name'): Unit => {
   const vi = field === 'name' ? t?.vi : t?.detail_vi;
   const cn = field === 'name' ? t?.cn : t?.detail;
-  return vi ? { text: vi, untranslated: false } : { text: cn ?? '', untranslated: true };
+  return pickText(vi, cn);
 };
 const asset = (path?: string) => (path ? (path.startsWith('/') ? path : `/${path}`) : '');
 // Skill slot (data.json) → the short tag under a rotation step (owner 2026-09-28).

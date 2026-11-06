@@ -8,6 +8,8 @@ import { loreOverlayMerged } from '../../../data/loader.js';
 import { recordHref } from '../../../admin/characters/lib/route.mts';
 import { buildLoreView, factSize, factSpans, keepTogether, type FactSize, type LoreFact, type LoreUnit } from './loreView.mts';
 import { useHeightTween, useReveal, useSlider } from '../motion';
+import { s } from '../../../i18n/strings.mts';
+import { useLang } from '../../../i18n/useLang.ts';
 
 export function Text({ unit, as: Tag = 'span', className }: { unit: LoreUnit | null; as?: 'p' | 'span'; className?: string }) {
   if (!unit) return null;
@@ -29,7 +31,7 @@ function TermPopover({ name, detail, className, style, children }: { name: LoreU
       <div popover="auto" id={id} className="lore-popover">
         <div className="lore-pop-head">
           <h4>{typeof name === 'string' ? name : <Text unit={name} />}</h4>
-          <button type="button" className="lore-close" popoverTarget={id} popoverTargetAction="hide">Đóng</button>
+          <button type="button" className="lore-close" popoverTarget={id} popoverTargetAction="hide">{s('close')}</button>
         </div>
         <Text unit={detail} as="p" className="lore-prose" />
       </div>
@@ -80,6 +82,7 @@ const shown = (unit: LoreUnit): LoreUnit => (unit.untranslated ? unit : { ...uni
 
 // A cold deep link renders before the R2 overlay is merged into char.profile; re-render once it is.
 export function useOverlayRerender() {
+  useLang();
   const [, setTick] = useState(0);
   useEffect(() => {
     let live = true;
@@ -137,12 +140,12 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
 
   return (
     <div className="lore-wrap">
-    <section ref={tabRef} className={hasAside ? 'lore-tab' : 'lore-tab lore-tab--single'} aria-label="Hồ Sơ Lưu Trữ">
+    <section ref={tabRef} className={hasAside ? 'lore-tab' : 'lore-tab lore-tab--single'} aria-label={s('tabLore')}>
       {hasAside && (
         <aside className="lore-aside">
           {view.archive && (
             <figure className="lore-plate">
-              <img src={view.archive.image} alt="Hiện vật" loading="lazy" onError={(e) => { e.currentTarget.closest('figure')?.remove(); }} />
+              <img src={view.archive.image} alt={s('loreRelic')} loading="lazy" onError={(e) => { e.currentTarget.closest('figure')?.remove(); }} />
             </figure>
           )}
           {(view.relicName || view.facts.length > 0 || view.people) && (
@@ -169,48 +172,48 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
                   <dl className="lore-stub">
                     {view.people.department && (
                       <div>
-                        <dt className="lore-label">Trực thuộc</dt>
+                        <dt className="lore-label">{s('loreDept')}</dt>
                         <dd><TermPopover name={view.people.department} detail={view.people.departmentDetail} className="lore-stub-value">{keepTogether(view.people.department)}</TermPopover></dd>
                       </div>
                     )}
-                    {view.people.status && <div><dt className="lore-label">Bản thể</dt><dd>{view.people.status}</dd></div>}
-                    {view.people.recordId && <div className="lore-serial-row"><dt className="lore-label">Mã hồ sơ</dt><dd className="lore-serial">{view.people.recordId}</dd></div>}
+                    {view.people.status && <div><dt className="lore-label">{s('loreEntity')}</dt><dd>{view.people.status}</dd></div>}
+                    {view.people.recordId && <div className="lore-serial-row"><dt className="lore-label">{s('loreRecord')}</dt><dd className="lore-serial">{view.people.recordId}</dd></div>}
                   </dl>
                 </>
               )}
             </div>
           )}
           {(view.facts.some((f) => f.detail) || view.people?.departmentDetail) && (
-            <p className="lore-footnote">* Bấm vào từng mục trong phiếu để xem ghi chú.</p>
+            <p className="lore-footnote">{s('loreFootnote')}</p>
           )}
         </aside>
       )}
 
       <article className="lore-main">
         <header className="lore-head">
-          <h2>Hồ Sơ Lưu Trữ</h2>
+          <h2>{s('tabLore')}</h2>
           {char.id && <EditorLink id={char.id} />}
         </header>
         {view.hasUntranslated && (
           <p className="lore-notice"><b>Hồ sơ này chưa dịch xong.</b> Đoạn có chấm nhỏ đang hiện bản gốc tiếng Trung.</p>
         )}
-        {view.empty && <p className="lore-empty">Chưa có hồ sơ lưu trữ.</p>}
+        {view.empty && <p className="lore-empty">{s('loreEmpty')}</p>}
 
         {view.intro && (
           <div className={leadOpen ? 'lore-lead is-open' : 'lore-lead'} ref={leadRef}>
             <Text unit={view.intro} as="p" className="lore-prose" />
-            <button type="button" className="lore-more" aria-expanded={leadOpen} onClick={() => { captureLead(); setLeadOpen((v) => !v); }}>{leadOpen ? 'Thu gọn' : 'Đọc tiếp'}</button>
+            <button type="button" className="lore-more" aria-expanded={leadOpen} onClick={() => { captureLead(); setLeadOpen((v) => !v); }}>{leadOpen ? s('loreLess') : s('loreMore')}</button>
           </div>
         )}
 
         {hasRelic && (
           <section className="lore-block">
-            <h3 className="lore-title">Hiện vật</h3>
+            <h3 className="lore-title">{s('loreRelic')}</h3>
             {view.relicIntro && view.timeline.length > 0 && (
-              <div className="lore-switch" role="tablist" aria-label="Hiện vật" ref={switchRef}>
+              <div className="lore-switch" role="tablist" aria-label={s('loreRelic')} ref={switchRef}>
                 <span className="seg-ink" aria-hidden="true" />
-                <button type="button" role="tab" aria-selected={relicPanel === 'origin'} onClick={() => setRelicPanel('origin')}>Nguồn gốc</button>
-                <button type="button" role="tab" aria-selected={relicPanel === 'timeline'} onClick={() => setRelicPanel('timeline')}>Dòng thời gian</button>
+                <button type="button" role="tab" aria-selected={relicPanel === 'origin'} onClick={() => setRelicPanel('origin')}>{s('loreOrigin')}</button>
+                <button type="button" role="tab" aria-selected={relicPanel === 'timeline'} onClick={() => setRelicPanel('timeline')}>{s('loreTimeline')}</button>
               </div>
             )}
             <div ref={relicRef}>
@@ -229,21 +232,21 @@ function LoreTab({ char }: { char: { id?: string } & Record<string, unknown> }) 
 
         {view.reports.length > 0 && current && (
           <section className="lore-block">
-            <h3 className="lore-title">Báo cáo đánh giá</h3>
-            <div className="lore-tabs" role="tablist" aria-label="Báo cáo đánh giá" ref={reportsRef}>
+            <h3 className="lore-title">{s('loreReports')}</h3>
+            <div className="lore-tabs" role="tablist" aria-label={s('loreReports')} ref={reportsRef}>
               <span className="seg-ink" aria-hidden="true" />
               {view.reports.map((r, i) => (
                 <button key={i} type="button" role="tab" aria-selected={i === report} onClick={() => setReport(i)}>
                   {r.special
-                    ? (r.title && !r.title.untranslated ? r.title.text : 'Báo cáo mật')
-                    : `Báo cáo ${view.reports.slice(0, i + 1).filter((x) => !x.special).length}`}
+                    ? (r.title && !r.title.untranslated ? r.title.text : s('loreSecret'))
+                    : s('loreReportN').replace('{n}', () => String(view.reports.slice(0, i + 1).filter((x) => !x.special).length))}
                 </button>
               ))}
             </div>
             <div role="tabpanel" className="lore-report" ref={reportRef}>
               {current.title && <Text unit={current.title} as="p" className="lore-report-title" />}
               {current.unlock && (
-                <p className="lore-unlock">Mở khoá ở cảm ứng <b>{current.unlockLevel !== null && `cấp ${current.unlockLevel} · `}<Text unit={current.unlock} /></b></p>
+                <p className="lore-unlock">{s('loreUnlock')} <b>{current.unlockLevel !== null && s('loreLv').replace('{n}', () => String(current.unlockLevel))}<Text unit={current.unlock} /></b></p>
               )}
               <Text unit={current.content} as="p" className="lore-prose" />
             </div>

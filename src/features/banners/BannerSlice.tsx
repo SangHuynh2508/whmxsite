@@ -3,16 +3,21 @@
 import { useState } from 'react';
 import { status } from './bannerTime.mts';
 import { artUrl, skinImage, sliceMeta, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
+import { txt } from '../../i18n/lang.mts';
+import { s } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang.ts';
 
 export type SliceChar = { slug: string; name_vi?: string; name_cn: string; skins?: { skinID: string; image?: string }[] };
 
 /** Untranslated text: Chinese, the site's small ash dot, "(chưa dịch)" for screen readers (DESIGN.md Original Name Rule). */
 export function Cn({ text }: { text: string }) {
+  if (useLang() === 'cn') return <span lang="zh">{text}</span>;
   return <span className="bn-cn" lang="zh">{text}<span className="bn-sr"> (chưa dịch)</span></span>;
 }
 
 export function BannerSlice({ banner, doc, now, characters, isArchive = false }:
   { banner: Banner; doc: BannersDoc; now: number; characters: Record<string, SliceChar>; isArchive?: boolean }) {
+  useLang();
   const [broken, setBroken] = useState<Record<string, boolean>>({});
   const hide = (key: string) => () => setBroken((b) => ({ ...b, [key]: true }));
   const ups = upCharacters(banner, characters);
@@ -28,16 +33,16 @@ export function BannerSlice({ banner, doc, now, characters, isArchive = false }:
       <span className="bn-slice-txt">
         {logo && <img className="bn-slice-logo" src={logo} alt="" loading="lazy" onError={hide('logo')} />}
         <span className="bn-slice-name">
-          {ups.length ? ups.map(({ char }) => char.name_vi || char.name_cn).join(' · ') : <Cn text={banner.name_cn} />}
+          {ups.length ? ups.map(({ char }) => txt(char, 'name')).join(' · ') : <Cn text={banner.name_cn} />}
         </span>
-        <span className="bn-slice-meta">{meta.label}{meta.left && <> · còn <b>{meta.left}</b></>}</span>
+        <span className="bn-slice-meta">{meta.label}{meta.left && <> · {s('homeLeftLc')} <b>{meta.left}</b></>}</span>
       </span>
     </>
   );
   // A slice opens its first UP character; a banner without one (choice banners, 强化A池) is not a link.
   return ups[0]
     ? <a className="bn-slice" href={`#/characters/${ups[0].char.slug}`} data-ended={ended || undefined}>
-        {body}<span className="bn-slice-cue" aria-hidden="true">Xem Khí Giả ›</span>
+        {body}<span className="bn-slice-cue" aria-hidden="true">{s('bnCue')}</span>
       </a>
     : <div className="bn-slice" data-ended={ended || undefined}>{body}</div>;
 }

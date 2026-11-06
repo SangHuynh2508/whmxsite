@@ -1,4 +1,6 @@
 // Banner/event time helpers (spec 2026-09-30 §3.4). Times in the data are unix seconds; "now" is Date.now() ms.
+import { s } from '../../i18n/strings.mts';
+
 export type BannerStatus = 'upcoming' | 'active' | 'ended';
 
 export function status(nowMs: number, startS: number, endS: number): BannerStatus {
@@ -10,9 +12,10 @@ export function remaining(nowMs: number, endS: number): string {
   const left = Math.floor((endS * 1000 - nowMs) / 1000);
   if (left <= 0) return '';
   const d = Math.floor(left / 86400), h = Math.floor((left % 86400) / 3600), m = Math.floor((left % 3600) / 60);
-  if (d > 0) return `${d} ngày ${h} giờ`;
-  if (h > 0) return `${h} giờ ${m} phút`;
-  return m > 0 ? `${m} phút` : '< 1 phút';
+  const f = (k: 'tmDH' | 'tmHM' | 'tmM') => s(k).replace('{d}', () => String(d)).replace('{h}', () => String(h)).replace('{m}', () => String(m));
+  if (d > 0) return f('tmDH');
+  if (h > 0) return f('tmHM');
+  return m > 0 ? f('tmM') : s('tmLt');
 }
 
 export function formatDate(s: number, timeZone?: string): string {
