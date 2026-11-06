@@ -1,10 +1,12 @@
 import { state } from '../../../data/state.js';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
-import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
+import { jobName, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { ticketHtml } from '../catalogCard.mts';
 import { openCalcPicker } from '../../../ui/calcCharacterPicker.js';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
+import { getLang, txt } from '../../../i18n/lang.mts';
+import { s } from '../../../i18n/strings.mts';
 
 export function renderHeader() {
   const char = state.character;
@@ -31,7 +33,7 @@ export function renderHeader() {
 
   if (!char) {
     // Unselected State
-    if (elAvatarBox) elAvatarBox.setAttribute('aria-label', 'Chọn nhân vật');
+    if (elAvatarBox) elAvatarBox.setAttribute('aria-label', s('pickTitle'));
     if (elAvatar) {
       elAvatar.classList.add('hidden');
       elAvatar.style.display = 'none';
@@ -45,8 +47,8 @@ export function renderHeader() {
       elChangeBtn.style.display = 'none';
     }
     if (elRarity) elRarity.style.display = 'none';
-    if (elNameVi) elNameVi.textContent = 'Chọn Nhân Vật';
-    if (elNameCn) elNameCn.textContent = 'Bấm vào hình đại diện để chọn nhân vật';
+    if (elNameVi) elNameVi.textContent = s('pickTitle');
+    if (elNameCn) elNameCn.textContent = s('hdrPickHint');
     if (elJobBlock) elJobBlock.style.display = 'none';
     if (elTags) elTags.innerHTML = '';
     
@@ -56,7 +58,7 @@ export function renderHeader() {
   }
 
   // Selected State
-  if (elAvatarBox) elAvatarBox.setAttribute('aria-label', 'Đổi nhân vật');
+  if (elAvatarBox) elAvatarBox.setAttribute('aria-label', s('hdrChange'));
   if (elPlus) {
     elPlus.classList.add('hidden');
     elPlus.style.display = 'none';
@@ -75,8 +77,9 @@ export function renderHeader() {
     elRarity.className = `profile-rarity rare-${char.rare}`;
     elRarity.textContent = getRarityText(char.rare) + (char.is_limited ? ' • LIMITED' : '');
   }
-  if (elNameVi) elNameVi.textContent = char.name_vi || char.name_cn;
-  if (elNameCn) elNameCn.textContent = char.fullname_vi || char.fullname_cn || char.name_cn;
+  if (elNameVi) elNameVi.textContent = txt(char, 'name');
+  // Han/full name under the title; in CN mode it would repeat the title.
+  if (elNameCn) elNameCn.textContent = getLang() === 'cn' ? '' : (char.fullname_vi || char.fullname_cn || char.name_cn);
 
   // Class / Job Badge & Label Mapping
   const prefixes = { 1: 'sw', 2: 'qr', 3: 'yj', 4: 'gs', 5: 'zl' };
@@ -84,7 +87,7 @@ export function renderHeader() {
   
   const prefix  = prefixes[char.job];
   const color   = colors[char.rare] || 'red';
-  const jName   = JOB_NAMES[char.job] || '';
+  const jName   = jobName(char.job);
 
   if (prefix && elJobBlock && elClassBadge && elClassLabel) {
     elClassBadge.src = `/assets/jobs/ui_yc_${prefix}_${color}.png`;
@@ -96,7 +99,7 @@ export function renderHeader() {
   }
 
   // Globalized Gameplay Tags
-  const tagStr = char.tags_vi || char.tags_cn || '';
+  const tagStr = txt(char, 'tags');
   if (elTags) elTags.innerHTML = renderTagChipsHtml(tagStr);
 
   // Character Card Artwork & Gallery
@@ -120,7 +123,7 @@ function renderCardGallery(char) {
 
   // Initial artwork: use variant 0's artworkSrc
   if (!variants.length) { cardPanel.style.display = 'none'; return; }
-  cardBox.innerHTML = ticketHtml({ image: variants[0].artworkSrc, rare: char.rare, job: char.job, name: char.name_vi || char.name_cn || '', imageId: 'profile-card-img' });
+  cardBox.innerHTML = ticketHtml({ image: variants[0].artworkSrc, rare: char.rare, job: char.job, name: txt(char, 'name'), imageId: 'profile-card-img' });
   const cardImg = document.getElementById('profile-card-img');
   cardPanel.style.display = '';
 
@@ -131,7 +134,7 @@ function renderCardGallery(char) {
     variants.forEach((v, idx) => {
       const btn = document.createElement('button');
       btn.className = `thumb-btn${idx === 0 ? ' active' : ''}`;
-      btn.title = `Biến thể ${idx + 1}`;
+      btn.title = `${s('hdrVariant')} ${idx + 1}`;
       btn.innerHTML = `<img src="${v.thumbnailSrc}" alt="Variant ${idx + 1}" />`;
       btn.addEventListener('click', () => {
         // Update main artwork to variant's full artworkSrc

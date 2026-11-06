@@ -2,6 +2,8 @@
 // the game's 1 : 2 card art, the game's rarity glow at its foot (ui_ty_kp_pz_<rare>), the job icon where the game shows
 // Trí Tri, the name under the art. Limited is the 限 seal already printed in the art (all 11 is_limited cards, checked),
 // so there is no red border and no "SSR" label; rarity, job and Limited stay in the accessible name.
+import { s } from '../../i18n/strings.mts';
+
 export type CatalogCard = {
   slug: string; name: string; rare: number; rarityLabel: string; job: number; jobLabel: string; limited: boolean;
   primary: string; secondary: string | null; huanzhangIcon: string | null;
@@ -15,13 +17,13 @@ export function cardArtLayers(rare: number, job: number): string {
 }
 
 export function catalogCardHtml(c: CatalogCard): string {
-  const label = [c.name, c.jobLabel, c.rarityLabel, c.limited ? 'Limited' : ''].filter(Boolean).join(' · ');
+  const label = [c.name, c.jobLabel, c.rarityLabel, c.limited ? s('limited') : ''].filter(Boolean).join(' · ');
   return `<a href="#/characters/${c.slug}" class="cc-card${c.secondary ? ' has-alt' : ''} card-result-reveal" aria-label="${label}" title="${label}">`
     + '<span class="cc-art">'
     + `<img class="cc-art-main" src="${c.primary}" alt="" loading="lazy" />`
     + (c.secondary ? `<img class="cc-art-alt" src="${c.secondary}" alt="" loading="lazy" onerror="this.remove()" />` : '')
     + cardArtLayers(c.rare, c.job)
-    + (c.huanzhangIcon ? `<img class="cc-hz" src="${c.huanzhangIcon}" alt="" title="Có Hoán Chương" onerror="this.remove()" />` : '')
+    + (c.huanzhangIcon ? `<img class="cc-hz" src="${c.huanzhangIcon}" alt="" title="${s('catHasHz')}" onerror="this.remove()" />` : '')
     + `</span><span class="cc-name">${c.name}</span></a>`;
 }
 

@@ -7,7 +7,9 @@ import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { escapeHtml } from '../../../lib/escapeHtml.mts';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
-import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
+import { jobName as jobLabel, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
+import { getLang, txt } from '../../../i18n/lang.mts';
+import { s } from '../../../i18n/strings.mts';
 
 import { renderOverviewTab } from './detail/overviewView.js';
 import { renderInfoTab } from './detail/infoView.js';
@@ -29,6 +31,7 @@ document.addEventListener('click', (event) => {
 
 // Internal Tab State & Controller
 let currentRenderedCharId = null;
+let currentRenderedLang = null;
 let currentActiveTab = null;
 let activeTabTransition = null;
 let tabSwitchToken = 0; // bumps on every tab swap; a late island mount checks it before animating
@@ -117,9 +120,9 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     container.innerHTML = `
       <div class="char-not-found empty-state">
         <div class="empty-state-content">
-          <h1 class="empty-state-title">Không tìm thấy nhân vật</h1>
-          <p class="empty-state-text">Thẻ nhân vật "${escapeHtml(slugOrId)}" không tồn tại hoặc đã bị ẩn.</p>
-          <a href="#/characters" class="cd-breadcrumb-back">← Về danh sách nhân vật</a>
+          <h1 class="empty-state-title">${s('cdNotFound')}</h1>
+          <p class="empty-state-text">${s('cdNotFoundText').replace('{id}', escapeHtml(slugOrId))}</p>
+          <a href="#/characters" class="cd-breadcrumb-back">${s('cdBackList')}</a>
         </div>
       </div>
     `;
@@ -128,7 +131,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
   const normTab = normalizeTab(activeTab);
   const shellExists = !!container.querySelector('.character-detail-content');
-  const isSameChar = currentRenderedCharId === char.id && shellExists;
+  const isSameChar = currentRenderedCharId === char.id && currentRenderedLang === getLang() && shellExists;
 
   // CASE 1: Internal tab switch on already active character detail view
   if (isSameChar) {
@@ -233,13 +236,14 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
   }
 
   currentRenderedCharId = char.id;
+  currentRenderedLang = getLang(); // a language switch re-renders the whole shell
   currentActiveTab = normTab;
 
   const rarityLabel = RARITY_LABELS[char.rare] || `★${char.rare}`;
   const rarityInfo = { label: rarityLabel, class: RARITY_LABELS[char.rare] ? rarityLabel.toLowerCase() : "sr" };
-  const jobName = JOB_NAMES[char.job] || "Chức nghiệp";
+  const jobName = jobLabel(char.job) || s('catJob');
   const slug = char.slug || char.id;
-  const tagStr = char.tags_vi || char.tags_cn || "";
+  const tagStr = txt(char, 'tags');
 
   container.innerHTML = `
     <div class="character-detail-content">
@@ -247,7 +251,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
       <div class="cd-breadcrumb-bar">
         <a href="#/characters" class="cd-breadcrumb-back">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-          <span>Danh Sách Khí Giả</span>
+          <span>${s('cdBreadcrumb')}</span>
         </a>
       </div>
 
@@ -257,18 +261,18 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         <div class="cd-header-left">
           <div class="cd-avatar-box">
             <img src="${getCharacterAvatarUrl(char)}" 
-                 alt="${char.name_vi || char.name_cn}" 
+                 alt="${txt(char, 'name')}" 
                  class="cd-avatar-img" 
                  onerror="this.onerror=null; this.src='/assets/characters/avatars/W0001.png';" />
           </div>
 
           <div class="cd-identity-box">
             <div class="cd-title-row">
-              <h1 class="cd-name-vi">${char.name_vi || char.name_cn}</h1>
+              <h1 class="cd-name-vi">${txt(char, 'name')}</h1>
               ${char.is_limited ? '<span class="cd-limited-badge">LIMITED</span>' : ''}
             </div>
 
-            ${char.name_cn ? `<div class="cd-name-cn cn-font">${char.name_cn}</div>` : ''}
+            ${char.name_cn && getLang() !== 'cn' ? `<div class="cd-name-cn cn-font">${char.name_cn}</div>` : ''}
 
             ${tagStr ? `
             <div class="cd-tags-list">
@@ -284,41 +288,41 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
             <img src="/assets/jobs/job_${char.job}.png" 
                  alt="${jobName}" 
                  class="cd-job-large-icon" 
-                 title="Lớp: ${jobName}" />
+                 title="${s('cdClass')}: ${jobName}" />
             <div class="cd-rarity-badge-large ${rarityInfo.class}">${rarityInfo.label}</div>
           </div>
         </div>
       </header>
 
       <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Hồ Sơ Lưu Trữ | Phòng Trà | Thư Viện (gallery stays last) -->
-      <nav class="cd-sub-nav" aria-label="Điều hướng chi tiết nhân vật">
+      <nav class="cd-sub-nav" aria-label="${s('cdSubNav')}">
         <div class="cd-nav-scroll-wrapper">
           <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
-            <span class="tab-label">Tổng Quan</span>
+            <span class="tab-label">${s('tabOverview')}</span>
           </a>
 
           <a href="#/characters/${slug}/info" class="cd-tab-item ${normTab === 'info' ? 'active' : ''}">
-            <span class="tab-label">Thông Tin</span>
+            <span class="tab-label">${s('tabInfo')}</span>
           </a>
 
           <a href="#/characters/${slug}/talents" class="cd-tab-item ${normTab === 'talents' ? 'active' : ''}">
-            <span class="tab-label">Thiên Phú</span>
+            <span class="tab-label">${s('tabTalents')}</span>
           </a>
 
           <a href="#/characters/${slug}/build" class="cd-tab-item ${normTab === 'build' ? 'active' : ''}">
-            <span class="tab-label">Build</span>
+            <span class="tab-label">${s('tabBuild')}</span>
           </a>
 
           <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
-            <span class="tab-label">Hồ Sơ Lưu Trữ</span>
+            <span class="tab-label">${s('tabLore')}</span>
           </a>
 
           <a href="#/characters/${slug}/tea" class="cd-tab-item ${normTab === 'tea' ? 'active' : ''}">
-            <span class="tab-label">Phòng Trà</span>
+            <span class="tab-label">${s('tabTea')}</span>
           </a>
 
           <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
-            <span class="tab-label">Thư Viện</span>
+            <span class="tab-label">${s('tabGallery')}</span>
           </a>
 
         </div>

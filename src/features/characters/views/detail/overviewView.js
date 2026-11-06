@@ -4,22 +4,26 @@
  */
 import { getCharacterCardUrl } from '../../../assets/assetPaths.js';
 import { escapeHtml } from '../../../../lib/escapeHtml.mts';
-import { JOB_NAMES, RARITY_LABELS } from '../../../../ui/utils/gameLabels.mts';
+import { jobName as jobLabel, RARITY_LABELS } from '../../../../ui/utils/gameLabels.mts';
+import { getLang, txt } from '../../../../i18n/lang.mts';
+import { s } from '../../../../i18n/strings.mts';
 import { ticketHtml } from '../../catalogCard.mts';
 
 export function renderOverviewTab(container, char) {
 
   const rarityLabel = RARITY_LABELS[char.rare] || `★${char.rare}`;
   const rarityInfo = { label: rarityLabel, class: RARITY_LABELS[char.rare] ? rarityLabel.toLowerCase() : "sr" };
-  const jobName = JOB_NAMES[char.job] || "Chưa xác định";
+  const jobName = jobLabel(char.job) || s('ovUnknown');
   const attackStyleMap = {
-    1: "Cận chiến",
-    2: "Tầm xa"
+    1: s('ovMelee'),
+    2: s('ovRanged')
   };
-  const attackTypeStr = attackStyleMap[char.attack_style_type] || "Chưa xác định";
+  const attackTypeStr = attackStyleMap[char.attack_style_type] || s('ovUnknown');
 
   const mainCardImg = char.cards && char.cards.length > 0 ? getCharacterCardUrl(char.cards[0]) : char.icon;
-  const nickname = String(char.nickname_vi ?? "").trim();
+  const cn = getLang() === 'cn';
+  const nickname = cn ? '' : String(char.nickname_vi ?? "").trim();
+  const fullname = cn ? (char.fullname_cn ?? '') : (char.fullname_vi ?? '');
   const profile = char.profile || {};
 
   container.innerHTML = `
@@ -28,7 +32,7 @@ export function renderOverviewTab(container, char) {
         <!-- Compact Profile List Block -->
         <div class="overview-info-block">
           <div class="overview-section-header">
-            <h2>Hồ Sơ Khí Giả</h2>
+            <h2>${s('ovTitle')}</h2>
             <span class="rarity-badge ${rarityInfo.class}">${rarityInfo.label}</span>
           </div>
 
@@ -37,19 +41,19 @@ export function renderOverviewTab(container, char) {
             <div class="overview-info-col">
               <!-- 1. Tên hiển thị -->
               <div class="info-cell">
-                <span class="info-label">Tên hiển thị:</span>
-                <span class="info-val highlight" data-field="name_vi">${char.name_vi || char.name_cn}</span>
+                <span class="info-label">${s('ovName')}</span>
+                <span class="info-val highlight" data-field="name_vi">${txt(char, 'name')}</span>
               </div>
 
               <!-- 2. Tên đầy đủ (always rendered: inline edit un-hides empty editable fields) -->
-              <div class="info-cell${char.fullname_vi ? '' : ' hidden'}">
-                <span class="info-label">Tên đầy đủ:</span>
-                <span class="info-val" data-field="fullname_vi">${char.fullname_vi ?? ''}</span>
+              <div class="info-cell${fullname ? '' : ' hidden'}">
+                <span class="info-label">${s('ovFullname')}</span>
+                <span class="info-val" data-field="fullname_vi">${fullname}</span>
               </div>
 
               <!-- 3. Khí Giả -->
               <div class="info-cell">
-                <span class="info-label">Khí Giả:</span>
+                <span class="info-label">${s('ovJob')}</span>
                 <span class="info-val job-val">
                   <img src="/assets/jobs/job_${char.job}.png" alt="${jobName}" class="job-icon-small" />
                   ${jobName}
@@ -58,14 +62,14 @@ export function renderOverviewTab(container, char) {
 
               <!-- 4. Loại banner -->
               <div class="info-cell">
-                <span class="info-label">Loại banner:</span>
-                <span class="info-val">${char.is_limited ? '<span class="limited-tag">Limited</span>' : 'Thường'}</span>
+                <span class="info-label">${s('ovBanner')}</span>
+                <span class="info-val">${char.is_limited ? `<span class="limited-tag">${s('limited')}</span>` : s('catStandard')}</span>
               </div>
 
               <!-- 5. Tình trạng nhân sự -->
               ${profile.staff_status ? `
               <div class="info-cell">
-                <span class="info-label">Tình trạng nhân sự:</span>
+                <span class="info-label">${s('ovStaff')}</span>
                 <span class="info-val">${escapeHtml(profile.staff_status)}</span>
               </div>
               ` : ''}
@@ -73,7 +77,7 @@ export function renderOverviewTab(container, char) {
               <!-- 6. Mã hồ sơ -->
               ${profile.record_id ? `
               <div class="info-cell">
-                <span class="info-label">Mã hồ sơ:</span>
+                <span class="info-label">${s('ovRecord')}</span>
                 <span class="info-val record-id-val">${escapeHtml(profile.record_id)}</span>
               </div>
               ` : ''}
@@ -83,26 +87,26 @@ export function renderOverviewTab(container, char) {
             <div class="overview-info-col">
               <!-- 1. Tên thường gọi (always rendered, see above) -->
               <div class="info-cell${nickname ? '' : ' hidden'}">
-                <span class="info-label">Tên thường gọi:</span>
+                <span class="info-label">${s('ovNickname')}</span>
                 <span class="info-val" data-field="nickname_vi">${nickname}</span>
               </div>
 
               <!-- 2. Tên gốc (CN) -->
-              <div class="info-cell">
-                <span class="info-label">Tên gốc (CN):</span>
+              <div class="info-cell${cn ? ' hidden' : ''}">
+                <span class="info-label">${s('ovCnName')}</span>
                 <span class="info-val cn-font">${char.fullname_cn || char.name_cn}</span>
               </div>
 
               <!-- 3. Kiểu tấn công -->
               <div class="info-cell">
-                <span class="info-label">Kiểu tấn công:</span>
+                <span class="info-label">${s('ovAttack')}</span>
                 <span class="info-val">${attackTypeStr}</span>
               </div>
 
               <!-- 4. Trực thuộc -->
               ${profile.department ? `
               <div class="info-cell">
-                <span class="info-label">Trực thuộc:</span>
+                <span class="info-label">${s('ovDept')}</span>
                 <span class="info-val highlight-dept">${escapeHtml(profile.department)}</span>
               </div>
               ` : ''}
@@ -110,7 +114,7 @@ export function renderOverviewTab(container, char) {
               <!-- 5. Tình trạng bản thể -->
               ${profile.entity_status ? `
               <div class="info-cell">
-                <span class="info-label">Tình trạng bản thể:</span>
+                <span class="info-label">${s('ovEntity')}</span>
                 <span class="info-val">${escapeHtml(profile.entity_status)}</span>
               </div>
               ` : ''}
@@ -123,7 +127,7 @@ export function renderOverviewTab(container, char) {
         <!-- Artwork Showcase Block -->
         <div class="overview-art-block">
           <div class="art-frame">
-            ${ticketHtml({ image: mainCardImg, rare: char.rare, job: char.job, name: char.name_vi || char.name_cn })}
+            ${ticketHtml({ image: mainCardImg, rare: char.rare, job: char.job, name: txt(char, 'name') })}
           </div>
         </div>
       </section>

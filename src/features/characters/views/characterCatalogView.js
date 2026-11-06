@@ -5,7 +5,7 @@ import { getGameData } from '../../../data/loader.js';
 import { hasHuanZhang, HUANZHANG_INDICATOR_ICON } from '../../../ui/utils/huanzhang.js';
 import { getCharacterCardUrl } from '../../assets/assetPaths.js';
 import { fold } from '../../../lib/fold.mts';
-import { JOB_NAMES, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
+import { jobName, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { catalogCardHtml } from '../catalogCard.mts';
 import { newestFirst } from '../../../lib/newest.mts';
 import { getLang, txt } from '../../../i18n/lang.mts';
@@ -115,7 +115,7 @@ export function renderCharacterCatalogView(container) {
       const primary = cards[0] ? getCharacterCardUrl(cards[0]) : (char.icon ? (char.icon.startsWith('/') ? char.icon : `/${char.icon}`) : '');
       return catalogCardHtml({
         slug: char.slug, name: txt(char, 'name'), rare: char.rare, rarityLabel: RARITY_LABELS[char.rare] || 'R',
-        job: char.job, jobLabel: JOB_NAMES[char.job] ? s(`job${char.job}`) : s('jobOther'), limited: Boolean(char.is_limited), primary,
+        job: char.job, jobLabel: jobName(char.job) || s('jobOther'), limited: Boolean(char.is_limited), primary,
         secondary: cards[1] ? getCharacterCardUrl(cards[1]) : null, huanzhangIcon: hasHuanZhang(char) ? HUANZHANG_INDICATOR_ICON : null,
       });
     }).join('');
