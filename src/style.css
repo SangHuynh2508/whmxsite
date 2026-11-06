@@ -261,7 +261,6 @@
 .app-nav-lang {
   display: flex;
   height: 44px;
-  margin-bottom: 6px;
   padding: 3px;
   box-sizing: border-box;
   border-radius: 8px;
@@ -290,7 +289,12 @@
 }
 
 .mobile-menu-sheet .app-nav-lang {
-  margin: 12px 20px 0;
+  margin: 12px 20px;
+}
+
+/* divider: the switch is not part of the account group below it */
+.mobile-menu-sheet .app-nav-lang + .mobile-menu-heading {
+  border-top: 1px solid var(--border-color);
 }
 
 #app-nav-theme-btn {

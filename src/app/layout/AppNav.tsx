@@ -136,6 +136,8 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
       </ul>
       <div className="app-nav-footer">
         <LangToggle lang={lang} />
+      </div>
+      <div className="app-nav-footer">
         <a
           href={adminHref}
           id="app-nav-admin-link"
@@ -243,12 +245,12 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               )) : <p className="mobile-menu-empty">Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.</p>
             ) : (
               <>
-                <p className="mobile-menu-heading">Trang</p>
+                <p className="mobile-menu-heading">{s('navPages', lang)}</p>
                 <ul>
                   {/* no rail logo on phones: this row is the way home */}
                   <li>
                     <a href="#/" className={view === 'home' ? 'active' : undefined} aria-current={view === 'home' ? 'page' : undefined} onClick={linkClick('#/')}>
-                      <House size={20} />Trang chủ
+                      <House size={20} />{s('navHome', lang)}
                     </a>
                   </li>
                   {PUBLIC_LINKS.map(({ href, label, icon: Icon, views }) => (
