@@ -3,7 +3,9 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { reduced } from '../characters/motion.ts';
-import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
+import { JOB_NAMES, jobName, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
+import { s } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang.ts';
 import type { Filter } from './tierView.mts';
 
 type Props = {
@@ -14,6 +16,7 @@ type Props = {
 const phone = () => matchMedia('(max-width: 640px)').matches;
 
 export function TierFilter({ filter, rarities, left, count, toggle, clear }: Props) {
+  useLang();
   const dialog = useRef<HTMLDialogElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const active = filter.jobs.size + filter.rarities.size;
@@ -43,22 +46,22 @@ export function TierFilter({ filter, rarities, left, count, toggle, clear }: Pro
   };
   return (
     <div className="tl-fwrap">
-      <button ref={button} type="button" className={active ? 'tl-fbtn on' : 'tl-fbtn'} aria-haspopup="dialog" aria-controls="tl-filter" aria-label="Bộ lọc" title="Bộ lọc" onClick={open}>
+      <button ref={button} type="button" className={active ? 'tl-fbtn on' : 'tl-fbtn'} aria-haspopup="dialog" aria-controls="tl-filter" aria-label={s('catFilter')} title={s('catFilter')} onClick={open}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z" /></svg>
         {active > 0 && <i>{active}</i>}
       </button>
       <dialog ref={dialog} id="tl-filter" className="tl-filter" aria-labelledby="tl-filter-title" onClose={() => button.current?.focus()}
         onClick={(e) => { if (e.target === dialog.current && phone()) dialog.current.close(); }}>
-        <h2 id="tl-filter-title">Bộ lọc</h2>
-        <p className="tl-k">Nghề</p>
-        <div className="tl-chips">{Object.entries(JOB_NAMES).map(([n, l]) => chip('jobs', Number(n), l, `/assets/jobs/job_${n}.png`))}</div>
-        <p className="tl-k">Độ hiếm</p>
+        <h2 id="tl-filter-title">{s('catFilter')}</h2>
+        <p className="tl-k">{s('catJob')}</p>
+        <div className="tl-chips">{Object.keys(JOB_NAMES).map((n) => chip('jobs', Number(n), jobName(Number(n)), `/assets/jobs/job_${n}.png`))}</div>
+        <p className="tl-k">{s('catRarity')}</p>
         <div className="tl-chips">{rarities.map((r) => chip('rarities', r, RARITY_LABELS[r]))}</div>
         <Legend />
         <div className="tl-foot">
-          <span aria-live="polite">Còn {left} Khí Giả</span>
-          <button type="button" onClick={clear}>Xoá lọc</button>
-          <button type="button" className="tl-close" onClick={() => dialog.current?.close()}>Đóng</button>
+          <span aria-live="polite">{s('trLeft').replace('{n}', String(left))}</span>
+          <button type="button" onClick={clear}>{s('catClear')}</button>
+          <button type="button" className="tl-close" onClick={() => dialog.current?.close()}>{s('close')}</button>
         </div>
       </dialog>
     </div>
@@ -66,9 +69,10 @@ export function TierFilter({ filter, rarities, left, count, toggle, clear }: Pro
 }
 
 export function Legend() {
+  useLang();
   return (
     <p className="tl-legend">
-      <span className="tl-badge">Z3</span> mốc Trí Tri tối thiểu · <span className="tl-badge hc">HC</span> cần Hoán Chương · không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build
+      <span className="tl-badge">Z3</span> {s('trLegZ')} · <span className="tl-badge hc">HC</span> {s('trLegHc')} · {s('trLegRest')}
     </p>
   );
 }

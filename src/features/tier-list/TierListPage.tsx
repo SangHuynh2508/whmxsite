@@ -9,15 +9,19 @@ import { getGameData, loadedGameDocument } from '../../data/loader.js';
 import { reduced, useReveal } from '../characters/motion.ts';
 import { CharacterTile } from '../characters/components/CharacterTile.tsx';
 import { Legend, TierFilter } from './TierFilter.tsx';
-import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
+import { jobName, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
 import { chipCount, countMatches, emptyFilter, filterTiers, fmtDate, paragraphs, pickList, presentRarities, tileProps, visibleTabs, type Filter, type PublishedList, type SiteChar } from './tierView.mts';
 import { tierListHref, type Tab } from './tierRoute.mts';
+import { pickText } from '../../i18n/lang.mts';
+import { s as t$ } from '../../i18n/strings.mts';
+import { useLang } from '../../i18n/useLang.ts';
 import './styles/tierList.css';
 
 gsap.registerPlugin(Flip);
-const TAB_LABEL: Record<Tab, string> = { characters: 'Nhân vật', teams: 'Đội hình', info: 'Thông tin' };
+const TAB_LABEL = { characters: 'trTabChars', teams: 'trTabTeams', info: 'trTabInfo' } as const;
 
 export function TierListView({ list, characters, tab: initial, onTab }: { list: PublishedList; characters: Record<string, SiteChar>; tab: Tab; onTab?: (tab: Tab) => void }) {
+  useLang();
   const { doc } = list;
   const tabs = visibleTabs(doc);
   const [tab, setTab] = useState<Tab>(tabs.includes(initial) ? initial : 'characters');
@@ -54,25 +58,25 @@ export function TierListView({ list, characters, tab: initial, onTab }: { list: 
     onTab?.(next);
     if (focus) requestAnimationFrame(() => document.getElementById(`tl-tab-${next}`)?.focus());
   };
-  const names = [...[...filter.jobs].sort().map((j) => JOB_NAMES[j]), ...[...filter.rarities].sort((a, b) => b - a).map((r) => RARITY_LABELS[r])];
+  const names = [...[...filter.jobs].sort().map((j) => jobName(j)), ...[...filter.rarities].sort((a, b) => b - a).map((r) => RARITY_LABELS[r])];
   const filtering = names.length > 0 || filter.q.trim() !== '';
   const firstTier = tiers[0];
 
   return (
     <div className="tl-page">
       <header className="tl-mast">
-        <h1>{doc.title}</h1>
+        <h1>{pickText(doc.title, t$('trTitle', 'cn')).text}</h1>
         <p className="tl-by">
-          {doc.author && <>Tham khảo tier list của {doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.author}</a> : <b>{doc.author}</b>} · </>}
-          Cập nhật {fmtDate(list.updatedAt)}{list.status === 'archived' && ' · Cũ'}
+          {doc.author && <>{t$('trRef')} {doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.author}</a> : <b>{doc.author}</b>} · </>}
+          {t$('trUpdated')} {fmtDate(list.updatedAt)}{list.status === 'archived' && ` · ${t$('trOld')}`}
         </p>
         {tabs.length > 1 && (
-          <div className="tl-tabs" role="tablist" aria-label="Nội dung tier list">
+          <div className="tl-tabs" role="tablist" aria-label={t$('trTabs')}>
             {tabs.map((t, i) => (
               <button key={t} id={`tl-tab-${t}`} type="button" role="tab" aria-selected={t === tab} aria-controls="tl-panel" tabIndex={t === tab ? 0 : -1}
                 onClick={() => choose(t)}
                 onKeyDown={(e) => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) choose(tabs[(i + d + tabs.length) % tabs.length], true); }}>
-                {TAB_LABEL[t]}
+                {t$(TAB_LABEL[t])}
               </button>
             ))}
           </div>
@@ -82,13 +86,13 @@ export function TierListView({ list, characters, tab: initial, onTab }: { list: 
         <div className="tl-bar">
           <label className="tl-search">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-            <input type="search" placeholder="Tìm Khí Giả" aria-label="Tìm Khí Giả theo tên" autoComplete="off" value={filter.q} onChange={(e) => change({ ...filter, q: e.target.value })} />
+            <input type="search" placeholder={t$('trSearch')} aria-label={t$('trSearchAria')} autoComplete="off" value={filter.q} onChange={(e) => change({ ...filter, q: e.target.value })} />
           </label>
           <TierFilter filter={filter} rarities={rarities} left={shown} count={(k, v) => chipCount(tiers, characters, filter, k, v)} toggle={toggle} clear={clear} />
           <p className={filtering ? 'tl-result' : 'tl-result idle'} aria-live="polite">
             {filtering
-              ? <><b>{shown}</b>/{total} Khí Giả{names.length > 0 && ` · ${names.join(', ')}`}{filter.q.trim() && ` · “${filter.q.trim()}”`}<button type="button" onClick={clear}>Xoá lọc</button></>
-              : `${total} Khí Giả`}
+              ? <><b>{shown}</b>/{t$('trCount').replace('{n}', String(total))}{names.length > 0 && ` · ${names.join(', ')}`}{filter.q.trim() && ` · “${filter.q.trim()}”`}<button type="button" onClick={clear}>{t$('catClear')}</button></>
+              : t$('trCount').replace('{n}', String(total))}
           </p>
         </div>
       )}
@@ -103,14 +107,14 @@ export function TierListView({ list, characters, tab: initial, onTab }: { list: 
                   {g.description && <p className="tl-desc">{g.description}</p>}
                   {g.rows.map(({ tier, entries }) => (
                     <div key={tier.label} className="tl-row">
-                      <div className={tier === firstTier ? 'tl-lab top' : 'tl-lab'}><h2>{tier.label}</h2><small>{entries.length} Khí Giả</small></div>
+                      <div className={tier === firstTier ? 'tl-lab top' : 'tl-lab'}><h2>{tier.label}</h2><small>{t$('trCount').replace('{n}', String(entries.length))}</small></div>
                       <div className="tl-tiles">
                         {entries.map((e) => { const key = `${e.characterId}|${e.zhizhi ?? ''}|${e.hc ? 1 : ''}`; return <CharacterTile key={key} flipId={key} {...tileProps(e, characters[e.characterId])} />; })}
                       </div>
                     </div>
                   ))}
                 </section>
-              )) : <p className="tl-empty">Không có Khí Giả nào khớp. <button type="button" onClick={clear}>Xoá lọc</button></p>}
+              )) : <p className="tl-empty">{t$('trNoMatch')} <button type="button" onClick={clear}>{t$('catClear')}</button></p>}
             </div>
           </>
         )}
@@ -139,6 +143,7 @@ export function TierListView({ list, characters, tab: initial, onTab }: { list: 
 }
 
 function Page({ lists, slug, tab }: { lists: PublishedList[] | undefined; slug: string; tab: Tab }) {
+  useLang();
   const characters = getGameData().characters as Record<string, SiteChar>;
   const pick = pickList(lists, slug);
   if (pick.kind === 'list') {
@@ -148,10 +153,10 @@ function Page({ lists, slug, tab }: { lists: PublishedList[] | undefined; slug: 
   if (pick.kind === 'index') {
     return (
       <div className="tl-page">
-        <header className="tl-mast"><h1>Tier List</h1></header>
+        <header className="tl-mast"><h1>{t$('navTier')}</h1></header>
         <ul className="tl-index">
           {pick.lists.map((l) => (
-            <li key={l.slug}><a href={tierListHref(l.slug)}><b>{l.doc.title}</b><small>{l.doc.author && `${l.doc.author} · `}Cập nhật {fmtDate(l.updatedAt)}{l.status === 'archived' && ' · Cũ'}</small></a></li>
+            <li key={l.slug}><a href={tierListHref(l.slug)}><b>{pickText(l.doc.title, t$('trTitle', 'cn')).text}</b><small>{l.doc.author && `${l.doc.author} · `}{t$('trUpdated')} {fmtDate(l.updatedAt)}{l.status === 'archived' && ` · ${t$('trOld')}`}</small></a></li>
           ))}
         </ul>
       </div>
@@ -159,8 +164,8 @@ function Page({ lists, slug, tab }: { lists: PublishedList[] | undefined; slug: 
   }
   return (
     <div className="tl-page">
-      <header className="tl-mast"><h1>Tier List</h1></header>
-      <p className="tl-empty">{pick.kind === 'missing' ? <>Không tìm thấy tier list này. <a href={tierListHref()}>Xem các tier list</a></> : 'Chưa có tier list.'}</p>
+      <header className="tl-mast"><h1>{t$('navTier')}</h1></header>
+      <p className="tl-empty">{pick.kind === 'missing' ? <>{t$('trMissing')} <a href={tierListHref()}>{t$('trSeeAll')}</a></> : t$('trNone')}</p>
     </div>
   );
 }

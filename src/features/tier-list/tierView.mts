@@ -1,6 +1,6 @@
 // Pure view logic of the Tier List page (spec 2026-10-02 §7, direction D3). No DOM.
 import { fold } from '../../lib/fold.mts';
-import { JOB_NAMES, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
+import { jobName, RARITY_LABELS } from '../../ui/utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
 import { pick } from '../../i18n/lang.mts';
 import { s } from '../../i18n/strings.mts';
@@ -59,12 +59,12 @@ export function paragraphs(text: string) {
 }
 
 export const badges = (e: Entry) => [e.zhizhi ? `Z${e.zhizhi}` : '', e.hc ? 'HC' : ''].filter(Boolean);
-export const badgeTitle = (e: Entry) => [e.zhizhi ? `Trí Tri ${e.zhizhi}` : '', e.hc ? 'cần Hoán Chương' : ''].filter(Boolean).join(' · ');
+export const badgeTitle = (e: Entry) => [e.zhizhi ? `${s('zhizhi')} ${e.zhizhi}` : '', e.hc ? s('trLegHc') : ''].filter(Boolean).join(' · ');
 
 export function tileProps(e: Entry, c: SiteChar, href = `#/characters/${c.slug}/build`): CharacterTileProps {
   const { text: name, untranslated } = pick(c, 'name');
   const b = badges(e);
-  const label = [`${name}${untranslated ? ` (${s('untranslatedTag')})` : ''}${b.length ? ` (${b.join(' · ')})` : ''}`, JOB_NAMES[c.job], RARITY_LABELS[c.rare]].filter(Boolean).join(' · ');
+  const label = [`${name}${untranslated ? ` (${s('untranslatedTag')})` : ''}${b.length ? ` (${b.join(' · ')})` : ''}`, jobName(c.job), RARITY_LABELS[c.rare]].filter(Boolean).join(' · ');
   return { name, untranslated, avatar: getCharacterAvatarUrl(c), rare: c.rare, href, label, badges: b, badgeTitle: badgeTitle(e) };
 }
 

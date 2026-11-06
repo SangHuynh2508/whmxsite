@@ -160,6 +160,11 @@ const vi = {
   sdAvatar: 'Chân Dung (Avatar)',
   sdAvatarSub: 'Ảnh đại diện khí giả khi khoác y phục • Nhấn để xem',
   sdAvatarAria: 'Xem ảnh phóng to Chân Dung',
+  trTitle: 'Tier List tổng hợp', trRef: 'Tham khảo tier list của', trUpdated: 'Cập nhật', trOld: 'Cũ', trTabs: 'Nội dung tier list',
+  trTabChars: 'Nhân vật', trTabTeams: 'Đội hình', trTabInfo: 'Thông tin', trSearch: 'Tìm Khí Giả', trSearchAria: 'Tìm Khí Giả theo tên',
+  trCount: '{n} Khí Giả', trLeft: 'Còn {n} Khí Giả', trNoMatch: 'Không có Khí Giả nào khớp.', trMissing: 'Không tìm thấy tier list này.',
+  trSeeAll: 'Xem các tier list', trNone: 'Chưa có tier list.', trLegZ: 'mốc Trí Tri tối thiểu', trLegHc: 'cần Hoán Chương',
+  trLegRest: 'không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -324,6 +329,11 @@ const cn: Record<StringKey, string> = {
   sdAvatar: '头像 (Avatar)', // draft
   sdAvatarSub: '器者穿上装束后的头像 • 点击查看', // draft
   sdAvatarAria: '查看头像大图', // draft
+  trTitle: '强度榜汇总', trRef: '参考强度榜：', trUpdated: '更新于', trOld: '旧版', trTabs: '强度榜内容', // draft
+  trTabChars: '器者', trTabTeams: '阵容', trTabInfo: '说明', trSearch: '搜索器者', trSearchAria: '按名称搜索器者', // draft
+  trCount: '{n} 位器者', trLeft: '剩余 {n} 位器者', trNoMatch: '没有符合的器者。', trMissing: '未找到该强度榜。', // draft
+  trSeeAll: '查看全部强度榜', trNone: '暂无强度榜。', trLegZ: '最低知致阶段', trLegHc: '需要焕章', // draft
+  trLegRest: '无标签 = 无需阶段 · 同一档内越靠左越强 · 点击查看配装', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];
