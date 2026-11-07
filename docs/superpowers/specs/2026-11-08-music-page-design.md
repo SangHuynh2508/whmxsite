@@ -51,11 +51,14 @@ Tên nhóm truyện (sự kiện/chương) lấy từ `WHMX_Lore_By_Chapter/INDE
    "file": "music/bgm/novel_e2202.mp3", // khoá R2
    "cover": "music/covers/ui_jj_yy_pic_cd_26.webp",   // null → ảnh mặc định
    "group": "jukebox",                  // jukebox | story | stage | area | other (nhóm chính, theo thứ tự ưu tiên này)
+   "groups": ["jukebox", "story"],      // mọi nhóm bài có mặt — bộ lọc dùng trường này
    "name_cn": "春华如梦",                // tên chính thức; "" khi không có
    "name_vi": "",                       // từ localization/music_names_vi.json
-   "label_cn": "…",                     // nhãn tự sinh khi không có tên (§5)
+   "label_kind": "",                    // "" | story | stage | area — loại nhãn tự sinh (§5); giao diện thêm tiền tố
+   "label_cn": "",                      // phần tên của nhãn tự sinh, CN
    "source_cn": "通过【人间千古】活动获取",
    "stories": [{"group_cn": "人间千古", "count": 5}],   // gom theo nhóm truyện, tối đa 5 nhóm
+   "stories_total": 8,                  // tổng số kịch bản dùng bài
    "stages":  {"names_cn": ["远击的进阶：子", "…"], "count": 12},   // tối đa 3 tên + tổng
    "areas_cn": ["裂隙", "粤州"]}
  ]}
@@ -67,9 +70,9 @@ Bộ lọc nhóm trên trang lọc theo **có mặt** (bài vừa có truyện v
 ## 5. Tên bài
 
 - Có tên máy hát → `name_cn` (+ `name_vi` nếu đã dịch). Bỏ mục "预留位置" (ô trống trỏ lại `foundationMusic_1`).
-- Không có tên → `label_cn` sinh theo chỗ dùng đầu tiên có: nhóm truyện đầu tiên ("剧情 · 人间千古"), hoặc màn đầu
-  tiên ("战斗 · 远击的进阶：子"), hoặc khu vực ("地图 · 裂隙"); không có gì → chỉ mã file. Giao diện VI hiển thị tiền tố
-  bằng chữ giao diện ("Truyện", "Màn đánh", "Bản đồ"), phần tên giữ CN.
+- Không có tên → nhãn sinh theo chỗ dùng đầu tiên có: nhóm truyện đầu tiên (`label_kind` story, `label_cn` "人间千古"),
+  hoặc màn đầu tiên (stage, "远击的进阶：子"), hoặc khu vực (area, "裂隙"); không có gì → chỉ mã file. Giao diện thêm
+  tiền tố theo ngôn ngữ ("Truyện · 人间千古" / "剧情 · 人间千古"), phần tên giữ CN.
 - `localization/music_names_vi.json`: `{ "<id>": "<tên VI>" }`, tool tạo sẵn đủ 38 khoá với giá trị rỗng; chủ dự án
   điền, chạy lại tool. Claude không điền bản dịch.
 
