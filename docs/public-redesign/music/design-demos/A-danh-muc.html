@@ -1,0 +1,121 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="music-demo.css">
+<title>Âm nhạc · A · Danh mục</title>
+<!-- A · Danh mục (catalogue ledger + listening card).
+     (a) One bordered ledger sheet, rows split by hairlines: Nº · disc · title + where-heard · kind. Sticky tools bar
+         (search + group tabs with the selection ink). 390 px: Nº and kind drop, the row is disc + two lines.
+     (b) A row opens a listening card in a popover (top layer, scrim) over the list; ≤ 640 px a bottom sheet. The hash
+         becomes #/music/<id>, so a shared link opens the card over the list. Closing stops the music.
+     (c) Native <audio controls preload="none"> — the browser's own seek, volume, keyboard and screen-reader support.
+     (d) Bài trước / Bài sau walk the filtered list ("12 / 120"), playing on.
+     (e) Group change: the ink stretches to the tab, the rows arrive (6 px rise, blur → sharp). Card: 97 % → 100 % + 6 px
+         rise (0.3 s); phone sheet slides up (0.42 s). -->
+<style>
+.wrap{max-width:1120px;margin:0 auto}
+.bar{position:sticky;top:0;z-index:3;margin:0 -8px;padding:12px 8px;background:var(--bg);border-bottom:1px solid var(--line)}
+.count{margin:16px 0 8px;font-size:13px;color:var(--ash)}
+.sheet{border:1px solid var(--line2);border-radius:6px;overflow:hidden;background:var(--surface)}
+.row{display:grid;grid-template-columns:56px 44px minmax(0,1fr) 120px;align-items:center;gap:16px;width:100%;padding:10px 16px;border:0;border-top:1px solid var(--line);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.row:first-child{border-top:0}
+.row:hover{background:var(--hover)}
+.no{font:700 15px/1 var(--serif);font-variant-numeric:tabular-nums;color:var(--ash);letter-spacing:.06em}
+.row.on .no{color:var(--gold)}
+.t{min-width:0}
+.t b{display:block;font:600 16px/1.35 var(--serif);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t small{display:block;margin-top:2px;font-size:13px;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.k{justify-self:end;font-size:12px;color:var(--ash)}
+.row.on .k{color:var(--gold)}
+/* listening card */
+dialog{width:min(560px,calc(100vw - 32px));max-height:min(86dvh,760px);padding:0;border:1px solid var(--line2);border-radius:6px;background:var(--lifted);color:var(--text);overflow:auto}
+dialog::backdrop{background:rgb(0 0 0 / .6)}
+.card{padding:20px 22px 18px}
+.head{display:flex;gap:18px;align-items:center}
+.head .disc{width:120px;height:120px}
+.head .kind{font-size:12px;color:var(--ash)}
+.head h2{margin:4px 0 0;font:600 21px/1.35 var(--serif)}
+.close{position:absolute;right:10px;top:10px}
+.card audio{margin-top:18px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.foot .pos{font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums}
+@media (max-width:768px){
+  .row{grid-template-columns:40px minmax(0,1fr);gap:12px;padding:10px 12px}
+  .row .disc{width:40px;height:40px}
+  .no,.k{display:none}
+  .search{max-width:none}
+}
+@media (max-width:640px){
+  dialog{width:100%;max-width:100%;margin:auto 0 0;max-height:85dvh;border-radius:6px 6px 0 0;border-bottom:0}
+  .head .disc{width:88px;height:88px}
+  .head h2{font-size:19px}
+  .foot .btn span{display:none}
+  dialog[open]{animation:sheet .42s cubic-bezier(.16,1,.3,1)}
+}
+@keyframes sheet{from{transform:translateY(100%)}}
+@media (prefers-reduced-motion:reduce){dialog[open]{animation:none}}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap">
+  <h1>Âm nhạc</h1>
+  <p class="lede">259 bản nhạc nền trích từ game, bản <span id="ver"></span>. Bấm một bài để nghe.</p>
+  <div class="bar"><div class="tools">
+    <label class="search"><span class="sr">Tìm bài</span><input id="q" type="search"><span id="qi"></span></label>
+    <div class="tabs" id="tabs" role="group" aria-label="Nhóm"></div>
+  </div></div>
+  <p class="count" id="count"></p>
+  <div class="sheet" id="list"></div>
+</div></main>
+<dialog id="dlg" aria-labelledby="dlg-t"><div class="card" id="card"></div></dialog>
+<script src="music-data.js"></script><script src="music-common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const { L, icon, title, usage, uses, disc, filter } = M;
+let group = 'all', q = '', shown = [], openId = '';
+document.getElementById('ver').textContent = M.version;
+document.getElementById('q').placeholder = L.search;
+document.getElementById('qi').innerHTML = icon('search', 16);
+const list = document.getElementById('list'), dlg = document.getElementById('dlg'), card = document.getElementById('card');
+const kind = (t) => t.groups.map((g) => L[g]).join(' · ');
+function render(animate) {
+  shown = filter(group, q);
+  document.getElementById('count').textContent = `${shown.length} bài`;
+  list.innerHTML = shown.length ? shown.map((t, i) => `<button class="row${t.id === openId ? ' on' : ''}" data-id="${t.id}">
+    <span class="no">${String(i + 1).padStart(3, '0')}</span>${disc(t)}
+    <span class="t"><b>${title(t)}</b><small>${usage(t)}</small></span><span class="k">${kind(t)}</span></button>`).join('')
+    : `<p class="empty">${L.empty}</p>`;
+  list.style.display = shown.length ? '' : 'contents';
+  if (animate) M.reveal(list.children);
+}
+M.tabs(document.getElementById('tabs'), group, (g) => { group = g; render(true); });
+document.getElementById('q').addEventListener('input', (e) => { q = e.target.value; render(false); });
+list.addEventListener('click', (e) => { const r = e.target.closest('.row'); if (r) open(r.dataset.id, true); });
+function open(id, play) {
+  const t = M.byId.get(id); if (!t) return;
+  const i = shown.findIndex((x) => x.id === id);
+  openId = id; history.replaceState(null, '', '#/music/' + id);
+  card.innerHTML = `<button class="btn ghost close" id="x">${icon('x', 16)}Đóng</button>
+    <div class="head">${disc(t)}<div><div class="kind">${kind(t)}</div><h2 id="dlg-t">${title(t)}</h2></div></div>
+    <audio controls preload="none" src="${M.audio(t)}"></audio><p class="playerr">${L.playError}</p>
+    <div class="uses">${uses(t)}</div>
+    <div class="foot"><button class="btn" id="pv" ${i <= 0 ? 'disabled' : ''}>${icon('prev', 16)}<span>Bài trước</span></button>
+    <span class="pos">${i + 1} / ${shown.length}</span>
+    <button class="btn" id="nx" ${i < 0 || i >= shown.length - 1 ? 'disabled' : ''}><span>Bài sau</span>${icon('next', 16)}</button></div>`;
+  const a = card.querySelector('audio');
+  a.addEventListener('error', () => card.querySelector('.playerr').classList.add('on'));
+  if (play) a.play().catch(() => {});
+  card.querySelector('#x').onclick = close;
+  card.querySelector('#pv').onclick = () => open(shown[i - 1].id, true);
+  card.querySelector('#nx').onclick = () => open(shown[i + 1].id, true);
+  list.querySelectorAll('.row').forEach((r) => r.classList.toggle('on', r.dataset.id === id));
+  if (!dlg.open) {
+    dlg.showModal();
+    const phone = matchMedia('(max-width:640px)').matches;
+    if (!M.reduced && !phone) gsap.fromTo(card, { opacity: 0, scale: 0.97, y: 6 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: 'expo.out', clearProps: 'transform' }); // phone: CSS sheet slide (a GSAP tween on <dialog> itself drops it out of the top layer in Chrome)
+  }
+}
+function close() { card.querySelector('audio')?.pause(); dlg.close(); }
+dlg.addEventListener('close', () => { card.querySelector('audio')?.pause(); openId = ''; history.replaceState(null, '', '#/music'); list.querySelectorAll('.row.on').forEach((r) => r.classList.remove('on')); });
+dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+render(false);
+const deep = /^#\/music\/(.+)$/.exec(location.hash); if (deep) open(decodeURIComponent(deep[1]).toLowerCase(), false);
+</script></body></html>

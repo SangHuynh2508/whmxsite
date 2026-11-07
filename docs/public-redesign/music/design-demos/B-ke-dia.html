@@ -1,0 +1,149 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="music-demo.css">
+<title>Âm nhạc · B · Kệ đĩa</title>
+<!-- B · Kệ đĩa (record shelf + a page per track).
+     (a) The 38 Máy hát tracks stand on shelves as the game's own CDs (name under each); every other track is a compact
+         two-column text list under book-style section headings (serif over a 1 px rule). Group tabs pick one section;
+         "Tất cả" shows them all. 390 px: 3 discs per shelf row, the text list one column.
+     (b) A track opens its own page #/music/<id> (the Back button returns to the shelf). Leaving the page stops it.
+     (c) Own controls: one gold Phát/Tạm dừng button, a seek bar, the time, and the volume (mute button + slider; the level
+         is kept from track to track; the slider hides where the browser ignores volume, i.e. iOS); the disc turns while it plays (as on the
+         game's jukebox) and stops where it is when paused. <audio preload="none"> underneath, no autoplay on deep links.
+     (d) Bài trước / Bài sau name the neighbours in the filtered list, at the foot of the page.
+     (e) Opening: the disc flies from its shelf slot to the page (GSAP Flip), the text arrives in reading order. -->
+<style>
+.wrap{max-width:1180px;margin:0 auto}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:8px}
+.sec{margin-top:32px}
+.sec>h2{display:flex;align-items:baseline;gap:10px;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line2);font:700 19px/1.3 var(--serif)}
+.sec>h2 span{font:500 13px var(--sans);color:var(--ash)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:28px 16px}
+.cd{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 8px 0;border:0;border-bottom:1px solid var(--golddiv);background:none;color:inherit;font:inherit;cursor:pointer;text-align:center}
+.cd .disc{width:118px;height:118px;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.cd:hover .disc{transform:translateY(-4px) rotate(18deg)}
+.cd b{font:600 15px/1.35 var(--serif);padding-bottom:12px;max-width:100%;overflow-wrap:anywhere}
+.lines{columns:2 340px;column-gap:32px}
+.ln{display:block;width:100%;break-inside:avoid;padding:9px 8px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;border-radius:0}
+.ln:hover{background:var(--hover)}
+.ln b{display:block;font:600 15px/1.35 var(--serif)}
+.ln small{display:block;margin-top:2px;font-size:13px;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* track page */
+.back{margin:8px 0 16px}
+.page{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:48px;align-items:start}
+.big{position:relative;width:100%;max-width:360px;aspect-ratio:1}
+.big .disc{width:100%;height:100%}
+.big .disc.blank{border-color:var(--line2)}
+.kind{font-size:13px;color:var(--ash)}
+.page h1{margin:6px 0 20px;font-size:30px}
+.ctl{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line2);border-radius:6px;background:var(--surface)}
+.pp{display:grid;place-items:center;flex:none;width:44px;height:44px;border:0;border-radius:6px;background:var(--gold);color:var(--bg);cursor:pointer}
+.pp:active{transform:scale(.97)}
+.seek{flex:1;min-width:0;accent-color:var(--gold);height:20px}
+.vol{display:flex;align-items:center;gap:6px;flex:none}
+.mu{display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:6px;background:none;color:var(--ash);cursor:pointer}
+.mu:hover{background:var(--hover);color:var(--text)}
+.vs{width:88px;accent-color:var(--gold);height:20px}
+.time{flex:none;font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums;min-width:86px;text-align:right}
+.uses{margin-top:12px}
+.nb{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line)}
+.nb a{display:block;padding:10px 12px;border-radius:6px;min-width:0}
+.nb a:hover{background:var(--hover)}
+.nb a small{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--ash)}
+.nb a b{display:block;margin-top:2px;font:600 15px/1.35 var(--serif);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nb a.n{text-align:right}.nb a.n small{justify-content:flex-end}
+@media (max-width:768px){
+  .shelf{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 8px}
+  .cd .disc{width:min(92px,26vw);height:min(92px,26vw)}
+  .cd b{font-size:13px}
+  .lines{columns:1}
+  .page{grid-template-columns:1fr;gap:20px}
+  .big{max-width:220px;margin:0 auto}
+  .ctl{flex-wrap:wrap}
+  .seek{flex-basis:calc(100% - 56px)}
+  .time{order:3;text-align:left;margin-left:56px}
+  .vol{order:4;margin-left:auto}
+  .page h1{font-size:24px;margin-bottom:16px}
+  .nb{grid-template-columns:1fr}.nb a.n{text-align:left}.nb a.n small{justify-content:flex-start}
+}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap" id="app"></div></main>
+<script src="music-data.js"></script><script src="music-common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+<script>
+gsap.registerPlugin(Flip);
+const { L, icon, title, usage, uses, disc, filter } = M;
+const app = document.getElementById('app');
+let group = 'all', q = '', shown = [], audio = null, flipState = null, volume = 1, muted = false; // kept across tracks
+const fmt = (s) => (isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '–:––');
+function listView() {
+  app.innerHTML = `<h1>Âm nhạc</h1><p class="lede">259 bản nhạc nền trích từ game, bản ${M.version}.</p>
+    <div class="bar"><label class="search"><span class="sr">Tìm bài</span><input id="q" type="search" placeholder="${L.search}" value="${M.esc(q)}">${icon('search', 16)}</label>
+    <div class="tabs" id="tabs" role="group" aria-label="Nhóm"></div></div><div id="secs"></div>`;
+  M.tabs(document.getElementById('tabs'), group, (g) => { group = g; secs(true); });
+  document.getElementById('q').addEventListener('input', (e) => { q = e.target.value; secs(false); });
+  secs(false);
+}
+function secs(animate) {
+  shown = filter(group, q);
+  const el = document.getElementById('secs');
+  const gs = group === 'all' ? M.GROUPS : [group];
+  el.innerHTML = gs.map((g) => {
+    const ts = shown.filter((t) => (group === 'all' ? t.group === g : true));
+    if (!ts.length) return '';
+    const body = g === 'jukebox'
+      ? `<div class="shelf">${ts.map((t) => `<a class="cd" href="#/music/${t.id}" data-id="${t.id}">${disc(t)}<b>${title(t)}</b></a>`).join('')}</div>`
+      : `<div class="lines">${ts.map((t) => `<a class="ln" href="#/music/${t.id}" data-id="${t.id}"><b>${title(t)}</b><small>${usage(t)}</small></a>`).join('')}</div>`;
+    return `<section class="sec"><h2>${L[g]}<span>${ts.length} bài</span></h2>${body}</section>`;
+  }).join('') || `<p class="empty">${L.empty}</p>`;
+  if (animate) M.reveal(el.querySelectorAll('.sec'));
+}
+app.addEventListener('click', (e) => {
+  const a = e.target.closest('.cd'); if (a && !M.reduced) { const d = a.querySelector('.disc'); d.dataset.flipId = 'disc'; flipState = Flip.getState(d); }
+});
+function trackView(id) {
+  const t = M.byId.get(id); if (!t) return listView();
+  if (!shown.length) shown = filter(group, q);
+  const i = shown.findIndex((x) => x.id === id), pv = shown[i - 1], nx = shown[i + 1];
+  app.innerHTML = `<a class="btn ghost back" href="#/music">${icon('back', 16)}Âm nhạc</a>
+    <article class="page"><div class="big">${disc(t)}</div><div>
+      <div class="kind">${t.groups.map((g) => L[g]).join(' · ')}</div><h1>${title(t)}</h1>
+      <div class="ctl"><button class="pp" id="pp" aria-label="Phát">${icon('play', 20)}</button>
+        <input class="seek" id="seek" type="range" min="0" max="1000" value="0" aria-label="Vị trí">
+        <span class="time" id="time">0:00 / –:––</span>
+        <span class="vol"><button class="mu" id="mu" aria-label="Tắt tiếng">${icon('vol', 18)}</button><input class="vs" id="vs" type="range" min="0" max="1" step="0.05" aria-label="Âm lượng"></span></div><p class="playerr">${L.playError}</p>
+      <div class="uses">${uses(t)}</div>
+      <nav class="nb">${pv ? `<a href="#/music/${pv.id}"><small>${icon('back', 14)}Bài trước</small><b>${title(pv)}</b></a>` : '<span></span>'}
+        ${nx ? `<a class="n" href="#/music/${nx.id}"><small>Bài sau${icon('next', 12)}</small><b>${title(nx)}</b></a>` : ''}</nav>
+    </div></article>`;
+  const d = app.querySelector('.big .disc'), pp = app.querySelector('#pp'), seek = app.querySelector('#seek'), time = app.querySelector('#time');
+  audio = new Audio(); audio.preload = 'none'; audio.src = M.audio(t);
+  const spin = M.reduced ? null : gsap.to(d, { rotation: 360, duration: 9, ease: 'none', repeat: -1, paused: true });
+  const sync = () => { pp.innerHTML = icon(audio.paused ? 'play' : 'pause', 20); pp.setAttribute('aria-label', audio.paused ? 'Phát' : 'Tạm dừng'); audio.paused ? spin?.pause() : spin?.play(); };
+  pp.onclick = () => (audio.paused ? audio.play().catch(() => {}) : audio.pause());
+  audio.addEventListener('play', sync); audio.addEventListener('pause', sync);
+  audio.addEventListener('timeupdate', () => { time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; if (audio.duration) seek.value = (audio.currentTime / audio.duration) * 1000; });
+  audio.addEventListener('error', () => app.querySelector('.playerr').classList.add('on'));
+  const mu = app.querySelector('#mu'), vs = app.querySelector('#vs');
+  const vsync = () => { audio.volume = volume; audio.muted = muted; vs.value = muted ? 0 : volume; const off = muted || volume === 0; mu.innerHTML = icon(off ? 'mute' : 'vol', 18); mu.setAttribute('aria-label', off ? 'Bật tiếng' : 'Tắt tiếng'); };
+  mu.onclick = () => { muted = !(muted || volume === 0); if (!muted && volume === 0) volume = 0.5; vsync(); };
+  vs.oninput = () => { volume = Number(vs.value); muted = false; vsync(); };
+  audio.volume = 0.5; if (audio.volume !== 0.5) vs.hidden = true; // iOS: volume is read-only, the hardware buttons own it
+  vsync();
+  seek.oninput = () => { if (audio.duration) audio.currentTime = (seek.value / 1000) * audio.duration; };
+  if (flipState) { d.dataset.flipId = 'disc'; Flip.from(flipState, { targets: d, duration: 0.55, ease: 'expo.out', absolute: true }); flipState = null; }
+  M.reveal(app.querySelectorAll('.kind,h1,.ctl,.uses h3,.uses ul,.nb'));
+  return t;
+}
+function route() {
+  if (audio) { audio.pause(); audio = null; }
+  const m = /^#\/music\/(.+)$/.exec(location.hash);
+  if (m) { const auto = !!flipState || route.fromClick; trackView(decodeURIComponent(m[1]).toLowerCase()); if (auto && audio) audio.play().catch(() => {}); }
+  else listView();
+  route.fromClick = false; scrollTo(0, 0);
+}
+app.addEventListener('click', (e) => { if (e.target.closest('a[href^="#/music/"]')) route.fromClick = true; }, true);
+addEventListener('hashchange', route);
+route();
+</script></body></html>

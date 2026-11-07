@@ -1,0 +1,102 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="music-demo.css">
+<title>Âm nhạc · C · Sổ mục lục</title>
+<!-- C · Sổ mục lục (an index book: table of contents + entries that open in place).
+     (a) Desktop: a sticky left column (search, then the group index with counts, the picked one marked in gold) beside
+         one reading column of entries under book headings. 390 px: the index becomes a row of wrapped buttons under
+         the search; no rail column.
+     (b) No page and no popup: a row opens in place (one at a time), showing the player and where it is heard. The hash
+         is #/music/<id>; a shared link scrolls to the row and opens it. Opening another row stops the first.
+     (c) Native <audio controls preload="none"> inside the opened row.
+     (d) No Bài trước / Bài sau: the neighbours are the rows right above and below.
+     (e) Opening: the row eases to its new height (0.45 s) and its contents arrive; group change: entries arrive. -->
+<style>
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;align-items:start}
+.side{position:sticky;top:16px}
+.side h1{margin-top:8px}
+.side .lede{margin-bottom:20px}
+.side .search{max-width:none}
+.toc{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--line)}
+.toc button{display:flex;justify-content:space-between;width:100%;padding:10px 4px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ash);font:500 14px var(--sans);cursor:pointer;text-align:left}
+.toc button:hover{color:var(--text)}
+.toc button span{font-variant-numeric:tabular-nums}
+.toc button[aria-pressed=true]{color:var(--text)}
+.toc button[aria-pressed=true] span{color:var(--gold)}
+.book{max-width:780px}
+.sec{margin-bottom:40px}
+.sec>h2{margin:8px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--line2);font:700 19px/1.3 var(--serif)}
+.e{border-bottom:1px solid var(--line)}
+.e>button{display:grid;grid-template-columns:auto minmax(0,1fr) 20px;align-items:center;gap:14px;width:100%;padding:12px 4px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.e>button:hover{background:var(--hover)}
+.e .disc{width:36px;height:36px}
+.e .disc.blank{width:12px;height:12px;border:0;background:var(--line2);border-radius:50%;margin:0 12px}
+.e b{display:block;font:600 16px/1.35 var(--serif)}
+.e small{display:block;margin-top:2px;font-size:13px;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.e .chev{color:var(--ash);transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.e.open .chev{transform:rotate(180deg);color:var(--gold)}
+.e.open .blank{background:var(--gold)}
+.body{overflow:hidden;height:0}
+.e.open .body{height:auto}
+.in{padding:4px 4px 20px 54px}
+.in .uses h3:first-child{margin-top:12px}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:8px}
+  .side{position:static}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;border:0;margin-top:12px}
+  .toc li{display:contents}
+  .toc button{width:auto;gap:8px;padding:6px 10px;border:1px solid var(--line2);border-radius:6px;font-size:13px}
+  .toc button[aria-pressed=true]{border-color:var(--goldline);background:var(--lifted)}
+  .in{padding-left:4px}
+}
+</style></head><body>
+<nav class="rail" aria-hidden="true"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav><button class="fab" aria-label="Menu">☰</button>
+<main class="main"><div class="wrap">
+  <aside class="side">
+    <h1>Âm nhạc</h1><p class="lede">259 bản nhạc nền trích từ game, bản <span id="ver"></span>.</p>
+    <label class="search"><span class="sr">Tìm bài</span><input id="q" type="search"><span id="qi"></span></label>
+    <ul class="toc" id="toc" aria-label="Nhóm"></ul>
+  </aside>
+  <div class="book" id="book"></div>
+</div></main>
+<script src="music-data.js"></script><script src="music-common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const { L, icon, title, usage, uses, disc, filter } = M;
+let group = 'all', q = '', openEl = null;
+document.getElementById('ver').textContent = M.version;
+document.getElementById('q').placeholder = L.search;
+document.getElementById('qi').innerHTML = icon('search', 16);
+const book = document.getElementById('book'), toc = document.getElementById('toc');
+const c = M.counts();
+toc.innerHTML = ['all', ...M.GROUPS].map((g) => `<li><button data-g="${g}" aria-pressed="${g === group}">${L[g]}<span>${g === 'all' ? M.tracks.length : c[g]}</span></button></li>`).join('');
+toc.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; group = b.dataset.g; toc.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); render(true); });
+document.getElementById('q').addEventListener('input', (e) => { q = e.target.value; render(false); });
+function render(animate) {
+  stop(); openEl = null;
+  const shown = filter(group, q), gs = group === 'all' ? M.GROUPS : [group];
+  book.innerHTML = gs.map((g) => {
+    const ts = shown.filter((t) => (group === 'all' ? t.group === g : true));
+    return ts.length ? `<section class="sec"><h2>${L[g]}</h2>${ts.map((t) => `<div class="e" id="t-${t.id}"><button aria-expanded="false" data-id="${t.id}">${disc(t)}<span><b>${title(t)}</b><small>${usage(t)}</small></span><span class="chev">${icon('down', 18)}</span></button><div class="body"></div></div>`).join('')}</section>` : '';
+  }).join('') || `<p class="empty">${L.empty}</p>`;
+  if (animate) M.reveal(book.querySelectorAll('.sec>h2,.e'));
+}
+const stop = () => openEl?.querySelector('audio')?.pause();
+function toggle(e, play) {
+  const was = e === openEl;
+  if (openEl) { stop(); const o = openEl, ob = o.querySelector('.body'); o.classList.remove('open'); o.firstElementChild.setAttribute('aria-expanded', 'false'); M.reduced ? (ob.style.height = '0px') : gsap.fromTo(ob, { height: ob.scrollHeight }, { height: 0, duration: 0.35, ease: 'expo.out', onComplete: () => (ob.innerHTML = '') }); openEl = null; }
+  if (was) return history.replaceState(null, '', '#/music');
+  const t = M.byId.get(e.firstElementChild.dataset.id), body = e.querySelector('.body');
+  body.innerHTML = `<div class="in"><audio controls preload="none" src="${M.audio(t)}"></audio><p class="playerr">${L.playError}</p><div class="uses">${uses(t)}</div></div>`;
+  body.querySelector('audio').addEventListener('error', () => body.querySelector('.playerr').classList.add('on'));
+  e.classList.add('open'); e.firstElementChild.setAttribute('aria-expanded', 'true'); openEl = e;
+  history.replaceState(null, '', '#/music/' + t.id);
+  if (M.reduced) body.style.height = 'auto';
+  else { gsap.fromTo(body, { height: 0 }, { height: 'auto', duration: 0.45, ease: 'expo.out' }); M.reveal(body.querySelectorAll('audio,.uses h3,.uses ul,.uses p')); }
+  if (play) body.querySelector('audio').play().catch(() => {});
+}
+book.addEventListener('click', (ev) => { const b = ev.target.closest('.e>button'); if (b) toggle(b.parentElement, true); });
+render(false);
+const deep = /^#\/music\/(.+)$/.exec(location.hash);
+if (deep) { const e = document.getElementById('t-' + decodeURIComponent(deep[1]).toLowerCase()); if (e) { toggle(e, false); e.scrollIntoView({ block: 'center' }); } }
+</script></body></html>
