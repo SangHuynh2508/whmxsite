@@ -4,8 +4,8 @@ import { s, type StringKey } from '../../i18n/strings.mts';
 
 export type MusicGroup = 'jukebox' | 'story' | 'stage' | 'area' | 'other';
 export type MusicTrack = { id: string; file: string; cover: string | null; group: MusicGroup; groups: MusicGroup[];
-  name_cn: string; name_vi: string; label_kind: '' | 'story' | 'stage' | 'area'; label_cn: string; source_cn: string;
-  stories: { group_cn: string; count: number }[]; stories_total: number;
+  name_cn: string; name_vi: string; label_kind: '' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
+  stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
   stages: { names_cn: string[]; count: number }; areas_cn: string[] };
 export type MusicDoc = { version: string; asset_base_url: string; tracks: MusicTrack[] };
 
@@ -33,7 +33,7 @@ export async function loadMusic(fetchImpl: typeof fetch = fetch): Promise<MusicD
 export function filterTracks(tracks: MusicTrack[], group: MusicGroup | 'all', query: string): MusicTrack[] {
   const q = query.trim().toLowerCase();
   return tracks.filter((t) => (group === 'all' || t.groups.includes(group))
-    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.id].some((v) => v.toLowerCase().includes(q))));
+    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? '', t.id].some((v) => v.toLowerCase().includes(q))));
 }
 
 export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
@@ -42,10 +42,35 @@ export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
   return c;
 }
 
-export function trackTitle(t: MusicTrack, lang: Lang): string {
-  if (t.name_cn) return (lang === 'vi' && t.name_vi) || t.name_cn;
-  if (t.label_kind) return `${s(GROUP_LABEL[t.label_kind], lang)} · ${t.label_cn}`;
-  return t.id;
+/** The track's own name — jukebox name, else its first use, else the file id — and whether Chinese stands in for VI. */
+export function trackName(t: MusicTrack, lang: Lang): { text: string; zh: boolean } {
+  const vi = lang === 'vi' && (t.name_cn ? t.name_vi : t.label_vi);
+  if (vi) return { text: vi, zh: false };
+  const cn = t.name_cn || t.label_cn;
+  return cn ? { text: cn, zh: lang === 'vi' } : { text: t.id, zh: false };
 }
+
+/** List / document title: a label gets its kind in front ("Bản đồ · 裂隙"). */
+export function trackTitle(t: MusicTrack, lang: Lang): string {
+  const { text } = trackName(t, lang);
+  return !t.name_cn && t.label_kind ? `${s(GROUP_LABEL[t.label_kind], lang)} · ${text}` : text;
+}
+
+const isGroup = (g: string | null): g is MusicGroup => GROUPS.includes(g as MusicGroup);
+/** '#/music/<id>?g=story&q=…' — the filter rides along so Back and shared links keep it. */
+export function musicHash(id: string, group: MusicGroup | 'all', q: string): string {
+  const p = new URLSearchParams();
+  if (group !== 'all') p.set('g', group);
+  if (q.trim()) p.set('q', q);
+  const qs = p.toString();
+  return `#/music${id ? `/${encodeURIComponent(id)}` : ''}${qs ? `?${qs}` : ''}`;
+}
+export function musicFilter(hash: string): { group: MusicGroup | 'all'; q: string } {
+  const p = new URLSearchParams(hash.split('?')[1] ?? '');
+  const g = p.get('g');
+  return { group: isGroup(g) ? g : 'all', q: p.get('q') ?? '' };
+}
+
+export const clock = (sec: number) => (Number.isFinite(sec) ? `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}` : '–:––');
 
 export const assetUrl = (doc: MusicDoc, key: string) => `${doc.asset_base_url.replace(/\/$/, '')}/${key}`;

@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { assetUrl, filterTracks, groupCounts, loadMusic, trackTitle, type MusicTrack } from './musicData.mts';
+import { assetUrl, clock, filterTracks, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
 
 const t = (o: Partial<MusicTrack>): MusicTrack => ({ id: 'x', file: 'music/bgm/x.mp3', cover: null, group: 'other', groups: ['other'],
-  name_cn: '', name_vi: '', label_kind: '', label_cn: '', source_cn: '', stories: [], stories_total: 0,
+  name_cn: '', name_vi: '', label_kind: '', label_cn: '', label_vi: '', source_cn: '', stories: [], stories_total: 0,
   stages: { names_cn: [], count: 0 }, areas_cn: [], ...o });
 
 const named = t({ id: 'novel_e2202', group: 'jukebox', groups: ['jukebox', 'story'], name_cn: '春华如梦', name_vi: 'Xuân Hoa Như Mộng' });
@@ -43,4 +43,32 @@ test('load returns null on a bad document or a failed fetch', async () => {
   assert.equal(await loadMusic(async () => { throw new Error('offline'); }), null);
   const ok = await loadMusic(async () => new Response(JSON.stringify({ version: 'r1', asset_base_url: '', tracks: [named] })));
   assert.equal(ok?.tracks.length, 1);
+});
+
+const owned = t({ id: 'bgm_lt', group: 'story', groups: ['story'], label_kind: 'story', label_cn: '乳鸭图', label_vi: 'Nhũ Áp Đồ' });
+
+test('a story label shows the character VI name in VI, the story name in CN', () => {
+  assert.equal(trackTitle(owned, 'vi'), 'Truyện · Nhũ Áp Đồ');
+  assert.equal(trackTitle(owned, 'cn'), '剧情 · 乳鸭图');
+  assert.equal(filterTracks([owned], 'all', 'nhũ áp').length, 1);
+});
+
+test('name without the kind prefix, flagged when Chinese stands in for VI', () => {
+  assert.deepEqual(trackName(owned, 'vi'), { text: 'Nhũ Áp Đồ', zh: false });
+  assert.deepEqual(trackName(battle, 'vi'), { text: '远击的进阶：子', zh: true });
+  assert.deepEqual(trackName(battle, 'cn'), { text: '远击的进阶：子', zh: false });
+  assert.deepEqual(trackName(t({ ...named, name_vi: '' }), 'vi'), { text: '春华如梦', zh: true });
+  assert.deepEqual(trackName(t({ id: 'zgcx' }), 'vi'), { text: 'zgcx', zh: false });
+});
+
+test('filter lives in the hash and survives a round trip', () => {
+  assert.equal(musicHash('', 'all', ''), '#/music');
+  assert.equal(musicHash('bgm_map', 'story', 'mưa & gió'), '#/music/bgm_map?g=story&q=m%C6%B0a+%26+gi%C3%B3');
+  assert.deepEqual(musicFilter('#/music/bgm_map?g=story&q=m%C6%B0a+%26+gi%C3%B3'), { group: 'story', q: 'mưa & gió' });
+  assert.deepEqual(musicFilter('#/music?g=nope'), { group: 'all', q: '' });
+});
+
+test('clock: m:ss, a dash before the length is known', () => {
+  assert.equal(clock(83.9), '1:23');
+  assert.equal(clock(Number.NaN), '–:––');
 });
