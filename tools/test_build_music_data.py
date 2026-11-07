@@ -19,9 +19,38 @@ class BuildMusicTest(unittest.TestCase):
         self.assertEqual(m.groups_of(t), ["story", "stage"])
         self.assertEqual(m.groups_of(track("y.mp3")), ["other"])
 
-    def test_story_groups_fall_back_to_code(self):
-        g = m.story_groups(["e022002", "e022004", "e099001"], {"e022002": "人间千古", "e022004": "人间千古"})
-        self.assertEqual(g, [{"group_cn": "人间千古", "group_vi": "", "count": 2}, {"group_cn": "e099", "group_vi": "", "count": 1}])
+    def test_story_groups_never_show_a_code(self):
+        # a script missing from INDEX.tsv takes its event's name from a sibling, then from EVENT_CN, else "unknown"
+        names = {"e022002": "人间千古", "e015001": "漫去访友", "e015": "漫去访友"}
+        g = m.story_groups(["e022002", "e015009", "e009001", "e005001"], names)
+        self.assertEqual([x["group_cn"] for x in g], ["人间千古", "漫去访友", "岁时迢迢", m.UNKNOWN_EVENT])
+
+    def test_unused_event_track_is_named_after_its_event_never_its_file(self):
+        t = m.build_track(track("FSMY.mp3"), {}, {"浮生觅源": "Phù Sinh Mịch Nguyên"})
+        self.assertEqual((t["label_kind"], t["label_cn"], t["label_vi"]), ("", "浮生觅源", "Phù Sinh Mịch Nguyên"))
+        doc = m.build_document({"tracks": [track("zz.mp3"), track("aa.mp3")]}, {}, {}, "")
+        self.assertEqual([(x["id"], x["label_cn"], x["label_vi"]) for x in doc["tracks"]],
+                         [("aa", "未命名曲目 1", "Bài chưa rõ tên 1"), ("zz", "未命名曲目 2", "Bài chưa rõ tên 2")])
+
+    def test_group_names_map_each_event_code_to_its_named_scripts(self):
+        rows = [{"SCRIPT_ID": "E015001", "GROUP_NAME_CN": "漫去访友"}, {"SCRIPT_ID": "e015002", "GROUP_NAME_CN": ""}]
+        self.assertEqual(m.group_names(rows), {"e015001": "漫去访友", "e015002": "", "e015": "漫去访友"})
+
+    def test_vi_map_fills_every_field(self):
+        vi = {"甲": "Giáp", "来古": "Lai Cổ", "人间千古": "Nhân Gian Thiên Cổ", "春华如梦": "Xuân Hoa Như Mộng",
+              "通过【人间千古】活动获取": "Nhận qua sự kiện 【Nhân Gian Thiên Cổ】"}
+        t = m.build_track(track("a.mp3", jukebox=[JUKE], stories=["e022002"], stages=[{"id": "A", "name": "甲"}],
+                                areas=[{"name": "来古"}]), {"e022002": "人间千古"}, vi)
+        self.assertEqual((t["name_vi"], t["source_vi"], t["stories"][0]["group_vi"]),
+                         ("Xuân Hoa Như Mộng", "Nhận qua sự kiện 【Nhân Gian Thiên Cổ】", "Nhân Gian Thiên Cổ"))
+        self.assertEqual((t["stages"]["names_vi"], t["areas_vi"]), (["Giáp"], ["Lai Cổ"]))
+        stage = m.build_track(track("b.mp3", stages=[{"id": "A", "name": "甲"}]), {}, vi)
+        self.assertEqual((stage["label_cn"], stage["label_vi"]), ("甲", "Giáp"))
+
+    def test_reviewed_character_name_wins_over_vi_map(self):
+        raw = {"b001": "乳鸭图 — truyện của 莲塘乳鸭图 · Liên Đường Nhũ Áp Đồ [S0088]"}
+        g = m.story_groups(["b001"], raw, {"S0088": "Nhũ Áp Đồ"}, {"乳鸭图": "Khác"})
+        self.assertEqual(g[0]["group_vi"], "Nhũ Áp Đồ")
 
     def test_character_story_group_keeps_story_name_and_reviewed_vi_name(self):
         raw = {"b001": "乳鸭图 — truyện của 莲塘乳鸭图 · Liên Đường Nhũ Áp Đồ [S0088]", "b002": "蛙锣 — truyện của 蛙锣 · Oa La [V0023]"}
@@ -34,10 +63,10 @@ class BuildMusicTest(unittest.TestCase):
 
     def test_stage_summary_dedupes_and_caps(self):
         st = [{"id": str(i), "name": n} for i, n in enumerate(["甲", "甲", "乙", "丙", "丁"])]
-        self.assertEqual(m.stage_summary(st), {"names_cn": ["甲", "乙", "丙"], "count": 5})
+        self.assertEqual(m.stage_summary(st), {"names_cn": ["甲", "乙", "丙"], "names_vi": ["", "", ""], "count": 5})
 
     def test_named_track(self):
-        out = m.build_track(track("novel_E2202.mp3", jukebox=[JUKE], stories=["e022002"]), {}, {"novel_e2202": "Xuân Hoa Như Mộng"})
+        out = m.build_track(track("novel_E2202.mp3", jukebox=[JUKE], stories=["e022002"]), {}, {"春华如梦": "Xuân Hoa Như Mộng"})
         self.assertEqual(out["id"], "novel_e2202")
         self.assertEqual(out["file"], "music/bgm/novel_e2202.mp3")
         self.assertEqual(out["cover"], "music/covers/ui_jj_yy_pic_cd_26.webp")

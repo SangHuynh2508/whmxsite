@@ -5,8 +5,8 @@ import { s, type StringKey } from '../../i18n/strings.mts';
 export type MusicGroup = 'jukebox' | 'story' | 'stage' | 'area' | 'other';
 export type MusicTrack = { id: string; file: string; cover: string | null; group: MusicGroup; groups: MusicGroup[];
   name_cn: string; name_vi: string; label_kind: '' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
-  stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
-  stages: { names_cn: string[]; count: number }; areas_cn: string[] };
+  source_vi?: string; stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
+  stages: { names_cn: string[]; names_vi?: string[]; count: number }; areas_cn: string[]; areas_vi?: string[] };
 export type MusicDoc = { version: string; asset_base_url: string; tracks: MusicTrack[] };
 
 export const GROUPS: MusicGroup[] = ['jukebox', 'story', 'stage', 'area', 'other'];
@@ -33,7 +33,7 @@ export async function loadMusic(fetchImpl: typeof fetch = fetch): Promise<MusicD
 export function filterTracks(tracks: MusicTrack[], group: MusicGroup | 'all', query: string): MusicTrack[] {
   const q = query.trim().toLowerCase();
   return tracks.filter((t) => (group === 'all' || t.groups.includes(group))
-    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? '', t.id].some((v) => v.toLowerCase().includes(q))));
+    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? ''].some((v) => v.toLowerCase().includes(q))));
 }
 
 export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
@@ -42,7 +42,7 @@ export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
   return c;
 }
 
-/** The track's own name — jukebox name, else its first use, else the file id — and whether Chinese stands in for VI. */
+/** The track's own name — jukebox name, else its first use or event (build names every track) — and whether Chinese stands in for VI. */
 export function trackName(t: MusicTrack, lang: Lang): { text: string; zh: boolean } {
   const vi = lang === 'vi' && (t.name_cn ? t.name_vi : t.label_vi);
   if (vi) return { text: vi, zh: false };

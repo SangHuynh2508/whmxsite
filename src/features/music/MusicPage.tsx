@@ -34,7 +34,8 @@ function Name({ text, zh }: { text: string; zh: boolean }) {
     </span>
   );
 }
-const zhIf = (lang: Lang, text: string) => <Name text={text} zh={lang === 'vi'} />;
+/** VI page: the Vietnamese, else the Chinese with the dot; CN page: the Chinese. */
+const tx = (lang: Lang, vi: string | undefined, cn: string) => <Name text={(lang === 'vi' && vi) || cn} zh={lang === 'vi' && !vi} />;
 
 function Title({ t, lang }: { t: MusicTrack; lang: Lang }) {
   const n = trackName(t, lang);
@@ -51,12 +52,12 @@ function Disc({ doc, t, size }: { doc: MusicDoc; t: MusicTrack; size: 'shelf' | 
 function usage(t: MusicTrack, lang: Lang): ReactNode[] {
   const out: ReactNode[] = [];
   if (t.stories_total) {
-    out.push(<span key="s">{s('muStory', lang)}: {t.stories.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{x.group_vi && lang === 'vi' ? x.group_vi : zhIf(lang, x.group_cn)}</span>)}{t.stories_total > 2 && ` · ${s('muScenes', lang).replace('{n}', String(t.stories_total))}`}</span>);
+    out.push(<span key="s">{s('muStory', lang)}: {t.stories.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, x.group_vi, x.group_cn)}</span>)}{t.stories_total > 2 && ` · ${s('muScenes', lang).replace('{n}', String(t.stories_total))}`}</span>);
   }
   if (t.stages.count) {
-    out.push(<span key="m">{s('muStage', lang)}: {t.stages.names_cn.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{zhIf(lang, x)}</span>)}{t.stages.count > 2 && ` +${t.stages.count - 2}`}</span>);
+    out.push(<span key="m">{s('muStage', lang)}: {t.stages.names_cn.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, t.stages.names_vi?.[i], x)}</span>)}{t.stages.count > 2 && ` +${t.stages.count - 2}`}</span>);
   }
-  if (t.areas_cn.length) out.push(<span key="a">{s('muArea', lang)}: {t.areas_cn.slice(0, 3).map((x, i) => <span key={i}>{i ? ', ' : ''}{zhIf(lang, x)}</span>)}</span>);
+  if (t.areas_cn.length) out.push(<span key="a">{s('muArea', lang)}: {t.areas_cn.slice(0, 3).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, t.areas_vi?.[i], x)}</span>)}</span>);
   return out.length ? out.flatMap((x, i) => (i ? [' · ', x] : [x])) : [s('muNoUse', lang)];
 }
 
@@ -229,20 +230,19 @@ function Track({ doc, t, route, p, api }: { doc: MusicDoc; t: MusicTrack; route:
             </div>
           )}
           <div className="music-uses">
-            {t.source_cn && <><h2>{s('muSource', lang)}</h2><p>{zhIf(lang, t.source_cn)}</p></>}
+            {t.source_cn && <><h2>{s('muSource', lang)}</h2><p>{tx(lang, t.source_vi, t.source_cn)}</p></>}
             {!!t.stories.length && <>
               <h2>{s('muUsedStory', lang)}</h2>
-              <ul>{t.stories.map((x, k) => <li key={k}>{x.group_vi && lang === 'vi' ? x.group_vi : zhIf(lang, x.group_cn)}{x.count > 1 && <span>{s('muScenes', lang).replace('{n}', String(x.count))}</span>}</li>)}</ul>
+              <ul>{t.stories.map((x, k) => <li key={k}>{tx(lang, x.group_vi, x.group_cn)}{x.count > 1 && <span>{s('muScenes', lang).replace('{n}', String(x.count))}</span>}</li>)}</ul>
               {t.stories_total > t.stories.reduce((a, x) => a + x.count, 0) && <p className="music-more">{s('muScenesTotal', lang).replace('{n}', String(t.stories_total))}</p>}
             </>}
             {!!t.stages.count && <>
               <h2>{s('muUsedStage', lang)}</h2>
-              <ul>{t.stages.names_cn.map((x) => <li key={x}>{zhIf(lang, x)}</li>)}</ul>
+              <ul>{t.stages.names_cn.map((x, i) => <li key={x}>{tx(lang, t.stages.names_vi?.[i], x)}</li>)}</ul>
               {t.stages.count > t.stages.names_cn.length && <p className="music-more">{s('muMore', lang).replace('{n}', String(t.stages.count - t.stages.names_cn.length))}</p>}
             </>}
-            {!!t.areas_cn.length && <><h2>{s('muUsedArea', lang)}</h2><ul>{t.areas_cn.map((x) => <li key={x}>{zhIf(lang, x)}</li>)}</ul></>}
+            {!!t.areas_cn.length && <><h2>{s('muUsedArea', lang)}</h2><ul>{t.areas_cn.map((x, i) => <li key={x}>{tx(lang, t.areas_vi?.[i], x)}</li>)}</ul></>}
             {!t.stories.length && !t.stages.count && !t.areas_cn.length && <p className="music-more">{s('muNoUse', lang)}</p>}
-            <p className="music-file">{s('muFile', lang)}: <code>{t.file.split('/').pop()}</code></p>
           </div>
           <nav className="music-nb">
             {prev ? <a href={musicHash(prev.id, route.group, route.q)}><small><ChevronLeft size={14} aria-hidden="true" />{s('muPrev', lang)}</small><b><Title t={prev} lang={lang} /></b></a> : <span />}

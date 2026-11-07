@@ -39,7 +39,10 @@ mini-player **yes** · fix **P1 + P2** · story chips **labels only** (no link t
   tracks; the slider is hidden where `volume` is read-only, i.e. iOS). Space toggles play on this page. Error →
   `muPlayError` + "Thử lại". The disc turns while playing (9 s / turn, linear) and stops where it is when paused.
 - "Dùng trong truyện / màn đánh / bản đồ" as `h2` sections; story chips show `group_vi` when it exists, else the Chinese
-  story name with the dot; plain labels, not links. `muMore` when `stages.count > names_cn.length`; source and file id.
+  story name with the dot; plain labels, not links. `muMore` when `stages.count > names_cn.length`; source.
+- **No file id anywhere, all text in VI (owner 2026-11-08: "dịch hết … ẩn mã file đi").** Claude translates the page
+  (`localization/music_vi.json`, Hán-Việt names); event codes become event names (`EVENT_CN`, `TRACK_EVENT` in
+  `tools/build_music_data.py`, from masterdata); a track with no evidence is "Bài chưa rõ tên N". The CN page shows Chinese.
 - Bài trước / Bài sau (chevron icons both sides) walk the filtered list; on phones they sit side by side above the
   chips' end, 44 px tall.
 - Focus moves to the `h1` (`tabindex=-1`) on every route change; `document.title` = track title · Âm nhạc.

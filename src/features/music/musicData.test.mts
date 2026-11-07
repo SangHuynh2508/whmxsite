@@ -17,7 +17,8 @@ test('filter by presence, not only the primary group', () => {
 });
 
 test('search matches CN, VI, label and id, case-insensitive', () => {
-  for (const q of ['春华', 'xuân hoa', '远击', 'BATTLE_M01', '  novel_m8 ']) assert.equal(filterTracks([named, battle, both], 'all', q).length, 1, q);
+  for (const q of ['春华', 'xuân hoa', '远击']) assert.equal(filterTracks([named, battle, both], 'all', q).length, 1, q);
+  for (const q of ['BATTLE_M01', 'novel_m8']) assert.equal(filterTracks([named, battle, both], 'all', q).length, 0, q); // the file id is never shown, so never searched
   assert.equal(filterTracks([named], 'all', 'không có').length, 0);
 });
 
