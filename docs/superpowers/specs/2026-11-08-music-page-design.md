@@ -76,6 +76,10 @@ Bộ lọc nhóm trên trang lọc theo **có mặt** (bài vừa có truyện v
 ## 6. Tool `tools/build_music_data.py` + đẩy R2
 
 - Đọc `bgm_index.json` + `INDEX.tsv` + `music_names_vi.json` → ghi `public/music.json`. Không mạng, chạy lại được.
+- **Chạy trên máy chủ dự án, không chạy trên Vercel** (như `publish_assets.py` đọc `../NeoArtifacts`). WHMX_Tool là
+  repo riêng nên đường dẫn là tham số: `--bgm` (mặc định `../WHMX_Tool/Xuat/Audio/bgm`) và `--lore-index` (mặc định
+  `../WHMX_Lore_By_Chapter/INDEX.tsv`); thiếu file → báo rõ đường dẫn cần có rồi dừng. Vercel chỉ dùng
+  `public/music.json` đã commit; mp3 và ảnh bìa không vào repo web.
 - Đẩy file: dùng lại cách của `tools/publish_assets.py` / `publish_banner_art.py` (S3-compatible, env R2 sẵn có):
   `music/bgm/<id>.mp3` (Content-Type `audio/mpeg`, Cache-Control dài) và `music/covers/<icon>.webp`
   (webp q88 như ảnh khác). Có `--dry-run` liệt kê đối tượng + tổng dung lượng; **chỉ chạy thật khi chủ dự án đồng ý**.
