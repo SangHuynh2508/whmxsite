@@ -1,0 +1,14 @@
+/* Âm nhạc page (docs/superpowers/specs/2026-11-08-music-page-design.md). Tokens only; look per
+   docs/public-redesign/music/direction-approved.md. */
+
+.music-view {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  background: var(--bg-main);
+}
+.music-view.hidden { display: none !important; }
+
+.music-page { max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; }
