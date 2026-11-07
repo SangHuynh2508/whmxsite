@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -32,12 +33,26 @@ def groups_of(t: dict) -> list[str]:
     return [g for g in ORDER[:-1] if has[g]] or ["other"]
 
 
-def story_groups(ids: list[str], group_of: dict[str, str]) -> list[dict]:
+# INDEX.tsv names a character's own story "乳鸭图 — truyện của 莲塘乳鸭图 · Liên Đường Nhũ Áp Đồ [S0088]"
+CHAR_STORY = re.compile(r"^(?P<cn>.+?) — truyện của .*\[(?P<cid>[A-Z]\d{4})\]$")
+
+
+def split_group(raw: str, char_vi: dict[str, str]) -> tuple[str, str]:
+    """(story name, the character's reviewed VI name from data.json or '') — the TSV's own VI text is not trusted."""
+    m = CHAR_STORY.match(raw)
+    return (m["cn"], char_vi.get(m["cid"], "")) if m else (raw, "")
+
+
+def story_groups(ids: list[str], group_of: dict[str, str], char_vi: dict[str, str] | None = None) -> list[dict]:
     counts: dict[str, int] = {}
     for sid in ids:
         g = group_of.get(sid.lower()) or sid[:4].lower()  # e022002 -> e022 when INDEX.tsv has no name
         counts[g] = counts.get(g, 0) + 1
-    return [{"group_cn": g, "count": n} for g, n in list(counts.items())[:5]]
+    out = []
+    for g, n in list(counts.items())[:5]:
+        cn, vi = split_group(g, char_vi or {})
+        out.append({"group_cn": cn, "group_vi": vi, "count": n})
+    return out
 
 
 def stage_summary(stages: list[dict]) -> dict:
@@ -45,9 +60,9 @@ def stage_summary(stages: list[dict]) -> dict:
     return {"names_cn": names[:3], "count": len(stages)}
 
 
-def build_track(t: dict, group_of: dict[str, str], names_vi: dict[str, str]) -> dict:
+def build_track(t: dict, group_of: dict[str, str], names_vi: dict[str, str], char_vi: dict[str, str] | None = None) -> dict:
     tid, j, groups = track_id(t["file"]), _jukebox(t), groups_of(t)
-    stories, stages = story_groups(t["stories"], group_of), stage_summary(t["stages"])
+    stories, stages = story_groups(t["stories"], group_of, char_vi), stage_summary(t["stages"])
     areas = list(dict.fromkeys(a["name"] for a in t["areas"] if a.get("name")))
     kind, label = "", ""
     if not j:
@@ -63,13 +78,15 @@ def build_track(t: dict, group_of: dict[str, str], names_vi: dict[str, str]) -> 
         "cover": f"music/covers/{Path(j['cover']).stem.lower()}.webp" if j and j.get("cover") else None,
         "group": groups[0], "groups": groups,
         "name_cn": j["name"] if j else "", "name_vi": names_vi.get(tid, "") if j else "",
-        "label_kind": kind, "label_cn": label, "source_cn": (j or {}).get("source", ""),
+        "label_kind": kind, "label_cn": label,
+        "label_vi": stories[0]["group_vi"] if kind == "story" else "", "source_cn": (j or {}).get("source", ""),
         "stories": stories, "stories_total": len(t["stories"]), "stages": stages, "areas_cn": areas,
     }
 
 
-def build_document(index: dict, group_of: dict[str, str], names_vi: dict[str, str], base: str) -> dict:
-    tracks = [build_track(t, group_of, names_vi) for t in index["tracks"]]
+def build_document(index: dict, group_of: dict[str, str], names_vi: dict[str, str], base: str,
+                   char_vi: dict[str, str] | None = None) -> dict:
+    tracks = [build_track(t, group_of, names_vi, char_vi) for t in index["tracks"]]
     juke_id = {track_id(t["file"]): int((_jukebox(t) or {}).get("id") or 0) for t in index["tracks"]}
     tracks.sort(key=lambda x: (ORDER.index(x["group"]), juke_id[x["id"]], x["id"]))
     return {"version": index.get("version", ""), "asset_base_url": base, "tracks": tracks}
@@ -104,8 +121,9 @@ def main() -> int:
     index = json.loads((args.bgm / "bgm_index.json").read_text(encoding="utf-8"))
     named = [track_id(t["file"]) for t in index["tracks"] if _jukebox(t)]
     names_vi = sync_names_file(NAMES_VI, named)
-    base = json.loads((ROOT / "public" / "data.json").read_text(encoding="utf-8")).get("asset_base_url", "")
-    doc = build_document(index, read_group_names(args.lore_index), names_vi, base)
+    data = json.loads((ROOT / "public" / "data.json").read_text(encoding="utf-8"))
+    char_vi = {cid: c.get("name_vi", "") for cid, c in data.get("characters", {}).items()}
+    doc = build_document(index, read_group_names(args.lore_index), names_vi, data.get("asset_base_url", ""), char_vi)
     args.out.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{args.out}: {len(doc['tracks'])} bài, {len(named)} có tên, {args.out.stat().st_size // 1024} KB")
     return 0
