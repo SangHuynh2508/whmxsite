@@ -35,7 +35,7 @@ GSAP (`src/features/characters/motion.ts`), Playwright cho kiểm tra trình duy
 1. Bài thuộc nhiều nhóm (vừa truyện vừa màn đánh) → hiện ở cả hai bộ lọc, nhóm chính vẫn đúng thứ tự ưu tiên — test ở Task 1 (`groups`) và Task 3 (`filterTracks`).
 2. Tên file viết hoa lẫn thường (`BGM_THST.mp3`, `Bgm_interface_Hall.mp3`) → id/khoá R2 viết thường, URL vẫn trỏ đúng — test ở Task 1 và Task 2.
 3. `INDEX.tsv` thiếu tên nhóm cho một kịch bản → dùng mã nhóm (`e022`) thay vì bỏ trống — test ở Task 1.
-4. Mở thẳng `#/music/<id>` không tồn tại → trang vẫn hiện danh sách, không vỡ — test ở Task 4 (`musicTrackId`) và Task 7 (trình duyệt).
+4. Mở thẳng `#/music/<id>` không tồn tại → trang vẫn hiện danh sách, không vỡ — test ở Task 4 (`musicTrackId`) và Task 6 (trình duyệt).
 5. File mp3 lỗi / `r2.dev` trả 429 → báo "Không phát được bài này", trang không vỡ — kiểm ở Task 7.
 
 ---
