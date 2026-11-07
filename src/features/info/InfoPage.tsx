@@ -1,11 +1,12 @@
 // Thông tin (#/info, owner 2026-09-30, direction B "Gian trưng bày" — docs/public-redesign/info/direction-approved.md):
 // one large art panel per lookup feature; the rail keeps only the hot pages, the rest live here.
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { type SliceChar } from '../banners/BannerSlice.tsx';
 import { artUrl, currentBanners, skinImage, type BannersDoc } from '../banners/bannersData.mts';
 import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
 import { bannerIsland } from '../banners/island.tsx';
+import { assetUrl, loadMusicCached, type MusicDoc } from '../music/musicData.mts';
 import { s } from '../../i18n/strings.mts';
 import { useLang } from '../../i18n/useLang.ts';
 import './styles/info.css';
@@ -35,12 +36,21 @@ function WeaponArt() {
   );
 }
 
+// five of the game's jukebox discs
+function MusicArt() {
+  const [doc, setDoc] = useState<MusicDoc | null>(null);
+  useEffect(() => { void loadMusicCached().then(setDoc); }, []);
+  const covers = doc?.tracks.filter((t) => t.cover).slice(0, 5) ?? [];
+  return <span className="info-discs">{covers.map((t) => <img key={t.id} src={assetUrl(doc!, t.cover!)} alt="" loading="lazy" />)}</span>;
+}
+
 export function InfoPage({ doc }: { doc: BannersDoc | null }) {
   useLang();
   const page = useRef<HTMLDivElement>(null);
   useReveal(page, '.info-tile', 'info');
   const tiles = [
     { href: '#/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
+    { href: '#/music', name: s('navMusic'), desc: s('ifMusicDesc'), art: <MusicArt /> },
     { href: '#/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
   ];
   return (

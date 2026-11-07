@@ -44,6 +44,8 @@
 .info-weapons { position: absolute; inset: 0 0 25% 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
 .info-weapons > span { position: relative; width: 88px; height: 88px; background: url('/assets/frames/itemRare5.png') center / contain no-repeat; }
 .info-weapons img { position: absolute; inset: 8%; width: 84%; height: 84%; object-fit: contain; }
+.info-discs { position: absolute; inset: 0 0 25% 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.info-discs img { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; }
 
 .info-text { position: absolute; left: 24px; right: 24px; bottom: 20px; display: flex; flex-direction: column; gap: 4px; text-shadow: var(--art-text-shadow); }
 .info-name { font: 700 28px/1.2 var(--font-serif); }
@@ -71,4 +73,6 @@
   .info-art-logo { left: 16px; top: 16px; }
   .info-weapons { gap: 6px; }
   .info-weapons > span { width: 52px; height: 52px; }
+  .info-discs { gap: 6px; }
+  .info-discs img { width: 52px; height: 52px; }
 }

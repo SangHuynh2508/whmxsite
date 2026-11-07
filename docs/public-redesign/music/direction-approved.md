@@ -61,8 +61,8 @@ it; Bài trước / Bài sau start the next track.
   `<audio preload="none">`, as the picked direction requires; its error state and "leaving stops the music" stay.
 - Usage line stays 13 px (DESIGN.md "notes 13 px"; the detector's ramp warning is advisory); phone track title 26 px.
 
-**Open (owner)**: the rail link vs a panel in Thông tin (the rail keeps only hot pages, 2026-09-30). The build keeps the
-rail link from Task 4 until the owner decides.
+**Entry (owner 2026-11-08: "đặt trong mục thông tin")**: no rail link; a Thông tin tile (`#/info`) with five jukebox
+discs, between Banner and Vũ Khí. On `#/music` the rail lights Thông tin.
 
 Classes: `music-*` prefix (`music-page`, `music-tools`, `music-sec`, `music-shelf`, `music-cd`, `music-row`,
 `music-track`, `music-big`, `music-ctl`, `music-uses`, `music-nb`).
