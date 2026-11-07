@@ -21,7 +21,7 @@ file nhạc nào trước khi người xem chọn bài; không cuộn ngang ở 
 | 5 | **Trình phát (chỉnh theo chủ dự án):** trang là kho lưu trữ, **lúc vào không có thanh phát cố định**. Chỉ khi người xem bấm một bài mới mở phần nghe — **trang chi tiết riêng hay popup: chốt ở bước thiết kế (huashu)**. Rời trang nhạc thì nhạc dừng |
 | 6 | **mp3 160 kbps** giữ nguyên (697 MB), mọi `<audio>` đặt `preload="none"` |
 | 7 | 40 ảnh bìa → webp, lên R2; bài không bìa dùng một ảnh mặc định |
-| 8 | Dữ liệu trang: **`public/music.json`** trong git, gọn (mục tiêu < 60 KB) |
+| 8 | Dữ liệu trang: **`public/music.json`** trong git, gọn (thực tế ~97 KB, ~9 KB khi gzip) |
 | 9 | Chỗ dùng chỉ hiện tên sự kiện/chương/màn, **chưa link** sang lore |
 | 10 | Giao diện: **huashu-design 3 hướng**, chủ dự án chọn; chữ giao diện VI + CN; GSAP nhẹ khi đổi nhóm / mở bài, có đường reduced-motion |
 
