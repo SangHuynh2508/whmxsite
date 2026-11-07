@@ -44,16 +44,14 @@ mini-player **yes** · fix **P1 + P2** · story chips **labels only** (no link t
   chips' end, 44 px tall.
 - Focus moves to the `h1` (`tabindex=-1`) on every route change; `document.title` = track title · Âm nhạc.
 
-**Mini-player (owner: yes)** — appears only after a track has been played; stays while moving between the list and
-track pages; hidden on the page of the track it is playing (the big player is there). Fixed bottom bar inside the
-music view: 32 px disc (turns while playing), title, Phát/Tạm dừng, Đóng (stops and removes the bar). ≤ 768 px it sits
-above the floating menu button's row, full width minus 16 px gutters. Leaving the music page stops the music.
+**Mini-player — dropped (owner 2026-11-08: "ko cần cái phát nhạc sau khi đã thoát ra ngoài đâu, bỏ cái thanh phát mini
+đi").** The music belongs to its track page: leaving it (back to the list, Bài trước / Bài sau, leaving #/music) stops
+it; Bài trước / Bài sau start the next track.
 
 **Motion (GSAP, reduced motion → none / short fade)**
 - List → track: the disc flies from its shelf slot to the big disc (Flip, 0.55 s expo-out); text arrives (`useReveal`).
 - Track → list: back to the same scroll position, the disc flies home to its slot.
 - Group change / search result: sections arrive (`useReveal`); the ink stretches (`useSlider`).
-- Mini-player slides up 0.42 s on first play.
 
 **Rulings**
 - The plan's `Listen` block (native `<audio controls>`) is replaced by own controls over the same single
@@ -64,4 +62,4 @@ above the floating menu button's row, full width minus 16 px gutters. Leaving th
 rail link from Task 4 until the owner decides.
 
 Classes: `music-*` prefix (`music-page`, `music-tools`, `music-sec`, `music-shelf`, `music-cd`, `music-row`,
-`music-track`, `music-big`, `music-ctl`, `music-uses`, `music-nb`, `music-mini`).
+`music-track`, `music-big`, `music-ctl`, `music-uses`, `music-nb`).

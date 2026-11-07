@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
-import { ChevronLeft, ChevronRight, Pause, Play, Search, Volume2, VolumeX, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play, Search, Volume2, VolumeX } from 'lucide-react';
 import { useLang } from '../../i18n/useLang.ts';
 import { s } from '../../i18n/strings.mts';
 import type { Lang } from '../../i18n/lang.mts';
@@ -42,11 +42,10 @@ function Title({ t, lang }: { t: MusicTrack; lang: Lang }) {
   return <Name {...n} />;
 }
 
-function Disc({ doc, t, size }: { doc: MusicDoc; t: MusicTrack; size: 'shelf' | 'thumb' | 'big' | 'mini' }) {
-  const flip = size === 'mini' ? undefined : `music-disc-${t.id}`;
+function Disc({ doc, t, size }: { doc: MusicDoc; t: MusicTrack; size: 'shelf' | 'thumb' | 'big' }) {
   return t.cover
-    ? <img className={`music-disc is-${size}`} data-flip-id={flip} src={assetUrl(doc, t.cover)} alt="" loading={size === 'big' ? undefined : 'lazy'} />
-    : <span className={`music-disc is-${size} is-blank`} data-flip-id={flip} aria-hidden="true" />;
+    ? <img className={`music-disc is-${size}`} data-flip-id={`music-disc-${t.id}`} src={assetUrl(doc, t.cover)} alt="" loading={size === 'big' ? undefined : 'lazy'} />
+    : <span className={`music-disc is-${size} is-blank`} data-flip-id={`music-disc-${t.id}`} aria-hidden="true" />;
 }
 
 function usage(t: MusicTrack, lang: Lang): ReactNode[] {
@@ -61,7 +60,7 @@ function usage(t: MusicTrack, lang: Lang): ReactNode[] {
   return out.length ? out.flatMap((x, i) => (i ? [' · ', x] : [x])) : [s('muNoUse', lang)];
 }
 
-// ---- one <audio> for the whole page: the track page and the mini-player drive it ----
+// ---- one <audio> for the whole page, driven by the track page; leaving that page stops it ----
 type Player = {
   track: MusicTrack | null; paused: boolean; time: number; dur: number; failed: boolean; volume: number; muted: boolean;
   canVolume: boolean;
@@ -106,7 +105,7 @@ type PlayerApi = ReturnType<typeof usePlayer>['api'];
 function useSpin(ref: RefObject<HTMLElement | null>, on: boolean) {
   const tween = useRef<gsap.core.Tween | null>(null);
   useEffect(() => () => { tween.current?.kill(); }, []);
-  useEffect(() => { // every render: the element can be a new one (the mini-player hides and comes back)
+  useEffect(() => { // every render: the element is a new one each time the track page mounts
     const el = ref.current;
     if (reduced() || !el) return;
     if (tween.current?.targets()[0] !== el) {
@@ -255,30 +254,6 @@ function Track({ doc, t, route, p, api }: { doc: MusicDoc; t: MusicTrack; route:
   );
 }
 
-// ---- mini-player: only after a track was played, hidden on that track's own page ----
-function Mini({ doc, p, api, route }: { doc: MusicDoc; p: Player; api: PlayerApi; route: Route }) {
-  const lang = useLang();
-  const bar = useRef<HTMLDivElement>(null);
-  const disc = useRef<HTMLAnchorElement>(null);
-  const t = p.track;
-  const show = !!t && !p.failed && route.id !== t.id;
-  useSpin(disc, show && !p.paused);
-  useLayoutEffect(() => {
-    if (show && bar.current && !reduced()) gsap.fromTo(bar.current, { yPercent: 120 }, { yPercent: 0, duration: 0.42, ease: 'expo.out', clearProps: 'transform' });
-  }, [show]);
-  if (!show) return null;
-  return (
-    <div className="music-mini" ref={bar} role="region" aria-label={s('muNowPlaying', lang)}>
-      <a className="music-mini-t" href={musicHash(t.id, route.group, route.q)} ref={disc}><Disc doc={doc} t={t} size="mini" /></a>
-      <a className="music-mini-name" href={musicHash(t.id, route.group, route.q)}><small>{s('muNowPlaying', lang)}</small><b><Title t={t} lang={lang} /></b></a>
-      <button type="button" className="music-pp" aria-label={s(p.paused ? 'muPlay' : 'muPause', lang)} onClick={() => api.toggle(t)}>
-        {p.paused ? <Play size={18} aria-hidden="true" /> : <Pause size={18} aria-hidden="true" />}
-      </button>
-      <button type="button" className="music-mute" aria-label={s('muClose', lang)} onClick={api.close}><X size={18} aria-hidden="true" /></button>
-    </div>
-  );
-}
-
 // ---- page: route state from the hash, scroll memory, the disc's flight between list and track ----
 // Desktop scrolls the route view (through Lenis), phones the document. Lenis is always told, even when the view
 // cannot scroll (a short track page): it skips a scrollTo to the position it believes it is at. It is re-measured
@@ -332,6 +307,7 @@ function Music({ doc }: { doc: MusicDoc }) {
     if (prevId.current === route.id) return;
     const back = !route.id;
     prevId.current = route.id;
+    if (p.track) api.close(); // the music belongs to its track page: leaving it stops it (owner 2026-11-08)
     scrollTo(back ? listY.current : 0);
     document.querySelector<HTMLElement>('.music-page .music-title')?.focus({ preventScroll: true });
     const state = flight.current;
@@ -355,12 +331,11 @@ function Music({ doc }: { doc: MusicDoc }) {
     if (replace) { history.replaceState(null, '', h); setRoute(n); } else location.hash = h;
   };
   const onClick = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).closest('a[href^="#/music/"]:not(.music-mini-t):not(.music-mini-name)')) autoplay.current = true;
+    if ((e.target as HTMLElement).closest('a[href^="#/music/"]')) autoplay.current = true;
   };
   return (
     <div className="music-page" onClickCapture={onClick}>
       {t ? <Track doc={doc} t={t} route={route} p={p} api={api} /> : <List doc={doc} route={route} go={go} />}
-      <Mini doc={doc} p={p} api={api} route={route} />
       {audio}
     </div>
   );
@@ -372,7 +347,7 @@ let generation = 0;
 export function unmountMusicPage() { generation += 1; root?.unmount(); root = null; host = null; }
 export function mountMusicPage(container: HTMLElement): Promise<void> {
   // #/music ↔ #/music/<id> stay in this island (the router re-calls mount on every hash): the page follows the hash
-  // itself, so the music keeps playing and the disc can fly between the two views.
+  // itself, so the disc can fly between the two views.
   if (root && host === container && container.firstChild) return Promise.resolve();
   unmountMusicPage();
   const render = (doc: MusicDoc | null) => {
