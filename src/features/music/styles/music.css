@@ -155,10 +155,12 @@
   .music-vol { order: 4; margin-left: auto; }
   .music-mute { width: 44px; height: 44px; }
   .music-nb a { min-height: 44px; }
-  /* phones scroll the document, not the view, so sticky has nothing to stick to: pin it above the floating menu
-     button (bottom-left, 44 px) and keep the page's end clear of it */
-  .music-mini { position: fixed; left: 16px; right: 16px; bottom: 76px; max-width: none; margin: 0; }
-  .music-page:has(.music-mini) { padding-bottom: 160px; }
+  /* phones scroll the document, not the view: no gutter for a scrollbar it never shows, and sticky has nothing to
+     stick to, so the bar is pinned above the floating buttons' column (menu at 16 px, góp ý above it ending at
+     118 px) and the page's end is kept clear of it */
+  .music-view { scrollbar-gutter: auto; }
+  .music-mini { position: fixed; left: 16px; right: 16px; bottom: 126px; max-width: none; margin: 0; }
+  .music-page:has(.music-mini) { padding-bottom: 210px; }
   .music-mini .music-mute { width: 44px; height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
