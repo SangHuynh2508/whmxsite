@@ -174,6 +174,10 @@ const vi = {
   bdPoints: '{n}/11 điểm', bdRotation: 'Xoay vòng', bdTips: 'Mẹo', bdSeeSkills: 'Xem kỹ năng ›',
   mnEmpty: 'Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.', ldErr: 'Không tải được dữ liệu', ldErrText: 'Kiểm tra kết nối mạng rồi tải lại trang.',
   trLegRest: 'không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build',
+  navMusic: 'Âm nhạc', muTitle: 'Âm nhạc', muAll: 'Tất cả', muJukebox: 'Máy hát', muStory: 'Truyện', muStage: 'Màn đánh',
+  muArea: 'Bản đồ', muOther: 'Khác', muSearch: 'Tìm theo tên hoặc mã bài', muEmpty: 'Không có bài nào phù hợp.',
+  muLoadError: 'Không tải được danh sách nhạc.', muPlayError: 'Không phát được bài này.', muSource: 'Nguồn',
+  muUsedStory: 'Dùng trong truyện', muUsedStage: 'Dùng trong màn đánh', muUsedArea: 'Dùng ở bản đồ', muMore: '+{n} màn khác',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -401,6 +405,10 @@ const cn: Record<StringKey, string> = {
   catSortAtk: '攻击力', // game: characterlan_AttrDes_namelan_Atk
   catSortDef: '物理防御', // game: characterlan_AttrDes_namelan_PhysicDef
   catSortRes: '构素防御', // game: characterlan_AttrDes_namelan_MagicDef
+  navMusic: '音乐', muTitle: '音乐', muAll: '全部', muJukebox: '唱片机', muStory: '剧情', muStage: '战斗', muArea: '地图',
+  muOther: '其他', muSearch: '按曲名或编号搜索', muEmpty: '没有符合的曲目。', muLoadError: '曲目列表加载失败。',
+  muPlayError: '无法播放此曲目。', muSource: '获取方式', muUsedStory: '剧情使用', muUsedStage: '关卡使用', muUsedArea: '地图使用',
+  muMore: '另有 {n} 关', // draft
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];
