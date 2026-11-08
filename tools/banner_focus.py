@@ -5,8 +5,8 @@
   python tools/banner_focus.py --sheet    # + scratch/banner_focus_sheet.html to review every slice
 
 The web places the drawing so this point lands in the slice's figure spot (BannerSlice.tsx). Wrong ones: fix by banner
-skin in tools/banner_focus.json ({"V0076001": {"x": .5, "y": .2, "h": .06}}), made with the --sheet page (click the
-face); only that file reaches the web. The detector is right on about half the drawings (props and patterns fool it), so the
+skin in tools/banner_focus.json ({"V0076001": {"x": .5, "y": .2, "h": .06}}), made with the --sheet page (drag the
+figure, wheel to zoom); only that file reaches the web. The detector is right on about half the drawings (props and patterns fool it), so the
 page marks its guesses for review. Face detector: lbpcascade_animeface (MIT, tools/vendor/).
 """
 from __future__ import annotations
@@ -54,8 +54,8 @@ def banner_skins(banners: dict, data: dict) -> dict[str, str]:
 
 
 def sheet(banners: dict, data: dict, auto: dict, manual: dict, out: Path) -> None:
-    """A local page: one card per UP skin, its slice preview and the drawing. Click the face on the drawing, set the
-    size, then "Tải banner_focus.json" and save it over tools/banner_focus.json."""
+    """A local page: one card per UP skin, its slice preview and the drawing. Drag the figure in the slice, wheel to
+    zoom, then "Tải banner_focus.json" and save it over tools/banner_focus.json."""
     img = {s["skinID"]: s.get("image") for c in data["characters"].values() for s in c.get("skins") or []}
     base = banners["asset_base_url"].rstrip("/")
     cards = {}
@@ -71,38 +71,38 @@ def sheet(banners: dict, data: dict, auto: dict, manual: dict, out: Path) -> Non
 
 SHEET = """<!doctype html><meta charset=utf-8><title>Banner focus</title><style>
 body{background:#111;color:#ccc;font:13px sans-serif;margin:0;padding:12px}
-header{position:sticky;top:0;background:#111;padding:8px 0;z-index:9;display:flex;gap:12px;align-items:center}
+header{position:sticky;top:0;background:#111;padding:8px 0;z-index:9;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 button{font:inherit;padding:6px 12px}
-main{display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:16px}
-.c{display:grid;grid-template-columns:1fr 150px;gap:8px;background:#1a1a1a;padding:8px}
+main{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:16px}
+.c{display:grid;gap:8px;background:#1a1a1a;padding:8px}
 .c.todo{outline:2px solid #c33}.c.guess{outline:2px dashed #ca3}
-.s{position:relative;aspect-ratio:3/1.1;overflow:hidden;background:#222}
+.s{position:relative;aspect-ratio:3/1.1;overflow:hidden;background:#222;cursor:grab;touch-action:none;user-select:none}
+.s:active{cursor:grabbing}.s img{pointer-events:none}
 .s .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.s .fig{position:absolute;right:2%;top:-8%;height:250%}
-.s .fig.f{right:auto;left:72%;top:40%;height:var(--fs);transform:translate(calc(var(--fx)*-100%),calc(var(--fy)*-100%))}
-.d{position:relative;background:#fff;cursor:crosshair}.d img{width:100%;display:block}
-.d i{position:absolute;border:2px solid #e33;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
-.m{grid-column:1/-1;display:flex;gap:10px;align-items:center}
-</style><header><b>Bấm vào mặt trên ảnh bên phải (vòng đỏ) · kéo thanh để chỉnh cỡ</b>
+.s .fig{position:absolute;max-width:none;left:72%;top:40%;height:var(--fs);transform:translate(calc(var(--fx)*-100%),calc(var(--fy)*-100%))}
+.m{display:flex;gap:10px;align-items:center}.m input{flex:1}
+</style><header><b>Kéo ảnh nhân vật trong khung để đặt vị trí · lăn chuột (hoặc kéo thanh) để zoom</b>
 <span id=n></span><button id=ok>Đánh dấu tất cả "máy" là đúng</button><button id=dl>Tải banner_focus.json</button></header><main id=g></main>
 <script>
-const D=__DATA__, g=document.getElementById('g');
-const fs=h=>Math.min(400,Math.max(120,28/h));
-function draw(c,e){const f=c.focus, fig=e.querySelector('.fig'), dot=e.querySelector('i');
- e.className='c'+(f?(c.src==='máy'?' guess':''):' todo');
- e.querySelector('.m span').textContent=c.skin+' · '+c.name+' · '+(f?(c.src==='máy'?'máy đoán':'đã chỉnh'):'CHƯA CÓ');
- if(!f){fig.className='fig';dot.style.display='none';return}
- fig.className='fig f';fig.style.cssText=`--fx:${f.x};--fy:${f.y};--fs:${fs(f.h)}%`;
- const img=e.querySelector('.d img');dot.style.display='';dot.style.left=f.x*100+'%';dot.style.top=f.y*100+'%';
- dot.style.width=dot.style.height=(f.h*img.clientHeight*1.2)+'px';e.querySelector('input').value=f.h;count()}
+const D=__DATA__, g=document.getElementById('g'), MIN=60, MAX=600; // same clamp as figStyle (bannersData.mts)
+const cl=p=>Math.min(MAX,Math.max(MIN,p)), fs=h=>cl(28/h), r4=v=>+v.toFixed(4);
+function draw(c,e){const f=c.focus||{x:.5,y:.15,h:.07}, fig=e.querySelector('.fig'); // no guess: top middle of the drawing
+ e.className='c'+(c.focus?(c.src==='máy'?' guess':''):' todo');
+ e.querySelector('.m span').textContent=c.skin+' · '+c.name+' · '+(c.focus?(c.src==='máy'?'máy đoán':'đã chỉnh'):'CHƯA CÓ');
+ fig.style.cssText=`--fx:${f.x};--fy:${f.y};--fs:${fs(f.h)}%`;e.querySelector('input').value=fs(f.h);count()}
 function count(){document.getElementById('n').textContent=D.filter(c=>c.focus&&c.src!=='máy').length+'/'+D.length+' đã chỉnh, '+D.filter(c=>!c.focus).length+' chưa có'}
+function set(c,e,f){c.focus={x:r4(f.x),y:r4(f.y),h:r4(f.h)};c.src='tay';draw(c,e)}
 for(const c of D){const e=document.createElement('div');
- e.innerHTML=`<div class=s>${c.bg?`<img class=bg src="${c.bg}">`:''}<img class=fig src="${c.fig}"></div><div class=d><img src="${c.fig}"><i></i></div>
- <div class=m><span></span><label>cỡ mặt <input type=range min=.02 max=.2 step=.002></label></div>`;
- e.querySelector('.d').onclick=ev=>{const r=ev.currentTarget.getBoundingClientRect();
-  c.focus={x:+((ev.clientX-r.left)/r.width).toFixed(4),y:+((ev.clientY-r.top)/r.height).toFixed(4),h:c.focus?.h||.06};c.src='tay';draw(c,e)};
- e.querySelector('input').oninput=ev=>{c.focus={x:.5,y:.15,...c.focus,h:+ev.target.value};c.src='tay';draw(c,e)}; // no face yet: start from the top middle
- e.querySelector('.d img').onload=()=>draw(c,e);g.append(e);c.el=e;draw(c,e)}
+ e.innerHTML=`<div class=s>${c.bg?`<img class=bg src="${c.bg}">`:''}<img class=fig src="${c.fig}"></div>
+ <div class=m><span></span><label>zoom</label><input type=range min=${MIN} max=${MAX} step=1></div>`;
+ const s=e.querySelector('.s'), fig=e.querySelector('.fig'), cur=()=>c.focus||{x:.5,y:.15,h:.07};
+ s.onpointerdown=ev=>{s.setPointerCapture(ev.pointerId);let px=ev.clientX,py=ev.clientY;
+  s.onpointermove=m=>{const r=fig.getBoundingClientRect(),f=cur(); // the anchored point moves opposite to the drag
+   set(c,e,{...f,x:f.x-(m.clientX-px)/r.width,y:f.y-(m.clientY-py)/r.height});px=m.clientX;py=m.clientY};
+  s.onpointerup=()=>{s.onpointermove=null}};
+ s.addEventListener('wheel',ev=>{ev.preventDefault();const f=cur();set(c,e,{...f,h:28/cl(fs(f.h)*Math.exp(-ev.deltaY*.0015))})},{passive:false});
+ e.querySelector('input').oninput=ev=>set(c,e,{...cur(),h:28/+ev.target.value});
+ g.append(e);c.el=e;draw(c,e)}
 document.getElementById('ok').onclick=()=>{for(const c of D)if(c.src==='máy'){c.src='tay';draw(c,c.el)}};
 document.getElementById('dl').onclick=()=>{const o={};for(const c of D)if(c.focus&&c.src==='tay')o[c.skin]=c.focus;
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:'application/json'}));a.download='banner_focus.json';a.click()};

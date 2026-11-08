@@ -89,7 +89,7 @@ type SkinOwner = { skins?: { skinID: string; image?: string }[] };
 /** CSS vars that put the drawing's face on the slice spot (.bn-slice-fig.is-focus); the face fills ~28% of the slice height. */
 export function figStyle(f: BannerFocus | null | undefined): Record<string, string> | undefined {
   if (!f) return undefined;
-  return { '--fx': String(f.x), '--fy': String(f.y), '--fs': `${Math.round(Math.min(400, Math.max(120, 28 / f.h)))}%` };
+  return { '--fx': String(f.x), '--fy': String(f.y), '--fs': `${Math.round(Math.min(600, Math.max(60, 28 / f.h)))}%` };
 }
 
 export function skinImage(b: Banner, characters: Record<string, SkinOwner>): string | null {

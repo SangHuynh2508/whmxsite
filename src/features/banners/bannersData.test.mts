@@ -106,6 +106,6 @@ test('eventKind: owner-approved Vietnamese for the event kinds, Chinese kept for
 test('figure placement: the hand-set face lands on the slice spot, sized from the face height', () => {
   assert.deepEqual(figStyle({ x: 0.5, y: 0.2, h: 0.07 }), { '--fx': '0.5', '--fy': '0.2', '--fs': '400%' });
   assert.deepEqual(figStyle({ x: 0.4, y: 0.1, h: 0.14 }), { '--fx': '0.4', '--fy': '0.1', '--fs': '200%' });
-  assert.equal(figStyle({ x: 0.4, y: 0.1, h: 0.5 })['--fs'], '120%'); // never smaller than this
+  assert.equal(figStyle({ x: 0.4, y: 0.1, h: 0.9 })['--fs'], '60%'); // never smaller than this
   assert.equal(figStyle(null), undefined);
 });
