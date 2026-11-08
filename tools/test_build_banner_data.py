@@ -20,6 +20,18 @@ POOLS = [
 
 
 class BuildBannerDataTest(unittest.TestCase):
+    def test_pre_launch_test_pools_are_dropped(self):
+        old = {"id": "4001", "nameLanText": "强化A池", "type": "oldtime", "kindNameLanText": "常规渠道", "hidden": False,
+               "startTime": 1, "endTime": 2, "characterShow": [], "characterSkinShow": ""}
+        self.assertNotIn("4001", [x["id"] for x in b.build_banners(POOLS + [old], set(), Path("/nonexistent"))])
+
+    def test_earlier_runs_masterdata_overwrote_are_added_as_their_own_banner(self):
+        runs = [{"pool": "2017", "start": 1, "end": 5}]
+        out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path("/nonexistent"), earlier_runs=runs)}
+        self.assertEqual((out["2017"]["start"], out["2017-r1"]["start"], out["2017-r1"]["end"]), (10, 1, 5))
+        self.assertEqual({k: v for k, v in out["2017-r1"].items() if k not in ("id", "start", "end")},
+                         {k: v for k, v in out["2017"].items() if k not in ("id", "start", "end")})
+
     def test_only_timed_pools_newest_first(self):
         out = b.build_banners(POOLS, {"A0184001"}, Path("/nonexistent"))
         self.assertEqual([x["id"] for x in out], ["2114", "340001", "5003", "2017"])

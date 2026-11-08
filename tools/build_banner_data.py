@@ -10,6 +10,7 @@ import json
 import re
 import sys
 import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -62,10 +63,29 @@ def pick_hero(rows: list[dict], now: int, art_dir: Path, published: set[str] = f
     return None
 
 
-def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path, published: set[str] = frozenset()) -> list[dict]:
+def _cst(day: str, hm: str) -> int:
+    return int(datetime.strptime(f"{day} {hm}", "%Y-%m-%d %H:%M").replace(tzinfo=timezone(timedelta(hours=8))).timestamp())
+
+
+# cardPools.json keeps one start/end per pool: a rerun overwrites the first run, so the launch pools (2024-04-19 →
+# 05-30) only show their 2025 reruns. Their first runs, by UP character, from the player-kept pool list
+# (taptap.cn/moment/573093962051489436: 4.19 金瓯永固杯 狸猫盘 · 5.1 十二花卉杯 洛神赋图 · 5.18 千里江山图 毛公鼎)
+# and the 4.19 11:00 – 5.1 09:59 launch notice (ghzs666.com/bbs/thread-301185). Boundaries follow masterdata: 10:00 / 09:59.
+EARLIER_RUNS = [
+    {"pool": "2063", "start": _cst("2024-04-19", "11:00"), "end": _cst("2024-05-01", "09:59")},  # 金碧流彩 · 金瓯永固杯
+    {"pool": "2057", "start": _cst("2024-04-19", "11:00"), "end": _cst("2024-05-01", "09:59")},  # 宴席之乐 · 狸猫盘
+    {"pool": "2051", "start": _cst("2024-05-01", "10:00"), "end": _cst("2024-05-18", "09:59")},  # 月令花时 · 十二花卉杯
+    {"pool": "2065", "start": _cst("2024-05-01", "10:00"), "end": _cst("2024-05-18", "09:59")},  # 一见神思 · 洛神赋图
+    {"pool": "2058", "start": _cst("2024-05-18", "10:00"), "end": _cst("2024-05-30", "09:59")},  # 千载青绿 · 千里江山图
+]
+
+
+def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path, published: set[str] = frozenset(),
+                  earlier_runs: list[dict] = EARLIER_RUNS) -> list[dict]:
     out = []
     for p in pools:
-        if not p.get("startTime") or p.get("hidden"):
+        # oldtime = the 2022 test standard pools (强化A池), before the 2024-04-19 launch
+        if not p.get("startTime") or p.get("hidden") or p.get("type") == "oldtime":
             continue
         up = list(p.get("characterShow") or [])
         skin = f"{up[0]}{p['characterSkinShow']}" if up and p.get("characterSkinShow") else None
@@ -76,6 +96,9 @@ def build_banners(pools: list[dict], skin_ids: set[str], art_dir: Path, publishe
                     "art": _art(f"banners/{p['id']}.webp", art_dir / f"PoolBg_{p['id']}.png", published),
                     "title": _art(f"banners/title/{p['id']}.webp", art_dir / f"PoolIcon_{p['id']}.png", published),
                     "choice": len(_list(p.get("changeList"))) if p.get("kind") == "choiceness" else None})
+    by_id = {x["id"]: x for x in out}
+    out += [{**by_id[r["pool"]], "id": f"{r['pool']}-r1", "start": r["start"], "end": r["end"]}
+            for r in earlier_runs if r["pool"] in by_id]
     return sorted(out, key=lambda x: (-x["start"], x["id"]))
 
 
