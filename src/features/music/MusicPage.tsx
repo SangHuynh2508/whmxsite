@@ -13,7 +13,7 @@ import { reduced, useReveal, useSlider } from '../characters/motion.ts';
 import { musicTrackId } from '../../app/router/staticRoutes.mts';
 import { getActiveScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../../app/runtime/smoothScroll.js';
 import {
-  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, filterTracks, groupCounts, loadMusicCached, musicFilter, musicHash,
+  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash,
   trackName, trackTitle, type MusicDoc, type MusicTab, type MusicTrack,
 } from './musicData.mts';
 import './styles/music.css';
@@ -281,7 +281,7 @@ function Music({ doc }: { doc: MusicDoc }) {
   const autoplay = useRef(false);
   const current = useRef(route);
   current.current = route;
-  const t = route.id ? doc.tracks.find((x) => x.id === route.id) ?? null : null;
+  const t = route.id ? findTrack(doc, route.id) : null;
 
   useEffect(() => {
     const onHash = () => {

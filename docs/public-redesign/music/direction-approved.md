@@ -30,7 +30,10 @@ mini-player **yes** · fix **P1 + P2** · story chips **labels only** (no link t
 - Empty search: `muEmpty` + a "Xóa tìm kiếm" button.
 - "Mới cập nhật" tab (owner 2026-11-08: "chỉ tab, không nhãn"), after `Tất cả`, `#/music?g=new`: the bgm the newest
   `WHMX_Tool/Xuat/CapNhat_<old>_den_<new>` run added (`new`, `new_version` in music.json); hidden when it added none.
-  No badge on the tracks themselves.
+  No badge on the tracks themselves. The dates live in `tools/music_first_seen.json` (committed), so deleting `Xuat\`
+  loses nothing; a file never seen before is dated by the game version of the export.
+- One track per song (owner 2026-11-08): files with byte-identical audio (30 groups, 259 files → 226 songs) merge into
+  the jukebox one, else the most used, carrying every use; the merged ids sit in `also` and their links still open it.
 - No `<audio>` and no mp3 request until a track is played.
 
 **Track page (`#/music/<id>`, unknown id → list)**

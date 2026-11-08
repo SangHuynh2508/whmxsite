@@ -6,7 +6,8 @@ export type MusicGroup = 'jukebox' | 'story' | 'stage' | 'area' | 'other';
 export type MusicTrack = { id: string; file: string; cover: string | null; group: MusicGroup; groups: MusicGroup[];
   name_cn: string; name_vi: string; label_kind: '' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
   source_vi?: string; stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
-  stages: { names_cn: string[]; names_vi?: string[]; count: number }; areas_cn: string[]; areas_vi?: string[]; new?: boolean };
+  stages: { names_cn: string[]; names_vi?: string[]; count: number }; areas_cn: string[]; areas_vi?: string[]; new?: boolean;
+  also?: string[] }; // ids of files with the same audio, merged into this track
 export type MusicDoc = { version: string; asset_base_url: string; new_version?: string; tracks: MusicTrack[] };
 /** A tab: every track, the latest update's tracks, or one group. */
 export type MusicTab = MusicGroup | 'all' | 'new';
@@ -37,6 +38,9 @@ export function filterTracks(tracks: MusicTrack[], group: MusicTab, query: strin
   return tracks.filter((t) => (group === 'all' || (group === 'new' ? !!t.new : t.groups.includes(group)))
     && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? ''].some((v) => v.toLowerCase().includes(q))));
 }
+
+/** By id, or by the id of a duplicate merged into it, so old links still open the song. */
+export const findTrack = (doc: MusicDoc, id: string) => doc.tracks.find((t) => t.id === id || t.also?.includes(id)) ?? null;
 
 export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
   const c = { jukebox: 0, story: 0, stage: 0, area: 0, other: 0 };

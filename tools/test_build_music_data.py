@@ -106,5 +106,24 @@ class BuildMusicTest(unittest.TestCase):
         self.assertEqual({x["id"]: x["new"] for x in doc["tracks"]}, {"wdfh": True, "aa": False})
 
 
+    def test_identical_audio_becomes_one_track_with_every_use(self):
+        raw = [track("novel_c41.mp3", stories=["e041001"]), track("WDFH.mp3"), track("novel_c42.mp3", stories=["e041002"]),
+               track("a.mp3", stages=[{"id": "A", "name": "甲"}]), track("B.mp3", jukebox=[JUKE], areas=[{"name": "来古"}])]
+        digest = {"novel_c41.mp3": 1, "WDFH.mp3": 1, "novel_c42.mp3": 2, "a.mp3": 3, "B.mp3": 3}.get
+        out = m.merge_duplicates(raw, digest)
+        self.assertEqual([t["file"] for t in out], ["novel_c41.mp3", "novel_c42.mp3", "B.mp3"])  # jukebox, else most uses
+        self.assertEqual((out[2]["stages"], out[2]["areas"], out[2]["also"]), ([{"id": "A", "name": "甲"}], [{"name": "来古"}], ["a"]))
+        self.assertEqual(out[0]["also"], ["wdfh"])
+
+    def test_first_seen_survives_without_the_update_folder(self):
+        # first run: no history yet, so only the update's files get a revision
+        self.assertEqual(m.first_seen({}, ["a", "b"], ("r3164", {"b"}), "r3168"), {"a": "", "b": "r3164"})
+        # later runs keep it, even with Xuat\ gone; a file never seen before is dated by the game version
+        self.assertEqual(m.first_seen({"a": "", "b": "r3164"}, ["a", "b", "c"], ("", set()), "r3170"),
+                         {"a": "", "b": "r3164", "c": "r3170"})
+        self.assertEqual(m.latest({"a": "", "b": "r3164", "c": "r3170", "d": "r3170"}), ("r3170", {"c", "d"}))
+        self.assertEqual(m.latest({"a": ""}), ("", set()))
+
+
 if __name__ == "__main__":
     unittest.main()

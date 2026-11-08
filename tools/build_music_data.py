@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -17,6 +18,7 @@ DEFAULT_LORE_INDEX = ROOT.parent / "WHMX_Lore_By_Chapter" / "INDEX.tsv"
 DEFAULT_UPDATES = ROOT.parent / "WHMX_Tool" / "Xuat"  # `whmx.py update` writes CapNhat_<old>_den_<new>\ here
 # {Chinese: Vietnamese} for every string the page shows; Claude translates it (owner 2026-11-08: "trang này nhỏ ko cần admin dịch")
 MUSIC_VI = ROOT / "localization" / "music_vi.json"
+FIRST_SEEN = ROOT / "tools" / "music_first_seen.json"  # {file id: revision it first appeared in}; committed
 OUT = ROOT / "public" / "music.json"
 ORDER = ("jukebox", "story", "stage", "area", "other")
 PLACEHOLDER = "预留位置"  # empty jukebox slot that points back at foundationMusic_1
@@ -123,8 +125,54 @@ def build_track(t: dict, group_of: dict[str, str], vi: dict[str, str], char_vi: 
         "label_vi": stories[0]["group_vi"] if kind == "story" else vi.get(label, ""),
         "source_cn": source, "source_vi": vi.get(source, ""),
         "stories": stories, "stories_total": len(t["stories"]), "stages": stages,
-        "areas_cn": areas, "areas_vi": [vi.get(a, "") for a in areas],
+        "areas_cn": areas, "areas_vi": [vi.get(a, "") for a in areas], "also": t.get("also", []),
     }
+
+
+def _uses(t: dict) -> tuple[int, int]:
+    return (1 if _jukebox(t) else 0, len(t["stories"]) + len(t["stages"]) + len(t["areas"]))
+
+
+def merge_duplicates(raw: list[dict], digest) -> list[dict]:
+    """The game ships some songs under several file names (same bytes): one track each, carrying every use.
+    Kept file: the jukebox one, else the most used; the others' ids go to `also`."""
+    groups: dict = {}
+    for t in raw:
+        groups.setdefault(digest(t["file"]), []).append(t)
+    out = []
+    for ts in groups.values():
+        keep = max(ts, key=_uses)  # max keeps the first on a tie
+        rest = [t for t in ts if t is not keep]
+        merged = {**keep, "also": [track_id(t["file"]) for t in rest]}
+        for k in ("jukebox", "stories", "stages", "areas"):
+            seen, items = set(), []
+            for t in [keep, *rest]:
+                for x in t[k]:
+                    key = json.dumps(x, sort_keys=True, ensure_ascii=False)
+                    if key not in seen:
+                        seen.add(key)
+                        items.append(x)
+            merged[k] = items
+        out.append(merged)
+    return out
+
+
+def first_seen(history: dict[str, str], ids: list[str], update: tuple[str, set[str]], version: str) -> dict[str, str]:
+    """{file id: revision it first appeared in} — kept in the repo so the "Mới cập nhật" tab outlives Xuat\\.
+    With no history yet only the update's files can be dated ('' = older than our records)."""
+    out = dict(history)
+    for i in ids:
+        if i not in out:
+            out[i] = update[0] if i in update[1] else (version if history else "")
+    return out
+
+
+def latest(history: dict[str, str]) -> tuple[str, set[str]]:
+    revs = [r for r in history.values() if r]
+    if not revs:
+        return "", set()
+    top = max(revs, key=lambda r: int(r.lstrip("r") or 0))
+    return top, {i for i, r in history.items() if r == top}
 
 
 def newest_update(xuat: Path) -> tuple[str, set[str]]:
@@ -141,7 +189,7 @@ def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], ba
                    char_vi: dict[str, str] | None = None, new: tuple[str, set[str]] = ("", set())) -> dict:
     tracks = [build_track(t, group_of, vi, char_vi) for t in index["tracks"]]
     for x in tracks:
-        x["new"] = x["id"] in new[1]
+        x["new"] = bool(new[1] & {x["id"], *x["also"]})
     juke_id = {track_id(t["file"]): int((_jukebox(t) or {}).get("id") or 0) for t in index["tracks"]}
     tracks.sort(key=lambda x: (ORDER.index(x["group"]), juke_id[x["id"]], x["id"]))
     unnamed = [x for x in tracks if not x["name_cn"] and not x["label_cn"]]
@@ -192,7 +240,12 @@ def main() -> int:
     char_vi = {cid: c.get("name_vi", "") for cid, c in data.get("characters", {}).items()}
     with args.lore_index.open(encoding="utf-8-sig", newline="") as f:
         group_of = group_names(csv.DictReader(f, delimiter="\t"))
-    new = newest_update(args.updates)
+    history = json.loads(FIRST_SEEN.read_text(encoding="utf-8")) if FIRST_SEEN.is_file() else {}
+    history = first_seen(history, [track_id(t["file"]) for t in index["tracks"]], newest_update(args.updates), index.get("version", ""))
+    FIRST_SEEN.write_text(json.dumps(dict(sorted(history.items())), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    new = latest(history)
+    digest = lambda f: hashlib.md5((args.bgm / f).read_bytes()).hexdigest()
+    index = {**index, "tracks": merge_duplicates(index["tracks"], digest)}
     doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new)
     args.out.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     miss = untranslated(doc)

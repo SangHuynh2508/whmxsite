@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { assetUrl, clock, filterTracks, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
+import { assetUrl, clock, filterTracks, findTrack, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
 
 const t = (o: Partial<MusicTrack>): MusicTrack => ({ id: 'x', file: 'music/bgm/x.mp3', cover: null, group: 'other', groups: ['other'],
   name_cn: '', name_vi: '', label_kind: '', label_cn: '', label_vi: '', source_cn: '', stories: [], stories_total: 0,
@@ -75,4 +75,12 @@ test('filter lives in the hash and survives a round trip', () => {
 test('clock: m:ss, a dash before the length is known', () => {
   assert.equal(clock(83.9), '1:23');
   assert.equal(clock(Number.NaN), '–:––');
+});
+
+test('the id of a merged duplicate still opens the kept track (old links)', () => {
+  const kept = t({ id: 'novel_c41', also: ['wdfh'] });
+  const doc = { version: 'r1', asset_base_url: '', tracks: [kept] };
+  assert.equal(findTrack(doc, 'wdfh'), kept);
+  assert.equal(findTrack(doc, 'novel_c41'), kept);
+  assert.equal(findTrack(doc, 'nope'), null);
 });
