@@ -30,7 +30,10 @@ scripts/
 skills-lock.json
 terms_reference_export.xlsx
 tmp4v5_expv/
-tools/
+# tools/ stays out of the upload except the build step that prerenders pages (npm run build)
+tools/*
+!tools/prerender.mjs
+!tools/prerender-lib.mjs
 translation_gameplay.json
 translation_gameplay.xlsx
 vercel-dry-run.json
