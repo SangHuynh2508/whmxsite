@@ -61,7 +61,7 @@ export function paragraphs(text: string) {
 export const badges = (e: Entry) => [e.zhizhi ? `Z${e.zhizhi}` : '', e.hc ? 'HC' : ''].filter(Boolean);
 export const badgeTitle = (e: Entry) => [e.zhizhi ? `${s('zhizhi')} ${e.zhizhi}` : '', e.hc ? s('trLegHc') : ''].filter(Boolean).join(' · ');
 
-export function tileProps(e: Entry, c: SiteChar, href = `#/characters/${c.slug}/build`): CharacterTileProps {
+export function tileProps(e: Entry, c: SiteChar, href = `/characters/${c.slug}/build`): CharacterTileProps {
   const { text: name, untranslated } = pick(c, 'name');
   const b = badges(e);
   const label = [`${name}${untranslated ? ` (${s('untranslatedTag')})` : ''}${b.length ? ` (${b.join(' · ')})` : ''}`, jobName(c.job), RARITY_LABELS[c.rare]].filter(Boolean).join(' · ');

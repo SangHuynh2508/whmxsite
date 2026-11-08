@@ -11,4 +11,4 @@ export function parseTierListHash(hash: string): { slug: string; tab: Tab } | nu
 }
 
 export const tierListHref = (slug = '', tab: Tab = 'characters') =>
-  `#/tier-list${slug ? `/${slug}` : ''}${slug && tab !== 'characters' ? `/${tab}` : ''}`;
+  `/tier-list${slug ? `/${slug}` : ''}${slug && tab !== 'characters' ? `/${tab}` : ''}`;

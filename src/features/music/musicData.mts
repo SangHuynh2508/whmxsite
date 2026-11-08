@@ -79,13 +79,13 @@ export function trackTitle(t: MusicTrack, lang: Lang): string {
 }
 
 const isTab = (g: string | null): g is MusicTab => g === 'new' || GROUPS.includes(g as MusicGroup);
-/** '#/music/<id>?g=story&q=…' — the filter rides along so Back and shared links keep it. */
+/** '/music/<id>?g=story&q=…' — the filter rides along so Back and shared links keep it. */
 export function musicHash(id: string, group: MusicTab, q: string): string {
   const p = new URLSearchParams();
   if (group !== 'all') p.set('g', group);
   if (q.trim()) p.set('q', q);
   const qs = p.toString();
-  return `#/music${id ? `/${encodeURIComponent(id)}` : ''}${qs ? `?${qs}` : ''}`;
+  return `/music${id ? `/${encodeURIComponent(id)}` : ''}${qs ? `?${qs}` : ''}`;
 }
 export function musicFilter(hash: string): { group: MusicTab; q: string } {
   const p = new URLSearchParams(hash.split('?')[1] ?? '');

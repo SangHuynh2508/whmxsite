@@ -1,5 +1,5 @@
 /**
- * SPA Hash Router for WhmxCalc
+ * SPA router for WhmxCalc: public pages by path (spec 2026-11-09 seo-path-urls), the admin by hash.
  */
 import { getGameData } from '../../data/loader.js';
 import { notify, setCharacter, state } from '../../data/state.js';
@@ -10,6 +10,8 @@ import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharact
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
 import { staticView } from './staticRoutes.mts';
+import { routeString, navigate, ROUTE_EVENT, initLinkInterception, legacyHashToPath } from './location.mts';
+import { setPageMeta } from './pageMeta.mts';
 import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx';
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
@@ -62,9 +64,10 @@ export function getCharBySlugOrId(slugOrId) {
 }
 
 export function parseHash() {
-  const hash = window.location.hash.replace('#', '').trim();
+  const raw = routeString();
+  const hash = raw.replace('#', '').trim();
 
-  const pageView = staticView(window.location.hash);
+  const pageView = staticView(raw);
   if (pageView) return { view: pageView, slug: '', subtab: '' };
 
   // Admin routes are owned by the React shell (src/admin/layout/AdminApp.tsx).
@@ -76,7 +79,7 @@ export function parseHash() {
     };
   }
 
-  const tierList = parseTierListHash(window.location.hash);
+  const tierList = parseTierListHash(raw);
   if (tierList) return { view: 'tier-list', slug: tierList.slug, subtab: tierList.tab };
 
   // Format: /characters (Standalone Catalog)
@@ -109,7 +112,7 @@ export function parseHash() {
 
   // Backward compatibility: /data redirects to /weapons
   if (hash === '/data' || hash === 'data') {
-    window.location.hash = '#/weapons';
+    navigate('/weapons', { replace: true });
     return {
       view: 'weapons',
       slug: '',
@@ -130,7 +133,7 @@ export function parseHash() {
 
   // Format: /gallery-demo, gallery-demo -> backward-compatible alias redirect to /gallery
   if (hash === '/gallery-demo' || hash === 'gallery-demo') {
-    window.location.hash = '#/gallery';
+    navigate('/gallery', { replace: true });
     return {
       view: 'gallery',
       slug: '',
@@ -147,7 +150,7 @@ export function parseHash() {
     };
   }
 
-  // Format: calc or #calc?char=W0182 or calculator
+  // Format: /calculator?char=W0182 (old #calc… links are rewritten by legacyHashToPath)
   if (hash.startsWith('calc') || hash.startsWith('/calc') || hash.startsWith('calculator') || hash.startsWith('/calculator')) {
     const params = new URLSearchParams(hash.replace(/^(\/?calc|\/?calculator)\??/, ''));
     const charId = params.get('char') || params.get('id') || '';
@@ -239,7 +242,7 @@ export function handleRoute() {
   closeCalcPicker();
   document.body.style.overflow = '';
 
-  // One URL per character: an ID URL (#/characters/W0182) is rewritten to the slug URL in place.
+  // One URL per character: an ID URL (/characters/W0182) is rewritten to the slug URL in place.
   if (route.view === 'character') {
     const char = getCharBySlugOrId(route.slug);
     const canonical = canonicalCharacterHash(route.slug, route.subtab, char);
@@ -251,6 +254,7 @@ export function handleRoute() {
 
   // The React admin shell owns #/admin; nav highlights live in src/app/layout/AppNav.tsx.
   if (route.view === 'admin') return;
+  setPageMeta(route, gameData);
 
   // Compute semantic route key (subtabs within the same character share the same routeKey)
   let routeKey = route.view;
@@ -404,14 +408,18 @@ export function handleRoute() {
 
 // The calculator link keeps the currently selected character (src/app/layout/AppNav.tsx).
 export function calculatorHash() {
-  return state.character ? `#calc?char=${state.character.id}` : '#calc';
+  return state.character ? `/calculator?char=${state.character.id}` : '/calculator';
 }
 
 export function initRouter() {
+  // Registered before initLinkInterception's own popstate handler, which fires the route.
   window.addEventListener('popstate', () => {
     isPopStateNav = true;
   });
-  window.addEventListener('hashchange', handleRoute);
+  initLinkInterception();
+  window.addEventListener(ROUTE_EVENT, handleRoute);
+  const legacy = legacyHashToPath(location.hash); // an old shared '#/…' link opens the same page
+  if (legacy) history.replaceState(null, '', legacy);
   // Calculator: a language switch re-renders in place (notify) instead of re-selecting the character, which reset
   // its levels and talents.
   window.addEventListener('whmx:lang', () => (parseHash().view === 'calculator' && state.character ? notify() : handleRoute()));

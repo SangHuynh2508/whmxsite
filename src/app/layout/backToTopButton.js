@@ -24,7 +24,7 @@ export function initBackToTopButton() {
 
   // scroll does not bubble; capture catches the route containers as well as the document.
   document.addEventListener('scroll', schedule, { capture: true, passive: true });
-  window.addEventListener('hashchange', schedule);
+  window.addEventListener('whmx:route', schedule); // ROUTE_EVENT (src/app/router/location.mts)
   schedule();
 
   btn.addEventListener('click', () => {

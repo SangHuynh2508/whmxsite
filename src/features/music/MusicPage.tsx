@@ -11,6 +11,7 @@ import { s } from '../../i18n/strings.mts';
 import type { Lang } from '../../i18n/lang.mts';
 import { reduced, useReveal, useSlider } from '../characters/motion.ts';
 import { musicTrackId } from '../../app/router/staticRoutes.mts';
+import { routeString, navigate, ROUTE_EVENT } from '../../app/router/location.mts';
 import { getActiveScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../../app/runtime/smoothScroll.js';
 import {
   GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash, versionLabel,
@@ -21,7 +22,7 @@ import './styles/music.css';
 gsap.registerPlugin(Flip);
 
 type Route = { id: string; group: MusicTab; q: string };
-const readRoute = (): Route => ({ id: musicTrackId(location.hash), ...musicFilter(location.hash) });
+const readRoute = (): Route => ({ id: musicTrackId(routeString()), ...musicFilter(routeString()) });
 
 /** Chinese standing in for VI: Noto Serif SC, the ash dot (kept on the last glyph's line), "(chưa dịch)" for readers. */
 function Name({ text, zh }: { text: string; zh: boolean }) {
@@ -303,8 +304,8 @@ function Music({ doc }: { doc: MusicDoc }) {
       if (!cur.id && next.id) listY.current = scrollY();
       setRoute(next);
     };
-    addEventListener('hashchange', onHash);
-    return () => removeEventListener('hashchange', onHash);
+    addEventListener(ROUTE_EVENT, onHash);
+    return () => removeEventListener(ROUTE_EVENT, onHash);
   }, []);
 
   // a click inside the page that opens a track plays it (a user gesture); a shared link or Back does not
@@ -339,10 +340,10 @@ function Music({ doc }: { doc: MusicDoc }) {
   const go = (r: Partial<Route>, replace = false) => {
     const n = { ...route, ...r };
     const h = musicHash(n.id, n.group, n.q);
-    if (replace) { history.replaceState(null, '', h); setRoute(n); } else location.hash = h;
+    if (replace) { history.replaceState(null, '', h); setRoute(n); } else navigate(h);
   };
   const onClick = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).closest('a[href^="#/music/"]')) autoplay.current = true;
+    if ((e.target as HTMLElement).closest('a[href^="/music/"]')) autoplay.current = true;
   };
   return (
     <div className="music-page" onClickCapture={onClick}>

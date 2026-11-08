@@ -41,7 +41,7 @@ export function BannerSlice({ banner, doc, now, characters, isArchive = false }:
   );
   // A slice opens its first UP character; a banner without one (choice banners, 强化A池) is not a link.
   return ups[0]
-    ? <a className="bn-slice" href={`#/characters/${ups[0].char.slug}`} data-ended={ended || undefined}>
+    ? <a className="bn-slice" href={`/characters/${ups[0].char.slug}`} data-ended={ended || undefined}>
         {body}<span className="bn-slice-cue" aria-hidden="true">{s('bnCue')}</span>
       </a>
     : <div className="bn-slice" data-ended={ended || undefined}>{body}</div>;

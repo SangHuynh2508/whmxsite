@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
 import { calculatorHash, parseHash } from '../router/router.js';
+import { routeString, navigate, ROUTE_EVENT } from '../router/location.mts';
 import { gsap } from 'gsap';
 import { getGameData } from '../../data/loader.js';
 import { getCharacterAvatarUrl } from '../../ui/utils/avatar.mts';
@@ -23,11 +24,11 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
 // Only the hot pages sit in the rail; Home is the brand mark, Banner, Âm nhạc and Vũ Khí live in "Thông tin"
 // (owner 2026-09-30; Âm nhạc 2026-11-08: "đặt trong mục thông tin").
 const PUBLIC_LINKS = [
-  { href: '#/characters', label: 'navCharacters', icon: UsersRound, views: ['catalog', 'character'] },
-  { href: '#/tier-list', label: 'navTier', icon: Podium, views: ['tier-list'] },
-  { href: '#/gallery', label: 'navSkins', icon: Shirt, views: ['gallery', 'skin-detail'] },
-  { href: '#/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'music', 'weapons'] },
-  { href: '#calc', label: 'navTools', icon: Calculator, views: ['calculator'] },
+  { href: '/characters', label: 'navCharacters', icon: UsersRound, views: ['catalog', 'character'] },
+  { href: '/tier-list', label: 'navTier', icon: Podium, views: ['tier-list'] },
+  { href: '/gallery', label: 'navSkins', icon: Shirt, views: ['gallery', 'skin-detail'] },
+  { href: '/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'music', 'weapons'] },
+  { href: '/calculator', label: 'navTools', icon: Calculator, views: ['calculator'] },
 ] satisfies { href: string; label: StringKey; icon: unknown; views: string[] }[];
 
 const LangToggle = ({ lang }: { lang: Lang }) => (
@@ -42,25 +43,27 @@ const LangToggle = ({ lang }: { lang: Lang }) => (
 
 // The calculator link keeps the currently selected character.
 const linkClick = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-  if (href === '#calc') {
+  if (href === '/calculator') {
     event.preventDefault();
-    location.hash = calculatorHash();
+    navigate(calculatorHash());
   }
   event.currentTarget.blur(); // the rail expands on :focus-within; let it collapse after a click
 };
 
 function AppNav() {
-  const [, setHash] = useState(location.hash); // re-render on navigation; the active item is read from location
+  const [, setHash] = useState(routeString()); // re-render on navigation; the active item is read from location
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    const onHash = () => setHash(location.hash);
+    const onHash = () => setHash(routeString());
     const syncAuth = () => getSession().then((session: unknown) => setAuthorized(isAuthorizedEditor(session)));
     void syncAuth();
-    window.addEventListener('hashchange', onHash);
+    window.addEventListener('hashchange', onHash); // the admin
+    window.addEventListener(ROUTE_EVENT, onHash);
     window.addEventListener('whmx:session-change', syncAuth);
     return () => {
       window.removeEventListener('hashchange', onHash);
+      window.removeEventListener(ROUTE_EVENT, onHash);
       window.removeEventListener('whmx:session-change', syncAuth);
     };
   }, []);
@@ -102,7 +105,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
   const lang = useLang();
   const adminLabel = s(authorized ? 'navAdmin' : 'navLogin', lang);
   const AdminIcon = authorized ? ShieldCheck : LogIn;
-  const adminHref = authorized ? '#/admin' : '#/login';
+  const adminHref = authorized ? '/#/admin' : '/#/login';
   return (
     <aside ref={railRef} className="app-nav" id="app-nav" aria-label={s('navRail', lang)}>
       <span
@@ -111,7 +114,7 @@ function DesktopRail({ view, authorized }: { view: string; authorized: boolean }
         style={top === null ? { opacity: 0 } : { transform: `translateY(${top}px)` }}
       />
       <div className="app-nav-header">
-        <a href="#/" className="app-nav-brand" title={`${s('navHome', lang)} · ${s('homeTitle', lang)}`} onClick={linkClick('#/')}>
+        <a href="/" className="app-nav-brand" title={`${s('navHome', lang)} · ${s('homeTitle', lang)}`} onClick={linkClick('/')}>
           <span className="app-nav-brand-mark">物</span>
           <span className="app-nav-brand-full">
             <span className="brand-title">物华弥新</span>
@@ -228,7 +231,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={(event) => { if (event.key === 'Enter' && results[0]) { location.hash = results[0].href; setOpen(false); } }}
+              onKeyDown={(event) => { if (event.key === 'Enter' && results[0]) { navigate(results[0].href); setOpen(false); } }}
               placeholder={s('searchPlaceholder', lang)}
               aria-label={s('searchPlaceholder', lang)}
               autoComplete="off"
@@ -250,7 +253,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                 <ul>
                   {/* no rail logo on phones: this row is the way home */}
                   <li>
-                    <a href="#/" className={view === 'home' ? 'active' : undefined} aria-current={view === 'home' ? 'page' : undefined} onClick={linkClick('#/')}>
+                    <a href="/" className={view === 'home' ? 'active' : undefined} aria-current={view === 'home' ? 'page' : undefined} onClick={linkClick('/')}>
                       <House size={20} />{s('navHome', lang)}
                     </a>
                   </li>
@@ -282,7 +285,7 @@ function MobileMenu({ view, authorized }: { view: string; authorized: boolean })
                 ) : (
                   <>
                     <p className="mobile-menu-heading">{s('navAccount', lang)}</p>
-                    <a href="#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />{s('navLogin', lang)}</a>
+                    <a href="/#/login" className={view === 'admin' ? 'active' : undefined}><LogIn size={20} />{s('navLogin', lang)}</a>
                   </>
                 )}
               </>

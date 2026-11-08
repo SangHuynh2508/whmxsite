@@ -49,7 +49,7 @@ test('badges and tile', () => {
   const t = tileProps({ characterId: 'D0017', zhizhi: 1 }, chars.D0017);
   assert.equal(t.name, '铜版');
   assert.equal(t.untranslated, true);
-  assert.equal(t.href, '#/characters/dong-ban/build');
+  assert.equal(t.href, '/characters/dong-ban/build');
   assert.equal(t.label, '铜版 (chưa dịch) (Z1) · Túc Vệ · R');
   assert.equal(tileProps({ characterId: 'A0184' }, chars.A0184).avatar, '/assets/characters/avatars/A0184.png');
 });

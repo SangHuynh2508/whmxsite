@@ -1,5 +1,6 @@
 import { state, setCharacter } from '../data/state.js';
 import { getGameData } from '../data/loader.js';
+import { routeString } from '../app/router/location.mts';
 
 import { RARITY_LABELS } from './utils/gameLabels.mts';
 import { getCharacterAvatarUrl } from './utils/avatar.mts';
@@ -64,11 +65,9 @@ export function selectCalculatorCharacter(characterOrId) {
   setCharacter(char);
 
   // 2. Sync URL hash for sharing links when in calculator view
-  if (!window.location.hash.includes('/characters/')) {
-    const targetHash = `#calc?char=${char.id}`;
-    if (window.location.hash !== targetHash) {
-      history.replaceState(null, '', targetHash);
-    }
+  if (!routeString().includes('/characters/')) {
+    const target = `/calculator?char=${char.id}`;
+    if (`${location.pathname}${location.search}` !== target) history.replaceState(null, '', target);
   }
 
   // 3. setCharacter notified the calculator view (boot.js subscribe), which renders it once; this renders nothing

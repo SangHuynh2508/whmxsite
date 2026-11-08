@@ -63,7 +63,7 @@ test('深造: a game document published before 2026-09-27 (one `deepen`) still s
 
 test('teams link to existing characters', () => {
   const [v] = buildViews([doc], game, characters, 'D0017');
-  assert.deepEqual(v.teams, [{ label: 'Chính', note: '', members: [{ id: 'A0001', name: '山水', icon: '/assets/characters/avatars/A0001.png', href: '#/characters/A0001' }] }]);
+  assert.deepEqual(v.teams, [{ label: 'Chính', note: '', members: [{ id: 'A0001', name: '山水', icon: '/assets/characters/avatars/A0001.png', href: '/characters/A0001' }] }]);
 });
 
 test('rotations: steps with their slot tag, type, icon and notes; a rotation note is kept', () => {

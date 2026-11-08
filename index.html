@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- path URLs: relative asset paths (assets/items/…) resolve from the root on /characters/x/build -->
+  <base href="/" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vật Hoa Di Tân Wiki</title>
   <meta name="description" content="Tra cứu nhân vật, kỹ năng, build và cốt truyện Vật Hoa Di Tân bằng tiếng Việt." />
@@ -46,6 +48,8 @@
   <!-- Global nav (desktop rail + mobile dock): React, src/app/layout/AppNav.tsx, mounted first in <body> -->
 
   <div id="app" class="app-layout">
+    <!-- Prerendered page text (tools/prerender.mjs) for search engines and no-JS readers; boot.js removes it -->
+    <div id="prerender" class="prerender"></div>
 
     <!-- Main View: Details & Calculation -->
     <main class="main-content hidden" id="main-content">

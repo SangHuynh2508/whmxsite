@@ -4,6 +4,7 @@
 import { gsap } from 'gsap';
 import { getGameData } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
+import { navigate } from '../../../app/router/location.mts';
 import { escapeHtml } from '../../../lib/escapeHtml.mts';
 import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
@@ -26,7 +27,7 @@ document.addEventListener('click', (event) => {
   const link = event.target instanceof Element ? event.target.closest('a.cd-tab-item') : null;
   if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
-  window.location.replace(link.getAttribute('href'));
+  navigate(link.getAttribute('href'), { replace: true });
 });
 
 // Internal Tab State & Controller
@@ -122,7 +123,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         <div class="empty-state-content">
           <h1 class="empty-state-title">${s('cdNotFound')}</h1>
           <p class="empty-state-text">${s('cdNotFoundText').replace('{id}', escapeHtml(slugOrId))}</p>
-          <a href="#/characters" class="cd-breadcrumb-back">${s('cdBackList')}</a>
+          <a href="/characters" class="cd-breadcrumb-back">${s('cdBackList')}</a>
         </div>
       </div>
     `;
@@ -249,7 +250,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
     <div class="character-detail-content">
       <!-- Top Breadcrumb Bar -->
       <div class="cd-breadcrumb-bar">
-        <a href="#/characters" class="cd-breadcrumb-back">
+        <a href="/characters" class="cd-breadcrumb-back">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           <span>${s('cdBreadcrumb')}</span>
         </a>
@@ -297,31 +298,31 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
       <!-- Sub-Navigation Tabs: Tổng Quan | Thông Tin | Thiên Phú | Build | Hồ Sơ Lưu Trữ | Phòng Trà | Thư Viện (gallery stays last) -->
       <nav class="cd-sub-nav" aria-label="${s('cdSubNav')}">
         <div class="cd-nav-scroll-wrapper">
-          <a href="#/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
+          <a href="/characters/${slug}" class="cd-tab-item ${normTab === 'overview' ? 'active' : ''}">
             <span class="tab-label">${s('tabOverview')}</span>
           </a>
 
-          <a href="#/characters/${slug}/info" class="cd-tab-item ${normTab === 'info' ? 'active' : ''}">
+          <a href="/characters/${slug}/info" class="cd-tab-item ${normTab === 'info' ? 'active' : ''}">
             <span class="tab-label">${s('tabInfo')}</span>
           </a>
 
-          <a href="#/characters/${slug}/talents" class="cd-tab-item ${normTab === 'talents' ? 'active' : ''}">
+          <a href="/characters/${slug}/talents" class="cd-tab-item ${normTab === 'talents' ? 'active' : ''}">
             <span class="tab-label">${s('tabTalents')}</span>
           </a>
 
-          <a href="#/characters/${slug}/build" class="cd-tab-item ${normTab === 'build' ? 'active' : ''}">
+          <a href="/characters/${slug}/build" class="cd-tab-item ${normTab === 'build' ? 'active' : ''}">
             <span class="tab-label">${s('tabBuild')}</span>
           </a>
 
-          <a href="#/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
+          <a href="/characters/${slug}/lore" class="cd-tab-item ${normTab === 'lore' ? 'active' : ''}">
             <span class="tab-label">${s('tabLore')}</span>
           </a>
 
-          <a href="#/characters/${slug}/tea" class="cd-tab-item ${normTab === 'tea' ? 'active' : ''}">
+          <a href="/characters/${slug}/tea" class="cd-tab-item ${normTab === 'tea' ? 'active' : ''}">
             <span class="tab-label">${s('tabTea')}</span>
           </a>
 
-          <a href="#/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
+          <a href="/characters/${slug}/gallery" class="cd-tab-item ${normTab === 'gallery' ? 'active' : ''}">
             <span class="tab-label">${s('tabGallery')}</span>
           </a>
 

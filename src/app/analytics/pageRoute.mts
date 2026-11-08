@@ -1,5 +1,4 @@
-// The site routes by hash (#/characters/…), which analytics tools don't see as page changes.
-// Map a hash to the page analytics should record: the real path and a route that groups dynamic segments.
+// Map a route (routeString(): '#/characters/…' for path pages, the admin's own hash) to the page analytics records.
 // ponytail: only the dynamic segments the router has today; add a pattern here when a new one appears.
 const DYNAMIC: [RegExp, string][] = [
   [/^\/characters\/[^/]+(?<tail>\/[^/]+)?$/, '/characters/[slug]'],

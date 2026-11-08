@@ -335,7 +335,7 @@ export function renderSkinGalleryView(container) {
             <div class="museum-text-stage" id="hero-text-stage">
               <h2 class="museum-title" id="hero-skin-title">${initialSkin.nameVi}</h2>
               <div class="museum-char-meta" id="hero-char-meta">
-                <a href="#/characters/${initialChar.slug || initialChar.id || initialSkin.charId}" class="char-link-gold" id="hero-char-link">${txt(initialChar, 'name') || initialSkin.charId}</a>
+                <a href="/characters/${initialChar.slug || initialChar.id || initialSkin.charId}" class="char-link-gold" id="hero-char-link">${txt(initialChar, 'name') || initialSkin.charId}</a>
               </div>
               <div class="museum-notes" id="hero-skin-notes"></div>
               <div class="museum-data-table" id="hero-data-table">
@@ -352,7 +352,7 @@ export function renderSkinGalleryView(container) {
 
             <!-- Plaque Footer: Detail Action + Spotlight Nav -->
             <div class="museum-footer-row">
-              <a href="#/skins/${initialSkin.skinId}" class="museum-explore-btn" id="hero-detail-cta" title="${tr('skViewDetailN').replace('{n}', initialSkin.nameVi)}">
+              <a href="/skins/${initialSkin.skinId}" class="museum-explore-btn" id="hero-detail-cta" title="${tr('skViewDetailN').replace('{n}', initialSkin.nameVi)}">
                 <span>${tr('skViewDetail')}</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -773,7 +773,7 @@ function renderGridCards(skins) {
     }
 
     return `
-      <a href="#/skins/${skin.skinId}" class="gallery-skin-card" data-skin-id="${skin.skinId}" aria-label="${skin.nameVi} - ${skin.charNameVi}">
+      <a href="/skins/${skin.skinId}" class="gallery-skin-card" data-skin-id="${skin.skinId}" aria-label="${skin.nameVi} - ${skin.charNameVi}">
         <div class="gallery-card-image-wrap">
           <img 
             class="gallery-card-img" 
@@ -1037,13 +1037,13 @@ function setupHeroSpotlight(container, highSkins, gameData) {
     if (titleEl) titleEl.textContent = skin.nameVi;
     if (charLinkEl) {
       charLinkEl.textContent = txt(char, 'name') || skin.charId;
-      charLinkEl.href = `#/characters/${char.slug || char.id || skin.charId}`;
+      charLinkEl.href = `/characters/${char.slug || char.id || skin.charId}`;
     }
     // Lore text is updated via the lore reveal system, not raw textContent
     if (valObtainEl) valObtainEl.textContent = skin.obtainVi || tr('skObtainGift');
     if (valPriceEl) valPriceEl.textContent = skin.price ? `${skin.price} ${skin.currency}` : tr('skLimitedPrice');
     if (ctaBtn) {
-      ctaBtn.href = `#/skins/${skin.skinId}`;
+      ctaBtn.href = `/skins/${skin.skinId}`;
       ctaBtn.setAttribute('title', tr('skViewDetailN').replace('{n}', skin.nameVi));
     }
     if (seriesBadgeEl) {

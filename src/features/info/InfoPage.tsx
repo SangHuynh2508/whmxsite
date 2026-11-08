@@ -49,9 +49,9 @@ export function InfoPage({ doc }: { doc: BannersDoc | null }) {
   const page = useRef<HTMLDivElement>(null);
   useReveal(page, '.info-tile', 'info');
   const tiles = [
-    { href: '#/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
-    { href: '#/music', name: s('navMusic'), desc: s('ifMusicDesc'), art: <MusicArt /> },
-    { href: '#/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
+    { href: '/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
+    { href: '/music', name: s('navMusic'), desc: s('ifMusicDesc'), art: <MusicArt /> },
+    { href: '/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
   ];
   return (
     <div className="info-page" ref={page}>

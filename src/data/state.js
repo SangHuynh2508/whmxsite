@@ -1,3 +1,4 @@
+import { routeString } from '../app/router/location.mts';
 // Global Application State
 
 export const state = {
@@ -32,11 +33,9 @@ export function setCharacter(char, syncHash = true) {
   }
 
   // Sync URL hash for sharing links when in calculator view
-  if (syncHash && !window.location.hash.includes('/characters/')) {
-    const targetHash = char ? `#${char.id}` : '';
-    if (window.location.hash !== targetHash) {
-      history.replaceState(null, '', targetHash || window.location.pathname + window.location.search);
-    }
+  if (syncHash && !routeString().includes('/characters/')) {
+    const target = char ? `/calculator?char=${char.id}` : '/calculator';
+    if (`${location.pathname}${location.search}` !== target) history.replaceState(null, '', target);
   }
 
   notify();

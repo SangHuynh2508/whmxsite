@@ -66,8 +66,8 @@ test('name without the kind prefix, flagged when Chinese stands in for VI', () =
 });
 
 test('filter lives in the hash and survives a round trip', () => {
-  assert.equal(musicHash('', 'all', ''), '#/music');
-  assert.equal(musicHash('bgm_map', 'story', 'mưa & gió'), '#/music/bgm_map?g=story&q=m%C6%B0a+%26+gi%C3%B3');
+  assert.equal(musicHash('', 'all', ''), '/music');
+  assert.equal(musicHash('bgm_map', 'story', 'mưa & gió'), '/music/bgm_map?g=story&q=m%C6%B0a+%26+gi%C3%B3');
   assert.deepEqual(musicFilter('#/music/bgm_map?g=story&q=m%C6%B0a+%26+gi%C3%B3'), { group: 'story', q: 'mưa & gió' });
   assert.deepEqual(musicFilter('#/music?g=nope'), { group: 'all', q: '' });
 });

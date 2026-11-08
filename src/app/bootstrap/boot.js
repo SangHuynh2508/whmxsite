@@ -16,23 +16,26 @@ import { initAdminShell } from '../../admin/layout/mount.tsx';
 import { initSession } from '../auth/session.js';
 import { inject, pageview } from '@vercel/analytics';
 import { pageForHash } from '../analytics/pageRoute.mts';
+import { routeString, ROUTE_EVENT } from '../router/location.mts';
 
-// Hash routing (#/characters/…) is invisible to Vercel Web Analytics' pushState tracking, so every hash change
-// is sent as a page view (path + grouped route).
+// Auto-track is off: the router rewrites URLs in place (legacy hash, ID → slug), so every route change is sent as
+// one page view (path + grouped route); the admin still routes by hash.
 function initAnalytics() {
   inject({ disableAutoTrack: true });
   let last = null;
   const send = () => {
-    const { path, route } = pageForHash(window.location.hash);
+    const { path, route } = pageForHash(routeString());
     if (path === last) return; // the router may rewrite the hash (e.g. '' → '#/characters')
     last = path;
     pageview({ route, path });
   };
   window.addEventListener('hashchange', send);
+  window.addEventListener(ROUTE_EVENT, send);
   send();
 }
 
 export async function boot() {
+  document.getElementById('prerender')?.remove(); // prerendered text for crawlers (tools/prerender.mjs)
   initAnalytics();
   initAdminShell();
   initSession();
@@ -57,7 +60,7 @@ export async function boot() {
   // character (#calc?char=…) and notify straight away.
   subscribe(async (currentState) => {
     // Only update calculator main content if we are in calculator view mode
-    const hash = window.location.hash;
+    const hash = routeString();
     const isCharRoute = hash.includes('/characters/');
 
     if (!isCharRoute && currentState.character) {

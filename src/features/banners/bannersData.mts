@@ -132,5 +132,5 @@ export function filtersHash(f: ArchiveFilters): string {
   if (f.type) q.set('type', f.type);
   if (f.year) q.set('year', String(f.year));
   const qs = q.toString();
-  return qs ? `#/banners?${qs}` : '#/banners';
+  return qs ? `/banners?${qs}` : '/banners';
 }

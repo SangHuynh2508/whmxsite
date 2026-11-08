@@ -20,10 +20,10 @@ export function searchSite(query: string, characters: Record<string, Character>,
   };
   for (const c of Object.values(characters)) {
     const name = txt(c, 'name') || c.id;
-    consider({ kind: 'character', title: name, sub: c.name_cn ?? '', characterId: c.id, href: `#/characters/${c.slug || c.id}` }, [c.name_vi ?? '', c.name_cn ?? '']);
+    consider({ kind: 'character', title: name, sub: c.name_cn ?? '', characterId: c.id, href: `/characters/${c.slug || c.id}` }, [c.name_vi ?? '', c.name_cn ?? '']);
     for (const s of c.skins ?? []) {
       if (s.is_base) continue;
-      consider({ kind: 'skin', title: txt(s, 'name') || s.skinID, sub: name, characterId: c.id, href: `#/skins/${s.skinID}` }, [s.name_vi ?? '', s.name_cn ?? '']);
+      consider({ kind: 'skin', title: txt(s, 'name') || s.skinID, sub: name, characterId: c.id, href: `/skins/${s.skinID}` }, [s.name_vi ?? '', s.name_cn ?? '']);
     }
   }
   return scored.sort((a, b) => a.rank - b.rank).slice(0, limit).map((x) => x.r);

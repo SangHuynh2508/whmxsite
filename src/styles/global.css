@@ -40,3 +40,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Prerendered page text (tools/prerender.mjs): shown only until boot.js removes it */
+.prerender { max-width: 720px; padding: 24px 16px; color: var(--text-muted); }
+.prerender h1 { font-family: var(--font-serif); color: var(--text-main); }

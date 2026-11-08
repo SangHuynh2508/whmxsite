@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "test": "node --test \"scripts/lib/*.test.mjs\" \"server/profile/*.test.mjs\" \"server/builds/*.test.mjs\" \"server/game/*.test.mjs\" \"server/tier-lists/*.test.mjs\" \"server/*.test.mjs\" \"src/**/*.test.mts\" \"src/**/*.test.mjs\"",
+    "build": "vite build && node tools/prerender.mjs",
+    "test": "node --test \"scripts/lib/*.test.mjs\" \"server/profile/*.test.mjs\" \"server/builds/*.test.mjs\" \"server/game/*.test.mjs\" \"server/tier-lists/*.test.mjs\" \"server/*.test.mjs\" \"src/**/*.test.mts\" \"src/**/*.test.mjs\" \"tools/*.test.mjs\"",
     "test:tools": "python -m unittest discover -s tools -p \"test_*.py\"",
     "validate-data": "python tools/validate_data.py",
     "sync-sheets": "python tools/update_from_gsheets.py",

@@ -13,18 +13,18 @@ const characters = {
 
 test('accent-insensitive Vietnamese: "thuong chu" finds Thương Chu Đồng Nhân', () => {
   const [hit] = searchSite('thuong chu', characters);
-  assert.deepEqual(hit, { kind: 'character', title: 'Thương Chu Đồng Nhân', sub: '商周铜人', characterId: 'W0176', href: '#/characters/thuong-chu-dong-nhan' });
+  assert.deepEqual(hit, { kind: 'character', title: 'Thương Chu Đồng Nhân', sub: '商周铜人', characterId: 'W0176', href: '/characters/thuong-chu-dong-nhan' });
 });
 
 test('Chinese names match; a character without a VI name shows its CN name and links by ID', () => {
   assert.equal(searchSite('人物', characters)[0].title, 'Sơn Thủy Nhân Vật Kính');
-  assert.deepEqual(searchSite('无名', characters)[0], { kind: 'character', title: '无名', sub: '无名', characterId: 'X0001', href: '#/characters/X0001' });
+  assert.deepEqual(searchSite('无名', characters)[0], { kind: 'character', title: '无名', sub: '无名', characterId: 'X0001', href: '/characters/X0001' });
 });
 
 test('skins: the base outfit is left out; a skin links to its page and names its character', () => {
   assert.deepEqual(searchSite('tao hinh', characters), []);
   assert.deepEqual(searchSite('da yen', characters), [
-    { kind: 'skin', title: 'Đồng Nhân Dạ Yến', sub: 'Thương Chu Đồng Nhân', characterId: 'W0176', href: '#/skins/W0176002' },
+    { kind: 'skin', title: 'Đồng Nhân Dạ Yến', sub: 'Thương Chu Đồng Nhân', characterId: 'W0176', href: '/skins/W0176002' },
   ]);
 });
 

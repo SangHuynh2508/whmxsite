@@ -90,7 +90,7 @@ export function buildViews(docs: Doc[], game: GameDocument, characters: Record<s
         label: t.label, note: t.note,
         members: t.characterIds.filter((id) => characters[id]).map((id) => {
           const c = characters[id];
-          return { id, name: txt(c, 'name') || id, icon: asset(c.icon), href: `#/characters/${c.slug ?? id}` };
+          return { id, name: txt(c, 'name') || id, icon: asset(c.icon), href: `/characters/${c.slug ?? id}` };
         }),
       })),
       teamOther: doc.teamOther ?? '',

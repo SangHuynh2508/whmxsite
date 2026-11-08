@@ -34,7 +34,7 @@ SNAPSHOT="r3130-20261022T032356583723Z"   # snapshot hiện hành: xem Assets/ru
 | MuMu có kết nối không | `"$ADB" devices -l` | Phải thấy `127.0.0.1:16384  device` |
 | Web chạy local (chỉ trang public) | `cd "$CALC" && npm run dev` | http://localhost:5173 — **không** có lore/build overlay |
 | Web + API local (có Admin, lore, build) | `cd "$CALC" && npx vercel dev --listen 3003` | DB **development** (`.env.local`) |
-| Test | `npm test` · `npm run test:tools` · `npx tsc --noEmit -p tsconfig.json` · `npm run build` | |
+| Test | `npm test` · `npm run test:tools` · `npx tsc --noEmit -p tsconfig.json` · `npm run build` | `build` also prerenders ~940 pages + sitemap into `dist/` (`tools/prerender.mjs`, needs `VITE_LORE_POINTER_URL` for tier list pages). Locally serve with `npx vite preview` and open paths with a trailing `/` |
 | Kiểm dữ liệu | `python tools/validate_data.py` · `validate_public_output.py` · `validate_skin_roster.py` · `validate_skin_assets.py` | chạy trong `$CALC` |
 | Log Vercel production | `npx vercel logs https://whmxsite.vercel.app --json` | |
 | Deployment đang là Production | `npx vercel inspect https://whmxsite.vercel.app` | |

@@ -18,7 +18,7 @@ export function cardArtLayers(rare: number, job: number): string {
 
 export function catalogCardHtml(c: CatalogCard): string {
   const label = [c.name, c.jobLabel, c.rarityLabel, c.limited ? s('limited') : ''].filter(Boolean).join(' · ');
-  return `<a href="#/characters/${c.slug}" class="cc-card${c.secondary ? ' has-alt' : ''} card-result-reveal" aria-label="${label}" title="${label}">`
+  return `<a href="/characters/${c.slug}" class="cc-card${c.secondary ? ' has-alt' : ''} card-result-reveal" aria-label="${label}" title="${label}">`
     + '<span class="cc-art">'
     + `<img class="cc-art-main" src="${c.primary}" alt="" loading="lazy" />`
     + (c.secondary ? `<img class="cc-art-alt" src="${c.secondary}" alt="" loading="lazy" onerror="this.remove()" />` : '')

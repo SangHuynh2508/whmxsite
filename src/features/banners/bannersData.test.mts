@@ -92,8 +92,8 @@ test('archive filters round-trip through the hash', () => {
   assert.deepEqual(readFilters('#/banners?char=A0184&type=limited&year=2024'), { character: 'A0184', type: 'limited', year: 2024 });
   assert.deepEqual(readFilters('#/banners'), { character: '', type: '', year: 0 });
   assert.deepEqual(readFilters('#/banners?year=abc'), { character: '', type: '', year: 0 });
-  assert.equal(filtersHash({ character: 'A0184', type: '', year: 2024 }), '#/banners?char=A0184&year=2024');
-  assert.equal(filtersHash({ character: '', type: '', year: 0 }), '#/banners');
+  assert.equal(filtersHash({ character: 'A0184', type: '', year: 2024 }), '/banners?char=A0184&year=2024');
+  assert.equal(filtersHash({ character: '', type: '', year: 0 }), '/banners');
 });
 
 test('eventKind: owner-approved Vietnamese for the event kinds, Chinese kept for anything new', () => {

@@ -40,7 +40,7 @@ function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
         <>
           <h3 className="home-lore-h3">Mới dịch</h3>
           <ul className="home-lore-recent">{p.recent.map((id) => { const c = characters[id]; return (
-            <li key={id}><a href={`#/characters/${c.slug}/lore`}>{txt(c, 'name')}</a></li>
+            <li key={id}><a href={`/characters/${c.slug}/lore`}>{txt(c, 'name')}</a></li>
           ); })}</ul>
         </>
       )}
@@ -75,7 +75,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
       )}
       <div className="home-body">
         <section className="home-block home-banners" aria-label={s('homeOpen')}>
-          <h2 className="home-h2">{s('homeOpen')} <a href="#/banners">{s('homeAllBanners')}</a></h2>
+          <h2 className="home-h2">{s('homeOpen')} <a href="/banners">{s('homeAllBanners')}</a></h2>
           {banners
             ? <BannerGrid banners={banners} doc={doc!} now={now} characters={characters} />
             : <p className="bn-error">{s('bnLoadErr')}</p>}
@@ -100,7 +100,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
             <section className="home-block home-releases" aria-label={s('homeReleases')}>
               <h2 className="home-h2">{s('homeReleases')}</h2>
               <ul>{releases.map((r) => {
-                const href = r.kind === 'skin' ? `#/skins/${r.id}` : `#/characters/${characters[r.charId].slug}`;
+                const href = r.kind === 'skin' ? `/skins/${r.id}` : `/characters/${characters[r.charId].slug}`;
                 return (
                   <li key={r.id}><a href={href}>
                     <span className="home-release-pic">

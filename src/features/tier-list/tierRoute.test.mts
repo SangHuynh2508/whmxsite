@@ -10,8 +10,8 @@ test('tier list URLs', () => {
   assert.deepEqual(parseTierListHash('#/tier-list/tong-hop/xyz'), { slug: 'tong-hop', tab: 'characters' });
   assert.equal(parseTierListHash('#/tier-lists'), null);
   assert.equal(parseTierListHash('#/characters/a/build'), null);
-  assert.equal(tierListHref(), '#/tier-list');
-  assert.equal(tierListHref('tong-hop'), '#/tier-list/tong-hop');
-  assert.equal(tierListHref('tong-hop', 'characters'), '#/tier-list/tong-hop');
-  assert.equal(tierListHref('tong-hop', 'info'), '#/tier-list/tong-hop/info');
+  assert.equal(tierListHref(), '/tier-list');
+  assert.equal(tierListHref('tong-hop'), '/tier-list/tong-hop');
+  assert.equal(tierListHref('tong-hop', 'characters'), '/tier-list/tong-hop');
+  assert.equal(tierListHref('tong-hop', 'info'), '/tier-list/tong-hop/info');
 });

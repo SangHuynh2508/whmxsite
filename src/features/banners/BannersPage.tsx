@@ -6,6 +6,7 @@ import { typeLabel, archive, currentBanners, filtersHash, readFilters, type Arch
 import { useNow } from './useNow.ts';
 import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
+import { routeString } from '../../app/router/location.mts';
 import { bannerIsland } from './island.tsx';
 import './styles/banners.css';
 import { getLang, txt } from '../../i18n/lang.mts';
@@ -18,7 +19,7 @@ const openYears = new Set<number>(); // years the reader unfolded, kept for Back
 export function BannersPage({ doc }: { doc: BannersDoc | null }) {
   const lang = useLang();
   const characters = getGameData().characters as Record<string, SliceChar>;
-  const [filters, setFilters] = useState<ArchiveFilters>(() => readFilters(window.location.hash));
+  const [filters, setFilters] = useState<ArchiveFilters>(() => readFilters(routeString()));
   const now = useNow();
   const page = useRef<HTMLDivElement>(null);
   const filtered = Boolean(filters.character || filters.type || filters.year);
