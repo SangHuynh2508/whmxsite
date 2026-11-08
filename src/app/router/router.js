@@ -20,6 +20,12 @@ import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/ski
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
 import { gsap } from 'gsap';
 import { updateSmoothScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../runtime/smoothScroll.js';
+import { attachSiteFooter } from '../layout/siteFooter.js';
+
+const attachView = (container) => {
+  attachSiteFooter(container);
+  updateSmoothScrollContainer(container);
+};
 
 let previousRouteKey = null;
 let activeRouteTransition = null;
@@ -283,7 +289,7 @@ export function handleRoute() {
     if (previousRouteKey === null) {
       previousRouteKey = routeKey;
       allViewContainers.forEach(el => gsap.set(el, { clearProps: 'transform,opacity' }));
-      updateSmoothScrollContainer(incomingContainer);
+      attachView(incomingContainer);
       setScrollPositionImmediate(targetScroll);
     } else {
       // Subtab switch inside same mounted shell preserves scroll position and resizes smooth scroll
@@ -297,7 +303,7 @@ export function handleRoute() {
     cancelActiveTransition(allViewContainers);
     previousRouteKey = routeKey;
     doRender();
-    updateSmoothScrollContainer(incomingContainer);
+    attachView(incomingContainer);
     setScrollPositionImmediate(targetScroll);
     return;
   }
@@ -322,7 +328,7 @@ export function handleRoute() {
       onComplete: () => {
         gsap.set(incomingContainer, { opacity: 0, y: 5 });
         doRender();
-        updateSmoothScrollContainer(incomingContainer);
+        attachView(incomingContainer);
         setScrollPositionImmediate(targetScroll);
 
         gsap.to(incomingContainer, {
@@ -353,7 +359,7 @@ export function handleRoute() {
           gsap.set(incomingContainer, { opacity: 0, y: 5 });
           incomingContainer.classList.remove('hidden');
           doRender();
-          updateSmoothScrollContainer(incomingContainer);
+          attachView(incomingContainer);
           setScrollPositionImmediate(targetScroll);
 
           gsap.to(incomingContainer, {
@@ -379,7 +385,7 @@ export function handleRoute() {
       incomingContainer.classList.remove('hidden');
     }
     doRender();
-    updateSmoothScrollContainer(incomingContainer);
+    attachView(incomingContainer);
     setScrollPositionImmediate(targetScroll);
     if (incomingContainer) {
       gsap.to(incomingContainer, {

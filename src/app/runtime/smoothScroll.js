@@ -12,6 +12,9 @@ let activeLenis = null;
 let currentContainer = null;
 let activeResizeObserver = null;
 
+/** The view's own first element; the shared site footer (siteFooter.js) sits at the end and is not content. */
+const viewContent = (container) => [...container.children].find((c) => !c.classList.contains('app-footer')) ?? null;
+
 function isReducedMotion() {
   return Boolean(
     typeof window !== 'undefined' &&
@@ -61,9 +64,9 @@ export function updateSmoothScrollContainer(container) {
   // A React view (Home, Music) mounts its content after this call on a cold load: Lenis built on an empty
   // container measures 0 scroll height and never sees the content arrive, so wheel scrolling is dead until F5.
   // Wait for the first child, then attach.
-  if (!container.firstElementChild) {
+  if (!viewContent(container)) {
     const waitForContent = new MutationObserver(() => {
-      if (!container.firstElementChild) return;
+      if (!viewContent(container)) return;
       waitForContent.disconnect();
       if (currentContainer === container && !activeLenis) updateSmoothScrollContainer(container);
     });
@@ -76,7 +79,7 @@ export function updateSmoothScrollContainer(container) {
   // all vertical calculation content. For other views, first child or container.
   const resolvedContent =
     container.querySelector('.content-body') ||
-    container.firstElementChild ||
+    viewContent(container) ||
     container;
 
   // Controlled, snappy feel: lerp 0.14, wheelMultiplier 1.0

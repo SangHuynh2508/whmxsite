@@ -23,7 +23,6 @@ export function renderHeader() {
   set('.stat-item:has(#total-coin) .stat-label', s('tlCoin'));
   set('.stat-item:has(#total-exp) .stat-label', s('cExp'));
   set('.materials-report h4', s('cMats'));
-  set('#main-content .app-footer p', s('cFooter'));
 
   const elAvatarBox  = document.getElementById('profile-avatar-container');
   const elAvatar     = document.getElementById('profile-avatar');
