@@ -54,8 +54,9 @@ Công cụ là tiện ích; admin không bắt buộc dùng nó (xem B3).
   ghi khi đăng).
 - So ở máy chủ `POST /api/admin/music/match`: trượt dấu vân mới trên từng bài, điểm = tỉ lệ bit giống nhau ở vị trí
   khớp tốt nhất (Hamming). Kho ~300 bài → so toàn bộ trong một request, không cần chỉ mục.
-- Ngưỡng: ≥ 0,85 "trùng" (chặn, admin phải bấm xác nhận đăng vẫn được kèm lý do); 0,6–0,85 "giống" (cảnh báo);
-  < 0,6 "bài mới". Ngưỡng chốt lại sau khi đo trên kho thật (B4).
+- Ngưỡng: ≥ 0,85 "trùng" (chặn, admin phải bấm xác nhận đăng vẫn được kèm lý do); 0,7–0,85 "giống" (cảnh báo);
+  < 0,7 "bài mới". Đo thử 2026-11-08 (`fpcalc` 1.5.1): 坤厚载物 bản Bilibili so cả kho cao nhất 0,654 (không có trong game),
+  cặp đối chứng cùng bài 0,939 → nâng mốc "giống" từ 0,6 lên 0,7. Vẫn chốt lại sau khi đo đủ 30 cặp (B4).
 - Trùng byte (md5) chặn cứng, không cho xác nhận.
 
 **B4 · Kiểm chứng ngưỡng trước khi làm UI**: chạy Chromaprint trên 30 cặp bài đã biết trùng (các nhóm `also` trong

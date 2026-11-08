@@ -312,6 +312,18 @@ tab vẫn hiện, chỉ mất hình). **Sprite phòng trà** (`public/assets/tea
 Admin → Từ điển → Lore → **Trà** (15 loại trà: tên + mô tả) và **Phòng trà** (3 tên chặng + bài thơ kết dùng chung). Lưu xong
 tự xuất bản ~30 giây, như lore.
 
+## 12. Quy trình: banner và nhạc (dữ liệu tĩnh trên site)
+
+```bash
+# banners.json — chạy khi có banner mới (ngày ra bản). Thoát mã 1, không ghi gì, nếu có banner bị đề ngày sai (misdated)
+python tools/build_banner_data.py --now $(date +%s)
+# vị trí nhân vật trên banner: có banner/skin mới → tạo trang chỉnh, kéo ảnh + lăn chuột zoom, bấm "Tải banner_focus.json"
+PYTHONIOENCODING=utf8 python tools/banner_focus.py --sheet      # mở scratch/banner_focus_sheet.html
+cp ~/Downloads/banner_focus.json tools/banner_focus.json         # rồi chạy lại build_banner_data.py
+# music.json — nhãn phiên bản cần MasterData (--master)
+python tools/build_music_data.py --help
+```
+
 ---
 
 ## Nguyên tắc

@@ -55,6 +55,7 @@
 | Area | State |
 |---|---|
 | Git | **Local only** (`gh` not installed — read PRs with `curl https://api.github.com/repos/SangHuynh2508/whmxsite/pulls/<n>`). Branch `feat/postgres-admin-crud`; push = `git fetch`, check `git merge-base --is-ancestor origin/main HEAD` (else a normal `git merge origin/main`; never reset/force), `git push origin HEAD:main` (Production) then `git push origin HEAD` (Preview). **2026-10-22 pushed:** r3127 release `9bb8189..7502ded` (sync fix, r3127 data, group A tool deletion, release-day data) → **Production `whmxsite-4vq4wsi35` = `7502ded`** (Vercel pruned to 5, owner yes). **2026-10-03 pushed:** tea room + docs `938f5b8..4a13947` → **Production alias `whmxsite-81xf72ax9` = `4a13947`** (Vercel pruned to 5, owner yes). **2026-10-08 pushed:** `a2348fc` link-preview meta (title "Vật Hoa Di Tân Wiki", short description, absolute `og:image` = `public/og-image.jpg`, key art KV3401 cropped 1200×630; Facebook caches previews — re-scrape in the Sharing Debugger) together with the 6 local docs commits (`2a3791a` … `5ef838e`). **2026-10-02 pushed:** Tier list `4ebb190`, admin form fix `cedf3b0`, Từ điển back-to-top `c19042e`, term 回击 = Phản kích + mobile back-to-top `f5dc8e6`, handoff + Tier List nav icon `90814ad` (trophy; `ListOrdered` read as a to-do list) → **podium** (owner pick, lucide `Podium`). The local `main` branch is stale and unused |
+| **Session 2026-11-08/09 (music, footer, banners)** (all on `main`, last `666c494`) | Branch now `feat/i18n-lang` (push with `git push origin HEAD:main`; local `main` is stale). **Music** `#/music`: "Sự kiện" tab `1f26fa6`; version tag ("3.4 Thượng", first event of the track by activityGroup start inside an `ActivityVersionMap` window; `tools/build_music_data.py --master`, searchable) `b7b9e89`. **Footer** on every view (`src/app/layout/siteFooter.js`, kept last by a MutationObserver; Lenis ignores it via `viewContent()`) `d994ab6`. Home: Lenis cold-load scroll fix + hero fade edge `ab02de4`. **Banners**: launch first runs restored from character UnlockDate (`restore_first_runs`, `{id}-r1`), oldtime test pools dropped, build exits 1 on `misdated` (`f4eb647`, `09dbe25`). Figure placement is hand-set: `tools/banner_focus.json` (skinID → {x,y,h}, 71 skins, owner-made 2026-11-09) → `banners.json` `focus` → `figStyle()` (zoom clamp 60–600%) `666c494`. Tool `tools/banner_focus.py --sheet` → `scratch/banner_focus_sheet.html` (drag figure, wheel zoom, download json); detector guesses only prefill (`banner_focus_auto.json`). Open: banners 2119–2122 bg art already contains the character (fig doubles it); 歆铭长愿 / 暗香盈袖 no bg art; 9 characters without UnlockDate; `vercel.json` caches a 404 of a hashed JS as immutable during deploys (seen once as a black screen). Spec written, not planned: [`superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md`](./superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md). |
 | Working tree (not mine to commit) | Owner files only: `localization/localization_master.xlsx` (modified; **includes the 2026-10-02 term change 回击 = Phản kích**, 80 cells + GLOSSARY `OWNER_GAMEPLAY_032`, backup in `localization/backups/`) + untracked (`localization/*`, root scratch files, `.agents/`, `.codex*/`, `.claude/` (project skills + `launch.json`), `AGENTS.md`, `WHMX_COMMAND_CHEATSHEET.md` (owner's; not committed), `.mcp.json`, `skills-lock.json` …). `.impeccable/` (critique snapshot + empty `live/` dirs) is **git-ignored** (`.gitignore`, owner 2026-09-28) — kept locally for `/impeccable polish` |
 | Lore pipeline (DB → R2 → site) | ✅ Live. Importer `scripts/import-character-profile.mjs`; overlay `scripts/export-profile-overlay.mjs \| tools/apply_profile_overlay.py`; publisher `scripts/publish-lore.mjs` (+ `--repoint`) and `POST /api/admin/lore/publish`; daily private backup in R2 `whmx-backups`; restore `scripts/restore-lore-snapshot.mjs` (lore only) |
 | Admin Khí Giả + Lore + **Từ điển** | ✅ Live. Code `src/admin/characters/`; lore API `server/profile/lore-admin.mjs` + `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs`. Saves auto-publish ~30 s later; owners also have "Xuất bản ngay" (closing the tab while a publish waits sends it via keepalive — `publishScheduler.leave()`; **still not browser-verified with a signed-in session**). **Từ điển** `#/admin/dictionary/<tab>[/<code>]`: Vũ khí (weapon + its skills in one save), Dòng thuộc tính, Thâm tạo (one row per identical Chinese text: 60 columns → 4 rows, 428 talents → 35 rows; saving writes every twin; "Áp dụng bản dịch này cho N mục còn lại"; PR #6), Lore; "Đã dịch x/y", "Chỉ hiện chưa dịch"; PR #5 fixed the "Khôi phục bản nháp?" prompt after every save. Lore module counter "thuật ngữ x/y" includes relic tags. **2026-09-28 (live, `22df247`):** the Lore side panel (relic, shared terms → Từ điển links, history) and the Tổng quan side panel were `max-xl:hidden` — invisible below 1280 px; now a collapsible block at the top of the editor below 1280 px ("Hiện vật và thuật ngữ · thuật ngữ x/y", "Thông tin hồ sơ"). Verified signed-in on the development DB at 375 / 1100 / 1440 px; production bundle checked to contain it |
@@ -237,36 +238,41 @@
 7. **P5** — publish admin name/description overrides, then re-enable the public inline edit.
 8. Owner-side: buff popup / orphan translation fixes (§8 banner), lore + Từ điển translation (affixes, weapons), Vercel secrets → Secret, full names of A0024/A0063/A0167/S0149/W0168/W0173.
 
-## 12. Next session — prompt to paste (owner asked 2026-10-04)
+## 12. Next session — handoff + prompt to paste (owner asked 2026-11-09)
 
-No next piece was chosen at the end of the tea-room session. The one agreed earlier (Tier List brainstorm) is still open: **URLs without `#`**
-(SEO step 1, roadmap §11 item 5; every tier-list link goes through `tierListHref()`). The other ready candidate is the **story lore reader**
-(notes ready, owner parked it). Paste into a new session (swap the "Việc:" line for the other candidate if wanted):
+**Where things stand (2026-11-09):** everything is pushed to `main` (`666c494`, Vercel deploys main). Local branch
+`feat/i18n-lang` = origin/main; local `main` is stale — push with `git push origin HEAD:main`. Session details: §2 row
+"Session 2026-11-08/09". Nothing committed is waiting; the owner's `localization/localization_master.xlsx` change stays uncommitted.
+
+**Candidates for the next piece (owner picks):**
+1. **Music covers + external (Bilibili) tracks** — spec done (Q1 Bilibili embed, Q2 admin crops covers by hand, Q3 no review,
+   dedup by Chromaprint, "giống" ≥ 0.7). First step is B4 (measure 30 known-duplicate pairs), then writing-plans. Needs a DB migration (owner yes).
+2. Small banner follow-ups: hide the overlaid figure on banners whose art already has the character (2119–2122);
+   art for 歆铭长愿 / 暗香盈袖; `vercel.json` cache headers so a deploy never caches a 404 for a hashed asset.
+3. Music: filter by version (the tag exists, no dropdown yet).
+4. Older roadmap (§11): path URLs without `#` (SEO step 1), story lore reader, Info/database section.
 
 ```text
-Bạn tiếp tục dự án WHMX (repo D:\BaiTapCode\WHMX\WhmxCalc, nhánh feat/postgres-admin-crud, site https://whmxsite.vercel.app).
+Bạn tiếp tục dự án WHMX (repo D:\BaiTapCode\WHMX\WhmxCalc, nhánh feat/i18n-lang, site https://whmxsite.vercel.app).
 Trả lời bằng tiếng Việt, xưng "tôi/bạn". Báo tiến độ ngắn sau mỗi bước. KHÔNG dùng subagent nếu tôi chưa yêu cầu.
-Đọc hết trước: docs/WHMX_CURRENT_STATE_FINAL_2026-10-04.md (§0–§12), PRODUCT.md, DESIGN.md, docs/WHMX_APP_ARCHITECTURE.md,
-docs/WHMX_ENGINEERING_PRINCIPLES.md, docs/plans/WHMX_SITE_AUDIT_FOLLOWUP_2026-09-29.md, docs/WHMX_COMMANDS.md.
-Lưu ý: commit docs ở local chưa push (xem §2 dòng Git) — đẩy cùng lần push code đầu tiên. Workbook
-localization/localization_master.xlsx đang có thay đổi 回击 = Phản kích của tôi — không commit.
-Việc: bỏ dấu # khỏi URL (path URLs, bước 1 của SEO — roadmap §11 mục 5, đã thống nhất làm ngay sau tier list).
-Dùng superpowers:brainstorming: đưa TẤT CẢ câu hỏi một lượt, mỗi câu kèm đề xuất của bạn (router History API thay hash,
-vercel.json rewrite chừa /api /assets /data.json, link cũ #/… tự chuyển sang đường dẫn mới, Admin #/admin, mọi chỗ đang
-dựng href (tierListHref, characterHash, AppNav, bộ lọc banner trong hash), Back/cuộn, meta/OG/sitemap làm luôn hay để sau).
-Chờ tôi trả lời rồi mới viết spec → superpowers:writing-plans → superpowers:executing-plans (native, ponytail, TDD).
-Nếu game ra bản cập nhật, tạm dừng và làm theo docs/WHMX_COMMANDS.md §3–§4.
-Luật commit/push, DB, Vercel theo §6 của file trạng thái.
+Đọc trước: docs/WHMX_CURRENT_STATE_FINAL_2026-10-04.md (§2 dòng "Session 2026-11-08/09", §6, §12), docs/WHMX_COMMANDS.md §12,
+PRODUCT.md, DESIGN.md, docs/WHMX_ENGINEERING_PRINCIPLES.md.
+Luật: không push/merge khi tôi chưa bảo (push = git push origin HEAD:main, main local đã cũ); không ghi DB/R2 khi chưa hỏi;
+không đụng localization/localization_master.xlsx; test tự động luôn chặn mp3; lệnh npm chạy từng cái một.
+Việc: phần nhạc ngoài game + bìa nhạc theo spec docs/superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md.
+Bắt đầu bằng B4 (đo ngưỡng Chromaprint trên 30 cặp trùng trong music.json, fpcalc), ghi kết quả vào spec, hỏi tôi chốt ngưỡng,
+rồi superpowers:writing-plans → superpowers:executing-plans (native, ponytail, TDD).
+Nếu game ra bản cập nhật, tạm dừng và làm theo docs/WHMX_COMMANDS.md §3–§4 (+ §12 cho banner).
 ```
 
-Alternative "Việc:" line for the story lore reader:
+Alternative "Việc:" lines:
 
 ```text
-Việc: làm trình đọc cốt truyện (lore game thật). Đọc docs/plans/WHMX_STORY_LORE_NOTES_2026-10-03.md trước (§1–§6: chữ, ảnh nền/CG,
-icon người nói, việc cần làm). Dùng superpowers:brainstorming: đưa TẤT CẢ câu hỏi một lượt, mỗi câu kèm đề xuất (phạm vi chương,
-ảnh nền: 1 005 gói có sẵn đã giải mã trong NeoArtifacts/Assets/bundles, kéo 147 gói còn thiếu từ MuMu, dịch ~68 000 câu ở đâu, icon người nói, giao diện huashu 3 hướng).
+Việc: dọn banner — ẩn ảnh nhân vật chồng lên ở banner mà ảnh nền đã có sẵn nhân vật (2119–2122, nên làm bằng cờ trong
+tools/banner_focus.json hoặc build_banner_data.py), và sửa vercel.json để không cache 404 của file JS có hash khi deploy.
 ```
 
-Other open items the owner may pick instead: roadmap §11 item 3 (Info / database: Vũ khí, Item…, incl. a "which characters like tea X" list),
-item 4 (public "Sửa/Tạo build"), the React migration order (follow-up plan §5), the buff-popup triage (§8 banner).
-
+```text
+Việc: bỏ dấu # khỏi URL (path URLs, bước 1 của SEO — roadmap §11 mục 5). Dùng superpowers:brainstorming: đưa TẤT CẢ câu hỏi một lượt,
+mỗi câu kèm đề xuất, chờ tôi trả lời rồi mới viết spec.
+```
