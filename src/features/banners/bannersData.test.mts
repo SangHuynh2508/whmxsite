@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archive, artUrl, currentBanners, currentEvents, eventKind, filtersHash, formatRange, loadBanners, readFilters, skinImage, sliceMeta, upCharacters, versionTitle, type Banner, type BannersDoc } from './bannersData.mts';
+import { archive, artUrl, currentBanners, currentEvents, eventKind, figStyle, filtersHash, formatRange, loadBanners, readFilters, skinImage, sliceMeta, upCharacters, versionTitle, type Banner, type BannersDoc } from './bannersData.mts';
 
 const b = (id: string, start: number, end: number, extra: Partial<Banner> = {}): Banner =>
   ({ id, name_cn: id, name_vi: null, type: 'time', kind_cn: '限时渠道', start, end, up: ['A0001'], up_skin: null, art: null, title: null, choice: null, ...extra });
@@ -101,4 +101,11 @@ test('eventKind: owner-approved Vietnamese for the event kinds, Chinese kept for
   assert.deepEqual(eventKind('试炼场'), { text: 'Thí Luyện Trường', vi: true });
   assert.deepEqual(eventKind('限时招集'), { text: 'Chiêu mộ có thời hạn', vi: true });
   assert.deepEqual(eventKind('新活动'), { text: '新活动', vi: false });
+});
+
+test('figure placement: the hand-set face lands on the slice spot, sized from the face height', () => {
+  assert.deepEqual(figStyle({ x: 0.5, y: 0.2, h: 0.07 }), { '--fx': '0.5', '--fy': '0.2', '--fs': '400%' });
+  assert.deepEqual(figStyle({ x: 0.4, y: 0.1, h: 0.14 }), { '--fx': '0.4', '--fy': '0.1', '--fs': '200%' });
+  assert.equal(figStyle({ x: 0.4, y: 0.1, h: 0.5 })['--fs'], '120%'); // never smaller than this
+  assert.equal(figStyle(null), undefined);
 });

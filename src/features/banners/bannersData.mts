@@ -5,7 +5,9 @@ import { s } from '../../i18n/strings.mts';
 
 export type Banner = { id: string; name_cn: string; name_vi: string | null; type: string; kind_cn: string;
   start: number; end: number; up: string[]; up_skin: string | null; art: string | null;
-  title: string | null; choice: number | null };
+  title: string | null; choice: number | null;
+  focus?: BannerFocus | null }; // the UP drawing's face, set by hand (tools/banner_focus.py --sheet)
+export type BannerFocus = { x: number; y: number; h: number }; // 0..1 of the drawing
 export type BannerEvent = { id: number; name_cn: string; kind_cn: string; start: number; end: number };
 export type BannersDoc = { generated_at: number; masterdata: string; asset_base_url: string;
   version: { id: string; label: string; start: number; end: number } | null;
@@ -84,6 +86,12 @@ export const typeLabel = (type: string, kindCn: string) => (getLang() === 'vi' &
 type SkinOwner = { skins?: { skinID: string; image?: string }[] };
 
 /** The UP skin drawing (data.json) the slice layers over the pool background; null when data.json does not have it. */
+/** CSS vars that put the drawing's face on the slice spot (.bn-slice-fig.is-focus); the face fills ~28% of the slice height. */
+export function figStyle(f: BannerFocus | null | undefined): Record<string, string> | undefined {
+  if (!f) return undefined;
+  return { '--fx': String(f.x), '--fy': String(f.y), '--fs': `${Math.round(Math.min(400, Math.max(120, 28 / f.h)))}%` };
+}
+
 export function skinImage(b: Banner, characters: Record<string, SkinOwner>): string | null {
   if (!b.up_skin || !b.up[0]) return null;
   return characters[b.up[0]]?.skins?.find((s) => s.skinID === b.up_skin)?.image ?? null;

@@ -1,8 +1,8 @@
 // One banner as a thin slice of its art (docs/public-redesign/home/direction-approved.md): the game's pool background,
 // the UP skin drawing over it, the banner's own title logo, the UP names and one meta line on a dark fade.
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { status } from './bannerTime.mts';
-import { artUrl, skinImage, sliceMeta, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
+import { artUrl, figStyle, skinImage, sliceMeta, upCharacters, type Banner, type BannersDoc } from './bannersData.mts';
 import { txt } from '../../i18n/lang.mts';
 import { s } from '../../i18n/strings.mts';
 import { useLang } from '../../i18n/useLang.ts';
@@ -29,7 +29,7 @@ export function BannerSlice({ banner, doc, now, characters, isArchive = false }:
   const body = (
     <>
       {bg && <img className="bn-slice-bg" src={bg} alt="" loading="lazy" onError={hide('bg')} />}
-      {fig && <img className="bn-slice-fig" src={fig} alt="" loading="lazy" onError={hide('fig')} />}
+      {fig && <img className={`bn-slice-fig${banner.focus ? ' is-focus' : ''}`} style={figStyle(banner.focus) as CSSProperties} src={fig} alt="" loading="lazy" onError={hide('fig')} />}
       <span className="bn-slice-txt">
         {logo && <img className="bn-slice-logo" src={logo} alt="" loading="lazy" onError={hide('logo')} />}
         <span className="bn-slice-name">

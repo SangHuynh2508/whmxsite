@@ -20,17 +20,27 @@ POOLS = [
 
 
 class BuildBannerDataTest(unittest.TestCase):
+    def test_focus_by_skin_only_from_the_hand_set_file(self):
+        out = {x["id"]: x for x in b.build_banners(POOLS, {"A0184001"}, Path("/nonexistent"), focus={"A0184001": {"x": .5, "y": .2, "h": .06}})}
+        self.assertEqual(out["2114"]["focus"], {"x": .5, "y": .2, "h": .06})
+        self.assertIsNone(out["2017"]["focus"])
+
     def test_pre_launch_test_pools_are_dropped(self):
         old = {"id": "4001", "nameLanText": "强化A池", "type": "oldtime", "kindNameLanText": "常规渠道", "hidden": False,
                "startTime": 1, "endTime": 2, "characterShow": [], "characterSkinShow": ""}
         self.assertNotIn("4001", [x["id"] for x in b.build_banners(POOLS + [old], set(), Path("/nonexistent"))])
 
-    def test_earlier_runs_masterdata_overwrote_are_added_as_their_own_banner(self):
-        runs = [{"pool": "2017", "start": 1, "end": 5}]
-        out = {x["id"]: x for x in b.build_banners(POOLS, set(), Path("/nonexistent"), earlier_runs=runs)}
-        self.assertEqual((out["2017"]["start"], out["2017-r1"]["start"], out["2017-r1"]["end"]), (10, 1, 5))
-        self.assertEqual({k: v for k, v in out["2017-r1"].items() if k not in ("id", "start", "end")},
-                         {k: v for k, v in out["2017"].items() if k not in ("id", "start", "end")})
+    def test_first_run_restored_from_the_up_characters_release(self):
+        day = 86400
+        bn = lambda i, up, start, end: {"id": i, "up": up, "start": start, "end": end, "name_cn": i}
+        banners = [bn("A", ["X"], 300 * day, 320 * day),  # X released day 100: A is a rerun
+                   bn("B", ["Y"], 120 * day, 140 * day), bn("C", ["Z"], 100 * day, 120 * day)]
+        unlock = {"X": 100 * day - 60, "Y": 120 * day - 60, "Z": 100 * day - 60}  # game: 1 min before the banner
+        out = {x["id"]: x for x in b.restore_first_runs(banners, unlock)}
+        self.assertEqual((out["A-r1"]["start"], out["A-r1"]["end"], out["A-r1"]["up"]), (100 * day, 120 * day - 60, ["X"]))
+        self.assertEqual(len(out), 4)  # B and C already start at release
+        self.assertEqual(b.misdated(list(out.values()), unlock), [])
+        self.assertEqual(b.misdated(banners, unlock), ["X"])
 
     def test_only_timed_pools_newest_first(self):
         out = b.build_banners(POOLS, {"A0184001"}, Path("/nonexistent"))
@@ -40,7 +50,7 @@ class BuildBannerDataTest(unittest.TestCase):
         out = {x["id"]: x for x in b.build_banners(POOLS, {"A0184001"}, Path("/nonexistent"))}
         self.assertEqual(out["2114"], {"id": "2114", "name_cn": "万嶂烟峦", "name_vi": None, "type": "limited",
                                        "kind_cn": "限定渠道", "start": 200, "end": 900, "up": ["A0184"],
-                                       "up_skin": "A0184001", "art": None, "title": None, "choice": None})
+                                       "up_skin": "A0184001", "art": None, "title": None, "choice": None, "focus": None})
         self.assertIsNone(out["340001"]["up_skin"])  # W0097009 is not in data.json
         self.assertEqual(out["5003"]["up"], [])
 
