@@ -83,7 +83,7 @@ main{display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:
 .d{position:relative;background:#fff;cursor:crosshair}.d img{width:100%;display:block}
 .d i{position:absolute;border:2px solid #e33;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
 .m{grid-column:1/-1;display:flex;gap:10px;align-items:center}
-</style><header><b>Bấm vào mặt trên ảnh bên phải · kéo thanh để chỉnh cỡ mặt</b>
+</style><header><b>Bấm vào mặt trên ảnh bên phải (vòng đỏ) · kéo thanh để chỉnh cỡ</b>
 <span id=n></span><button id=ok>Đánh dấu tất cả "máy" là đúng</button><button id=dl>Tải banner_focus.json</button></header><main id=g></main>
 <script>
 const D=__DATA__, g=document.getElementById('g');
@@ -101,7 +101,7 @@ for(const c of D){const e=document.createElement('div');
  <div class=m><span></span><label>cỡ mặt <input type=range min=.02 max=.2 step=.002></label></div>`;
  e.querySelector('.d').onclick=ev=>{const r=ev.currentTarget.getBoundingClientRect();
   c.focus={x:+((ev.clientX-r.left)/r.width).toFixed(4),y:+((ev.clientY-r.top)/r.height).toFixed(4),h:c.focus?.h||.06};c.src='tay';draw(c,e)};
- e.querySelector('input').oninput=ev=>{if(!c.focus)return;c.focus.h=+ev.target.value;c.src='tay';draw(c,e)};
+ e.querySelector('input').oninput=ev=>{c.focus={x:.5,y:.15,...c.focus,h:+ev.target.value};c.src='tay';draw(c,e)}; // no face yet: start from the top middle
  e.querySelector('.d img').onload=()=>draw(c,e);g.append(e);c.el=e;draw(c,e)}
 document.getElementById('ok').onclick=()=>{for(const c of D)if(c.src==='máy'){c.src='tay';draw(c,c.el)}};
 document.getElementById('dl').onclick=()=>{const o={};for(const c of D)if(c.focus&&c.src==='tay')o[c.skin]=c.focus;
