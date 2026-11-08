@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BGM = ROOT.parent / "WHMX_Tool" / "Xuat" / "Audio" / "bgm"
 DEFAULT_LORE_INDEX = ROOT.parent / "WHMX_Lore_By_Chapter" / "INDEX.tsv"
+DEFAULT_MASTER = ROOT.parent / "NeoArtifacts" / "MasterData" / "json"  # activityGroup + ActivityVersionMap
 DEFAULT_UPDATES = ROOT.parent / "WHMX_Tool" / "Xuat"  # `whmx.py update` writes CapNhat_<old>_den_<new>\ here
 # {Chinese: Vietnamese} for every string the page shows; Claude translates it (owner 2026-11-08: "trang này nhỏ ko cần admin dịch")
 MUSIC_VI = ROOT / "localization" / "music_vi.json"
@@ -214,10 +215,12 @@ def newest_update(xuat: Path) -> tuple[str, set[str]]:
 
 def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], base: str,
                    char_vi: dict[str, str] | None = None, new: tuple[str, set[str]] = ("", set()),
-                   event_ids: set[str] = frozenset()) -> dict:
+                   event_ids: set[str] = frozenset(), starts: dict[str, int] | None = None,
+                   versions: list[dict] | None = None) -> dict:
     tracks = [build_track(t, group_of, vi, char_vi, event_ids) for t in index["tracks"]]
     for x in tracks:
         x["new"] = bool(new[1] & {x["id"], *x["also"]})
+        x["version"] = version_of([e["group_cn"] for e in x["events"]], starts or {}, versions or [])
     juke_id = {track_id(t["file"]): int((_jukebox(t) or {}).get("id") or 0) for t in index["tracks"]}
     tracks.sort(key=lambda x: (ORDER.index(x["group"]), juke_id[x["id"]], x["id"]))
     unnamed = [x for x in tracks if not x["name_cn"] and not x["label_cn"]]
@@ -233,6 +236,33 @@ def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], ba
                 x["label_cn"] += f" · {n}"
                 x["label_vi"] = x["label_vi"] and f"{x['label_vi']} · {n}"
     return {"version": index.get("version", ""), "asset_base_url": base, "new_version": new[0], "tracks": tracks}
+
+
+def version_of(events_cn: list[str], starts: dict[str, int], versions: list[dict]) -> str:
+    """Version label ("3.4上") of the earliest-starting event that uses the song; "" when no event has a start date
+    (activityGroup) or the earliest one predates ActivityVersionMap (it only reaches back to 2.5)."""
+    first = min((starts[e] for e in events_cn if e in starts), default=None)
+    if first is None:
+        return ""
+    return next((v["label"] for v in versions if v["start"] <= first < v["end"]), "")
+
+
+def load_versions(master: Path) -> tuple[dict[str, int], list[dict]]:
+    """activityGroup name -> start (unix), ActivityVersionMap -> [{label, start, end}]; empty when masterdata is absent."""
+    def rows(name):
+        f = master / name
+        if not f.is_file():
+            return []
+        d = json.loads(f.read_text(encoding="utf-8"))
+        return d if isinstance(d, list) else list(d.values())
+    starts: dict[str, int] = {}
+    for r in rows("activityGroup.json"):
+        name, t = r.get("nameLanText") or r.get("name") or "", int(r.get("startTimeUnix") or 0)
+        if name and t:
+            starts[name] = min(t, starts.get(name, t))
+    versions = [{"label": re.sub(r"版本.*$", "", r.get("NameLanText") or ""), "start": int(r["StartTime"]), "end": int(r["EndTime"])}
+                for r in rows("ActivityVersionMap.json")]
+    return starts, versions
 
 
 def group_names(rows) -> dict[str, str]:
@@ -262,6 +292,7 @@ def main() -> int:
     ap.add_argument("--bgm", type=Path, default=DEFAULT_BGM, help="WHMX_Tool output folder with bgm_index.json")
     ap.add_argument("--lore-index", type=Path, default=DEFAULT_LORE_INDEX)
     ap.add_argument("--updates", type=Path, default=DEFAULT_UPDATES, help="WHMX_Tool Xuat folder with CapNhat_* runs")
+    ap.add_argument("--master", type=Path, default=DEFAULT_MASTER, help="MasterData json folder (version tags)")
     ap.add_argument("--out", type=Path, default=OUT)
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # Windows pipes default to cp1252
@@ -285,7 +316,7 @@ def main() -> int:
     new = latest(history)
     digest = lambda f: hashlib.md5((args.bgm / f).read_bytes()).hexdigest()
     index = {**index, "tracks": merge_duplicates(index["tracks"], digest)}
-    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new, event_ids)
+    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new, event_ids, *load_versions(args.master))
     args.out.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     miss = untranslated(doc)
     print(f"{args.out}: {len(doc['tracks'])} bài, {args.out.stat().st_size // 1024} KB, mới ở {new[0] or '—'}: {len(new[1])}, chưa dịch {len(miss)}")

@@ -151,3 +151,6 @@
   .music-disc.is-shelf { transition: none; }
   .music-cd:hover .music-disc { transform: none; }
 }
+
+/* version tag ("3.4 Thượng"): first event's version, also searchable */
+.music-ver { color: var(--accent); font-weight: 600; white-space: nowrap; }

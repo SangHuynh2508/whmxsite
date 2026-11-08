@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { assetUrl, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
+import { assetUrl, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusic, musicFilter, musicHash, trackName, versionLabel, trackTitle, type MusicTrack } from './musicData.mts';
 
 const t = (o: Partial<MusicTrack>): MusicTrack => ({ id: 'x', file: 'music/bgm/x.mp3', cover: null, group: 'other', groups: ['other'],
   name_cn: '', name_vi: '', label_kind: '', label_cn: '', label_vi: '', source_cn: '', events: [], stories: [], stories_total: 0,
@@ -92,4 +92,13 @@ test('Sự kiện tab: one section per event, newest first; a song in two events
   const sec = eventSections([a, b, named]);
   assert.deepEqual(sec.map((x) => [x.event.group_cn, x.tracks.map((y) => y.id)]), [['无渡风花', ['a']], ['人间千古', ['a', 'b']]]);
   assert.equal(filterTracks([a, named], 'event', '').length, 1);
+});
+
+test('version tag: "3.4上" reads "3.4 Thượng" in VI, and search finds it either way', () => {
+  assert.equal(versionLabel('3.4上', 'vi'), '3.4 Thượng');
+  assert.equal(versionLabel('3.4下', 'vi'), '3.4 Hạ');
+  assert.equal(versionLabel('2.8', 'vi'), '2.8');
+  assert.equal(versionLabel('3.4上', 'cn'), '3.4上');
+  const v = { ...named, id: 'v', version: '3.4下' };
+  for (const q of ['3.4 hạ', '3.4下']) assert.deepEqual(filterTracks([named, v], 'all', q).map((x) => x.id), ['v'], q);
 });

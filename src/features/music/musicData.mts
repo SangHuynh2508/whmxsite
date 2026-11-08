@@ -8,6 +8,7 @@ export type MusicTrack = { id: string; file: string; cover: string | null; group
   name_cn: string; name_vi: string; label_kind: '' | 'event' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
   source_vi?: string; events: MusicEvent[]; stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
   stages: { names_cn: string[]; names_vi?: string[]; count: number }; areas_cn: string[]; areas_vi?: string[]; new?: boolean;
+  version?: string; // first event's version ("3.4上"), "" when unknown
   also?: string[] }; // ids of files with the same audio, merged into this track
 export type MusicDoc = { version: string; asset_base_url: string; new_version?: string; tracks: MusicTrack[] };
 /** A tab: every track, the latest update's tracks, or one group. */
@@ -37,8 +38,11 @@ export async function loadMusic(fetchImpl: typeof fetch = fetch): Promise<MusicD
 export function filterTracks(tracks: MusicTrack[], group: MusicTab, query: string): MusicTrack[] {
   const q = query.trim().toLowerCase();
   return tracks.filter((t) => (group === 'all' || (group === 'new' ? !!t.new : t.groups.includes(group)))
-    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? ''].some((v) => v.toLowerCase().includes(q))));
+    && (!q || [t.name_cn, t.name_vi, t.label_cn, t.label_vi ?? '', t.version ?? '', versionLabel(t.version ?? '', 'vi')].some((v) => v.toLowerCase().includes(q))));
 }
+
+/** "3.4上" → "3.4 Thượng" in VI; CN keeps the game's label. */
+export const versionLabel = (v: string, lang: Lang) => (lang === 'vi' ? v.replace('上', ' Thượng').replace('下', ' Hạ') : v);
 
 /** By id, or by the id of a duplicate merged into it, so old links still open the song. */
 export const findTrack = (doc: MusicDoc, id: string) => doc.tracks.find((t) => t.id === id || t.also?.includes(id)) ?? null;

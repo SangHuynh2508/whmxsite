@@ -141,6 +141,15 @@ class BuildMusicTest(unittest.TestCase):
         self.assertEqual([(e["group_cn"], e["count"], e["order"]) for e in h["events"]], [("无渡风花", 0, 41)])
 
 
+    def test_version_is_the_version_of_the_first_event_to_use_the_song(self):
+        versions = [{"label": "3.4上", "start": 100, "end": 200}, {"label": "3.4下", "start": 200, "end": 300}]
+        starts = {"经以山海": 150, "游灵万象": 250}
+        self.assertEqual(m.version_of(["游灵万象", "经以山海"], starts, versions), "3.4上")
+        self.assertEqual(m.version_of(["游灵万象"], starts, versions), "3.4下")
+        self.assertEqual(m.version_of(["旧活动"], {"旧活动": 50}, versions), "")  # before the first known version
+        self.assertEqual(m.version_of(["没日期"], starts, versions), "")  # no start date: no guess
+        self.assertEqual(m.version_of([], starts, versions), "")
+
     def test_unnamed_tracks_sharing_a_label_are_numbered(self):
         group_of = {"m001001": "来古", "m002001": "汴都"}
         raw = [track("b.mp3", stories=["m001001"]), track("a.mp3", stories=["m001001"]), track("c.mp3", stories=["m002001"])]

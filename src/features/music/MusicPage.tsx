@@ -13,7 +13,7 @@ import { reduced, useReveal, useSlider } from '../characters/motion.ts';
 import { musicTrackId } from '../../app/router/staticRoutes.mts';
 import { getActiveScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../../app/runtime/smoothScroll.js';
 import {
-  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash,
+  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash, versionLabel,
   trackName, trackTitle, type MusicDoc, type MusicTab, type MusicTrack,
 } from './musicData.mts';
 import './styles/music.css';
@@ -51,6 +51,7 @@ function Disc({ doc, t, size }: { doc: MusicDoc; t: MusicTrack; size: 'shelf' | 
 
 function usage(t: MusicTrack, lang: Lang): ReactNode[] {
   const out: ReactNode[] = [];
+  if (t.version) out.push(<span key="v" className="music-ver">{versionLabel(t.version, lang)}</span>);
   if (t.events?.length) out.push(<span key="e">{s('muEvent', lang)}: {t.events.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, x.group_vi, x.group_cn)}</span>)}{t.events.length > 2 && ` +${t.events.length - 2}`}</span>);
   if (t.stories_total) {
     out.push(<span key="s">{s('muStory', lang)}: {t.stories.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, x.group_vi, x.group_cn)}</span>)}{t.stories_total > 2 && ` · ${s('muScenes', lang).replace('{n}', String(t.stories_total))}`}</span>);
@@ -59,7 +60,8 @@ function usage(t: MusicTrack, lang: Lang): ReactNode[] {
     out.push(<span key="m">{s('muStage', lang)}: {t.stages.names_cn.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, t.stages.names_vi?.[i], x)}</span>)}{t.stages.count > 2 && ` +${t.stages.count - 2}`}</span>);
   }
   if (t.areas_cn.length) out.push(<span key="a">{s('muArea', lang)}: {t.areas_cn.slice(0, 3).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, t.areas_vi?.[i], x)}</span>)}</span>);
-  return out.length ? out.flatMap((x, i) => (i ? [' · ', x] : [x])) : [s('muNoUse', lang)];
+  if (out.length === (t.version ? 1 : 0)) out.push(s('muNoUse', lang));
+  return out.flatMap((x, i) => (i ? [' · ', x] : [x]));
 }
 
 // ---- one <audio> for the whole page, driven by the track page; leaving that page stops it ----
@@ -213,7 +215,7 @@ function Track({ doc, t, route, p, api }: { doc: MusicDoc; t: MusicTrack; route:
       <div className="music-track-grid">
         <div className="music-big" ref={big}><Disc doc={doc} t={t} size="big" /></div>
         <div className="music-track-text">
-          <p className="music-kind">{t.groups.map((g) => s(GROUP_LABEL[g], lang)).join(' · ')}</p>
+          <p className="music-kind">{t.groups.map((g) => s(GROUP_LABEL[g], lang)).join(' · ')}{t.version && <> · <span className="music-ver">{versionLabel(t.version, lang)}</span></>}</p>
           <h1 className="music-title" tabIndex={-1}><Name {...name} /></h1>
           {mine && p.failed ? (
             <p className="music-error">{s('muPlayError', lang)} <button type="button" className="music-btn" onClick={() => api.play(t)}>{s('muRetry', lang)}</button></p>
