@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 
 import build_music_data as m
 
@@ -87,6 +89,21 @@ class BuildMusicTest(unittest.TestCase):
         doc = m.build_document({"version": "r1", "tracks": [track("b.mp3"), track("a.mp3", jukebox=[JUKE])]}, {}, {}, "https://x")
         self.assertEqual([t["id"] for t in doc["tracks"]], ["a", "b"])
         self.assertEqual((doc["version"], doc["asset_base_url"]), ("r1", "https://x"))
+
+
+    def test_newest_update_lists_its_new_bgm(self):
+        with tempfile.TemporaryDirectory() as d:
+            for name, files in (("CapNhat_r3137_den_r3164", ["WDFH.mp3", "novel_C41.mp3"]), ("CapNhat_r900_den_r1000", ["Old.mp3"])):
+                (Path(d) / name / "Audio" / "bgm").mkdir(parents=True)
+                for f in files:
+                    (Path(d) / name / "Audio" / "bgm" / f).write_bytes(b"")
+            self.assertEqual(m.newest_update(Path(d)), ("r3164", {"wdfh", "novel_c41"}))
+            self.assertEqual(m.newest_update(Path(d) / "none"), ("", set()))
+
+    def test_document_marks_tracks_new_in_the_latest_update(self):
+        doc = m.build_document({"tracks": [track("WDFH.mp3"), track("aa.mp3")]}, {}, {}, "", new=("r3164", {"wdfh"}))
+        self.assertEqual(doc["new_version"], "r3164")
+        self.assertEqual({x["id"]: x["new"] for x in doc["tracks"]}, {"wdfh": True, "aa": False})
 
 
 if __name__ == "__main__":

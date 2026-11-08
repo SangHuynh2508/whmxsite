@@ -28,6 +28,9 @@ mini-player **yes** · fix **P1 + P2** · story chips **labels only** (no link t
 - Other tracks = two-column text rows (one column ≤ 768 px): `trackTitle` (serif 15 px) + ash usage line (13 px). A
   Máy hát track shown in another tab keeps its disc as a 32 px thumbnail in the row (critique P2).
 - Empty search: `muEmpty` + a "Xóa tìm kiếm" button.
+- "Mới cập nhật" tab (owner 2026-11-08: "chỉ tab, không nhãn"), after `Tất cả`, `#/music?g=new`: the bgm the newest
+  `WHMX_Tool/Xuat/CapNhat_<old>_den_<new>` run added (`new`, `new_version` in music.json); hidden when it added none.
+  No badge on the tracks themselves.
 - No `<audio>` and no mp3 request until a track is played.
 
 **Track page (`#/music/<id>`, unknown id → list)**

@@ -20,6 +20,9 @@ test('search matches CN, VI, label and id, case-insensitive', () => {
   for (const q of ['春华', 'xuân hoa', '远击']) assert.equal(filterTracks([named, battle, both], 'all', q).length, 1, q);
   for (const q of ['BATTLE_M01', 'novel_m8']) assert.equal(filterTracks([named, battle, both], 'all', q).length, 0, q); // the file id is never shown, so never searched
   assert.equal(filterTracks([named], 'all', 'không có').length, 0);
+  const fresh = t({ ...battle, id: 'wdfh', new: true });
+  assert.deepEqual(filterTracks([named, fresh], 'new', '').map((x) => x.id), ['wdfh']); // the latest update's tracks
+  assert.deepEqual(musicFilter('#/music?g=new'), { group: 'new', q: '' });
 });
 
 test('title: VI name in VI, CN name in CN, label otherwise, id last', () => {

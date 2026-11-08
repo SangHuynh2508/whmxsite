@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BGM = ROOT.parent / "WHMX_Tool" / "Xuat" / "Audio" / "bgm"
 DEFAULT_LORE_INDEX = ROOT.parent / "WHMX_Lore_By_Chapter" / "INDEX.tsv"
+DEFAULT_UPDATES = ROOT.parent / "WHMX_Tool" / "Xuat"  # `whmx.py update` writes CapNhat_<old>_den_<new>\ here
 # {Chinese: Vietnamese} for every string the page shows; Claude translates it (owner 2026-11-08: "trang này nhỏ ko cần admin dịch")
 MUSIC_VI = ROOT / "localization" / "music_vi.json"
 OUT = ROOT / "public" / "music.json"
@@ -126,15 +127,27 @@ def build_track(t: dict, group_of: dict[str, str], vi: dict[str, str], char_vi: 
     }
 
 
+def newest_update(xuat: Path) -> tuple[str, set[str]]:
+    """(new revision, ids of the bgm it added) from the latest CapNhat_<old>_den_<new> folder; ('', set()) if none."""
+    runs = [(int(m[1]), m[0][1:], d) for d in (xuat.glob("CapNhat_*_den_r*") if xuat.is_dir() else [])
+            if (m := re.search(r"_r(\d+)$", d.name))]
+    if not runs:
+        return "", set()
+    _, rev, d = max(runs)
+    return rev, {track_id(f.name) for f in (d / "Audio" / "bgm").glob("*.mp3")}
+
+
 def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], base: str,
-                   char_vi: dict[str, str] | None = None) -> dict:
+                   char_vi: dict[str, str] | None = None, new: tuple[str, set[str]] = ("", set())) -> dict:
     tracks = [build_track(t, group_of, vi, char_vi) for t in index["tracks"]]
+    for x in tracks:
+        x["new"] = x["id"] in new[1]
     juke_id = {track_id(t["file"]): int((_jukebox(t) or {}).get("id") or 0) for t in index["tracks"]}
     tracks.sort(key=lambda x: (ORDER.index(x["group"]), juke_id[x["id"]], x["id"]))
     unnamed = [x for x in tracks if not x["name_cn"] and not x["label_cn"]]
     for n, x in enumerate(unnamed, 1):  # system tracks (hall, login, gacha…): a number, not the file id
         x["label_cn"], x["label_vi"] = f"未命名曲目 {n}", f"Bài chưa rõ tên {n}"
-    return {"version": index.get("version", ""), "asset_base_url": base, "tracks": tracks}
+    return {"version": index.get("version", ""), "asset_base_url": base, "new_version": new[0], "tracks": tracks}
 
 
 def group_names(rows) -> dict[str, str]:
@@ -163,6 +176,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--bgm", type=Path, default=DEFAULT_BGM, help="WHMX_Tool output folder with bgm_index.json")
     ap.add_argument("--lore-index", type=Path, default=DEFAULT_LORE_INDEX)
+    ap.add_argument("--updates", type=Path, default=DEFAULT_UPDATES, help="WHMX_Tool Xuat folder with CapNhat_* runs")
     ap.add_argument("--out", type=Path, default=OUT)
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # Windows pipes default to cp1252
@@ -178,10 +192,11 @@ def main() -> int:
     char_vi = {cid: c.get("name_vi", "") for cid, c in data.get("characters", {}).items()}
     with args.lore_index.open(encoding="utf-8-sig", newline="") as f:
         group_of = group_names(csv.DictReader(f, delimiter="\t"))
-    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi)
+    new = newest_update(args.updates)
+    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new)
     args.out.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     miss = untranslated(doc)
-    print(f"{args.out}: {len(doc['tracks'])} bài, {args.out.stat().st_size // 1024} KB, chưa dịch {len(miss)}")
+    print(f"{args.out}: {len(doc['tracks'])} bài, {args.out.stat().st_size // 1024} KB, mới ở {new[0] or '—'}: {len(new[1])}, chưa dịch {len(miss)}")
     for cn in miss:
         print("  " + cn)
     return 0

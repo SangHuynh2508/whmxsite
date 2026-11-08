@@ -14,13 +14,13 @@ import { musicTrackId } from '../../app/router/staticRoutes.mts';
 import { getActiveScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../../app/runtime/smoothScroll.js';
 import {
   GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, filterTracks, groupCounts, loadMusicCached, musicFilter, musicHash,
-  trackName, trackTitle, type MusicDoc, type MusicGroup, type MusicTrack,
+  trackName, trackTitle, type MusicDoc, type MusicTab, type MusicTrack,
 } from './musicData.mts';
 import './styles/music.css';
 
 gsap.registerPlugin(Flip);
 
-type Route = { id: string; group: MusicGroup | 'all'; q: string };
+type Route = { id: string; group: MusicTab; q: string };
 const readRoute = (): Route => ({ id: musicTrackId(location.hash), ...musicFilter(location.hash) });
 
 /** Chinese standing in for VI: Noto Serif SC, the ash dot (kept on the last glyph's line), "(chưa dịch)" for readers. */
@@ -123,7 +123,9 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
   const page = useRef<HTMLDivElement>(null);
   const tabs = useRef<HTMLDivElement>(null);
   const counts = groupCounts(doc.tracks);
-  const keys: (MusicGroup | 'all')[] = ['all', ...GROUPS];
+  const fresh = doc.tracks.filter((t) => t.new).length;
+  const keys: MusicTab[] = ['all', ...(fresh ? ['new' as const] : []), ...GROUPS]; // "Mới cập nhật": the latest update's tracks (owner 2026-11-08)
+  const label = (g: MusicTab) => s(g === 'all' ? 'muAll' : g === 'new' ? 'muNew' : GROUP_LABEL[g], lang);
   useSlider(tabs, keys.indexOf(route.group));
   useReveal(page, '.music-sec', `${route.group}|${route.q}`, 0, true);
   const shown = filterTracks(doc.tracks, route.group, route.q);
@@ -145,7 +147,7 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
           <span className="seg-ink" aria-hidden="true" />
           {keys.map((g) => (
             <button key={g} type="button" role="tab" aria-selected={route.group === g} onClick={() => go({ group: g }, true)}>
-              {s(g === 'all' ? 'muAll' : GROUP_LABEL[g], lang)}<span>{g === 'all' ? doc.tracks.length : counts[g]}</span>
+              {label(g)}<span>{g === 'all' ? doc.tracks.length : g === 'new' ? fresh : counts[g]}</span>
             </button>
           ))}
         </div>
@@ -158,7 +160,7 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
       )}
       {sections.map(({ g, ts }) => (
         <section key={g} className="music-sec">
-          <h2>{s(GROUP_LABEL[g], lang)}{route.group !== 'all' && <span>{ts.length}</span>}</h2>
+          <h2>{label(g)}{route.group !== 'all' && <span>{g === 'new' && doc.new_version ? `${ts.length} · ${doc.new_version}` : ts.length}</span>}</h2>
           {g === 'jukebox'
             ? <div className="music-shelf">{ts.map((t) => (
                 <a key={t.id} className="music-cd" href={href(t)} data-id={t.id}><Disc doc={doc} t={t} size="shelf" /><b><Title t={t} lang={lang} /></b></a>
