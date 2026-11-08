@@ -34,6 +34,10 @@ mini-player **yes** · fix **P1 + P2** · story chips **labels only** (no link t
   loses nothing; a file never seen before is dated by the game version of the export.
 - One track per song (owner 2026-11-08): files with byte-identical audio (30 groups, 259 files → 226 songs) merge into
   the jukebox one, else the most used, carrying every use; the merged ids sit in `also` and their links still open it.
+- "Sự kiện" tab (owner 2026-11-08: "tách thành tab riêng … đặt nó ở sau máy hát"), `#/music?g=event`: one section
+  per event, newest event code first (events without a code sit at the bottom, "Sự kiện chưa rõ tên" last). Truyện
+  keeps main / character / other stories; a song used in both shows in both. An unnamed event track is labelled with
+  the first event that used it; tracks sharing a label get " · N". Track page: "Dùng trong sự kiện" chips.
 - No `<audio>` and no mp3 request until a track is played.
 
 **Track page (`#/music/<id>`, unknown id → list)**

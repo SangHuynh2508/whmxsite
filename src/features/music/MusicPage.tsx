@@ -13,7 +13,7 @@ import { reduced, useReveal, useSlider } from '../characters/motion.ts';
 import { musicTrackId } from '../../app/router/staticRoutes.mts';
 import { getActiveScrollContainer, resizeSmoothScroll, setScrollPositionImmediate } from '../../app/runtime/smoothScroll.js';
 import {
-  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash,
+  GROUPS, GROUP_LABEL, assetUrl, cachedMusic, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusicCached, musicFilter, musicHash,
   trackName, trackTitle, type MusicDoc, type MusicTab, type MusicTrack,
 } from './musicData.mts';
 import './styles/music.css';
@@ -51,6 +51,7 @@ function Disc({ doc, t, size }: { doc: MusicDoc; t: MusicTrack; size: 'shelf' | 
 
 function usage(t: MusicTrack, lang: Lang): ReactNode[] {
   const out: ReactNode[] = [];
+  if (t.events?.length) out.push(<span key="e">{s('muEvent', lang)}: {t.events.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, x.group_vi, x.group_cn)}</span>)}{t.events.length > 2 && ` +${t.events.length - 2}`}</span>);
   if (t.stories_total) {
     out.push(<span key="s">{s('muStory', lang)}: {t.stories.slice(0, 2).map((x, i) => <span key={i}>{i ? ', ' : ''}{tx(lang, x.group_vi, x.group_cn)}</span>)}{t.stories_total > 2 && ` · ${s('muScenes', lang).replace('{n}', String(t.stories_total))}`}</span>);
   }
@@ -129,9 +130,11 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
   useSlider(tabs, keys.indexOf(route.group));
   useReveal(page, '.music-sec', `${route.group}|${route.q}`, 0, true);
   const shown = filterTracks(doc.tracks, route.group, route.q);
-  const sections = route.group === 'all'
-    ? GROUPS.map((g) => ({ g, ts: shown.filter((t) => t.group === g) })).filter((x) => x.ts.length)
-    : shown.length ? [{ g: route.group, ts: shown }] : [];
+  const sections: { key: string; g: MusicTab; title?: ReactNode; ts: MusicTrack[] }[] = route.group === 'all'
+    ? GROUPS.map((g) => ({ key: g, g, ts: shown.filter((t) => t.group === g) })).filter((x) => x.ts.length)
+    : route.group === 'event' // one section per event, newest first
+      ? eventSections(shown).map(({ event: e, tracks }) => ({ key: `ev-${e.group_cn}`, g: 'event' as const, title: tx(lang, e.group_vi, e.group_cn), ts: tracks }))
+      : shown.length ? [{ key: route.group, g: route.group, ts: shown }] : [];
   const href = (t: MusicTrack) => musicHash(t.id, route.group, route.q);
   return (
     <div ref={page}>
@@ -158,9 +161,9 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
           {route.q && <button type="button" className="music-btn" onClick={() => go({ q: '' }, true)}>{s('muClear', lang)}</button>}
         </div>
       )}
-      {sections.map(({ g, ts }) => (
-        <section key={g} className="music-sec">
-          <h2>{label(g)}{route.group !== 'all' && <span>{g === 'new' && doc.new_version ? `${ts.length} · ${doc.new_version}` : ts.length}</span>}</h2>
+      {sections.map(({ key, g, title, ts }) => (
+        <section key={key} className="music-sec">
+          <h2>{title ?? label(g)}{route.group !== 'all' && <span>{g === 'new' && doc.new_version ? `${ts.length} · ${doc.new_version}` : ts.length}</span>}</h2>
           {g === 'jukebox'
             ? <div className="music-shelf">{ts.map((t) => (
                 <a key={t.id} className="music-cd" href={href(t)} data-id={t.id}><Disc doc={doc} t={t} size="shelf" /><b><Title t={t} lang={lang} /></b></a>
@@ -233,6 +236,10 @@ function Track({ doc, t, route, p, api }: { doc: MusicDoc; t: MusicTrack; route:
           )}
           <div className="music-uses">
             {t.source_cn && <><h2>{s('muSource', lang)}</h2><p>{tx(lang, t.source_vi, t.source_cn)}</p></>}
+            {!!t.events?.length && <>
+              <h2>{s('muUsedEvent', lang)}</h2>
+              <ul>{t.events.map((x, k) => <li key={k}>{tx(lang, x.group_vi, x.group_cn)}{x.count > 1 && <span>{s('muScenes', lang).replace('{n}', String(x.count))}</span>}</li>)}</ul>
+            </>}
             {!!t.stories.length && <>
               <h2>{s('muUsedStory', lang)}</h2>
               <ul>{t.stories.map((x, k) => <li key={k}>{tx(lang, x.group_vi, x.group_cn)}{x.count > 1 && <span>{s('muScenes', lang).replace('{n}', String(x.count))}</span>}</li>)}</ul>
@@ -244,7 +251,7 @@ function Track({ doc, t, route, p, api }: { doc: MusicDoc; t: MusicTrack; route:
               {t.stages.count > t.stages.names_cn.length && <p className="music-more">{s('muMore', lang).replace('{n}', String(t.stages.count - t.stages.names_cn.length))}</p>}
             </>}
             {!!t.areas_cn.length && <><h2>{s('muUsedArea', lang)}</h2><ul>{t.areas_cn.map((x, i) => <li key={x}>{tx(lang, t.areas_vi?.[i], x)}</li>)}</ul></>}
-            {!t.stories.length && !t.stages.count && !t.areas_cn.length && <p className="music-more">{s('muNoUse', lang)}</p>}
+            {!t.events?.length && !t.stories.length && !t.stages.count && !t.areas_cn.length && <p className="music-more">{s('muNoUse', lang)}</p>}
           </div>
           <nav className="music-nb">
             {prev ? <a href={musicHash(prev.id, route.group, route.q)}><small><ChevronLeft size={14} aria-hidden="true" />{s('muPrev', lang)}</small><b><Title t={prev} lang={lang} /></b></a> : <span />}

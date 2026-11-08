@@ -29,7 +29,8 @@ class BuildMusicTest(unittest.TestCase):
 
     def test_unused_event_track_is_named_after_its_event_never_its_file(self):
         t = m.build_track(track("FSMY.mp3"), {}, {"浮生觅源": "Phù Sinh Mịch Nguyên"})
-        self.assertEqual((t["label_kind"], t["label_cn"], t["label_vi"]), ("", "浮生觅源", "Phù Sinh Mịch Nguyên"))
+        self.assertEqual((t["label_kind"], t["label_cn"], t["label_vi"]), ("event", "浮生觅源", "Phù Sinh Mịch Nguyên"))
+        self.assertEqual(t["groups"], ["event"])
         doc = m.build_document({"tracks": [track("zz.mp3"), track("aa.mp3")]}, {}, {}, "")
         self.assertEqual([(x["id"], x["label_cn"], x["label_vi"]) for x in doc["tracks"]],
                          [("aa", "未命名曲目 1", "Bài chưa rõ tên 1"), ("zz", "未命名曲目 2", "Bài chưa rõ tên 2")])
@@ -123,6 +124,29 @@ class BuildMusicTest(unittest.TestCase):
                          {"a": "", "b": "r3164", "c": "r3170"})
         self.assertEqual(m.latest({"a": "", "b": "r3164", "c": "r3170", "d": "r3170"}), ("r3170", {"c", "d"}))
         self.assertEqual(m.latest({"a": ""}), ("", set()))
+
+
+    def test_event_stories_get_their_own_group_newest_event_first(self):
+        group_of = {"e022002": "人间千古", "e041001": "无渡风花", "m001001": "来古", "e022": "人间千古", "e041": "无渡风花"}
+        events = {"e022002", "e041001"}
+        t = m.build_track(track("x.mp3", stories=["e022002", "m001001", "e041001", "e041001"]), group_of,
+                          {"无渡风花": "Vô Độ Phong Hoa"}, None, events)
+        self.assertEqual(t["groups"], ["event", "story"])
+        self.assertEqual([(e["group_cn"], e["group_vi"], e["count"], e["order"]) for e in t["events"]],
+                         [("无渡风花", "Vô Độ Phong Hoa", 2, 41), ("人间千古", "", 1, 22)])
+        self.assertEqual(([x["group_cn"] for x in t["stories"]], t["stories_total"]), (["来古"], 1))
+        self.assertEqual((t["label_kind"], t["label_cn"]), ("event", "人间千古"))  # named after the event that first used it
+        # a file named after an event (TRACK_EVENT) joins that event, dated by its scripts
+        h = m.build_track(track("WDFH.mp3"), group_of, {}, None, events)
+        self.assertEqual([(e["group_cn"], e["count"], e["order"]) for e in h["events"]], [("无渡风花", 0, 41)])
+
+
+    def test_unnamed_tracks_sharing_a_label_are_numbered(self):
+        group_of = {"m001001": "来古", "m002001": "汴都"}
+        raw = [track("b.mp3", stories=["m001001"]), track("a.mp3", stories=["m001001"]), track("c.mp3", stories=["m002001"])]
+        doc = m.build_document({"tracks": raw}, group_of, {"来古": "Lai Cổ"}, "")
+        self.assertEqual([(x["id"], x["label_cn"], x["label_vi"]) for x in doc["tracks"]],
+                         [("a", "来古 · 1", "Lai Cổ · 1"), ("b", "来古 · 2", "Lai Cổ · 2"), ("c", "汴都", "")])
 
 
 if __name__ == "__main__":

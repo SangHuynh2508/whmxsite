@@ -2,18 +2,19 @@
 import type { Lang } from '../../i18n/lang.mts';
 import { s, type StringKey } from '../../i18n/strings.mts';
 
-export type MusicGroup = 'jukebox' | 'story' | 'stage' | 'area' | 'other';
+export type MusicGroup = 'jukebox' | 'event' | 'story' | 'stage' | 'area' | 'other';
+export type MusicEvent = { group_cn: string; group_vi?: string; count: number; order: number };
 export type MusicTrack = { id: string; file: string; cover: string | null; group: MusicGroup; groups: MusicGroup[];
-  name_cn: string; name_vi: string; label_kind: '' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
-  source_vi?: string; stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
+  name_cn: string; name_vi: string; label_kind: '' | 'event' | 'story' | 'stage' | 'area'; label_cn: string; label_vi: string; source_cn: string;
+  source_vi?: string; events: MusicEvent[]; stories: { group_cn: string; group_vi?: string; count: number }[]; stories_total: number;
   stages: { names_cn: string[]; names_vi?: string[]; count: number }; areas_cn: string[]; areas_vi?: string[]; new?: boolean;
   also?: string[] }; // ids of files with the same audio, merged into this track
 export type MusicDoc = { version: string; asset_base_url: string; new_version?: string; tracks: MusicTrack[] };
 /** A tab: every track, the latest update's tracks, or one group. */
 export type MusicTab = MusicGroup | 'all' | 'new';
 
-export const GROUPS: MusicGroup[] = ['jukebox', 'story', 'stage', 'area', 'other'];
-export const GROUP_LABEL: Record<MusicGroup, StringKey> = { jukebox: 'muJukebox', story: 'muStory', stage: 'muStage', area: 'muArea', other: 'muOther' };
+export const GROUPS: MusicGroup[] = ['jukebox', 'event', 'story', 'stage', 'area', 'other']; // Sự kiện after Máy hát (owner 2026-11-08)
+export const GROUP_LABEL: Record<MusicGroup, StringKey> = { jukebox: 'muJukebox', event: 'muEvent', story: 'muStory', stage: 'muStage', area: 'muArea', other: 'muOther' };
 
 // ponytail: one copy per page load, like banners.json; a failed load is not kept.
 let cached: MusicDoc | null = null;
@@ -42,8 +43,19 @@ export function filterTracks(tracks: MusicTrack[], group: MusicTab, query: strin
 /** By id, or by the id of a duplicate merged into it, so old links still open the song. */
 export const findTrack = (doc: MusicDoc, id: string) => doc.tracks.find((t) => t.id === id || t.also?.includes(id)) ?? null;
 
+/** Sự kiện tab: a section per event, newest event first (order = the game's event code). */
+export function eventSections(tracks: MusicTrack[]): { event: MusicEvent; tracks: MusicTrack[] }[] {
+  const by = new Map<string, { event: MusicEvent; tracks: MusicTrack[] }>();
+  for (const t of tracks) for (const e of t.events ?? []) {
+    const sec = by.get(e.group_cn) ?? { event: e, tracks: [] };
+    sec.tracks.push(t);
+    by.set(e.group_cn, sec);
+  }
+  return [...by.values()].sort((x, y) => y.event.order - x.event.order);
+}
+
 export function groupCounts(tracks: MusicTrack[]): Record<MusicGroup, number> {
-  const c = { jukebox: 0, story: 0, stage: 0, area: 0, other: 0 };
+  const c = { jukebox: 0, event: 0, story: 0, stage: 0, area: 0, other: 0 };
   for (const t of tracks) for (const g of t.groups) c[g] += 1;
   return c;
 }

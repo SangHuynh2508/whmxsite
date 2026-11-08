@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { assetUrl, clock, filterTracks, findTrack, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
+import { assetUrl, clock, eventSections, filterTracks, findTrack, groupCounts, loadMusic, musicFilter, musicHash, trackName, trackTitle, type MusicTrack } from './musicData.mts';
 
 const t = (o: Partial<MusicTrack>): MusicTrack => ({ id: 'x', file: 'music/bgm/x.mp3', cover: null, group: 'other', groups: ['other'],
-  name_cn: '', name_vi: '', label_kind: '', label_cn: '', label_vi: '', source_cn: '', stories: [], stories_total: 0,
+  name_cn: '', name_vi: '', label_kind: '', label_cn: '', label_vi: '', source_cn: '', events: [], stories: [], stories_total: 0,
   stages: { names_cn: [], count: 0 }, areas_cn: [], ...o });
 
 const named = t({ id: 'novel_e2202', group: 'jukebox', groups: ['jukebox', 'story'], name_cn: '春华如梦', name_vi: 'Xuân Hoa Như Mộng' });
@@ -83,4 +83,13 @@ test('the id of a merged duplicate still opens the kept track (old links)', () =
   assert.equal(findTrack(doc, 'wdfh'), kept);
   assert.equal(findTrack(doc, 'novel_c41'), kept);
   assert.equal(findTrack(doc, 'nope'), null);
+});
+
+test('Sự kiện tab: one section per event, newest first; a song in two events sits in both', () => {
+  const ev = (cn: string, order: number) => ({ group_cn: cn, group_vi: '', count: 1, order });
+  const a = t({ id: 'a', group: 'event', groups: ['event'], events: [ev('无渡风花', 54), ev('人间千古', 22)] });
+  const b = t({ id: 'b', group: 'event', groups: ['event'], events: [ev('人间千古', 22)] });
+  const sec = eventSections([a, b, named]);
+  assert.deepEqual(sec.map((x) => [x.event.group_cn, x.tracks.map((y) => y.id)]), [['无渡风花', ['a']], ['人间千古', ['a', 'b']]]);
+  assert.equal(filterTracks([a, named], 'event', '').length, 1);
 });

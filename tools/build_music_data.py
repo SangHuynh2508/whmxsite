@@ -20,7 +20,7 @@ DEFAULT_UPDATES = ROOT.parent / "WHMX_Tool" / "Xuat"  # `whmx.py update` writes 
 MUSIC_VI = ROOT / "localization" / "music_vi.json"
 FIRST_SEEN = ROOT / "tools" / "music_first_seen.json"  # {file id: revision it first appeared in}; committed
 OUT = ROOT / "public" / "music.json"
-ORDER = ("jukebox", "story", "stage", "area", "other")
+ORDER = ("jukebox", "event", "story", "stage", "area", "other")
 PLACEHOLDER = "预留位置"  # empty jukebox slot that points back at foundationMusic_1
 
 # Events INDEX.tsv leaves unnamed (its README: no MasterData table links them). Evidence, masterdata r3168:
@@ -68,8 +68,9 @@ def _jukebox(t: dict) -> dict | None:
     return next((j for j in t["jukebox"] if j.get("name") and j["name"] != PLACEHOLDER), None)
 
 
-def groups_of(t: dict) -> list[str]:
-    has = {"jukebox": _jukebox(t) is not None, "story": bool(t["stories"]), "stage": bool(t["stages"]), "area": bool(t["areas"])}
+def groups_of(t: dict, is_event=lambda sid: False, named_event: bool = False) -> list[str]:
+    has = {"jukebox": _jukebox(t) is not None, "event": named_event or any(map(is_event, t["stories"])),
+           "story": not all(map(is_event, t["stories"])), "stage": bool(t["stages"]), "area": bool(t["areas"])}
     return [g for g in ORDER[:-1] if has[g]] or ["other"]
 
 
@@ -102,19 +103,45 @@ def stage_summary(stages: list[dict], vi: dict[str, str] | None = None) -> dict:
     return {"names_cn": names, "names_vi": [(vi or {}).get(n, "") for n in names], "count": len(stages)}
 
 
-def build_track(t: dict, group_of: dict[str, str], vi: dict[str, str], char_vi: dict[str, str] | None = None) -> dict:
-    tid, j, groups = track_id(t["file"]), _jukebox(t), groups_of(t)
-    stories, stages = story_groups(t["stories"], group_of, char_vi, vi), stage_summary(t["stages"], vi)
+def _code_no(sid: str) -> int:
+    return int(sid[1:4]) if sid[1:4].isdigit() else 0
+
+
+def event_list(sids: list[str], file_ids: list[str], group_of: dict[str, str], event_ids: set[str],
+               vi: dict[str, str]) -> list[dict]:
+    """Events a track plays in (their story scripts, or a file named after one), newest first by event code."""
+    out = story_groups(sids, group_of, vi=vi)
+    order = {UNKNOWN_EVENT: -1, **{n: _code_no(c) for c, n in EVENT_CN.items()},
+             **{group_of[s]: _code_no(s) for s in event_ids if group_of.get(s)}}
+    for e in out:
+        e["order"] = order.get(e["group_cn"], 0)
+    for name in dict.fromkeys(TRACK_EVENT[i] for i in file_ids if i in TRACK_EVENT):
+        if name not in {e["group_cn"] for e in out}:
+            out.append({"group_cn": name, "group_vi": vi.get(name, ""), "count": 0, "order": order.get(name, 0)})
+    return sorted(out, key=lambda e: -e["order"])
+
+
+def build_track(t: dict, group_of: dict[str, str], vi: dict[str, str], char_vi: dict[str, str] | None = None,
+                event_ids: set[str] = frozenset()) -> dict:
+    tid, j = track_id(t["file"]), _jukebox(t)
+    is_event = lambda sid: sid.lower() in event_ids or (sid.lower() not in group_of and sid[:1].lower() == "e")
+    ev_sids = [x for x in t["stories"] if is_event(x)]
+    plain = [x for x in t["stories"] if not is_event(x)]
+    events = event_list(ev_sids, [tid, *t.get("also", [])], group_of, event_ids, vi)
+    groups = groups_of(t, is_event, bool(events))
+    stories, stages = story_groups(plain, group_of, char_vi, vi), stage_summary(t["stages"], vi)
     areas = list(dict.fromkeys(a["name"] for a in t["areas"] if a.get("name")))
     kind, label = "", ""
     if not j:
-        for kind, label in (("story", stories[0]["group_cn"] if stories else ""),
+        first = min(events, key=lambda e: e["order"] if e["order"] > 0 else 10**6) if events else None  # first event to use it
+        for kind, label in (("event", first["group_cn"] if first else ""),
+                            ("story", stories[0]["group_cn"] if stories else ""),
                             ("stage", stages["names_cn"][0] if stages["names_cn"] else ""),
                             ("area", areas[0] if areas else "")):
             if label:
                 break
         else:
-            kind, label = "", TRACK_EVENT.get(tid, "")
+            kind = ""
     source = (j or {}).get("source", "")
     return {
         "id": tid, "file": f"music/bgm/{tid}.mp3",
@@ -122,9 +149,9 @@ def build_track(t: dict, group_of: dict[str, str], vi: dict[str, str], char_vi: 
         "group": groups[0], "groups": groups,
         "name_cn": j["name"] if j else "", "name_vi": vi.get(j["name"], "") if j else "",
         "label_kind": kind, "label_cn": label,
-        "label_vi": stories[0]["group_vi"] if kind == "story" else vi.get(label, ""),
+        "label_vi": stories[0]["group_vi"] if kind == "story" else first["group_vi"] if kind == "event" else vi.get(label, ""),
         "source_cn": source, "source_vi": vi.get(source, ""),
-        "stories": stories, "stories_total": len(t["stories"]), "stages": stages,
+        "events": events, "stories": stories, "stories_total": len(plain), "stages": stages,
         "areas_cn": areas, "areas_vi": [vi.get(a, "") for a in areas], "also": t.get("also", []),
     }
 
@@ -186,8 +213,9 @@ def newest_update(xuat: Path) -> tuple[str, set[str]]:
 
 
 def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], base: str,
-                   char_vi: dict[str, str] | None = None, new: tuple[str, set[str]] = ("", set())) -> dict:
-    tracks = [build_track(t, group_of, vi, char_vi) for t in index["tracks"]]
+                   char_vi: dict[str, str] | None = None, new: tuple[str, set[str]] = ("", set()),
+                   event_ids: set[str] = frozenset()) -> dict:
+    tracks = [build_track(t, group_of, vi, char_vi, event_ids) for t in index["tracks"]]
     for x in tracks:
         x["new"] = bool(new[1] & {x["id"], *x["also"]})
     juke_id = {track_id(t["file"]): int((_jukebox(t) or {}).get("id") or 0) for t in index["tracks"]}
@@ -195,6 +223,15 @@ def build_document(index: dict, group_of: dict[str, str], vi: dict[str, str], ba
     unnamed = [x for x in tracks if not x["name_cn"] and not x["label_cn"]]
     for n, x in enumerate(unnamed, 1):  # system tracks (hall, login, gacha…): a number, not the file id
         x["label_cn"], x["label_vi"] = f"未命名曲目 {n}", f"Bài chưa rõ tên {n}"
+    same: dict[str, list[dict]] = {}
+    for x in tracks:
+        if not x["name_cn"]:
+            same.setdefault(x["label_cn"], []).append(x)
+    for xs in same.values():  # several songs only known by one event/story: "Vô Độ Phong Hoa · 1", "· 2"
+        if len(xs) > 1:
+            for n, x in enumerate(sorted(xs, key=lambda x: x["id"]), 1):
+                x["label_cn"] += f" · {n}"
+                x["label_vi"] = x["label_vi"] and f"{x['label_vi']} · {n}"
     return {"version": index.get("version", ""), "asset_base_url": base, "new_version": new[0], "tracks": tracks}
 
 
@@ -214,7 +251,7 @@ def untranslated(doc: dict) -> list[str]:
     miss = set()
     for t in doc["tracks"]:
         pairs = [(t["name_cn"], t["name_vi"]), (t["label_cn"], t["label_vi"]), (t["source_cn"], t["source_vi"])]
-        pairs += [(s["group_cn"], s["group_vi"]) for s in t["stories"]]
+        pairs += [(s["group_cn"], s["group_vi"]) for s in t["stories"] + t["events"]]
         pairs += list(zip(t["stages"]["names_cn"], t["stages"]["names_vi"])) + list(zip(t["areas_cn"], t["areas_vi"]))
         miss |= {cn for cn, v in pairs if cn and not v}
     return sorted(miss)
@@ -239,14 +276,16 @@ def main() -> int:
     data = json.loads((ROOT / "public" / "data.json").read_text(encoding="utf-8"))
     char_vi = {cid: c.get("name_vi", "") for cid, c in data.get("characters", {}).items()}
     with args.lore_index.open(encoding="utf-8-sig", newline="") as f:
-        group_of = group_names(csv.DictReader(f, delimiter="\t"))
+        rows = list(csv.DictReader(f, delimiter="\t"))
+    group_of = group_names(rows)
+    event_ids = {r["SCRIPT_ID"].lower() for r in rows if r.get("SECTION") == "Events"}  # INDEX.tsv SECTION
     history = json.loads(FIRST_SEEN.read_text(encoding="utf-8")) if FIRST_SEEN.is_file() else {}
     history = first_seen(history, [track_id(t["file"]) for t in index["tracks"]], newest_update(args.updates), index.get("version", ""))
     FIRST_SEEN.write_text(json.dumps(dict(sorted(history.items())), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     new = latest(history)
     digest = lambda f: hashlib.md5((args.bgm / f).read_bytes()).hexdigest()
     index = {**index, "tracks": merge_duplicates(index["tracks"], digest)}
-    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new)
+    doc = build_document(index, group_of, vi, data.get("asset_base_url", ""), char_vi, new, event_ids)
     args.out.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     miss = untranslated(doc)
     print(f"{args.out}: {len(doc['tracks'])} bài, {args.out.stat().st_size // 1024} KB, mới ở {new[0] or '—'}: {len(new[1])}, chưa dịch {len(miss)}")
