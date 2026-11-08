@@ -58,6 +58,20 @@ export function updateSmoothScrollContainer(container) {
 
   currentContainer = container;
 
+  // A React view (Home, Music) mounts its content after this call on a cold load: Lenis built on an empty
+  // container measures 0 scroll height and never sees the content arrive, so wheel scrolling is dead until F5.
+  // Wait for the first child, then attach.
+  if (!container.firstElementChild) {
+    const waitForContent = new MutationObserver(() => {
+      if (!container.firstElementChild) return;
+      waitForContent.disconnect();
+      if (currentContainer === container && !activeLenis) updateSmoothScrollContainer(container);
+    });
+    waitForContent.observe(container, { childList: true });
+    activeResizeObserver = waitForContent; // disconnected by the next updateSmoothScrollContainer call
+    return null;
+  }
+
   // Resolve content element: for Calculator (#main-content), .content-body encompasses
   // all vertical calculation content. For other views, first child or container.
   const resolvedContent =

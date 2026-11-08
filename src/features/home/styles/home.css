@@ -9,6 +9,9 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 65% 70% at 0% 100%, var(--art-shade-strong) 0%, var(--art-shade) 35%, var(--art-shade-soft) 70%, transparent 100%);
+  /* fade the shade out at the very bottom (below the text), or its edge shows as a hard line on the left */
+  -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
 }
 .home-hero-art {
   position: absolute;
