@@ -9,14 +9,13 @@ import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
 import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
-import { staticView } from './staticRoutes.mts';
+import { parseRoute } from './parseRoute.mts';
 import { routeString, navigate, ROUTE_EVENT, initLinkInterception, legacyHashToPath } from './location.mts';
 import { setPageMeta } from './pageMeta.mts';
 import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx';
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
 import { mountMusicPage, unmountMusicPage } from '../../features/music/MusicPage.tsx';
-import { parseTierListHash } from '../../features/tier-list/tierRoute.mts';
 import { mountTierListPage, unmountTierListPage } from '../../features/tier-list/TierListPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
@@ -64,117 +63,9 @@ export function getCharBySlugOrId(slugOrId) {
 }
 
 export function parseHash() {
-  const raw = routeString();
-  const hash = raw.replace('#', '').trim();
-
-  const pageView = staticView(raw);
-  if (pageView) return { view: pageView, slug: '', subtab: '' };
-
-  // Admin routes are owned by the React shell (src/admin/layout/AdminApp.tsx).
-  if (hash === '/login' || hash === '/admin' || hash.startsWith('/admin/') || hash.startsWith('/admin?')) {
-    return {
-      view: 'admin',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  const tierList = parseTierListHash(raw);
-  if (tierList) return { view: 'tier-list', slug: tierList.slug, subtab: tierList.tab };
-
-  // Format: /characters (Standalone Catalog)
-  if (hash === '/characters' || hash === 'characters') {
-    return {
-      view: 'catalog',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Format: /characters/:slug or /characters/:slug/skills
-  const charRouteMatch = hash.match(/^\/?characters\/([^\/]+)(?:\/([^\/]+))?$/i);
-  if (charRouteMatch) {
-    return {
-      view: 'character',
-      slug: charRouteMatch[1],
-      subtab: charRouteMatch[2] || 'overview'
-    };
-  }
-
-  // Format: /weapons or weapons
-  if (hash === '/weapons' || hash === 'weapons') {
-    return {
-      view: 'weapons',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Backward compatibility: /data redirects to /weapons
-  if (hash === '/data' || hash === 'data') {
-    navigate('/weapons', { replace: true });
-    return {
-      view: 'weapons',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Format: /skins/:skinId
-  const skinRouteMatch = hash.match(/^\/?skins\/([^\/]+)$/i);
-  if (skinRouteMatch) {
-    return {
-      view: 'skin-detail',
-      skinId: skinRouteMatch[1],
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Format: /gallery-demo, gallery-demo -> backward-compatible alias redirect to /gallery
-  if (hash === '/gallery-demo' || hash === 'gallery-demo') {
-    navigate('/gallery', { replace: true });
-    return {
-      view: 'gallery',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Format: /gallery, gallery, /skins, skins
-  if (hash === '/gallery' || hash === 'gallery' || hash === '/skins' || hash === 'skins') {
-    return {
-      view: 'gallery',
-      slug: '',
-      subtab: ''
-    };
-  }
-
-  // Format: /calculator?char=W0182 (old #calc… links are rewritten by legacyHashToPath)
-  if (hash.startsWith('calc') || hash.startsWith('/calc') || hash.startsWith('calculator') || hash.startsWith('/calculator')) {
-    const params = new URLSearchParams(hash.replace(/^(\/?calc|\/?calculator)\??/, ''));
-    const charId = params.get('char') || params.get('id') || '';
-    return {
-      view: 'calculator',
-      characterId: charId,
-      subtab: ''
-    };
-  }
-
-  // Legacy direct character ID hash e.g. #W0182
-  if (hash && !hash.includes('/')) {
-    return {
-      view: 'calculator',
-      characterId: hash,
-      subtab: ''
-    };
-  }
-
-  return {
-    view: 'catalog',
-    slug: '',
-    subtab: ''
-  };
+  const route = parseRoute(routeString());
+  if (route.redirect) navigate(route.redirect, { replace: true }); // old aliases: /data, /gallery-demo
+  return route;
 }
 
 // Route view -> its container; every other container is hidden and emptied. A view not listed is the calculator
