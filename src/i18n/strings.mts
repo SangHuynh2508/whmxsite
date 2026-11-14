@@ -176,7 +176,7 @@ const vi = {
   mnEmpty: 'Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.', ldErr: 'Không tải được dữ liệu', ldErrText: 'Kiểm tra kết nối mạng rồi tải lại trang.',
   trLegRest: 'không nhãn = không cần mốc · trong một tier, bên trái mạnh hơn · bấm để xem build',
   navCoffee: 'Quán cà phê', cfTitle: 'Quán cà phê · 一日店长', cfLede: 'Tra đáp án sự kiện 青琉璃咖啡馆. Gõ vài chữ trong câu khách nói; đặt nguyên liệu theo thứ tự 基底 → 填充 → 雪盖. Mỗi ô đúng +1 điểm, đủ 3 ô là mở công thức.',
-  cfSearch: 'Gõ chữ trong câu khách nói, tên công thức hoặc nguyên liệu', cfCount: '{n}/{t} công thức', cfEmpty: 'Không có công thức nào khớp.',
+  cfSearch: 'Gõ chữ trong câu khách nói, tên nhân vật, công thức hoặc nguyên liệu', cfCustomers: 'Lọc theo khách', cfCount: '{n}/{t} công thức', cfEmpty: 'Không có công thức nào khớp.',
   cfLoadError: 'Không tải được dữ liệu quán cà phê.', cfIngredients: 'Bảng nguyên liệu ({n})',
   navMusic: 'Âm nhạc', muTitle: 'Âm nhạc', muAll: 'Tất cả', muNew: 'Mới cập nhật', muJukebox: 'Máy hát', muStory: 'Truyện', muStage: 'Màn đánh',
   muArea: 'Bản đồ', muOther: 'Khác', muSearch: 'Tìm theo tên bài', muEmpty: 'Không có bài nào phù hợp.',
@@ -415,7 +415,7 @@ const cn: Record<StringKey, string> = {
   catSortDef: '物理防御', // game: characterlan_AttrDes_namelan_PhysicDef
   catSortRes: '构素防御', // game: characterlan_AttrDes_namelan_MagicDef
   navCoffee: '一日店长', cfTitle: '青琉璃咖啡馆 · 一日店长', cfLede: '活动配方速查。输入顾客台词中的几个字；按 基底 → 填充 → 雪盖 的顺序放入配料。', // draft
-  cfSearch: '输入顾客台词、配方或配料', cfCount: '{n}/{t} 个配方', cfEmpty: '没有符合的配方。', // draft
+  cfSearch: '输入顾客台词、角色名、配方或配料', cfCustomers: '按顾客筛选', cfCount: '{n}/{t} 个配方', cfEmpty: '没有符合的配方。', // draft
   cfLoadError: '咖啡馆数据加载失败。', cfIngredients: '配料一览（{n}）', // draft
   navMusic: '音乐', muTitle: '音乐', muAll: '全部', muNew: '最新更新', muJukebox: '唱片机', muStory: '剧情', muStage: '战斗', muArea: '地图',
   muOther: '其他', muSearch: '按曲名搜索', muEmpty: '没有符合的曲目。', muLoadError: '曲目列表加载失败。',

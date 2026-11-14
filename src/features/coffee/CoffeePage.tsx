@@ -17,19 +17,25 @@ const SLOTS = ['基底', '填充', '雪盖'];
 const icon = (m: CoffeeIngredient) => <img className="coffee-icon" src={`/coffee/${m.icon}.webp`} alt="" loading="lazy" />;
 
 /** Avatar + name (VI page: Vietnamese; CN page or no translation: Chinese), linked to the character page. */
+const customerName = (c: CoffeeCustomer, lang: Lang) => (lang === 'vi' && c.name_vi) || c.name_cn || '？';
+const Avatar = ({ c }: { c: CoffeeCustomer }) => {
+  const src = c.avatar || getCharacterAvatarUrl((getGameData()?.characters ?? {})[c.id]);
+  return src ? <img className="coffee-avatar" src={src} alt="" loading="lazy" /> : <span className="coffee-avatar" aria-hidden />;
+};
+
 function Customer({ c, lang }: { c: CoffeeCustomer; lang: Lang }) {
-  const name = (lang === 'vi' && c.name_vi) || c.name_cn || '？';
-  const avatar = c.avatar || getCharacterAvatarUrl((getGameData()?.characters ?? {})[c.id]);
-  const body = <>{avatar ? <img className="coffee-avatar" src={avatar} alt="" loading="lazy" /> : <span className="coffee-avatar" aria-hidden />}{name}</>;
+  const body = <><Avatar c={c} />{customerName(c, lang)}</>;
   return c.slug ? <a className="coffee-customer" href={`/characters/${c.slug}`}>{body}</a> : <span className="coffee-customer">{body}</span>;
 }
 
 function CoffeePage({ doc }: { doc: CoffeeDoc | null }) {
   const lang = useLang();
   const [q, setQ] = useState('');
+  const [who, setWho] = useState(''); // customer name_cn picked in the strip; '' = everyone
   if (!doc) return <div className="coffee-page"><p className="coffee-empty">{s('cfLoadError', lang)}</p></div>;
   const mat = new Map(doc.ingredients.map((m) => [m.id, m]));
-  const list = filterRecipes(doc, q);
+  const customers = [...new Map(doc.recipes.map((r) => [r.customer.name_cn, r.customer])).values()]; // game order
+  const list = filterRecipes(doc, q).filter((r) => !who || r.customer.name_cn === who);
   return (
     <div className="coffee-page">
       <h1 className="coffee-title">{s('cfTitle', lang)}</h1>
@@ -38,6 +44,13 @@ function CoffeePage({ doc }: { doc: CoffeeDoc | null }) {
         <Search size={16} aria-hidden />
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={s('cfSearch', lang)} aria-label={s('cfSearch', lang)} autoComplete="off" />
       </label>
+      <div className="coffee-who" role="group" aria-label={s('cfCustomers', lang)}>
+        {customers.map((c) => (
+          <button key={c.name_cn} type="button" aria-pressed={who === c.name_cn} onClick={() => setWho(who === c.name_cn ? '' : c.name_cn)}>
+            <Avatar c={c} />{customerName(c, lang)}
+          </button>
+        ))}
+      </div>
       <p className="coffee-count">{s('cfCount', lang).replace('{n}', String(list.length)).replace('{t}', String(doc.recipes.length))}</p>
 
       {list.length ? (
