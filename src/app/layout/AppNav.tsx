@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Calculator, House, LayoutGrid, LogIn, LogOut, Podium, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
+import { Calculator, Coffee, House, LayoutGrid, LogIn, LogOut, Podium, Search, ShieldCheck, Shirt, UsersRound } from 'lucide-react';
 import { Menu, X } from 'lucide'; // morph data, not components
 import { MorphIcon } from 'morphicons/react';
 import { getSession, isAuthorizedEditor, signOut } from '../auth/session.js';
@@ -27,6 +27,7 @@ const PUBLIC_LINKS = [
   { href: '/characters', label: 'navCharacters', icon: UsersRound, views: ['catalog', 'character'] },
   { href: '/tier-list', label: 'navTier', icon: Podium, views: ['tier-list'] },
   { href: '/gallery', label: 'navSkins', icon: Shirt, views: ['gallery', 'skin-detail'] },
+  { href: '/coffee', label: 'navCoffee', icon: Coffee, views: ['coffee'] }, // event lookup, on the rail (owner 2026-11-14)
   { href: '/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'music', 'weapons'] },
   { href: '/calculator', label: 'navTools', icon: Calculator, views: ['calculator'] },
 ] satisfies { href: string; label: StringKey; icon: unknown; views: string[] }[];

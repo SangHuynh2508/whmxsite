@@ -16,6 +16,7 @@ import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
 import { mountMusicPage, unmountMusicPage } from '../../features/music/MusicPage.tsx';
+import { mountCoffeePage, unmountCoffeePage } from '../../features/coffee/CoffeePage.tsx';
 import { mountTierListPage, unmountTierListPage } from '../../features/tier-list/TierListPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
 import { renderSkinDetailView } from '../../features/skins/views/skinDetailView.js';
@@ -75,6 +76,7 @@ const VIEW_CONTAINERS = {
   banners: 'banners-view',
   info: 'info-view',
   music: 'music-view',
+  coffee: 'coffee-view',
   'tier-list': 'tier-list-view',
   catalog: 'character-catalog-view',
   character: 'character-detail-view',
@@ -92,6 +94,7 @@ function renderRouteView(route, target, gameData) {
       if (id === 'banners-view') unmountBannersPage();
       if (id === 'info-view') unmountInfoPage();
       if (id === 'music-view') unmountMusicPage();
+      if (id === 'coffee-view') unmountCoffeePage();
       if (id === 'tier-list-view') unmountTierListPage();
       el.classList.add('hidden');
       el.innerHTML = '';
@@ -105,6 +108,7 @@ function renderRouteView(route, target, gameData) {
     else if (route.view === 'banners') mountBannersPage(target);
     else if (route.view === 'info') mountInfoPage(target);
     else if (route.view === 'music') mountMusicPage(target);
+    else if (route.view === 'coffee') mountCoffeePage(target);
     else if (route.view === 'tier-list') mountTierListPage(target, { slug: route.slug, tab: route.subtab });
     else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);

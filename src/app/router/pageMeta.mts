@@ -1,7 +1,7 @@
 // Tab title after in-app navigation; same wording as tools/prerender-lib.mjs (crawlers read that file, not this).
 const SITE = 'Vật Hoa Di Tân Wiki';
 const nm = (o: any) => (o?.name_vi || o?.name_cn || '').trim();
-const VIEW: Record<string, string> = { catalog: 'Danh sách Khí Giả', gallery: 'Trang phục', 'tier-list': 'Tier list', music: 'Nhạc', banners: 'Banner', info: 'Thông tin', weapons: 'Vũ khí', calculator: 'Máy tính' };
+const VIEW: Record<string, string> = { catalog: 'Danh sách Khí Giả', gallery: 'Trang phục', 'tier-list': 'Tier list', music: 'Nhạc', coffee: 'Quán cà phê', banners: 'Banner', info: 'Thông tin', weapons: 'Vũ khí', calculator: 'Máy tính' };
 
 type Route = { view: string; slug?: string; subtab?: string; skinId?: string };
 

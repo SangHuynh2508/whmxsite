@@ -22,6 +22,7 @@ export function buildPages({ data, music, tierLists }) {
     page('/tier-list', 'Tier list', 'Bảng xếp hạng Khí Giả Vật Hoa Di Tân.'),
     page('/music', 'Nhạc', 'Nhạc nền Vật Hoa Di Tân theo sự kiện, cốt truyện và khu vực.'),
     page('/banners', 'Banner', 'Banner hiện tại và lịch sử banner Vật Hoa Di Tân.'),
+    page('/coffee', 'Quán cà phê', 'Tra đáp án sự kiện quán cà phê 一日店长: câu khách nói → 3 nguyên liệu.'),
     page('/info', 'Thông tin', 'Banner, nhạc và dữ liệu Vật Hoa Di Tân.'),
   ];
   for (const c of Object.values(data.characters)) {
