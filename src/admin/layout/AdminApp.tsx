@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Eye, EyeOff, Lock, LogOut } from 'lucide-react';
+import { Eye, EyeOff, Globe, Lock, LogOut } from 'lucide-react';
 import { getSession, refreshSession, signOut } from '../../app/auth/session.js';
 import { cn } from '@/lib/utils';
 import { MagicCard } from '@/components/magicui/magic-card';
@@ -180,7 +180,35 @@ export default function AdminApp() {
           </div>
         )}
       </div>
+      <PhoneNav section={section} isOwner={isOwner} />
     </main>
+  );
+}
+
+/**
+ * Phones (< 768 px): the admin areas as a bottom bar, in place of the sidebar and the public ☰ button (hidden on
+ * admin routes in adminShell.css). "Trang web" leads back to the public site, where ☰ is again.
+ */
+function PhoneNav({ section, isOwner }: { section: Section; isOwner: boolean }) {
+  const cell = 'flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] focus-visible:outline-2 focus-visible:outline-(--accent)';
+  return (
+    <nav aria-label="Khu quản trị" className="fixed inset-x-0 bottom-0 z-30 flex border-t border-(--border-color) bg-(--bg-surface) pb-[env(safe-area-inset-bottom)] md:hidden">
+      {NAV.filter((entry) => !entry.ownerOnly || isOwner).map((entry) => {
+        const Icon = entry.icon;
+        const active = section === entry.id;
+        return (
+          <a key={entry.id} href={entry.href} aria-current={active ? 'page' : undefined}
+            className={cn(cell, active ? 'text-(--text-main) shadow-[inset_0_2px_0_var(--accent)]' : 'text-(--text-muted)')}>
+            <Icon size={20} aria-hidden />
+            <span className="max-w-full truncate px-1">{entry.label}</span>
+          </a>
+        );
+      })}
+      <a href="/" className={cn(cell, 'text-(--text-muted)')}>
+        <Globe size={20} aria-hidden />
+        <span>Trang web</span>
+      </a>
+    </nav>
   );
 }
 

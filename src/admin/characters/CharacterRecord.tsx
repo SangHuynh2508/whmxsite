@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type ComponentType } from 'react';
+import { ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { BackToTop, Button, Notice, SkeletonRows } from '../layout/ui';
+import { BackToTop, Button, Notice, Select, SkeletonRows } from '../layout/ui';
 import { getCharacter } from './charactersApi.js';
 import { recordHref, type ModuleId } from './lib/route.mts';
 import { Avatar, characterAvatar } from './components/Avatar';
@@ -42,14 +43,21 @@ export function CharacterRecord({ id, module }: { id: string; module: ModuleId }
   const c = data?.character;
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-none flex-wrap items-center gap-x-3.5 gap-y-2 border-b border-(--border-color) px-4 py-2.5 lg:px-5">
-        <a href="#/admin/characters" className="text-[13px] text-(--text-muted) hover:text-(--text-main)">← Danh sách</a>
-        <Avatar src={characterAvatar(id)} label={id} className="size-9 rounded-md" />
-        <h2 className="min-w-0 truncate text-base font-semibold">
+      {/* Phones: one sticky 56 px row (back, avatar, name, module picker); LoreModule's unit bar sticks under it (top-14). */}
+      <div className="flex flex-none flex-wrap items-center gap-x-3.5 gap-y-2 border-b border-(--border-color) px-4 py-2.5 max-md:sticky max-md:top-0 max-md:z-20 max-md:h-14 max-md:flex-nowrap max-md:gap-x-2 max-md:bg-(--bg-main) max-md:py-0 max-md:pl-1 lg:px-5">
+        <a href="#/admin/characters" aria-label="Danh sách" className="text-[13px] text-(--text-muted) hover:text-(--text-main) max-md:grid max-md:size-11 max-md:flex-none max-md:place-items-center">
+          <ChevronLeft size={20} aria-hidden className="md:hidden" /><span aria-hidden className="max-md:hidden">← Danh sách</span>
+        </a>
+        <Avatar src={characterAvatar(id)} label={id} className="size-9 flex-none rounded-md max-md:size-8" />
+        <h2 className="min-w-0 truncate text-base font-semibold max-md:flex-1">
           {c?.nameVi.value || c?.nameCn || id}
-          {c?.nameVi.value && <small lang="zh" className="admin-cn ml-1.5 font-normal text-(--text-muted)">{c.nameCn}</small>}
+          {c?.nameVi.value && <small lang="zh" className="admin-cn ml-1.5 font-normal text-(--text-muted) max-md:hidden">{c.nameCn}</small>}
         </h2>
-        <nav aria-label="Mục hồ sơ" className="flex gap-0.5 overflow-x-auto [scrollbar-width:none] max-lg:w-full lg:ml-6">
+        <Select aria-label="Mục hồ sơ" value={active.id} onChange={(event) => { location.hash = recordHref(id, event.target.value as ModuleId); }}
+          className="w-32 flex-none md:hidden [&_select]:h-11">
+          {MODULES.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+        </Select>
+        <nav aria-label="Mục hồ sơ" className="flex gap-0.5 overflow-x-auto [scrollbar-width:none] max-md:hidden max-lg:w-full lg:ml-6">
           {MODULES.map((m) => (
             <a
               key={m.id}
@@ -68,7 +76,8 @@ export function CharacterRecord({ id, module }: { id: string; module: ModuleId }
       {error && <Notice className="m-4">Không tải được hồ sơ {id}. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>}
       {!data && !error && <SkeletonRows />}
       {data && <active.Component key={active.id} data={data} reload={reload} />}
-      <BackToTop className="lg:hidden" />{/* phones: the page scrolls, the panes don't */}
+      {/* md–lg: the page scrolls, the panes don't. Phones: hidden, it sat on the fields; Lore and Build have jump bars. */}
+      <BackToTop className="max-md:hidden lg:hidden" />
     </div>
   );
 }

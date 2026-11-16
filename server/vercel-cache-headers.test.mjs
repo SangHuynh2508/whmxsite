@@ -25,3 +25,12 @@ test('stable-name public assets are never immutable and get exactly one cache ru
 test('hashed build output stays immutable', () => {
   assert.deepEqual(cacheFor('/assets/index-NQD-zLxK.js'), ['public, max-age=31536000, immutable']);
 });
+
+// The SPA fallback must leave Vite's dev-server modules alone (`vercel dev` served index.html for /@vite/client → blank page).
+test('SPA fallback rewrites page paths only', () => {
+  const { rewrites } = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8'));
+  const spa = rewrites.find((r) => r.destination === '/index.html');
+  const re = new RegExp(`^${spa.source}$`);
+  for (const page of ['/', '/characters/khac-ban-son-hai-kinh/build', '/tier-list']) assert.ok(re.test(page), page);
+  for (const file of ['/@vite/client', '/@react-refresh', '/@id/x', '/api/admin/x', '/assets/a.png', '/src/main.js']) assert.ok(!re.test(file), file);
+});

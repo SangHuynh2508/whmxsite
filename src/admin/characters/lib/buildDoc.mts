@@ -39,7 +39,10 @@ export function setPoint(doc: BuildDoc, index: number, column: number, value: nu
   return { ...doc, deepens: doc.deepens.map((d, i) => (i === index ? { ...d, points } : d)) };
 }
 
-export const addDeepen = (doc: BuildDoc, styleId: string): BuildDoc =>
+// 深造 talent lines are the control: tapping line N sets the column to N, tapping the top lit line steps one down.
+export const pickLevel = (current: number, level: number) => (current === level ? level - 1 : level);
+
+export const addDeepen =(doc: BuildDoc, styleId: string): BuildDoc =>
   (doc.deepens.length >= MAX_DEEPENS ? doc : { ...doc, deepens: [...doc.deepens, { label: '', styleId, points: [0, 0, 0, 0] }] });
 
 export const addWeapon = (doc: BuildDoc, weaponId: string): BuildDoc =>

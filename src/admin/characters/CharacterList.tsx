@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Notice, SkeletonRows } from '../layout/ui';
+import { cn } from '@/lib/utils';
+import { Button, Notice, Select, SkeletonRows } from '../layout/ui';
 import { listCharacters } from './charactersApi.js';
 import { getLoreProgress } from './loreApi.js';
 import { recordHref } from './lib/route.mts';
@@ -43,19 +44,23 @@ export function CharacterList() {
           {items ? `${items.length} hồ sơ` : 'Hồ sơ'}
           <small className="mt-2.5 block font-sans text-sm text-(--text-muted)">Bấm một tên để mở hồ sơ.</small>
         </h2>
-        <div className="mb-3 flex flex-wrap items-baseline gap-x-7 gap-y-2 border-b border-(--border-strong) pb-3 transition-colors focus-within:border-(--accent)">
+        <div className="mb-3 flex flex-wrap items-baseline gap-x-7 gap-y-2 border-b border-(--border-strong) pb-3 max-md:flex-nowrap max-md:items-center max-md:gap-x-2 max-md:pb-2 transition-colors focus-within:border-(--accent)">
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Tìm tên hoặc mã"
             aria-label="Tìm nhân vật"
-            className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none"
+            className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none max-md:min-h-11"
           />
+          {/* Phones: the four filters as one picker (44 px) beside the search; Từ điển is in the bottom bar. */}
+          <Select aria-label="Lọc" value={filter} onChange={(event) => setFilter(event.target.value as LoreFilter)} className="w-36 flex-none md:hidden [&_select]:h-11">
+            {FILTERS.map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+          </Select>
           {FILTERS.map(([id, label]) => (
-            <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} className={filter === id ? 'text-[13px] text-(--text-main)' : 'text-[13px] text-(--text-muted) transition-colors hover:text-(--text-main)'}>{label}</button>
+            <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} className={cn('text-[13px] max-md:hidden', filter === id ? 'text-(--text-main)' : 'text-(--text-muted) transition-colors hover:text-(--text-main)')}>{label}</button>
           ))}
-          <a href={DICTIONARY_HREF} className="text-[13px] text-(--text-muted) transition-colors hover:text-(--text-main)">Từ điển →</a>
+          <a href={DICTIONARY_HREF} className="text-[13px] text-(--text-muted) transition-colors hover:text-(--text-main) max-md:hidden">Từ điển →</a>
         </div>
         {error && <Notice className="my-4">Không tải được danh sách. <Button variant="ghost" onClick={load}>Thử lại</Button></Notice>}
         {!items && !error && <SkeletonRows count={8} />}

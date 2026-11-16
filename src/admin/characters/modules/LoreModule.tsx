@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button, Notice, SkeletonRows } from '../../layout/ui';
+import { Button, Notice, Select, SkeletonRows } from '../../layout/ui';
 import { getLore, patchLore } from '../loreApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
 import { useEditor } from '../useEditor';
@@ -8,6 +9,7 @@ import { useIsOwner } from '../useIsOwner';
 import { inScope, loreUnitGroups, teaUnitGroups, termProgress, type TeaStructure } from '../lib/loreUnits.mts';
 import { TAG_LABELS } from '../../../features/characters/lore/loreView.mts';
 import { termHref } from '../lib/route.mts';
+import { topVisible } from '../lib/scrollSpy.mts';
 import { BilingualText, type LoreStatus } from '../components/BilingualText';
 import { PairHead } from '../components/OverridableField';
 import { SaveBar } from '../components/SaveBar';
@@ -82,11 +84,15 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
     ['Trực thuộc', lore.organisation],
   ];
   const terms = termProgress([...termRows.map(([, t]) => t), ...(scope === 'tea' ? [] : Object.values(lore.affinity))]);
-  const jump = (unitKey: string) => {
+  // The phone bar jumps without focusing: focusing the field would open the keyboard over the text being read.
+  const jump = (unitKey: string, focus = true) => {
     document.getElementById(`pair-${unitKey}`)?.scrollIntoView({ behavior: smooth(), block: 'start' });
-    (document.getElementById(`vi-${unitKey}`) as HTMLTextAreaElement | null)?.focus({ preventScroll: true });
+    if (focus) (document.getElementById(`vi-${unitKey}`) as HTMLTextAreaElement | null)?.focus({ preventScroll: true });
     setActive(unitKey);
   };
+  const order = groups.flatMap((g) => g.items.map((i) => i.unitKey));
+  const at = Math.max(0, order.indexOf(active ?? ''));
+  const STATUS_NOTE: Record<LoreStatus, string> = { done: '', legacy: ' · bản cũ', changed: ' · đổi CN', todo: ' · chưa dịch' };
 
   // Relic + shared terms + recent history: a column on wide screens, a collapsible block at the top of the editor below
   // 1280 px (owner 2026-09-28: on phones the column was hidden, so editors could not find where to translate the terms).
@@ -98,7 +104,7 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
         {termRows.map(([label, t]) => (
           <Fragment key={label}>
             <dt className="text-(--text-muted)">{label}</dt>
-            <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent)">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-muted)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-muted)">(chưa dịch)</span></>}</a> : '—'}</dd>
+            <dd>{t ? <a href={termHref(t.code)} className="underline decoration-(--border-strong) underline-offset-4 hover:decoration-(--accent) max-md:inline-block max-md:py-3">{t.official && t.nameVi ? <>{t.nameVi}{!t.done && <span className="text-(--text-muted)"> (chưa dịch mô tả)</span>}</> : <><span lang="zh" className="admin-cn">{t.nameCn}</span> <span className="text-(--text-muted)">(chưa dịch)</span></>}</a> : '—'}</dd>
           </Fragment>
         ))}
       </dl>
@@ -115,13 +121,28 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
       <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-muted) lg:px-5">
         <span className="tabular-nums">{counts.done}/{units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></span>
         <span role="status" className="ml-auto">{publish.state !== 'idle' && publish.message}</span>
-        {isOwner && <Button variant="ghost" className="h-7" onClick={() => lorePublisher.now()} disabled={publish.state === 'publishing'}>Xuất bản ngay</Button>}
+        {isOwner && <Button variant="ghost" className="h-7 max-md:h-11" onClick={() => lorePublisher.now()} disabled={publish.state === 'publishing'}>Xuất bản ngay</Button>}
+      </div>
+      {/* Phones: one row under the record header — previous, a picker of every unit (grouped, status in words), next. */}
+      <div className="sticky top-14 z-10 flex items-center gap-1 border-b border-(--border-color) bg-(--bg-main) px-1 py-1.5 md:hidden">
+        <button type="button" aria-label="Đoạn trước" disabled={at === 0} onClick={() => jump(order[at - 1], false)}
+          className="grid size-11 flex-none place-items-center text-(--text-muted) hover:text-(--text-main) disabled:opacity-40"><ChevronLeft size={20} aria-hidden /></button>
+        <Select aria-label={scope === 'tea' ? 'Chọn đoạn phòng trà' : 'Chọn đoạn lore'} value={order[at]} onChange={(event) => jump(event.target.value, false)}
+          className="min-w-0 flex-1 [&_select]:h-11">
+          {groups.map((g) => (
+            <optgroup key={g.group} label={g.group}>
+              {g.items.map((i) => <option key={i.unitKey} value={i.unitKey}>{i.label}{STATUS_NOTE[statusOf(byKey.get(i.unitKey)!)]}</option>)}
+            </optgroup>
+          ))}
+        </Select>
+        <button type="button" aria-label="Đoạn sau" disabled={at === order.length - 1} onClick={() => jump(order[at + 1], false)}
+          className="grid size-11 flex-none place-items-center text-(--text-muted) hover:text-(--text-main) disabled:opacity-40"><ChevronRight size={20} aria-hidden /></button>
       </div>
       <div className="min-h-0 flex-1 lg:grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_280px]">
         <nav
           ref={navRef}
           aria-label={scope === 'tea' ? 'Các đoạn phòng trà' : 'Các đoạn lore'}
-          className="relative z-10 bg-(--bg-main) [scrollbar-width:none] max-lg:sticky max-lg:top-0 max-lg:flex max-lg:gap-1 max-lg:overflow-x-auto max-lg:border-b max-lg:border-(--border-color) max-lg:px-2 max-lg:py-1.5 lg:overflow-y-auto lg:border-r lg:border-(--border-color) lg:py-2.5"
+          className="relative z-10 bg-(--bg-main) [scrollbar-width:none] max-md:hidden max-lg:sticky max-lg:top-0 max-lg:flex max-lg:gap-1 max-lg:overflow-x-auto max-lg:border-b max-lg:border-(--border-color) max-lg:px-2 max-lg:py-1.5 lg:overflow-y-auto lg:border-r lg:border-(--border-color) lg:py-2.5"
         >
           {groups.map((g) => (
             <Fragment key={g.group}>
@@ -159,8 +180,8 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
           onFocus={(event) => { const unit = (event.target as HTMLElement).closest<HTMLElement>('[data-unit]')?.dataset.unit; if (unit) setActive(unit); }}
           className="max-lg:pb-16 lg:h-full lg:overflow-y-auto"
         >
-          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] md:px-8 xl:hidden">
-            <summary className="cursor-pointer text-(--text-muted)">{scope === 'tea' ? 'Trà và thuật ngữ' : 'Hiện vật và thuật ngữ'} · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></summary>
+          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] max-md:py-0 max-md:open:pb-3 md:px-8 xl:hidden">
+            <summary className="cursor-pointer text-(--text-muted) max-md:py-3">{scope === 'tea' ? 'Trà và thuật ngữ' : 'Hiện vật và thuật ngữ'} · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></summary>
             <div className="mt-3">{info}</div>
           </details>
           <PairHead />
@@ -203,11 +224,13 @@ function useScrollSpy(pane: HTMLElement | null, keys: string[]) {
   useEffect(() => {
     if (!pane || !keys.length) return;
     const wide = matchMedia('(min-width: 1024px)').matches; // the pane scrolls on its own only on wide screens
+    const edge = matchMedia('(max-width: 767.98px)').matches ? 112 : 48; // phones: record header + unit bar
+    const visible = new Set<Element>();
     const observer = new IntersectionObserver((entries) => {
-      const top = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-      const unit = (top?.target as HTMLElement | undefined)?.dataset.unit;
+      const line = (wide ? pane.getBoundingClientRect().top : 0) + edge;
+      const unit = (topVisible(visible, entries, (el) => el.getBoundingClientRect().top, line) as HTMLElement | undefined)?.dataset.unit;
       if (unit) setActive(unit);
-    }, { root: wide ? pane : null, rootMargin: '-48px 0px -60% 0px' });
+    }, { root: wide ? pane : null, rootMargin: `-${edge}px 0px -60% 0px` });
     pane.querySelectorAll('[data-unit]').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [pane, keys]);

@@ -46,8 +46,8 @@ export function OverviewModule({ data, reload }: ModuleProps) {
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 xl:grid xl:grid-cols-[1fr_280px]">
         <section aria-label="Tổng quan" className="max-lg:pb-16 lg:h-full lg:overflow-y-auto">
-          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] md:px-8 xl:hidden">
-            <summary className="cursor-pointer text-(--text-muted)">Thông tin hồ sơ</summary>
+          <details className="border-b border-(--border-color) px-4 py-3 text-[13px] max-md:py-0 max-md:open:pb-3 md:px-8 xl:hidden">
+            <summary className="cursor-pointer text-(--text-muted) max-md:py-3">Thông tin hồ sơ</summary>
             <div className="mt-3">{info}</div>
           </details>
           <PairHead />

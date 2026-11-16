@@ -23,8 +23,13 @@ body.admin-route-active>#whmx-top-btn {
   --admin-danger-line: color-mix(in oklch, var(--rarity-ssr) 40%, var(--border-color));
   --admin-warn: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main));
   --admin-warn-bg: color-mix(in oklch, var(--rarity-sr) 14%, var(--bg-surface));
-  /* Room for the phone ☰ menu button (src/style.css --mobile-fab-zone) so fixed admin bars sit above it (0 on wide screens). */
-  --admin-dock: var(--mobile-fab-zone, 0px);
+  /* Height of the phone bottom bar (AdminApp PhoneNav) so fixed admin bars sit above it (0 on wide screens). */
+  --admin-dock: 0px;
+}
+@media (max-width: 767.98px) {
+  .admin-react-root { --admin-dock: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  /* PhoneNav replaces the public ☰ button on admin routes. */
+  body.admin-route-active .mobile-menu-fab { display: none; }
 }
 /* The public CSS sets overflow-x: hidden on html and body, which makes body a scroll container and
  * breaks position: sticky (the phone chip strip). clip crops the same way without that side effect. */

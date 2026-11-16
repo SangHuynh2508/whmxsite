@@ -104,9 +104,10 @@ export function SectionTitle({ children, aside }: { children: ReactNode; aside?:
   );
 }
 
+// Phones: the area name is in the bottom bar (AdminApp PhoneNav), so the header gives its 48 px to content.
 export function ViewHeader({ title, meta, children }: { title: string; meta?: ReactNode; children?: ReactNode }) {
   return (
-    <header className="flex h-12 shrink-0 items-center gap-3 border-b border-(--border-color) bg-(--bg-surface) px-4 lg:px-6">
+    <header className="flex h-12 shrink-0 items-center gap-3 border-b border-(--border-color) bg-(--bg-surface) px-4 max-md:hidden lg:px-6">
       <h1 className="text-sm font-semibold text-(--text-main)">{title}</h1>
       {meta && <span className="min-w-0 truncate text-[13px] text-(--text-muted)">{meta}</span>}
       <div className="ml-auto flex items-center gap-1.5">{children}</div>

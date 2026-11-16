@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from './buildDoc.mts';
+import { addDeepen, addWeapon, buildErrors, emptyBuild, move, pickLevel, sameDoc, setPoint, totalPoints, type BuildDoc } from './buildDoc.mts';
 
 test('a new build starts from the game\'s recommended style (0 points), or without 深造 when there is none', () => {
   assert.deepEqual(emptyBuild('102'), {
@@ -62,4 +62,11 @@ test('server errors inside a rotation step name the rotation', () => {
 test('a rotation is { label, note, steps }', () => {
   const doc: BuildDoc = { ...emptyBuild(null), rotations: [{ label: 'Lượt đầu', note: '', steps: [{ skillId: 'V005502', note: '' }] }] };
   assert.equal(doc.rotations[0].steps[0].skillId, 'V005502');
+});
+
+test('tapping a talent line sets that level; tapping the top lit line steps one down', () => {
+  assert.equal(pickLevel(2, 5), 5);
+  assert.equal(pickLevel(5, 5), 4);
+  assert.equal(pickLevel(1, 1), 0);
+  assert.equal(pickLevel(5, 3), 3);
 });

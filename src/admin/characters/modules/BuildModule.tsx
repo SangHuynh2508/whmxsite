@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { ArrowDown, ArrowUp, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button, Field, Notice, SectionTitle, Select, SkeletonRows, describeError, inputClass, statusOf } from '../../layout/ui';
 import { loadCharacterDetail, loadGameData } from '../../../data/loader.js';
 import { createBuild, deleteBuild, getBuilds, saveBuild } from '../buildApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
-import { MAX_COLUMN, MAX_DEEPENS, MAX_TOTAL, MAX_WEAPONS, addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from '../lib/buildDoc.mts';
+import { MAX_COLUMN, MAX_DEEPENS, MAX_TOTAL, MAX_WEAPONS, addDeepen, addWeapon, buildErrors, emptyBuild, move, pickLevel, sameDoc, setPoint, totalPoints, type BuildDoc } from '../lib/buildDoc.mts';
 import type { ModuleProps } from '../types';
 
 // Shapes of GET /api/admin/builds/characters/:id (server/builds/build-editor.mjs).
@@ -24,6 +25,9 @@ type DirtyFlag = { __whmxAdminDirty?: boolean };
 
 const nm = (n: Name | undefined) => n?.vi || n?.cn || '';
 const withDefaults = (doc: Partial<BuildDoc>): BuildDoc => ({ ...emptyBuild(null), ...doc });
+// Phone jump list (the sections are long: one 深造 alone is ~1 000 px).
+const SECTIONS = [['info', 'Thông tin'], ['weapons', 'Vũ khí'], ['affixes', 'Dòng thuộc tính'], ['deepens', 'Thâm tạo'], ['rotations', 'Xoay vòng kỹ năng'], ['teams', 'Đội hình']] as const;
+const sectionClass = 'scroll-mt-16 max-md:scroll-mt-32'; // below the sticky bar (phones: record header + bar)
 
 async function loadSite(characterId: string): Promise<Site> {
   const data = await loadGameData();
@@ -109,6 +113,10 @@ export function BuildModule({ data }: ModuleProps) {
     catch (failure) { setProblem(describeError(failure)); }
     finally { setBusy(false); }
   };
+  const jump = (key: string) => {
+    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    document.getElementById(`build-${key}`)?.scrollIntoView({ behavior, block: 'start' });
+  };
 
   const { catalogue } = editor;
   const weaponOf = (weaponId: string) => catalogue.weapons.find((w) => w.id === weaponId);
@@ -117,10 +125,19 @@ export function BuildModule({ data }: ModuleProps) {
   const characterName = (characterId: string) => site.characters.find((c) => c.id === characterId)?.name ?? characterId;
   const tabs = [...editor.builds.map((b, i) => b.doc.name || `Build ${i + 1}`), ...(active === editor.builds.length ? ['Build mới'] : [])];
 
+  // Below lg the window scrolls (not this box), so the bar sticks to the window: under the record header on phones.
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto">
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-(--border-color) bg-(--bg-main) px-4 py-2 lg:px-6">
-        <nav aria-label="Các build" className="flex flex-wrap gap-1">
+    <div className="min-h-0 flex-1 lg:overflow-y-auto max-md:[&_button]:min-h-11 max-md:[&_input:not([type=checkbox])]:h-11 max-md:[&_select]:h-11">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-(--border-color) bg-(--bg-main) px-4 py-2 max-md:top-14 max-md:flex-nowrap max-md:gap-1 max-md:px-1 max-md:py-1.5 lg:px-6">
+        <Select aria-label="Chọn build" value={String(active)} onChange={(e) => choose(Number(e.target.value))} className="min-w-0 flex-1 md:hidden">
+          {tabs.map((label, i) => <option key={i} value={i}>{label}</option>)}
+          {active !== editor.builds.length && <option value={editor.builds.length}>+ Thêm build</option>}
+        </Select>
+        <Select aria-label="Đến phần" value="" onChange={(e) => jump(e.target.value)} className="min-w-0 flex-1 md:hidden">
+          <option value="">Đến phần…</option>
+          {SECTIONS.map(([key, label]) => <option key={key} value={key}>{label}</option>)}
+        </Select>
+        <nav aria-label="Các build" className="flex flex-wrap gap-1 max-md:hidden">
           {tabs.map((label, i) => (
             <button key={i} type="button" aria-current={i === active ? 'true' : undefined} onClick={() => choose(i)}
               className={cn('rounded-md px-3 py-1.5 text-[13px]', i === active ? 'bg-(--bg-elevated) text-(--text-main)' : 'text-(--text-muted) hover:text-(--text-main)')}>
@@ -129,14 +146,15 @@ export function BuildModule({ data }: ModuleProps) {
           ))}
           {active !== editor.builds.length && <Button variant="ghost" onClick={() => choose(editor.builds.length)}>+ Thêm build</Button>}
         </nav>
-        <span className="ml-auto text-xs text-(--text-muted)" role="status">{publish.state !== 'idle' ? publish.message : dirty ? 'Chưa lưu' : ''}</span>
-        {current && <Button variant="ghost" disabled={busy} onClick={remove}>Xoá build</Button>}
-        <Button variant="primary" disabled={busy || !dirty} onClick={save}>{busy ? 'Đang lưu…' : current ? 'Lưu' : 'Tạo build'}</Button>
+        <span className="ml-auto text-xs text-(--text-muted) max-md:hidden" role="status">{publish.state !== 'idle' ? publish.message : dirty ? 'Chưa lưu' : ''}</span>
+        {current && <Button variant="ghost" disabled={busy} onClick={remove} className="max-md:hidden">Xoá build</Button>}
+        <Button variant="primary" disabled={busy || !dirty} onClick={save} className="flex-none">{busy ? 'Đang lưu…' : current ? 'Lưu' : 'Tạo build'}</Button>
       </div>
+      {publish.state !== 'idle' && <p role="status" className="px-4 pt-2 text-xs text-(--text-muted) md:hidden">{publish.message}</p>}
       {problem && <Notice className="mx-4 mt-3 lg:mx-6">{problem}</Notice>}
 
       <div className="grid max-w-[1100px] gap-10 px-4 py-6 lg:px-6">
-        <section>
+        <section id="build-info" className={sectionClass}>
           <SectionTitle>Thông tin</SectionTitle>
           <div className="grid gap-3 sm:grid-cols-[2fr_1fr]">
             <Field label="Tên build (tab)"><input className={cn(inputClass, 'h-9')} value={draft.name} maxLength={60} onChange={(e) => upd({ name: e.target.value })} placeholder="Chuẩn, Boss…" /></Field>
@@ -145,27 +163,24 @@ export function BuildModule({ data }: ModuleProps) {
           <Field label="Tóm tắt" className="mt-3"><textarea className={cn(inputClass, 'min-h-20 py-2')} value={draft.summary} maxLength={2000} onChange={(e) => upd({ summary: e.target.value })} /></Field>
         </section>
 
-        <section>
+        <section id="build-weapons" className={sectionClass}>
           <SectionTitle aside={<span className="text-xs text-(--text-muted)">{draft.weapons.length}/{MAX_WEAPONS}</span>}>Vũ khí</SectionTitle>
           {draft.weapons.map((w, i) => {
             const weapon = weaponOf(w.weaponId);
             const set = (patch: Partial<typeof w>) => upd({ weapons: draft.weapons.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
             return (
-              <div key={i} className="mb-3 grid gap-2 border-b border-(--border-color) pb-3 sm:grid-cols-[2fr_1fr_auto]">
-                <span className="flex items-center gap-2">
+              <div key={i} className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-(--border-color) pb-3 sm:grid-cols-[2fr_1fr_auto]">
+                <span className="col-span-2 flex items-center gap-2 sm:col-span-1">
                   {weapon?.icon && <img src={`/assets/items/${weapon.icon}.png`} alt="" className="size-9 flex-none object-contain" />}
-                  <Select aria-label={`Vũ khí ${i + 1}`} value={w.weaponId} onChange={(e) => set({ weaponId: e.target.value })}>
+                  <Select aria-label={`Vũ khí ${i + 1}`} value={w.weaponId} onChange={(e) => set({ weaponId: e.target.value })} className="min-w-0 flex-1">
                     {!weapon && <option value={w.weaponId}>{w.weaponId} (không có trong danh sách)</option>}
                     {catalogue.weapons.map((x) => <option key={x.id} value={x.id}>★{x.rare} · {nm(x.name)}</option>)}
                   </Select>
                 </span>
                 <input aria-label={`Nhãn vũ khí ${i + 1}`} className={cn(inputClass, 'h-9')} value={w.label} maxLength={60} placeholder="Chịu đòn, Hồi năng…" onChange={(e) => set({ label: e.target.value })} />
-                <span className="flex gap-1">
-                  <Button variant="ghost" aria-label="Lên" onClick={() => upd({ weapons: move(draft.weapons, i, -1) })}>↑</Button>
-                  <Button variant="ghost" aria-label="Xuống" onClick={() => upd({ weapons: move(draft.weapons, i, 1) })}>↓</Button>
-                  <Button variant="ghost" aria-label="Bỏ" onClick={() => upd({ weapons: draft.weapons.filter((_, j) => j !== i) })}>✕</Button>
-                </span>
-                {weapon?.skills.map((s) => <p key={s.id} className="text-xs text-(--text-muted) sm:col-span-3"><b className="font-medium text-(--text-main)">{nm(s.name)}</b> — {nm(s.detail)}</p>)}
+                <Mover index={i} count={draft.weapons.length} label={`vũ khí ${i + 1}`}
+                  onMove={(d) => upd({ weapons: move(draft.weapons, i, d) })} onRemove={() => upd({ weapons: draft.weapons.filter((_, j) => j !== i) })} />
+                {weapon?.skills.map((s) => <p key={s.id} className="col-span-2 text-xs text-(--text-muted) sm:col-span-3"><b className="font-medium text-(--text-main)">{nm(s.name)}</b> — {nm(s.detail)}</p>)}
               </div>
             );
           })}
@@ -173,9 +188,9 @@ export function BuildModule({ data }: ModuleProps) {
           {!catalogue.weapons.length && <p className="text-sm text-(--text-muted)">Chưa có dữ liệu vũ khí (chạy importer kho game).</p>}
         </section>
 
-        <section>
+        <section id="build-affixes" className={sectionClass}>
           <SectionTitle>Dòng thuộc tính</SectionTitle>
-          <label className="mb-3 flex items-center gap-2 text-sm"><input type="checkbox" checked={draft.affixes.noReroll} onChange={(e) => upd({ affixes: { ...draft.affixes, noReroll: e.target.checked } })} /> Không cần tẩy luyện vũ khí</label>
+          <label className="mb-3 flex items-center gap-2 text-sm max-md:min-h-11"><input type="checkbox" className="max-md:size-5" checked={draft.affixes.noReroll} onChange={(e) => upd({ affixes: { ...draft.affixes, noReroll: e.target.checked } })} /> Không cần tẩy luyện vũ khí</label>
           {draft.affixes.groups.map((g, i) => {
             const set = (patch: Partial<typeof g>) => upd({ affixes: { ...draft.affixes, groups: draft.affixes.groups.map((x, j) => (j === i ? { ...x, ...patch } : x)) } });
             return (
@@ -184,7 +199,7 @@ export function BuildModule({ data }: ModuleProps) {
                   <input aria-label={`Nhãn nhóm ${i + 1}`} className={cn(inputClass, 'h-9')} value={g.label} maxLength={60} placeholder="Ưu tiên, Thay thế…" onChange={(e) => set({ label: e.target.value })} />
                   <Button variant="ghost" onClick={() => upd({ affixes: { ...draft.affixes, groups: draft.affixes.groups.filter((_, j) => j !== i) } })}>Bỏ nhóm</Button>
                 </span>
-                <Chips items={g.affixIds.map((a) => [a, nm(catalogue.affixes.find((x) => x.id === a)?.name) || a])} onRemove={(k) => set({ affixIds: g.affixIds.filter((_, j) => j !== k) })} onMove={(k, d) => set({ affixIds: move(g.affixIds, k, d) })} />
+                <PickList items={g.affixIds.map((a) => [a, nm(catalogue.affixes.find((x) => x.id === a)?.name) || a])} onRemove={(k) => set({ affixIds: g.affixIds.filter((_, j) => j !== k) })} onMove={(k, d) => set({ affixIds: move(g.affixIds, k, d) })} />
                 <Adder label="Thêm dòng…" options={catalogue.affixes.map((x) => [x.id, `${nm(x.name)}${x.percent ? ' %' : ''}`])} onAdd={(a) => set({ affixIds: [...g.affixIds, a] })} />
               </div>
             );
@@ -192,7 +207,7 @@ export function BuildModule({ data }: ModuleProps) {
           <Button onClick={() => upd({ affixes: { ...draft.affixes, groups: [...draft.affixes.groups, { label: '', affixIds: [] }] } })}>+ Thêm nhóm</Button>
         </section>
 
-        <section>
+        <section id="build-deepens" className={sectionClass}>
           <SectionTitle>Thâm tạo</SectionTitle>
           {draft.deepens.map((d, n) => {
             const set = (patch: Partial<typeof d>) => upd({ deepens: draft.deepens.map((x, j) => (j === n ? { ...x, ...patch } : x)) });
@@ -206,13 +221,26 @@ export function BuildModule({ data }: ModuleProps) {
                   <span className={cn('text-xs', totalPoints(d) === MAX_TOTAL ? 'text-(--accent)' : 'text-(--text-muted)')}>{totalPoints(d)}/{MAX_TOTAL} điểm</span>
                   <Button variant="ghost" onClick={() => upd({ deepens: draft.deepens.filter((_, j) => j !== n) })}>Bỏ</Button>
                 </span>
-                <div className="grid gap-3 sm:grid-cols-4">
-                  {(styleOf(d.styleId)?.sectors ?? []).map((sector, i) => (
-                    <Field key={sector.id} label={nm(sector.name)}
-                      hint={<span className="grid gap-0.5">{sector.talents.map((point, p) => <span key={p} className={p < (d.points[i] ?? 0) ? 'text-(--text-main)' : undefined}>{p + 1}. {point.map((t) => nm(t.text)).join(' / ')}</span>)}</span>}>
-                      <input type="number" min={0} max={MAX_COLUMN} aria-label={`Thâm tạo ${n + 1} · ${nm(sector.name)}`} className={cn(inputClass, 'h-9')} value={d.points[i] ?? 0} onChange={(e) => setDraft(setPoint(draft, n, i, Number(e.target.value)))} />
-                    </Field>
-                  ))}
+                <div className="grid grid-cols-2 gap-x-2 gap-y-4 sm:grid-cols-4 sm:gap-3">
+                  {(styleOf(d.styleId)?.sectors ?? []).map((sector, i) => {
+                    const lit = d.points[i] ?? 0;
+                    return (
+                      <div key={sector.id} role="group" aria-label={`Thâm tạo ${n + 1} · ${nm(sector.name)}`}>
+                        <p className="mb-1 flex justify-between px-2 text-xs text-(--text-muted)"><span>{nm(sector.name)}</span><span className="admin-num">{lit}/{MAX_COLUMN}</span></p>
+                        <ol className="grid">
+                          {sector.talents.map((point, p) => (
+                            <li key={p}>
+                              <button type="button" aria-pressed={p < lit} onClick={() => setDraft(setPoint(draft, n, i, pickLevel(lit, p + 1)))}
+                                className={cn('flex w-full items-start gap-2 rounded-md px-2 py-1 text-left text-xs focus-visible:outline-2 focus-visible:outline-(--accent) max-md:items-center',
+                                  p < lit ? 'bg-(--admin-gold-bg) text-(--text-main)' : 'text-(--text-muted) hover:bg-(--bg-elevated) hover:text-(--text-main)')}>
+                                <span className="admin-num w-3 flex-none">{p + 1}</span>{point.map((t) => nm(t.text)).join(' / ')}
+                              </button>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -221,7 +249,7 @@ export function BuildModule({ data }: ModuleProps) {
             onClick={() => setDraft(addDeepen(draft, editor.character.recommendedStyleId ?? catalogue.styles[0].id))}>+ Thêm thâm tạo</Button>
         </section>
 
-        <section>
+        <section id="build-rotations" className={sectionClass}>
           <SectionTitle>Xoay vòng kỹ năng</SectionTitle>
           {draft.rotations.map((r, i) => {
             const set = (patch: Partial<typeof r>) => upd({ rotations: draft.rotations.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
@@ -233,13 +261,19 @@ export function BuildModule({ data }: ModuleProps) {
                   <Button variant="ghost" onClick={() => upd({ rotations: draft.rotations.filter((_, j) => j !== i) })}>Bỏ</Button>
                 </span>
                 <textarea aria-label={`Ghi chú xoay vòng ${i + 1}`} className={cn(inputClass, 'min-h-16 py-2')} value={r.note} maxLength={500} placeholder="Ghi chú cho cả vòng (tuỳ chọn): điều kiện, lượt đầu…" onChange={(e) => set({ note: e.target.value })} />
-                <Chips items={r.steps.map((s) => [s.skillId, skillName(s.skillId)])} onRemove={(k) => set({ steps: r.steps.filter((_, j) => j !== k) })} onMove={(k, d) => set({ steps: move(r.steps, k, d) })} />
-                {r.steps.map((s, k) => (
-                  <label key={k} className="flex items-center gap-2 text-xs text-(--text-muted)">
-                    <span className="w-44 truncate">{k + 1}. {skillName(s.skillId)}</span>
-                    <input aria-label={`Ghi chú bước ${k + 1} của xoay vòng ${i + 1}`} className={cn(inputClass, 'h-8')} value={s.note} maxLength={60} placeholder="Ghi chú bước (tuỳ chọn), vd: dùng lên Thố Động" onChange={(e) => setStep(k, e.target.value)} />
-                  </label>
-                ))}
+                {/* One row per step: phones put the note under the name, wider screens beside it. */}
+                {r.steps.length > 0 && (
+                  <ol className="grid gap-2 md:gap-1">
+                    {r.steps.map((s, k) => (
+                      <li key={k} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="min-w-0 flex-1 truncate text-sm md:w-44 md:flex-none">{k + 1}. {skillName(s.skillId)}</span>
+                        <input aria-label={`Ghi chú bước ${k + 1} của xoay vòng ${i + 1}`} className={cn(inputClass, 'h-8 min-w-0 max-md:order-last max-md:basis-full md:flex-1')} value={s.note} maxLength={60} placeholder="Ghi chú bước (tuỳ chọn), vd: dùng lên Thố Động" onChange={(e) => setStep(k, e.target.value)} />
+                        <Mover index={k} count={r.steps.length} label={skillName(s.skillId)}
+                          onMove={(d) => set({ steps: move(r.steps, k, d) })} onRemove={() => set({ steps: r.steps.filter((_, j) => j !== k) })} />
+                      </li>
+                    ))}
+                  </ol>
+                )}
                 <Adder label="Thêm kỹ năng…" options={site.skills.map((s) => [s.id, s.name])} onAdd={(s) => set({ steps: [...r.steps, { skillId: s, note: '' }] })} />
               </div>
             );
@@ -248,7 +282,7 @@ export function BuildModule({ data }: ModuleProps) {
           <Field label="Mẹo (mỗi dòng một mẹo)" className="mt-4"><textarea className={cn(inputClass, 'min-h-24 py-2')} value={draft.tips.join('\n')} onChange={(e) => upd({ tips: e.target.value.split('\n') })} /></Field>
         </section>
 
-        <section>
+        <section id="build-teams" className={sectionClass}>
           <SectionTitle>Đội hình</SectionTitle>
           {draft.teams.map((t, i) => {
             const set = (patch: Partial<typeof t>) => upd({ teams: draft.teams.map((x, j) => (j === i ? { ...x, ...patch } : x)) });
@@ -258,7 +292,7 @@ export function BuildModule({ data }: ModuleProps) {
                   <input aria-label={`Tên đội ${i + 1}`} className={cn(inputClass, 'h-9')} value={t.label} maxLength={60} placeholder="Đội chính…" onChange={(e) => set({ label: e.target.value })} />
                   <Button variant="ghost" onClick={() => upd({ teams: draft.teams.filter((_, j) => j !== i) })}>Bỏ đội</Button>
                 </span>
-                <Chips items={t.characterIds.map((c) => [c, characterName(c)])} onRemove={(k) => set({ characterIds: t.characterIds.filter((_, j) => j !== k) })} onMove={(k, d) => set({ characterIds: move(t.characterIds, k, d) })} />
+                <PickList items={t.characterIds.map((c) => [c, characterName(c)])} onRemove={(k) => set({ characterIds: t.characterIds.filter((_, j) => j !== k) })} onMove={(k, d) => set({ characterIds: move(t.characterIds, k, d) })} />
                 <Adder label="Thêm nhân vật…" options={site.characters.map((c) => [c.id, c.name])} onAdd={(c) => set({ characterIds: [...t.characterIds, c] })} />
                 <input aria-label={`Ghi chú đội ${i + 1}`} className={cn(inputClass, 'h-9')} value={t.note} maxLength={500} placeholder="Ghi chú" onChange={(e) => set({ note: e.target.value })} />
               </div>
@@ -267,6 +301,8 @@ export function BuildModule({ data }: ModuleProps) {
           <Button onClick={() => upd({ teams: [...draft.teams, { label: '', characterIds: [], note: '' }] })}>+ Thêm đội hình</Button>
           <Field label="Khác" className="mt-4"><input className={cn(inputClass, 'h-9')} value={draft.teamOther} maxLength={500} onChange={(e) => upd({ teamOther: e.target.value })} /></Field>
         </section>
+        {/* Phones: delete lives at the end of the build, away from Lưu in the sticky bar. */}
+        {current && <Button variant="ghost" disabled={busy} onClick={remove} className="justify-self-start md:hidden">Xoá build này</Button>}
       </div>
     </div>
   );
@@ -282,17 +318,27 @@ function Adder({ label, options, onAdd, disabled }: { label: string; options: [s
   );
 }
 
-// Ordered picks: ← → reorder, ✕ removes.
-function Chips({ items, onRemove, onMove }: { items: [string, string][]; onRemove: (index: number) => void; onMove: (index: number, delta: number) => void }) {
+// ↑ ↓ reorder, ✕ removes (set apart so it is not hit by mistake). 44 px on phones.
+function Mover({ index, count, label, onMove, onRemove }: { index: number; count: number; label: string; onMove: (delta: number) => void; onRemove: () => void }) {
+  const btn = 'grid size-8 flex-none place-items-center rounded-md text-(--text-muted) hover:bg-(--bg-elevated) hover:text-(--text-main) focus-visible:outline-2 focus-visible:outline-(--accent) disabled:opacity-30 max-md:size-11';
+  return (
+    <span className="flex flex-none items-center">
+      <button type="button" aria-label={`Đưa ${label} lên`} disabled={index === 0} onClick={() => onMove(-1)} className={btn}><ArrowUp size={16} aria-hidden /></button>
+      <button type="button" aria-label={`Đưa ${label} xuống`} disabled={index === count - 1} onClick={() => onMove(1)} className={btn}><ArrowDown size={16} aria-hidden /></button>
+      <button type="button" aria-label={`Bỏ ${label}`} onClick={onRemove} className={cn(btn, 'ml-2')}><X size={16} aria-hidden /></button>
+    </span>
+  );
+}
+
+// Ordered picks (affixes, team members): one row each.
+function PickList({ items, onRemove, onMove }: { items: [string, string][]; onRemove: (index: number) => void; onMove: (index: number, delta: number) => void }) {
   if (!items.length) return null;
   return (
-    <ol className="flex flex-wrap gap-1.5">
+    <ol className="grid">
       {items.map(([key, text], i) => (
-        <li key={`${key}-${i}`} className="flex items-center gap-1 rounded-md border border-(--border-color) bg-(--bg-surface) px-2 py-1 text-[13px]">
-          <button type="button" aria-label="Lùi" className="text-(--text-muted) hover:text-(--text-main)" onClick={() => onMove(i, -1)}>‹</button>
-          {text}
-          <button type="button" aria-label="Tiến" className="text-(--text-muted) hover:text-(--text-main)" onClick={() => onMove(i, 1)}>›</button>
-          <button type="button" aria-label={`Bỏ ${text}`} className="ml-1 text-(--text-muted) hover:text-(--text-main)" onClick={() => onRemove(i)}>✕</button>
+        <li key={`${key}-${i}`} className="flex items-center gap-2 text-sm">
+          <span className="min-w-0 flex-1 truncate">{i + 1}. {text}</span>
+          <Mover index={i} count={items.length} label={text} onMove={(d) => onMove(i, d)} onRemove={() => onRemove(i)} />
         </li>
       ))}
     </ol>

@@ -68,10 +68,10 @@ export function DictionaryView() {
   return (
     <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto max-w-[1100px] px-4 pb-24 pt-6 md:px-10 md:pt-10">
-        <nav aria-label="Phần" className="mb-2 flex flex-wrap gap-x-7 gap-y-2 border-b border-(--border-color)">
+        <nav aria-label="Phần" className="mb-2 flex flex-wrap gap-x-7 gap-y-2 border-b border-(--border-color) max-md:gap-x-5 max-md:gap-y-0">
           {DICTIONARY_TABS.map(([id, label]) => (
             <a key={id} href={dictionaryHref(id)} aria-current={route.tab === id ? 'page' : undefined}
-              className={cn('-mb-px border-b-2 pb-2 text-sm transition-colors', route.tab === id ? 'border-(--accent) text-(--text-main)' : 'border-transparent text-(--text-muted) hover:text-(--text-main)')}>{label}</a>
+              className={cn('-mb-px border-b-2 pb-2 text-sm transition-colors max-md:flex max-md:min-h-11 max-md:items-center max-md:pb-0', route.tab === id ? 'border-(--accent) text-(--text-main)' : 'border-transparent text-(--text-muted) hover:text-(--text-main)')}>{label}</a>
           ))}
         </nav>
         <TermsTab key={route.tab} tab={route.tab} code={route.code} />
@@ -138,8 +138,8 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
       </p>
       <div className="mb-3 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-b border-(--border-strong) pb-3 transition-colors focus-within:border-(--accent)">
         <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Tìm mã, tên Trung hoặc Việt" aria-label="Tìm trong từ điển"
-          className="min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none" />
-        <label className="flex items-center gap-2 text-[13px] text-(--text-muted)"><input type="checkbox" checked={todoOnly} onChange={(e) => setTodoOnly(e.target.checked)} /> Chỉ hiện chưa dịch</label>
+          className="max-md:min-h-11 min-w-0 flex-1 border-0 bg-transparent text-lg text-(--text-main) outline-none placeholder:text-(--text-muted) focus-visible:outline-none" />
+        <label className="flex items-center gap-2 text-[13px] text-(--text-muted) max-md:min-h-11"><input type="checkbox" className="max-md:size-5" checked={todoOnly} onChange={(e) => setTodoOnly(e.target.checked)} /> Chỉ hiện chưa dịch</label>
       </div>
       {error && <Notice className="my-4">Không tải được từ điển. <Button variant="ghost" onClick={() => { setError(false); load().catch(() => setError(true)); }}>Thử lại</Button></Notice>}
       {!terms && !error && <SkeletonRows count={8} />}
@@ -168,8 +168,8 @@ function TermsTab({ tab, code }: { tab: DictionaryTab; code?: string }) {
                   </button>
                   {t.usedBy.length > 0 && (
                     <details className="pb-2 text-xs text-(--text-muted)">
-                      <summary className="cursor-pointer">đang dùng bởi {t.usedBy.length} nhân vật</summary>
-                      <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">{t.usedBy.map((id) => <a key={id} href={recordHref(id, 'lore')} className="font-mono hover:text-(--text-main)">{id}</a>)}</p>
+                      <summary className="cursor-pointer max-md:py-3.5">đang dùng bởi {t.usedBy.length} nhân vật</summary>
+                      <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">{t.usedBy.map((id) => <a key={id} href={recordHref(id, 'lore')} className="font-mono hover:text-(--text-main) max-md:py-1.5">{id}</a>)}</p>
                     </details>
                   )}
                   {openRow === t.code && <GroupEditor key={t.code} terms={groups.get(t.code)!} reload={load} config={config} />}
