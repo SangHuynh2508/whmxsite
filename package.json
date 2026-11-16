@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predev": "node tools/split_data.mjs",
     "dev": "vite",
+    "prebuild": "node tools/split_data.mjs",
     "build": "vite build && node tools/prerender.mjs",
     "test": "node --test \"scripts/lib/*.test.mjs\" \"server/profile/*.test.mjs\" \"server/builds/*.test.mjs\" \"server/game/*.test.mjs\" \"server/tier-lists/*.test.mjs\" \"server/*.test.mjs\" \"src/**/*.test.mts\" \"src/**/*.test.mjs\" \"tools/*.test.mjs\"",
     "test:tools": "python -m unittest discover -s tools -p \"test_*.py\"",

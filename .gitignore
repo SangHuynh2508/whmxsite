@@ -12,3 +12,6 @@ dist
 .vercel
 .neon
 .impeccable/
+
+# generated from public/data.json by tools/split_data.mjs (docs/DATA_SPLIT.md)
+public/data/

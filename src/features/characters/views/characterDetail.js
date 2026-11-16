@@ -2,7 +2,7 @@
  * Master Character Detail View Shell & Orchestrator
  */
 import { gsap } from 'gsap';
-import { getGameData } from '../../../data/loader.js';
+import { getGameData, isCharacterDetailLoaded, loadCharacterDetail } from '../../../data/loader.js';
 import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { navigate } from '../../../app/router/location.mts';
 import { escapeHtml } from '../../../lib/escapeHtml.mts';
@@ -34,6 +34,7 @@ document.addEventListener('click', (event) => {
 let currentRenderedCharId = null;
 let currentRenderedLang = null;
 let currentActiveTab = null;
+let latestDetailRequest = ''; // `${slugOrId}|${tab}` of the last renderCharacterDetail call
 let activeTabTransition = null;
 let tabSwitchToken = 0; // bumps on every tab swap; a late island mount checks it before animating
 
@@ -127,6 +128,25 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
         </div>
       </div>
     `;
+    return;
+  }
+
+  // Skills, talents, zhizhi, Hoán Chương and profile live in data/c/<id>.json (docs/DATA_SPLIT.md): load, then render
+  // the latest request (a tab switch or another character while loading wins).
+  latestDetailRequest = `${slugOrId}|${activeTab}`;
+  if (!isCharacterDetailLoaded(char.id)) {
+    const request = latestDetailRequest;
+    container.setAttribute('aria-busy', 'true');
+    loadCharacterDetail(char.id).then(
+      () => { if (latestDetailRequest === request) renderCharacterDetail(slugOrId, activeTab); },
+      (error) => {
+        console.error('Error loading character detail:', error);
+        if (latestDetailRequest !== request) return;
+        currentRenderedCharId = null;
+        currentActiveTab = null;
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-content"><h2 class="empty-state-title">${s('ldErr')}</h2><p class="empty-state-text">${s('ldErrText')}</p></div></div>`;
+      },
+    ).finally(() => { if (latestDetailRequest === request) container.removeAttribute('aria-busy'); });
     return;
   }
 

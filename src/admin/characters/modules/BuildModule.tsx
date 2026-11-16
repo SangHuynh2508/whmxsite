@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Button, Field, Notice, SectionTitle, Select, SkeletonRows, describeError, inputClass, statusOf } from '../../layout/ui';
-import { loadGameData } from '../../../data/loader.js';
+import { loadCharacterDetail, loadGameData } from '../../../data/loader.js';
 import { createBuild, deleteBuild, getBuilds, saveBuild } from '../buildApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
 import { MAX_COLUMN, MAX_DEEPENS, MAX_TOTAL, MAX_WEAPONS, addDeepen, addWeapon, buildErrors, emptyBuild, move, sameDoc, setPoint, totalPoints, type BuildDoc } from '../lib/buildDoc.mts';
@@ -27,6 +27,7 @@ const withDefaults = (doc: Partial<BuildDoc>): BuildDoc => ({ ...emptyBuild(null
 
 async function loadSite(characterId: string): Promise<Site> {
   const data = await loadGameData();
+  if (data.characters[characterId]) await loadCharacterDetail(characterId); // skills: docs/DATA_SPLIT.md
   const all = Object.values(data.characters) as { id: string; name_vi?: string; name_cn?: string; skills?: { group_id: string; levels?: { name_vi?: string; name_cn?: string }[] }[] }[];
   return {
     skills: (data.characters[characterId]?.skills ?? []).map((s: { group_id: string; levels?: { name_vi?: string; name_cn?: string }[] }) => ({ id: s.group_id, name: s.levels?.[0]?.name_vi || s.levels?.[0]?.name_cn || s.group_id })),

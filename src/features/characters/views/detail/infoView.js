@@ -327,6 +327,19 @@ function deriveCardLocalAlias(mech, term) {
   return aliases.length && new Set(aliases).size === 1 ? aliases[0] : "";
 }
 
+// Every character name in the roster, longest first (index fields, so always loaded).
+let rosterNameCache = null;
+function rosterNames() {
+  if (!rosterNameCache) {
+    const names = new Set();
+    for (const c of Object.values(getGameData()?.characters || {})) {
+      for (const key of ['name_vi', 'fullname_vi', 'name_cn', 'fullname_cn']) if (c[key]?.trim()) names.add(c[key].trim());
+    }
+    rosterNameCache = [...names].sort((a, b) => b.length - a.length);
+  }
+  return rosterNameCache;
+}
+
 function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", parentBuffId = null) {
   if (!text) return s('noDesc');
 
@@ -383,6 +396,13 @@ function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", pare
       formatted = formatted.replace(termRe, `$1%%PROTECTED_TERM_${idx}%%$3`);
     });
 
+    // A character's name is never a popup term: "Liên Hoa" must not link inside "Thanh Từ Liên Hoa Tôn" (D0166).
+    // Any roster name (VI/CN, short/full) that contains an eligible term is masked before matching.
+    const protectedNames = rosterNames().filter(name => !exactTargetNames.has(name) && targets.some(target => name.includes(target.name)));
+    protectedNames.forEach((name, idx) => {
+      formatted = formatted.split(/(<[^>]*>)/g).map(part => part.startsWith('<') ? part : part.split(name).join(`%%PROTECTED_NAME_${idx}%%`)).join('');
+    });
+
     targets.forEach((target, idx) => {
       const parts = formatted.split(/(<[^>]*>)/g);
       for (let i = 0; i < parts.length; i++) {
@@ -401,6 +421,9 @@ function renderRichGameText(text, scope, contextDepth = 0, popupScope = "", pare
     });
     protectedTerms.forEach((term, idx) => {
       formatted = formatted.split(`%%PROTECTED_TERM_${idx}%%`).join(term);
+    });
+    protectedNames.forEach((name, idx) => {
+      formatted = formatted.split(`%%PROTECTED_NAME_${idx}%%`).join(name);
     });
   }
 

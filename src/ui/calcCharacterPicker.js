@@ -1,5 +1,7 @@
 import { state, setCharacter } from '../data/state.js';
-import { getGameData } from '../data/loader.js';
+import { getGameData, isCharacterDetailLoaded, loadCharacterDetail } from '../data/loader.js';
+
+let pendingCalcChar = '';
 import { routeString } from '../app/router/location.mts';
 
 import { RARITY_LABELS } from './utils/gameLabels.mts';
@@ -60,6 +62,16 @@ export function selectCalculatorCharacter(characterOrId) {
     : characterOrId;
 
   if (!char) return;
+
+  // Talents live in data/c/<id>.json (docs/DATA_SPLIT.md): load first; the last pick wins.
+  pendingCalcChar = char.id;
+  if (!isCharacterDetailLoaded(char.id)) {
+    loadCharacterDetail(char.id).then(
+      () => { if (pendingCalcChar === char.id) selectCalculatorCharacter(char.id); },
+      (error) => console.error('Error loading character detail:', error),
+    );
+    return;
+  }
 
   // 1. Update state
   setCharacter(char);
