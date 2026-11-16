@@ -179,8 +179,6 @@ LORE_PUBLISH_PREFIX=lore/production/ node --env-file=.env --env-file=.env.produc
 
 Rồi prune Vercel (§8). Sau đó kiểm trang nhân vật mới trên https://whmxsite.vercel.app (Tổng quan, Thông Tin, Build, Hồ Sơ).
 
-**G. Sau khi lên (N3)**: nếu có Preview trùng mã nhân vật mới → Admin → Preview → retire; metadata/ảnh đã chọn thành override trên nhân vật chính thức.
-
 ---
 
 ## 5. Quy trình: đồng bộ ảnh nhân vật (khi thiếu/hỏng ảnh, không có bản game mới)

@@ -29,12 +29,12 @@ Audit snapshot: 2026-09-21. The repository is a deliberately mixed application, 
 | --- | --- | --- |
 | Public browser app | Vite serves `index.html`; `src/main.js` delegates startup to `src/app/bootstrap/boot.js`, and `src/app/router/router.js` drives the hash-routed, mostly plain-JavaScript SPA. `src/data/loader.js` reads the public snapshot. | Current hybrid boundary |
 | Public UI | `src/features/characters/`, `src/features/skins/`, `src/features/calculator/`, and `src/features/weapons/` own their respective public renderers. `src/ui/` now holds only the remaining shared/Character-adjacent Calculator modules (`calcCharacterPicker.js`, `talentGraph.js`, `resourceSummary.js`, `loreReveal.js`, `utils/`), kept in their legacy location because they are genuinely shared with the Character feature or app shell rather than Calculator/Weapons-exclusive. Global navigation (React `AppNav.tsx`), feedback, back-to-top and smooth-scroll behavior live in `src/app/` (the legacy catalog drawer `sidebar.js` and `settings/theme.js` were removed 2026-09-29; the site is dark only via `data-theme` on `<html>`). | Current hybrid boundary |
-| Vue | Vue 3 is used as a dynamically imported, programmatically mounted Character/Skin Admin island in `src/admin/character-skin/characterSkinAdminWorkspace.js`. There are currently no `.vue` SFCs or a Vite Vue-plugin boundary. | Current hybrid boundary |
-| Admin shell | React + Tailwind (2026-09-23, direction B): `src/admin/layout/AdminApp.tsx` owns route/session/login and the nav array; `src/admin/preview/PreviewView.tsx`/`PreviewDetail.tsx` and `src/admin/users/AccountsView.tsx` call the `previewApi.js`/`usersApi.js` data layer. The Vue Khí Giả island is mounted inside it unchanged. | Current hybrid boundary |
-| API runtime | `api/` contains Node-style Vercel Function adapters for auth, session, Admin Character/Skin/Preview/User routes, managed-asset upload intents, and DB health. Preview routes delegate transaction-scoped reads/mutations into `server/preview-characters/`. | Current foundation |
-| Server/domain layer | `server/admin/accounts/`, `server/assets/`, and `server/preview-characters/` are already real current domain directories; remaining Better Auth, Character/Skin Admin, and R2 adapter modules stay flat until their own bounded batch. | Current foundation; TARGET for remaining domain directories |
-| Database | Neon/PostgreSQL is accessed through Drizzle and `postgres` in `db/`. Schemas are already separated into auth, core, Character/Skin, and preview/asset files; committed SQL migrations exist. | Current foundation |
-| Assets | Source card/drawing assets are R2/CDN-backed; public avatars, item icons, and Series badges are local public assets. Managed-asset services store metadata and mappings in PostgreSQL, not image bytes. | Current foundation |
+| Vue | None left: the Vue Character/Skin island was replaced by the React Khí Giả editor (`src/admin/characters/`); no `vue` dependency. | Removed |
+| Admin shell | React + Tailwind (2026-09-23, direction B): `src/admin/layout/AdminApp.tsx` owns route/session/login, the nav array and the phone bottom bar; areas are `src/admin/characters/` (Khí Giả record modules + Từ điển), `src/admin/tier-lists/`, `src/admin/users/`. Preview was removed 2026-11-17. | Current |
+| API runtime | `api/` contains Node-style Vercel Function adapters: `api/auth/[...].js`, `api/admin/session.js`, and one dispatcher `api/admin/[...].js` for the Admin routes in `server/admin-api-routes/` (characters, lore, skins, builds, tier-lists, users), plus `api/internal/`. | Current foundation |
+| Server/domain layer | `server/admin/`, `server/builds/`, `server/game/`, `server/profile/`, `server/tier-lists/` are domain directories; Better Auth (`server/auth.mjs`) and Character/Skin Admin (`server/character-skin-admin-domain.mjs`) stay flat until their own bounded batch. | Current foundation; TARGET for remaining domain directories |
+| Database | Neon/PostgreSQL is accessed through Drizzle and `postgres` in `db/`. Schemas are separated into auth, core, Character/Skin, profile, build, tier-list and preview/asset files (the last kept as tables only since Preview was removed); committed SQL migrations exist. | Current foundation |
+| Assets | Source card/drawing assets are R2/CDN-backed; public avatars, item icons, and Series badges are local public assets. (The managed-upload services went with Preview on 2026-11-17.) | Current foundation |
 | Public data | `public/data.json` remains a generated, read-optimized frontend artifact. `tools/build_web_data.py` joins source-backed relationships, localization, and asset information; it is not a blind table export. **Since 2026-11-14 the browser no longer fetches it:** `tools/split_data.mjs` (npm predev/prebuild) splits it into `public/data/index.json` plus per-character `public/data/c/<id>.json`, loaded on demand. See [`DATA_SPLIT.md`](DATA_SPLIT.md). | Current public delivery |
 | Auth | Better Auth is mounted under `api/auth/[...].js`; Admin reads session state from `api/admin/session.js`. Roles and active status are enforced server-side. | LOCKED security boundary |
 | Operations | `scripts/` contains migrations, importers, bootstrap/reset operations, and proof scripts. `tools/` contains the existing localization/build/validation workflow. | Current operational boundary |
@@ -74,7 +74,6 @@ src/
     layout/
     auth/
     accounts/
-    preview/
     audit/
     components/                # only when a real Admin-wide component exists
 
@@ -94,7 +93,7 @@ src/
 
 - When public bootstrap/navigation/router code is materially changed, migrate its bounded responsibility from `index.html`, `src/main.js`, `src/router.js`, and `src/ui/` toward `src/app/`; do not move it merely for appearance.
 - Keep current public rendering functional while a domain is migrated. A feature may initially wrap a legacy renderer or data adapter.
-- Keep the Admin shell at `src/admin/layout/AdminApp.tsx` and the Preview workspace in `src/admin/preview/`. Evolve the Vue Character/Skin island only when materially extended; accepted D2.4.1 behavior is a baseline, not a migration trigger.
+- Keep the Admin shell at `src/admin/layout/AdminApp.tsx`; Admin areas live in `src/admin/<area>/` (`characters/`, `tier-lists/`, `users/`).
 - New Character/Skin/Profile/Skill/Buff/Guide/Tier List work belongs in the owning feature, even if the public consumer remains legacy JavaScript for a period.
 - A new Vue module should use TypeScript and may use `<script setup lang="ts">`; adopting SFCs later is optional, not a prerequisite for organizing a feature.
 
@@ -170,7 +169,6 @@ server/                         # server-only application/domain behavior
   admin/                        # cross-cutting authorization/account helpers
   characters/
   skins/
-  preview-characters/
   assets/
   publishing/
   audit/
@@ -189,7 +187,7 @@ scripts/                        # explicit operational commands and proof tools
 tools/                          # existing build/localization/validation tooling
 ```
 
-Today, Vercel adapters already live under `api/`, while the corresponding server modules are flat files such as `server/character-skin-admin-domain.mjs`, `server/preview-character-domain.mjs`, `server/managed-asset-domain.mjs`, and `server/auth.mjs`. The current database split in `db/schema/` is already a useful precedent. New server domains should prefer the target placement; existing files move only when their bounded domain is actively refactored.
+Today, Vercel adapters already live under `api/`, while the corresponding server modules are flat files such as `server/character-skin-admin-domain.mjs` and `server/auth.mjs`. The current database split in `db/schema/` is already a useful precedent. New server domains should prefer the target placement; existing files move only when their bounded domain is actively refactored.
 
 `api/` adapters parse HTTP-specific input, call a server operation, and map known domain errors to response envelopes. They must not accumulate authorization policy, transaction orchestration, raw-source mapping, asset finalization, or feature business logic. `server/` owns domain-specific query composition, transactions, authorization, invariants, and business orchestration. `db/` owns the database client, schema, migrations, and narrowly reusable database primitives. `scripts/` and `tools/` own explicit operator/build/import/export/proof work. Vercel build/deploy must not silently run database migrations.
 
@@ -213,10 +211,10 @@ TypeScript improves development-time checking and refactoring confidence. It doe
 
 - Application-global JavaScript belongs in `src/app/<responsibility>/`, such as `bootstrap/`, `layout/`, `router/`, `runtime/`, and `settings/`.
 - Feature-owned JavaScript belongs in `src/features/<domain>/`. Use bounded `views/`, `components/`, `api/`, or `utils/` categories only when the domain has enough real files to justify them.
-- Cross-cutting Admin JavaScript belongs in `src/admin/<area>/`, such as `layout/`, `auth/`, `accounts/`, `preview/`, and `audit/`.
+- Cross-cutting Admin JavaScript belongs in `src/admin/<area>/`, such as `layout/`, `characters/`, `tier-lists/`, and `users/`.
 - Truly global CSS belongs in `src/styles/`. `tokens.css` and `global.css` may exist when they each represent a stable global responsibility; `typography.css` is not mandatory.
 - Feature CSS belongs in `src/features/<domain>/styles/`. Do not colocate it beside feature JavaScript when the domain already has a meaningful deterministic `styles/` directory. The accepted `src/features/skins/views/` and `src/features/skins/styles/` structure remains in place.
-- Genuinely Admin-only CSS belongs in `src/admin/styles/`, for example `adminShell.css`, `previewWorkspace.css`, or `characterSkinWorkspace.css`; do not scatter arbitrary style directories through every Admin subarea.
+- Genuinely Admin-only CSS belongs in `src/admin/styles/`, for example `adminShell.css`; do not scatter arbitrary style directories through every Admin subarea.
 
 Do not create `src/js/` or `src/css/`. `src/styles/` is not a dumping ground: feature-specific and Admin-specific selectors belong with their owners. Do not create empty directories merely for appearance.
 
