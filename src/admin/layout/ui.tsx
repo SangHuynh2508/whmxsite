@@ -2,32 +2,8 @@ import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode, type Re
 import { ArrowUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-/* ---------- Vietnamese labels for raw enum data (raw value stays visible next to them) ---------- */
-
-export const LIFECYCLE_VI: Record<string, string> = {
-  unverified: 'Chờ giám định',
-  unreleased: 'Chưa ra mắt',
-  released: 'Đã ra mắt',
-  retired: 'Đã rút',
-};
-export const VISIBILITY_VI: Record<string, string> = { hidden: 'Ẩn', preview: 'Xem trước', public: 'Công khai' };
-export const PROVENANCE_VI: Record<string, string> = {
-  source_extracted: 'Ảnh trích từ game',
-  manual_preview: 'Ảnh xem trước (chưa chính thức)',
-  manual_official: 'Ảnh chính thức',
-  manual_placeholder: 'Ảnh tạm',
-};
-export const ROLE_VI: Record<string, string> = { avatar: 'Ảnh đại diện', card: 'Ảnh thẻ', drawing: 'Tranh lập họa' };
-
 const ERROR_VI: Record<string, string> = {
   FORBIDDEN: 'Máy chủ từ chối quyền thực hiện.',
-  OBJECT_NOT_FOUND: 'Tệp chưa được tải lên.',
-  UPLOAD_FAILED: 'Tải tệp lên thất bại.',
-  UPLOAD_BLOCKED: 'Trình duyệt không gửi được tệp lên kho ảnh (thường do cấu hình CORS của bucket R2).',
-  OBJECT_INVALID: 'Tệp không phải ảnh PNG/JPEG/WebP hợp lệ.',
-  OBJECT_TOO_LARGE: 'Ảnh vượt dung lượng cho phép của loại ảnh này.',
-  UPLOAD_EXPIRED: 'Phiếu tải lên đã hết hạn, hãy tải lại ảnh.',
-  UPLOAD_NOT_PENDING: 'Phiếu tải lên này đã được xử lý.',
   REQUEST_FAILED: 'Yêu cầu thất bại.',
   VERSION_CONFLICT: 'Bản ghi đã thay đổi ở nơi khác.',
 };
@@ -43,41 +19,6 @@ export function formatDate(value: unknown) {
   if (!value) return '—';
   const date = new Date(String(value));
   return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' });
-}
-
-/* ---------- Lifecycle glyph: the accession path drawn as one progressing mark ---------- */
-
-export function LifecycleGlyph({ lifecycle, className }: { lifecycle: string; className?: string }) {
-  const common = { width: 16, height: 16, viewBox: '0 0 16 16', 'aria-hidden': true, className: cn('shrink-0', className) } as const;
-  if (lifecycle === 'released') {
-    return (
-      <svg {...common} className={cn(common.className, 'text-(--admin-gold-ink)')}>
-        <circle cx="8" cy="8" r="7" fill="currentColor" />
-        <path d="M4.8 8.2l2.1 2.1 4.3-4.6" fill="none" stroke="var(--admin-on-gold)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (lifecycle === 'unreleased') {
-    return (
-      <svg {...common} className={cn(common.className, 'text-(--text-main)')}>
-        <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M8 4a4 4 0 0 1 0 8z" fill="currentColor" />
-      </svg>
-    );
-  }
-  if (lifecycle === 'retired') {
-    return (
-      <svg {...common} className={cn(common.className, 'text-(--text-muted)')}>
-        <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M3.8 12.2l8.4-8.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  return (
-    <svg {...common} className={cn(common.className, 'text-(--text-muted)')}>
-      <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2.4 2.1" />
-    </svg>
-  );
 }
 
 /* ---------- Primitives ---------- */

@@ -4,12 +4,11 @@ import { getSession, refreshSession, signOut } from '../../app/auth/session.js';
 import { cn } from '@/lib/utils';
 import { MagicCard } from '@/components/magicui/magic-card';
 import { Button, Field, Notice, ViewHeader, inputClass } from '@/ui';
-import PreviewView from '../preview/PreviewView';
 import AccountsView from '../users/AccountsView';
 import CharactersView from '../characters/CharactersView';
 import { DictionaryView } from '../characters/DictionaryView';
 import TierListsView from '../tier-lists/TierListsView';
-import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav';
+import { NAV, currentSection, isAdminRoute, type NavEntry, type Section } from './nav.mts';
 import { LOGIN_HASH, authRedirect } from './lib/authRoute.mts';
 import { mustAskBeforeLeaving } from './lib/leaveGuard.mts';
 
@@ -32,9 +31,7 @@ export default function AdminApp() {
   const [showPassword, setShowPassword] = useState(false);
   // The admin page a signed-out visitor asked for, reopened after they sign in.
   const nextAfterLogin = useRef('');
-  // Preview and Khí Giả mount on first visit and then stay mounted (hidden) so an unsaved draft survives a trip to another area.
-  const [previewMounted, setPreviewMounted] = useState(false);
-  if (section === 'preview' && !previewMounted) setPreviewMounted(true);
+  // Khí Giả mounts on first visit and then stays mounted (hidden) so an unsaved draft survives a trip to another area.
   const [charactersMounted, setCharactersMounted] = useState(false);
   if (section === 'characters' && !charactersMounted) setCharactersMounted(true);
 
@@ -163,11 +160,6 @@ export default function AdminApp() {
     <main className="admin-react-root flex min-h-screen flex-col bg-(--bg-main) text-(--text-main) md:ml-[60px] md:w-[calc(100%-60px)] md:flex-row lg:h-screen lg:overflow-hidden">
       <Sidebar section={section} name={session.user?.name ?? ''} role={session.user?.role ?? ''} isOwner={isOwner} onLogout={() => void signOut()} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        {previewMounted && (
-          <div hidden={section !== 'preview'} className={shown(section === 'preview')}>
-            <PreviewView isOwner={isOwner} />
-          </div>
-        )}
         {section === 'accounts' && <AccountsView isOwner={isOwner} />}
         {section === 'dictionary' && (
           <div className={shown(true)}>

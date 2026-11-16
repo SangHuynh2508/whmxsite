@@ -1,4 +1,4 @@
-// Shared by every admin area (moved from previewApi.js).
+// Shared by every admin area.
 export function requestId() { return crypto.randomUUID(); }
 
 // Throws Error(code) with .status (409 = VERSION_CONFLICT) and .payload.

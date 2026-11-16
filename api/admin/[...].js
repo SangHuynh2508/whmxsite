@@ -28,21 +28,6 @@ module.exports = async function adminApiDispatcher(request, response) {
         request.query.id = rest[0];
         return userDetail(request, response);
       }
-      case 'previews': {
-        const { previewList, previewDetail } = await import('../../server/admin-api-routes/previews.mjs');
-        if (rest.length === 0) return previewList(request, response);
-        request.query.id = rest[0];
-        return previewDetail(request, response);
-      }
-      case 'assets': {
-        const { uploadIntent, finalizeUpload } = await import('../../server/admin-api-routes/assets.mjs');
-        if (rest.length === 1 && rest[0] === 'upload-intents') return uploadIntent(request, response);
-        if (rest.length === 3 && rest[0] === 'upload-intents' && rest[2] === 'finalize') {
-          request.query.id = rest[1];
-          return finalizeUpload(request, response);
-        }
-        return response.status(404).json({ error: { code: 'NOT_FOUND' } });
-      }
       case 'lore': {
         const lore = await import('../../server/admin-api-routes/lore.mjs');
         if (rest.length === 1 && rest[0] === 'publish') return lore.lorePublish(request, response);

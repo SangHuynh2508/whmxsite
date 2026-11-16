@@ -13,7 +13,7 @@ import { searchSite } from './siteSearch.mts';
 import { setLang, type Lang } from '../../i18n/lang.mts';
 import { s, type StringKey } from '../../i18n/strings.mts';
 import { useLang } from '../../i18n/useLang.ts';
-import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav';
+import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav.mts';
 
 /*
  * Global navigation, one React root: the desktop rail (≥769px) and the mobile

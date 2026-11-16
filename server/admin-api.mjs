@@ -84,15 +84,11 @@ export function requestId(body) {
   return typeof body.requestId === 'string' && body.requestId ? body.requestId : randomUUID();
 }
 
-// Domain errors are told apart by name, not instanceof: importing their modules here would load the upload stack
+// Domain errors are told apart by name, not instanceof: importing their modules here could load heavy modules
 // (sharp, AWS SDK) on every admin request (server/admin-api.test.mjs).
 export function sendAdminError(response, error) {
   if (error instanceof AdminApiError) return response.status(error.status).json({ error: { code: error.code, ...(error.details ? { details: error.details } : {}) } });
   if (error?.name === 'ZodError') return response.status(422).json({ error: { code: 'VALIDATION_ERROR' } });
-  if (error?.name === 'PreviewDomainError' || error?.name === 'ManagedAssetError') {
-    const status = error.code === 'FORBIDDEN' ? 403 : error.code === 'NOT_FOUND' ? 404 : error.code === 'VERSION_CONFLICT' ? 409 : 400;
-    return response.status(status).json({ error: { code: error.code } });
-  }
   if (error?.name === 'AdminAccountDomainError') {
     return response.status(error.status).json({ error: { code: error.code } });
   }

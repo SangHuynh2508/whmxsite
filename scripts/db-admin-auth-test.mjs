@@ -63,7 +63,7 @@ function nodeLoginRequest(email, password) {
 
 let db;
 try {
-  const [{ auth, internalAuthHeaders, provisioningAuth }, { getDb, closeDb }, { accounts, adminAccountAudits, users }, accountDomain, { authenticatedUser }, sessionRoute, authRoute, previewDomain] = await Promise.all([
+  const [{ auth, internalAuthHeaders, provisioningAuth }, { getDb, closeDb }, { accounts, adminAccountAudits, users }, accountDomain, { authenticatedUser }, sessionRoute, authRoute] = await Promise.all([
     import('../server/auth.mjs'),
     import('../db/client.mjs'),
     import('../db/schema/auth.mjs'),
@@ -71,7 +71,6 @@ try {
     import('../server/admin-api.mjs'),
     import('../api/admin/session.js'),
     import('../api/auth/[...].js'),
-    import('../server/preview-characters/preview-character-domain.mjs'),
   ]);
   db = getDb();
   const { bootstrapFirstOwner, provisionAdminAccount, updateAdminAccount, AdminAccountDomainError } = accountDomain;
@@ -199,14 +198,6 @@ try {
   await authRoute.default(nodeLoginRequest(editor.email, editorPassword), disabledLoginResponse);
   assert.equal(disabledLoginResponse.statusCode, 401, 'disabled users must not obtain a new session');
 
-  await assert.rejects(
-    () => previewDomain.createPreviewCharacter(db, {
-      actorUserId: editor.id,
-      requestId: randomUUID(),
-      nameVi: `${marker}-must-not-create`,
-    }),
-    (error) => error.code === 'FORBIDDEN',
-  );
   await updateAdminAccount({ actorUserId: owner.id, subjectUserId: editor.id, status: 'active', requestId: randomUUID() });
 
   await updateAdminAccount({ actorUserId: owner.id, subjectUserId: secondOwner.id, role: 'editor', requestId: randomUUID() });
