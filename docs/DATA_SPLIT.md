@@ -34,6 +34,9 @@ The owner asked for this change on 2026-11-14 so the site stays fast as features
 - In the index, each character keeps `profile: { department, record_id }` only, for the catalogue search.
 - It runs automatically as npm `predev` and `prebuild`, so `npm run dev`, `npm run build` and the Vercel build regenerate it.
 - `public/data/` is gitignored. Test: `tools/split_data.test.mjs`.
+- `.vercelignore` drops `tools/*` from the upload, so `split_data.mjs` must stay whitelisted (`!tools/split_data.mjs`).
+  The first deploy (6288b43) failed with "Cannot find module tools/split_data.mjs" because of this; the fix was 67ab316.
+  Any new build-step script in `tools/` needs the same whitelist line.
 
 ## Frontend contract (`src/data/loader.js`)
 

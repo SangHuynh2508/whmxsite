@@ -13,6 +13,8 @@
 | [`../DESIGN.md`](../DESIGN.md) | **Visual system** (impeccable `document`, 2026-09-28): tokens (frontmatter), North Star "The Night Archive", canonical radius/spacing/tabs/popover, drift list. Read before any UI work, with PRODUCT.md. Sidecar `.impeccable/design.json` (git-ignored) is regenerated with it |
 | [`../PRODUCT.md`](../PRODUCT.md) | **Product truth** (impeccable `init`, owner answers 2026-09-28): users, purpose, positioning, binding constraints (dark only, no horizontal scroll at 390 px). Read before any UI work |
 | [`WHMX_APP_ARCHITECTURE.md`](./WHMX_APP_ARCHITECTURE.md) | Where code lives; §11 publication model (Hướng B: static `data.json` + DB text overlay on R2); §12 source-of-truth boundaries |
+| [`DATA_SPLIT.md`](./DATA_SPLIT.md) | **Read before touching `src/data/loader.js` or adding a feature's data (2026-11-14):** the browser loads `data/index.json` + per-character `data/c/<id>.json`, not `data.json`; `loadCharacterDetail`; new features get their own JSON file; `.vercelignore` whitelist for build scripts |
+| `D:\BaiTapCode\WHMX\WHMX_Tool\Xuat\TrangBi_r3173\GHICHU.txt` (outside the repo) | **Equipment page research** (parked 2026-11-14): tables, stat formula, CDN bundles for icons/pictures, export + card-mock scripts, draft VI terms (not approved) |
 | [`WHMX_ENGINEERING_PRINCIPLES.md`](./WHMX_ENGINEERING_PRINCIPLES.md) | How to write code here (per-entity resolvers, bounded changes) |
 | [`WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md`](./WHMX_COMPLETE_TECHNICAL_HANDOFF_2026-09-20_v2.md) | Deep background (still valid): runtime update pipeline, AssetBundle decrypt, R2/CDN, skin/series/acquisition invariants, localization workflow, NeoArtifacts history. Its status/next-step sections (§11–§25) are superseded by this file |
 | [`WHMX_MASTERDATA_ID_CONVENTIONS(5).md`](./WHMX_MASTERDATA_ID_CONVENTIONS(5).md) | Meaning of raw MasterData IDs — never infer semantics from ID shape |
@@ -56,6 +58,7 @@
 |---|---|
 | Git | **Local only** (`gh` not installed — read PRs with `curl https://api.github.com/repos/SangHuynh2508/whmxsite/pulls/<n>`). Branch `feat/postgres-admin-crud`; push = `git fetch`, check `git merge-base --is-ancestor origin/main HEAD` (else a normal `git merge origin/main`; never reset/force), `git push origin HEAD:main` (Production) then `git push origin HEAD` (Preview). **2026-10-22 pushed:** r3127 release `9bb8189..7502ded` (sync fix, r3127 data, group A tool deletion, release-day data) → **Production `whmxsite-4vq4wsi35` = `7502ded`** (Vercel pruned to 5, owner yes). **2026-10-03 pushed:** tea room + docs `938f5b8..4a13947` → **Production alias `whmxsite-81xf72ax9` = `4a13947`** (Vercel pruned to 5, owner yes). **2026-10-08 pushed:** `a2348fc` link-preview meta (title "Vật Hoa Di Tân Wiki", short description, absolute `og:image` = `public/og-image.jpg`, key art KV3401 cropped 1200×630; Facebook caches previews — re-scrape in the Sharing Debugger) together with the 6 local docs commits (`2a3791a` … `5ef838e`). **2026-10-02 pushed:** Tier list `4ebb190`, admin form fix `cedf3b0`, Từ điển back-to-top `c19042e`, term 回击 = Phản kích + mobile back-to-top `f5dc8e6`, handoff + Tier List nav icon `90814ad` (trophy; `ListOrdered` read as a to-do list) → **podium** (owner pick, lucide `Podium`). The local `main` branch is stale and unused |
 | **Session 2026-11-08/09 (music, footer, banners)** (all on `main`, last `666c494`) | Branch now `feat/i18n-lang` (push with `git push origin HEAD:main`; local `main` is stale). **Music** `#/music`: "Sự kiện" tab `1f26fa6`; version tag ("3.4 Thượng", first event of the track by activityGroup start inside an `ActivityVersionMap` window; `tools/build_music_data.py --master`, searchable) `b7b9e89`. **Footer** on every view (`src/app/layout/siteFooter.js`, kept last by a MutationObserver; Lenis ignores it via `viewContent()`) `d994ab6`. Home: Lenis cold-load scroll fix + hero fade edge `ab02de4`. **Banners**: launch first runs restored from character UnlockDate (`restore_first_runs`, `{id}-r1`), oldtime test pools dropped, build exits 1 on `misdated` (`f4eb647`, `09dbe25`). Figure placement is hand-set: `tools/banner_focus.json` (skinID → {x,y,h}, 71 skins, owner-made 2026-11-09) → `banners.json` `focus` → `figStyle()` (zoom clamp 60–600%) `666c494`. Tool `tools/banner_focus.py --sheet` → `scratch/banner_focus_sheet.html` (drag figure, wheel zoom, download json); detector guesses only prefill (`banner_focus_auto.json`). Open: banners 2119–2122 bg art already contains the character (fig doubles it); 歆铭长愿 / 暗香盈袖 no bg art; 9 characters without UnlockDate; `vercel.json` caches a 404 of a hashed JS as immutable during deploys (seen once as a black screen). Spec written, not planned: [`superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md`](./superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md). |
+| **Session 2026-11-12…17 (coffee event, data split, WHMX_Tool)** (all pushed, Production = `67ab316`) | **Coffee page `/coffee`** (`86a3835`, `53ee221`): answer lookup for the event 青琉璃咖啡馆·一日店长 — nav-rail item (not under Info), only customer names in VI (owner rule), search over hint/recipe/customer/ingredient (accent-folded), customer chip strip with avatars that filters, icons + NPC avatars V0187/D0067 local in `public/coffee/` (easy to delete). Data `public/coffee.json` from `tools/build_coffee_data.py`; icons `tools/export_coffee_icons.py`; code `src/features/coffee/`. Score rule: BaseStar 2 + 1 per slot matched in position (基底/填充/雪盖). **Data split** (`6288b43`, `67ab316`): browser index 2.7 MB → 79 KB gzip, details on demand — [`DATA_SPLIT.md`](./DATA_SPLIT.md). First deploy failed: `.vercelignore` drops `tools/*`, `split_data.mjs` now whitelisted. Verified live: Thanh Từ Liên Hoa Tôn loads index + buffs + `c/D0166.json`. **Skill text fix** (`6288b43`): roster character names are masked before popup-term matching (`infoView.js` `rosterNames()`), so "Liên Hoa" no longer links inside "Thanh Từ Liên Hoa Tôn". **Not verified:** tab-switch animation (hidden pane), every character's skill text one by one (only D0166). **WHMX_Tool** (`D:\BaiTapCode\WHMX\WHMX_Tool`, its own git repo, branch at `e7d89a1`, **uncommitted** `whmx.py`/`whmx_story.py`/`README.txt` + untracked `GHICHU_CDN_LAIGU.md`): `lua` command (lua.ab decrypted with the data key), Lua snapshot + diff in `update`, `diff_dirs` ignores `SOURCE:` lines and clears stale `*_thaydoi` folders. Exports in `WHMX_Tool\Xuat\` (coffee event txt/html, touch effect, new Hoán Chương, equipment). **Equipment research parked** (see §0 GHICHU.txt): 110/110 icons + pictures exported from the laigu CDN (no MuMu), card mock `_claude_scratch\compose_card.py <id> [--vi]`. **Site comparison with BWIKI** (owner asked 2026-11-14) → backlog row "Gaps vs BWIKI". **Free-tier check** (2026-11-14): Neon 23 MB / 0.5 GB, R2 1.43 GB / 10 GB, build 150 MB; risk = images served from the rate-limited `pub-….r2.dev` domain |
 | Working tree (not mine to commit) | Owner files only: `localization/localization_master.xlsx` (modified; **includes the 2026-10-02 term change 回击 = Phản kích**, 80 cells + GLOSSARY `OWNER_GAMEPLAY_032`, backup in `localization/backups/`) + untracked (`localization/*`, root scratch files, `.agents/`, `.codex*/`, `.claude/` (project skills + `launch.json`), `AGENTS.md`, `WHMX_COMMAND_CHEATSHEET.md` (owner's; not committed), `.mcp.json`, `skills-lock.json` …). `.impeccable/` (critique snapshot + empty `live/` dirs) is **git-ignored** (`.gitignore`, owner 2026-09-28) — kept locally for `/impeccable polish` |
 | Lore pipeline (DB → R2 → site) | ✅ Live. Importer `scripts/import-character-profile.mjs`; overlay `scripts/export-profile-overlay.mjs \| tools/apply_profile_overlay.py`; publisher `scripts/publish-lore.mjs` (+ `--repoint`) and `POST /api/admin/lore/publish`; daily private backup in R2 `whmx-backups`; restore `scripts/restore-lore-snapshot.mjs` (lore only) |
 | Admin Khí Giả + Lore + **Từ điển** | ✅ Live. Code `src/admin/characters/`; lore API `server/profile/lore-admin.mjs` + `lore-edit.mjs`, routes `server/admin-api-routes/lore.mjs`. Saves auto-publish ~30 s later; owners also have "Xuất bản ngay" (closing the tab while a publish waits sends it via keepalive — `publishScheduler.leave()`; **still not browser-verified with a signed-in session**). **Từ điển** `#/admin/dictionary/<tab>[/<code>]`: Vũ khí (weapon + its skills in one save), Dòng thuộc tính, Thâm tạo (one row per identical Chinese text: 60 columns → 4 rows, 428 talents → 35 rows; saving writes every twin; "Áp dụng bản dịch này cho N mục còn lại"; PR #6), Lore; "Đã dịch x/y", "Chỉ hiện chưa dịch"; PR #5 fixed the "Khôi phục bản nháp?" prompt after every save. Lore module counter "thuật ngữ x/y" includes relic tags. **2026-09-28 (live, `22df247`):** the Lore side panel (relic, shared terms → Từ điển links, history) and the Tổng quan side panel were `max-xl:hidden` — invisible below 1280 px; now a collapsible block at the top of the editor below 1280 px ("Hiện vật và thuật ngữ · thuật ngữ x/y", "Thông tin hồ sơ"). Verified signed-in on the development DB at 375 / 1100 / 1440 px; production bundle checked to contain it |
@@ -196,6 +199,9 @@
 | Localization quality | Re-checked clean 2026-09-26 (populated cells); untranslated coverage is a separate question; batch #3 not started |
 | **SEO** (**live 2026-11-09**, `e8ca7e4` + `fe7c9be` `.vercelignore` lets `tools/prerender*.mjs` upload; Preview checked by a subagent, Production by curl + browser: 938 pages, old `#/` links redirect) | Spec [`superpowers/specs/2026-11-09-seo-path-urls-design.md`](./superpowers/specs/2026-11-09-seo-path-urls-design.md), plan [`superpowers/plans/2026-11-09-seo-path-urls.md`](./superpowers/plans/2026-11-09-seo-path-urls.md). Public pages are paths (`/characters/<slug>/build`); `src/app/router/location.mts` (`routeString` hands the old parsers a `#/…` string, `navigate`, link interception, old `#/…` / `#calc` / `#W0182` links rewritten); admin stays `#/admin`. `<base href="/">` in `index.html` (relative `assets/…` paths). `npm run build` = `vite build && node tools/prerender.mjs` → ~940 page files + `sitemap.xml` + `robots.txt` in `dist/` (origin constant `SITE_ORIGIN` in `tools/prerender-lib.mjs`; tier lists read from R2 via `VITE_LORE_POINTER_URL`, skipped with a warning if R2 fails). `vercel.json` SPA fallback. Guard test `noHashLinks.test.mjs`. Vercel serves `<dir>/index.html` with or without a trailing slash. Preview `VITE_LORE_POINTER_URL` gives a 404 game pointer (tier list pages skipped there; Preview `/api/auth/session` 500 predates this work). **Owner next:** paste a character link in Discord/Zalo to see the preview; add the site to Google Search Console + submits `/sitemap.xml`. OG images are `.webp` (Zalo may not preview them) |
 | Voice lines (通讯记录) — separate route, `characterLines` | Not started (later) |
+| **Gaps vs BWIKI** (wiki.biligame.com/whmx, compared 2026-11-14) | Missing on our site, by player value: (1) **equipment** (`/weapons` is a placeholder; data + images ready, GHICHU.txt), (2) cultivation materials (升级/考核/深造/致知/感应 costs), (3) stages + monsters (主线/外传/资源副本/怪物图鉴/区域派遣), (4) event calendar + news, (5) challenge modes (冬谷竞赛/试炼场/榑桑遗境/博物研学), (6) furniture + shops (家具图鉴, 易市/货架), (7) tea-room minigames rules, (8) general knowledge (伤害计算, 惯用语, 职业), (9) **外勤见闻 per-character dispatch stories** (`DispatchStoryMap`, images `images_longtermdispatch`; WHMX_Tool `dongcoc` already exports them — fits a character tab like the tea room), (10) 考据 relic essays (community-written, not game data). 1–3, 6, 9 come straight from MasterData. Each new feature = its own JSON (DATA_SPLIT.md) |
+| **Images on `pub-….r2.dev`** | Cloudflare's r2.dev domain is rate-limited and meant for testing — connect a custom domain to the bucket (free, needs a domain) before traffic grows |
+| Equipment page | Parked by the owner (2026-11-14). Still missing from the game: paper background, ink ring and star sprites of the equipment popup (some shared UI atlas). VI terms in GHICHU.txt are Claude drafts — owner approves |
 | Tea room content (owner) | Translate in Admin → Khí Giả → Phòng trà (4 455 texts) and Từ điển → Lore → Trà (15 teas: name + description) / Phòng trà (3 stage names + the shared poem). Reverse "which characters like tea X" list → roadmap §11 item 3 |
 | Tea room — open points | Admin "Phòng trà" module **not yet checked with a signed-in session**; deferred minors from the final self-review: LoreModule filters units by scope twice (one `useMemo` could feed both), the Phòng trà module's "Lịch sử gần đây" also lists lore-unit edits |
 | Story lore (`WHMX_Lore_*`) | Surveyed 2026-10-03, **parked by the owner** (tea room first): [`plans/WHMX_STORY_LORE_NOTES_2026-10-03.md`](./plans/WHMX_STORY_LORE_NOTES_2026-10-03.md) |
@@ -238,41 +244,48 @@
 7. **P5** — publish admin name/description overrides, then re-enable the public inline edit.
 8. Owner-side: buff popup / orphan translation fixes (§8 banner), lore + Từ điển translation (affixes, weapons), Vercel secrets → Secret, full names of A0024/A0063/A0167/S0149/W0168/W0173.
 
-## 12. Next session — handoff + prompt to paste (owner asked 2026-11-09)
+## 12. Next session — handoff + prompt to paste (owner asked 2026-11-17)
 
-**Where things stand (2026-11-09):** everything is pushed to `main` (`666c494`, Vercel deploys main). Local branch
-`feat/i18n-lang` = origin/main; local `main` is stale — push with `git push origin HEAD:main`. Session details: §2 row
-"Session 2026-11-08/09". Nothing committed is waiting; the owner's `localization/localization_master.xlsx` change stays uncommitted.
+**Where things stand (2026-11-17):** everything is pushed — Production = `67ab316` (local branch `feat/i18n-lang` =
+origin/main; local `main` is stale, push with `git push origin HEAD:main` after `git fetch` + ancestor check). Session
+details: §2 row "Session 2026-11-12…17". This handoff + the `DATA_SPLIT.md` `.vercelignore` note are **committed locally,
+not pushed** (docs only, push with the next change); the owner's `localization/localization_master.xlsx` stays uncommitted. WHMX_Tool (separate repo) has uncommitted
+`whmx.py` / `whmx_story.py` / `README.txt` (Lua export + diff) — the owner decides whether to commit there.
 
-**Candidates for the next piece (owner picks):**
-1. **Music covers + external (Bilibili) tracks** — spec done (Q1 Bilibili embed, Q2 admin crops covers by hand, Q3 no review,
-   dedup by Chromaprint, "giống" ≥ 0.7). First step is B4 (measure 30 known-duplicate pairs), then writing-plans. Needs a DB migration (owner yes).
-2. Small banner follow-ups: hide the overlaid figure on banners whose art already has the character (2119–2122);
-   art for 歆铭长愿 / 暗香盈袖; `vercel.json` cache headers so a deploy never caches a 404 for a hashed asset.
-3. Music: filter by version (the tag exists, no dropdown yet).
-4. Older roadmap (§11): path URLs without `#` (SEO step 1), story lore reader, Info/database section.
+**Files to read for each candidate:**
+
+| Candidate | Read first |
+|---|---|
+| Any data/feature work | [`DATA_SPLIT.md`](./DATA_SPLIT.md), `src/data/loader.js`, `tools/split_data.mjs` |
+| **Equipment page** (data + images ready) | `D:\BaiTapCode\WHMX\WHMX_Tool\Xuat\TrangBi_r3173\GHICHU.txt`, `…\TrangBi_r3173\equipments.json`, `_claude_scratch\export_equip.py`, `_claude_scratch\compose_card.py`, `src/features/weapons/views/weaponsView.js` (placeholder), `src/features/coffee/` (pattern for a self-contained page with its own JSON) |
+| 外勤见闻 dispatch stories tab | `WHMX_Tool\whmx_story.py` `build_dongcoc` (section `ngoaican`, `DispatchStoryMap`), `src/features/characters/tea/` (pattern for a character tab) |
+| Coffee page tweaks | `src/features/coffee/CoffeePage.tsx`, `coffeeData.mts`, `tools/build_coffee_data.py`, `tools/export_coffee_icons.py` |
+| Skill text / popups | `src/features/characters/views/detail/infoView.js` `renderRichGameText` + `rosterNames()`; popup backlog banner in §8 |
+| Other gaps | §8 row "Gaps vs BWIKI" |
 
 ```text
 Bạn tiếp tục dự án WHMX (repo D:\BaiTapCode\WHMX\WhmxCalc, nhánh feat/i18n-lang, site https://whmxsite.vercel.app).
 Trả lời bằng tiếng Việt, xưng "tôi/bạn". Báo tiến độ ngắn sau mỗi bước. KHÔNG dùng subagent nếu tôi chưa yêu cầu.
-Đọc trước: docs/WHMX_CURRENT_STATE_FINAL_2026-10-04.md (§2 dòng "Session 2026-11-08/09", §6, §12), docs/WHMX_COMMANDS.md §12,
-PRODUCT.md, DESIGN.md, docs/WHMX_ENGINEERING_PRINCIPLES.md.
-Luật: không push/merge khi tôi chưa bảo (push = git push origin HEAD:main, main local đã cũ); không ghi DB/R2 khi chưa hỏi;
-không đụng localization/localization_master.xlsx; test tự động luôn chặn mp3; lệnh npm chạy từng cái một.
-Việc: phần nhạc ngoài game + bìa nhạc theo spec docs/superpowers/specs/2026-11-08-music-covers-and-external-tracks-design.md.
-Bắt đầu bằng B4 (đo ngưỡng Chromaprint trên 30 cặp trùng trong music.json, fpcalc), ghi kết quả vào spec, hỏi tôi chốt ngưỡng,
-rồi superpowers:writing-plans → superpowers:executing-plans (native, ponytail, TDD).
-Nếu game ra bản cập nhật, tạm dừng và làm theo docs/WHMX_COMMANDS.md §3–§4 (+ §12 cho banner).
+Đọc trước: docs/WHMX_CURRENT_STATE_FINAL_2026-10-04.md (§2 dòng "Session 2026-11-12…17", §6, §8 "Gaps vs BWIKI", §12),
+docs/DATA_SPLIT.md, PRODUCT.md, DESIGN.md.
+Lưu ý: commit docs handoff đã nằm ở local, chưa push — push cùng thay đổi kế tiếp. Không đụng localization_master.xlsx.
+Luật: không push khi tôi chưa bảo (push = git fetch, kiểm tra origin/main là tổ tiên của HEAD, rồi git push origin HEAD:main);
+không ghi DB/R2 khi chưa hỏi; lệnh npm chạy từng cái một; tính năng mới dùng file JSON riêng, KHÔNG nhét vào data.json;
+script mới trong tools/ mà build cần thì phải thêm vào .vercelignore.
+Việc: trang Trang bị (thay /weapons đang là trang giữ chỗ). Dữ liệu + ảnh đã xuất sẵn, đọc
+D:\BaiTapCode\WHMX\WHMX_Tool\Xuat\TrangBi_r3173\GHICHU.txt. Dùng superpowers:brainstorming: đưa TẤT CẢ câu hỏi một lượt, mỗi câu
+kèm đề xuất (gồm: ảnh để R2 hay public/, thuật ngữ tiếng Việt, có dựng lại khung thẻ giống game không), chờ tôi trả lời rồi mới
+viết spec; giao diện mới dùng huashu-design (3 hướng).
 ```
 
 Alternative "Việc:" lines:
 
 ```text
-Việc: dọn banner — ẩn ảnh nhân vật chồng lên ở banner mà ảnh nền đã có sẵn nhân vật (2119–2122, nên làm bằng cờ trong
-tools/banner_focus.json hoặc build_banner_data.py), và sửa vercel.json để không cache 404 của file JS có hash khi deploy.
+Việc: thêm tab "Ngoại cần" (外勤见闻) vào trang nhân vật, giống tab Phòng Trà — dữ liệu DispatchStoryMap, ảnh images_longtermdispatch
+(WHMX_Tool whmx_story.py build_dongcoc đã có code đọc). Brainstorming trước, mọi câu hỏi một lượt.
 ```
 
 ```text
-Việc: bỏ dấu # khỏi URL (path URLs, bước 1 của SEO — roadmap §11 mục 5). Dùng superpowers:brainstorming: đưa TẤT CẢ câu hỏi một lượt,
-mỗi câu kèm đề xuất, chờ tôi trả lời rồi mới viết spec.
+Việc: gắn tên miền riêng cho bucket R2 thay pub-….r2.dev (bị giới hạn tốc độ). Liệt kê các bước + chỗ trong code dùng URL r2.dev,
+hỏi tôi tên miền trước khi làm.
 ```
