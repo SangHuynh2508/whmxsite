@@ -18,7 +18,8 @@ export function buildPages({ data, music, tierLists }) {
   const pages = [
     page('/', SITE, DEFAULT_DESC),
     page('/characters', 'Danh sách Khí Giả', 'Toàn bộ Khí Giả Vật Hoa Di Tân: độ hiếm, hệ, vai trò, kỹ năng và build.'),
-    page('/gallery', 'Trang phục', 'Toàn bộ trang phục Khí Giả Vật Hoa Di Tân.'),
+    page('/skins', 'Trang phục', 'Toàn bộ trang phục Khí Giả Vật Hoa Di Tân.'),
+    page('/gallery', 'Thư viện ảnh', 'CG truyện, màn hình chờ, hình nền sảnh, KV và bưu thiếp của Vật Hoa Di Tân; xem ảnh to, tải bản gốc.'),
     page('/tier-list', 'Tier list', 'Bảng xếp hạng Khí Giả Vật Hoa Di Tân.'),
     page('/music', 'Nhạc', 'Nhạc nền Vật Hoa Di Tân theo sự kiện, cốt truyện và khu vực.'),
     page('/banners', 'Banner', 'Banner hiện tại và lịch sử banner Vật Hoa Di Tân.'),

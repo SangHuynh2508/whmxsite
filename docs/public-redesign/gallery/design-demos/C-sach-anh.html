@@ -1,0 +1,163 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="gallery-demo.css">
+<title>Thư viện ảnh · C · Sách ảnh</title>
+<!-- C · Sách ảnh (art book) — best designer: Irma Boom (book maker; the Rijksmuseum's own catalogues). Read inside the
+     Night Archive.
+     (a) A table of contents on the left (sticky): the five kinds, and under CG truyện the series → versions / chapters /
+         events, each with its plate count. Picking a version scrolls to its chapter; the URL keeps it. Phones: the
+         contents fold into one "Mục lục" disclosure at the top.
+     (b) A series is read as a book: one chapter per version (or chapter / event), a book heading (serif over a 1 px rule),
+         then the plates in a spread rhythm — a full-width plate, then pairs of unequal width (7 : 5, 5 : 7) — each with
+         a plate caption set like a book's list of plates (name, source; the poem for postcards).
+     (c) Viewer: the plate on night-ink with its caption centred under it, ‹ › and a filmstrip of the chapter's plates at
+         the foot to jump. -->
+<style>
+.wrap{max-width:1360px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px}
+.toc{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;padding-right:8px;scrollbar-width:thin}
+.toc h2{font:700 13px var(--sans);color:var(--ash);margin:0 0 8px}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc button{display:flex;width:100%;justify-content:space-between;gap:8px;padding:6px 8px;border:0;border-radius:6px;background:none;color:var(--ash);font-size:14px;text-align:left;cursor:pointer}
+.toc button:hover{background:var(--hover);color:var(--text)}
+.toc button[aria-current=true]{color:var(--text)}
+.toc .k>button{font:600 15px/1.35 var(--serif);color:var(--text)}
+.toc small{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.toc ul ul{margin:2px 0 8px 8px;padding-left:8px;border-left:1px solid var(--line)}
+.toc ul ul ul button{font-size:13px;padding:4px 8px}
+.toc ul ul ul button[aria-current=true]{color:var(--gold)}
+.toc details summary{display:none}
+#kinds[hidden]{display:none}
+.head{padding:8px 0 24px}
+.head h1{font:700 44px/1.1 var(--serif)}
+.head p{margin-top:12px;color:var(--ash);max-width:60ch}
+.tools{display:flex;justify-content:flex-end;margin:-8px 0 8px}
+.ch{scroll-margin-top:16px;padding-top:40px}
+.ch>h2{display:flex;align-items:baseline;gap:12px;margin-bottom:24px;padding-bottom:8px;border-bottom:1px solid var(--line2);font:700 28px/1.25 var(--serif)}
+.ch>h2 span{font:500 13px var(--sans);color:var(--ash)}
+.spread{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:40px 24px;align-items:start}
+.pl{grid-column:span 12;margin:0}
+.pl.a{grid-column:span 7}.pl.b{grid-column:span 5}
+.pl.sq{grid-column:span 3}
+.pl button{display:block;width:100%;padding:0;border:0;background:var(--surface);border-radius:6px;overflow:hidden;cursor:zoom-in;aspect-ratio:var(--r)}
+.pl img{display:block;width:100%;height:100%;object-fit:cover;transition:opacity .25s}
+.pl button:hover img{opacity:.85}
+.pl figcaption{margin-top:8px;font-size:13px;color:var(--ash);line-height:1.5}
+.pl figcaption b{font:600 14px var(--serif);color:var(--text)}
+.pl .poem{display:block;margin-top:6px;font:500 14px/1.7 var(--serif);color:var(--text)}
+/* viewer */
+.vw{position:fixed;inset:0;z-index:20;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;background:var(--bg)}
+.vw[hidden]{display:none}
+.vw .top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px}
+.vw .count{font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums}
+.vw .stage{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:0 16px;min-height:0}
+.vw .cap{max-width:64ch;margin:16px auto 0;padding:0 16px;text-align:center}
+.vw .cap b{font:600 20px/1.3 var(--serif)}
+.vw .cap .m{margin-top:4px;font-size:13px;color:var(--ash)}
+.vw .cap .poem{margin-top:8px;font:500 15px/1.7 var(--serif)}
+.strip{display:flex;gap:6px;overflow-x:auto;padding:16px;scrollbar-width:thin}
+.strip button{flex:none;width:96px;aspect-ratio:21/9;padding:0;border:1px solid transparent;border-radius:4px;overflow:hidden;background:var(--surface);cursor:pointer;opacity:.55}
+.strip button.sq{width:48px;aspect-ratio:1}
+.strip button[aria-current=true]{opacity:1;border-color:var(--gold)}
+.strip img{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:1024px){
+  .wrap{grid-template-columns:1fr;gap:0}
+  .toc{position:static;max-height:none;padding:0;overflow:visible}
+  .toc details{border:1px solid var(--line2);border-radius:6px;background:var(--surface)}
+  .toc details summary{display:flex;justify-content:space-between;align-items:center;height:44px;padding:0 12px;cursor:pointer;font-weight:600;list-style:none}
+  .toc details summary::-webkit-details-marker{display:none}
+  .toc details>div{padding:4px 8px 12px;max-height:60vh;overflow:auto}
+  .toc h2{display:none}
+}
+@media (max-width:768px){
+  .head h1{font-size:30px}
+  .head{padding-bottom:16px}
+  .tools{justify-content:stretch;margin:12px 0 0}.tools .search{width:100%}
+  .ch>h2{font-size:22px}
+  .spread{gap:24px 12px}
+  .pl.a,.pl.b{grid-column:span 12}
+  .pl.sq{grid-column:span 6}
+  .vw .stage{grid-template-columns:1fr;padding:0 8px}
+  .vw .stage .btn{display:none}
+}
+</style></head><body>
+<nav class="rail" aria-label="Điều hướng"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav>
+<button class="fab" aria-label="Mở menu">☰</button>
+<main class="main"><div class="wrap">
+  <aside class="toc" id="toc"></aside>
+  <div>
+    <header class="head"><h1 id="t"></h1><p id="lede"></p></header>
+    <div class="tools"><div id="kinds" hidden></div><label class="search"><span id="sicon"></span><input id="q" type="search"></label></div>
+    <div id="story"></div>
+    <div id="body"></div>
+    <footer class="elsewhere" id="foot"></footer>
+  </div>
+</div></main>
+<div class="vw" id="vw" hidden role="dialog" aria-modal="true" aria-label="Xem ảnh">
+  <div class="top"><span class="count" id="vc"></span><div style="display:flex;gap:8px"><a class="btn gold" id="vd" download></a><button class="btn icon" id="vx"></button></div></div>
+  <div class="stage" id="vs"><button class="btn icon" id="vp"></button><div class="vimg" id="vi"></div><button class="btn icon" id="vn"></button></div>
+  <div id="vcap"></div>
+  <div class="strip" id="strip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="gallery-data.js"></script><script src="gallery-common.js"></script><script src="gallery-ui.js"></script>
+<script>
+const { L, icon, esc } = G;
+let current = [];
+const ui = GUI.mount({
+  defaults: { kind: 'story', g: 'v3', v: '' },
+  storyNav: false,
+  chapters: true,
+  render(list, st, set) {
+    current = list;
+    toc(st, set);
+    const body = document.getElementById('body');
+    if (!list.length) return GUI.empty(body);
+    // chapters: one per version / chapter / event / story for story CGs; one per kind otherwise
+    const chs = new Map(st.kind === 'story' ? G.subs(st.g).map((s) => [s, []]) : []); // same order as the contents
+    list.forEach((it, i) => { const k = it.kind === 'story' ? it.sub_cn : it.kind; if (!chs.has(k)) chs.set(k, []); chs.get(k).push([it, i]); });
+    body.innerHTML = [...chs].filter(([, arr]) => arr.length).map(([k, arr]) => `<section class="ch" id="ch-${esc(k)}"><h2>${st.kind === 'story' ? G.subHtml(arr[0][0]) : G.KIND[st.kind]}<span>${arr.length} tấm</span></h2>
+      <div class="spread">${arr.map(([it, i], n) => plate(it, i, n)).join('')}</div></section>`).join('');
+    GUI.arrive(body.querySelectorAll('.pl'));
+    if (st.v) toChapter(st.v, 'auto');
+  },
+  viewer: {
+    show(it, i, n) {
+      document.getElementById('vc').textContent = `Tấm ${i + 1} / ${n}`;
+      document.getElementById('vcap').innerHTML = `<div class="cap"><b>${G.title(it)}</b><div class="m">${GUI.meta(it)} · ${it.w} × ${it.h}</div>${it.kind === 'postcard' ? `<p class="poem">${G.note(it)}</p>` : ''}</div>`;
+      // filmstrip: the plates of this chapter
+      const ch = current.map((x, j) => [x, j]).filter(([x]) => (x.kind === 'story' ? x.sub_cn === it.sub_cn : true));
+      const strip = document.getElementById('strip');
+      strip.innerHTML = ch.map(([x, j]) => `<button data-j="${j}" class="${x.w === x.h ? 'sq' : ''}" aria-label="${esc(G.titleText(x))}" aria-current="${j === i}"><img loading="lazy" src="${G.thumb(x)}" alt=""></button>`).join('');
+      const on = strip.querySelector('[aria-current=true]'); if (on) strip.scrollLeft = on.offsetLeft - strip.clientWidth / 2;
+    },
+  },
+});
+document.getElementById('strip').addEventListener('click', (e) => { const b = e.target.closest('[data-j]'); if (b) ui.open(+b.dataset.j, document.activeElement); });
+// spread rhythm: full plate, then 7 : 5, then 5 : 7, repeat; postcards four to a row
+function plate(it, i, n) {
+  const sq = it.w === it.h, m = n % 5;
+  const cls = sq ? 'sq' : m === 0 ? '' : m === 1 || m === 4 ? 'a' : 'b';
+  const cap = it.kind === 'postcard' ? `<b>${G.title(it)}</b><span class="poem">${G.note(it)}</span>`
+    : `<b>${G.title(it)}</b>${it.kind === 'loading' && it.note_cn ? ' — ' + G.note(it) : it.kind === 'kv' ? '' : ''}`;
+  return `<figure class="pl ${cls}"><button data-i="${i}" style="--r:${it.w}/${it.h}" aria-label="Xem to: ${esc(G.titleText(it))}"><img loading="lazy" src="${m === 0 && !sq ? G.view(it) : G.thumb(it)}" alt="" onerror="this.parentNode.innerHTML='<span class=ph>Không tải được ảnh</span>'"></button><figcaption>${cap}</figcaption></figure>`;
+}
+function toChapter(v, behavior) {
+  const el = document.getElementById('ch-' + v);
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 8, behavior });
+}
+function toc(st, set) {
+  const box = document.getElementById('toc');
+  const open = box.querySelector('details')?.open;
+  const sub = (g) => `<ul>${G.subs(g).map((s) => `<li><button data-g="${g}" data-s="${esc(s)}" aria-current="${st.g === g && st.v === s}">${G.subLabel(g, s)}<small>${G.count((it) => it.group === g && it.sub_cn === s)}</small></button></li>`).join('')}</ul>`;
+  box.innerHTML = `<details${open ? ' open' : ''}><summary>Mục lục ${icon('chev', 16)}</summary><div><h2>Mục lục</h2><ul>${G.KINDS.map(([k, n]) => `<li class="k"><button data-k="${k}" aria-current="${st.kind === k}">${n}<small>${G.count((it) => it.kind === k)}</small></button>
+    ${k === 'story' ? `<ul>${G.GROUPS.map(([g, gn]) => `<li><button data-g="${g}" aria-current="${st.kind === 'story' && st.g === g}">${gn}<small>${G.count((it) => it.group === g)}</small></button>${st.kind === 'story' && st.g === g ? sub(g) : ''}</li>`).join('')}</ul>` : ''}</li>`).join('')}</ul></div></details>`;
+  if (matchMedia('(min-width: 1025px)').matches) box.querySelector('details').open = true;
+  box.onclick = (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.k) return set({ kind: b.dataset.k, g: b.dataset.k === 'story' ? 'v3' : '', v: '' });
+    if (b.dataset.s !== undefined) { ui.state.v = b.dataset.s; G.writeQuery(ui.state); box.querySelectorAll('[data-s]').forEach((x) => x.setAttribute('aria-current', String(x === b)));
+      toChapter(b.dataset.s, G.reduced ? 'auto' : 'smooth'); return; }
+    if (b.dataset.g) set({ kind: 'story', g: b.dataset.g, v: '' });
+  };
+}
+</script></body></html>

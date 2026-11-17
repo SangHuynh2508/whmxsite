@@ -26,9 +26,9 @@ import { NAV, currentSection, isAdminRoute } from '../../admin/layout/nav.mts';
 const PUBLIC_LINKS = [
   { href: '/characters', label: 'navCharacters', icon: UsersRound, views: ['catalog', 'character'] },
   { href: '/tier-list', label: 'navTier', icon: Podium, views: ['tier-list'] },
-  { href: '/gallery', label: 'navSkins', icon: Shirt, views: ['gallery', 'skin-detail'] },
+  { href: '/skins', label: 'navSkins', icon: Shirt, views: ['skins', 'skin-detail'] },
   { href: '/coffee', label: 'navCoffee', icon: Coffee, views: ['coffee'] }, // event lookup, on the rail (owner 2026-11-14)
-  { href: '/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'music', 'weapons'] },
+  { href: '/info', label: 'navInfo', icon: LayoutGrid, views: ['info', 'banners', 'music', 'weapons', 'gallery'] },
   { href: '/calculator', label: 'navTools', icon: Calculator, views: ['calculator'] },
 ] satisfies { href: string; label: StringKey; icon: unknown; views: string[] }[];
 

@@ -7,6 +7,7 @@ import { useReveal } from '../characters/motion.ts';
 import { getGameData } from '../../data/loader.js';
 import { bannerIsland } from '../banners/island.tsx';
 import { assetUrl, loadMusicCached, type MusicDoc } from '../music/musicData.mts';
+import { loadGalleryCached, viewUrl, type GalleryDoc } from '../gallery/galleryData.mts';
 import { s } from '../../i18n/strings.mts';
 import { useLang } from '../../i18n/useLang.ts';
 import './styles/info.css';
@@ -44,6 +45,14 @@ function MusicArt() {
   return <span className="info-discs">{covers.map((t) => <img key={t.id} src={assetUrl(doc!, t.cover!)} alt="" loading="lazy" />)}</span>;
 }
 
+// one version KV (3.5), full bleed
+function GalleryArt() {
+  const [doc, setDoc] = useState<GalleryDoc | null>(null);
+  useEffect(() => { void loadGalleryCached().then(setDoc); }, []);
+  const kv = doc?.items.find((x) => x.kind === 'kv' && x.id === '3501');
+  return kv ? <img className="info-art-bg" src={viewUrl(doc!, kv)} alt="" loading="lazy" /> : null;
+}
+
 export function InfoPage({ doc }: { doc: BannersDoc | null }) {
   useLang();
   const page = useRef<HTMLDivElement>(null);
@@ -51,6 +60,7 @@ export function InfoPage({ doc }: { doc: BannersDoc | null }) {
   const tiles = [
     { href: '/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
     { href: '/music', name: s('navMusic'), desc: s('ifMusicDesc'), art: <MusicArt /> },
+    { href: '/gallery', name: s('gaTitle'), desc: s('ifGalleryDesc'), art: <GalleryArt /> },
     { href: '/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
   ];
   return (

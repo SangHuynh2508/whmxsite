@@ -24,3 +24,10 @@ test('music routes', () => {
   assert.equal(musicTrackId('#/banners'), '');
   assert.equal(musicTrackId('#/music/%'), '');
 });
+
+test('gallery route: the query is the page own', () => {
+  assert.equal(staticView('#/gallery'), 'gallery');
+  assert.equal(staticView('#/gallery?kind=kv&id=2301&lang=cn'), 'gallery');
+  assert.equal(staticView('#/gallery/x'), null);
+  assert.equal(staticView('#/galleryx'), null);
+});

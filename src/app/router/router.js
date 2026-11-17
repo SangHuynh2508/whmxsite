@@ -16,6 +16,7 @@ import { mountHomePage, unmountHomePage } from '../../features/home/HomePage.tsx
 import { mountBannersPage, unmountBannersPage } from '../../features/banners/BannersPage.tsx';
 import { mountInfoPage, unmountInfoPage } from '../../features/info/InfoPage.tsx';
 import { mountMusicPage, unmountMusicPage } from '../../features/music/MusicPage.tsx';
+import { mountGalleryPage, unmountGalleryPage } from '../../features/gallery/GalleryPage.tsx';
 import { mountCoffeePage, unmountCoffeePage } from '../../features/coffee/CoffeePage.tsx';
 import { mountTierListPage, unmountTierListPage } from '../../features/tier-list/TierListPage.tsx';
 import { renderSkinGalleryView, renderGalleryDemoView } from '../../features/skins/views/skinGalleryView.js';
@@ -76,12 +77,13 @@ const VIEW_CONTAINERS = {
   banners: 'banners-view',
   info: 'info-view',
   music: 'music-view',
+  gallery: 'gallery-view',
   coffee: 'coffee-view',
   'tier-list': 'tier-list-view',
   catalog: 'character-catalog-view',
   character: 'character-detail-view',
   weapons: 'weapons-view',
-  gallery: 'skin-gallery-view',
+  skins: 'skin-gallery-view',
   'skin-detail': 'skin-detail-view',
 };
 const containerOf = (view) => (Object.hasOwn(VIEW_CONTAINERS, view) ? document.getElementById(VIEW_CONTAINERS[view]) : null);
@@ -94,6 +96,7 @@ function renderRouteView(route, target, gameData) {
       if (id === 'banners-view') unmountBannersPage();
       if (id === 'info-view') unmountInfoPage();
       if (id === 'music-view') unmountMusicPage();
+      if (id === 'gallery-view') unmountGalleryPage();
       if (id === 'coffee-view') unmountCoffeePage();
       if (id === 'tier-list-view') unmountTierListPage();
       el.classList.add('hidden');
@@ -113,7 +116,8 @@ function renderRouteView(route, target, gameData) {
     else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
     else if (route.view === 'weapons') renderWeaponsView(target);
-    else if (route.view === 'gallery') renderSkinGalleryView(target);
+    else if (route.view === 'gallery') mountGalleryPage(target);
+    else if (route.view === 'skins') renderSkinGalleryView(target);
     else renderSkinDetailView(target, route.skinId);
     return;
   }

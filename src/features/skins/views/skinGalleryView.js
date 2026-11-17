@@ -1,5 +1,5 @@
 /**
- * WHMX Skin Gallery & Library Component (/gallery or /skins)
+ * WHMX Skin Gallery & Library Component (/skins)
  * Uses Variant 2 Museum / Curatorial Collage as the authoritative hero.
  * Browses ACTUAL SKINS ONLY (145 custom skins), removing base/breakthrough appearances.
  */

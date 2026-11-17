@@ -21,7 +21,7 @@ export function legacyHashToPath(hash: string): string | null {
   if (!pathPart.includes('/')) return `/calculator?char=${encodeURIComponent(pathPart)}`; // '#W0182'
   const path = pathPart.replace(/^\/?/, '/');
   if (path === '/data') return '/weapons';
-  if (path === '/gallery-demo') return '/gallery';
+  if (path === '/gallery-demo') return '/skins';
   return `${path}${qs}`;
 }
 

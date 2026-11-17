@@ -19,7 +19,9 @@ const byPath = Object.fromEntries(pages.map((p) => [p.path, p]));
 
 test('buildPages: the page set', () => {
   for (const p of ['/', '/characters', '/characters/sach-kells', '/characters/sach-kells/build', '/characters/sach-kells/lore',
-    '/skins/W0097002', '/gallery', '/tier-list', '/tier-list/tong-hop', '/music', '/music/Bgm_Map', '/banners', '/info']) assert.ok(byPath[p], p);
+    '/skins/W0097002', '/skins', '/gallery', '/tier-list', '/tier-list/tong-hop', '/music', '/music/Bgm_Map', '/banners', '/info']) assert.ok(byPath[p], p);
+  assert.equal(byPath['/skins'].title, 'Trang phục — Vật Hoa Di Tân Wiki');
+  assert.equal(byPath['/gallery'].title, 'Thư viện ảnh — Vật Hoa Di Tân Wiki');
   assert.equal(byPath['/skins/W0097001'], undefined, 'base skin has no page');
   assert.equal(byPath['/tier-list/cu'], undefined, 'archived list has no page');
 });

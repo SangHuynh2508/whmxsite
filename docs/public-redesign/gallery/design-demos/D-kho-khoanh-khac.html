@@ -1,0 +1,470 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><link rel="stylesheet" href="gallery-demo.css">
+<title>Thư viện ảnh · D · theo UTTU</title>
+<!-- D · after the owner's reference, UTTU "The Captured Moment" (uttu.merui.net/gallery/the-captured-moment/), read inside
+     the Night Archive tokens. Owner chose the overlay way to open ("C", 2026-11-17).
+     (a) No card around it (owner: a grey box reads "AI"), straight on the page: kind tabs (gold underline) → for CG truyện the groups in plain 15 px type (bone + bold when
+         chosen, no box) and under them their versions in 13 px with the gold underline (owner: boxes and tinted bands
+         read as "AI") → a dense thumb grid.
+     (b) Near-identical images are one tile with a "layers" count; the versions show once the tile is opened.
+     (c) Story / loading / postcard: the tile opens a panel over the page (big image · versions · facts · "Tải ảnh");
+         the grid stays still and shows through the scrim, darker. Hình nền sảnh / KV (no versions): the tile opens
+         straight to full screen, a download icon beside ✕.
+     Loading (owner, like UTTU): the large image is fetched first — a progress line + % on the tile (or on the big
+     frame for another version) — and only then shown, sharp; no blurry thumb that sharpens. Only the image asked for
+     is fetched; the other versions load when picked. Motion: only the loaded image moves, from the tile to its place;
+     the page stays still (scrollbar gutter kept, panel fades in where it stands).
+     Variant groups: gallery-variants.js (demo data). -->
+<style>
+:root{--scrim:rgb(0 0 0 / .6)} /* = src/styles/tokens.css --scrim */
+html{scrollbar-gutter:stable} /* locking the scroll on open must not drop the scrollbar and reflow the page */
+.wrap{max-width:1320px;margin:0 auto}
+.head{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between;padding:8px 0 16px}
+.head h1{font:700 36px/1.15 var(--serif)} /* no lede (owner, round 7): the title and the tiles say it */
+.board{min-width:0} /* no card: the grid sits on the page itself (owner: one grey box reads "AI") */
+/* desktop (UTTU): the page and its menu stand still, only the images scroll, in place under the tabs.
+   Phones keep the page scroll — a nested scroller fights the browser bar and the thumb. */
+@media (min-width:769px){
+  html{scrollbar-gutter:auto}
+  body{overflow:hidden}
+  .main{height:100vh;height:100dvh;padding-bottom:0}
+  .wrap{display:flex;flex-direction:column;height:100%}
+  .board{flex:1;min-height:0;display:flex;flex-direction:column}
+  .scroll{flex:1;min-height:0;margin:0 -4px;padding:0 4px 24px;overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--line2) transparent} /* 4 px: room for the focus ring */
+}
+.tabs{position:relative;display:flex;gap:28px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;height:48px;padding:0;border:0;background:none;color:var(--ash);font:500 15px var(--sans);cursor:pointer;white-space:nowrap}
+.tabs button:hover,.tabs button[aria-selected=true]{color:var(--text)}
+.tabs small{margin-left:6px;font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.tabs .bar{position:absolute;bottom:-1px;left:0;height:2px;background:var(--gold);pointer-events:none}
+/* story: plain type, no boxes — the group is the bigger word (bone when chosen), its versions sit under it smaller
+   with the gold underline; one hairline closes the pair */
+.groups-row{display:flex;align-items:baseline;gap:16px;padding:14px 0 2px}
+.groups-row:empty{display:none}
+.grp{display:flex;gap:22px;min-width:0;overflow-x:auto;scrollbar-width:none}
+.grp::-webkit-scrollbar{display:none}
+.grp button{flex:none;padding:2px 0;border:0;background:none;color:var(--ash);font:500 15px var(--sans);cursor:pointer;white-space:nowrap}
+.grp button:hover{color:var(--text)}
+.grp button[aria-pressed=true]{color:var(--text);font-weight:600}
+.res{margin-left:auto;font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums;white-space:nowrap}
+.vers-row{border-bottom:1px solid var(--line)}
+.vers-row[hidden]{display:none}
+.vers-row .vers{gap:18px;padding:0}
+.vers-row .vers button{height:36px;padding:0;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:16px 0}
+.grid.sq{grid-template-columns:repeat(8,minmax(0,1fr))}
+.tile{position:relative;display:block;width:100%;aspect-ratio:var(--r);padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--lifted);cursor:pointer}
+.tile img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.tile:hover{border-color:var(--goldline)}
+.tile:hover img{transform:scale(1.04)}
+.tile[aria-expanded=true]{border-color:var(--gold)}
+.tile .nm{position:absolute;inset:auto 0 0 0;padding:20px 10px 7px;background:linear-gradient(transparent,color-mix(in srgb,var(--bg) 88%,transparent));font:500 13px/1.3 var(--sans);text-align:left;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile:hover .nm,.tile:focus-visible .nm,.tile[aria-expanded=true] .nm{opacity:1;transform:none}
+.tile .vc{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--bg) 82%,transparent);color:var(--text);font:600 12px var(--sans);font-variant-numeric:tabular-nums}
+/* loading: the picture dims, the percentage sits in the middle, a gold line fills along the bottom */
+.ld{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 55%,transparent);pointer-events:none}
+.ld b{font:600 12px var(--sans);color:var(--text);font-variant-numeric:tabular-nums}
+.ld i{position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--gold);transition:width .15s linear}
+.ld.ind i{width:30%;animation:ld 1.1s linear infinite}
+@keyframes ld{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+/* the panel over the page: the grid stays where it is and shows through the scrim */
+.panel{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:32px;background:var(--scrim);overflow:auto}
+.pin{display:grid;grid-template-columns:minmax(0,1fr) auto 320px;width:min(1240px,100%);border:1px solid var(--line2);border-radius:6px;background:var(--bg)}
+.pin.one{grid-template-columns:minmax(0,1fr) 320px} /* a single image: no versions column */
+.stage{display:grid;place-items:center;padding:16px;min-width:0}
+.frame{position:relative;width:min(100%,calc(60vh * var(--ar)));aspect-ratio:var(--r);border-radius:6px;overflow:hidden;background:var(--lifted);cursor:zoom-in}
+.frame img{display:block;width:100%;height:100%;object-fit:cover}
+.frame .zoom{position:absolute;right:10px;bottom:10px;opacity:0;transition:opacity .2s}
+.frame:hover .zoom,.frame:focus-within .zoom{opacity:1}
+.broken{display:grid;place-items:center;height:100%;padding:16px;color:var(--ash);font-size:13px;text-align:center}
+.strip{display:flex;flex-direction:column;gap:8px;width:120px;padding:16px 8px;border-left:1px solid var(--line);overflow-y:auto;max-height:calc(60vh + 32px);scrollbar-width:none}
+.strip[hidden]{display:none}
+.strip b{font-size:12px;font-weight:500;color:var(--ash);text-align:center}
+.strip button{flex:none;width:100%;aspect-ratio:var(--r);padding:0;border:1px solid var(--line2);border-radius:6px;overflow:hidden;background:var(--lifted);opacity:.45;cursor:pointer;transition:opacity .15s}
+.strip button:hover{opacity:.8}
+.strip button[aria-current=true]{opacity:1;border-color:var(--gold)}
+.strip img{display:block;width:100%;height:100%;object-fit:cover}
+.info{display:flex;flex-direction:column;gap:14px;padding:16px 20px 20px;border-left:1px solid var(--line);min-width:0}
+.info .top{display:flex;justify-content:flex-end}
+.info h2{margin-top:-8px;font:700 22px/1.3 var(--serif)}
+.info .poem{font:500 15px/1.8 var(--serif);padding:10px 0;border-top:1px solid var(--golddiv);border-bottom:1px solid var(--golddiv)}
+.info dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;margin:0;font-size:13px}
+.info dt{color:var(--ash)}
+.info dd{margin:0;font-variant-numeric:tabular-nums}
+.info .acts{margin-top:auto}
+.info .acts .btn{width:100%;height:42px}
+/* full screen: the page stays visible behind the scrim (UTTU); bar on top = name · n / N · download icon · ✕ */
+.lb{position:fixed;inset:0;z-index:30;display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--scrim)}
+.lb[hidden]{display:none}
+.lb .bar2{display:flex;align-items:center;gap:8px;padding:10px 12px 10px 20px;background:color-mix(in srgb,var(--bg) 80%,transparent)} /* the title must not sit on the page's own text */
+.lb .bar2 b{flex:1;min-width:0;font:600 17px/1.3 var(--serif);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .bar2 .ct{font-size:13px;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lb .room{position:relative;display:grid;place-items:center;padding:0 64px 24px;min-height:0}
+.lb .lbf{position:relative;border-radius:6px;overflow:hidden;background:var(--lifted)}
+.lb .lbf img{display:block;width:100%;height:100%;object-fit:cover}
+.lb .pv,.lb .nx{position:absolute;top:50%;margin-top:-32px}
+.lb .pv{left:12px}.lb .nx{right:12px}
+.fly{position:fixed;z-index:40;margin:0;border-radius:6px;object-fit:cover;pointer-events:none;will-change:transform}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.sq{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .pin,.pin.one{grid-template-columns:minmax(0,1fr) auto}.info{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:768px){
+  .head h1{font-size:28px}
+  .head .search{width:100%}
+  .tabs{gap:22px}
+  .groups-row{padding:12px 0 2px}
+  .res{display:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px 0}
+  .grid.sq{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tile .nm{display:none} /* no hover on phones: the name is read in the opened sheet (UTTU does the same) */
+  .panel{display:block;place-items:normal;padding:0;background:var(--bg)} /* place-items also centres block children (shrink-to-fit) in new Chrome */
+  .pin{display:flex;flex-direction:column;width:auto;border:0;border-radius:0;min-height:100%}
+  .stage{padding:56px 8px 8px}
+  .frame{width:100%}
+  .frame .zoom{opacity:1}
+  .strip{flex-direction:row;width:auto;max-height:none;padding:8px;border-left:0;border-top:1px solid var(--line);overflow-x:auto}
+  .strip b{display:none}
+  .strip button{width:120px}
+  .info{border-left:0;border-top:1px solid var(--line)}
+  .info h2{margin-top:0}
+  .info .top{position:fixed;top:0;left:0;right:0;z-index:2;padding:8px;background:color-mix(in srgb,var(--bg) 92%,transparent)}
+  .lb .bar2{padding:8px 8px 8px 16px}
+  .lb .room{padding:0 8px 72px}
+  .lb .pv,.lb .nx{top:auto;bottom:12px;margin:0}
+}
+@media (prefers-reduced-motion:reduce){.ld.ind i{animation:none;width:100%;opacity:.5}}
+</style></head><body>
+<nav class="rail" aria-label="Điều hướng"><b>物</b><i></i><i></i><i class="on"></i><i></i></nav>
+<button class="fab" aria-label="Mở menu">☰</button>
+<main class="main"><div class="wrap">
+  <header class="head"><h1 id="t"></h1><label class="search"><span id="sicon"></span><input id="q" type="search"></label></header>
+  <section class="board">
+    <div class="tabs" id="kinds" role="tablist" aria-label="Loại ảnh"></div>
+    <div class="groups-row" id="groups-row"></div>
+    <div class="vers-row" id="vers-row" hidden></div>
+    <div class="scroll" id="scroll"><div id="body"></div><footer class="elsewhere" id="foot"></footer></div>
+  </section>
+</div></main>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-labelledby="lbt">
+  <div class="bar2"><b id="lbt"></b><span class="ct" id="lbc"></span><a class="btn icon" id="lbd"></a><button class="btn icon" id="lbx"></button></div>
+  <div class="room" id="lbr"><div class="lbf" id="lbf"></div><button class="btn icon pv" id="lbp"></button><button class="btn icon nx" id="lbn"></button></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="gallery-data.js"></script><script src="gallery-variants.js"></script><script src="gallery-common.js"></script><script src="gallery-ui.js"></script>
+<script>
+const { L, icon, esc } = G;
+L.download = 'Tải ảnh'; // owner: "Tải ảnh", not the file format
+const $ = (id) => document.getElementById(id);
+const anim = window.gsap && !G.reduced;
+const phone = matchMedia('(max-width:768px)');
+const svg = (p, s = 14) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const LAYERS = '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>';
+const MAX = '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/>';
+const DIRECT = new Set(['home', 'kv']); // no versions: a tile opens straight to full screen
+const BROKEN = '<p class="broken">Không tải được ảnh này. Vẫn có thể bấm “Tải ảnh”.</p>';
+
+// ---- loading the large image, with progress (fetch stream → object URL, decoded before it is shown) ----
+const cache = new Map(), heard = new Map();
+function load(url) {
+  if (cache.has(url)) return cache.get(url);
+  const tell = (x) => heard.get(url)?.forEach((f) => f(x));
+  const p = fetch(url).then(async (r) => {
+    if (!r.ok) throw new Error(r.status);
+    const total = +r.headers.get('content-length') || 0;
+    let blob;
+    if (!r.body || !total) { tell(-1); blob = await r.blob(); }
+    else {
+      const rd = r.body.getReader(), parts = []; let got = 0;
+      for (;;) { const { done, value } = await rd.read(); if (done) break; parts.push(value); got += value.length; tell(got / total); }
+      blob = new Blob(parts, { type: r.headers.get('content-type') || 'image/webp' });
+    }
+    const src = URL.createObjectURL(blob), im = new Image();
+    im.src = src; await im.decode().catch(() => {});
+    return src;
+  });
+  p.catch(() => cache.delete(url)).finally(() => heard.delete(url));
+  cache.set(url, p);
+  return p;
+}
+// Shows the progress on `el` only if the wait is noticeable (a cached image opens without a flash of it).
+function loadOn(el, url) {
+  let ui = null, last = null;
+  const paint = () => { if (!ui) return; if (last < 0) { ui.classList.add('ind'); ui.querySelector('b').textContent = 'Đang tải…'; } else { ui.querySelector('i').style.width = last * 100 + '%'; ui.querySelector('b').textContent = Math.round(last * 100) + '%'; } };
+  const t = setTimeout(() => { ui = document.createElement('span'); ui.className = 'ld'; ui.innerHTML = '<i></i><b>0%</b>'; el.append(ui); paint(); }, 120);
+  const f = (x) => { last = x; paint(); };
+  if (!heard.has(url)) heard.set(url, new Set());
+  heard.get(url).add(f);
+  return load(url).finally(() => { clearTimeout(t); ui?.remove(); heard.get(url)?.delete(f); });
+}
+
+// ---- variant families: kind:id -> [items], representative first ----
+const byKey = new Map(G.items.map((it) => [it.kind + ':' + it.id, it]));
+const fam = new Map();
+for (const [k, ids] of window.GALLERY_VARIANTS) { const f = ids.map((i) => byKey.get(k + ':' + i)); f.forEach((it) => fam.set(it, f)); }
+const family = (it) => fam.get(it) || [it];
+function tiles(list) { // one tile per family: the first member the filter kept stands for it
+  const seen = new Set(), out = [];
+  for (const it of list) { const f = family(it); if (seen.has(f)) continue; seen.add(f); out.push({ it, f }); }
+  return out;
+}
+
+const st = G.readQuery({ kind: 'story', g: 'v3', v: G.subs('v3')[0] });
+let shown = [], open = null, want = -1; // open = { n, at, el }; want = the tile whose image is being fetched
+$('t').textContent = L.title;
+$('sicon').innerHTML = icon('search', 16);
+$('q').placeholder = L.search; $('q').setAttribute('aria-label', L.search); $('q').value = st.q;
+$('foot').innerHTML = `<span>${L.elsewhere}</span><a href="#">${L.skins}</a><a href="#">${L.banners}</a>`;
+
+// ---- kind tabs ----
+const kinds = $('kinds');
+kinds.innerHTML = G.KINDS.map(([k, n]) => `<button role="tab" data-v="${k}">${n}<small>${G.count((it) => it.kind === k)}</small></button>`).join('') + '<span class="bar"></span>';
+kinds.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && b.dataset.v !== st.kind) set({ kind: b.dataset.v, ...(b.dataset.v === 'story' ? { g: 'v3', v: G.subs('v3')[0] } : { g: '', v: '' }) }); });
+function bar() {
+  const b = kinds.querySelector(`[data-v="${st.kind}"]`), el = kinds.querySelector('.bar');
+  kinds.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  const to = { x: b.offsetLeft, width: b.offsetWidth };
+  if (anim && el.style.width) gsap.to(el, { ...to, duration: 0.45, ease: 'expo.out' }); else gsap.set(el, to);
+}
+// ---- groups row + versions row ----
+const VLAB = (g) => (/^v\d$/.test(g) ? 'Bản' : g === 'main' ? 'Chương' : 'Truyện');
+function rows() {
+  const gr = $('groups-row'), vr = $('vers-row');
+  const res = `<span class="res" aria-live="polite">${shown.reduce((a, t) => a + t.f.length, 0)} ảnh</span>`;
+  if (st.kind !== 'story') { gr.innerHTML = res; vr.hidden = true; return; }
+  gr.innerHTML = `<div class="grp" id="groups" role="group" aria-label="Nhóm">${G.GROUPS.map(([g, n]) => `<button data-v="${g}" aria-pressed="${g === st.g}">${n}</button>`).join('')}</div>${res}`;
+  $('groups').onclick = (e) => { const b = e.target.closest('button'); if (b) set({ g: b.dataset.v, v: /^v\d$/.test(b.dataset.v) ? G.subs(b.dataset.v)[0] : '' }); };
+  vr.hidden = false;
+  vr.innerHTML = `<div class="vers" role="group" aria-label="${VLAB(st.g)}">${[['', L.all], ...G.subs(st.g).map((s) => [s, G.subLabel(st.g, s)])]
+    .map(([s, n]) => `<button data-s="${esc(s)}" aria-pressed="${s === st.v}">${n}</button>`).join('')}</div>`;
+  const vers = vr.querySelector('.vers');
+  vers.onclick = (e) => { const b = e.target.closest('button'); if (b) set({ v: b.dataset.s }); };
+  const on = vers.querySelector('[aria-pressed=true]'); if (on) vers.scrollLeft = on.offsetLeft - vers.offsetLeft - vers.clientWidth / 2 + on.offsetWidth / 2;
+}
+let qTimer = 0;
+$('q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => set({ q: $('q').value.trim() }), 150); });
+function set(patch) { close(true); Object.assign(st, patch, { id: '' }); G.writeQuery(st); draw(); $('scroll').scrollTop = 0; }
+
+// ---- grid ----
+const body = $('body');
+function draw() {
+  bar();
+  shown = tiles(G.filter(st));
+  rows();
+  if (!shown.length) return GUI.empty(body);
+  body.innerHTML = `<div class="grid${st.kind === 'postcard' ? ' sq' : ''}" id="grid">${shown.map(({ it, f }, n) => `<button class="tile" data-n="${n}" aria-haspopup="dialog" style="--r:${it.w}/${it.h}">
+    <img loading="lazy" src="${G.thumb(it)}" alt="" onerror="this.outerHTML='<span class=ph>Không tải được ảnh</span>'">
+    ${f.length > 1 ? `<span class="vc" aria-label="${f.length} bản">${svg(LAYERS, 12)}${f.length}</span>` : ''}<span class="nm">${G.title(f[0])}</span></button>`).join('')}</div>`;
+  GUI.arrive(body.querySelectorAll('.tile'));
+}
+body.addEventListener('click', (e) => {
+  const b = e.target.closest('.tile'); if (!b) return;
+  const n = +b.dataset.n;
+  if (DIRECT.has(st.kind)) lightbox(shown.map((t) => t.it), n, b);
+  else openTile(n, 0);
+});
+const tileEl = (n) => $('grid')?.querySelector(`[data-n="${n}"]`);
+const ratio = (it) => it.w / it.h;
+
+// The loaded image flies from the tile to its place (scaled down, so it is sharp the whole way).
+function fly(fromEl, toEl, tl, src) {
+  if (!anim || !fromEl) return;
+  const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+  if (!a.width || !b.width) return;
+  const c = new Image(); c.src = src; c.className = 'fly'; c.alt = '';
+  Object.assign(c.style, { left: b.left + 'px', top: b.top + 'px', width: b.width + 'px', height: b.height + 'px' });
+  document.body.append(c);
+  gsap.set(toEl, { opacity: 0 });
+  tl.fromTo(c, { x: a.left - b.left, y: a.top - b.top, scaleX: a.width / b.width, scaleY: a.height / b.height, transformOrigin: '0 0' },
+    { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.55, ease: 'expo.out' }, 0)
+    .set(toEl, { opacity: 1 }, 0.55).add(() => c.remove(), 0.56);
+}
+
+// ---- panel over the page ----
+function openTile(n, at, fromKey) {
+  if (open && open.n === n) return;
+  want = n;
+  const it = shown[n].f[at];
+  loadOn(tileEl(n), G.view(it)).then((src) => { if (want === n) show(n, at, src, fromKey); }, () => { if (want === n) show(n, at, null, fromKey); });
+}
+function show(n, at, src, fromKey) {
+  const { f } = shown[n], it = f[at], tile = tileEl(n);
+  const swapping = !!open; // ← / → inside the panel: same overlay, new content
+  $('grid').querySelectorAll('.tile').forEach((t) => t.setAttribute('aria-expanded', String(t === tile)));
+  let el = open?.el;
+  if (!el) {
+    el = document.createElement('div'); el.className = 'panel';
+    el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+    document.body.append(el);
+    el.addEventListener('click', (e) => { if (e.target === el) close(); });
+  }
+  open = { n, at, el };
+  el.setAttribute('aria-label', G.titleText(f[0]));
+  el.innerHTML = `<div class="pin${f.length > 1 ? '' : ' one'}">
+    <div class="stage"><div class="frame" id="frame" style="--r:${it.w}/${it.h};--ar:${ratio(it)}" tabindex="0" role="button" aria-label="Xem toàn màn hình">${src ? `<img id="pimg" src="${src}" alt="${esc(G.titleText(it))}">` : BROKEN}<span class="btn icon zoom" aria-hidden="true">${svg(MAX, 16)}</span></div></div>
+    <div class="strip" ${f.length > 1 ? '' : 'hidden'} role="group" aria-label="Các bản của ảnh này"><b>${f.length} bản</b>${f.map((x, i) => `<button data-a="${i}" aria-current="${i === at}" aria-label="Bản ${i + 1}" style="--r:${x.w}/${x.h}"><img src="${G.thumb(x)}" alt=""></button>`).join('')}</div>
+    <div class="info">${info(f, at)}</div></div>`;
+  wire(el);
+  st.id = it.id; G.writeQuery(st);
+  document.body.style.overflow = 'hidden';
+  const done = () => (fromKey ? tile : el.querySelector('#px'))?.focus({ preventScroll: true });
+  if (!anim) return done();
+  if (swapping) return gsap.fromTo(el.querySelector('.pin'), { opacity: 0.4 }, { opacity: 1, duration: 0.25, onComplete: done });
+  const tl = gsap.timeline({ onComplete: done });
+  // only the image moves (UTTU): the panel fades in where it stands, so the flight lands exactly on the frame
+  tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0)
+    .fromTo(el.querySelectorAll('.strip,.info'), { opacity: 0 }, { opacity: 1, duration: 0.4, stagger: 0.06 }, 0.15);
+  if (src) fly(tile, el.querySelector('#frame'), tl, src); // the tile, not its img: the img is scaled 1.04 on hover
+}
+function info(f, at) {
+  const it = f[at];
+  const facts = [['Loại', G.KIND[it.kind]],
+    it.kind === 'story' && ['Nằm trong', /^v\d$/.test(it.group) ? G.subHtml(it) : `${G.GROUP[it.group]} · ${G.subHtml(it)}`],
+    it.kind === 'loading' && it.note_cn && ['Cách nhận', G.note(it)],
+    f.length > 1 && ['Bản', `${at + 1} / ${f.length}`],
+    ['Kích thước', `${it.w} × ${it.h} px`], ['Mã', esc(it.id)]].filter(Boolean);
+  return `<div class="top"><button class="btn icon ghost" id="px" aria-label="${L.close}">${icon('x')}</button></div>
+    <h2>${G.title(it)}</h2>
+    ${it.kind === 'postcard' && it.note_cn ? `<p class="poem">${G.note(it)}</p>` : ''}
+    <dl>${facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+    <div class="acts"><a class="btn gold" href="${G.orig(it)}" download="${it.kind}_${esc(it.id)}.png">${icon('down', 16)}<span>${L.download}</span></a></div>`;
+}
+function wire(el) {
+  el.querySelector('#px').onclick = () => close();
+  const fr = el.querySelector('#frame');
+  const full = () => { if (open.el.querySelector('#pimg')) lightbox(shown[open.n].f, open.at, fr, (i) => version(i)); };
+  fr.onclick = full; fr.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); full(); } };
+  el.querySelector('.strip').onclick = (e) => { const b = e.target.closest('[data-a]'); if (b) version(+b.dataset.a); };
+  G.swipe(el.querySelector('.stage'), () => version(open.at - 1), () => version(open.at + 1));
+}
+// Another version: fetched only now (progress on the big frame), shown when it is ready.
+function version(a) {
+  const f = shown[open.n].f;
+  if (f.length < 2) return Promise.resolve();
+  a = (a + f.length) % f.length;
+  const it = f[a], el = open.el, fr = el.querySelector('#frame');
+  open.at = a;
+  el.querySelectorAll('.strip [data-a]').forEach((b) => b.setAttribute('aria-current', String(+b.dataset.a === a)));
+  el.querySelector('.info').innerHTML = info(f, a);
+  el.querySelector('#px').onclick = () => close();
+  st.id = it.id; G.writeQuery(st);
+  return loadOn(fr, G.view(it)).then((src) => {
+    if (open?.el !== el || open.at !== a) return;
+    fr.style.setProperty('--r', `${it.w}/${it.h}`); fr.style.setProperty('--ar', ratio(it));
+    const img = el.querySelector('#pimg') || Object.assign(new Image(), { id: 'pimg' });
+    if (!img.isConnected) fr.replaceChildren(img, fr.querySelector('.zoom') || '');
+    img.src = src; img.alt = G.titleText(it);
+    if (anim) gsap.fromTo(img, { opacity: 0 }, { opacity: 1, duration: 0.25 });
+    return src;
+  }, () => { if (open?.el === el && open.at === a) fr.querySelector('#pimg')?.replaceWith(Object.assign(document.createElement('div'), { innerHTML: BROKEN }).firstChild); });
+}
+function close(now) {
+  want = -1;
+  if (!open) return;
+  const { el, n } = open; open = null;
+  document.body.style.overflow = '';
+  const tile = tileEl(n);
+  tile?.setAttribute('aria-expanded', 'false');
+  if (anim && !now) gsap.to(el, { opacity: 0, duration: 0.18, onComplete: () => el.remove() });
+  else el.remove();
+  if (!now) { st.id = ''; G.writeQuery(st); tile?.focus({ preventScroll: true }); }
+}
+
+// ---- full screen (direct for Hình nền sảnh / KV; from the panel's big image elsewhere) ----
+const lb = $('lb');
+let lbSeq = [], lbAt = 0, lbStep = null, lbBack = null, lbWant = -1;
+$('lbx').innerHTML = icon('x'); $('lbx').setAttribute('aria-label', L.close);
+$('lbd').innerHTML = icon('down', 18); $('lbd').setAttribute('aria-label', L.download); $('lbd').title = L.download;
+$('lbp').innerHTML = icon('left', 22); $('lbn').innerHTML = icon('right', 22);
+function lbFit(it) { // contain the image in the room
+  const r = $('lbr').getBoundingClientRect(), pad = phone.matches ? 16 : 128, bottom = phone.matches ? 72 : 24;
+  const w = Math.min(r.width - pad, (r.height - bottom) * ratio(it));
+  Object.assign($('lbf').style, { width: w + 'px', height: w / ratio(it) + 'px' });
+}
+function lbPaint(src) {
+  const it = lbSeq[lbAt];
+  if (src) { const img = new Image(); img.src = src; img.alt = G.titleText(it); $('lbf').replaceChildren(img); }
+  else $('lbf').innerHTML = BROKEN;
+  lbFit(it);
+  $('lbt').innerHTML = G.title(it);
+  $('lbc').textContent = lbSeq.length > 1 ? `${lbAt + 1} / ${lbSeq.length}` : '';
+  $('lbd').href = G.orig(it); $('lbd').setAttribute('download', `${it.kind}_${it.id}.png`);
+  $('lbp').hidden = $('lbn').hidden = lbSeq.length < 2;
+  $('lbp').setAttribute('aria-label', lbStep ? 'Bản trước' : L.prev); $('lbn').setAttribute('aria-label', lbStep ? 'Bản sau' : L.next);
+  if (DIRECT.has(it.kind)) { st.id = it.id; G.writeQuery(st); }
+}
+// fromEl: the tile (direct) or the panel frame; the image is fetched first (progress on fromEl), then shown
+function lightbox(seq, at, fromEl, step) {
+  lbWant = at;
+  const go = (src) => {
+    if (lbWant !== at) return;
+    lbSeq = seq; lbAt = at; lbStep = step || null; lbBack = document.activeElement;
+    lb.hidden = false; document.body.style.overflow = 'hidden';
+    lbPaint(src); $('lbx').focus();
+    if (!anim) return;
+    const tl = gsap.timeline();
+    tl.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0)
+      .fromTo('#lb .bar2', { y: -6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'expo.out' }, 0.1);
+    if (src) fly(fromEl, $('lbf'), tl, src);
+  };
+  loadOn(fromEl, G.view(seq[at])).then(go, () => go(null));
+}
+function lbGo(d) {
+  const at = (lbAt + d + lbSeq.length) % lbSeq.length;
+  lbWant = at;
+  const step = lbStep ? lbStep(at) : null; // versions: the panel fetches it; the full screen follows the same file
+  const p = step || loadOn($('lbf'), G.view(lbSeq[at]));
+  if (step) loadOn($('lbf'), G.view(lbSeq[at]));
+  p.then((src) => {
+    if (lbWant !== at || lb.hidden) return;
+    lbAt = at; lbPaint(src);
+    if (anim) gsap.fromTo('#lbf', { opacity: 0.3, x: 12 * d }, { opacity: 1, x: 0, duration: 0.35, ease: 'expo.out' });
+  }, () => { if (lbWant === at) { lbAt = at; lbPaint(null); } });
+}
+function lbClose() {
+  lb.hidden = true; lbWant = -1;
+  if (!open) document.body.style.overflow = '';
+  if (DIRECT.has(st.kind)) { st.id = ''; G.writeQuery(st); }
+  (open ? open.el.querySelector('#frame') : lbBack)?.focus?.({ preventScroll: true });
+}
+$('lbx').onclick = lbClose; $('lbp').onclick = () => lbGo(-1); $('lbn').onclick = () => lbGo(1);
+$('lbr').addEventListener('click', (e) => { if (e.target.id === 'lbr') lbClose(); });
+lb.querySelector('.bar2').addEventListener('click', (e) => { if (e.target.classList.contains('bar2')) lbClose(); });
+G.swipe($('lbr'), () => lbGo(-1), () => lbGo(1));
+addEventListener('resize', () => { if (!lb.hidden) lbFit(lbSeq[lbAt]); });
+
+// keyboard: Esc closes the top layer; ← → step; Tab stays inside the open layer
+function trap(box, e) {
+  const f = [...box.querySelectorAll('a[href],button:not([hidden]),[tabindex="0"]')].filter((x) => x.offsetParent || x === document.activeElement);
+  if (!f.length) return;
+  const i = f.indexOf(document.activeElement);
+  e.preventDefault(); f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+}
+document.addEventListener('keydown', (e) => {
+  if (e.target.matches?.('input')) return;
+  if (!lb.hidden) {
+    if (e.key === 'Escape') lbClose();
+    else if (e.key === 'ArrowLeft') lbGo(-1);
+    else if (e.key === 'ArrowRight') lbGo(1);
+    else if (e.key === 'Tab') trap(lb, e);
+    return;
+  }
+  if (!open) return;
+  if (e.key === 'Escape') close();
+  else if (e.key === 'ArrowLeft' && open.n > 0) openTile(open.n - 1, 0, true);
+  else if (e.key === 'ArrowRight' && open.n < shown.length - 1) openTile(open.n + 1, 0, true);
+  else if (e.key === 'Tab') trap(open.el, e);
+});
+// ← → between tiles while a panel is open: fetch the next tile's image, then swap the panel's content
+const _openTile = openTile;
+openTile = function (n, at, fromKey) { if (open && open.n !== n) { want = n; const it = shown[n].f[at]; return loadOn(open.el.querySelector('#frame'), G.view(it)).then((src) => { if (want === n && open) show(n, at, src, fromKey); }, () => { if (want === n && open) show(n, at, null, fromKey); }); } return _openTile(n, at, fromKey); };
+
+draw();
+// ?id= may name any version: open its tile on that version (or the full screen for Hình nền sảnh / KV)
+if (st.id) {
+  const n = shown.findIndex((t) => t.f.some((x) => x.id === st.id));
+  if (n >= 0 && DIRECT.has(st.kind)) lightbox(shown.map((t) => t.it), n, tileEl(n));
+  else if (n >= 0) openTile(n, shown[n].f.findIndex((x) => x.id === st.id));
+}
+</script></body></html>

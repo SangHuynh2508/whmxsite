@@ -186,6 +186,17 @@ const vi = {
   muRetry: 'Thử lại', muPlay: 'Phát', muPause: 'Tạm dừng', muMute: 'Tắt tiếng', muUnmute: 'Bật tiếng', muVolume: 'Âm lượng',
   muSeek: 'Vị trí', muPrev: 'Bài trước', muNext: 'Bài sau', muScenes: '{n} cảnh',
   muScenesTotal: 'Tổng {n} cảnh truyện', muNoUse: 'Chưa tìm thấy nơi game dùng bài này.',
+  // Thư viện ảnh (spec 2026-11-17-gallery-page-design.md)
+  gaTitle: 'Thư viện ảnh', gaSearch: 'Tìm theo tên, địa danh, truyện', gaEmpty: 'Không có ảnh nào phù hợp.',
+  gaLoadError: 'Không tải được thư viện ảnh.', gaImageError: 'Không tải được ảnh này. Vẫn có thể bấm “Tải ảnh”.',
+  gaThumbError: 'Không tải được ảnh', gaDownload: 'Tải ảnh', gaFull: 'Xem toàn màn hình', gaPrev: 'Ảnh trước', gaNext: 'Ảnh sau',
+  gaPrevVer: 'Bản trước', gaNextVer: 'Bản sau', gaVersions: '{n} bản', gaVersionN: 'Bản {n}', gaVersionsOf: 'Các bản của ảnh này',
+  gaLoadingImg: 'Đang tải…', gaCount: '{n} ảnh', gaKinds: 'Loại ảnh', gaGroups: 'Nhóm',
+  gaKStory: 'CG truyện', gaKLoading: 'Màn hình chờ', gaKHome: 'Hình nền sảnh', gaKKv: 'KV phiên bản', gaKPostcard: 'Bưu thiếp',
+  gaGV3: 'Bản 3.x', gaGV2: 'Bản 2.x', gaGOld: 'Trước 2.5', gaGMain: 'Chính tuyến', gaGOther: 'Khác',
+  gaVerN: 'Bản {v}', gaRowVer: 'Bản', gaRowChapter: 'Chương', gaRowStory: 'Truyện',
+  gaFactKind: 'Loại', gaFactIn: 'Nằm trong', gaFactObtain: 'Cách nhận', gaFactPart: 'Bản', gaFactSize: 'Kích thước', gaFactId: 'Mã',
+  gaElsewhere: 'Ảnh trang phục và banner có trang riêng:', ifGalleryDesc: 'CG truyện, màn hình chờ, KV và bưu thiếp; xem ảnh to, tải bản gốc.',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -424,6 +435,16 @@ const cn: Record<StringKey, string> = {
   muLede: '共 {n} 首游戏背景音乐，版本 {v}。', muClear: '清除搜索', muRetry: '重试', muPlay: '播放', muPause: '暂停', // draft
   muMute: '静音', muUnmute: '取消静音', muVolume: '音量', muSeek: '进度', muPrev: '上一首', muNext: '下一首', // draft
   muScenes: '{n} 段', muScenesTotal: '共 {n} 段剧情', muNoUse: '尚未找到游戏中使用此曲的位置。', // draft
+  // 画廊 — kind / group names are not game terms (evidence rule)
+  gaTitle: '画廊', gaSearch: '按名称、地点、剧情搜索', gaEmpty: '没有符合的图片。', gaLoadError: '画廊加载失败。',
+  gaImageError: '无法加载此图片，仍可点击“下载图片”。', gaThumbError: '图片加载失败', gaDownload: '下载图片', gaFull: '全屏查看',
+  gaPrev: '上一张', gaNext: '下一张', gaPrevVer: '上一版', gaNextVer: '下一版', gaVersions: '{n} 版', gaVersionN: '第 {n} 版',
+  gaVersionsOf: '此图的各个版本', gaLoadingImg: '加载中…', gaCount: '{n} 张', gaKinds: '图片类型', gaGroups: '分组',
+  gaKStory: '剧情CG', gaKLoading: '加载图', gaKHome: '主界面背景', gaKKv: '版本KV', gaKPostcard: '明信片',
+  gaGV3: '3.x 版本', gaGV2: '2.x 版本', gaGOld: '2.5 之前', gaGMain: '主线', gaGOther: '其他',
+  gaVerN: '{v}', gaRowVer: '版本', gaRowChapter: '章节', gaRowStory: '剧情',
+  gaFactKind: '类型', gaFactIn: '所属', gaFactObtain: '获取方式', gaFactPart: '版本', gaFactSize: '尺寸', gaFactId: '编号',
+  gaElsewhere: '衣装与招集图另有专页：', ifGalleryDesc: '剧情CG、加载图、KV 与明信片，可看大图并下载原图。',
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];

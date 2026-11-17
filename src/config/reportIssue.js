@@ -34,7 +34,8 @@ export const SUBTAB_ROUTE_LABELS = {
  */
 export const VIEW_ROUTE_LABELS = {
   catalog: 'Khí Giả',
-  gallery: 'Thư Viện Trang Phục',
+  skins: 'Thư Viện Trang Phục',
+  gallery: 'Thư Viện Ảnh',
   data: 'Dữ Liệu',
   calculator: 'Máy Tính',
   'skin-detail': 'Chi Tiết Y Phục'

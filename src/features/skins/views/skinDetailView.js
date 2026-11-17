@@ -40,7 +40,7 @@ export function renderSkinDetailView(container, skinId) {
         <div class="gallery-grid-empty">
           <h2>${s('sdNotFound')}</h2>
           <p>${s('sdNotFoundText').replace('{id}', skinId)}</p>
-          <a href="/gallery" class="skin-back-btn">${s('sdBack')}</a>
+          <a href="/skins" class="skin-back-btn">${s('sdBack')}</a>
         </div>
       </div>
     `;
@@ -90,7 +90,7 @@ export function renderSkinDetailView(container, skinId) {
     <div class="whmx-skin-gallery skin-detail-page">
       <!-- Breadcrumb Bar -->
       <nav class="skin-detail-nav" aria-label="${s('sdNav')}">
-        <a href="/gallery" class="skin-back-btn">
+        <a href="/skins" class="skin-back-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>

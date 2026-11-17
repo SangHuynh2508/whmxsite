@@ -23,7 +23,7 @@ test('legacyHashToPath: every old public form', () => {
   assert.equal(legacyHashToPath('#calc'), '/calculator');
   assert.equal(legacyHashToPath('#W0182'), '/calculator?char=W0182');
   assert.equal(legacyHashToPath('#/data'), '/weapons');
-  assert.equal(legacyHashToPath('#/gallery-demo'), '/gallery');
+  assert.equal(legacyHashToPath('#/gallery-demo'), '/skins');
   assert.equal(legacyHashToPath('#/admin'), null);
   assert.equal(legacyHashToPath('#/admin/dictionary/weapons'), null);
   assert.equal(legacyHashToPath('#/login'), null);

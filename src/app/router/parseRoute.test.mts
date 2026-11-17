@@ -8,7 +8,8 @@ test('a query (?lang=, ?fbclid=) never ends up in a slug or id', () => {
   assert.deepEqual(parseRoute('#/characters/kim-si-dieu/build?lang=cn&fbclid=x'), { view: 'character', slug: 'kim-si-dieu', subtab: 'build' });
   assert.deepEqual(parseRoute('#/skins/W0097002?lang=vi'), { view: 'skin-detail', skinId: 'W0097002', slug: '', subtab: '' });
   assert.equal(parseRoute('#/characters?lang=cn').view, 'catalog');
-  assert.equal(parseRoute('#/gallery?lang=cn').view, 'gallery');
+  assert.equal(parseRoute('#/skins?lang=cn').view, 'skins');
+  assert.equal(parseRoute('#/gallery?kind=story&g=v3&lang=cn').view, 'gallery');
   assert.equal(parseRoute('#/weapons?lang=cn').view, 'weapons');
   assert.equal(parseRoute('#/banners?lang=cn').view, 'banners');
   assert.deepEqual(parseRoute('#/tier-list/a/teams?lang=cn'), { view: 'tier-list', slug: 'a', subtab: 'teams' });
@@ -17,7 +18,7 @@ test('a query (?lang=, ?fbclid=) never ends up in a slug or id', () => {
 test('calculator keeps its own query; aliases report a redirect', () => {
   assert.deepEqual(parseRoute('#/calculator?char=W0182&lang=cn'), { view: 'calculator', characterId: 'W0182', subtab: '' });
   assert.deepEqual(parseRoute('#/data'), { view: 'weapons', slug: '', subtab: '', redirect: '/weapons' });
-  assert.deepEqual(parseRoute('#/gallery-demo?lang=vi'), { view: 'gallery', slug: '', subtab: '', redirect: '/gallery' });
+  assert.deepEqual(parseRoute('#/gallery-demo?lang=vi'), { view: 'skins', slug: '', subtab: '', redirect: '/skins' }); // owner 2026-11-17: skins move to /skins
   assert.equal(parseRoute('#/admin/characters/A0001').view, 'admin');
   assert.equal(parseRoute('#/login').view, 'admin');
   assert.equal(parseRoute('#/').view, 'home');

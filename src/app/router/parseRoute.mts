@@ -30,8 +30,8 @@ export function parseRoute(raw: string): Route {
   const skin = path.match(/^\/?skins\/([^/]+)$/i);
   if (skin) return { view: 'skin-detail', skinId: skin[1], slug: '', subtab: '' };
 
-  if (path === '/gallery-demo' || path === 'gallery-demo') return { view: 'gallery', slug: '', subtab: '', redirect: '/gallery' };
-  if (['/gallery', 'gallery', '/skins', 'skins'].includes(path)) return { view: 'gallery', slug: '', subtab: '' };
+  if (path === '/gallery-demo' || path === 'gallery-demo') return { view: 'skins', slug: '', subtab: '', redirect: '/skins' };
+  if (['/skins', 'skins'].includes(path)) return { view: 'skins', slug: '', subtab: '' };
 
   // /calculator?char=W0182 (old #calc… links are rewritten by legacyHashToPath)
   if (/^\/?calc(ulator)?(\?|$)/.test(hash)) {
