@@ -14,6 +14,7 @@ import {
   loadGalleryCached, readState, stateUrl, subText, subs, thumbUrl, tiles, title, viewUrl,
   type GalleryDoc, type GalleryItem, type GalleryKind, type GalleryState, type Tile,
 } from './galleryData.mts';
+import { preload } from './loadImage.mts';
 import { FullScreen, Loading, Name, Panel, trap, useLoader, type FullState, type PanelState } from './GalleryViewer.tsx';
 import './styles/gallery.css';
 
@@ -197,6 +198,19 @@ function Gallery({ doc }: { doc: GalleryDoc }) {
     document.documentElement.classList.toggle('ga-lock', layered);
     return () => document.documentElement.classList.remove('ga-lock');
   }, [layered]);
+
+  useEffect(() => { // fetch the shown image of every tile on screen ahead (not its other versions)
+    const g = grid.current;
+    if (!g || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      const t = shown[Number((e.target as HTMLElement).dataset.n)];
+      if (t) preload(viewUrl(doc, t.it));
+    }), { rootMargin: '200px' }); // viewport root: tiles clipped by the desktop scroller do not count
+    g.querySelectorAll('.ga-tile').forEach((x) => io.observe(x));
+    return () => io.disconnect();
+  }, [shown, doc]);
 
   useEffect(() => { // keep the chosen version in view in its row
     const row = vers.current, on = row?.querySelector<HTMLElement>('[aria-pressed="true"]');

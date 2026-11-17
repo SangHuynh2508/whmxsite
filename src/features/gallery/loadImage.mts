@@ -20,7 +20,7 @@ export async function fetchBlob(url: string, onProgress: Progress, fetchImpl: ty
   return new Blob(parts, { type: res.headers.get('content-type') || 'image/webp' });
 }
 
-const MAX = 24; // ponytail: object URLs of the last 24 large images stay (≈0.3–1 MB each); older ones are revoked
+const MAX = 48; // ponytail: object URLs of the last 48 large images stay (≈0.3–1 MB each); older ones are revoked
 const cache = new Map<string, Promise<string>>(); // insertion order = least recently used first
 const listeners = new Map<string, Set<Progress>>();
 
@@ -59,4 +59,22 @@ export function loadImage(url: string, onProgress: Progress = () => {}, fetchImp
     q.then((src) => { if (src.startsWith('blob:')) URL.revokeObjectURL(src); }, () => {});
   }
   return p.finally(() => set.delete(onProgress));
+}
+
+// owner 2026-11-17: the image a tile shows is fetched ahead once the tile is on screen, so opening it is instant;
+// the other versions of a family still load only when picked. Three at a time, newest request first.
+const wait: string[] = [];
+let running = 0;
+export function preload(url: string, fetchImpl: typeof fetch = fetch) {
+  if ((globalThis.navigator as { connection?: { saveData?: boolean } } | undefined)?.connection?.saveData) return; // Data Saver: open on demand only
+  if (cache.has(url) || wait.includes(url)) return;
+  wait.push(url);
+  pump(fetchImpl);
+}
+function pump(fetchImpl: typeof fetch) {
+  while (running < 3 && wait.length) {
+    const url = wait.pop()!;
+    running++;
+    loadImage(url, () => {}, fetchImpl).catch(() => {}).finally(() => { running--; pump(fetchImpl); });
+  }
 }
