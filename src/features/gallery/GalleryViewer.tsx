@@ -93,6 +93,24 @@ function fly(from: HTMLElement | null, to: HTMLElement | null, tl: gsap.core.Tim
     .add(() => c.remove(), 0.56);
 }
 
+/** Closing (owner 2026-11-18): the big image shrinks back into its tile while the layer fades; `done` clears the state. */
+export function flyBack(tile: HTMLElement | null, done: () => void) {
+  const layer = document.querySelector<HTMLElement>('.ga-full, .ga-panel');
+  const img = layer?.querySelector<HTMLImageElement>('.ga-full-frame img, .ga-frame img');
+  const a = img?.getBoundingClientRect(), b = tile?.getBoundingClientRect();
+  if (!layer || !img || !a?.width || !b?.width || reduced() || b.bottom < 0 || b.top > innerHeight) return done();
+  const c = Object.assign(new Image(), { src: img.currentSrc || img.src, alt: '', className: 'ga-fly' });
+  Object.assign(c.style, { left: `${b.left}px`, top: `${b.top}px`, width: `${b.width}px`, height: `${b.height}px` });
+  document.body.append(c);
+  img.style.opacity = '0';
+  layer.style.pointerEvents = 'none';
+  gsap.timeline({ onComplete: () => { c.remove(); } })
+    .fromTo(c, { x: a.left - b.left, y: a.top - b.top, scaleX: a.width / b.width, scaleY: a.height / b.height, transformOrigin: '0 0' },
+      { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.42, ease: 'expo.inOut' }, 0)
+    .to(layer, { opacity: 0, duration: 0.3, ease: 'power1.out' }, 0)
+    .add(done, 0.3); // the layer is gone before the image lands; the copy finishes over the grid
+}
+
 /** Tab stays inside the open layer. */
 export function trap(box: HTMLElement, e: KeyboardEvent) {
   const f = [...box.querySelectorAll<HTMLElement>('a[href],button:not([hidden]),[tabindex="0"]')]

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { fetchBlob, loadImage, preload } from './loadImage.mts';
+import { fetchBlob, loadImage } from './loadImage.mts';
 
 const body = (sizes: number[]) => new ReadableStream<Uint8Array>({ start(c) { for (const n of sizes) c.enqueue(new Uint8Array(n)); c.close(); } });
 const res = (sizes: number[], headers: Record<string, string> = {}, status = 200) => new Response(body(sizes), { status, headers });
@@ -48,13 +48,4 @@ test('fetch blocked (no CORS on R2, a proxy): the <img> loads it, progress unkno
   } finally {
     delete (globalThis as any).Image;
   }
-});
-
-test('preload fetches once; opening it later reuses that fetch', async () => {
-  let n = 0;
-  const f = (async () => { n++; return res([1], { 'content-length': '1' }); }) as typeof fetch;
-  preload('pre-1', f);
-  preload('pre-1', f);
-  await loadImage('pre-1', () => {}, f);
-  assert.equal(n, 1);
 });

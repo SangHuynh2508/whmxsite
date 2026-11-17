@@ -14,8 +14,7 @@ import {
   loadGalleryCached, readState, stateUrl, subText, subs, thumbUrl, tiles, title, viewUrl,
   type GalleryDoc, type GalleryItem, type GalleryKind, type GalleryState, type Tile,
 } from './galleryData.mts';
-import { preload } from './loadImage.mts';
-import { FullScreen, Loading, Name, Panel, trap, useLoader, type FullState, type PanelState } from './GalleryViewer.tsx';
+import { flyBack, FullScreen, Loading, Name, Panel, trap, useLoader, type FullState, type PanelState } from './GalleryViewer.tsx';
 import './styles/gallery.css';
 
 const phone = () => matchMedia('(max-width: 768px)').matches;
@@ -57,6 +56,7 @@ function Gallery({ doc }: { doc: GalleryDoc }) {
   const vers = useRef<HTMLDivElement>(null);
   const grid = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  const closing = useRef(false);
   const from = useRef<HTMLElement | null>(null); // where the opening image flies from
   const openId = useRef(st.id);                   // the id this page has put in the URL
   const pushed = useRef(false);                   // opening added a history entry: closing goes Back
@@ -112,6 +112,14 @@ function Gallery({ doc }: { doc: GalleryDoc }) {
   const closeAll = (silent = false) => {
     const { panel: p, full: fs } = now.current;
     const back = p ? p.n : fs && !fs.versions ? fs.at : -1; // the tile that opened it gets the focus back
+    if (!silent && (p || fs) && !closing.current) {
+      closing.current = true;
+      return flyBack(back >= 0 ? tileEl(back) : null, () => { closing.current = false; finishClose(back); });
+    }
+    if (closing.current && !silent) return; // a second ✕ / Esc during the flight
+    finishClose(back, silent);
+  };
+  const finishClose = (back: number, silent = false) => {
     cancel();
     setPanel(null);
     setFull(null);
@@ -198,19 +206,6 @@ function Gallery({ doc }: { doc: GalleryDoc }) {
     document.documentElement.classList.toggle('ga-lock', layered);
     return () => document.documentElement.classList.remove('ga-lock');
   }, [layered]);
-
-  useEffect(() => { // fetch the shown image of every tile on screen ahead (not its other versions)
-    const g = grid.current;
-    if (!g || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      io.unobserve(e.target);
-      const t = shown[Number((e.target as HTMLElement).dataset.n)];
-      if (t) preload(viewUrl(doc, t.it));
-    }), { rootMargin: '200px' }); // viewport root: tiles clipped by the desktop scroller do not count
-    g.querySelectorAll('.ga-tile').forEach((x) => io.observe(x));
-    return () => io.disconnect();
-  }, [shown, doc]);
 
   useEffect(() => { // keep the chosen version in view in its row
     const row = vers.current, on = row?.querySelector<HTMLElement>('[aria-pressed="true"]');
