@@ -171,6 +171,7 @@ const vi = {
   cMats: 'Vật liệu cần', cNoMats: 'Không cần tài nguyên cho khoảng này.', cVan: 'vạn',
   cFooter: '© 物华弥新 (Vật Hoa Di Tân). Mọi hình ảnh, âm thanh, tên gọi và dữ liệu game trên trang đều thuộc quyền sở hữu của nhà phát triển và nhà phát hành trò chơi.',
   cFooterFan: 'Vật Hoa Di Tân Wiki là trang do người chơi lập, phi lợi nhuận và không liên kết với nhà phát hành.',
+  cFooterContact: 'Liên hệ:',
   bdAffixes: 'Dòng thuộc tính', bdNoReroll: 'Không cần tẩy luyện vũ khí.', bdDeepens: 'Thâm tạo', bdSeeTalents: 'Xem thiên phú ›',
   bdPoints: '{n}/11 điểm', bdRotation: 'Xoay vòng', bdTips: 'Mẹo', bdSeeSkills: 'Xem kỹ năng ›',
   mnEmpty: 'Không tìm thấy. Thử tên tiếng Trung hoặc bỏ dấu.', ldErr: 'Không tải được dữ liệu', ldErrText: 'Kiểm tra kết nối mạng rồi tải lại trang.',
@@ -416,6 +417,7 @@ const cn: Record<StringKey, string> = {
   cMats: '所需材料', cNoMats: '该区间无需资源。', cVan: '万', // draft
   cFooter: '© 物华弥新。本站使用的图像、音频、名称及游戏数据，版权均归游戏开发商与发行商所有。', // draft
   cFooterFan: '物华弥新 Wiki 为玩家自制的非商业站点，与官方无关。', // draft
+  cFooterContact: '联系：', // draft
   bdDeepens: '深造', // game: interfaceLan_interface_nameLan_1110
   bdAffixes: '属性词条', bdNoReroll: '无需洗炼武器。', bdSeeTalents: '查看深造 ›', // draft
   bdPoints: '{n}/11 点', bdRotation: '输出循环', bdTips: '技巧', bdSeeSkills: '查看技能 ›', // draft

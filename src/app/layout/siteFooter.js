@@ -5,16 +5,19 @@
  */
 import { s } from '../../i18n/strings.mts';
 
+const CONTACT = 'fujiwarachikato1234@gmail.com';
 let footer = null;
 let watcher = null;
 
 function build() {
   const el = document.createElement('footer');
   el.className = 'app-footer';
-  el.innerHTML = '<p class="app-footer-rights"></p><p class="app-footer-fan"></p>';
+  el.innerHTML = '<p class="app-footer-rights"></p><p class="app-footer-fan"></p>'
+    + `<p><span class="app-footer-contact"></span> <a href="mailto:${CONTACT}">${CONTACT}</a></p>`;
   const text = () => {
     el.querySelector('.app-footer-rights').textContent = s('cFooter');
     el.querySelector('.app-footer-fan').textContent = s('cFooterFan');
+    el.querySelector('.app-footer-contact').textContent = s('cFooterContact');
   };
   text();
   window.addEventListener('whmx:lang', text);

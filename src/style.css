@@ -1411,6 +1411,8 @@
 }
 .app-footer p { margin: 0 auto; max-width: 760px; text-wrap: pretty; }
 .app-footer p + p { margin-top: 6px; }
+.app-footer a { color: inherit; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.app-footer a:hover { color: var(--text-main); }
 @media (max-width: 768px) {
   .app-footer { padding: 16px 16px 96px; } /* clear the floating phone buttons */
 }
