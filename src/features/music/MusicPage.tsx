@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
-import { ChevronLeft, ChevronRight, Pause, Play, Search, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Pause, Play, Search, Volume2, VolumeX } from 'lucide-react';
 import { useLang } from '../../i18n/useLang.ts';
 import { s } from '../../i18n/strings.mts';
 import type { Lang } from '../../i18n/lang.mts';
@@ -18,6 +18,13 @@ import {
   trackName, trackTitle, type MusicDoc, type MusicTab, type MusicTrack,
 } from './musicData.mts';
 import './styles/music.css';
+
+// Official / curated playlists elsewhere; people search there instead of us listing every song (owner 2026-11-17).
+const PLATFORMS = [
+  { vi: 'NetEase Cloud Music', cn: '网易云音乐', url: 'https://music.163.com/#/playlist?id=10038932093' },
+  { vi: 'QQ Music', cn: 'QQ音乐', url: 'https://y.qq.com/n/ryqq/playlist/9214685734' },
+  { vi: 'Bilibili · PV khí giả', cn: 'B站 · 器者PV', url: 'https://space.bilibili.com/521325931/lists/5272661?type=season' },
+];
 
 gsap.registerPlugin(Flip);
 
@@ -142,7 +149,15 @@ function List({ doc, route, go }: { doc: MusicDoc; route: Route; go: (r: Partial
   return (
     <div ref={page}>
       <h1 className="music-title" tabIndex={-1}>{s('muTitle', lang)}</h1>
-      <p className="music-lede">{s('muLede', lang).replace('{n}', String(doc.tracks.length)).replace('{v}', doc.version)}</p>
+      <p className="music-lede">{s('muLede', lang).replace('{n}', String(doc.tracks.length))}</p>
+      <nav className="music-elsewhere" aria-label={s('muElsewhere', lang)}>
+        <span>{s('muElsewhere', lang)}</span>
+        {PLATFORMS.map((p) => (
+          <a key={p.url} className="music-btn" href={p.url} target="_blank" rel="noopener noreferrer">
+            {lang === 'cn' ? p.cn : p.vi}<ExternalLink size={14} aria-hidden="true" />
+          </a>
+        ))}
+      </nav>
       <div className="music-tools">
         <label className="music-search">
           <Search size={16} aria-hidden="true" />

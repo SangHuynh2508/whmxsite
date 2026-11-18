@@ -182,7 +182,7 @@ const vi = {
   muArea: 'Bản đồ', muOther: 'Khác', muSearch: 'Tìm theo tên bài', muEmpty: 'Không có bài nào phù hợp.',
   muLoadError: 'Không tải được danh sách nhạc.', muPlayError: 'Không phát được bài này.', muSource: 'Nguồn',
   muUsedEvent: 'Dùng trong sự kiện', muEvent: 'Sự kiện', muUsedStory: 'Dùng trong truyện', muUsedStage: 'Dùng trong màn đánh', muUsedArea: 'Dùng ở bản đồ', muMore: '+{n} màn khác',
-  muLede: '{n} bản nhạc nền trích từ game, bản {v}. Tên chữ Hán có chấm xám là tên chưa dịch.', muClear: 'Xóa tìm kiếm',
+  muLede: '{n} bản nhạc nền trích từ game. Tên chữ Hán có chấm xám là tên chưa dịch.', muElsewhere: 'Nghe ở nền tảng khác', muClear: 'Xóa tìm kiếm',
   muRetry: 'Thử lại', muPlay: 'Phát', muPause: 'Tạm dừng', muMute: 'Tắt tiếng', muUnmute: 'Bật tiếng', muVolume: 'Âm lượng',
   muSeek: 'Vị trí', muPrev: 'Bài trước', muNext: 'Bài sau', muScenes: '{n} cảnh',
   muScenesTotal: 'Tổng {n} cảnh truyện', muNoUse: 'Chưa tìm thấy nơi game dùng bài này.',
@@ -432,7 +432,7 @@ const cn: Record<StringKey, string> = {
   muOther: '其他', muSearch: '按曲名搜索', muEmpty: '没有符合的曲目。', muLoadError: '曲目列表加载失败。',
   muPlayError: '无法播放此曲目。', muSource: '获取方式', muUsedEvent: '活动使用', muEvent: '活动', muUsedStory: '剧情使用', muUsedStage: '关卡使用', muUsedArea: '地图使用',
   muMore: '另有 {n} 关', // draft
-  muLede: '共 {n} 首游戏背景音乐，版本 {v}。', muClear: '清除搜索', muRetry: '重试', muPlay: '播放', muPause: '暂停', // draft
+  muLede: '共 {n} 首游戏背景音乐。', muElsewhere: '在其他平台收听', muClear: '清除搜索', muRetry: '重试', muPlay: '播放', muPause: '暂停', // draft
   muMute: '静音', muUnmute: '取消静音', muVolume: '音量', muSeek: '进度', muPrev: '上一首', muNext: '下一首', // draft
   muScenes: '{n} 段', muScenesTotal: '共 {n} 段剧情', muNoUse: '尚未找到游戏中使用此曲的位置。', // draft
   // 画廊 — kind / group names are not game terms (evidence rule)
