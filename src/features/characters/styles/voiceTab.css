@@ -1,0 +1,78 @@
+/* Lồng tiếng tab — look C4 (docs/public-redesign/voice/direction-approved.md). Tokens only; one object (the recorder),
+   everything else sits on the page: group tabs with an underline, takes as rows with a horizontal hairline. */
+/* containing block for Text's .lore-sr ("chưa dịch"), else it escapes the clipped one-line text and widens the page */
+.voice-text, .voice-take small, .voice-line { position: relative; }
+.voice-empty { color: var(--text-muted); padding: 24px 0; }
+.voice-tab button { all: unset; box-sizing: border-box; cursor: pointer; }
+.voice-tab button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.voice-rec { display: grid; grid-template-columns: 72px minmax(0, 1fr) 240px; gap: 24px; align-items: center; padding: 24px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; }
+.voice-face { width: 72px; height: 72px; border-radius: 50%; border: 1px solid var(--border-strong); align-self: start; }
+.voice-read { display: flex; flex-direction: column; gap: 8px; min-width: 0; font-variant-numeric: tabular-nums; }
+.voice-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-muted); }
+.voice-row b { color: var(--text-main); font-weight: 600; }
+.voice-read[data-on] .voice-row b { color: var(--accent); }
+.voice-line { font: 500 20px/1.6 var(--font-serif); min-height: 64px; margin: 0; }
+.voice-line:has(+ .voice-cn) { min-height: 0; }
+.voice-cn { margin: 0; font: 400 15px/1.6 'Noto Serif SC', var(--font-serif); color: var(--text-muted); }
+/* Text marks untranslated CN with lang="zh": VI uses the shared serif, CN keeps Noto Serif SC */
+.voice-line[lang="zh"], .voice-text[lang="zh"] { font-family: 'Noto Serif SC', var(--font-serif); }
+.voice-msg { font-size: 15px; color: var(--text-muted); min-height: 64px; margin: 0; }
+.voice-meter { display: flex; gap: 3px; align-items: flex-end; height: 16px; }
+.voice-meter i { flex: 1; height: 8px; background: var(--border-strong); transform: scaleY(.25); transform-origin: bottom; transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard); }
+.voice-meter i[data-on] { transform: none; background: var(--accent); }
+
+.voice-ctl { display: flex; flex-direction: column; justify-content: center; gap: 16px; padding-left: 24px; border-left: 1px solid var(--border-color); align-self: stretch; }
+.voice-packs { display: flex; flex-direction: column; gap: 4px; }
+.voice-tab .voice-pack { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; font-size: 12px; color: var(--text-muted); }
+.voice-pack b { font: 600 14px/1.4 var(--font-sans); color: var(--text-muted); }
+.voice-pack:hover b { color: var(--text-main); }
+.voice-pack[aria-checked="true"] { color: var(--text-main); }
+.voice-pack[aria-checked="true"] b { color: var(--accent); }
+.voice-tab .voice-go { display: flex; align-items: center; justify-content: center; gap: 8px; height: 40px; border-radius: 6px; background: var(--accent-light); border: 1px solid var(--border-gold-subtle); color: var(--accent); font: 600 14px var(--font-sans); }
+.voice-go:hover { background: var(--bg-elevated); }
+.voice-go svg { width: 12px; height: 12px; }
+
+.voice-skins { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 24px; }
+.voice-tab .voice-skin { padding: 4px 0; font-size: 13px; color: var(--text-muted); }
+.voice-skin span { font-size: 12px; }
+.voice-skin:hover { color: var(--text-main); }
+.voice-skin[aria-checked="true"] { color: var(--accent); }
+
+.voice-groups { display: flex; flex-wrap: wrap; gap: 4px 24px; margin: 32px 0 8px; border-bottom: 1px solid var(--border-color); }
+.voice-skins + .voice-groups { margin-top: 16px; }
+.voice-tab .voice-grp { padding: 8px 0; margin-bottom: -1px; border-bottom: 2px solid transparent; font: 600 15px var(--font-sans); color: var(--text-muted); }
+.voice-grp span { margin-left: 8px; font: 400 12px var(--font-sans); font-variant-numeric: tabular-nums; }
+.voice-grp:hover { color: var(--text-main); }
+.voice-grp[aria-selected="true"] { color: var(--text-main); border-bottom-color: var(--accent); }
+
+.voice-takes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+.voice-tab .voice-take { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 12px; align-items: baseline; align-content: start; padding: 12px 8px; border-bottom: 1px solid var(--border-color); }
+.voice-take:hover:not(:disabled) { background: var(--bg-surface); }
+.voice-take:disabled { cursor: default; opacity: .55; }
+.voice-no { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.voice-take b { font: 600 15px/1.4 var(--font-sans); color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.voice-take b span { margin-left: 8px; font: 500 12px 'Noto Serif SC', var(--font-serif); color: var(--text-muted); }
+.voice-text { grid-column: 2; margin: 0; font: 500 15px/1.6 var(--font-serif); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.voice-text--none { font: 400 13px/1.6 var(--font-sans); }
+.voice-take small { grid-column: 2; font-size: 12px; color: var(--text-muted); }
+.voice-take[data-playing] .voice-no, .voice-take[data-playing] b { color: var(--accent); }
+.voice-take[data-playing] .voice-text { color: var(--text-main); }
+
+@media (max-width: 1000px) {
+  .voice-rec { grid-template-columns: minmax(0, 1fr) 220px; }
+  .voice-face { display: none; }
+}
+@media (max-width: 640px) {
+  .voice-rec { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+  .voice-line { font-size: 17px; min-height: 0; }
+  .voice-msg { min-height: 0; }
+  .voice-ctl { padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--border-color); }
+  .voice-packs { flex-direction: row; flex-wrap: wrap; gap: 4px 16px; }
+  .voice-tab .voice-pack { flex-direction: column; gap: 0; }
+  .voice-groups { gap: 0 16px; margin-top: 24px; }
+  .voice-tab .voice-grp { font-size: 14px; }
+  .voice-takes { grid-template-columns: 1fr; }
+  .voice-tab .voice-take { padding: 12px 0; }
+}
+@media (prefers-reduced-motion: reduce) { .voice-meter i { transition: none; } }

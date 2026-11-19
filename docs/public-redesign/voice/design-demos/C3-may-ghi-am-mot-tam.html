@@ -1,0 +1,115 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Lồng tiếng · C3 Một tấm</title>
+<!-- C3 (owner 2026-11-19 on C2: "tách khối quá nhiều nhìn như AI"). Same recorder content as C/C2, rebuilt on DESIGN.md:
+     flat, no shadows (No-Shadow Rule), one 6 px corner, spacing 4/8/12/16/24, separation = 1 px hairline or 1 px grid gap.
+     The whole tab is ONE sheet, like the Build sheet: its 1 px gaps are the dividers. Band 1 = the recorder (portrait |
+     display | language keys + play), band 2 = the four banks, band 3 = the takes in three columns. No card per line. -->
+<style>
+.wrap{max-width:1180px;margin:0 auto}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs a{padding:8px 12px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{font-size:12px;color:var(--ash);margin:-8px 0 24px}
+/* one sheet; the 1 px gaps show the hairline colour */
+.sheet{display:grid;gap:1px;background:var(--line);border:1px solid var(--line2);border-radius:6px;overflow:hidden}
+.sheet>*{background:var(--surface)}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+/* band 1: recorder */
+.rec{display:grid;grid-template-columns:136px minmax(0,1fr) 312px;gap:1px;background:var(--line)}
+.rec>*{background:var(--surface)}
+.who{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;
+ background:radial-gradient(circle,var(--line) 1.4px,transparent 1.8px) 0 0/8px 8px,var(--surface)}
+.who img{width:72px;height:72px;border-radius:50%;border:1px solid var(--line2)}
+.who span{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ash)}
+.lcd{display:flex;flex-direction:column;gap:8px;padding:16px 24px;background:var(--bg);min-width:0;font-variant-numeric:tabular-nums}
+.lcd .row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--ash)}
+.lcd .row b{color:var(--gold);font-weight:600}
+.lcd p{font:500 18px/1.6 'Noto Serif SC',serif;min-height:58px}
+.meter{display:flex;gap:4px;align-items:flex-end;height:16px}
+.meter i{flex:1;height:2px;background:var(--line2)}
+.lcd[data-on] .meter i{background:var(--gold);transition:height .12s}
+.ctl{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr auto;gap:1px;background:var(--line)}
+.key{display:flex;flex-direction:column;gap:4px;padding:12px;background:var(--surface);font-size:12px;color:var(--ash)}
+.key b{font:600 13px/1.3 var(--sans);color:var(--text)}
+.key:hover{background:var(--hover)}
+.key[aria-pressed=true]{background:var(--lifted);color:var(--gold)}
+.key[aria-pressed=true] b{color:var(--gold)}
+.go{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--goldwash);color:var(--gold);font:600 14px var(--sans)}
+.go:hover{background:var(--lifted)}
+.go svg{width:14px;height:14px}
+/* band 2: banks */
+.banks{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.bank{display:flex;gap:8px;align-items:baseline;padding:12px 16px;background:var(--surface);color:var(--ash);font-size:12px;font-variant-numeric:tabular-nums}
+.bank b{font:600 14px var(--sans);color:var(--ash)}
+.bank .c{margin-left:auto}
+.bank:hover b{color:var(--text)}
+.bank[aria-selected=true]{background:var(--lifted);color:var(--gold)}
+.bank[aria-selected=true] b{color:var(--text)}
+/* band 3: takes */
+.takes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line)}
+.take{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:4px 8px;align-items:baseline;align-content:start;padding:12px 16px;background:var(--surface)}
+.take:hover{background:var(--hover)}
+.take .no,.take .len{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.take b{font:600 14px/1.35 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.take b .cn{font-size:12px;color:var(--ash);margin-left:8px}
+.take p{grid-column:2/-1;font:500 13px/1.6 'Noto Serif SC',serif;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.take em{grid-column:2/-1;font-style:normal;font-size:12px;color:var(--gold)}
+.take[data-playing]{background:var(--lifted)}
+.take[data-playing] .no,.take[data-playing] b{color:var(--gold)}
+.take[data-playing] p{color:var(--text)}
+.fill{background:var(--surface)}
+@media (max-width:1000px){.rec{grid-template-columns:minmax(0,1fr) 280px}.who{display:none}.takes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.rec{grid-template-columns:1fr}.lcd{padding:16px}.lcd p{font-size:16px;min-height:0}
+ .banks{grid-template-columns:1fr 1fr}.takes{grid-template-columns:1fr}.fill{display:none}}
+@media (prefers-reduced-motion:reduce){.lcd[data-on] .meter i{transition:none}}
+</style></head><body>
+<nav class="rail"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">≡</button>
+<main class="main"><div class="wrap">
+ <nav class="tabs"><a>Tổng quan</a><a>Thông tin</a><a>Thiên phú</a><a>Build</a><a>Hồ sơ</a><a>Phòng trà</a><a class="on">Lồng tiếng</a><a>Thư viện</a></nav>
+ <p class="demo">Bản mẫu C3: chữ là thoại thật (r3177), chưa có mp3 nên tiếng được giả lập. Câu đầy đủ hiện trên màn hiển thị khi phát.</p>
+ <section class="sheet" aria-label="Lồng tiếng">
+  <div class="rec">
+   <div class="who"><img src="../../../../public/assets/characters/avatars/A0100.png" alt=""><span id="who"></span></div>
+   <div class="lcd" id="lcd" aria-live="polite">
+    <div class="row"><span><b id="no">—</b> <span id="lab">Chọn một câu</span></span><span id="tm">0:00 / 0:00</span></div>
+    <p class="cn" id="txt"></p>
+    <div class="meter" id="meter"></div>
+   </div>
+   <div class="ctl"><div id="lk" role="group" aria-label="Gói giọng" style="display:contents"></div>
+    <button class="go" id="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg><span id="gol">Phát</span></button></div>
+  </div>
+  <div class="banks" id="banks" role="tablist" aria-label="Nhóm thoại"></div>
+  <div class="takes" id="takes" role="tabpanel"></div>
+ </section>
+</div></main>
+<script src="voice-data.js"></script><script src="voice-common.js"></script>
+<script>
+const {V,play,dur,groupsOf,note,mmss,esc}=VP, C=V.char;
+who.textContent=C.vi;
+meter.innerHTML='<i></i>'.repeat(40);
+const bars=[...meter.children];
+let li=0, gi=0, sel=null;
+const pad=n=>String(n).padStart(2,'0');
+function render(){
+  const L=V.langs[li], G=groupsOf(L); let n=G.slice(0,gi).reduce((a,g)=>a+g.lines.length,0);
+  lk.innerHTML=V.langs.map((x,i)=>`<button class="key" aria-pressed="${i===li}" data-i="${i}"><span>${pad(i+1)}</span><b>${esc(x.name.replace(/（.*）/,''))}</b><span>${esc((x.name.match(/（(.*)）/)||[,''])[1]||'CV '+x.cv)}</span></button>`).join('');
+  banks.innerHTML=G.map((g,i)=>`<button class="bank" role="tab" aria-selected="${i===gi}" data-g="${i}"><span>${pad(i+1)}</span><b>${g.name}</b><span class="c">${g.lines.length}</span></button>`).join('');
+  const cells=G[gi].lines.map(l=>{n++;return `<button class="take" data-t="${l.type}" data-n="${pad(n)}"><span class="no">${pad(n)}</span><b>${esc(l.vi)}<span class="cn">${esc(l.cn)}</span></b><span class="len">${mmss(dur(l))}</span><p class="cn">${esc(l.text)}</p>${note(l)?`<em>${esc(note(l))}</em>`:''}</button>`});
+  while(cells.length%3) cells.push('<span class="fill"></span>'); // ponytail: fill the last row so the gap lines stay a clean grid
+  takes.innerHTML=cells.join('');
+}
+function start(b){
+  const l=V.langs[li].lines.find(x=>x.type===b.dataset.t); sel=b;
+  no.textContent=b.dataset.n; lab.textContent=`${l.vi} · ${l.cn}`; txt.textContent=l.text;
+  lcd.setAttribute('data-on',''); gol.textContent='Dừng';
+  play(b,l,{onTick:(p,ms)=>{tm.textContent=`${mmss(p*ms)} / ${mmss(ms)}`;bars.forEach(i=>i.style.height=(2+Math.random()*14)+'px')}, // ponytail: random meter until real audio levels
+    onStop:()=>{lcd.removeAttribute('data-on');gol.textContent='Phát';bars.forEach(i=>i.style.height='2px')}});
+}
+lk.onclick=e=>{const b=e.target.closest('.key');if(!b)return;VP.stop();li=+b.dataset.i;sel=null;render()};
+banks.onclick=e=>{const b=e.target.closest('.bank');if(!b)return;gi=+b.dataset.g;render()};
+takes.onclick=e=>{const b=e.target.closest('.take');if(b)start(b)};
+go.onclick=()=>start(sel?.isConnected?sel:takes.querySelector('.take'));
+render();
+</script></body></html>

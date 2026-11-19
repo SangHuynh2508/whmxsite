@@ -1,0 +1,133 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Lồng tiếng · C2 Máy ghi âm gọn</title>
+<!-- C2 (owner 2026-11-19: "phần này của hướng C khá đẹp nhưng phần chọn bên dưới dài quá, có thể lựa 1 bố cục dạng thu gọn"):
+     the device stays as C. The take sheet becomes compact: the four groups are numbered bank keys (one bank shown at a
+     time, like a sampler's pad banks), and each take is a small cell in a 3-column grid — number, name, length, one line
+     of the words. The full line reads in the LCD when it plays. -->
+<style>
+.banks{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 14px}
+.bank{all:unset;cursor:pointer;display:flex;gap:10px;align-items:baseline;padding:8px 14px;border-radius:8px;background:var(--lifted);border:1px solid var(--line2);box-shadow:0 3px 0 var(--line);color:var(--ash);font-size:14px;transition:transform .06s,box-shadow .06s}
+.bank span{font-size:12px;font-variant-numeric:tabular-nums}
+.bank b{font:600 14px var(--sans);color:var(--text)}
+.bank:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.bank[aria-selected=true]{border-color:var(--gold);color:var(--gold)}
+.bank[aria-selected=true] b{color:var(--gold)}
+.bank:focus-visible,.cell:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cell{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}
+.cell:hover{border-color:var(--line2);background:var(--lifted)}
+.cell .no{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.cell b{font:600 14px/1.35 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell b .cn{font-size:12px;font-weight:500;color:var(--ash);margin-left:6px}
+.cell .len{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.cell p{grid-column:2/-1;font:500 13px/1.6 'Noto Serif SC',serif;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell em{grid-column:2/-1;font-style:normal;font-size:12px;color:var(--gold)}
+.cell[data-playing]{border-color:var(--gold);background:var(--lifted)}
+.cell[data-playing] .no,.cell[data-playing] b{color:var(--gold)}
+.cell[data-playing] p{color:var(--text)}
+@media (max-width:1000px){.cells{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.cells{grid-template-columns:1fr;gap:6px}.bank{padding:7px 10px}}
+</style>
+<!-- C · Máy ghi âm. Logic 3, best designer: Teenage Engineering (OP-1, TP-7 field recorder, EP-133) — instruments as
+     precise little objects: a speaker grille of punched dots, one small LCD that says exactly what is playing, physical
+     keys with numbers on them, everything labelled in tiny caps, nothing decorative that doesn't do something.
+     Form from content: these lines were RECORDED, take by take — so the tab is a recorder: one device panel that plays,
+     and an indexed take sheet (No. / take / words / length) under it, the way a session log lists takes. -->
+<style>
+.wrap{max-width:1180px;margin:0 auto}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:28px}
+.tabs a{padding:8px 14px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{font-size:12px;color:var(--ash);margin:-12px 0 24px}
+.cap{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ash)}
+/* the device */
+.dev{position:sticky;top:12px;z-index:3;display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:24px;align-items:stretch;padding:20px;border-radius:16px;
+ background:var(--surface);border:1px solid var(--line2);box-shadow:0 1px 0 var(--hover) inset,0 18px 40px rgba(0,0,0,.45)}
+.grille{position:relative;border-radius:12px;background:radial-gradient(circle,var(--bg) 2.2px,transparent 2.6px) 0 0/10px 10px,var(--lifted);overflow:hidden;display:grid;place-items:center}
+.grille img{width:84px;height:84px;border-radius:50%;border:2px solid var(--line2);background:var(--surface)}
+.grille .cap{position:absolute;left:10px;bottom:8px}
+.lcd{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:10px;background:#0b0c0d;border:1px solid var(--line);font-variant-numeric:tabular-nums;min-width:0}
+.lcd .row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--ash)}
+.lcd .row b{color:var(--gold);font-weight:600}
+.lcd p{font:500 18px/1.6 'Noto Serif SC',serif;min-height:58px}
+.meter{display:flex;gap:3px;align-items:flex-end;height:18px}
+.meter i{flex:1;background:var(--line2);border-radius:1px;height:20%;transition:height .12s}
+.lcd[data-on] .meter i{background:var(--gold)}
+.keys{display:grid;grid-template-rows:auto 1fr;gap:10px;min-width:200px}
+.lk{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.key{all:unset;cursor:pointer;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;min-height:58px;padding:7px 8px;border-radius:8px;
+ background:var(--lifted);border:1px solid var(--line2);box-shadow:0 3px 0 var(--line);font-size:12px;color:var(--ash);transition:transform .06s,box-shadow .06s}
+.key b{font:600 13px var(--sans);color:var(--text)}
+.key:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.key[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+.key[aria-pressed=true] b{color:var(--gold)}
+.key:focus-visible,.go:focus-visible,.take:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.go{all:unset;cursor:pointer;justify-self:end;align-self:end;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:var(--bg);box-shadow:0 4px 0 #6b5a2c}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 #6b5a2c}
+.go svg{width:22px;height:22px}
+/* take sheet */
+.sheet{margin-top:32px}
+.sec{display:grid;grid-template-columns:48px 1fr;align-items:center;gap:12px;margin:28px 0 6px}
+.sec .n{font:600 12px var(--sans);color:var(--gold);font-variant-numeric:tabular-nums}
+.sec h2{font:700 17px/1.3 var(--serif);display:flex;gap:12px;align-items:center}
+.sec h2::after{content:"";flex:1;height:1px;background:var(--line2)}
+.take{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:48px 210px minmax(0,1fr) 56px;gap:16px;align-items:baseline;width:100%;padding:12px 0;border-top:1px solid var(--line)}
+.take:hover{background:linear-gradient(90deg,var(--surface),transparent)}
+.take .no{font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums;padding-left:4px}
+.take b{display:block;font:600 14px/1.35 var(--sans)} .take .cn{font-size:12px;color:var(--ash)}
+.take em{display:block;margin-top:4px;font-style:normal;font-size:12px;color:var(--gold)}
+.take p{font:500 15px/1.7 'Noto Serif SC',serif;color:var(--ash)}
+.take .len{text-align:right;font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums}
+.take[data-playing] .no,.take[data-playing] b{color:var(--gold)}
+.take[data-playing] p{color:var(--text)}
+@media (max-width:860px){.dev{grid-template-columns:1fr;gap:12px;top:8px;padding:12px}.grille{display:none}
+ .keys{grid-template-columns:1fr auto;grid-template-rows:none;min-width:0;align-items:end}.go{width:52px;height:52px}
+ .lcd p{font-size:15px;min-height:0}
+ .take{grid-template-columns:36px minmax(0,1fr) 44px;gap:4px 10px}.take p{grid-column:2/-1}.take .len{grid-row:1;grid-column:3}}
+@media (prefers-reduced-motion:reduce){.meter i,.key{transition:none}}
+</style></head><body>
+<nav class="rail"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">≡</button>
+<main class="main"><div class="wrap">
+ <nav class="tabs"><a>Tổng quan</a><a>Thông tin</a><a>Thiên phú</a><a>Build</a><a>Hồ sơ</a><a>Phòng trà</a><a class="on">Lồng tiếng</a><a>Thư viện</a></nav>
+ <p class="demo">Bản mẫu C2: chữ là thoại thật (r3177), chưa có mp3 nên tiếng được giả lập. Câu đầy đủ hiện trên màn LCD khi phát.</p>
+ <section class="dev" aria-label="Máy phát">
+  <div class="grille"><img src="../../../../public/assets/characters/avatars/A0100.png" alt=""><span class="cap" id="who"></span></div>
+  <div class="lcd" id="lcd" aria-live="polite">
+   <div class="row"><span><b id="no">—</b> <span id="lab">Chọn một câu</span></span><span id="tm">0:00 / 0:00</span></div>
+   <p class="cn" id="txt"></p>
+   <div class="meter" id="meter"></div>
+  </div>
+  <div class="keys"><div class="lk" id="lk" role="group" aria-label="Gói giọng"></div>
+   <button class="go" id="go" aria-label="Phát câu đang chọn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg></button></div>
+ </section>
+ <div class="banks" id="banks" role="tablist" aria-label="Nhóm thoại"></div>
+ <div class="cells" id="sheet" role="tabpanel"></div>
+</div></main>
+<script src="voice-data.js"></script><script src="voice-common.js"></script>
+<script>
+const {V,play,dur,groupsOf,note,mmss,esc}=VP, C=V.char;
+who.textContent=C.vi;
+meter.innerHTML='<i></i>'.repeat(32);
+let li=0, gi=0, sel=null;
+const pad=n=>String(n).padStart(2,'0');
+function render(){
+  const L=V.langs[li], G=groupsOf(L); let n=G.slice(0,gi).reduce((a,g)=>a+g.lines.length,0);
+  lk.innerHTML=V.langs.map((x,i)=>`<button class="key" aria-pressed="${i===li}" data-i="${i}"><span>${pad(i+1)}</span><b>${esc(x.name.replace(/（.*）/,''))}</b><span>${esc((x.name.match(/（(.*)）/)||[,''])[1]||'CV '+x.cv)}</span></button>`).join('');
+  banks.innerHTML=G.map((g,i)=>`<button class="bank" role="tab" aria-selected="${i===gi}" data-g="${i}"><span>${pad(i+1)}</span><b>${g.name}</b><span>${g.lines.length}</span></button>`).join('');
+  sheet.innerHTML=G[gi].lines.map(l=>{n++;return `<button class="cell"data-t="${l.type}" data-n="${pad(n)}"><span class="no">${pad(n)}</span><b>${esc(l.vi)}<span class="cn">${esc(l.cn)}</span></b><span class="len">${mmss(dur(l))}</span><p class="cn">${esc(l.text)}</p>${note(l)?`<em>${esc(note(l))}</em>`:''}</button>`}).join('');
+}
+banks.onclick=e=>{const b=e.target.closest('.bank');if(!b)return;gi=+b.dataset.g;render()};
+const bars=[...meter.children];
+function start(b){
+  const l=V.langs[li].lines.find(x=>x.type===b.dataset.t); sel=b;
+  no.textContent=b.dataset.n; lab.textContent=`${l.vi} · ${l.cn}`; txt.textContent=l.text;
+  lcd.setAttribute('data-on','');
+  play(b,l,{onTick:(p,ms)=>{tm.textContent=`${mmss(p*ms)} / ${mmss(ms)}`;bars.forEach(i=>i.style.height=(20+Math.random()*80)+'%')}, // ponytail: random meter until real audio levels
+    onStop:()=>{lcd.removeAttribute('data-on');bars.forEach(i=>i.style.height='20%')}});
+}
+lk.onclick=e=>{const b=e.target.closest('.key');if(!b)return;VP.stop();li=+b.dataset.i;sel=null;render()};
+sheet.onclick=e=>{const b=e.target.closest('.cell');if(b)start(b)};
+go.onclick=()=>start(sel?.isConnected?sel:sheet.querySelector('.cell'));
+render();
+</script></body></html>

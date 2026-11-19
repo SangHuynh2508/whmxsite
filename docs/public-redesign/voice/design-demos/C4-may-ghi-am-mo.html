@@ -1,0 +1,109 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Lồng tiếng · C4 Mở</title>
+<!-- C4 (owner 2026-11-19 on C3: "vẫn mắc lỗi đóng hộp quá nhiều"; impeccable critique: the 1 px gap grid made ~26
+     equal rectangles). Only ONE object stays: the recorder (one flat 6 px panel, nothing boxed inside it).
+     Everything else sits on the page: the four groups are underline tabs, the takes are plain rows with a horizontal
+     hairline, no vertical lines, no cell fills. Each control kind gets its own form: voice pack = radio rows inside the
+     recorder, group = tab, line = row. Gold means "current" only. -->
+<style>
+.wrap{max-width:1180px;margin:0 auto}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs a{padding:8px 12px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{font-size:12px;color:var(--ash);margin:-8px 0 24px}
+button{all:unset;box-sizing:border-box;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+::selection{background:var(--goldwash);color:var(--gold)}
+/* the recorder: the only object */
+.rec{display:grid;grid-template-columns:72px minmax(0,1fr) 240px;gap:24px;align-items:center;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.rec>img{width:72px;height:72px;border-radius:50%;border:1px solid var(--line2);align-self:start}
+.read{display:flex;flex-direction:column;gap:8px;min-width:0;font-variant-numeric:tabular-nums}
+.read .row{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--ash)}
+.read .row b{color:var(--text);font-weight:600}
+.read[data-on] .row b{color:var(--gold)}
+.read p{font:500 20px/1.6 'Noto Serif SC',serif;min-height:64px}
+.read p:empty::before{content:attr(data-empty);font:400 15px/1.65 var(--sans);color:var(--ash)}
+.meter{display:flex;gap:3px;align-items:flex-end;height:16px}
+.meter i{flex:1;height:2px;background:var(--line2)}
+.read[data-on] .meter i{background:var(--gold);transition:height .12s}
+.ctl{display:flex;flex-direction:column;gap:16px;padding-left:24px;border-left:1px solid var(--line);align-self:stretch;justify-content:center}
+.packs{display:flex;flex-direction:column;gap:4px}
+.pack{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:12px;color:var(--ash)}
+.pack b{font:600 14px/1.4 var(--sans);color:var(--ash)}
+.pack:hover b{color:var(--text)}
+.pack[aria-checked=true] b{color:var(--gold)}
+.pack[aria-checked=true]{color:var(--text)}
+.go{display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:6px;background:var(--goldwash);border:1px solid var(--goldline);color:var(--gold);font:600 14px var(--sans)}
+.go:hover{background:var(--lifted)}
+.go svg{width:12px;height:12px}
+.go .st,.go[data-on] .pl{display:none}.go[data-on] .st{display:inline}
+/* groups: tabs on the page */
+.groups{display:flex;flex-wrap:wrap;gap:4px 24px;margin:32px 0 8px;border-bottom:1px solid var(--line)}
+.grp{padding:8px 0;margin-bottom:-1px;border-bottom:2px solid transparent;font:600 15px var(--sans);color:var(--ash)}
+.grp span{margin-left:8px;font:400 12px var(--sans);font-variant-numeric:tabular-nums}
+.grp:hover{color:var(--text)}
+.grp[aria-selected=true]{color:var(--text);border-color:var(--gold)}
+/* takes: rows, horizontal hairline only */
+.takes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
+.take{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;align-content:start;padding:12px 8px;border-bottom:1px solid var(--line);border-radius:0}
+.take:hover{background:var(--surface)}
+.take .no,.take .len{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.take b{font:600 15px/1.4 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.take b .cn{font-size:12px;font-weight:500;color:var(--ash);margin-left:8px}
+.take p{grid-column:2/-1;font:500 15px/1.6 'Noto Serif SC',serif;color:var(--ash);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.take small{grid-column:2/-1;font-size:12px;color:var(--ash)}
+.take[data-playing] .no,.take[data-playing] b{color:var(--gold)}
+.take[data-playing] p{color:var(--text)}
+@media (max-width:1000px){.rec{grid-template-columns:minmax(0,1fr) 220px}.rec>img{display:none}}
+@media (max-width:640px){.rec{grid-template-columns:1fr;gap:16px;padding:16px}.read p{font-size:17px;min-height:0}
+ .ctl{padding:16px 0 0;border-left:0;border-top:1px solid var(--line)}
+ .packs{flex-direction:row;flex-wrap:wrap;gap:4px 16px}.pack{flex-direction:column;gap:0}
+ .groups{gap:0 16px;margin-top:24px}.grp{font-size:14px}.takes{grid-template-columns:1fr}.take{padding:12px 0}}
+@media (prefers-reduced-motion:reduce){.read[data-on] .meter i{transition:none}}
+</style></head><body>
+<nav class="rail"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">≡</button>
+<main class="main"><div class="wrap">
+ <nav class="tabs"><a>Tổng quan</a><a>Thông tin</a><a>Thiên phú</a><a>Build</a><a>Hồ sơ</a><a>Phòng trà</a><a class="on">Lồng tiếng</a><a>Thư viện</a></nav>
+ <p class="demo">Bản mẫu C4: chữ là thoại thật (r3177), chưa có mp3 nên tiếng được giả lập.</p>
+ <section class="rec" aria-label="Máy phát">
+  <img src="../../../../public/assets/characters/avatars/A0100.png" alt="">
+  <div class="read" id="read" aria-live="polite">
+   <div class="row"><span><b id="no"></b> <span id="lab">Chưa phát</span></span><span id="tm">0:00 / 0:00</span></div>
+   <p class="cn" id="txt" data-empty="Chọn một câu bên dưới để nghe."></p>
+   <div class="meter" id="meter"></div>
+  </div>
+  <div class="ctl">
+   <div class="packs" id="packs" role="radiogroup" aria-label="Gói giọng"></div>
+   <button class="go" id="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="pl" d="M4 2.5v11l9-5.5z" fill="currentColor"/><rect class="st" x="3" y="3" width="10" height="10" fill="currentColor"/></svg><span id="gol">Phát</span></button>
+  </div>
+ </section>
+ <div class="groups" id="groups" role="tablist" aria-label="Nhóm thoại"></div>
+ <div class="takes" id="takes" role="tabpanel"></div>
+</div></main>
+<script src="voice-data.js"></script><script src="voice-common.js"></script>
+<script>
+const {V,play,dur,groupsOf,note,mmss,esc}=VP;
+meter.innerHTML='<i></i>'.repeat(48);
+const bars=[...meter.children];
+let li=0, gi=0, sel=null;
+const pad=n=>String(n).padStart(2,'0');
+function render(){
+  const G=groupsOf(V.langs[li]); let n=G.slice(0,gi).reduce((a,g)=>a+g.lines.length,0);
+  packs.innerHTML=V.langs.map((x,i)=>`<button class="pack" role="radio" aria-checked="${i===li}" data-i="${i}"><b>${esc(x.name.replace(/（.*）/,''))}</b><span>${esc((x.name.match(/（(.*)）/)||[,''])[1]||'CV '+x.cv)}</span></button>`).join('');
+  groups.innerHTML=G.map((g,i)=>`<button class="grp" role="tab" aria-selected="${i===gi}" data-g="${i}">${g.name}<span>${g.lines.length}</span></button>`).join('');
+  takes.innerHTML=G[gi].lines.map(l=>{n++;return `<button class="take" data-t="${l.type}" data-n="${pad(n)}"><span class="no">${pad(n)}</span><b>${esc(l.vi)}<span class="cn">${esc(l.cn)}</span></b><span class="len">${mmss(dur(l))}</span><p class="cn">${esc(l.text)}</p>${note(l)?`<small>${esc(note(l))}</small>`:''}</button>`}).join('');
+}
+function start(b){
+  const l=V.langs[li].lines.find(x=>x.type===b.dataset.t); sel=b;
+  no.textContent=b.dataset.n; lab.textContent=`${l.vi} · ${l.cn}`; txt.textContent=l.text;
+  read.setAttribute('data-on',''); gol.textContent='Dừng';go.dataset.on='';
+  play(b,l,{onTick:(p,ms)=>{tm.textContent=`${mmss(p*ms)} / ${mmss(ms)}`;bars.forEach(i=>i.style.height=(2+Math.random()*14)+'px')}, // ponytail: random meter until real audio levels
+    onStop:()=>{read.removeAttribute('data-on');gol.textContent='Phát';delete go.dataset.on;bars.forEach(i=>i.style.height='2px')}});
+}
+packs.onclick=e=>{const b=e.target.closest('.pack');if(!b)return;VP.stop();li=+b.dataset.i;sel=null;render()};
+groups.onclick=e=>{const b=e.target.closest('.grp');if(!b)return;gi=+b.dataset.g;render()};
+takes.onclick=e=>{const b=e.target.closest('.take');if(b)start(b)};
+go.onclick=()=>start(sel?.isConnected?sel:takes.querySelector('.take'));
+render();
+</script></body></html>

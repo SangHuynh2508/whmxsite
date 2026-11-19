@@ -1,0 +1,89 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Lồng tiếng · B Lời đang nói</title>
+<!-- B · Lời đang nói. Logic 2, real reference: Apple Music's full-screen time-synced lyrics — the artwork and transport
+     stay put on the left, the words are the interface on the right: very large type, the current line full white, the
+     rest dimmed, tap any line to jump. Moved onto our content: the drawing is the "artwork", each voice line is a lyric
+     line, the language pack is the "version" switch under the artwork. Form from content: a voice line is something you
+     READ while you HEAR it, so the text is the hero, not the buttons. -->
+<style>
+.wrap{max-width:1280px;margin:0 auto}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:28px}
+.tabs a{padding:8px 14px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+.demo{font-size:12px;color:var(--ash);margin:-12px 0 24px}
+.lay{display:grid;grid-template-columns:340px minmax(0,1fr);gap:56px}
+/* left: artwork + version + transport, sticky */
+.side{position:sticky;top:16px;align-self:start}
+.art2{position:relative;aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:var(--surface) var(--grain);border:1px solid var(--line2)}
+.art2 img{position:absolute;left:50%;top:2%;height:150%;width:auto;max-width:none;transform:translateX(-50%)}
+.art2::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:linear-gradient(transparent,var(--art-shade,rgba(0,0,0,.84)))}
+.art2 .id{position:absolute;left:18px;bottom:16px;z-index:1}
+.art2 h1{font:700 26px/1.2 var(--serif)} .art2 .cn{font-size:15px;color:var(--ash)}
+.ver{margin-top:18px}
+.ver h2{font:600 12px var(--sans);color:var(--ash);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.vlist{display:flex;flex-direction:column;gap:2px}
+.vb{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:6px;font-size:14px;color:var(--ash)}
+.vb:hover{background:var(--hover);color:var(--text)}
+.vb:focus-visible{outline:2px solid var(--gold)}
+.vb small{font-size:12px}
+.vb[aria-pressed=true]{background:var(--lifted);color:var(--text);box-shadow:inset 2px 0 var(--gold)}
+.now{margin-top:18px;padding:14px;border:1px solid var(--line2);border-radius:8px;background:var(--surface)}
+.now .t{font-size:13px;color:var(--ash);display:flex;justify-content:space-between}
+.now .t b{color:var(--text);font-weight:600}
+.trk{height:3px;margin:10px 0 4px;border-radius:2px;background:var(--line)}
+.trk i{display:block;height:100%;width:0;border-radius:2px;background:var(--gold)}
+.now .tm{display:flex;justify-content:space-between;font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+/* right: the words */
+.grp{padding-bottom:28px}
+.grp h3{position:sticky;top:0;z-index:1;padding:10px 0;background:linear-gradient(var(--bg) 70%,transparent);font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.ln{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:14px 16px;margin:0 -16px;border-radius:10px;transition:background .2s}
+.ln:hover{background:var(--surface)}
+.ln:focus-visible{outline:2px solid var(--gold)}
+.ln .lb{display:flex;gap:10px;align-items:baseline;font-size:13px;color:var(--ash)}
+.ln .lb b{font-weight:600;color:var(--ash)}
+.ln .lb em{font-style:normal;font-size:12px;padding:0 7px;border:1px solid var(--line2);border-radius:999px}
+.ln p{margin-top:4px;font:700 24px/1.5 'Noto Serif SC',serif;color:var(--ash);transition:color .3s}
+.ln:hover p{color:var(--text)}
+.ln[data-playing] p{color:var(--text)}
+.ln[data-playing] .lb b{color:var(--gold)}
+@media (max-width:900px){.lay{grid-template-columns:1fr;gap:20px}
+ .side{position:static;display:grid;grid-template-columns:120px 1fr;gap:0 16px}
+ .art2{grid-row:span 2;aspect-ratio:3/4}.art2::after,.art2 .id{display:none}
+ .ver{margin-top:0}.vlist{flex-direction:row;flex-wrap:wrap}.vb small{display:none}
+ .now{position:fixed;left:72px;right:16px;bottom:20px;z-index:4;margin:0;background:rgba(23,25,28,.96)}
+ .ln p{font-size:19px}}
+@media (prefers-reduced-motion:reduce){.ln,.ln p{transition:none}}
+</style></head><body>
+<nav class="rail"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">≡</button>
+<main class="main"><div class="wrap">
+ <nav class="tabs"><a>Tổng quan</a><a>Thông tin</a><a>Thiên phú</a><a>Build</a><a>Hồ sơ</a><a>Phòng trà</a><a class="on">Lồng tiếng</a><a>Thư viện</a></nav>
+ <p class="demo">Bản mẫu: chữ là thoại thật (r3177), chưa có mp3 nên tiếng được giả lập.</p>
+ <div class="lay">
+  <aside class="side">
+   <div class="art2"><img src="https://pub-c0dceaa4fc5b48d1811c48f6f91a899c.r2.dev/characters/a0100/drawings/a0100001.webp" alt=""><div class="id"><h1 id="nm"></h1><p class="cn" id="nmcn"></p></div></div>
+   <div class="ver"><h2>Gói giọng</h2><div class="vlist" id="vl" role="group" aria-label="Gói giọng"></div></div>
+   <div class="now" aria-live="polite"><div class="t"><b id="nl">Chọn một câu để nghe</b><span id="ncn" class="cn"></span></div><div class="trk"><i id="bar"></i></div><div class="tm"><span id="t0">0:00</span><span id="t1">–</span></div></div>
+  </aside>
+  <section id="words"></section>
+ </div>
+</div></main>
+<script src="voice-data.js"></script><script src="voice-common.js"></script>
+<script>
+const {V,play,groupsOf,note,mmss,esc}=VP, C=V.char;
+nm.textContent=C.vi; nmcn.textContent=C.cn;
+let li=0;
+function render(){
+  const L=V.langs[li];
+  vl.innerHTML=V.langs.map((x,i)=>`<button class="vb" aria-pressed="${i===li}" data-i="${i}"><span>${esc(x.name)}</span><small>CV ${esc(x.cv)}</small></button>`).join('');
+  words.innerHTML=groupsOf(L).map(g=>`<div class="grp"><h3>${g.name}</h3>${
+    g.lines.map(l=>`<button class="ln" data-t="${l.type}"><span class="lb"><b>${esc(l.vi)}</b><span class="cn">${esc(l.cn)}</span>${note(l)?`<em>${esc(note(l))}</em>`:''}</span><p class="cn">${esc(l.text)}</p></button>`).join('')
+  }</div>`).join('');
+}
+vl.onclick=e=>{const b=e.target.closest('.vb');if(!b)return;VP.stop();li=+b.dataset.i;render()};
+words.onclick=e=>{const b=e.target.closest('.ln');if(!b)return;const l=V.langs[li].lines.find(x=>x.type===b.dataset.t);
+  nl.textContent=l.vi;ncn.textContent=l.cn;
+  play(b,l,{onTick:(p,ms)=>{bar.style.width=p*100+'%';t0.textContent=mmss(p*ms);t1.textContent=mmss(ms)},
+    onStop:()=>{bar.style.width='0'}})};
+render();
+</script></body></html>

@@ -198,6 +198,11 @@ const vi = {
   gaVerN: 'Bản {v}', gaRowVer: 'Bản', gaRowChapter: 'Chương', gaRowStory: 'Truyện',
   gaFactKind: 'Loại', gaFactIn: 'Nằm trong', gaFactObtain: 'Cách nhận', gaFactPart: 'Bản', gaFactSize: 'Kích thước', gaFactId: 'Mã',
   gaElsewhere: 'Ảnh trang phục và banner có trang riêng:', ifGalleryDesc: 'CG truyện, màn hình chờ, KV và bưu thiếp; xem ảnh to, tải bản gốc.',
+  tabVoice: 'Lồng Tiếng', voiceLoading: 'Đang tải lồng tiếng…', voiceNone: 'Khí Giả này chưa có lồng tiếng.',
+  voiceIdle: 'Chưa phát', voiceHint: 'Chọn một câu bên dưới để nghe.', voiceNoText: 'Không có chữ trong dữ liệu game.',
+  voiceFail: 'Không phát được câu này.', voicePlay: 'Phát', voiceStop: 'Dừng', voicePacks: 'Gói giọng', voiceSkins: 'Trang phục',
+  voiceGroups: 'Nhóm thoại', voiceGrpDaily: 'Đời thường', voiceGrpGrowth: 'Phát triển', voiceGrpBattle: 'Chiến đấu',
+  voiceGrpBase: 'Căn cứ & tương tác', voiceGrpOther: 'Khác', voiceZone: 'Khung giờ',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -447,6 +452,12 @@ const cn: Record<StringKey, string> = {
   gaVerN: '{v}', gaRowVer: '版本', gaRowChapter: '章节', gaRowStory: '剧情',
   gaFactKind: '类型', gaFactIn: '所属', gaFactObtain: '获取方式', gaFactPart: '版本', gaFactSize: '尺寸', gaFactId: '编号',
   gaElsewhere: '衣装与招集图另有专页：', ifGalleryDesc: '剧情CG、加载图、KV 与明信片，可看大图并下载原图。',
+  // draft (voice tab, 2026-11-19)
+  tabVoice: '语音', voiceLoading: '语音加载中…', voiceNone: '该器者暂无语音。',
+  voiceIdle: '未播放', voiceHint: '选择下方的一句来收听。', voiceNoText: '游戏数据中没有文本。',
+  voiceFail: '无法播放这句。', voicePlay: '播放', voiceStop: '停止', voicePacks: '语音包', voiceSkins: '衣装',
+  voiceGroups: '语音分组', voiceGrpDaily: '日常', voiceGrpGrowth: '养成', voiceGrpBattle: '战斗',
+  voiceGrpBase: '基建与互动', voiceGrpOther: '其他', voiceZone: '时段',
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];

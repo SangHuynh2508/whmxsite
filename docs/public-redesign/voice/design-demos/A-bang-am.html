@@ -1,0 +1,89 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../home/design-demos/common.css"><title>Lồng tiếng · A Bảng âm</title>
+<!-- A · Bảng âm. Logic 1, roulette: `date +%S` = 23 → 23 % 20 + 1 = 4 → web #4 Friendly Geometric Candy
+     (raised, pressable geometric buttons; gamified). Translated into the site's dark tokens: the candy colours are the
+     existing --tag-* hues, one per group; the "raised" look is a 4 px darker ledge under each pad that collapses on press.
+     Form from content: a voice list in the game IS a soundboard (tap a pad, she speaks) — so the page is a board of pads,
+     grouped like the game groups them, and the spoken line rises into one caption bar at the bottom. -->
+<style>
+:root{--g0:#8DB8F2;--g1:#F2B35E;--g2:#F2937F;--g3:#7FD4CF}
+.wrap{max-width:1280px;margin:0 auto}
+.head{display:flex;gap:16px;align-items:center;padding:8px 0 16px}
+.head img{width:56px;height:56px;border-radius:50%;border:2px solid var(--line2)}
+.head h1{font:700 21px/1.3 var(--serif)} .head p{color:var(--ash);font-size:14px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs a{padding:8px 14px;font-size:13px;color:var(--ash);white-space:nowrap;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--text);border-color:var(--gold)}
+/* language switch: three raised pills */
+.bar{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;margin-bottom:28px}
+.langs{display:flex;flex-wrap:wrap;gap:10px}
+.lp{all:unset;cursor:pointer;padding:9px 16px 8px;border-radius:999px;background:var(--lifted);border:1px solid var(--line2);box-shadow:0 4px 0 var(--line);font:600 14px/1.2 var(--sans);color:var(--ash);transition:transform .08s,box-shadow .08s}
+.lp small{display:block;font-weight:400;font-size:12px;margin-top:2px}
+.lp:hover{color:var(--text)}
+.lp:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.lp[aria-pressed=true]{background:var(--goldwash);border-color:var(--gold);color:var(--gold);box-shadow:0 4px 0 #6b5a2c}
+.lp:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.count{font-size:13px;color:var(--ash)}
+/* groups */
+.grp{margin-bottom:36px}
+.grp h2{display:flex;align-items:center;gap:10px;font:700 18px/1.3 var(--serif);margin-bottom:14px}
+.grp h2 i{width:14px;height:14px;border-radius:4px;background:var(--c);transform:rotate(45deg)}
+.grp h2 span{font:400 13px var(--sans);color:var(--ash)}
+.pads{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.pad{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:grid;grid-template-columns:44px 1fr;gap:4px 12px;align-content:start;
+ min-height:132px;padding:14px 14px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);
+ box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s,border-color .15s}
+.pad:hover{border-color:var(--c)}
+.pad:active,.pad[data-playing]{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.pad:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+.knob{grid-row:span 2;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--bg)}
+.knob svg{width:16px;height:16px}
+.pad b{font:600 15px/1.3 var(--sans);align-self:end}
+.pad .cn{font-size:12px;color:var(--ash)}
+.pad p{grid-column:1/-1;margin-top:8px;font:500 14px/1.6 'Noto Serif SC',serif;color:var(--ash);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pad .lock{grid-column:1/-1;justify-self:start;margin-top:8px;padding:2px 8px;border-radius:999px;font-size:12px;color:var(--c);border:1px solid var(--c)}
+.pad[data-playing]{border-color:var(--c);background:var(--lifted)}
+.pad[data-playing] p{color:var(--text)}
+.pad[data-playing]::after{content:"";position:absolute;left:14px;right:14px;bottom:8px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--c) calc(var(--p,0)*100%),var(--line) 0)}
+/* caption bar: the line being spoken */
+.cap{position:sticky;bottom:16px;margin-top:8px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;padding:14px 18px;border-radius:14px;
+ background:rgba(28,32,36,.96);border:1px solid var(--goldline);box-shadow:0 12px 32px var(--bg);opacity:0;transform:translateY(12px);transition:opacity .2s,transform .2s;pointer-events:none}
+.cap.on{opacity:1;transform:none}
+.cap img{grid-row:span 2;width:48px;height:48px;border-radius:50%;border:2px solid var(--gold)}
+.cap b{font:600 13px var(--sans);color:var(--gold)}
+.cap p{font:500 17px/1.6 'Noto Serif SC',serif}
+.demo{font-size:12px;color:var(--ash);margin:-8px 0 24px}
+@media (max-width:768px){.pads{grid-template-columns:1fr 1fr;gap:12px}.pad{min-height:0;grid-template-columns:36px 1fr}.knob{width:36px;height:36px}.pad p{display:none}
+ .cap{bottom:76px}.cap p{font-size:15px}}
+@media (prefers-reduced-motion:reduce){.pad,.lp,.cap{transition:none}}
+</style></head><body>
+<nav class="rail"><b>物</b><i></i><i class="on"></i><i></i><i></i></nav><button class="fab" aria-label="Menu">≡</button>
+<main class="main"><div class="wrap">
+ <header class="head"><img src="../../../../public/assets/characters/avatars/A0100.png" alt=""><div><h1 id="nm"></h1><p id="nmcn" class="cn"></p></div></header>
+ <nav class="tabs"><a>Tổng quan</a><a>Thông tin</a><a>Thiên phú</a><a>Build</a><a>Hồ sơ</a><a>Phòng trà</a><a class="on">Lồng tiếng</a><a>Thư viện</a></nav>
+ <p class="demo">Bản mẫu: chữ là thoại thật (r3177), chưa có mp3 nên tiếng được giả lập bằng thanh chạy.</p>
+ <div class="bar"><div class="langs" id="langs" role="group" aria-label="Gói giọng"></div><span class="count" id="count"></span></div>
+ <div id="board"></div>
+ <div class="cap" id="cap" aria-live="polite"><img src="../../../../public/assets/characters/avatars/A0100.png" alt=""><b id="capl"></b><p id="capt" class="cn"></p></div>
+</div></main>
+<script src="voice-data.js"></script><script src="voice-common.js"></script>
+<script>
+const {V,play,groupsOf,note,esc}=VP, C=V.char;
+nm.textContent=C.vi; nmcn.textContent=C.cn;
+const PLAY='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
+let li=0;
+function render(){
+  const L=V.langs[li];
+  langs.innerHTML=V.langs.map((x,i)=>`<button class="lp" aria-pressed="${i===li}" data-i="${i}">${esc(x.name)}<small>CV ${esc(x.cv)}</small></button>`).join('');
+  count.textContent=`${L.lines.length} câu thoại`;
+  board.innerHTML=groupsOf(L).map((g,gi)=>`<section class="grp" style="--c:var(--g${gi})"><h2><i></i>${g.name}<span>${g.lines.length}</span></h2><div class="pads">${
+    g.lines.map(l=>`<button class="pad" data-t="${l.type}" aria-label="Phát: ${esc(l.vi)}"><span class="knob">${PLAY}</span><b>${esc(l.vi)}</b><span class="cn">${esc(l.cn)}</span><p class="cn">${esc(l.text)}</p>${note(l)?`<span class="lock">${esc(note(l))}</span>`:''}</button>`).join('')
+  }</div></section>`).join('');
+}
+langs.onclick=e=>{const b=e.target.closest('.lp');if(!b)return;VP.stop();li=+b.dataset.i;render()};
+board.onclick=e=>{const b=e.target.closest('.pad');if(!b)return;const l=V.langs[li].lines.find(x=>x.type===b.dataset.t);
+  capl.textContent=`${l.vi} · ${l.cn}`;capt.textContent=l.text;cap.classList.add('on');
+  play(b,l,{onStop:()=>cap.classList.remove('on')})};
+render();
+</script></body></html>

@@ -20,6 +20,8 @@ import { renderGalleryTab } from './detail/galleryView.js';
 import { mountLoreQuote, mountLoreTab, unmountLoreTab } from '../lore/LoreTab.tsx';
 import { unmountBuildTab } from '../build/BuildTab.tsx';
 import { mountTeaTab, unmountTeaTab } from '../tea/TeaTab.tsx';
+import { mountVoiceTab, unmountVoiceTab } from '../voice/VoiceTab.tsx';
+import { loadVoiceIndexCached } from '../voice/voiceData.mts';
 
 // A tab switch replaces the history entry, so Back leaves the character page instead of stepping back through
 // every tab opened (owner 2026-09-28, like s1n.gg). Modified clicks (new tab/window) keep the browser default.
@@ -54,6 +56,7 @@ function renderTabContent(container, char, tabName) {
   unmountLoreTab(); // every tab swap and character change goes through here
   unmountBuildTab();
   unmountTeaTab();
+  unmountVoiceTab();
   switch (tabName) {
     case 'info':
       renderInfoTab(container, char);
@@ -72,6 +75,9 @@ function renderTabContent(container, char, tabName) {
     case 'tea':
       mountTeaTab(container, char);
       break;
+    case 'voice':
+      mountVoiceTab(container, char);
+      break;
     case 'overview':
     default:
       renderOverviewTab(container, char);
@@ -81,6 +87,17 @@ function renderTabContent(container, char, tabName) {
       // `void enhanceCharacterOverviewEditing(container, char);` here when P5 lands.
       break;
   }
+}
+
+// Lồng tiếng shows only for characters in public/voice/index.json; the index arrives after the shell is drawn.
+function addVoiceTab(container, char, slug) {
+  void loadVoiceIndexCached().then((index) => {
+    if (!index?.ids.includes(char.id) || currentRenderedCharId !== char.id) return;
+    const tea = container.querySelector('.cd-tab-item[href$="/tea"]');
+    if (!tea || container.querySelector('.cd-tab-item[href$="/voice"]')) return;
+    tea.insertAdjacentHTML('afterend', `<a href="/characters/${slug}/voice" class="cd-tab-item"><span class="tab-label">${s('tabVoice')}</span></a>`);
+    updateNavTabs(container, currentActiveTab);
+  });
 }
 
 function updateNavTabs(container, tabName) {
@@ -357,6 +374,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
   `;
 
   updateNavTabs(container, normTab); // marks the active tab (aria-current) and scrolls it into view on phones
+  addVoiceTab(container, char, slug);
 
   // Render initial tab content directly (NO double animation with route entry)
   const tabContentContainer = document.getElementById('cd-tab-content');
