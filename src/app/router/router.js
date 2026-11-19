@@ -3,7 +3,7 @@
  */
 import { getGameData } from '../../data/loader.js';
 import { notify, setCharacter, state } from '../../data/state.js';
-import { renderCharacterDetail } from '../../features/characters/views/characterDetail.js';
+import { renderCharacterDetail, unmountCharacterTabs } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
 import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
 import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
@@ -99,6 +99,7 @@ function renderRouteView(route, target, gameData) {
       if (id === 'gallery-view') unmountGalleryPage();
       if (id === 'coffee-view') unmountCoffeePage();
       if (id === 'tier-list-view') unmountTierListPage();
+      if (id === 'character-detail-view') unmountCharacterTabs();
       el.classList.add('hidden');
       el.innerHTML = '';
     }
@@ -152,7 +153,10 @@ export function handleRoute() {
   }
 
   // The React admin shell owns #/admin; nav highlights live in src/app/layout/AppNav.tsx.
-  if (route.view === 'admin') return;
+  if (route.view === 'admin') {
+    unmountCharacterTabs(); // the public page stays in the DOM under the admin; stop its voice line
+    return;
+  }
   setPageMeta(route, gameData);
 
   // Compute semantic route key (subtabs within the same character share the same routeKey)

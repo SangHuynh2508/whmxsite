@@ -51,12 +51,18 @@ function normalizeTab(activeTab) {
   return activeTab || 'overview';
 }
 
-function renderTabContent(container, char, tabName) {
-  tabSwitchToken += 1;
-  unmountLoreTab(); // every tab swap and character change goes through here
+// React tabs live in their own roots: emptying the container leaves them (and a playing voice line) running, so
+// every tab swap, character change and route away from the page calls this.
+export function unmountCharacterTabs() {
+  unmountLoreTab();
   unmountBuildTab();
   unmountTeaTab();
   unmountVoiceTab();
+}
+
+function renderTabContent(container, char, tabName) {
+  tabSwitchToken += 1;
+  unmountCharacterTabs();
   switch (tabName) {
     case 'info':
       renderInfoTab(container, char);
