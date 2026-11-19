@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { audioUrl, loadVoiceDoc, loadVoiceIndex, loadVoiceVi } from './voiceData.mts';
-import { GROUP_OF, LABEL_VI, barLevels, groupsOf, packLabel, skinsOf, type VoiceDoc, type VoiceLang, type VoiceLine } from './voiceView.mts';
+import { GROUP_OF, LABEL_VI, barLevels, groupsOf, parseVolume, packLabel, skinsOf, type VoiceDoc, type VoiceLang, type VoiceLine } from './voiceView.mts';
 
 const ln = (o: Partial<VoiceLine>): VoiceLine => ({ skin: 'A0100001', type: 'regardsLine', order: 2, label: '问候', text: '今日吹的是北风。', key: 'voice/a0100/1001/a0100001_regardsLine.mp3', ...o });
 const lang: VoiceLang = { lang: '1001', name: '中文-普通话', cv: '井琉', lines: [
@@ -101,4 +101,13 @@ test('barLevels: one 0–1 level per bar, low bands on the left, each bar reads 
   const high = barLevels(bins, 48);
   assert.equal(high[47], 128 / 255);
   assert.ok(high.slice(0, 47).every((v) => v === 0));
+});
+
+test('parseVolume: a saved 0–1 level; nothing or junk → 0.6 (the files are loud), out of range → clamped', () => {
+  assert.equal(parseVolume(null), 0.6);
+  assert.equal(parseVolume('abc'), 0.6);
+  assert.equal(parseVolume('0.3'), 0.3);
+  assert.equal(parseVolume('0'), 0);
+  assert.equal(parseVolume('7'), 1);
+  assert.equal(parseVolume('-1'), 0);
 });

@@ -81,3 +81,9 @@ export function barLevels(bins: Uint8Array, bars: number): number[] {
     return v / 255;
   });
 }
+
+/** The listener's saved volume (localStorage text) → 0–1; nothing saved or junk → 0.6, since the mp3 are mastered loud. */
+export function parseVolume(raw: string | null): number {
+  const v = raw === null || raw.trim() === '' ? NaN : Number(raw);
+  return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.6;
+}

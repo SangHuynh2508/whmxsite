@@ -202,7 +202,7 @@ const vi = {
   voiceIdle: 'Chưa phát', voiceHint: 'Chọn một câu bên dưới để nghe.', voiceNoText: 'Không có chữ trong dữ liệu game.',
   voiceFail: 'Không phát được câu này.', voicePlay: 'Phát', voiceStop: 'Dừng', voicePacks: 'Gói giọng', voiceSkins: 'Trang phục',
   voiceGroups: 'Nhóm thoại', voiceGrpDaily: 'Đời thường', voiceGrpGrowth: 'Phát triển', voiceGrpBattle: 'Chiến đấu',
-  voiceGrpBase: 'Căn cứ & tương tác', voiceGrpOther: 'Khác', voiceZone: 'Khung giờ',
+  voiceGrpBase: 'Căn cứ & tương tác', voiceGrpOther: 'Khác', voiceZone: 'Khung giờ', voiceVolume: 'Âm lượng',
 };
 export type StringKey = keyof typeof vi;
 const cn: Record<StringKey, string> = {
@@ -457,7 +457,7 @@ const cn: Record<StringKey, string> = {
   voiceIdle: '未播放', voiceHint: '选择下方的一句来收听。', voiceNoText: '游戏数据中没有文本。',
   voiceFail: '无法播放这句。', voicePlay: '播放', voiceStop: '停止', voicePacks: '语音包', voiceSkins: '衣装',
   voiceGroups: '语音分组', voiceGrpDaily: '日常', voiceGrpGrowth: '养成', voiceGrpBattle: '战斗',
-  voiceGrpBase: '基建与互动', voiceGrpOther: '其他', voiceZone: '时段',
+  voiceGrpBase: '基建与互动', voiceGrpOther: '其他', voiceZone: '时段', voiceVolume: '音量',
 };
 export const strings: Record<Lang, Record<StringKey, string>> = { vi, cn };
 export const s = (key: StringKey, l: Lang = getLang()) => strings[l][key];

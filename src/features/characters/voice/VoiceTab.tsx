@@ -6,13 +6,14 @@ import '../styles/voiceTab.css';
 import { Text } from '../lore/LoreTab.tsx';
 import { s } from '../../../i18n/strings.mts';
 import { audioUrl, loadVoiceDoc, loadVoiceViCached, type VoiceVi } from './voiceData.mts';
-import { barLevels, groupsOf, packLabel, skinsOf, type GroupId, type Take, type VoiceDoc } from './voiceView.mts';
+import { barLevels, groupsOf, parseVolume, packLabel, skinsOf, type GroupId, type Take, type VoiceDoc } from './voiceView.mts';
 
 // Look C4 (docs/public-redesign/voice/direction-approved.md): one recorder panel, group tabs, takes as rows.
 type Skin = { skinID?: string; name_vi?: string; name_cn?: string };
 type Char = { id?: string; icon?: string; skins?: Skin[] };
 const GROUP_KEY = { daily: 'voiceGrpDaily', growth: 'voiceGrpGrowth', battle: 'voiceGrpBattle', base: 'voiceGrpBase', other: 'voiceGrpOther' } as const satisfies Record<GroupId, string>;
 const BARS = 48;
+const VOLUME_KEY = 'whmx.voice.volume';
 const pad = (n: number) => String(n).padStart(2, '0');
 const mmss = (sec: number) => (Number.isFinite(sec) && sec > 0 ? `${Math.floor(sec / 60)}:${pad(Math.floor(sec % 60))}` : '0:00');
 
@@ -28,6 +29,8 @@ function VoiceTab({ char }: { char: Char }) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const analyser = useRef<AnalyserNode | null>(null);
   const meter = useRef<HTMLDivElement | null>(null);
+  const gain = useRef<GainNode | null>(null);
+  const [volume, setVolume] = useState(() => { try { return parseVolume(localStorage.getItem(VOLUME_KEY)); } catch { return parseVolume(null); } });
   const [tr, setTr] = useState<VoiceVi | null>(null);
 
   // Published VI arrives after the tab is drawn; until then (or on failure) the lines stay in CN.
@@ -46,6 +49,7 @@ function VoiceTab({ char }: { char: Char }) {
   useEffect(() => {
     const a = new Audio();
     a.preload = 'none';
+    a.volume = volume;
     a.crossOrigin = 'anonymous'; // the meter reads the samples; R2 sends Access-Control-Allow-Origin: *
     audio.current = a;
     const tick = () => setPos({ t: a.currentTime, d: a.duration || 0 });
@@ -55,11 +59,18 @@ function VoiceTab({ char }: { char: Char }) {
     a.addEventListener('pause', () => setPlaying(false));
     a.addEventListener('ended', () => setPlaying(false));
     a.addEventListener('error', () => { if (a.getAttribute('src')) { setPlaying(false); setFailed(true); } });
-    return () => { a.pause(); audio.current = null; void (analyser.current?.context as AudioContext | undefined)?.close(); analyser.current = null; }; // leaving the tab stops the line
+    return () => { a.pause(); audio.current = null; void (analyser.current?.context as AudioContext | undefined)?.close(); analyser.current = null; gain.current = null; }; // leaving the tab stops the line
   }, []);
 
-  // While a line plays, each bar follows one frequency band of the voice (low on the left); the gold part still
-  // shows how far the line has played. Written straight to the bars each frame, no React render.
+  // Volume: on the gain node once the meter's graph exists (the element stays at 1), else on the element. Remembered per browser.
+  useEffect(() => {
+    if (gain.current) gain.current.gain.value = volume;
+    else if (audio.current) audio.current.volume = volume;
+    try { localStorage.setItem(VOLUME_KEY, String(volume)); } catch { /* private mode: not remembered */ }
+  }, [volume]);
+
+  // While a line plays, each bar follows one frequency band of the voice (low on the left).
+  // Written straight to the bars each frame, no React render.
   useEffect(() => {
     const node = analyser.current;
     const bars = meter.current?.children;
@@ -103,8 +114,12 @@ function VoiceTab({ char }: { char: Char }) {
       node.smoothingTimeConstant = 0.6;
       node.minDecibels = -80; // default -100 kept every band above half height; quiet bands now fall back
       node.maxDecibels = -20;
-      ctx.createMediaElementSource(a).connect(node).connect(ctx.destination);
+      const g = ctx.createGain(); // after the analyser, so the meter shows the voice whatever the volume
+      g.gain.value = volume;
+      a.volume = 1;
+      ctx.createMediaElementSource(a).connect(node).connect(g).connect(ctx.destination);
       analyser.current = node;
+      gain.current = g;
     }
     void (analyser.current?.context as AudioContext | undefined)?.resume();
     a.play().catch((e: unknown) => { if ((e as Error)?.name !== 'AbortError') { setPlaying(false); setFailed(true); } });
@@ -162,6 +177,10 @@ function VoiceTab({ char }: { char: Char }) {
             <svg viewBox="0 0 16 16" aria-hidden="true">{playing ? <rect x="3" y="3" width="10" height="10" fill="currentColor" /> : <path d="M4 2.5v11l9-5.5z" fill="currentColor" />}</svg>
             {playing ? s('voiceStop') : s('voicePlay')}
           </button>
+          <label className="voice-vol">
+            <span>{s('voiceVolume')}</span>
+            <input type="range" min={0} max={1} step={0.05} value={volume} onChange={(e) => setVolume(Number(e.target.value))} />
+          </label>
         </div>
       </div>
 
