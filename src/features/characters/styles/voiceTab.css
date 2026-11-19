@@ -19,8 +19,9 @@
 .voice-line[lang="zh"], .voice-text[lang="zh"] { font-family: 'Noto Serif SC', var(--font-serif); }
 .voice-msg { font-size: 15px; color: var(--text-muted); min-height: 64px; margin: 0; }
 .voice-meter { display: flex; gap: 3px; align-items: flex-end; height: 16px; }
-.voice-meter i { flex: 1; height: 8px; background: var(--border-strong); transform: scaleY(.25); transform-origin: bottom; transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard); }
-.voice-meter i[data-on] { transform: none; background: var(--accent); }
+.voice-meter i { flex: 1; height: 16px; background: var(--accent); transform: scaleY(.25); transform-origin: bottom; transition: transform var(--motion-fast) var(--ease-standard); }
+/* Always gold (the corner clock shows progress, owner 2026-11-19). Playing: VoiceTab sets each bar's scaleY every frame. */
+.voice-read[data-on] .voice-meter i { transition: none; }
 
 .voice-ctl { display: flex; flex-direction: column; justify-content: center; gap: 16px; padding-left: 24px; border-left: 1px solid var(--border-color); align-self: stretch; }
 .voice-packs { display: flex; flex-direction: column; gap: 4px; }

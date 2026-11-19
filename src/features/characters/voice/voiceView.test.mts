@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { audioUrl, loadVoiceDoc, loadVoiceIndex, loadVoiceVi } from './voiceData.mts';
-import { GROUP_OF, LABEL_VI, groupsOf, packLabel, skinsOf, type VoiceDoc, type VoiceLang, type VoiceLine } from './voiceView.mts';
+import { GROUP_OF, LABEL_VI, barLevels, groupsOf, packLabel, skinsOf, type VoiceDoc, type VoiceLang, type VoiceLine } from './voiceView.mts';
 
 const ln = (o: Partial<VoiceLine>): VoiceLine => ({ skin: 'A0100001', type: 'regardsLine', order: 2, label: '问候', text: '今日吹的是北风。', key: 'voice/a0100/1001/a0100001_regardsLine.mp3', ...o });
 const lang: VoiceLang = { lang: '1001', name: '中文-普通话', cv: '井琉', lines: [
@@ -87,4 +87,18 @@ test('loadVoiceVi: pointer next to the lore pointer → file; any failure → nu
   const missing = (async () => new Response('', { status: 404 })) as unknown as typeof fetch;
   assert.equal(await loadVoiceVi('https://cdn.example/lore/lore.pointer.json', missing), null);
   assert.equal(await loadVoiceVi(undefined, ok), null);
+});
+
+test('barLevels: one 0–1 level per bar, low bands on the left, each bar reads its own bins', () => {
+  const bins = new Uint8Array(512);
+  assert.deepEqual(barLevels(bins, 48), Array(48).fill(0)); // silence
+  bins[2] = 255; // ~94 Hz: the first bar only
+  const low = barLevels(bins, 48);
+  assert.equal(low.length, 48);
+  assert.equal(low[0], 1);
+  assert.ok(low.slice(1).every((v) => v === 0));
+  bins.fill(0); bins[99] = 128; // ~4.6 kHz: the last bar only
+  const high = barLevels(bins, 48);
+  assert.equal(high[47], 128 / 255);
+  assert.ok(high.slice(0, 47).every((v) => v === 0));
 });

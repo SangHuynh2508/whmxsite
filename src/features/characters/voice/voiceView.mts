@@ -70,3 +70,14 @@ export function packLabel(lang: VoiceLang): { name: string; sub: string } {
   const m = /^(.*?)（(.*)）$/.exec(lang.name);
   return m ? { name: m[1], sub: m[2] } : { name: lang.name, sub: lang.cv ? `CV ${lang.cv}` : '' };
 }
+
+/** Analyser bins (fftSize 1024, ~47 Hz each) → one 0–1 level per meter bar. Bar i reads bins
+ *  [edge(i), edge(i+1)) with edge growing from bin 2 (~94 Hz) to bin 100 (~4.7 kHz), wider to the right like the ear. */
+export function barLevels(bins: Uint8Array, bars: number): number[] {
+  const edge = (i: number) => Math.floor(2 + i + 50 * (i / bars) ** 2);
+  return Array.from({ length: bars }, (_, i) => {
+    let v = 0;
+    for (let b = edge(i); b < edge(i + 1); b++) v = Math.max(v, bins[b] ?? 0);
+    return v / 255;
+  });
+}

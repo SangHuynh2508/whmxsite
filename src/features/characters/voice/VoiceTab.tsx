@@ -6,7 +6,7 @@ import '../styles/voiceTab.css';
 import { Text } from '../lore/LoreTab.tsx';
 import { s } from '../../../i18n/strings.mts';
 import { audioUrl, loadVoiceDoc, loadVoiceViCached, type VoiceVi } from './voiceData.mts';
-import { groupsOf, packLabel, skinsOf, type GroupId, type Take, type VoiceDoc } from './voiceView.mts';
+import { barLevels, groupsOf, packLabel, skinsOf, type GroupId, type Take, type VoiceDoc } from './voiceView.mts';
 
 // Look C4 (docs/public-redesign/voice/direction-approved.md): one recorder panel, group tabs, takes as rows.
 type Skin = { skinID?: string; name_vi?: string; name_cn?: string };
@@ -26,6 +26,8 @@ function VoiceTab({ char }: { char: Char }) {
   const [failed, setFailed] = useState(false);
   const [pos, setPos] = useState({ t: 0, d: 0 });
   const audio = useRef<HTMLAudioElement | null>(null);
+  const analyser = useRef<AnalyserNode | null>(null);
+  const meter = useRef<HTMLDivElement | null>(null);
   const [tr, setTr] = useState<VoiceVi | null>(null);
 
   // Published VI arrives after the tab is drawn; until then (or on failure) the lines stay in CN.
@@ -44,6 +46,7 @@ function VoiceTab({ char }: { char: Char }) {
   useEffect(() => {
     const a = new Audio();
     a.preload = 'none';
+    a.crossOrigin = 'anonymous'; // the meter reads the samples; R2 sends Access-Control-Allow-Origin: *
     audio.current = a;
     const tick = () => setPos({ t: a.currentTime, d: a.duration || 0 });
     a.addEventListener('timeupdate', tick);
@@ -52,8 +55,25 @@ function VoiceTab({ char }: { char: Char }) {
     a.addEventListener('pause', () => setPlaying(false));
     a.addEventListener('ended', () => setPlaying(false));
     a.addEventListener('error', () => { if (a.getAttribute('src')) { setPlaying(false); setFailed(true); } });
-    return () => { a.pause(); audio.current = null; }; // leaving the tab stops the line
+    return () => { a.pause(); audio.current = null; void (analyser.current?.context as AudioContext | undefined)?.close(); analyser.current = null; }; // leaving the tab stops the line
   }, []);
+
+  // While a line plays, each bar follows one frequency band of the voice (low on the left); the gold part still
+  // shows how far the line has played. Written straight to the bars each frame, no React render.
+  useEffect(() => {
+    const node = analyser.current;
+    const bars = meter.current?.children;
+    if (!playing || !node || !bars || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const bins = new Uint8Array(node.frequencyBinCount);
+    let raf = 0;
+    const draw = () => {
+      node.getByteFrequencyData(bins);
+      barLevels(bins, bars.length).forEach((v, i) => { (bars[i] as HTMLElement).style.transform = `scaleY(${0.125 + 0.875 * v})`; });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => { cancelAnimationFrame(raf); for (const b of bars) (b as HTMLElement).style.transform = ''; };
+  }, [playing]);
 
   if (doc === undefined) return <section className="voice-tab"><p className="voice-empty">{s('voiceLoading')}</p></section>;
   if (!doc || !doc.langs.length) return <section className="voice-tab"><p className="voice-empty">{s('voiceNone')}</p></section>;
@@ -75,6 +95,18 @@ function VoiceTab({ char }: { char: Char }) {
     setFailed(false);
     setPos({ t: 0, d: 0 });
     a.src = audioUrl(doc, t.line.key);
+    // First play (a click, so the AudioContext may start): route the element through an analyser for the meter.
+    if (!analyser.current && 'AudioContext' in window) {
+      const ctx = new AudioContext();
+      const node = ctx.createAnalyser();
+      node.fftSize = 1024;
+      node.smoothingTimeConstant = 0.6;
+      node.minDecibels = -80; // default -100 kept every band above half height; quiet bands now fall back
+      node.maxDecibels = -20;
+      ctx.createMediaElementSource(a).connect(node).connect(ctx.destination);
+      analyser.current = node;
+    }
+    void (analyser.current?.context as AudioContext | undefined)?.resume();
     a.play().catch((e: unknown) => { if ((e as Error)?.name !== 'AbortError') { setPlaying(false); setFailed(true); } });
   };
   const toggle = () => {
@@ -92,7 +124,6 @@ function VoiceTab({ char }: { char: Char }) {
   };
   const skinName = (id: string) => { const x = char.skins?.find((k) => k.skinID === id); return x?.name_vi || x?.name_cn || id; };
   const skinCv = (id: string) => lang.lines.find((l) => l.skin === id && l.cv)?.cv;
-  const done = pos.d > 0 ? pos.t / pos.d : 0;
 
   return (
     <section className="voice-tab">
@@ -109,8 +140,8 @@ function VoiceTab({ char }: { char: Char }) {
                 {!shown.text.untranslated && <p className="voice-cn" lang="zh">{shown.cn}</p>}
               </>
               : <p className="voice-msg">{shown ? s('voiceNoText') : s('voiceHint')}</p>}
-          <div className="voice-meter" aria-hidden="true">
-            {Array.from({ length: BARS }, (_, i) => <i key={i} data-on={i < done * BARS || undefined} />)}
+          <div className="voice-meter" aria-hidden="true" ref={meter}>
+            {Array.from({ length: BARS }, (_, i) => <i key={i} />)}
           </div>
         </div>
         <div className="voice-ctl">
