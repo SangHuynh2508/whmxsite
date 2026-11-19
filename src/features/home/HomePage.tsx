@@ -18,15 +18,11 @@ import { useLang } from '../../i18n/useLang.ts';
 type HomeChar = SliceChar & ReleaseChar & { profile?: Record<string, any> };
 
 // "Cập nhật trang": short notes on new site features, newest first. Written by hand; keep 4–5, drop the oldest.
-const SITE_UPDATES: { date: string; title: string; text: string; href?: string }[] = [
-  { date: '19/11/2026', title: 'Lồng tiếng', href: '/characters',
-    text: 'Trang mỗi Khí Giả có thêm tab Lồng tiếng: nghe toàn bộ câu thoại, chỉnh âm lượng ngay trên trang. Lời thoại đang được dịch dần.' },
-  { date: '18/11/2026', title: 'Âm nhạc', href: '/music',
-    text: 'Trang Âm nhạc có liên kết tới playlist trên NetEase, QQ Music và Bilibili.' },
-  { date: '17/11/2026', title: 'Thư viện ảnh', href: '/gallery',
-    text: 'Thư viện ảnh mới gom tranh trong game về một chỗ. Trang phục chuyển sang mục riêng.' },
-  { date: '06/11/2026', title: 'Song ngữ Việt – Trung',
-    text: 'Nút VI/中 trên thanh bên đổi cả trang sang tiếng Trung và ngược lại.' },
+const SITE_UPDATES: { date: string; title: string; href?: string }[] = [
+  { date: '19/11/2026', title: 'Lồng tiếng', href: '/characters' },
+  { date: '18/11/2026', title: 'Âm nhạc', href: '/music' },
+  { date: '17/11/2026', title: 'Thư viện ảnh', href: '/gallery' },
+  { date: '06/11/2026', title: 'Thêm tiếng Trung' },
 ];
 
 function UpdatesBlock() {
@@ -38,7 +34,6 @@ function UpdatesBlock() {
         <li key={u.date + u.title}>
           <time className="home-update-date">{u.date}</time>
           {u.href ? <a className="home-update-title" href={u.href}>{u.title}</a> : <b className="home-update-title">{u.title}</b>}
-          <p className="home-update-text">{u.text}</p>
         </li>
       ))}</ul>
     </section>
