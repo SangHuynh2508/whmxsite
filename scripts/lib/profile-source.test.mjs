@@ -184,3 +184,18 @@ test('tea: a broken TopicNext, a missing tea item or a missing comment text abor
   noLang.teaLang = {};
   assert.throws(() => normalizeProfileSources(noLang, ['V0053']), /comment1Lan_V0053/);
 });
+
+test('voice lines become units; unlock texts become voice_unlock terms named on the profile', () => {
+  const doc = { id: 'A0100', langs: [{ lang: '1001', lines: [
+    { skin: 'A0100001', type: 'regardsLine', text: '北风。' },
+    { skin: 'A0100001', type: 'touchLine_4', text: '', unlock: '精研解锁' },
+  ] }] };
+  const raw = { characterFiles: { A0100: {} }, characterFileTextMap: {}, historicalRelicsMap: {}, historicalTextMap: {}, friendshipDescription: {}, characterTable: {}, typeJJHMap: {}, voice: { A0100: doc } };
+  const out = normalizeProfileSources(raw, ['A0100'], { voiceCodes: new Map([['旧', 'VOICE_UNLOCK_4']]) });
+  const [p] = out.profiles;
+  assert.deepEqual(p.units.map((u) => u.unitKey), ['voice.A0100001.regardsLine']);
+  assert.deepEqual(p.structure.voiceUnlocks, ['VOICE_UNLOCK_5']);
+  assert.deepEqual(out.terms.filter((t) => t.kind === 'voice_unlock').map((t) => [t.code, t.nameCn]), [['VOICE_UNLOCK_5', '精研解锁']]);
+  const plain = normalizeProfileSources({ ...raw, voice: undefined }, ['A0100']).profiles[0];
+  assert.equal('voiceUnlocks' in plain.structure, false); // no voice → same structure (and hash) as before
+});

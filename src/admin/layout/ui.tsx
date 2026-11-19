@@ -52,7 +52,7 @@ export const inputClass =
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <span className={cn('relative block', className)}>
-      <select {...props} className={cn(inputClass, 'h-9 appearance-none pr-8')}>
+      <select {...props} className={cn(inputClass, 'admin-select h-9 appearance-none pr-8')}>
         {children}
       </select>
       <ChevronDown size={14} aria-hidden className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-(--text-muted)" />

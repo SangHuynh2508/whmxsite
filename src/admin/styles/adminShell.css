@@ -78,3 +78,29 @@ html:has(> body.admin-route-active), body.admin-route-active { overflow-x: clip;
 @media (prefers-reduced-motion: reduce) {
   .admin-react-root *, .admin-react-root *::before { transition: none !important; }
 }
+
+/* Shared Select (layout/ui.tsx), owner pick "A · Menu gọn" 2026-11-19 (docs/admin-redesign/select/design-demos):
+ * the native customizable select restyled — keyboard, typeahead and screen readers stay the browser's.
+ * Browsers without base-select (Safari, Firefox) keep their own list; the closed box reads the option's `label`. */
+@supports (appearance: base-select) {
+  .admin-select, .admin-select::picker(select) { appearance: base-select; }
+  .admin-select { display: flex; align-items: center; } /* base-select's box is a block: centre the text in h-9/h-11 */
+  .admin-select::picker-icon { display: none; } /* the trigger keeps its lucide chevron */
+  .admin-select::picker(select) {
+    min-width: anchor-size(width); max-height: min(440px, 70dvh); margin-block: 4px; padding: 4px; overflow-y: auto;
+    border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg-elevated); color: var(--text-main); box-shadow: none;
+  }
+  .admin-select optgroup { padding: 6px 8px 4px; font: 600 11px var(--font-sans); letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); }
+  .admin-select optgroup + optgroup { margin-top: 4px; border-top: 1px solid var(--border-color); }
+  .admin-select option {
+    display: flex; align-items: center; gap: 8px; min-height: 32px; margin-inline: -8px; padding: 0 8px; border-radius: 4px;
+    font: 400 14px var(--font-sans); letter-spacing: normal; text-transform: none; color: var(--text-main); white-space: nowrap; cursor: pointer;
+  }
+  .admin-select > option { margin-inline: 0; }
+  .admin-select option:hover, .admin-select option:focus-visible { outline: none; background: var(--bg-surface-hover); }
+  .admin-select option::checkmark { order: 2; content: '✓'; width: 14px; margin-left: auto; font-weight: 600; color: var(--accent); }
+  .admin-select option:has(.admin-select-note)::checkmark { margin-left: 0; }
+  .admin-select option:not(:checked)::checkmark { visibility: hidden; }
+  .admin-select .admin-select-sep { display: none; }
+  .admin-select-note { margin-left: auto; padding-left: 16px; font-size: 12px; color: var(--text-muted); }
+}

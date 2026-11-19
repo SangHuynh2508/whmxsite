@@ -1,6 +1,9 @@
+import { audioUrl } from '../../../features/characters/voice/voiceData.mts';
+import { GROUP_OF, GROUP_ORDER, LABEL_VI, type GroupId, type VoiceDoc } from '../../../features/characters/voice/voiceView.mts';
+
 type Report = { fileId: string; kind: string; unlock?: { type: number; elementId: string } };
 type Term = { nameCn: string; nameVi: string | null } | null;
-export type LoreItem = { unitKey: string; label: string; extra?: string };
+export type LoreItem = { unitKey: string; label: string; extra?: string; audio?: string };
 
 export function loreUnitGroups(structure: { reports: Report[]; timeline: string[] }, unitKeys: string[], affinity: Record<string, Term>) {
   const present = new Set(unitKeys);
@@ -31,7 +34,9 @@ export function termProgress(terms: ({ code: string; done: boolean } | null)[]) 
 }
 
 export type TeaStructure = { teas: string[]; topics: { id: string; trend: number }[]; branches: { id: string; next: { id: string; trend: number }[] }[] };
-export const inScope = (unitKey: string, scope: 'lore' | 'tea') => unitKey.startsWith('tea.') === (scope === 'tea');
+export type Scope = 'lore' | 'tea' | 'voice';
+const scopeOf = (unitKey: string): Scope => (unitKey.startsWith('tea.') ? 'tea' : unitKey.startsWith('voice.') ? 'voice' : 'lore');
+export const inScope = (unitKey: string, scope: Scope) => scopeOf(unitKey) === scope;
 
 const REACTION: Record<number, string> = { 1: 'thích', 2: 'bối rối' };
 // The Phòng trà module (spec 2026-10-03 §7): the game's order, a label per question / answer, the reaction shown beside
@@ -51,4 +56,24 @@ export function teaUnitGroups(tea: TeaStructure | undefined, unitKeys: string[],
     { group: 'Kết thúc', items: [{ unitKey: 'tea.win', label: 'Thành công' }, { unitKey: 'tea.result', label: 'Thơ kết riêng' }, { unitKey: 'tea.lose', label: 'Thất bại' }] },
   ];
   return groups.map((g) => ({ ...g, items: g.items.filter((i) => present.has(i.unitKey)).map((i) => (i.extra === undefined ? { unitKey: i.unitKey, label: i.label } : i)) })).filter((g) => g.items.length);
+}
+
+// The Lồng tiếng module (spec 2026-11-19-voice-translation §6): the tab's groups and labels (one table, voiceView.mts),
+// line order from public/voice/<ID>.json, a play button per line that has an mp3.
+const VOICE_GROUP: Record<GroupId, string> = { daily: 'Đời thường', growth: 'Phát triển', battle: 'Chiến đấu', base: 'Căn cứ & tương tác', other: 'Khác' };
+export function voiceUnitGroups(doc: VoiceDoc | null, unitKeys: string[], skinName: (id: string) => string = (id) => id) {
+  if (!doc?.langs.length) return [];
+  const present = new Set(unitKeys);
+  const baseSkin = doc.langs[0].lines[0]?.skin;
+  const by = new Map<GroupId, LoreItem[]>(GROUP_ORDER.map((g) => [g, []]));
+  doc.langs.forEach((lang, i) => {
+    for (const l of lang.lines) {
+      const unitKey = `voice.${l.skin}.${l.type}${i ? `.${lang.lang}` : ''}`;
+      if (!present.has(unitKey)) continue;
+      const label = [`${LABEL_VI[l.type] ?? l.label} · ${l.label}`, l.skin !== baseSkin ? skinName(l.skin) : '', i ? lang.name : ''].filter(Boolean).join(' · ');
+      const extra = l.unlock ? `Mở khoá: ${l.unlock}` : l.zone ? `Khung giờ ${l.zone}` : '';
+      by.get(GROUP_OF[l.type] ?? 'other')!.push({ unitKey, label, ...(extra ? { extra } : {}), ...(l.key ? { audio: audioUrl(doc, l.key) } : {}) });
+    }
+  });
+  return GROUP_ORDER.map((id) => ({ group: VOICE_GROUP[id], items: by.get(id)! })).filter((g) => g.items.length);
 }

@@ -3,18 +3,21 @@
 import { gzipSync } from 'node:zlib';
 
 import { buildGameDocument } from '../game/game-document.mjs';
-import { GAME_POINTER_NAME, IMMUTABLE, POINTER_CACHE, POINTER_NAME, backupKey, buildLoreDocument, buildPointer } from './lore-document.mjs';
+import { GAME_POINTER_NAME, IMMUTABLE, POINTER_CACHE, POINTER_NAME, VOICE_POINTER_NAME, backupKey, buildLoreDocument, buildPointer } from './lore-document.mjs';
+import { buildVoiceDocument } from './voice-document.mjs';
 
-// Publishes every public DB document under one lock and one backup: the lore file and the game file
-// (game.<hash>.json: game catalogue + texts + builds, server/game/game-document.mjs). Each content file is uploaded
+// Publishes every public DB document under one lock and one backup: the lore file, the game file
+// (game.<hash>.json: game catalogue + texts + builds, server/game/game-document.mjs) and the voice file
+// (voice.<hash>.json: voice-line VI, server/profile/voice-document.mjs). Each content file is uploaded
 // only when its pointer doesn't already name it; the admin's published state follows the lore file, as before.
 export async function publishLore({ repo, storage, actorUserId = null, now = new Date() }) {
   return repo.withPublishLock(async (tx) => {
     const lore = buildLoreDocument(await repo.loadPublishProfiles(tx));
     const game = buildGameDocument(await repo.loadGameDocumentInput(tx));
+    const voice = buildVoiceDocument(await repo.loadVoiceDocumentInput(tx));
     await storage.putBackup(backupKey(storage.envName, now), gzipSync(JSON.stringify(await repo.loadBackupPayload(tx))));
     let changed = false;
-    for (const [doc, pointer] of [[lore, POINTER_NAME], [game, GAME_POINTER_NAME]]) {
+    for (const [doc, pointer] of [[lore, POINTER_NAME], [game, GAME_POINTER_NAME], [voice, VOICE_POINTER_NAME]]) {
       // Compare with the live pointer of this environment, not the DB row: the state row is
       // per database, so a new environment (or a branch copied from another) would look current.
       if ((await storage.readPointerFile(pointer)) === doc.fileName) continue;
@@ -25,10 +28,10 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
     }
     if (!changed) {
       await repo.writeState(tx, { publishedAt: now, publishedByUserId: actorUserId }); // the live files are current
-      return { status: 'unchanged', file: lore.fileName, game: game.fileName };
+      return { status: 'unchanged', file: lore.fileName, game: game.fileName, voice: voice.fileName };
     }
     await repo.writeState(tx, { publishedFile: lore.fileName, publishedHash: lore.hash, publishedAt: now, publishedByUserId: actorUserId });
-    return { status: 'published', file: lore.fileName, game: game.fileName };
+    return { status: 'published', file: lore.fileName, game: game.fileName, voice: voice.fileName };
   });
 }
 

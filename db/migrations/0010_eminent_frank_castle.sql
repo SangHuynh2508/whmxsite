@@ -1,0 +1,1 @@
+ALTER TYPE "public"."lore_term_kind" ADD VALUE 'voice_unlock';

@@ -14,12 +14,14 @@ import { HistoryModule } from './modules/HistoryModule';
 import type { CharacterData, ModuleProps } from './types';
 
 const TeaModule = (props: ModuleProps) => <LoreModule {...props} scope="tea" />;
+const VoiceModule = (props: ModuleProps) => <LoreModule {...props} scope="voice" />;
 
 // One entry per module; phase 2 adds Lore here.
 export const MODULES: { id: ModuleId; label: string; Component: ComponentType<ModuleProps> }[] = [
   { id: 'overview', label: 'Tổng quan', Component: OverviewModule },
   { id: 'lore', label: 'Lore', Component: LoreModule },
   { id: 'tea', label: 'Phòng trà', Component: TeaModule },
+  { id: 'voice', label: 'Lồng tiếng', Component: VoiceModule },
   { id: 'build', label: 'Build', Component: BuildModule },
   { id: 'skins', label: 'Trang phục', Component: SkinsModule },
   { id: 'source', label: 'Nguồn', Component: SourceModule },

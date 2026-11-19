@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A · Menu gọn</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@500&display=swap">
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="common.css">
+<style>
+/* A · Menu gọn (reference: Linear's menus). One line per row, 32 px; the status is a quiet word on the right,
+   the selected row gets a gold check. Group names are small muted headings with a hairline between groups. */
+.sel::picker(select) { min-width: anchor-size(width); }
+.sel option {
+  display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 8px; border-radius: 4px; white-space: nowrap;
+}
+.sel option:hover, .sel option:focus-visible { background: var(--bg-surface-hover); }
+.sel option::checkmark { order: 2; content: '✓'; color: var(--accent); font-weight: 600; width: 14px; }
+.sel option:not(:checked)::checkmark { visibility: hidden; }
+.sel option .x { margin-left: auto; padding-left: 16px; font-size: 12px; color: var(--text-muted); }
+.sel option[data-status="todo"] .x { color: var(--text-muted); }
+.sel option[data-status="done"] .x { color: color-mix(in oklch, var(--text-muted) 70%, var(--bg-elevated)); }
+.sel option[data-status="changed"] .x, .sel option[data-status="legacy"] .x { color: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main)); }
+.sel optgroup + optgroup { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--border-color); }
+.sel legend { display: block; padding: 6px 8px 4px; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<script src="select-data.js"></script>
+<script src="common.js"></script>
+<script>
+const STATUS_TEXT = { done: 'đã lưu', legacy: 'bản cũ', changed: 'đổi CN', todo: 'chưa dịch' };
+mountDemo({
+  title: 'A · Menu gọn',
+  note: 'Một dòng mỗi mục, trạng thái chữ nhỏ bên phải, dấu ✓ vàng ở mục đang chọn.',
+  renderGroup: (g) => esc(g.group),
+  renderOption: (item, n, status) => `<span>${esc(item.vi)}</span>${status ? `<span class="x">${STATUS_TEXT[status]}</span>` : ''}`,
+});
+</script>
+</body>
+</html>

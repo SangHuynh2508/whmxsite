@@ -118,6 +118,15 @@ test('v2 vi_updated_at is the latest published main-text VI, else null', () => {
   assert.equal('vi_updated_at' in shapeCharacterProfile({ profile, texts: dated }, terms, { shape: 'legacy' }), false);
 });
 
+test('v2 vi_updated_at ignores voice lines (they have their own module)', () => {
+  const at = (iso) => new Date(iso);
+  const dated = new Map([
+    ['card_intro', { ...t('介绍', 'Giới thiệu', 'admin'), viUpdatedAt: at('2026-09-20T01:00:00Z') }],
+    ['voice.A0100001.regardsLine', { ...t('北风', 'Gió bấc', 'admin'), viUpdatedAt: at('2026-12-01T01:00:00Z') }],
+  ]);
+  assert.equal(shapeCharacterProfile({ profile, texts: dated }, terms, { shape: 'v2' }).vi_updated_at, '2026-09-20T01:00:00.000Z');
+});
+
 const teaProfile = { ...profile, structure: { ...profile.structure, tea: {
   teas: ['81009'],
   topics: [{ id: 'X101', trend: 1 }, { id: 'X201', trend: 2 }],

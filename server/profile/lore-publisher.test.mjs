@@ -4,20 +4,21 @@ import assert from 'node:assert/strict';
 import { gunzipSync } from 'node:zlib';
 import { publishLore, repointLore } from './lore-publisher.mjs';
 
-function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null, liveGameFile = null, builds = [] } = {}) {
+function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null, liveGameFile = null, liveVoiceFile = null, builds = [] } = {}) {
   const writes = [];
   let state = { publishedHash };
   const repo = {
     withPublishLock: async (fn) => (locked ? fn('tx') : { status: 'busy' }),
     loadPublishProfiles: async () => [['A0001', { record_id: '1' }]],
     loadGameDocumentInput: async () => ({ refs: [], texts: [], builds }),
+    loadVoiceDocumentInput: async () => ({ texts: [], unlocks: [] }),
     loadBackupPayload: async () => ({ version: 1, profileTexts: [] }),
     readState: async () => state,
     writeState: async (_tx, patch) => { state = { ...state, ...patch }; writes.push(['state', patch]); },
   };
   const storage = {
     envName: 'development',
-    readPointerFile: async (name) => (name === 'game.pointer.json' ? liveGameFile : livePointerFile),
+    readPointerFile: async (name) => ({ 'game.pointer.json': liveGameFile, 'voice.pointer.json': liveVoiceFile }[name] ?? livePointerFile),
     publicFileExists: async (name) => name === 'lore.aaaaaaaaaaaa.json',
     putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body, opts.contentEncoding]); },
     putBackup: async (key, buffer) => writes.push(['backup', key, JSON.parse(gunzipSync(buffer).toString())]),
@@ -31,17 +32,17 @@ test('publishes content, then pointer, then state; always writes the backup', as
   const result = await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u1', now });
   assert.equal(result.status, 'published');
   assert.deepEqual(f.writes.map((w) => (w[0] === 'public' ? w[1].replace(/\.[0-9a-f]{12}\./, '.<hash>.') : w[0])), [
-    'backup', 'lore.<hash>.json', 'lore.pointer.json', 'game.<hash>.json', 'game.pointer.json', 'state',
+    'backup', 'lore.<hash>.json', 'lore.pointer.json', 'game.<hash>.json', 'game.pointer.json', 'voice.<hash>.json', 'voice.pointer.json', 'state',
   ]);
-  assert.deepEqual(f.writes.filter((w) => w[0] === 'public').map((w) => w[2]), ['public, max-age=31536000, immutable', 'public, max-age=60', 'public, max-age=31536000, immutable', 'public, max-age=60']);
+  assert.deepEqual(f.writes.filter((w) => w[0] === 'public').map((w) => w[2]), ['public, max-age=31536000, immutable', 'public, max-age=60', 'public, max-age=31536000, immutable', 'public, max-age=60', 'public, max-age=31536000, immutable', 'public, max-age=60']);
   assert.equal(f.writes[0][1], 'backups/lore/development/2026-09-24.json.gz');
   assert.equal(f.getState().publishedByUserId, 'u1');
 });
 
 test('unchanged content writes the backup and marks the live file current (clears the unpublished hint)', async () => {
   const first = fakes();
-  const { file, game } = await publishLore({ repo: first.repo, storage: first.storage, now });
-  const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: file, liveGameFile: game });
+  const { file, game, voice } = await publishLore({ repo: first.repo, storage: first.storage, now });
+  const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: file, liveGameFile: game, liveVoiceFile: voice });
   assert.equal((await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u2', now })).status, 'unchanged');
   assert.deepEqual(f.writes.map((w) => w[0]), ['backup', 'state']);
   assert.equal(f.getState().publishedAt, now);
@@ -91,9 +92,9 @@ test('the content file is uploaded gzip-encoded (1.8 MB of JSON → a fraction);
 
 test('the game document (game.<hash>.json: catalogue + texts + builds) is published next to lore; only a changed file is uploaded', async () => {
   const first = fakes();
-  const { file } = await publishLore({ repo: first.repo, storage: first.storage, now });
-  // lore is live and unchanged; a saved build changes only the game file
-  const f = fakes({ livePointerFile: file, builds: [{ characterId: 'D0017', position: 0, doc: { name: 'Chuẩn', weapons: [], affixes: { groups: [] }, deepen: null } }] });
+  const { file, voice } = await publishLore({ repo: first.repo, storage: first.storage, now });
+  // lore and voice are live and unchanged; a saved build changes only the game file
+  const f = fakes({ livePointerFile: file, liveVoiceFile: voice, builds: [{ characterId: 'D0017', position: 0, doc: { name: 'Chuẩn', weapons: [], affixes: { groups: [] }, deepen: null } }] });
   const result = await publishLore({ repo: f.repo, storage: f.storage, now });
   assert.equal(result.status, 'published');
   const names = f.writes.filter((w) => w[0] === 'public').map((w) => w[1]);

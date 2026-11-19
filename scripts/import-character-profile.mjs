@@ -18,6 +18,7 @@ import { teaLangFile, teaLangKeys } from './lib/tea-lang.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const MASTER = resolve(ROOT, '..', 'NeoArtifacts', 'MasterData', 'json');
+const VOICE = join(ROOT, 'public', 'voice'); // tools/build_voice_data.py output, same game build as the mp3 (r3177)
 const SOURCES = {
   characterFiles: 'characterFiles.json', characterFileTextMap: 'characterFileTextMap.json',
   historicalRelicsMap: 'historicalRelicsMap.json', historicalTextMap: 'HistoricalTextMap.json',
@@ -26,7 +27,7 @@ const SOURCES = {
   playerAskMap: 'playerAskMap.json', highteaCharacterMap: 'highteaCharacterMap.json', itemMap: 'itemMap.json',
 };
 
-function loadRaw(masterRoot) {
+function loadRaw(masterRoot, voiceRoot = VOICE) {
   const raw = {};
   const files = [];
   for (const [key, name] of Object.entries(SOURCES)) {
@@ -39,7 +40,15 @@ function loadRaw(masterRoot) {
   const langBuffer = readFileSync(langPath);
   raw.teaLang = teaLangKeys(JSON.parse(langBuffer.toString('utf8')));
   files.push({ path: `NeoArtifacts/MasterData/${relative(masterData, langPath).replace(/\\/g, '/')}`, sha256: sha256(langBuffer) });
-  return { raw, receipt: { sourceKind: 'masterdata', sourceVersion: 'character-profile-masterdata-v2', contentHash: hashValue(files), sourcePath: 'NeoArtifacts/MasterData/json', manifest: { files } } };
+  // Voice lines (spec 2026-11-19-voice-translation §4.1). A missing index.json or <ID>.json throws ENOENT with the path,
+  // before anything is written.
+  raw.voice = {};
+  for (const id of JSON.parse(readFileSync(join(voiceRoot, 'index.json'), 'utf8')).ids) {
+    const buffer = readFileSync(join(voiceRoot, `${id}.json`));
+    raw.voice[id] = JSON.parse(buffer.toString('utf8'));
+    files.push({ path: `WhmxCalc/public/voice/${id}.json`, sha256: sha256(buffer) });
+  }
+  return { raw, receipt: { sourceKind: 'masterdata', sourceVersion: 'character-profile-masterdata-v3', contentHash: hashValue(files), sourcePath: 'NeoArtifacts/MasterData/json', manifest: { files } } };
 }
 
 function readLegacyRows(workbook) {
@@ -167,12 +176,15 @@ if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
       const ids = Object.keys(JSON.parse(readFileSync(args.dataJson, 'utf8')).characters);
       const normalized = normalizeProfileSources(raw, ids);
       const legacy = args.seedLegacy ? matchLegacyCells(readLegacyRows(args.workbook), normalized.profiles) : null;
-      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, missingFromRaw: normalized.missingFromRaw, teaOdd: normalized.teaOdd, teaOwnResult: normalized.teaOwnResult, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
+      console.log(JSON.stringify({ check: 'ok', characters: normalized.profiles.length, units: normalized.profiles.reduce((n, p) => n + p.units.length, 0), terms: normalized.terms.length, skipped: normalized.skipped, missingFromRaw: normalized.missingFromRaw, teaOdd: normalized.teaOdd, teaOwnResult: normalized.teaOwnResult, voiceUnits: normalized.profiles.reduce((n, p) => n + p.units.filter((u) => u.unitKey.startsWith('voice.')).length, 0), voiceUnlocks: normalized.terms.filter((t) => t.kind === 'voice_unlock').length, legacySeeds: legacy?.seeds.length, legacyIgnored: legacy?.ignored.length }));
     } else {
       const db = getDb();
       const ids = (await db.select({ id: characters.characterId }).from(characters)).map((r) => r.id);
-      const normalized = normalizeProfileSources(raw, ids);
-      const plan = planProfileImport({ normalized, current: await loadCurrent(db) });
+      const current = await loadCurrent(db);
+      // Unlock texts keep their VOICE_UNLOCK_<n> code across imports (matched by name_cn).
+      const voiceCodes = new Map([...current.terms.values()].filter((t) => t.kind === 'voice_unlock').map((t) => [t.nameCn, t.code]));
+      const normalized = normalizeProfileSources(raw, ids, { voiceCodes });
+      const plan = planProfileImport({ normalized, current });
       const seeds = args.seedLegacy ? matchLegacyCells(readLegacyRows(args.workbook), normalized.profiles).seeds : null;
       if (!args.apply) console.log(JSON.stringify({ mode: 'plan (read-only, nothing written)', ...summarize(plan, normalized, seeds) }, null, 2));
       else console.log(JSON.stringify(await apply(db, { plan, receipt, seeds })));

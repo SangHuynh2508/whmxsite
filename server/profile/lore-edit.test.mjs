@@ -129,3 +129,9 @@ test('termUsage counts favourite teas; the lore record names them', () => {
   });
   assert.deepEqual(record.teaTerms, { 81009: { code: '81009', kind: 'tea', nameCn: '杏皮茶', nameVi: null, official: false, done: false } });
 });
+
+test('lore progress skips voice units; term usage counts voice unlocks', () => {
+  const rows = [{ characterId: 'A1', unitKey: 'voice.A1001.regardsLine', vi: 'x', viOrigin: 'admin', state: 'ok' }, { characterId: 'A1', unitKey: 'quote', vi: null, viOrigin: null, state: 'ok' }];
+  assert.deepEqual(loreProgress(rows), { A1: { total: 1, done: 0, legacy: 0, changed: 0 } });
+  assert.deepEqual(termUsage([{ characterId: 'A1', structure: { reports: [], voiceUnlocks: ['VOICE_UNLOCK_1'] } }]), { VOICE_UNLOCK_1: ['A1'] });
+});

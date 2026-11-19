@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C · Hai dòng</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@500&display=swap">
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="common.css">
+<style>
+/* C · Hai dòng (phone-first, Things/Apple-list thinking): 44 px rows you can hit with a thumb, the VI name on
+   top and the CN name + unlock note under it. Status is a dot on the left (hollow gold = chưa dịch,
+   filled grey = đã lưu, amber = needs a look), so the eye scans one column for the work left. */
+.sel::picker(select) { min-width: max(anchor-size(width), 380px); padding: 4px 0; }
+.sel legend {
+  display: block; padding: 10px 14px 4px; font-size: 12px; font-weight: 600; color: var(--text-muted);
+}
+.sel optgroup + optgroup { border-top: 1px solid var(--border-color); margin-top: 4px; }
+.sel option {
+  display: grid; grid-template-columns: 10px minmax(0, 1fr) 16px; align-items: center; column-gap: 12px;
+  min-height: 44px; padding: 5px 14px; box-sizing: border-box;
+}
+.sel option:hover, .sel option:focus-visible { background: var(--bg-surface-hover); }
+.sel option::checkmark { grid-column: 3; content: '✓'; color: var(--accent); font-weight: 600; }
+.sel option > *, .sel option::checkmark { grid-row: 1; }
+.sel option:not(:checked)::checkmark { visibility: hidden; }
+.sel option .t { display: grid; min-width: 0; }
+.sel option .vi { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sel option .sub { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sel option .dot { width: 8px; height: 8px; border-radius: 50%; box-sizing: border-box; border: 1.5px solid var(--accent); }
+.sel option[data-status="done"] .dot { background: var(--text-muted); border-color: var(--text-muted); }
+.sel option[data-status="changed"] .dot, .sel option[data-status="legacy"] .dot { background: var(--rarity-sr); border-color: var(--rarity-sr); }
+.sel-short option { grid-template-columns: minmax(0, 1fr) 16px; }
+.sel-short option::checkmark { grid-column: 2; }
+.legend-key { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); }
+.legend-key i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; box-sizing: border-box; border: 1.5px solid var(--accent); }
+.legend-key i.d { background: var(--text-muted); border-color: var(--text-muted); }
+.legend-key i.w { background: var(--rarity-sr); border-color: var(--rarity-sr); }
+/* Phones: the list spans the screen (16 px gutters) instead of hugging the trigger. */
+@media (max-width: 600px) { .sel-voice::picker(select) { min-width: 0; width: calc(100vw - 32px); } }
+</style>
+</head>
+<body>
+<script src="select-data.js"></script>
+<script src="common.js"></script>
+<script>
+mountDemo({
+  title: 'C · Hai dòng',
+  note: 'Dòng cao 44px dễ bấm trên điện thoại; tên Việt trên, tên gốc + điều kiện mở khoá dưới; chấm trạng thái bên trái.',
+  renderGroup: (g) => esc(g.group),
+  renderOption: (item, n, status) => status
+    ? `<span class="dot x" aria-hidden="true"></span><span class="t"><span class="vi">${esc(item.vi)}</span><span class="sub x"><span lang="zh" class="cn">${esc(item.cn)}</span>${item.extra ? ' · ' + esc(item.extra) : ''}</span></span>`
+    : `<span class="vi">${esc(item.vi)}</span>`,
+});
+document.querySelector('.demo-main').insertAdjacentHTML('beforeend',
+  '<p class="legend-key"><span><i></i>chưa dịch</span><span><i class="d"></i>đã lưu</span><span><i class="w"></i>bản cũ / đổi CN</span></p>');
+</script>
+</body>
+</html>

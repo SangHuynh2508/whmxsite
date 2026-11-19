@@ -2,6 +2,8 @@
 // Pure: raw MasterData tables -> normalized lore rows. No I/O, no DB.
 import { createHash } from 'node:crypto';
 
+import { assignUnlockCodes, voiceUnits } from './voice-source.mjs';
+
 export const sha256 = (text) => createHash('sha256').update(String(text)).digest('hex');
 
 function stable(value) {
@@ -82,7 +84,7 @@ function teaFor(characterId, raw, units, terms, sharedResult) {
   return { teas, topics, branches };
 }
 
-export function normalizeProfileSources(raw, characterIds) {
+export function normalizeProfileSources(raw, characterIds, { voiceCodes = new Map() } = {}) {
   const wanted = new Set(characterIds);
   const skipped = Object.keys(raw.characterFiles).filter((id) => !wanted.has(id)).sort();
   const terms = new Map();
@@ -94,6 +96,10 @@ export function normalizeProfileSources(raw, characterIds) {
   const sharedResult = sharedTeaResult(raw.highteaCharacterMap);
   const teaOdd = [];
   const teaOwnResult = [];
+  // Voice lines (spec 2026-11-19-voice-translation §4): units per character, shared unlock texts as voice_unlock terms.
+  const voice = new Map(Object.entries(raw.voice ?? {}).map(([id, doc]) => [id, voiceUnits(doc)]));
+  const unlockCode = assignUnlockCodes([...voice.values()].flatMap((v) => v.unlocks), voiceCodes);
+  for (const [cn, code] of unlockCode) addTerm(terms, code, 'voice_unlock', cn, '');
 
   for (const characterId of [...wanted].sort()) {
     if (!raw.characterFiles[characterId]) continue;
@@ -154,6 +160,9 @@ export function normalizeProfileSources(raw, characterIds) {
     }
 
     const tea = teaFor(characterId, raw, units, terms, sharedResult);
+    const spoken = voice.get(characterId);
+    if (spoken) units.push(...spoken.units);
+    const voiceUnlocks = (spoken?.unlocks ?? []).map((cn) => unlockCode.get(cn));
     if (tea && (tea.topics.length !== 8 || tea.branches.length !== 2 || tea.branches.some((br) => br.next.length !== 2))) teaOdd.push(characterId);
     if (units.some((u) => u.unitKey === 'tea.result')) teaOwnResult.push(characterId);
 
@@ -181,7 +190,7 @@ export function normalizeProfileSources(raw, characterIds) {
         museum: text(relic?.museumlanText),
       },
       // relicTags only when present, so profiles without tags keep their source hash
-      structure: { reports, timeline, ...(relicTags.length ? { relicTags } : {}), ...(tea ? { tea } : {}) },
+      structure: { reports, timeline, ...(relicTags.length ? { relicTags } : {}), ...(tea ? { tea } : {}), ...(voiceUnlocks.length ? { voiceUnlocks } : {}) },
       units,
     };
     const { units: _u, ...structural } = profile;

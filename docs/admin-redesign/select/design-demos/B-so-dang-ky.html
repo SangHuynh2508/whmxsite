@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B · Sổ đăng ký</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@500&display=swap">
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="common.css">
+<style>
+/* B · Sổ đăng ký (Vignelli-style register, like the admin's own B direction). The list is a table:
+   № · VI · CN · status, rows split by 1 px hairlines, group headers carry a count. The selected row is a
+   gold-tint fill; "chưa dịch" is the word that stands out, since that is the work left. */
+.sel::picker(select) { min-width: max(anchor-size(width), 460px); padding: 0; }
+.sel optgroup { display: block; }
+.sel legend {
+  display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; padding: 10px 12px 6px;
+  font-size: 12px; font-weight: 600; color: var(--text-main); border-bottom: 1px solid var(--border-strong);
+}
+.sel legend .c { color: var(--text-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+.sel optgroup + optgroup legend { border-top: 1px solid var(--border-strong); margin-top: 0; }
+.sel option {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto 64px; align-items: center; column-gap: 10px;
+  min-height: 34px; padding: 0 12px; border-bottom: 1px solid var(--border-color); white-space: nowrap;
+}
+.sel optgroup option:last-child { border-bottom: 0; }
+.sel option::checkmark { display: none; }
+.sel option:hover, .sel option:focus-visible { background: var(--bg-surface-hover); }
+.sel option:checked { background: color-mix(in oklch, var(--accent) 12%, var(--bg-elevated)); }
+.sel option:checked .vi { color: color-mix(in oklch, var(--accent) 62%, var(--text-main)); font-weight: 500; }
+.sel option .n { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; }
+.sel option .cn { font-size: 13px; color: var(--text-muted); }
+.sel option .st { font-size: 12px; text-align: right; color: var(--text-muted); }
+.sel option[data-status="todo"] .st { color: color-mix(in oklch, var(--accent) 62%, var(--text-main)); }
+.sel option[data-status="changed"] .st, .sel option[data-status="legacy"] .st { color: color-mix(in oklch, var(--rarity-sr) 55%, var(--text-main)); }
+/* The short list (module picker) has no №/CN/status columns. */
+.sel-short::picker(select) { min-width: anchor-size(width); }
+.sel-short option { grid-template-columns: 1fr; }
+.sel-short option:last-child { border-bottom: 0; }
+@media (max-width: 600px) { .sel::picker(select) { min-width: anchor-size(width); } .sel option { grid-template-columns: 24px minmax(0, 1fr) 60px; } .sel option .cn { display: none; } }
+</style>
+</head>
+<body>
+<script src="select-data.js"></script>
+<script src="common.js"></script>
+<script>
+const STATUS_TEXT = { done: 'đã lưu', legacy: 'bản cũ', changed: 'đổi CN', todo: 'chưa dịch' };
+mountDemo({
+  title: 'B · Sổ đăng ký',
+  note: 'Danh sách dạng bảng: số câu · tên Việt · tên gốc · trạng thái; nhóm có đếm số câu.',
+  renderGroup: (g) => `${esc(g.group)}<span class="c">${g.items.length} câu</span>`,
+  renderOption: (item, n, status) => status
+    ? `<span class="n x">${n}</span><span class="vi">${esc(item.vi)}</span><span class="cn x" lang="zh">${esc(item.cn)}</span><span class="st x">${STATUS_TEXT[status]}</span>`
+    : `<span class="vi">${esc(item.vi)}</span>`,
+});
+</script>
+</body>
+</html>

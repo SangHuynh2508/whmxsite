@@ -6,7 +6,9 @@ import { getLore, patchLore } from '../loreApi.js';
 import { lorePublisher, usePublishStatus } from '../lorePublish';
 import { useEditor } from '../useEditor';
 import { useIsOwner } from '../useIsOwner';
-import { inScope, loreUnitGroups, teaUnitGroups, termProgress, type TeaStructure } from '../lib/loreUnits.mts';
+import { inScope, loreUnitGroups, teaUnitGroups, termProgress, voiceUnitGroups, type Scope, type TeaStructure } from '../lib/loreUnits.mts';
+import { loadVoiceDoc } from '../../../features/characters/voice/voiceData.mts';
+import type { VoiceDoc } from '../../../features/characters/voice/voiceView.mts';
 import { TAG_LABELS } from '../../../features/characters/lore/loreView.mts';
 import { termHref } from '../lib/route.mts';
 import { topVisible } from '../lib/scrollSpy.mts';
@@ -39,8 +41,13 @@ const smooth = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? '
 
 // Units as editor fields: `value` is the shown text (legacy / CN-changed text is pre-filled), `official` says
 // whether it is already published — "Dùng bản này" / "Giữ bản dịch" turns an unofficial one into a change.
-// One record, two modules (spec 2026-10-03 §7): Lore edits the archive units, Phòng trà the `tea.*` units.
-type Scope = 'lore' | 'tea';
+// One record, three modules (spec 2026-10-03 §7, voice-translation §6): Lore edits the archive units, Phòng trà the
+// `tea.*` units, Lồng tiếng the `voice.*` units.
+const TEXT: Record<Scope, { name: string; pick: string; nav: string; info: string; terms: string | null; empty: string }> = {
+  lore: { name: 'Lore', pick: 'Chọn đoạn lore', nav: 'Các đoạn lore', info: 'Hiện vật và thuật ngữ', terms: 'Hiện vật', empty: '' },
+  tea: { name: 'Phòng trà', pick: 'Chọn đoạn phòng trà', nav: 'Các đoạn phòng trà', info: 'Trà và thuật ngữ', terms: 'Trà yêu thích', empty: 'Nhân vật này chưa có dữ liệu phòng trà.' },
+  voice: { name: 'Lồng tiếng', pick: 'Chọn câu thoại', nav: 'Các câu thoại', info: 'Lịch sử gần đây', terms: null, empty: 'Nhân vật này chưa có thoại.' },
+};
 const toRecord = (lore: Lore, scope: Scope) =>
   Object.fromEntries(lore.units.filter((u) => inScope(u.unitKey, scope)).map((u) => [u.unitKey, { value: u.vi ?? '', source: null, official: u.viOrigin === 'admin' && u.state === 'ok' }]));
 
@@ -50,6 +57,9 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
   const [error, setError] = useState(false);
   const reload = useCallback(async () => { const next: Lore = await getLore(id); setLore(next); return toRecord(next, scope); }, [id, scope]);
   useEffect(() => { reload().catch(() => setError(true)); }, [reload]);
+  // Line order, labels and mp3 keys come from the tab's own file (public/voice/<ID>.json).
+  const [voiceDoc, setVoiceDoc] = useState<VoiceDoc | null | undefined>(scope === 'voice' ? undefined : null);
+  useEffect(() => { if (scope === 'voice') void loadVoiceDoc(id).then(setVoiceDoc); }, [id, scope]);
 
   const record = useMemo(() => (lore ? toRecord(lore, scope) : null), [lore, scope]);
   const keys = useMemo(() => lore?.units.filter((u) => inScope(u.unitKey, scope)).map((u) => u.unitKey) ?? [], [lore, scope]);
@@ -68,22 +78,26 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
   useKeepVisible(navRef, active);
 
   if (error) return <Notice className="m-4">Không tải được lore của {id}.</Notice>;
-  if (!lore || !record) return <SkeletonRows />;
+  if (!lore || !record || voiceDoc === undefined) return <SkeletonRows />;
 
   const units = lore.units.filter((u) => inScope(u.unitKey, scope));
   const byKey = new Map(units.map((u) => [u.unitKey, u]));
-  const groups = scope === 'tea' ? teaUnitGroups(lore.structure.tea, keys, lore.teaTerms ?? {}) : loreUnitGroups(lore.structure, keys, lore.affinity);
-  if (scope === 'tea' && !groups.length) return <Notice className="m-4">Nhân vật này chưa có dữ liệu phòng trà.</Notice>;
+  const skinName = (sid: string) => { const k = data.skins.find((x) => x.skinId === sid); return k?.skinNameVi.value || k?.skinNameCn || sid; };
+  const groups = scope === 'tea' ? teaUnitGroups(lore.structure.tea, keys, lore.teaTerms ?? {})
+    : scope === 'voice' ? voiceUnitGroups(voiceDoc ?? null, keys, skinName)
+      : loreUnitGroups(lore.structure, keys, lore.affinity);
+  const t = TEXT[scope];
+  if (scope !== 'lore' && !groups.length) return <Notice className="m-4">{t.empty}</Notice>;
   const labels = Object.fromEntries(groups.flatMap((g) => g.items.map((i) => [i.unitKey, i.label])));
   const counts = units.reduce((c, u) => ({ ...c, [statusOf(u)]: c[statusOf(u)] + 1 }), { done: 0, legacy: 0, changed: 0, todo: 0 } as Record<LoreStatus, number>);
-  const termRows: [string, TermView][] = scope === 'tea'
+  const termRows: [string, TermView][] = scope === 'voice' ? [] : scope === 'tea'
     ? (lore.structure.tea?.teas ?? []).map((code, i): [string, TermView] => [`Trà ${i + 1}`, lore.teaTerms?.[code] ?? null])
     : [
     ['Loại', lore.relic?.type ?? null], ['Triều đại', lore.relic?.era ?? null], ['Bảo tàng', lore.relic?.museum ?? null], ['Giai đoạn', lore.relic?.eraRange ?? null],
     ...(lore.relicTags ?? []).map((t): [string, TermView] => [TAG_LABELS[t.field] ?? t.field, t.term]),
     ['Trực thuộc', lore.organisation],
   ];
-  const terms = termProgress([...termRows.map(([, t]) => t), ...(scope === 'tea' ? [] : Object.values(lore.affinity))]);
+  const terms = termProgress([...termRows.map(([, t]) => t), ...(scope === 'lore' ? Object.values(lore.affinity) : [])]);
   // The phone bar jumps without focusing: focusing the field would open the keyboard over the text being read.
   const jump = (unitKey: string, focus = true) => {
     document.getElementById(`pair-${unitKey}`)?.scrollIntoView({ behavior: smooth(), block: 'start' });
@@ -92,13 +106,14 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
   };
   const order = groups.flatMap((g) => g.items.map((i) => i.unitKey));
   const at = Math.max(0, order.indexOf(active ?? ''));
-  const STATUS_NOTE: Record<LoreStatus, string> = { done: '', legacy: ' · bản cũ', changed: ' · đổi CN', todo: ' · chưa dịch' };
+  const STATUS_NOTE: Record<LoreStatus, string> = { done: '', legacy: 'bản cũ', changed: 'đổi CN', todo: 'chưa dịch' };
 
   // Relic + shared terms + recent history: a column on wide screens, a collapsible block at the top of the editor below
   // 1280 px (owner 2026-09-28: on phones the column was hidden, so editors could not find where to translate the terms).
   const info = (
     <>
-      <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">{scope === 'tea' ? 'Trà yêu thích' : 'Hiện vật'}</h3>
+      {t.terms && <>
+      <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">{t.terms}</h3>
       {scope === 'lore' && lore.archiveImages[0] && <img src={lore.archiveImages[0].url} alt="" loading="lazy" className="mb-3 aspect-square w-full max-w-64 rounded-md bg-(--bg-elevated) object-contain" />}
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
         {termRows.map(([label, t]) => (
@@ -109,7 +124,8 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
         ))}
       </dl>
       <p className="mt-2 text-xs text-(--text-muted)">Thuật ngữ dùng chung: bấm để sửa trong Từ điển, đổi cho mọi nhân vật.</p>
-      <h3 className="mb-1 mt-5 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)">Lịch sử gần đây</h3>
+      </>}
+      <h3 className={cn('mb-1 text-[11px] font-medium uppercase tracking-[.12em] text-(--text-muted)', t.terms && 'mt-5')}>Lịch sử gần đây</h3>
       <div className="-mx-4 [&_li]:px-4 [&_p]:px-4">
         <HistoryList entries={lore.history.filter((h) => h.eventType === 'human_edit').slice(0, 5)} labels={labels} />
       </div>
@@ -119,7 +135,7 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-none flex-wrap items-center gap-x-4 gap-y-1 border-b border-(--border-color) px-4 py-2 text-xs text-(--text-muted) lg:px-5">
-        <span className="tabular-nums">{counts.done}/{units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></span>
+        <span className="tabular-nums">{counts.done}/{units.length} đã lưu · {counts.legacy} bản cũ · {counts.changed} đổi CN · {counts.todo} chưa dịch{t.terms && <> · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></>}</span>
         <span role="status" className="ml-auto">{publish.state !== 'idle' && publish.message}</span>
         {isOwner && <Button variant="ghost" className="h-7 max-md:h-11" onClick={() => lorePublisher.now()} disabled={publish.state === 'publishing'}>Xuất bản ngay</Button>}
       </div>
@@ -127,11 +143,17 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
       <div className="sticky top-14 z-10 flex items-center gap-1 border-b border-(--border-color) bg-(--bg-main) px-1 py-1.5 md:hidden">
         <button type="button" aria-label="Đoạn trước" disabled={at === 0} onClick={() => jump(order[at - 1], false)}
           className="grid size-11 flex-none place-items-center text-(--text-muted) hover:text-(--text-main) disabled:opacity-40"><ChevronLeft size={20} aria-hidden /></button>
-        <Select aria-label={scope === 'tea' ? 'Chọn đoạn phòng trà' : 'Chọn đoạn lore'} value={order[at]} onChange={(event) => jump(event.target.value, false)}
+        <Select aria-label={t.pick} value={order[at]} onChange={(event) => jump(event.target.value, false)}
           className="min-w-0 flex-1 [&_select]:h-11">
           {groups.map((g) => (
             <optgroup key={g.group} label={g.group}>
-              {g.items.map((i) => <option key={i.unitKey} value={i.unitKey}>{i.label}{STATUS_NOTE[statusOf(byKey.get(i.unitKey)!)]}</option>)}
+              {g.items.map((i) => {
+                // The closed box shows the option's text ("… · chưa dịch"); the open list hides the " · " and puts the status on the right.
+                const note = STATUS_NOTE[statusOf(byKey.get(i.unitKey)!)];
+                return <option key={i.unitKey} value={i.unitKey}>
+                  <span>{i.label}</span>{note && <><span className="admin-select-sep"> · </span><span className="admin-select-note">{note}</span></>}
+                </option>;
+              })}
             </optgroup>
           ))}
         </Select>
@@ -141,7 +163,7 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
       <div className="min-h-0 flex-1 lg:grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_280px]">
         <nav
           ref={navRef}
-          aria-label={scope === 'tea' ? 'Các đoạn phòng trà' : 'Các đoạn lore'}
+          aria-label={t.nav}
           className="relative z-10 bg-(--bg-main) [scrollbar-width:none] max-md:hidden max-lg:sticky max-lg:top-0 max-lg:flex max-lg:gap-1 max-lg:overflow-x-auto max-lg:border-b max-lg:border-(--border-color) max-lg:px-2 max-lg:py-1.5 lg:overflow-y-auto lg:border-r lg:border-(--border-color) lg:py-2.5"
         >
           {groups.map((g) => (
@@ -176,12 +198,12 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
 
         <section
           ref={setPane}
-          aria-label={scope === 'tea' ? 'Phòng trà' : 'Lore'}
+          aria-label={t.name}
           onFocus={(event) => { const unit = (event.target as HTMLElement).closest<HTMLElement>('[data-unit]')?.dataset.unit; if (unit) setActive(unit); }}
           className="max-lg:pb-16 lg:h-full lg:overflow-y-auto"
         >
           <details className="border-b border-(--border-color) px-4 py-3 text-[13px] max-md:py-0 max-md:open:pb-3 md:px-8 xl:hidden">
-            <summary className="cursor-pointer text-(--text-muted) max-md:py-3">{scope === 'tea' ? 'Trà và thuật ngữ' : 'Hiện vật và thuật ngữ'} · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></summary>
+            <summary className="cursor-pointer text-(--text-muted) max-md:py-3">{t.info}{t.terms && <> · <span className={terms.done < terms.total ? 'text-(--accent)' : undefined}>thuật ngữ {terms.done}/{terms.total}</span></>}</summary>
             <div className="mt-3">{info}</div>
           </details>
           <PairHead />
@@ -196,6 +218,7 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
                     unitKey={i.unitKey}
                     label={i.label}
                     extra={i.extra}
+                    audio={i.audio}
                     cn={u.sourceCn}
                     previousCn={u.previousCn}
                     value={editor.draft[i.unitKey] ?? ''}
@@ -211,7 +234,7 @@ export function LoreModule({ data, scope = 'lore' }: ModuleProps & { scope?: Sco
           ))}
         </section>
 
-        <aside aria-label={scope === 'tea' ? 'Trà và thuật ngữ' : 'Hiện vật và thuật ngữ'} className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">{info}</aside>
+        <aside aria-label={t.info} className="overflow-y-auto border-l border-(--border-color) px-4 py-4 text-[13px] max-xl:hidden">{info}</aside>
       </div>
       <SaveBar {...editor} labels={labels} />
     </div>

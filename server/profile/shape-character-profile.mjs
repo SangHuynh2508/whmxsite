@@ -12,7 +12,7 @@ const viOf = (texts, key) => publishableVi(texts.get(key));
 function viUpdatedAt(texts) {
   let latest = null;
   for (const [key, row] of texts) {
-    if (key.startsWith('tea.') || /\.(title|label)$/.test(key) || !publishableVi(row) || !row.viUpdatedAt) continue;
+    if (/^(tea|voice)\./.test(key) || /\.(title|label)$/.test(key) || !publishableVi(row) || !row.viUpdatedAt) continue;
     if (!latest || row.viUpdatedAt > latest) latest = row.viUpdatedAt;
   }
   return latest ? new Date(latest).toISOString() : null;

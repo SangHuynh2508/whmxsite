@@ -5,7 +5,7 @@ type GameData = { characters?: Record<string, { profile?: unknown }> };
 
 // A published DB document: tiny pointer → immutable content file next to it. Any failure → null (the page keeps
 // what it has). 20 s: loaded after the page renders (never blocks it); the lore file is ~0.3–1.8 MB.
-async function loadPointed<T>(pointerUrl: string | undefined, fileName: RegExp, valid: (doc: any) => boolean, fetchImpl: typeof fetch, timeoutMs: number, label: string): Promise<T | null> {
+export async function loadPointed<T>(pointerUrl: string | undefined, fileName: RegExp, valid: (doc: any) => boolean, fetchImpl: typeof fetch, timeoutMs: number, label: string): Promise<T | null> {
   if (!pointerUrl) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);

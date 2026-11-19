@@ -1,5 +1,5 @@
 // server/profile/lore-repository.mjs
-import { eq, getTableColumns, inArray, sql } from 'drizzle-orm';
+import { eq, getTableColumns, inArray, like, sql } from 'drizzle-orm';
 
 import { characterBuilds, gameReferences, gameTexts } from '../../db/schema/build.mjs';
 import { characters } from '../../db/schema/character-skin.mjs';
@@ -36,6 +36,13 @@ export function createLoreRepository(db) {
         builds: await tx.select({ characterId: characters.characterId, position: characterBuilds.position, doc: characterBuilds.doc })
           .from(characterBuilds).innerJoin(characters, eq(characters.entityId, characterBuilds.characterEntityId)),
         tierLists: await tx.select({ slug: tierLists.slug, status: tierLists.status, position: tierLists.position, doc: tierLists.doc, updatedAt: tierLists.updatedAt }).from(tierLists),
+      };
+    },
+    // voice.<hash>.json input (server/profile/voice-document.mjs): voice lines and the shared unlock texts.
+    async loadVoiceDocumentInput(tx) {
+      return {
+        texts: await selectProfileTextsWithCharacterId(tx).where(like(profileTexts.unitKey, 'voice.%')),
+        unlocks: await tx.select().from(loreTerms).where(eq(loreTerms.kind, 'voice_unlock')),
       };
     },
     async loadBackupPayload(tx) {

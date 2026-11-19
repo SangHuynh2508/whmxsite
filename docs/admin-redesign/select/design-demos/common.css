@@ -1,0 +1,44 @@
+/* Frame shared by the 3 directions. Tokens come from the app (src/styles/tokens.css, served by Vite).
+   Every direction uses the native customizable select (appearance: base-select): keyboard, typeahead,
+   form value and a11y stay the browser's; Safari/Firefox fall back to their own list. */
+body { margin: 0; min-height: 100vh; background: var(--bg-main); color: var(--text-main); font: 14px/1.45 var(--font-sans); }
+.demo-head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; padding: 14px 20px; border-bottom: 1px solid var(--border-color); }
+.demo-head b { font-size: 15px; }
+.demo-head span { color: var(--text-muted); font-size: 13px; }
+.demo-main { display: grid; gap: 18px; padding: 20px; max-width: 760px; }
+.demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.demo-label { width: 84px; color: var(--text-muted); font-size: 13px; }
+.demo-count { color: var(--text-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* Trigger: same look as today's inputClass (h-9, 6px, input tokens), so only the open list changes. */
+.sel, .sel::picker(select) { appearance: base-select; }
+.sel {
+  display: inline-flex; align-items: center; height: 36px; padding: 0 10px 0 12px; box-sizing: border-box;
+  border: 1px solid var(--input-border); border-radius: 6px; background: var(--input-bg); color: var(--input-text);
+  font: 14px var(--font-sans); cursor: pointer;
+}
+.sel:hover { background: var(--input-bg-hover); }
+.sel:focus-visible, .sel:open { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px var(--border-gold-subtle); }
+.sel > button { all: unset; display: flex; align-items: center; flex: 1; min-width: 0; }
+.sel > button selectedcontent { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.sel::picker-icon { color: var(--text-muted); margin-left: 8px; }
+.sel-voice { width: 340px; max-width: 100%; }
+.sel-short { width: 160px; }
+/* The trigger shows the label only (the extra parts of a row are list-only). */
+.sel selectedcontent .x { display: none; }
+
+.sel::picker(select) {
+  margin-block: 4px; padding: 4px; box-sizing: border-box; border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg-elevated); color: var(--text-main); box-shadow: none; max-height: min(440px, 70dvh); overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent;
+}
+.sel option { font: 14px var(--font-sans); color: var(--text-main); cursor: pointer; }
+.sel option:focus-visible { outline: none; }
+.sel optgroup { font: inherit; }
+.sel legend { padding: 0; }
+.cn { font-family: 'Noto Serif SC', var(--font-serif); }
+
+@media (max-width: 600px) {
+  .demo-label { width: 100%; }
+  .sel-voice { width: 100%; }
+}
