@@ -33,12 +33,15 @@ export async function loadBanners(fetchImpl: typeof fetch = fetch): Promise<Bann
   }
 }
 
-/** The newest batch that has started: every started banner still running after the latest start. Kept when it ends
- *  (the site data is older than the game) so the card can say "Đã kết thúc · chờ bản cập nhật". */
+/** The newest batch that has started: every started banner still running after the latest start, minus the ones that
+ *  have ended (owner 2026-11-19). Only when the whole batch has ended (the site data is older than the game) is it kept,
+ *  so the card can say "Đã kết thúc · chờ bản cập nhật". */
 export function currentBanners(doc: BannersDoc, nowMs: number): Banner[] {
   const started = doc.banners.filter((b) => status(nowMs, b.start, b.end) !== 'upcoming');
   const anchor = Math.max(...started.map((b) => b.start), -Infinity);
-  const current = started.filter((b) => b.end > anchor);
+  const batch = started.filter((b) => b.end > anchor);
+  const open = batch.filter((b) => status(nowMs, b.start, b.end) === 'active');
+  const current = open.length ? open : batch;
   const isFeatured = (b: Banner) => b.up.length > 0 && b.type !== 'season'; // spec Q3: UP banners first
   return [...current.filter(isFeatured), ...current.filter((b) => !isFeatured(b))];
 }

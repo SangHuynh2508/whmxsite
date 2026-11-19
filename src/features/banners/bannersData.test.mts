@@ -20,6 +20,11 @@ test('currentBanners keeps an ended batch and marks it ended (site data older th
   assert.deepEqual(currentBanners(d, 950 * S).map((x) => x.id), ['2114']);
 });
 
+test('currentBanners hides a banner that ended while others of the batch are still open', () => {
+  const d = doc([b('2117', 100, 500), b('2119', 300, 900), b('340001', 100, 500, { type: 'season' })]);
+  assert.deepEqual(currentBanners(d, 600 * S).map((x) => x.id), ['2119']);
+});
+
 test('currentBanners ignores banners that have not started', () => {
   const d = doc([b('now', 100, 900), b('later', 500, 900)]);
   assert.deepEqual(currentBanners(d, 150 * S).map((x) => x.id), ['now']);
