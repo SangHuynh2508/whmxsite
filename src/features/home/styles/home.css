@@ -77,6 +77,14 @@
 .home-new { position: absolute; left: 6px; top: 6px; padding: 0 6px; border-radius: 6px; background: var(--accent); color: var(--on-vivid); font: 600 11px var(--font-sans); }
 .home-release-kind { font-size: 12px; color: var(--text-muted); }
 
+.home-updates li { display: grid; gap: 2px; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+.home-updates li:first-child { padding-top: 0; }
+.home-update-date { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.home-update-title { justify-self: start; font-size: 16px; font-weight: 400; color: var(--text-main); text-decoration: none; }
+a.home-update-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+.home-update-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.home-update-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+
 @media (max-width: 980px) { .home-row { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { .home-body { padding: 0 16px 88px; } } /* room for the floating menu button */
 @media (max-width: 640px) {

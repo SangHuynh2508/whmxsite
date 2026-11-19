@@ -17,6 +17,34 @@ import { useLang } from '../../i18n/useLang.ts';
 
 type HomeChar = SliceChar & ReleaseChar & { profile?: Record<string, any> };
 
+// "Cập nhật trang": short notes on new site features, newest first. Written by hand; keep 4–5, drop the oldest.
+const SITE_UPDATES: { date: string; title: string; text: string; href?: string }[] = [
+  { date: '19/11/2026', title: 'Lồng tiếng', href: '/characters',
+    text: 'Trang mỗi Khí Giả có thêm tab Lồng tiếng: nghe toàn bộ câu thoại, chỉnh âm lượng ngay trên trang. Lời thoại đang được dịch dần.' },
+  { date: '18/11/2026', title: 'Âm nhạc', href: '/music',
+    text: 'Trang Âm nhạc có liên kết tới playlist trên NetEase, QQ Music và Bilibili.' },
+  { date: '17/11/2026', title: 'Thư viện ảnh', href: '/gallery',
+    text: 'Thư viện ảnh mới gom tranh trong game về một chỗ. Trang phục chuyển sang mục riêng.' },
+  { date: '06/11/2026', title: 'Song ngữ Việt – Trung',
+    text: 'Nút VI/中 trên thanh bên đổi cả trang sang tiếng Trung và ngược lại.' },
+];
+
+function UpdatesBlock() {
+  if (useLang() === 'cn') return null; // notes are written in VI only
+  return (
+    <section className="home-block home-updates" aria-label="Cập nhật trang">
+      <h2 className="home-h2">Cập nhật trang</h2>
+      <ul>{SITE_UPDATES.map((u) => (
+        <li key={u.date + u.title}>
+          <time className="home-update-date">{u.date}</time>
+          {u.href ? <a className="home-update-title" href={u.href}>{u.title}</a> : <b className="home-update-title">{u.title}</b>}
+          <p className="home-update-text">{u.text}</p>
+        </li>
+      ))}</ul>
+    </section>
+  );
+}
+
 // Hidden until the lore overlay is merged and once everything is translated (loreProgress.visible).
 function LoreBlock({ characters }: { characters: Record<string, HomeChar> }) {
   const [, setMerged] = useState(false);
@@ -96,6 +124,7 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
             )}
             <LoreBlock characters={characters} />
           </div>
+          <div className="home-col">
           {releases.length > 0 && (
             <section className="home-block home-releases" aria-label={s('homeReleases')}>
               <h2 className="home-h2">{s('homeReleases')}</h2>
@@ -114,6 +143,8 @@ export function HomePage({ doc }: { doc: BannersDoc | null }) {
               })}</ul>
             </section>
           )}
+          <UpdatesBlock />
+          </div>
         </div>
       </div>
     </div>
