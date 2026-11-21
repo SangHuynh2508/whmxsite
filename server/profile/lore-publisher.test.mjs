@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { gunzipSync } from 'node:zlib';
 import { publishLore, repointLore } from './lore-publisher.mjs';
 
-function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null, liveGameFile = null, liveVoiceFile = null, builds = [] } = {}) {
+function fakes({ locked = true, publishedHash = null, failPointer = false, livePointerFile = null, liveGameFile = null, liveVoiceFile = null, builds = [], backups = [] } = {}) {
   const writes = [];
   let state = { publishedHash };
   const repo = {
@@ -12,7 +12,7 @@ function fakes({ locked = true, publishedHash = null, failPointer = false, liveP
     loadPublishProfiles: async () => [['A0001', { record_id: '1' }]],
     loadGameDocumentInput: async () => ({ refs: [], texts: [], builds }),
     loadVoiceDocumentInput: async () => ({ texts: [], unlocks: [] }),
-    loadBackupPayload: async () => ({ version: 1, profileTexts: [] }),
+    loadBackupPayload: async () => { writes.push(['backup-read']); return { version: 1, profileTexts: [] }; },
     readState: async () => state,
     writeState: async (_tx, patch) => { state = { ...state, ...patch }; writes.push(['state', patch]); },
   };
@@ -21,22 +21,32 @@ function fakes({ locked = true, publishedHash = null, failPointer = false, liveP
     readPointerFile: async (name) => ({ 'game.pointer.json': liveGameFile, 'voice.pointer.json': liveVoiceFile }[name] ?? livePointerFile),
     publicFileExists: async (name) => name === 'lore.aaaaaaaaaaaa.json',
     putPublic: async (name, body, opts) => { if (failPointer && name === 'lore.pointer.json') throw new Error('R2 down'); writes.push(['public', name, opts.cacheControl, body, opts.contentEncoding]); },
+    backupExists: async (key) => backups.includes(key),
     putBackup: async (key, buffer) => writes.push(['backup', key, JSON.parse(gunzipSync(buffer).toString())]),
   };
   return { repo, storage, writes, getState: () => state };
 }
 const now = new Date('2026-09-24T10:00:00Z');
 
-test('publishes content, then pointer, then state; always writes the backup', async () => {
+test('publishes content, then pointer, then state; writes the day\'s first backup', async () => {
   const f = fakes();
   const result = await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u1', now });
   assert.equal(result.status, 'published');
   assert.deepEqual(f.writes.map((w) => (w[0] === 'public' ? w[1].replace(/\.[0-9a-f]{12}\./, '.<hash>.') : w[0])), [
-    'backup', 'lore.<hash>.json', 'lore.pointer.json', 'game.<hash>.json', 'game.pointer.json', 'voice.<hash>.json', 'voice.pointer.json', 'state',
+    'backup-read', 'backup', 'lore.<hash>.json', 'lore.pointer.json', 'game.<hash>.json', 'game.pointer.json', 'voice.<hash>.json', 'voice.pointer.json', 'state',
   ]);
   assert.deepEqual(f.writes.filter((w) => w[0] === 'public').map((w) => w[2]), ['public, max-age=31536000, immutable', 'public, max-age=60', 'public, max-age=31536000, immutable', 'public, max-age=60', 'public, max-age=31536000, immutable', 'public, max-age=60']);
-  assert.equal(f.writes[0][1], 'backups/lore/development/2026-09-24.json.gz');
+  assert.equal(f.writes[1][1], 'backups/lore/development/2026-09-24.json.gz');
   assert.equal(f.getState().publishedByUserId, 'u1');
+});
+
+test('a backup already written today is not re-read from the DB nor rewritten (Neon network transfer)', async () => {
+  const f = fakes({ backups: ['backups/lore/development/2026-09-24.json.gz'] });
+  assert.equal((await publishLore({ repo: f.repo, storage: f.storage, now })).status, 'published');
+  assert.equal(f.writes.some((w) => w[0].startsWith('backup')), false);
+  const nextDay = fakes({ backups: ['backups/lore/development/2026-09-24.json.gz'] });
+  await publishLore({ repo: nextDay.repo, storage: nextDay.storage, now: new Date('2026-09-25T01:00:00Z') });
+  assert.equal(nextDay.writes.find((w) => w[0] === 'backup')[1], 'backups/lore/development/2026-09-25.json.gz');
 });
 
 test('unchanged content writes the backup and marks the live file current (clears the unpublished hint)', async () => {
@@ -44,7 +54,7 @@ test('unchanged content writes the backup and marks the live file current (clear
   const { file, game, voice } = await publishLore({ repo: first.repo, storage: first.storage, now });
   const f = fakes({ publishedHash: first.getState().publishedHash, livePointerFile: file, liveGameFile: game, liveVoiceFile: voice });
   assert.equal((await publishLore({ repo: f.repo, storage: f.storage, actorUserId: 'u2', now })).status, 'unchanged');
-  assert.deepEqual(f.writes.map((w) => w[0]), ['backup', 'state']);
+  assert.deepEqual(f.writes.map((w) => w[0]), ['backup-read', 'backup', 'state']);
   assert.equal(f.getState().publishedAt, now);
 });
 

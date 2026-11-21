@@ -15,7 +15,10 @@ export async function publishLore({ repo, storage, actorUserId = null, now = new
     const lore = buildLoreDocument(await repo.loadPublishProfiles(tx));
     const game = buildGameDocument(await repo.loadGameDocumentInput(tx));
     const voice = buildVoiceDocument(await repo.loadVoiceDocumentInput(tx));
-    await storage.putBackup(backupKey(storage.envName, now), gzipSync(JSON.stringify(await repo.loadBackupPayload(tx))));
+    // One backup per day (the first publish of the day): the payload re-reads the whole lore table and
+    // edit history (~8 MB from Neon), which per publish ate most of the monthly network transfer.
+    const key = backupKey(storage.envName, now);
+    if (!(await storage.backupExists(key))) await storage.putBackup(key, gzipSync(JSON.stringify(await repo.loadBackupPayload(tx))));
     let changed = false;
     for (const [doc, pointer] of [[lore, POINTER_NAME], [game, GAME_POINTER_NAME], [voice, VOICE_POINTER_NAME]]) {
       // Compare with the live pointer of this environment, not the DB row: the state row is

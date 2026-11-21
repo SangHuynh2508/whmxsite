@@ -42,6 +42,15 @@ export function createLoreStorage(config) {
         throw error;
       }
     },
+    async backupExists(key) {
+      try {
+        await client.send(new HeadObjectCommand({ Bucket: config.backupBucket, Key: key }));
+        return true;
+      } catch (error) {
+        if (error?.name === 'NotFound' || error?.$metadata?.httpStatusCode === 404) return false;
+        throw error;
+      }
+    },
     async putBackup(key, buffer) {
       await client.send(new PutObjectCommand({ Bucket: config.backupBucket, Key: key, Body: buffer, ContentType: 'application/gzip' }));
     },
