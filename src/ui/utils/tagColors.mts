@@ -62,8 +62,21 @@ const TAG_CN: Record<string, string> = {
   'Đánh Thường': '常击', 'Đẩy Lùi': '击退', 'Đột Kích': '突入', 'Đỡ Gạt': '格挡', 'Đỡ Đòn': '承伤',
 };
 
-export function renderTagChipsHtml(tagStr: unknown) {
+/** asButton: the chip opens the list of characters sharing the tag (character page); data-tag is the VI tag. */
+export function renderTagChipsHtml(tagStr: unknown, asButton = false) {
   return parseTags(tagStr)
-    .map((t) => `<span class="cd-tag-chip" style="--tag: var(--tag-${tagHue(t)})">${getLang() === 'cn' ? TAG_CN[t.trim()] ?? t : t}</span>`)
+    .map((t) => {
+      const label = getLang() === 'cn' ? TAG_CN[t.trim()] ?? t : t;
+      const style = `style="--tag: var(--tag-${tagHue(t)})"`;
+      return asButton
+        ? `<button type="button" class="cd-tag-chip" data-tag="${t}" aria-haspopup="dialog" ${style}>${label}</button>`
+        : `<span class="cd-tag-chip" ${style}>${label}</span>`;
+    })
     .join('');
+}
+
+/** Characters whose VI tags include `tag`, rarest first. */
+export function charsWithTag<C extends { tags_vi?: string; rare?: number }>(chars: C[], tag: string): C[] {
+  const key = tag.toLowerCase().trim();
+  return chars.filter((c) => parseTags(c.tags_vi).some((t) => t.toLowerCase() === key)).sort((a, b) => (b.rare ?? 0) - (a.rare ?? 0));
 }

@@ -6,7 +6,7 @@ import { getGameData, isCharacterDetailLoaded, loadCharacterDetail } from '../..
 import { getCharBySlugOrId } from '../../../app/router/router.js';
 import { navigate } from '../../../app/router/location.mts';
 import { escapeHtml } from '../../../lib/escapeHtml.mts';
-import { renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
+import { charsWithTag, renderTagChipsHtml } from '../../../ui/utils/tagColors.mts';
 import { getCharacterAvatarUrl } from '../../../ui/utils/avatar.mts';
 import { jobName as jobLabel, RARITY_LABELS } from '../../../ui/utils/gameLabels.mts';
 import { getLang, txt } from '../../../i18n/lang.mts';
@@ -93,6 +93,30 @@ function renderTabContent(container, char, tabName) {
       // `void enhanceCharacterOverviewEditing(container, char);` here when P5 lands.
       break;
   }
+}
+
+// A role tag opens the characters sharing it (owner 2026-11-23); a pick goes to that character's page.
+function wireTagChips(container, char, gameData) {
+  const pop = container.querySelector('#cd-tag-pop');
+  if (!pop?.showPopover) return;
+  container.querySelectorAll('.cd-tags-list button.cd-tag-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const list = charsWithTag(Object.values(gameData.characters), chip.dataset.tag);
+      pop.innerHTML = `
+        <div class="cd-tag-pop-head">${chip.textContent} <span>${list.length}</span></div>
+        <div class="cd-tag-pop-list">${list.map((c) => `
+          <a href="/characters/${c.slug || c.id}" class="cd-tag-pop-item${c.id === char.id ? ' is-current' : ''}"${c.id === char.id ? ' aria-current="page"' : ''}>
+            <img src="${getCharacterAvatarUrl(c)}" alt="" loading="lazy" width="40" height="40" />
+            <span>${escapeHtml(txt(c, 'name'))}</span>
+          </a>`).join('')}</div>`;
+      pop.showPopover();
+      const r = chip.getBoundingClientRect();
+      const w = pop.offsetWidth;
+      pop.style.left = `${Math.max(8, Math.min(r.left, innerWidth - w - 8))}px`;
+      pop.style.top = `${r.bottom + 6}px`;
+    });
+  });
+  pop.addEventListener('click', (e) => { if (e.target.closest('a')) pop.hidePopover(); });
 }
 
 // Lồng tiếng shows only for characters in public/voice/index.json; the index arrives after the shell is drawn.
@@ -320,8 +344,9 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
             ${tagStr ? `
             <div class="cd-tags-list">
-              ${renderTagChipsHtml(tagStr)}
+              ${renderTagChipsHtml(char.tags_vi || tagStr, true)}
             </div>
+            <div class="cd-tag-pop" id="cd-tag-pop" popover="auto" role="dialog" data-lenis-prevent></div>
             ` : ''}
           </div>
         </div>
@@ -381,6 +406,7 @@ export function renderCharacterDetail(slugOrId, activeTab = 'overview') {
 
   updateNavTabs(container, normTab); // marks the active tab (aria-current) and scrolls it into view on phones
   addVoiceTab(container, char, slug);
+  wireTagChips(container, char, gameData);
 
   // Render initial tab content directly (NO double animation with route entry)
   const tabContentContainer = document.getElementById('cd-tab-content');

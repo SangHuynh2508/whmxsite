@@ -36,6 +36,7 @@ const vi = {
   tlReqCharLv: 'Đạt cấp độ nhân vật', tlReqTalent: 'Mở thiên phú:', tlConditions: 'ĐIỀU KIỆN MỞ', tlUpgrade: 'Nâng Thiên Phú',
   tlUndo: 'Đã Nâng (Bấm để Hủy)', tlCost: 'CHI PHÍ NÂNG CẤP',
   glPortrait: 'Chân Dung', glModel: 'Tạo Hình', glSkin: 'Trang Phục', glBase: 'Ảnh Gốc',
+  glFull: 'Xem toàn màn hình {x}',
   glZoom1: 'Phóng to hình ảnh {x} (1.4x)', glZoom2: 'Phóng to thêm hình ảnh {x} (1.8x)',
   glZoom0: 'Thu hình ảnh {x} về kích thước ban đầu (1.0x)',
   bdEmpty: 'Chưa có hướng dẫn build', bdEmptyText: 'Dữ liệu khuyến nghị trang bị, thâm tạo và đội hình cho {x} đang chưa được làm.',
@@ -281,6 +282,7 @@ const cn: Record<StringKey, string> = {
   glModel: '肖形', // game: characterlan_characterSkin_skinNamelan_*001
   glSkin: '衣装', // game: interfaceLan_interface_gotoLan_1011
   glBase: '原图', // draft
+  glFull: '全屏查看 {x}', // draft
   glZoom1: '放大图片 {x}（1.4x）', glZoom2: '继续放大图片 {x}（1.8x）', // draft
   glZoom0: '将图片 {x} 恢复原始大小（1.0x）', // draft
   bdEmpty: '暂无配装指南', bdEmptyText: '{x} 的装备、深造与阵容推荐尚未完成。', // draft

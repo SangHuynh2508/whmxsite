@@ -11,6 +11,7 @@ import Lenis from 'lenis';
 let activeLenis = null;
 let currentContainer = null;
 let activeResizeObserver = null;
+let activeDomObserver = null;
 
 /** The view's own first element; the shared site footer (siteFooter.js) sits at the end and is not content. */
 const viewContent = (container) => [...container.children].find((c) => !c.classList.contains('app-footer')) ?? null;
@@ -30,6 +31,8 @@ function isReducedMotion() {
  * @param {HTMLElement|null} container - The active view scroll container
  */
 export function updateSmoothScrollContainer(container) {
+  activeDomObserver?.disconnect();
+  activeDomObserver = null;
   if (activeResizeObserver) {
     try {
       activeResizeObserver.disconnect();
@@ -123,6 +126,17 @@ export function updateSmoothScrollContainer(container) {
       activeResizeObserver.observe(child);
     }
   });
+
+  // Any page that swaps its HTML (a language switch re-renders the character shell, a tab replaces its body…)
+  // detaches the nodes the ResizeObserver above watches, so Lenis never re-measured and the page stopped
+  // scrolling — fixed page by page until now. Re-measure on every DOM change in the container, once per frame;
+  // Lenis reads the wrapper's own scrollHeight, so this covers every view, present and future.
+  let pending = 0;
+  activeDomObserver = new MutationObserver(() => {
+    if (pending) return;
+    pending = requestAnimationFrame(() => { pending = 0; activeLenis?.resize(); });
+  });
+  activeDomObserver.observe(container, { childList: true, subtree: true });
 
   return activeLenis;
 }

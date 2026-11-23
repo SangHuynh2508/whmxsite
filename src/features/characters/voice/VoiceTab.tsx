@@ -5,6 +5,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import '../styles/voiceTab.css';
 import { Text } from '../lore/LoreTab.tsx';
 import { s } from '../../../i18n/strings.mts';
+import { getLang } from '../../../i18n/lang.mts';
 import { audioUrl, loadVoiceDoc, loadVoiceViCached, type VoiceVi } from './voiceData.mts';
 import { barLevels, groupsOf, parseVolume, packLabel, skinsOf, type GroupId, type Take, type VoiceDoc } from './voiceView.mts';
 
@@ -137,7 +138,8 @@ function VoiceTab({ char }: { char: Char }) {
     setGi(next);
     (e.currentTarget.children[next] as HTMLElement | undefined)?.focus();
   };
-  const skinName = (id: string) => { const x = char.skins?.find((k) => k.skinID === id); return x?.name_vi || x?.name_cn || id; };
+  const cn = getLang() === 'cn'; // a language switch re-renders the page shell, which remounts this tab
+  const skinName = (id: string) => { const x = char.skins?.find((k) => k.skinID === id); return (cn ? x?.name_cn || x?.name_vi : x?.name_vi || x?.name_cn) || id; };
   const skinCv = (id: string) => lang.lines.find((l) => l.skin === id && l.cv)?.cv;
 
   return (
@@ -146,13 +148,13 @@ function VoiceTab({ char }: { char: Char }) {
         {char.icon && <img className="voice-face" src={char.icon} alt="" />}
         <div className="voice-read" aria-live="polite" data-on={playing || undefined}>
           <div className="voice-row">
-            <span>{shown ? <><b>{pad(shown.n)}</b> {shown.vi} · <span lang="zh">{shown.line.label}</span></> : s('voiceIdle')}</span>
+            <span>{shown ? <><b>{pad(shown.n)}</b> {cn ? <span lang="zh">{shown.line.label}</span> : <>{shown.vi} · <span lang="zh">{shown.line.label}</span></>}</> : s('voiceIdle')}</span>
             <span>{mmss(pos.t)} / {mmss(pos.d)}</span>
           </div>
           {failed ? <p className="voice-msg">{s('voiceFail')}</p>
             : shown?.text ? <>
                 <Text unit={shown.text} as="p" className="voice-line" />
-                {!shown.text.untranslated && <p className="voice-cn" lang="zh">{shown.cn}</p>}
+                {!cn && !shown.text.untranslated && <p className="voice-cn" lang="zh">{shown.cn}</p>}
               </>
               : <p className="voice-msg">{shown ? s('voiceNoText') : s('voiceHint')}</p>}
           <div className="voice-meter" aria-hidden="true" ref={meter}>
@@ -208,7 +210,7 @@ function VoiceTab({ char }: { char: Char }) {
           <button key={t.n} type="button" className="voice-take" disabled={!t.playable}
             data-playing={(take?.n === t.n && playing) || undefined} onClick={() => play(t)}>
             <span className="voice-no">{pad(t.n)}</span>
-            <b>{t.vi}<span lang="zh">{t.line.label}</span></b>
+            <b>{cn ? <span lang="zh" className="voice-cn-title">{t.line.label}</span> : <>{t.vi}<span lang="zh">{t.line.label}</span></>}</b>
             {t.text ? <Text unit={t.text} as="p" className="voice-text" /> : <p className="voice-text voice-text--none">{s('voiceNoText')}</p>}
             {(t.unlock || t.zone) && <small>{t.unlock ? <Text unit={t.unlock} /> : `${s('voiceZone')} ${t.zone}`}</small>}
           </button>

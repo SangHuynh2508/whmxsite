@@ -54,6 +54,23 @@ export function renderGalleryTab(container, char) {
   let hasDragged = false;
 
   let activeKeyHandler = null;
+  let full = false; // full-screen view: the page around fades away, the drawing fills the screen
+
+  // View Transitions morph the drawing from its place on the page to full screen and back.
+  function setFull(on) {
+    const wrapper = container.querySelector('.gallery-canvas-wrapper');
+    if (!wrapper || on === full) return;
+    const apply = () => {
+      full = on;
+      wrapper.classList.toggle('is-full', on);
+      wrapper.toggleAttribute('data-lenis-prevent', on); // the wheel stays on the overlay, not the page behind
+      resetZoom();
+    };
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced) document.startViewTransition(apply);
+    else apply();
+    if (!on) container.querySelector('.gallery-canvas-stage')?.focus({ preventScroll: true });
+  }
 
   function resetZoom() {
     zoomIndex = 0;
@@ -114,7 +131,9 @@ export function renderGalleryTab(container, char) {
 
     // Accessible labels reflecting the 3-step state without boolean aria-expanded
     stageEl.removeAttribute('aria-expanded');
-    if (zoomIndex === 0) {
+    if (!full) {
+      stageEl.setAttribute('aria-label', s('glFull').replace('{x}', labelPrefix));
+    } else if (zoomIndex === 0) {
       stageEl.setAttribute('aria-label', s('glZoom1').replace('{x}', labelPrefix));
     } else if (zoomIndex === 1) {
       stageEl.setAttribute('aria-label', s('glZoom2').replace('{x}', labelPrefix));
@@ -162,9 +181,8 @@ export function renderGalleryTab(container, char) {
 
     activeKeyHandler = (e) => {
       if (e.key === 'Escape' || e.key === 'Esc') {
-        if (zoomIndex !== 0) {
-          resetZoom();
-        }
+        if (zoomIndex !== 0) resetZoom();
+        else if (full) setFull(false);
       }
     };
     window.addEventListener('keydown', activeKeyHandler);
@@ -219,7 +237,8 @@ export function renderGalleryTab(container, char) {
         isDragging = false;
         applyTransform(true);
       } else if (!hasDragged) {
-        cycleZoom();
+        if (full) cycleZoom();
+        else setFull(true);
       }
     };
 
@@ -229,7 +248,8 @@ export function renderGalleryTab(container, char) {
     stageEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        cycleZoom();
+        if (full) cycleZoom();
+        else setFull(true);
       }
     });
   }
@@ -237,9 +257,13 @@ export function renderGalleryTab(container, char) {
   function renderGallery() {
     const currentSkin = displayItems[activeIndex] || displayItems[0];
     const charName = txt(char, 'name');
+    full = false;
 
     container.innerHTML = `
       <div class="gallery-canvas-wrapper">
+        <button type="button" class="gallery-full-close" aria-label="${s('close')}">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
         <!-- Compact Horizontal Skin Tab Strip -->
         ${displayItems.length > 1 ? `
         <div class="gallery-skin-strip-container">
@@ -276,6 +300,7 @@ export function renderGalleryTab(container, char) {
 
     resetZoom();
     setupZoomEvents();
+    container.querySelector('.gallery-full-close').addEventListener('click', () => setFull(false));
 
     // Event listeners for skin tabs
     container.querySelectorAll('.skin-strip-tab').forEach(el => {

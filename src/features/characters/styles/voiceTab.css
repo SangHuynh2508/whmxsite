@@ -56,6 +56,7 @@
 .voice-no { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .voice-take b { font: 600 15px/1.4 var(--font-sans); color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .voice-take b span { margin-left: 8px; font: 500 12px 'Noto Serif SC', var(--font-serif); color: var(--text-muted); }
+.voice-take b span.voice-cn-title { margin-left: 0; font: 600 15px/1.4 'Noto Serif SC', var(--font-serif); color: var(--text-main); } /* CN mode: the CN label is the title */
 .voice-text { grid-column: 2; margin: 0; font: 500 15px/1.6 var(--font-serif); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .voice-text--none { font: 400 13px/1.6 var(--font-sans); }
 .voice-take small { grid-column: 2; font-size: 12px; color: var(--text-muted); }
