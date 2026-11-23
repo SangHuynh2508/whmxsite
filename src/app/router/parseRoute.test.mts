@@ -11,6 +11,7 @@ test('a query (?lang=, ?fbclid=) never ends up in a slug or id', () => {
   assert.equal(parseRoute('#/skins?lang=cn').view, 'skins');
   assert.equal(parseRoute('#/gallery?kind=story&g=v3&lang=cn').view, 'gallery');
   assert.equal(parseRoute('#/weapons?lang=cn').view, 'weapons');
+  assert.deepEqual(parseRoute('#/weapons/30321?lang=vi'), { view: 'weapons', slug: '30321', subtab: '' });
   assert.equal(parseRoute('#/banners?lang=cn').view, 'banners');
   assert.deepEqual(parseRoute('#/tier-list/a/teams?lang=cn'), { view: 'tier-list', slug: 'a', subtab: 'teams' });
 });

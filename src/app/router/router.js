@@ -5,7 +5,7 @@ import { getGameData } from '../../data/loader.js';
 import { notify, setCharacter, state } from '../../data/state.js';
 import { renderCharacterDetail, unmountCharacterTabs } from '../../features/characters/views/characterDetail.js';
 import { renderCharacterCatalogView } from '../../features/characters/views/characterCatalogView.js';
-import { renderWeaponsView } from '../../features/weapons/views/weaponsView.js';
+import { mountWeaponsPage, unmountWeaponsPage } from '../../features/weapons/WeaponsPage.tsx';
 import { closeCalcPicker, selectCalculatorCharacter } from '../../ui/calcCharacterPicker.js';
 import { renderHeader } from '../../features/characters/components/characterHeader.js';
 import { canonicalCharacterHash } from './characterHash.mts';
@@ -96,6 +96,7 @@ function renderRouteView(route, target, gameData) {
       if (id === 'banners-view') unmountBannersPage();
       if (id === 'info-view') unmountInfoPage();
       if (id === 'music-view') unmountMusicPage();
+      if (id === 'weapons-view') unmountWeaponsPage();
       if (id === 'gallery-view') unmountGalleryPage();
       if (id === 'coffee-view') unmountCoffeePage();
       if (id === 'tier-list-view') unmountTierListPage();
@@ -116,7 +117,7 @@ function renderRouteView(route, target, gameData) {
     else if (route.view === 'tier-list') mountTierListPage(target, { slug: route.slug, tab: route.subtab });
     else if (route.view === 'catalog') renderCharacterCatalogView(target);
     else if (route.view === 'character') renderCharacterDetail(route.slug, route.subtab);
-    else if (route.view === 'weapons') renderWeaponsView(target);
+    else if (route.view === 'weapons') mountWeaponsPage(target, route.slug);
     else if (route.view === 'gallery') mountGalleryPage(target);
     else if (route.view === 'skins') renderSkinGalleryView(target);
     else renderSkinDetailView(target, route.skinId);
@@ -167,6 +168,8 @@ export function handleRoute() {
     routeKey = `skin-detail:${route.skinId}`;
   } else if (route.view === 'calculator') {
     routeKey = `calculator:${route.characterId || ''}`;
+  } else if (route.view === 'weapons') {
+    routeKey = `weapons:${route.slug}`; // list ↔ one weapon: a real page change (scroll to top, back restores)
   } else if (route.view === 'tier-list') {
     routeKey = `tier-list:${route.slug}`; // tab changes use replaceState and never reach the router
   }

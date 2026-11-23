@@ -25,6 +25,8 @@ export function parseRoute(raw: string): Route {
   if (char) return { view: 'character', slug: char[1], subtab: char[2] || 'overview' };
 
   if (path === '/weapons' || path === 'weapons') return { view: 'weapons', slug: '', subtab: '' };
+  const weapon = path.match(/^\/?weapons\/(\d+)$/);
+  if (weapon) return { view: 'weapons', slug: weapon[1], subtab: '' };
   if (path === '/data' || path === 'data') return { view: 'weapons', slug: '', subtab: '', redirect: '/weapons' };
 
   const skin = path.match(/^\/?skins\/([^/]+)$/i);

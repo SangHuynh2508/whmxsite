@@ -61,7 +61,7 @@ export function InfoPage({ doc }: { doc: BannersDoc | null }) {
     { href: '/banners', name: s('bnTitle'), desc: s('ifBannerDesc'), art: <BannerArt doc={doc} /> },
     { href: '/music', name: s('navMusic'), desc: s('ifMusicDesc'), art: <MusicArt /> },
     { href: '/gallery', name: s('gaTitle'), desc: s('ifGalleryDesc'), art: <GalleryArt /> },
-    { href: '/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), soon: s('ifSoon'), art: <WeaponArt /> },
+    { href: '/weapons', name: s('ifWeapons'), desc: s('ifWeaponsDesc'), art: <WeaponArt /> },
   ];
   return (
     <div className="info-page" ref={page}>
