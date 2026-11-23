@@ -10,7 +10,7 @@ Phân loại, đặc tính, nhà chế tạo được ghép từ các mảnh (d�
 | 仿真类 / 古典类 / 星象类 | Phỏng Chân / Cổ Điển / Tinh Tượng | tên dòng → Hán-Việt |
 | 珐琅类 / 菱纹类 / 青玉类 | Pháp Lang / Lăng Văn / Thanh Ngọc | Pháp Lang khớp tên đã duyệt "Pháp Lang Thuẫn" |
 | 铜青类 | Đồng Thanh | khớp buff đã duyệt "Đồng Thanh Nỗ" |
-| 太虚恒光 / 流云鸣沙 / 绮木覆花 / 金桂抱月 | Thái Hư Hằng Quang / Lưu Vân Minh Sa / Khỉ Mộc Phúc Hoa / Kim Quế Bão Nguyệt | |
+| 太虚恒光 / 流云鸣沙 / 绮木覆花 / 金桂抱月 | Thái Hư Hằng Quang / Lưu Vân Minh Sa / Ỷ Mộc Phúc Hoa / Kim Quế Bão Nguyệt | |
 | 刀 / 双刀 / 剑 / 弓弩 / 弩 / 法杖 / 炮 / 盾 / 仪 / 钩 | Đao / Song Đao / Kiếm / Cung Nỗ / Nỗ / Pháp Trượng / Pháo / Thuẫn / Nghi / Câu | Nỗ, Thuẫn theo tên buff đã duyệt |
 | 刑天 / 安息香 / 巫南研究 / 无根之木 / 海角山庄 | Hình Thiên / An Tức Hương / Vu Nam Nghiên Cứu / Vô Căn Chi Mộc / Hải Giác Sơn Trang | hãng chế tạo |
 | 琢磨 / 罄乐行 / 超金 / 鸠浅 | Trác Ma / Khánh Lạc Hành / Siêu Kim / Cưu Thiển | |
