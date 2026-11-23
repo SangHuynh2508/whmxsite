@@ -99,21 +99,39 @@ function renderTabContent(container, char, tabName) {
 function wireTagChips(container, char, gameData) {
   const pop = container.querySelector('#cd-tag-pop');
   if (!pop?.showPopover) return;
+  // Light dismiss closes the popover on pointerdown, before the chip's click: note on pointerdown whether this
+  // chip's list was open, so a second click on the same chip closes it instead of reopening.
+  let wasOpen = false;
+  const RANKS = [5, 4, 3, 2, 1];
   container.querySelectorAll('.cd-tags-list button.cd-tag-chip').forEach((chip) => {
+    chip.addEventListener('pointerdown', () => { wasOpen = pop.matches(':popover-open') && pop.dataset.tag === chip.dataset.tag; });
     chip.addEventListener('click', () => {
+      if (wasOpen) { wasOpen = false; pop.hidePopover(); return; }
       const list = charsWithTag(Object.values(gameData.characters), chip.dataset.tag);
+      let i = 0;
+      const groups = RANKS.map((r) => [r, list.filter((c) => (c.rare ?? 0) === r)]).filter(([, cs]) => cs.length);
+      pop.dataset.tag = chip.dataset.tag;
+      pop.style.setProperty('--tag', chip.style.getPropertyValue('--tag'));
       pop.innerHTML = `
-        <div class="cd-tag-pop-head">${chip.textContent} <span>${list.length}</span></div>
-        <div class="cd-tag-pop-list">${list.map((c) => `
-          <a href="/characters/${c.slug || c.id}" class="cd-tag-pop-item${c.id === char.id ? ' is-current' : ''}"${c.id === char.id ? ' aria-current="page"' : ''}>
-            <img src="${getCharacterAvatarUrl(c)}" alt="" loading="lazy" width="40" height="40" />
-            <span>${escapeHtml(txt(c, 'name'))}</span>
-          </a>`).join('')}</div>`;
-      pop.showPopover();
+        <div class="cd-tag-pop-head">
+          <span class="cd-tag-pop-name">${chip.textContent}</span>
+          <span class="cd-tag-pop-count">${list.length} ${s('catRecords')}</span>
+        </div>
+        ${groups.map(([r, cs]) => `
+          <div class="cd-tag-pop-rank" data-rank="${r}">${RARITY_LABELS[r] || `★${r}`}<span>${cs.length}</span></div>
+          <div class="cd-tag-pop-list">${cs.map((c) => `
+            <a href="/characters/${c.slug || c.id}" class="cd-tag-pop-item${c.id === char.id ? ' is-current' : ''}" style="--i:${i++}" data-rank="${r}"${c.id === char.id ? ' aria-current="page"' : ''}>
+              <img src="${getCharacterAvatarUrl(c)}" alt="" loading="lazy" width="44" height="44" />
+              <span>${escapeHtml(txt(c, 'name'))}</span>
+            </a>`).join('')}</div>`).join('')}`;
       const r = chip.getBoundingClientRect();
-      const w = pop.offsetWidth;
-      pop.style.left = `${Math.max(8, Math.min(r.left, innerWidth - w - 8))}px`;
+      const w = Math.min(380, innerWidth - 16); // = the CSS width
+      const left = Math.max(8, Math.min(r.left, innerWidth - w - 8));
+      pop.style.left = `${left}px`;
       pop.style.top = `${r.bottom + 6}px`;
+      pop.style.transformOrigin = `${r.left + r.width / 2 - left}px 0`; // grows out of the chip
+      pop.showPopover();
+      pop.scrollTop = 0;
     });
   });
   pop.addEventListener('click', (e) => { if (e.target.closest('a')) pop.hidePopover(); });
