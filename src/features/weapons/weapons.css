@@ -69,7 +69,7 @@
 .wp-file div { padding: 10px 12px; background: var(--bg-main); }
 .wp-file dt { font-size: 11.5px; color: var(--text-muted); }
 .wp-file dd { margin: 3px 0 0; font-size: 14px; color: var(--text-main); }
-.wp-file-text { margin: 16px 0 0; font: 15px/1.8 'Noto Serif SC', var(--font-serif); color: var(--text-main); white-space: pre-line; }
+.wp-file-text { margin: 16px 0 0; font: 15px/1.8 var(--font-serif); color: var(--text-main); white-space: pre-line; }
 .wp-user-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 2px; }
 .wp-user-list a { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 6px; color: var(--text-main); text-decoration: none; font-size: 12px; text-align: center; line-height: 1.3; }
 .wp-user-list a:hover { background: var(--bg-elevated); }

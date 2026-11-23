@@ -42,3 +42,10 @@ test('stat rows: each grade at Lv.1, then Lv.60 from the top grade (30321: 1849 
   assert.equal(rows.length, 3);
   assert.deepEqual(statRows(undefined), []);
 });
+
+test('file fields: VI draft when there, else CN flagged; weight and batch are never "untranslated"', () => {
+  const extras = { version: 1 as const, weapons: { '1': { tags: [], series: null, grades: [], grow: null, file: { maker: '琢磨·宿卫', text: '古人', weight: '25.5KG' } } } };
+  const vi = { version: 1 as const, weapons: { '1': { maker: 'Trác Ma · Túc Vệ' } } };
+  const w = weaponList(game, chars, extras, vi).find((x) => x.id === '1')!;
+  assert.deepEqual(w.file, { maker: { text: 'Trác Ma · Túc Vệ', untranslated: false }, text: { text: '古人', untranslated: true }, weight: { text: '25.5KG', untranslated: false } });
+});

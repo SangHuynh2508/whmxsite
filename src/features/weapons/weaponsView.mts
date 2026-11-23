@@ -8,6 +8,7 @@ export type WeaponUser = { id: string; href: string; name: string; icon: string 
 export type Weapon = {
   id: string; rare: number; job: number; icon: string; frame: string; name: Unit; cn: string;
   skills: { name: Unit; text: Unit }[]; users: WeaponUser[]; extra?: WeaponExtra; art: string;
+  file: Partial<Record<FileKey, Unit>>;
 };
 /** public/weapons.json (tools/build_weapons.py): what only the game has. Text is CN. */
 export type WeaponExtra = {
@@ -16,6 +17,17 @@ export type WeaponExtra = {
   file: Partial<Record<'type' | 'class' | 'trait' | 'maker' | 'text' | 'weight' | 'batch', string>>;
 };
 export type WeaponsDoc = { version: 1; weapons: Record<string, WeaponExtra> };
+type FileKey = keyof WeaponExtra['file'];
+/** public/weapons.vi.json: VI of the file fields (Claude draft 2026-11-23, owner reviews). Weight and batch need none. */
+export type WeaponsViDoc = { version: 1; weapons: Record<string, Partial<Record<FileKey, string>>> };
+const PLAIN: FileKey[] = ['weight', 'batch'];
+function fileUnits(cn: WeaponExtra['file'] | undefined, vi: Partial<Record<FileKey, string>> | undefined) {
+  const out: Partial<Record<FileKey, Unit>> = {};
+  for (const [k, v] of Object.entries(cn ?? {}) as [FileKey, string][]) {
+    out[k] = PLAIN.includes(k) ? { text: v, untranslated: false } : pickText(vi?.[k], v);
+  }
+  return out;
+}
 export const MAX_LEVEL = 60;
 /** Stats per breakthrough grade at level 1, then max level = top grade + 59 × growth (owner's check: 30321 → 3147). */
 export function statRows(x: WeaponExtra | undefined) {
@@ -32,7 +44,7 @@ const unit = (t: GameText | undefined, field: 'name' | 'detail' = 'name'): Unit 
 export const frameOf = (rare: number) => `/assets/frames/itemRare${[2, 3, 4, 5].includes(rare) ? rare : 'K'}.png`;
 
 /** Every weapon of the document, rarest first, then by job and id; users = characters whose builds suggest it. */
-export function weaponList(game: GameDocument, characters: Record<string, SiteChar>, extras: WeaponsDoc | null = null): Weapon[] {
+export function weaponList(game: GameDocument, characters: Record<string, SiteChar>, extras: WeaponsDoc | null = null, vi: WeaponsViDoc | null = null): Weapon[] {
   const users = new Map<string, WeaponUser[]>();
   for (const [charId, docs] of Object.entries(game.builds ?? {})) {
     const c = characters[charId];
@@ -54,6 +66,7 @@ export function weaponList(game: GameDocument, characters: Record<string, SiteCh
         name: unit(t), cn: t?.cn ?? '',
         skills: ((r.skillIds ?? []) as string[]).map((sid) => ({ name: unit(game.texts.weapon_skill?.[sid]), text: unit(game.texts.weapon_skill?.[sid], 'detail') })),
         users: users.get(id) ?? [],
+        file: fileUnits(extras?.weapons[id]?.file, vi?.weapons[id]),
         extra: extras?.weapons[id], art: extras?.weapons[id] ? `/assets/weapons/${id}.webp` : '',
       };
     })
